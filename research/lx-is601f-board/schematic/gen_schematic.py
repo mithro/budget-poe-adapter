@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the LX-IS601F V2.0 reverse-engineered schematic (KiCad 7, hierarchical).
 
-Pass 2 (2026-11-17): restyled after well-regarded open KiCad projects
+Layout follows well-regarded open KiCad projects
 (Antmicro baseboards, Olimex ESP32-PoE): a root sheet with a block diagram of
 hierarchical sheets, one function per sheet, KiCad library symbols for
 standard parts, power ports instead of rail labels, signal flow left to right,
@@ -170,7 +170,7 @@ LEGEND = ('Wire style = confidence of each connection\n'
           'blue solid       V  seen on one side of the board in the photos\n'
           'orange dashed    I  inferred from datasheet, marking or usual practice\n'
           'red dotted       U  unknown: pin exists, destination not traced\n\n'
-          'Pass 2: nothing is C yet. Every connection still needs a continuity check.')
+          'Nothing is C yet. Every connection still needs a continuity check.')
 
 
 def gnd(s, p, conf='I', drop=2.54):

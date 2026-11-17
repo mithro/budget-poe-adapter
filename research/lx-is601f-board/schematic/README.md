@@ -16,7 +16,7 @@ The schematic is a KiCad 7 hierarchical project. Open `lx-is601f.kicad_sch`; the
 | `poe_module.kicad_sch` | PIN1 header and the PoE PSE daughterboard (U1 `2184A`). |
 | `leds.kicad_sch` | FX/POW LED array, LED6 header, LED7/LED8. |
 | `lx-is601f-schematic.pdf` | PDF of all seven sheets. |
-| `renders/` | PNG of each sheet (`after-*`) and of the pass-1 single sheet (`before-pass1.png`). |
+| `renders/` | PNG of each sheet, numbered in sheet order. |
 | `lx-is601f-nets.csv` | Every pin with its net, confidence code and sheet. Sort by `net` to get a netlist. |
 | `gen_schematic.py`, `kisch.py` | Generate every sheet and the CSV from one data model, then export KiCad's netlist and check it against the model. Edit these, not the `.kicad_sch` files. |
 
@@ -31,7 +31,7 @@ Parts on the PoE module are renumbered R1xx/D1xx/U101 so they don't clash with m
 | **I** | Inferred from the datasheet, the part marking or usual practice | orange, dashed |
 | **U** | Unknown: the pin exists, its destination is not traced | red, dotted |
 
-Current count: 0 C, 107 V, 237 I, 228 U pin connections (572 in all). **No net is confirmed yet.** The photos are handheld and oblique, and inner layers are invisible, so continuity checks are needed before anything can be marked C.
+Count: 0 C, 107 V, 237 I, 228 U pin connections (572 in all). **No net is confirmed yet.** The photos are handheld and oblique, and inner layers are invisible, so continuity checks are needed before anything can be marked C.
 
 ## What the board is
 
@@ -43,7 +43,7 @@ A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered 
 - **PoE module**: a daughterboard on the 8-pin **PIN1** header beside J1. It carries U1, a QFN-48 marked **`2184A 533AQ1H`** (4-port PSE controller, maker not identified; IP804AR is the closest public match in package and function). It also has 4× `R250` 0.25 Ω sense resistors (R8/R12/R13/R14), 4× `330` 33 Ω (R3/R9/R10/R11), 5× SMB TVS marked `RGS` (D1/D3/D5/D7 + one more) and 1206 caps.
 - **Power**: 2-pin `POWER2` input (48–57 V assumed), L1, three `SS510` Schottkys (D1, D4, D5), three blue disc parts RV1–RV3 (varistors or Y-caps), L2 `701` inductor, C4 47 µF/63 V. **PU1 SCT2622** (marking `2622 SCT 6DC`, 4.2–60 V 2 A non-synchronous buck, ESOP-8) with PL3 10 µH, D40 catch diode and TC1 220 µF/16 V makes **3.3 V**. **1.15 V** core comes from U4's internal switching regulator (pins 63/64 LX) through **L3 4.7 µH**.
 - **25 MHz crystal Y6** with C43/C44, beside U4 XTAL pins 87/88.
-- **Config EEPROM U10** `HK24C08` (Hangshun 24C08, 1 KB I²C) on the bottom. It is presumably on U4 pins 91/92 (SCL/SDA). This matters for firmware work: the earlier note said "no EEPROM", which was for the other (OSHWHub) board.
+- **Config EEPROM U10** `HK24C08` (Hangshun 24C08, 1 KB I²C) on the bottom. It is presumably on U4 pins 91/92 (SCL/SDA). The OSHWHub YT9215S board has no EEPROM; this board does.
 - **Empty SPI-flash footprint U6** (SOP-8/WSON-8) on the bottom, with R40/R94/R96/R98/R100/R102/R109 next to it. Together with R44/R89/R92/R93 on the SPF0 pins, the board looks designed to take a flash chip.
 - **ESD**: ED1–ED10, SOT-23-6 marked `05U`, two per copper port between U4 and the magnetics.
 - **LEDs**: a 6×2 array of 0603 LEDs, columns `FX` and `POW`, rows 1–6, with RJ7–RJ18 resistors. LED7/LED8 sit next to an unpopulated 2×3 header `LED6` (with R68).

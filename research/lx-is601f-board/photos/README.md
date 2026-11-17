@@ -11,9 +11,11 @@ board (the originals in the album are untouched):
   bottom right, J2 and the blue disc capacitors along the top.
 * **Bottom side (24-29):** as if the board were flipped left-to-right, so the RJ45
   block is on the right and the top edge stays at the top. The bottom shots were
-  oriented from the RJ45 pin rows, the six disc-capacitor pins and the J2 pads. In the callouts a small ring marks the exact spot and a
-numbered badge, joined to it by a line, sits beside it so markings stay readable. EXIF data, including GPS, was stripped from every copy.
-Photo numbers follow the album order.
+  oriented from the RJ45 pin rows, the six disc-capacitor pins and the J2 pads.
+
+In the callouts a small ring marks the exact spot, and a numbered badge joined to it
+by a line sits beside it so markings stay readable. EXIF data, including GPS, was
+stripped from every copy. Photo numbers follow the album order.
 
 ## The two boards
 
@@ -28,8 +30,7 @@ They differ in what is fitted:
 | Magnetics date | `2632` | `2523A` |
 | PoE PSE module | Not fitted | Fitted |
 | SFP cage | Not fitted | Fitted |
-| U4 heatsink | Yes (removed in 04) | Not seen |
-| Photos | 01-06, 13-23, 33 | 07-12, 30-32, 34 |
+| U4 heatsink | Fitted | Not seen |
 
 Board A is the non-PoE build: the 8-hole header for the PoE module is empty and U12
 has only the SFP host connector, without its cage. Board B is the PoE build, with the
@@ -37,53 +38,64 @@ PSE daughterboard plugged into that header and the SFP cage fitted over U12.
 
 The bottom-side photos (24-29) do not show anything that ties them to one board.
 
-Parts common to both boards: United-tek `G2401PR` magnetics (DXFRM1-6), `05U`
-SOT-23-6 ESD arrays (ED1-ED10), Y6 25.000 MHz crystal, PU1 `SCT2622` 3.3 V buck with
-PL3 `100` (10 µH) and D40 `SS510`, L2 `701` input inductor, C4 47 µF 63 V input
-capacitor, TC1 220 µF 16 V output capacitor, three blue disc capacitors next to the
-J2 `POWER2` connector, and U10 `HK24C08` I²C EEPROM on the bottom.
+Parts common to both boards:
+
+| Ref | Part | Side | Package | Marking | Value |
+| --- | --- | --- | --- | --- | --- |
+| DXFRM1-6 | Magnetics | Top | SMD 24-pin | `G2401PR` | |
+| ED1-ED10 | ESD array | Top | SOT-23-6 | `05U` | |
+| Y6 | Crystal | Top | SMD 4-pad | `25.000` | 25 MHz |
+| PU1 | Buck regulator | Top | SOIC-8 | `SCT2622` | 3.3 V out |
+| PL3 | Buck inductor | Top | SMD | `100` | 10 µH |
+| D40 | Buck diode | Top | SMA | `SS510` | |
+| L2 | Input inductor | Top | SMD | `701` | |
+| C4 | Input capacitor | Top | Polymer can | `YX 47 63V` | 47 µF |
+| TC1 | 3.3 V output capacitor | Top | Polymer can | `YX 220 16V` | 220 µF |
+| J2 | Power input connector | Top | THT 2-pin | `POWER2` | |
+| U10 | I²C EEPROM | Bottom | SOIC-8 | `HK24C08` | 8 Kbit |
 
 ## Catalogue
 
-✎ marks photos with an annotated callout below. Click a thumbnail for the 1600 px copy,
-or the number for the notes. Times are the camera's local time.
+Click a thumbnail for the 1600 px copy, or the number for the notes, which list the
+parts in each photo. "Callout" marks photos with an annotated image in their notes.
+Times are the camera's local time.
 
-| # | Preview | Board | Side | View | Key items | Time |
-| --- | --- | --- | --- | --- | --- | --- |
-| [01](#photo-01) | [<img src="thumbs/01.jpg" width="120">](web/01.jpg) | A | Top | Whole board | Heatsink on U4 | 09:23 |
-| [02](#photo-02) | [<img src="thumbs/02.jpg" width="120">](web/02.jpg) | A | Top | Whole board | Heatsink on U4 | 09:24 |
-| [03](#photo-03) | [<img src="thumbs/03.jpg" width="120">](web/03.jpg) | A | Top | Whole board, angled | Heatsink on U4 | 09:24 |
-| [04](#photo-04) | [<img src="thumbs/04.jpg" width="120">](web/04.jpg) | A | Top | Whole board | Heatsink off; U12 SFP connector ✎ | 09:48 |
-| [05](#photo-05) | [<img src="thumbs/05.jpg" width="120">](web/05.jpg) | A | Top | Whole board, angled | U4 exposed | 09:48 |
-| [06](#photo-06) | [<img src="thumbs/06.jpg" width="120">](web/06.jpg) | A | Top | U4 close-up | U4 marking, Y6, debug resistors ✎ | 09:48 |
-| [07](#photo-07) | [<img src="thumbs/07.jpg" width="120">](web/07.jpg) | B | Top | U4 + PoE module corner | U4 marking, PSE U1 | 09:48 |
-| [08](#photo-08) | [<img src="thumbs/08.jpg" width="120">](web/08.jpg) | B | Top | Whole board | PoE module, SFP cage ✎ | 09:48 |
-| [09](#photo-09) | [<img src="thumbs/09.jpg" width="120">](web/09.jpg) | B | Top | U4 close-up (glare) | U4 marking unreadable | 09:49 |
-| [10](#photo-10) | [<img src="thumbs/10.jpg" width="120">](web/10.jpg) | B | Top | U4 left edge, macro | Y6, R250, ESD arrays | 09:49 |
-| [11](#photo-11) | [<img src="thumbs/11.jpg" width="120">](web/11.jpg) | B | Top | U4 left edge, macro | Same as 10, sharper | 09:49 |
-| [12](#photo-12) | [<img src="thumbs/12.jpg" width="120">](web/12.jpg) | B | Top | U4 close-up | U4 marking, PSE U1 | 09:49 |
-| [13](#photo-13) | [<img src="thumbs/13.jpg" width="120">](web/13.jpg) | A | Top | U4 close-up | U4 marking, ESD arrays | 09:49 |
-| [14](#photo-14) | [<img src="thumbs/14.jpg" width="120">](web/14.jpg) | A | Top | U4 + power, angled | PU1, PL3, C4 | 09:50 |
-| [15](#photo-15) | [<img src="thumbs/15.jpg" width="120">](web/15.jpg) | A | Top | U4 + power, angled | PU1, PL3, C4 | 09:50 |
-| [16](#photo-16) | [<img src="thumbs/16.jpg" width="120">](web/16.jpg) | A | Top | Centre, wide | U4, magnetics, TC1 | 09:50 |
-| [17](#photo-17) | [<img src="thumbs/17.jpg" width="120">](web/17.jpg) | A | Top | Centre, wide | U4, magnetics, TC1 | 09:50 |
-| [18](#photo-18) | [<img src="thumbs/18.jpg" width="120">](web/18.jpg) | A | Top | Centre, wide | U4, magnetics, TC1 | 09:50 |
-| [19](#photo-19) | [<img src="thumbs/19.jpg" width="120">](web/19.jpg) | A? | Top | Power corner | PU1 SCT2622, C4, L2 | 13:41 |
-| [20](#photo-20) | [<img src="thumbs/20.jpg" width="120">](web/20.jpg) | A | Top | U4 + port 6 magnetics | U4 marking, DXFRM6 | 13:41 |
-| [21](#photo-21) | [<img src="thumbs/21.jpg" width="120">](web/21.jpg) | A | Top | Port edge corner | Empty PoE header, LED pads ✎ | 13:41 |
-| [22](#photo-22) | [<img src="thumbs/22.jpg" width="120">](web/22.jpg) | A | Top | Port edge corner | LED6-8, R68 | 13:41 |
-| [23](#photo-23) | [<img src="thumbs/23.jpg" width="120">](web/23.jpg) | A | Top | U4 area | U4, Y6, L2 | 13:42 |
-| [24](#photo-24) | [<img src="thumbs/24.jpg" width="120">](web/24.jpg) | ? | Bottom | RJ45 block pins | D19, D21, C69, C73 | 13:42 |
-| [25](#photo-25) | [<img src="thumbs/25.jpg" width="120">](web/25.jpg) | ? | Bottom | RJ45 block pins | D8-D14 port diodes | 13:42 |
-| [26](#photo-26) | [<img src="thumbs/26.jpg" width="120">](web/26.jpg) | ? | Bottom | Under U4 | U6 empty, U10 EEPROM ✎ | 13:42 |
-| [27](#photo-27) | [<img src="thumbs/27.jpg" width="120">](web/27.jpg) | ? | Bottom | Under U4, wider | U10, port diodes | 13:42 |
-| [28](#photo-28) | [<img src="thumbs/28.jpg" width="120">](web/28.jpg) | ? | Bottom | Under U4 (blurred) | U10 | 13:42 |
-| [29](#photo-29) | [<img src="thumbs/29.jpg" width="120">](web/29.jpg) | ? | Bottom | U10 close-up | HK24C08 EEPROM | 13:43 |
-| [30](#photo-30) | [<img src="thumbs/30.jpg" width="120">](web/30.jpg) | B | Top | PoE module | U1, R250, D1-D7 | 13:43 |
-| [31](#photo-31) | [<img src="thumbs/31.jpg" width="120">](web/31.jpg) | B | Top | PoE module, angled | Diodes "RGS 2616" | 13:43 |
-| [32](#photo-32) | [<img src="thumbs/32.jpg" width="120">](web/32.jpg) | B | Top | PoE module, macro | U1 "2184A 533AQ1H" ✎ | 13:43 |
-| [33](#photo-33) | [<img src="thumbs/33.jpg" width="120">](web/33.jpg) | A | Top | Uplink corner | Silkscreen, DXFRM6 2632 | 13:43 |
-| [34](#photo-34) | [<img src="thumbs/34.jpg" width="120">](web/34.jpg) | B | Top | Uplink corner | Silkscreen, DXFRM6 2523A | 13:44 |
+| # | Preview | Board | Side | Area | Framing | Angle | U4 marking | Callout | Time |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [01](#photo-01) | [<img src="thumbs/01.jpg" width="120">](web/01.jpg) | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:23 |
+| [02](#photo-02) | [<img src="thumbs/02.jpg" width="120">](web/02.jpg) | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:24 |
+| [03](#photo-03) | [<img src="thumbs/03.jpg" width="120">](web/03.jpg) | A | Top | Whole board | Wide | Angled | Heatsink |  | 09:24 |
+| [04](#photo-04) | [<img src="thumbs/04.jpg" width="120">](web/04.jpg) | A | Top | Whole board | Wide | Straight | Too small | Yes | 09:48 |
+| [05](#photo-05) | [<img src="thumbs/05.jpg" width="120">](web/05.jpg) | A | Top | Whole board | Wide | Angled | Glare |  | 09:48 |
+| [06](#photo-06) | [<img src="thumbs/06.jpg" width="120">](web/06.jpg) | A | Top | U4 | Close | Straight | Readable | Yes | 09:48 |
+| [07](#photo-07) | [<img src="thumbs/07.jpg" width="120">](web/07.jpg) | B | Top | U4 | Close | Straight | Readable |  | 09:48 |
+| [08](#photo-08) | [<img src="thumbs/08.jpg" width="120">](web/08.jpg) | B | Top | Whole board | Wide | Straight | Too small | Yes | 09:48 |
+| [09](#photo-09) | [<img src="thumbs/09.jpg" width="120">](web/09.jpg) | B | Top | U4 | Close | Straight | Glare |  | 09:49 |
+| [10](#photo-10) | [<img src="thumbs/10.jpg" width="120">](web/10.jpg) | B | Top | U4 left edge | Macro | Straight | Not in shot |  | 09:49 |
+| [11](#photo-11) | [<img src="thumbs/11.jpg" width="120">](web/11.jpg) | B | Top | U4 left edge | Macro | Straight | Not in shot |  | 09:49 |
+| [12](#photo-12) | [<img src="thumbs/12.jpg" width="120">](web/12.jpg) | B | Top | U4 | Close | Straight | Readable |  | 09:49 |
+| [13](#photo-13) | [<img src="thumbs/13.jpg" width="120">](web/13.jpg) | A | Top | U4 | Close | Straight | Readable |  | 09:49 |
+| [14](#photo-14) | [<img src="thumbs/14.jpg" width="120">](web/14.jpg) | A | Top | U4 and power | Close | Angled | Glare |  | 09:50 |
+| [15](#photo-15) | [<img src="thumbs/15.jpg" width="120">](web/15.jpg) | A | Top | U4 and power | Close | Angled | Glare |  | 09:50 |
+| [16](#photo-16) | [<img src="thumbs/16.jpg" width="120">](web/16.jpg) | A | Top | Centre | Wide | Straight | Readable |  | 09:50 |
+| [17](#photo-17) | [<img src="thumbs/17.jpg" width="120">](web/17.jpg) | A | Top | Centre | Wide | Angled | Glare |  | 09:50 |
+| [18](#photo-18) | [<img src="thumbs/18.jpg" width="120">](web/18.jpg) | A | Top | Centre | Wide | Angled | Readable |  | 09:50 |
+| [19](#photo-19) | [<img src="thumbs/19.jpg" width="120">](web/19.jpg) | Probably A | Top | Power corner | Close | Straight | Not in shot |  | 13:41 |
+| [20](#photo-20) | [<img src="thumbs/20.jpg" width="120">](web/20.jpg) | A | Top | U4 | Close | Straight | Readable |  | 13:41 |
+| [21](#photo-21) | [<img src="thumbs/21.jpg" width="120">](web/21.jpg) | A | Top | Port edge | Close | Angled | Not in shot | Yes | 13:41 |
+| [22](#photo-22) | [<img src="thumbs/22.jpg" width="120">](web/22.jpg) | A | Top | Port edge | Close | Angled | Not in shot |  | 13:41 |
+| [23](#photo-23) | [<img src="thumbs/23.jpg" width="120">](web/23.jpg) | A | Top | U4 | Close | Straight | Readable |  | 13:42 |
+| [24](#photo-24) | [<img src="thumbs/24.jpg" width="120">](web/24.jpg) | Unknown | Bottom | RJ45 pins | Close | Angled |  |  | 13:42 |
+| [25](#photo-25) | [<img src="thumbs/25.jpg" width="120">](web/25.jpg) | Unknown | Bottom | RJ45 pins | Close | Angled |  |  | 13:42 |
+| [26](#photo-26) | [<img src="thumbs/26.jpg" width="120">](web/26.jpg) | Unknown | Bottom | Under U4 | Close | Straight |  | Yes | 13:42 |
+| [27](#photo-27) | [<img src="thumbs/27.jpg" width="120">](web/27.jpg) | Unknown | Bottom | Under U4 | Close | Angled |  |  | 13:42 |
+| [28](#photo-28) | [<img src="thumbs/28.jpg" width="120">](web/28.jpg) | Unknown | Bottom | Under U4 | Close | Angled |  |  | 13:42 |
+| [29](#photo-29) | [<img src="thumbs/29.jpg" width="120">](web/29.jpg) | Unknown | Bottom | U10 | Macro | Straight |  |  | 13:43 |
+| [30](#photo-30) | [<img src="thumbs/30.jpg" width="120">](web/30.jpg) | B | Top | PoE module | Close | Straight | Not in shot |  | 13:43 |
+| [31](#photo-31) | [<img src="thumbs/31.jpg" width="120">](web/31.jpg) | B | Top | PoE module | Close | Angled | Not in shot |  | 13:43 |
+| [32](#photo-32) | [<img src="thumbs/32.jpg" width="120">](web/32.jpg) | B | Top | PoE module | Macro | Straight | Not in shot | Yes | 13:43 |
+| [33](#photo-33) | [<img src="thumbs/33.jpg" width="120">](web/33.jpg) | A | Top | Uplink corner | Close | Straight | Not in shot |  | 13:43 |
+| [34](#photo-34) | [<img src="thumbs/34.jpg" width="120">](web/34.jpg) | B | Top | Uplink corner | Close | Straight | Not in shot |  | 13:44 |
 
 ## Notes per photo
 

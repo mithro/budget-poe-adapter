@@ -4,21 +4,21 @@ Traced 2026-11-17 from Tim's Google Photos album (34 photos, Pixel 7 Pro, two bo
 
 ## Files
 
-The schematic is a KiCad 7 hierarchical project. Open `lx-is601f.kicad_sch`; the root page is a block diagram and each block is its own sheet.
+The schematic is a KiCad 7 hierarchical project. Open [`lx-is601f.kicad_sch`](lx-is601f.kicad_sch); the root page is a block diagram and each block is its own sheet.
 
 | File | What it is |
 |---|---|
-| `lx-is601f.kicad_sch` | Root sheet: block diagram, confidence legend, how-to-read notes. |
-| `power.kicad_sch` | DC input, protection, PU1 SCT2622 3.3 V buck. |
-| `switch.kicad_sch` | U4 YT9215SCH in four units: clock/reset/EEPROM/flash/GPIO, copper MDI, SerDes, supply pins. |
-| `ethernet_poe.kicad_sch` | Ports 1-4: G2401PR magnetics, `05U` ESD, J1 (drawn J1A-J1D), PoE centre taps. |
-| `uplink_sfp.kicad_sch` | Port 5 uplink (DXFRM6, J3) and the U12 SFP connector. |
-| `poe_module.kicad_sch` | PIN1 header and the PoE PSE daughterboard (U1 `2184A`). |
-| `leds.kicad_sch` | FX/POW LED array, LED6 header, LED7/LED8. |
-| `lx-is601f-schematic.pdf` | PDF of all seven sheets. |
-| `renders/` | PNG of each sheet, numbered in sheet order. |
-| `lx-is601f-nets.csv` | Every pin with its net, confidence code and sheet. Sort by `net` to get a netlist. |
-| `gen_schematic.py`, `kisch.py` | Generate every sheet and the CSV from one data model, then export KiCad's netlist and check it against the model. Edit these, not the `.kicad_sch` files. |
+| [`lx-is601f.kicad_sch`](lx-is601f.kicad_sch) | Root sheet: block diagram, confidence legend, how-to-read notes. |
+| [`power.kicad_sch`](power.kicad_sch) | DC input, protection, PU1 SCT2622 3.3 V buck. |
+| [`switch.kicad_sch`](switch.kicad_sch) | U4 YT9215SCH in four units: clock/reset/EEPROM/flash/GPIO, copper MDI, SerDes, supply pins. |
+| [`ethernet_poe.kicad_sch`](ethernet_poe.kicad_sch) | Ports 1-4: G2401PR magnetics, `05U` ESD, J1 (drawn J1A-J1D), PoE centre taps. |
+| [`uplink_sfp.kicad_sch`](uplink_sfp.kicad_sch) | Port 5 uplink (DXFRM6, J3) and the U12 SFP connector. |
+| [`poe_module.kicad_sch`](poe_module.kicad_sch) | PIN1 header and the PoE PSE daughterboard (U1 `2184A`). |
+| [`leds.kicad_sch`](leds.kicad_sch) | FX/POW LED array, LED6 header, LED7/LED8. |
+| [`lx-is601f-schematic.pdf`](lx-is601f-schematic.pdf) | PDF of all seven sheets. |
+| [`renders/`](renders/) | PNG of each sheet, numbered in sheet order: [root](renders/1-root.png), [power](renders/2-power.png), [switch](renders/3-switch.png), [ports 1-4](renders/4-ethernet-poe.png), [uplink and SFP](renders/5-uplink-sfp.png), [PoE module](renders/6-poe-module.png), [LEDs](renders/7-leds.png). |
+| [`lx-is601f-nets.csv`](lx-is601f-nets.csv) | Every pin with its net, confidence code and sheet. Sort by `net` to get a netlist. |
+| [`gen_schematic.py`](gen_schematic.py), [`kisch.py`](kisch.py) | Generate every sheet and the CSV from one data model, then export KiCad's netlist and check it against the model. Edit these, not the `.kicad_sch` files. |
 
 Parts on the PoE module are renumbered R1xx/D1xx/U101 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. PIN1 is drawn as J4 and the LED6 header as J5 for the same reason.
 

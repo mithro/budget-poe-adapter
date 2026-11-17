@@ -1,0 +1,35 @@
+block,item,example_part,qty,unit_usd_1k,switch_variant,no_switch_variant,confidence
+PoE front end,Polarity bridges (2 x 4 Schottky 100 V 2 A),SS2100 / SS210 (SMA),8,0.012,1,1,medium
+PoE front end,Surge TVS 58 V,SMAJ58A,1,0.03,1,1,medium
+PoE front end,Detection signature 24.9k 1% + 100 nF/100 V,0603 + 0805,1,0.01,1,1,high
+PoE front end,Class/mark current sink (NMOS + sense R + PWM RC),SOT-23 NMOS + passives,1,0.04,1,1,medium
+PoE front end,MCU bootstrap supply + UVLO (>12 V on / <6 V off),zener + depletion FET or HV LDO,1,0.08,1,1,low
+PoE front end,Hot-swap switch 100 V NMOS (low side) + gate RC,100 V 20 A DFN5x6,1,0.15,1,1,medium
+PoE front end,Bulk + HV ceramic caps (100 V),47 uF electrolytic + 100 V MLCCs,1,0.10,1,1,medium
+PoE front end,Voltage/current sense dividers and shunt,0603 resistors,1,0.02,1,1,high
+Output power stage,60 V sync buck controller (36-57 V in -> 5.1 V or 12 V; 5 A max at 5 V),Chinese 60-100 V controller class,1,0.60,1,1,low
+Output power stage,Buck MOSFETs 80-100 V,DFN/PDFN,2,0.10,1,1,low
+Output power stage,Power inductor ~10 uH 8 A,shielded 10x10,1,0.15,1,1,medium
+Output power stage,Output caps (16-25 V rated) + feedback/comp passives,MLCC/polymer,1,0.12,1,1,medium
+Output power stage,5 V / 12 V select: GPIO-switched NMOS + resistor on buck FB (defaults to 5 V),SOT-23 NMOS + resistor,1,0.02,1,1,high
+Logic supply,"3.3 V rail (switch+MCU ~400 mA: small buck, 5-12 V in)",18 V-rated buck + inductor,1,0.15,1,0,medium
+Logic supply,"3.3 V rail (MCU only: LDO, 5-12 V in)",16 V+ rated SOT-89 LDO,1,0.04,0,1,high
+USB-C output,USB-C receptacle (power-rated),16-pin SMD/THT,1,0.08,1,1,medium
+USB-C output,VBUS load switch 20-30 V PMOS 5 A + gate zener + NPN driver,AO4407-class PMOS + SOT-23,1,0.10,1,1,medium
+USB-C output,VBUS current shunt + discharge FET + 15 V TVS,5 mOhm + SOT-23,1,0.06,1,1,medium
+USB-C output,"CC network (Rp x4 switchable, BMC TX divider, ESD x2)",0402/0603 + ESD diodes,1,0.08,1,1,medium
+USB-C output,CC1/CC2 12 V short protection (series NMOS clamps or CC OVP IC),2x NMOS or TCPP01-class,1,0.10,1,1,low
+Ethernet,PoE-rated GbE magjack (centre taps out) - input,HanRun HR911130C-class,1,1.10,1,0,low
+Ethernet,Standard GbE magjack - output,HanRun HR911130A-class,1,0.65,1,0,low
+Ethernet,4-ch PoE splitter transformer (passthrough option 2),H5007NL-class,1,0.50,0,1,low
+Ethernet,Plain RJ45 jacks (no magnetics),8P8C shielded,2,0.10,0,1,medium
+Switch,Gigabit switch 2 PHY + RMII ext MAC,RTL8363NB-VB-CG (C2835942),1,1.43,1,0,high
+Switch,25 MHz crystal,3225,1,0.04,1,0,high
+Switch,1.1 V on-chip buck inductor + decoupling,0603/0402 passives,1,0.15,1,0,medium
+MCU,MCU with Ethernet MAC + OPA (PoE + PD + RMII),CH32V307RCT6,1,1.30,1,0,low
+MCU,MCU for PoE + bit-banged PD (no networking),CH32V203C8T6,1,0.35,0,1,medium
+MCU,MCU crystal + decoupling + SWD pads + LEDs,8 MHz 3225 + passives,1,0.08,1,1,medium
+PCB,4-layer ~50x35 mm (GbE impedance control),JLCPCB 4L,1,0.45,1,0,low
+PCB,2-layer ~45x30 mm,JLCPCB 2L,1,0.20,0,1,low
+Assembly,JLCPCB SMT + THT (~110 parts switch / ~65 no-switch),amortised setup + extended-part fees,1,1.20,1,0,low
+Assembly,JLCPCB SMT + THT,amortised setup + extended-part fees,1,0.70,0,1,low

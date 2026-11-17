@@ -3,8 +3,8 @@
 Tim's photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with a
 Pixel 7 Pro. The originals (3072 x 4080) are in the
 [Google Photos album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9). This folder holds
-copies resized to 1600 px (`web/`), 240 px thumbnails (`thumbs/`) and annotated
-callouts (`annotated/`). The copies are rotated to one orientation and cropped to the
+copies resized to 1600 px ([`web/`](web/)), 240 px thumbnails ([`thumbs/`](thumbs/)) and
+annotated callouts ([`annotated/`](annotated/)). The copies are rotated to one orientation and cropped to the
 board (the originals in the album are untouched):
 
 * **Top side:** RJ45 block on the left, `LX-IS601F V2.0` silkscreen readable at the
@@ -265,7 +265,7 @@ Board B, PoE module at an angle. The diodes are marked `RGS / 2616`.
 
 Board B, macro of the PoE module. U1 reads `2184A / 533AQ1H` (QFN). The part is not
 yet identified; it is drawn as an unidentified 4-port PSE in the
-[schematic](../schematic/).
+[schematic](../schematic/README.md).
 
 ![Photo 32 annotated](annotated/32.jpg)
 
@@ -281,7 +281,8 @@ apart.
 
 ## Regenerating the images
 
-`make_photos.py` builds `web/`, `thumbs/` and `annotated/` from the album originals:
+[`make_photos.py`](make_photos.py) builds [`web/`](web/), [`thumbs/`](thumbs/) and
+[`annotated/`](annotated/) from the album originals:
 
 ```
 python3 make_photos.py /path/to/originals   # 01.jpg .. 34.jpg in album order

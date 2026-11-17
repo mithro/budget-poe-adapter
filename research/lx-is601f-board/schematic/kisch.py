@@ -228,6 +228,24 @@ class Part:
         return (round(dx), round(dy))
 
 
+
+def textbox_height(s, w, size):
+    """Estimate the height KiCad needs for text s word-wrapped in a box w mm wide."""
+    cw = size * 0.92                      # average stroke-font advance incl. spacing
+    per = max(8, int((w - 2.0) / cw))
+    n = 0
+    for para in s.split('\n'):
+        line = 0
+        words = para.split(' ')
+        n += 1
+        for wd in words:
+            add = len(wd) + (1 if line else 0)
+            if line and line + add > per:
+                n += 1; line = len(wd)
+            else:
+                line += add
+    return snap(n * size * 1.62 + 2.6)
+
 class Sheet:
     def __init__(self, project, fname, title, paper='A3', page='1'):
         self.project, self.fname, self.title, self.paper, self.page = project, fname, title, paper, page
@@ -252,6 +270,7 @@ class Sheet:
     def place(self, lib_id, ref, value, x, y, rot=0, mirror=None, unit=1, dnp=False, fields=None,
               node=None, show_value=True, ref_at=None, val_at=None, footprint='', center=None):
         center_override = center
+        just = {}
         sym = self.use(lib_id, node)
         pins = symbol_pins(sym)
         x, y = snap(x), snap(y)
@@ -261,21 +280,28 @@ class Sheet:
                 at = find(props[name], 'at')[0] if name in props else None
                 if at is None or (float(at[1]) == 0 and float(at[2]) == 0):
                     return None
+                eff = find(props[name], 'effects')
+                js = find(eff[0], 'justify') if eff else []
+                if js and rot == 0 and not mirror:
+                    just[name] = str(js[0][1])
                 dx, dy = xform(float(at[1]), float(at[2]), rot, mirror)
                 return (x + dx, y + dy)
             upins = [v for (u, n), v in pins.items() if u in (0, unit)]
             ys = [xform(px, py, rot, mirror)[1] for px, py, a, l, nm in upins] or [0]
             xs = [xform(px, py, rot, mirror)[0] for px, py, a, l, nm in upins] or [0]
-            lx = x + min(xs) + 2.54
+            import math
+            inner = [xform(px + l * math.cos(math.radians(a)), py + l * math.sin(math.radians(a)), rot, mirror)[0]
+                     for px, py, a, l, nm in upins] or [0]
+            lx = x + min(inner)
             center = set()
             if ref_at is None:
                 ref_at = lp('Reference')
-                if ref_at: center.add('ref')
-                else: ref_at = (lx, y + min(ys) - 1.27)
+                if ref_at and 'Reference' not in just: center.add('ref')
+                else: ref_at = (lx, y + min(ys) - 3.81)
             if val_at is None:
                 val_at = lp('Value')
-                if val_at: center.add('val')
-                else: val_at = (lx, y + max(ys) + 2.54)
+                if val_at and 'Value' not in just: center.add('val')
+                else: val_at = (lx, y + max(ys) + 3.81)
         else:
             center = set()
         if center_override is not None:
@@ -283,7 +309,7 @@ class Sheet:
         part = Part(self, lib_id, ref, x, y, rot, mirror, unit, pins)
         self.symbols.append(dict(lib_id=lib_id, ref=ref, value=value, x=x, y=y, rot=rot, mirror=mirror,
                                  unit=unit, dnp=dnp, fields=fields or {}, pins=pins, show_value=show_value,
-                                 ref_at=ref_at, val_at=val_at, footprint=footprint, center=center))
+                                 ref_at=ref_at, val_at=val_at, footprint=footprint, center=center, just=just))
         return part
 
     def power(self, name, x, y, lib_name=None, rot=0):
@@ -345,13 +371,14 @@ class Sheet:
     def nc(self, p):
         self.items.append(['no_connect', ['at', snap(p[0]), snap(p[1])], ['uuid', U()]])
 
-    def stub(self, part, num, net, conf='I', length=5.08, kind='label', shape='bidirectional'):
-        """Short wire out of a pin ending in a label (or power port if net is a rail)."""
+    def stub(self, part, num, net, conf='I', length=5.08, kind='label', shape='bidirectional', near=False):
+        """Short wire out of a pin ending in a label. near=True anchors a local label
+        2.54 mm from the pin so its text sits on the wire, clear of anything at the far end."""
         p = part.p(num)
         d = part.pdir(num)
         e = (p[0] + d[0] * length, p[1] + d[1] * length)
         self.wire([p, e], conf)
-        self.label(net, e, d, kind, shape)
+        self.label(net, (p[0] + d[0] * 2.54, p[1] + d[1] * 2.54) if near else e, d, kind, shape)
         self.pins_used.append((part.ref, str(num), net, conf))
         return e
 
@@ -380,9 +407,11 @@ class Sheet:
                            ['stroke', ['width', 0.254], ['type', 'dash'], ['color'] + list(color) + [1]],
                            ['fill', ['type', 'none']], ['uuid', U()]])
         if title:
-            self.text(title, x1 + 1.27, y1 + 1.27, size=2.0, bold=True, color=(0, 0, 132))
+            self.text(title, x1 + 2.54, y1 + 2.54, size=2.0, bold=True, color=(0, 0, 132))
 
-    def textbox(self, s, x, y, w, h, size=1.27, fill=(255, 255, 225)):
+    def textbox(self, s, x, y, w, h=None, size=1.27, fill=(255, 255, 225)):
+        """Text box w wide; the height is fitted to the wrapped text (h is ignored)."""
+        h = textbox_height(s, w, size)
         self.items.append(['text_box', Q(s), ['at', snap(x), snap(y), 0], ['size', snap(w), snap(h)],
                            ['stroke', ['width', 0.1524], ['type', 'solid'], ['color', 120, 120, 120, 1]],
                            ['fill', ['type', 'color'], ['color'] + list(fill) + [1]],
@@ -475,10 +504,11 @@ class Sheet:
             rx, ry = s['ref_at'] or (s['x'] + 2.54, s['y'] - 1.27)
             vx, vy = s['val_at'] or (s['x'] + 2.54, s['y'] + 1.27)
             c = s.get('center', set())
-            ent.append(['property', Q('Reference'), Q(s['ref']), ['at', round(rx, 3), round(ry, 3), 0],
-                        ['effects', ['font', ['size', 1.27, 1.27]]] + ([] if 'ref' in c else [['justify', 'left']]) + (['hide'] if s.get('power') else [])])
-            ent.append(['property', Q('Value'), Q(s['value']), ['at', round(vx, 3), round(vy, 3), 0],
-                        ['effects', ['font', ['size', 1.27, 1.27]]] + ([] if 'val' in c else [['justify', 'left']]) + ([] if s['show_value'] else ['hide'])])
+            fa = 90 if s['rot'] in (90, 270) else 0   # keeps field text horizontal on rotated parts
+            ent.append(['property', Q('Reference'), Q(s['ref']), ['at', round(rx, 3), round(ry, 3), fa],
+                        ['effects', ['font', ['size', 1.27, 1.27]]] + ([] if 'ref' in c else [['justify', s.get('just', {}).get('Reference', 'left')]]) + (['hide'] if s.get('power') else [])])
+            ent.append(['property', Q('Value'), Q(s['value']), ['at', round(vx, 3), round(vy, 3), fa],
+                        ['effects', ['font', ['size', 1.27, 1.27]]] + ([] if 'val' in c else [['justify', s.get('just', {}).get('Value', 'left')]]) + ([] if s['show_value'] else ['hide'])])
             ent.append(['property', Q('Footprint'), Q(s['footprint']), ['at', s['x'], s['y'], 0],
                         ['effects', ['font', ['size', 1.27, 1.27]], 'hide']])
             ent.append(['property', Q('Datasheet'), Q(''), ['at', s['x'], s['y'], 0],

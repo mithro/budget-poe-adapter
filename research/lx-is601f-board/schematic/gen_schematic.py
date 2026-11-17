@@ -47,9 +47,11 @@ def two(s, lib, ref, val, x, y, horiz, conf='I', **kw):
         rot = 0 if horiz else 270  # these are horizontal in the library, pin 1 (K) left / top
     if flip:
         rot = (rot + 180) % 360
-    ra = kw.pop('ref_at', None) or ((x, y - 2.54) if horiz else (x + 2.54, y - 1.27))
+    dy = 3.81 if (horiz and (lib.startswith('Device:C') or lib == 'Device:LED')) else 2.54
+    ra = kw.pop('ref_at', None) or ((x, y - dy) if horiz else (x + 2.54, y - 1.27))
     va = kw.pop('val_at', None) or ((x, y + 3.175) if horiz else (x + 2.54, y + 1.27))
-    return s.place(lib, ref, val, x, y, rot=rot, ref_at=ra, val_at=va, center={'ref', 'val'} if horiz else set(), **kw)
+    cen = kw.pop('center', {'ref', 'val'} if horiz else set())
+    return s.place(lib, ref, val, x, y, rot=rot, ref_at=ra, val_at=va, center=cen, **kw)
 
 
 def link(s, a, an, b, bn, net, conf='I', hfirst=None):
@@ -104,7 +106,7 @@ def u4_symbol():
     gnd = [('11', 'AGND', 'power_in'), ('30', 'SGND_1', 'power_in'), ('36', 'SGND_1', 'power_in'), ('37', 'SGND_0', 'power_in'),
            ('43', 'SGND_0', 'power_in'), ('61', 'GND_SWR', 'power_in'), ('62', 'GND_SWR', 'power_in'), ('117', 'PLLGND', 'power_in'),
            ('129', 'EPAD', 'power_in')]
-    unitD = dict(left=p33, right=p115, bottom=gnd, w=25.4)
+    unitD = dict(left=p33, right=p115 + [None] + gnd, w=25.4)
     units = [unitA, unitB, unitC, unitD]
     node = box_symbol('YT9215SCH', units, ref='U', value='YT9215SCH')
     allp = set()
@@ -131,9 +133,9 @@ def g2401_symbol():
 
 
 def sct2622_symbol():
-    return box_symbol('SCT2622', [dict(left=[('2', 'VIN', 'power_in'), ('3', 'EN', 'input'), ('4', 'RT', 'passive')],
-                                       right=[('1', 'BOOT', 'passive'), ('8', 'SW', 'power_out'), ('5', 'FB', 'input')],
-                                       bottom=[None, ('7', 'GND', 'power_in'), ('9', 'EP', 'passive')], w=15.24)],
+    return box_symbol('SCT2622', [dict(left=[('2', 'VIN', 'power_in'), ('3', 'EN', 'input'), ('4', 'RT', 'passive'), None],
+                                       right=[('1', 'BOOT', 'passive'), ('8', 'SW', 'power_out'), ('5', 'FB', 'input'), None],
+                                       bottom=[None, ('7', 'GND', 'power_in'), None, None, ('9', 'EP', 'passive')], w=20.32)],
                       ref='U', value='SCT2622', props={'Note': 'Pin numbers not verified'})
 
 
@@ -143,7 +145,7 @@ def pse_symbol():
     right = []
     for ch in range(1, 5):
         if ch > 1:
-            right.append(None)
+            right += [None, None]
         right += [('?%d0' % ch, 'PORT%d' % ch, 'passive'), ('?%d1' % ch, 'SENSE%d' % ch, 'passive')]
     return box_symbol('PSE_2184A', [dict(left=left, right=right, w=22.86)], ref='U', value='2184A',
                       props={'Note': 'Unidentified 4-port PSE (QFN-48, marking 2184A 533AQ1H). Functional pins only.'})
@@ -188,28 +190,28 @@ def entry(s, x, y, dx, dy):
 
 # ---------------------------------------------------------------- POWER
 s = power
-s.frame(m(10), m(15), m(200), m(97), 'DC input and protection')
+s.frame(m(12.7), m(15), m(200), m(97), 'DC input and protection')
 YL = m(40)
 j2 = s.place('Connector_Generic:Conn_01x02', 'J2', 'POWER2', m(22), YL, mirror='y')
 l1 = two(s, 'Device:L', 'L1', 'white SMD', m(45), YL, True)
-d4 = two(s, 'Device:D_Schottky', 'D4', 'SS510', m(80), YL, True, flip=True)
-l2 = two(s, 'Device:L', 'L2', '"701"', m(100), YL, True)
+d4 = two(s, 'Device:D_Schottky', 'D4', 'SS510', m(90), YL, True, flip=True)
+l2 = two(s, 'Device:L', 'L2', '"701"', m(108), YL, True)
 link(s, j2, '1', l1, '1', 'VIN_RAW', 'I')
 link(s, l1, '2', d4, '2', 'VIN_F', 'I')
 link(s, d4, '1', l2, '1', 'VIN_P', 'I')
 p = j2.p('2'); s.wire([p, (m(30), p[1]), (m(30), m(62))], 'I'); s.power('GND', m(30), m(62)); s.mark(j2, '2', 'GND', 'I')
 for i, rv in enumerate(['RV1', 'RV2', 'RV3']):
-    x = m(55 + 7.62 * i)
+    x = m(52 + 12.7 * i)
     v = two(s, 'Device:Varistor', rv, 'MOV?', x, m(53), False)
     s.wire([(x, YL), v.p('1')], 'U'); s.mark(v, '1', 'VIN_F', 'U')
     gnd(s, v.p('2'), 'U', drop=m(62) - v.p('2')[1]); s.mark(v, '2', 'GND', 'U')
 for i, (r, v, lib) in enumerate([('C1', '1206', 'Device:C'), ('C2', '1206', 'Device:C'), ('C3', '1206', 'Device:C'), ('C4', '47u 63V', 'Device:C_Polarized')]):
-    x = m(115 + 10.16 * i)
+    x = m(122 + 12.7 * i)
     c = two(s, lib, r, v, x, m(53), False)
     s.wire([(x, YL), c.p('1')], 'I'); s.mark(c, '1', '+48V', 'I')
     gnd(s, c.p('2'), 'I', drop=m(62) - c.p('2')[1]); s.mark(c, '2', 'GND', 'I')
-s.wire([l2.p('2'), (m(170), YL)], 'I'); s.mark(l2, '2', '+48V', 'I')
-s.power('+48V', m(170), YL); s.power('PWR_FLAG', m(170), YL, lib_name='PWR_FLAG', rot=180)
+s.wire([l2.p('2'), (m(175), YL)], 'I'); s.mark(l2, '2', '+48V', 'I')
+s.power('+48V', m(175), YL); s.power('PWR_FLAG', m(175), YL, lib_name='PWR_FLAG', rot=180)
 d1 = two(s, 'Device:D_Schottky', 'D1', 'SS510', m(40), m(80), True); s.stub(d1, '1', 'TBD_D1_K', 'U'); s.stub(d1, '2', 'TBD_D1_A', 'U')
 d5 = two(s, 'Device:D_Schottky', 'D5', 'SS510', m(80), m(80), True); s.stub(d5, '1', 'TBD_D5_K', 'U'); s.stub(d5, '2', 'TBD_D5_A', 'U')
 s.text('D1 and D5 sit next to the input; their nets are not traced.', m(15), m(88), size=1.27, italic=True)
@@ -217,8 +219,8 @@ s.textbox('Input\n- Assumed 48-57 V (C4 is rated 63 V). J2 polarity not checked.
           '- RV1-RV3: blue disc parts, silk "RV". Drawn as varistors to GND;\n  they could be Y-capacitors to chassis.\n'
           '- L1 is a white SMD part (fuse or inductor).\n- D4 is assumed to be the reverse-polarity diode.', m(210), m(15), m(95), m(30))
 
-s.frame(m(10), m(105), m(285), m(195), '3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous)')
-pu1 = s.place('lxr:SCT2622', 'PU1', 'SCT2622', m(110), m(145), node=sct2622_symbol())
+s.frame(m(12.7), m(105), m(285), m(195), '3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous)')
+pu1 = s.place('lxr:SCT2622', 'PU1', 'SCT2622', m(110), m(145), node=sct2622_symbol(), ref_at=(m(102.87), m(137.16)), val_at=(m(113.03), m(137.16)))
 s.power('+48V', m(85), m(125))
 s.route((m(85), m(125)), pu1.p('2'), 'I', hfirst=False); s.mark(pu1, '2', '+48V', 'I')
 r7 = two(s, 'Device:R', 'R7', '0603', m(65), m(137), False)
@@ -231,8 +233,9 @@ gnd(s, r8.p('2'), 'I', drop=m(178) - r8.p('2')[1]); s.mark(r8, '2', 'GND', 'I')
 pr1 = two(s, 'Device:R', 'PR1', '73k2 "86C"', m(90), m(165), False)
 s.route(pu1.p('4'), pr1.p('1'), 'I', hfirst=True); s.mark(pu1, '4', 'BUCK_RT', 'I'); s.mark(pr1, '1', 'BUCK_RT', 'I')
 gnd(s, pr1.p('2'), 'I', drop=m(178) - pr1.p('2')[1]); s.mark(pr1, '2', 'GND', 'I')
-for n in ('7', '9'):
-    gnd(s, pu1.p(n), 'I', drop=m(178) - pu1.p(n)[1]); s.mark(pu1, n, 'GND', 'I')
+gnd(s, pu1.p('7'), 'I', drop=m(178) - pu1.p('7')[1]); s.mark(pu1, '7', 'GND', 'I')
+p9 = pu1.p('9'); yj = p9[1] + G * 2
+s.wire([p9, (p9[0], yj), (pu1.p('7')[0], yj)], 'I'); s.mark(pu1, '9', 'GND', 'I')
 pc6 = two(s, 'Device:C', 'PC6', 'boot', m(135), m(130), True)
 ysw = pu1.p('8')[1]
 s.route(pu1.p('1'), pc6.p('1'), 'I', hfirst=False); s.mark(pu1, '1', 'BUCK_BST', 'I'); s.mark(pc6, '1', 'BUCK_BST', 'I')
@@ -243,22 +246,22 @@ s.wire([pu1.p('8'), pl3.p('1')], 'V'); s.mark(pu1, '8', 'BUCK_SW', 'V'); s.mark(
 d40 = two(s, 'Device:D_Schottky', 'D40', 'Schottky', xn, m(162), False)
 s.wire([(xn, ysw), d40.p('1')], 'I'); s.mark(d40, '1', 'BUCK_SW', 'I')
 gnd(s, d40.p('2'), 'I', drop=m(178) - d40.p('2')[1]); s.mark(d40, '2', 'GND', 'I')
-for x, (r, v, lib) in zip([m(185), m(197), m(209)], [('TC1', '220u 16V', 'Device:C_Polarized'), ('C23', '1206', 'Device:C'), ('C24', '1206', 'Device:C')]):
+for x, (r, v, lib) in zip([m(185), m(200), m(212)], [('TC1', '220u 16V', 'Device:C_Polarized'), ('C23', '1206', 'Device:C'), ('C24', '1206', 'Device:C')]):
     c = two(s, lib, r, v, x, m(162), False)
     s.wire([(x, ysw), c.p('1')], 'I'); s.mark(c, '1', '+3V3', 'I')
     gnd(s, c.p('2'), 'I', drop=m(178) - c.p('2')[1]); s.mark(c, '2', 'GND', 'I')
-pr2 = two(s, 'Device:R', 'PR2', '200k "30D"', m(225), m(157), False)
-pr3 = two(s, 'Device:R', 'PR3', '300k "304"', m(225), m(170), False)
-s.wire([(m(225), ysw), pr2.p('1')], 'I'); s.mark(pr2, '1', '+3V3', 'I')
+pr2 = two(s, 'Device:R', 'PR2', '200k "30D"', m(228), m(157), False)
+pr3 = two(s, 'Device:R', 'PR3', '300k "304"', m(228), m(170), False)
+s.wire([(m(228), ysw), pr2.p('1')], 'I'); s.mark(pr2, '1', '+3V3', 'I')
 link(s, pr2, '2', pr3, '1', 'BUCK_FB', 'I')
 gnd(s, pr3.p('2'), 'I', drop=m(183) - pr3.p('2')[1]); s.mark(pr3, '2', 'GND', 'I')
 yfb = m(163.83)
-s.wire([(m(225), yfb), (m(232), yfb)], 'I'); s.label('BUCK_FB', (m(232), yfb), (1, 0))
+s.wire([(pr2.p('2')[0], yfb), (m(235), yfb)], 'I'); s.label('BUCK_FB', (m(235), yfb), (1, 0))
 s.stub(pu1, '5', 'BUCK_FB', 'I', length=m(7.62))
 s.wire([pl3.p('2'), (m(250), ysw)], 'V'); s.mark(pl3, '2', '+3V3', 'V')
 s.power('+3V3', m(250), ysw); s.power('PWR_FLAG', m(250), ysw, lib_name='PWR_FLAG', rot=180)
-pc2 = two(s, 'Device:C', 'PC2', 'MLCC', m(255), m(185), True); s.stub(pc2, '1', 'TBD_PC2_1', 'U'); s.stub(pc2, '2', 'TBD_PC2_2', 'U')
-r11 = two(s, 'Device:R', 'R11', '20k5 "31C"', m(255), m(175), True); s.stub(r11, '1', 'TBD_R11_1', 'U'); s.stub(r11, '2', 'TBD_R11_2', 'U')
+pc2 = two(s, 'Device:C', 'PC2', 'MLCC', m(262), m(187), True); s.stub(pc2, '1', 'TBD_PC2_1', 'U'); s.stub(pc2, '2', 'TBD_PC2_2', 'U')
+r11 = two(s, 'Device:R', 'R11', '20k5 "31C"', m(262), m(175), True); s.stub(r11, '1', 'TBD_R11_1', 'U'); s.stub(r11, '2', 'TBD_R11_2', 'U')
 s.textbox('3.3 V buck\n- PU1 marking "2622 SCT 6DC" = SCT2622. Pin functions are from its datasheet;\n  pin numbers are assumed.\n'
           '- Values are decoded EIA-96 codes (49C = 31.6k, 86C = 73.2k, 30D = 200k).\n'
           '- Which resistors form the FB divider is not checked: measure TC1 (expect 3.3 V).\n'
@@ -270,7 +273,7 @@ s = switch
 u4node, u4units = u4_symbol()
 s.use('lxr:YT9215SCH', u4node)
 # U4C control
-s.frame(m(10), m(15), m(280), m(270), 'U4C: clock, reset, regulator, management, GPIO and LEDs')
+s.frame(m(12.7), m(15), m(280), m(270), 'U4C: clock, reset, regulator, management, GPIO and LEDs')
 uC = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(170), m(140), unit=3, node=u4node)
 # crystal block (top-left)
 y6 = two(s, 'Device:Crystal', 'Y6', '25 MHz', m(90), m(80), True, flip=True)
@@ -284,7 +287,7 @@ for c in (c43, c44):
     gnd(s, c.p('2'), 'V'); s.mark(c, '2', 'GND', 'V')
 s.stub(uC, '89', 'NRESET', 'U', length=m(10))
 s.stub(uC, '12', 'RBIAS', 'I', length=m(10))
-s.pin_power(uC, '60', '+3V3', 'I', length=m(5.08))
+s.pin_power(uC, '60', '+3V3', 'I', length=m(25.4))
 l3 = two(s, 'Device:L', 'L3', '4u7 "4R7"', m(95), uC.p('63')[1], True)
 s.wire([uC.p('63'), l3.p('2')], 'V'); s.mark(uC, '63', 'SWR_LX', 'V'); s.mark(l3, '2', 'SWR_LX', 'V')
 xl = m(105)
@@ -293,7 +296,7 @@ s.wire([l3.p('1'), (m(85), l3.p('1')[1])], 'V'); s.mark(l3, '1', '+1V15', 'V')
 s.power('+1V15', m(85), l3.p('1')[1], lib_name='+1V1'); s.power('PWR_FLAG', m(85), l3.p('1')[1], lib_name='PWR_FLAG', rot=180)
 s.textbox('RBIAS: 2.49 kOhm 1 % to GND per datasheet. The\nresistor and the reset RC are not located yet.', m(15), m(100), m(60), m(10))
 # EEPROM
-u10 = s.place('Memory_EEPROM:24LC08', 'U10', 'HK24C08', m(55), m(150))
+u10 = s.place('Memory_EEPROM:24LC08', 'U10', 'HK24C08', m(55), m(150), ref_at=(m(55) - 10.16, m(150) - 8.89), val_at=(m(55) + 2.54, m(150) - 8.89), center=set())
 s.route(u10.p('6'), uC.p('91'), 'I', xm=m(100)); s.mark(u10, '6', 'I2C_SCL', 'I'); s.mark(uC, '91', 'I2C_SCL', 'I')
 s.route(u10.p('5'), uC.p('92'), 'I', xm=m(102.54)); s.mark(u10, '5', 'I2C_SDA', 'I'); s.mark(uC, '92', 'I2C_SDA', 'I')
 xa = u10.p('1')[0] - m(5.08)
@@ -304,12 +307,12 @@ s.pin_power(u10, '8', '+3V3', 'I'); s.pin_power(u10, '4', 'GND', 'I')
 s.stub(u10, '7', 'TBD_U10_WP', 'U', length=m(5.08))
 s.textbox('U10 (bottom side). R14, R16, R19, R29, R30 and C15\nnext to it: probably pull-ups, WP and decoupling.', m(15), m(168), m(60), m(10))
 # SPI flash footprint
-u6 = s.place('Memory_Flash:W25Q32JVSS', 'U6', 'DNP footprint', m(60), m(215), dnp=True, mirror='y')
+u6 = s.place('Memory_Flash:W25Q32JVSS', 'U6', 'W25Q32 (DNP)', m(60), m(215), dnp=True, mirror='y', ref_at=(m(48), m(201)), val_at=(m(48), m(229)), center=set())
 fl = [('49', 'R93', 'SPF0_SCK', 'FL_SCK', '6'), ('50', 'R92', 'SPF0_SI', 'FL_SI', '5'), ('54', 'R89', 'SPF0_SO', 'FL_SO', '2'),
       ('55', 'R44', 'SPF0_CS', 'FL_CS', '1')]
 for i, (n, rr, n1, n2, fp) in enumerate(fl):
     p = uC.p(n)
-    r = two(s, 'Device:R', rr, '0402', m(110), p[1], True, ref_at=(m(110), p[1] - 1.0), val_at=(m(118), p[1] - 1.0))
+    r = two(s, 'Device:R', rr, '0402', m(110), p[1], True, ref_at=(m(116.84), p[1] - 1.0), val_at=(m(125.73), p[1] - 1.0), center=set())
     s.wire([r.p('2'), p], 'V'); s.mark(r, '2', n1, 'V'); s.mark(uC, n, n1, 'V')
     q = u6.p(fp)
     xv = m(85 + 2.54 * i)
@@ -318,7 +321,7 @@ for i, (n, rr, n1, n2, fp) in enumerate(fl):
 s.pin_power(u6, '8', '+3V3', 'U'); s.pin_power(u6, '4', 'GND', 'U')
 s.stub(u6, '3', 'TBD_U6_WP', 'U', length=m(5.08)); s.stub(u6, '7', 'TBD_U6_HOLD', 'U', length=m(5.08))
 s.textbox('U6: empty SOP-8 footprint on the bottom, assumed SPI NOR\nflash (25-series pinout). R40, R94, R96, R98, R100, R102,\nR109 sit next to it. '
-          'R44/R89/R92/R93 to U4 pins 55/54/50/49\nare seen on the top side.', m(15), m(232), m(70), m(16))
+          'R44/R89/R92/R93 to U4 pins 55/54/50/49\nare seen on the top side.', m(15), m(240), m(70))
 for n in ('46', '47', '90'):
     s.nc(uC.p(n)); s.mark(uC, n, '(no trace seen)', 'V')
 for n in ('93', '44', '48', '51', '52', '53', '56', '57'):
@@ -342,7 +345,7 @@ uA = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(330), m(130), unit=1, node=u4
 MDIPINS = {0: [95, 96, 97, 98, 100, 101, 102, 103], 1: [105, 106, 107, 108, 110, 111, 112, 113],
            2: [119, 120, 121, 122, 124, 125, 126, 127], 3: [1, 2, 3, 4, 6, 7, 8, 9], 4: [19, 20, 21, 22, 24, 25, 26, 27]}
 for p in range(5):
-    ends = [s.stub(uA, n, 'P%d_MDI%d' % (p, k), 'I', length=m(20.32)) for k, n in enumerate(MDIPINS[p])]
+    ends = [s.stub(uA, n, 'P%d_MDI%d' % (p, k), 'I', length=m(20.32), near=True) for k, n in enumerate(MDIPINS[p])]
     bx = ends[0][0] + m(2.54)
     for e in ends:
         entry(s, e[0], e[1], G, -G)
@@ -352,7 +355,7 @@ for p in range(5):
 s.textbox('Port mapping (inferred from placement)\nP0 -> DXFRM4 -> J1 port 1\nP1 -> DXFRM3 -> J1 port 2\nP2 -> DXFRM2 -> J1 port 3\n'
           'P3 -> DXFRM5 -> J1 port 4\nP4 -> DXFRM6 -> J3 uplink\nMDIn: 0..7 = A+ A- B+ B- C+ C- D+ D-', m(295), m(200), m(60), m(30))
 # U4B SerDes
-s.frame(m(460), m(15), m(585), m(110), 'U4B: SerDes')
+s.frame(m(460), m(15), m(575), m(110), 'U4B: SerDes')
 uB = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(485), m(55), unit=2, node=u4node)
 for n, net in (('39', 'SDS0_TXP'), ('38', 'SDS0_TXN'), ('41', 'SDS0_RXP'), ('42', 'SDS0_RXN')):
     s.stub(uB, n, net, 'U', length=m(15.24), kind='hier', shape='output' if 'TX' in net else 'input')
@@ -360,9 +363,11 @@ for n, net in (('32', 'SDS1_TXP'), ('31', 'SDS1_TXN'), ('34', 'SDS1_RXP'), ('35'
     s.stub(uB, n, net, 'U', length=m(7.62))
 s.textbox('Which SerDes feeds the SFP (U12) is not traced;\nSerDes 0 is assumed. SerDes 1 nets end here.', m(465), m(85), m(60), m(10))
 # U4D power
-s.frame(m(290), m(280), m(585), m(380), 'U4D: supply pins')
-uD = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(360), m(325), unit=4, node=u4node)
-lp, rp, bp = u4units[3]['left'], u4units[3]['right'], [x for x in u4units[3]['bottom'] if x]
+s.frame(m(290), m(280), m(575), m(365), 'U4D: supply pins')
+uD = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(360), m(322), unit=4, node=u4node)
+lp = u4units[3]['left']
+_r = u4units[3]['right']; _k = _r.index(None)
+rp, bp = _r[:_k], _r[_k + 1:]
 xa = uD.p(lp[0][0])[0] - m(5.08)
 for pe in lp:
     q = uD.p(pe[0]); s.wire([q, (xa, q[1])], 'I'); s.mark(uD, pe[0], '+3V3', 'I')
@@ -371,29 +376,27 @@ xb = uD.p(rp[0][0])[0] + m(5.08)
 for pe in rp:
     q = uD.p(pe[0]); s.wire([q, (xb, q[1])], 'I'); s.mark(uD, pe[0], '+1V15', 'I')
 s.wire([(xb, uD.p(rp[0][0])[1] - m(5.08)), (xb, uD.p(rp[-1][0])[1])], 'I'); s.power('+1V15', xb, uD.p(rp[0][0])[1] - m(5.08), lib_name='+1V1')
-yb = uD.p(bp[0][0])[1] + m(2.54)
 for pe in bp:
-    q = uD.p(pe[0]); s.wire([q, (q[0], yb)], 'I'); s.mark(uD, pe[0], 'GND', 'I')
-s.wire([(uD.p(bp[0][0])[0], yb), (uD.p(bp[-1][0])[0], yb)], 'I'); gnd(s, (uD.p(bp[-1][0])[0] + m(2.54), yb), 'I', drop=m(2.54))
-s.wire([(uD.p(bp[-1][0])[0], yb), (uD.p(bp[-1][0])[0] + m(2.54), yb)], 'I')
+    q = uD.p(pe[0]); s.wire([q, (xb, q[1])], 'I'); s.mark(uD, pe[0], 'GND', 'I')
+s.wire([(xb, uD.p(bp[0][0])[1]), (xb, uD.p(bp[-1][0])[1])], 'I'); gnd(s, (xb, uD.p(bp[-1][0])[1]), 'I', drop=m(5.08))
 s.textbox('Supplies (datasheet): AVDDH, DVDDIO, SVDDH, HV_SWR = 3.3 V;\nAVDDL, DVDDL, SVDDL, PLLVDDL = 1.15 V (1.08-1.32 V).\n\n'
           'About 30 0402 decoupling capacitors surround U4 (C19, C21,\nC22, C25, C26, C30, C45, C48, C49, C92-C97, C100, C105,\nC111-C113, C119, C122-C126, ...). '
           'Their rails are not traced,\nso they are not drawn.\n\nEPAD (pin 129) is GND; a screw through the board clamps the\nheatsink onto it.',
-          m(415), m(285), m(80), m(48))
+          m(415), m(295), m(85))
 
 # ---------------------------------------------------------------- PORT BLOCK
 gnode = g2401_symbol()
 
 
-def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=200, h=110):
+def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=195, h=105):
     s.frame(x0, y0, x0 + w, y0 + h, title)
     yb = y0 + m(12.7)
-    s.label('P%d_MDI[0..7]' % p, (x0 + m(5.08), yb), (-1, 0), kind='hier')
-    bx = x0 + m(12.7)
+    s.label('P%d_MDI[0..7]' % p, (x0 + m(22.86), yb), (-1, 0), kind='hier')
+    bx = x0 + m(27.94)
     t = s.place('lxr:G2401PR', xfrm, 'G2401PR', x0 + m(80), y0 + m(45), node=gnode)
     td = [('2', 0), ('3', 1), ('5', 2), ('6', 3), ('8', 4), ('9', 5), ('11', 6), ('12', 7)]
     ylast = t.p('12')[1]
-    bus(s, [(x0 + m(5.08), yb), (bx, yb), (bx, ylast - G)])
+    bus(s, [(x0 + m(22.86), yb), (bx, yb), (bx, ylast - G)])
     for pin, k in td:
         q = t.p(pin)
         entry(s, bx, q[1] - G, G, G)
@@ -405,7 +408,8 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=200, h=11
         q = t.p(pin); s.wire([q, (xt, q[1])], 'U'); s.mark(t, pin, 'P%d_TCT' % p, 'U')
     s.wire([(xt, t.p('1')[1]), (xt, t.p('10')[1] + m(5.08))], 'U')
     s.label('P%d_TCT' % p, (xt, t.p('10')[1] + m(5.08)), (0, 1))
-    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(170), y0 + m(45), mirror='y')
+    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(170), y0 + m(45), mirror='y',
+                ref_at=(x0 + m(177.8), y0 + m(25.4)), val_at=(x0 + m(177.8), y0 + m(27.94)), center=set())
     for tp, jp in [('23', '1'), ('22', '2'), ('20', '3'), ('19', '6'), ('17', '4'), ('16', '5'), ('14', '7'), ('13', '8')]:
         s.stub(t, tp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
         s.stub(j, jp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
@@ -414,7 +418,8 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=200, h=11
     for pin, net in (('24', 'POE%d' % poe_base), ('21', 'POE%d' % (poe_base + 1)), ('18', 'P%d_CT45' % p), ('15', 'P%d_CT78' % p)):
         s.stub(t, pin, net, 'U', length=m(10.16))
     for k, ed in enumerate(eds):
-        e = s.place('Power_Protection:SRV05-4', ed, '"05U"', x0 + m(45 + 75 * k), y0 + m(95))
+        ex, ey = x0 + m(45 + 75 * k), y0 + m(85)
+        e = s.place('Power_Protection:SRV05-4', ed, '"05U"', ex, ey, ref_at=(ex + m(5.08), ey - m(15.24)), val_at=(ex + m(5.08), ey - m(12.7)), center=set())
         for pin, mi in zip(('1', '3', '4', '6'), ([0, 1, 2, 3] if k == 0 else [4, 5, 6, 7])):
             s.stub(e, pin, 'P%d_MDI%d' % (p, mi), 'I', length=m(5.08))
         s.pin_power(e, '2', 'GND', 'I'); s.stub(e, '5', 'TBD_P%d_ESD_VP' % p, 'U', length=m(2.54))
@@ -424,12 +429,12 @@ s = eth
 PORTS = [(0, 'DXFRM4', 'J1 port 1 (PoE)', ('ED1', 'ED10'), 1), (1, 'DXFRM3', 'J1 port 2 (PoE)', ('ED2', 'ED3'), 3),
          (2, 'DXFRM2', 'J1 port 3 (PoE)', ('ED4', 'ED5'), 5), (3, 'DXFRM5', 'J1 port 4 (PoE)', ('ED6', 'ED7'), 7)]
 for i, (p, xf, jv, eds, pb) in enumerate(PORTS):
-    x0 = m(10 + (i % 2) * 205)
-    y0 = m(12.7 + (i // 2) * 114.3)
+    x0 = m(12.7 + (i % 2) * 198.12)
+    y0 = m(12.7 + (i // 2) * 109.22)
     port_block(s, p, xf, 'J1%s' % 'ABCD'[i], 'RJ45 ' + jv, eds, x0, y0, pb,
                'Port %d: U4 P%d -> %s -> J1 port %d' % (i + 1, p, xf, i + 1))
 # PoE bus to the module sheet
-yb = m(256.54)
+yb = m(236.22)
 s.label('POE[1..8]', (m(105), yb), (1, 0), kind='hier')
 bus(s, [(m(12.7), yb), (m(105), yb)])
 for k in range(8):
@@ -441,11 +446,11 @@ s.textbox('Notes: PoE assumed on the centre taps of pairs 1-2 / 3-6 (POE odd/eve
           'Pairs 4-5 / 7-8 centre taps (Pn_CT45/CT78) assumed to go to Bob-Smith terminations on the bottom. '
           'Bottom parts under J1 not yet assigned: 12x SMB "CP06C" (D6, D8-D18), 1206 caps C16, C38, C55, C56, C60-C62, C65, C71, C75, C98, ..., '
           '0603 resistors R15, R32, R67, R71-R76, R82-R84. J1 is one 1x4 RJ45 block, drawn as J1A-J1D. G2401PR pinout assumed. '
-          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(110), m(244), m(185), m(18), size=1.1)
+          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(10), m(243.84), m(165), size=1.1)
 
 # ---------------------------------------------------------------- UPLINK + SFP
 s = upl
-port_block(s, 4, 'DXFRM6', 'J3', 'RJ45 uplink (no PoE)', ('ED8', 'ED9'), m(10), m(15), 9, 'Port 5 (uplink): U4 P4 -> DXFRM6 -> J3')
+port_block(s, 4, 'DXFRM6', 'J3', 'RJ45 uplink (no PoE)', ('ED8', 'ED9'), m(12.7), m(15), 9, 'Port 5 (uplink): U4 P4 -> DXFRM6 -> J3')
 s.frame(m(220), m(15), m(330), m(135), 'SFP: U12')
 sfp = s.place('Interface_Optical:SFP', 'U12', 'SFP host connector', m(275), m(70))
 for n, net, sh in (('18', 'SDS0_TXP', 'input'), ('19', 'SDS0_TXN', 'input'), ('13', 'SDS0_RXP', 'output'), ('12', 'SDS0_RXN', 'output')):
@@ -453,27 +458,33 @@ for n, net, sh in (('18', 'SDS0_TXP', 'input'), ('19', 'SDS0_TXN', 'input'), ('1
 for n, net in (('2', 'TBD_SFP_TXFAULT'), ('8', 'TBD_SFP_LOS'), ('3', 'TBD_SFP_TXDIS'), ('4', 'TBD_SFP_SDA'), ('5', 'TBD_SFP_SCL'),
                ('6', 'TBD_SFP_MODDEF0'), ('7', 'TBD_SFP_RS')):
     s.stub(sfp, n, net, 'U', length=m(5.08))
-s.pin_power(sfp, '15', '+3V3', 'U'); s.pin_power(sfp, '16', '+3V3', 'U')
+a15, a16 = sfp.p('15'), sfp.p('16'); yt = min(a15[1], a16[1]) - m(5.08)
+s.wire([a15, (a15[0], yt)], 'U'); s.wire([a16, (a16[0], yt)], 'U'); s.wire([(a15[0], yt), (a16[0], yt)], 'U')
+s.power('+3V3', min(a15[0], a16[0]), yt); s.mark(sfp, '15', '+3V3', 'U'); s.mark(sfp, '16', '+3V3', 'U')
 for n in ('9', '11', '14', '17', '20'):
     s.mark(sfp, n, 'GND', 'U')
-s.pin_power(sfp, '10', 'GND', 'U'); s.pin_power(sfp, '1', 'GND', 'U')
+b1, b10 = sfp.p('1'), sfp.p('10'); yg = max(b1[1], b10[1]) + m(2.54)
+s.wire([b1, (b1[0], yg)], 'U'); s.wire([b10, (b10[0], yg)], 'U'); s.wire([(b1[0], yg), (b10[0], yg)], 'U')
+s.power('GND', max(b1[0], b10[0]), yg); s.mark(sfp, '1', 'GND', 'U'); s.mark(sfp, '10', 'GND', 'U')
 s.mark(sfp, 'CAGE', 'CHASSIS', 'U')
-c = sfp.p('CAGE'); s.wire([c, (c[0], c[1] + G)], 'U'); s.power('Earth_Protective', c[0], c[1] + G, lib_name='Earth_Protective')
-s.textbox('U12 is a 20-pin SFP edge connector; one board has the cage fitted.\nAC-coupling caps, I2C and status pins are not traced.', m(300), m(155), m(110), m(10))
-s.textbox('The uplink has no PoE: POE9/POE10 are placeholders for its pair 1-2 / 3-6 centre taps (not traced).', m(10), m(140), m(200), m(6))
+c = sfp.p('CAGE'); ye = c[1] + m(7.62); xe = c[0] - m(7.62)
+s.wire([c, (c[0], ye), (xe, ye)], 'U'); s.power('Earth_Protective', xe, ye, lib_name='Earth_Protective')
+s.textbox('U12 is a 20-pin SFP edge connector; one board has the cage fitted.\nAC-coupling caps, I2C and status pins are not traced.', m(225), m(110), m(100))
+s.textbox('The uplink has no PoE: POE9/POE10 are placeholders for its pair 1-2 / 3-6 centre taps (not traced).', m(12.7), m(124), m(195))
 
 # ---------------------------------------------------------------- POE MODULE
 s = poe
-s.frame(m(10), m(15), m(75), m(120), 'Mainboard header PIN1')
-pin1 = s.place('Connector_Generic:Conn_01x08', 'J4', 'PIN1 header', m(55), m(55), fields={'Silk': 'PIN1'})
-s.label('POE[1..8]', (m(15.24), m(35.56)), (-1, 0), kind='hier')
-bus(s, [(m(15.24), m(35.56)), (m(25.4), m(35.56)), (m(25.4), pin1.p('8')[1] - G)])
+s.frame(m(12.7), m(15), m(75), m(120), 'Mainboard header PIN1')
+pin1 = s.place('Connector_Generic:Conn_01x08', 'J4', 'PIN1 header', m(58), m(55), fields={'Silk': 'PIN1'})
+XB = m(38.1)
+s.label('POE[1..8]', (m(35.56), m(35.56)), (-1, 0), kind='hier')
+bus(s, [(m(35.56), m(35.56)), (XB, m(35.56)), (XB, pin1.p('8')[1] - G)])
 for k in range(8):
     q = pin1.p(str(k + 1))
-    entry(s, m(25.4), q[1] - G, G, G)
-    s.wire([(m(25.4) + G, q[1]), q], 'U'); s.label('POE%d' % (k + 1), (m(25.4) + 2 * G, q[1]), (1, 0)); s.mark(pin1, str(k + 1), 'POE%d' % (k + 1), 'U')
-s.textbox('Silk "PIN1": 8-pin row along J1.\nAssumed to carry the 4 ports\' PoE\ncentre-tap feeds. Needs a\ncontinuity check to J1.', m(12.7), m(90), m(55), m(16))
-s.frame(m(80), m(15), m(287), m(155), 'PoE PSE module (separate PCB)')
+    entry(s, XB, q[1] - G, G, G)
+    s.wire([(XB + G, q[1]), q], 'U'); s.label('POE%d' % (k + 1), (XB + 2 * G, q[1]), (1, 0)); s.mark(pin1, str(k + 1), 'POE%d' % (k + 1), 'U')
+s.textbox('Silk "PIN1": 8-pin row along J1.\nAssumed to carry the 4 ports\' PoE\ncentre-tap feeds. Needs a\ncontinuity check to J1.', m(17.78), m(90), m(52))
+s.frame(m(80), m(15), m(284), m(155), 'PoE PSE module (separate PCB)')
 pse = s.place('lxr:PSE_2184A', 'U101', '2184A', m(115), m(70), node=pse_symbol(), fields={'Silk': 'U1 (module)'})
 s.pin_power(pse, '?1', '+48V', 'U'); s.stub(pse, '?2', 'TBD_PSE_VDD', 'U', length=m(7.62))
 s.stub(pse, '?3', 'TBD_PSE_IO1', 'U', length=m(7.62)); s.stub(pse, '?4', 'TBD_PSE_IO2', 'U', length=m(7.62)); s.pin_power(pse, '?5', 'GND', 'U')
@@ -499,7 +510,7 @@ s.textbox('- U1 (QFN-48) marked "2184A 533AQ1H": maker not identified (IP804AR i
 
 # ---------------------------------------------------------------- LEDS
 s = leds
-s.frame(m(10), m(15), m(175), m(170), 'Port LED array (silk columns FX and POW, rows 1-6)')
+s.frame(m(12.7), m(15), m(175), m(170), 'Port LED array (silk columns FX and POW, rows 1-6)')
 rws = [('LED_P0', 'RJ7', 'RJ8'), ('LED_P1', 'RJ9', 'RJ10'), ('LED_P2', 'RJ11', 'RJ12'), ('LED_P3', 'RJ13', 'RJ14'),
        ('LED_P4', 'RJ15', 'RJ16'), ('LED_P9', 'RJ17', 'RJ18')]
 s.text('FX column', m(30), m(22), size=1.6, bold=True); s.text('POW column', m(110), m(22), size=1.6, bold=True)
@@ -521,7 +532,7 @@ for i, (net, rf, rp) in enumerate(rws):
 s.textbox('- The array LEDs have no visible reference designators: LED101-106 (FX) and\n  LED111-116 (POW) are numbering for this schematic.\n'
           '- Active-low drive from U4 and the RJ-resistor pairing are inferred. Row 6 is\n  assumed to be the SFP (U4 P9LED0, pin 67).\n'
           '- The POW LEDs are probably driven by the PoE module (not traced).', m(12.7), m(140), m(110), m(25), size=1.1)
-s.frame(m(190), m(15), m(287), m(130), 'LED6 header (DNP), LED7, LED8')
+s.frame(m(185), m(15), m(284), m(130), 'LED6 header (DNP), LED7, LED8')
 hd = s.place('Connector_Generic:Conn_02x03_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), dnp=True, fields={'Silk': 'LED6'})
 for n in '123456':
     s.stub(hd, n, 'TBD_LED6_%s' % n, 'U', length=m(5.08))
@@ -536,7 +547,6 @@ s = root
 s.text('LX-IS601F V2.0 switch board: reverse-engineered schematic', m(15), m(15), size=3.5, bold=True)
 s.text('Two boards photographed 2026-11-17. YT9215SCH 5-port GbE switch + SFP, with a 4-port PoE PSE plug-in module.', m(15), m(22), size=1.8)
 pp = s.subsheet(power, m(20), m(45), m(55), m(20), [])
-s.text('+48V in -> +3V3 (SCT2622)\n+1V15 from U4 internal regulator', m(20), m(70), size=1.5, italic=True)
 sw = s.subsheet(switch, m(105), m(45), m(55), m(55),
                 [('P0_MDI[0..7]', 'R', 'bidirectional'), ('P1_MDI[0..7]', 'R', 'bidirectional'), ('P2_MDI[0..7]', 'R', 'bidirectional'),
                  ('P3_MDI[0..7]', 'R', 'bidirectional'), ('P4_MDI[0..7]', 'R', 'bidirectional'), ('SDS0_TXP', 'R', 'output'),
@@ -571,11 +581,11 @@ def rw(a, b, xm, kind):
 
 for k in range(4):
     rw(sw['P%d_MDI[0..7]' % k], ep['P%d_MDI[0..7]' % k], m(200 + 5.08 * k), 'bus')
-rw(sw['P4_MDI[0..7]'], up['P4_MDI[0..7]'], m(220.98), 'bus')
+rw(sw['P4_MDI[0..7]'], up['P4_MDI[0..7]'], m(233.68), 'bus')
 for k, n in enumerate(('SDS0_TXP', 'SDS0_TXN', 'SDS0_RXP', 'SDS0_RXN')):
-    rw(sw[n], up[n], m(223.52 + 2.54 * k), 'wire')
+    rw(sw[n], up[n], m(231.14 - 2.54 * k), 'wire')
 for k, n in enumerate(['LED_P0', 'LED_P1', 'LED_P2', 'LED_P3', 'LED_P4', 'LED_P9']):
-    rw(sw[n], ld[n], m(180 + 2.54 * k), 'wire')
+    rw(sw[n], ld[n], m(180 + 2.54 * (5 - k)), 'wire')
 a, b = ep['POE[1..8]'], pm['POE[1..8]']
 rw(a, b, m(315), 'bus')
 s.textbox(LEGEND, m(15), m(150), m(120), m(35), size=1.5)

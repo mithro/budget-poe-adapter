@@ -8,17 +8,12 @@ open-hardware board mirrored at
 [mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0);
 see [`../motorcomm-debug-pins.md`](../motorcomm-debug-pins.md).
 
-| File | What it is |
-| --- | --- |
-| `lx-is601f-debug-pins-annotated.png` | Annotated image |
-| `photo-u4-macro.jpg` | Source photo, close-up of U4 |
-| `photo-u4-wide.jpg` | Source photo, wider view |
-| `annotate.py` | Annotation script |
-
-The annotated image carries a pin table and notes on confidence. The close-up
-was taken with the heatsink removed; the wider view is of a second board with
-the same layout. The script draws the annotations (`python3 annotate.py`,
-needs Pillow).
+| File | Kind | Shows | Notes |
+| --- | --- | --- | --- |
+| `lx-is601f-debug-pins-annotated.png` | Annotated image | Pin table and notes on confidence | – |
+| `photo-u4-macro.jpg` | Source photo | Close-up of U4 | Heatsink removed |
+| `photo-u4-wide.jpg` | Source photo | Wider view of a second board | Same layout |
+| `annotate.py` | Script | Draws the annotations | `python3 annotate.py`, needs Pillow |
 
 ![Annotated debug pins](lx-is601f-debug-pins-annotated.png)
 

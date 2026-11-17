@@ -38,29 +38,18 @@ the rest are estimates carried over from the BOM CSV.
 
 ## 2. Options ranked
 
-| # | Approach | MCU can send? | Works with any host? | Δ BOM vs passive variant @1k | Verdict |
-|---|---|---|---|---|---|
-| A | **Host relay over USB-C** | Via the host | No | ≈ $0.00–0.05 | **Best cheap option** |
-| B | **3-port switch, trimmed** | Yes | Yes | ≈ +$3.3–3.6 (est.) | Best standalone option |
-| C | 3-port switch as designed | Yes | Yes | ≈ +$4.50 | Baseline, lowest risk |
-| D | Switch with embedded CPU | Yes | Yes | ≈ +$3.5–4 (est.) | Needs a Motorcomm SDK |
-| E | PoE-layer signalling | Not really | Yes | $0 | Already used |
-| F | Analog link sensing | No | Yes | ≈ $0.05–0.10 | Status only |
-| G | Passive and overlay schemes | — | — | — | Dead ends (§4) |
+| # | Approach | How | MCU can send? | Works with any host? | Δ BOM vs passive variant @1k | Verdict |
+|---|---|---|---|---|---|---|
+| A | **Host relay over USB-C** | MCU ↔ host on USB 2.0; host speaks on Ethernet | Via the host | No, needs a daemon | ≈ $0.00–0.05 | **Best cheap option** |
+| B | **3-port switch, trimmed** | RTL8363NB, cap-coupled device port, RP2040 on RMII | Yes | Yes | ≈ +$3.3–3.6 (est.) | Best standalone option; needs bench validation |
+| C | 3-port switch as designed | RTL8363NB + CH32V307 | Yes | Yes | ≈ +$4.50 | Baseline, lowest risk |
+| D | Switch with embedded CPU | YT9215S RISC-V does the networking | Yes | Yes | ≈ +$3.5–4 (est.) | Only if Motorcomm gives an SDK |
+| E | PoE-layer signalling | Class events, Autoclass | Not really | Yes | $0 (already in design) | Already used; tells the PD its power grant only |
+| F | Analog link sensing | Pair activity; 10/100/1000 by which pairs are active | No | Yes | ≈ $0.05–0.10 | Status only; risks return loss |
+| G | Passive and overlay schemes | Each one is listed in §4 | — | — | — | Dead ends (§4) |
 
-* **A.** MCU ↔ host over USB 2.0; the host speaks on Ethernet. It needs a
-  daemon on the host.
-* **B.** RTL8363NB, cap-coupled device port, RP2040 on RMII. Needs bench
-  validation.
-* **C.** RTL8363NB + CH32V307.
-* **D.** The YT9215S RISC-V core does the networking. Only if Motorcomm gives
-  an SDK.
-* **E.** Class events and Autoclass, already in the design. It tells the PD
-  its power grant, nothing more.
-* **F.** Detect pair activity, or 10/100/1000 by which pairs are active.
-  Risks return loss.
-* **G.** Passive tap / spare pairs / 10BASE-T1S / PoE-DC powerline / autoneg
-  next pages / PHY-PHY + FPGA.
+Approach G covers the passive tap, spare pairs, 10BASE-T1S, PoE-DC powerline,
+autoneg next pages and PHY-PHY + FPGA ideas.
 
 A and B/C are not exclusive: a "basic" SKU can ship A, and a "managed" SKU
 can add the switch. A's firmware (USB protocol, state model) is reusable in
@@ -196,48 +185,42 @@ not a network presence.
 
 ## 4. Dead ends and why
 
-| Idea | Why it fails here |
-|---|---|
-| Passive tap (Throwing-Star style) | Gigabit pairs carry both directions |
-| Use the spare pairs | Gigabit has no spare pairs |
-| 10BASE-T1S / SPE overlay | No receiver at the PSE |
-| Data over PoE DC (powerline-style) | No receiver at the PSE |
-| Autoneg next pages | Adapter is not a link endpoint |
-| Two PHYs back-to-back + FPGA/MCU | Costs more than the switch |
-| "MAC-in-PHY" / SPI Ethernet parts | They terminate their own link |
-| USB-Ethernet bridge (RTL8153) | Not gigabit on USB 2.0 hosts |
+| Idea | Would work if | Why it fails here | Key figure |
+|---|---|---|---|
+| **Passive tap (Throwing-Star style)** | The link is 10/100 | Gigabit sends both ways on all four pairs | – |
+| **Use the spare pairs** | The link drops to 100 Mbit | 1000BASE-T uses all four pairs | Needs ≥1 Gbit/s |
+| **10BASE-T1S / SPE overlay** | A custom injector is at the other end | The PSE switch has no receiver for it | – |
+| **Data over PoE DC (powerline-style)** | – | Nothing at the PSE end listens | – |
+| **Autoneg next pages** | The adapter terminates the link (has PHYs) | Only the two link endpoints exchange them | – |
+| **Two PHYs back-to-back + FPGA/MCU** | It does work | Costs more than the switch | 2 × YT8531C at **$0.79 @1k [live]** |
+| **"MAC-in-PHY" / SPI Ethernet parts** | – | They all terminate their *own* link | – |
+| **USB-Ethernet bridge (RTL8153)** | The host has USB 3 | The Pi's USB-C port is USB 2.0 | 480 Mbit/s |
 
-* **Passive tap.** Works only on 10/100, where each pair carries one
-  direction. On 1000BASE-T both ends transmit on all four pairs at once and
-  rely on knowing their *own* transmit signal to cancel it; a third party
-  sees the sum and can't decode it. Commercial gigabit taps are active (they
-  terminate and regenerate). Injection is impossible even at 10/100.
-  **[LAN Tap]**
-* **Spare pairs.** 1000BASE-T uses all four pairs. There are spare pairs only
-  if the user's link drops to 100 Mbit, which fails the ≥1 Gbit/s
-  requirement.
-* **10BASE-T1S / SPE overlay.** Needs its own pair. Superimposing it in
-  common mode (phantom) between pair centre taps would ride on the PoE power,
-  but the PSE switch has no receiver for it. Only useful with a custom
-  injector at the other end, which defeats "plug into any PoE switch".
-* **Data over PoE DC.** Same problem: nothing at the PSE end listens. It also
-  fights the PSE's MPS/current monitoring.
+The reasoning behind each row:
+
+* **Passive tap.** On 10/100 each pair carries one direction. On 1000BASE-T
+  both ends transmit on all four pairs at once and rely on knowing their
+  *own* transmit signal to cancel it; a third party sees the sum and can't
+  decode it. Commercial gigabit taps are active (they terminate and
+  regenerate). Injection is impossible even at 10/100. **[LAN Tap]**
+* **Spare pairs.** A 100 Mbit link fails the ≥1 Gbit/s requirement.
+* **10BASE-T1S / SPE overlay.** It needs its own pair. Superimposing it in
+  common mode (phantom) between pair centre taps would ride on the PoE
+  power. A custom injector defeats "plug into any PoE switch".
+* **Data over PoE DC.** Same problem as the overlay. It also fights the
+  PSE's MPS/current monitoring.
 * **Autoneg next pages.** 802.3 autoneg can carry arbitrary next-page
-  messages, but only between the two link endpoints. The adapter is not an
-  endpoint unless it terminates the link (i.e. has PHYs).
-* **Two PHYs back-to-back + FPGA/MCU muxing frames in.** It works
-  (RGMII/SGMII between two PHYs, everything clocked from the upstream link)
-  but costs more than the switch: 2 × YT8531C at **$0.79 @1k [live]** plus an
-  FPGA or fast MCU that can handle 125 MHz DDR RGMII and buffer a frame. No
-  MCU in this price range can do that. A media-converter PHY pair
-  (UTP↔SGMII) can repeat the link but can't inject.
-* **"MAC-in-PHY" / SPI Ethernet parts** (W5500, ENC28J60, LAN865x
-  10BASE-T1S). They all terminate their *own* link; none can sit inside
-  someone else's gigabit link.
-* **USB-Ethernet bridge (RTL8153) instead of passthrough.** Turns the adapter
-  into a USB NIC. Gives gigabit only to USB 3 hosts; the Pi's USB-C port is
-  USB 2.0 (480 Mbit/s), so it fails the requirement for the main target.
-  Different product.
+  messages. The adapter is not an endpoint unless it terminates the link.
+* **Two PHYs back-to-back + FPGA/MCU muxing frames in.** RGMII/SGMII runs
+  between the two PHYs, with everything clocked from the upstream link. On
+  top of the PHYs it needs an FPGA or fast MCU that can handle 125 MHz DDR
+  RGMII and buffer a frame. No MCU in this price range can do that. A
+  media-converter PHY pair (UTP↔SGMII) can repeat the link but can't inject.
+* **"MAC-in-PHY" / SPI Ethernet parts.** Examples are the W5500, ENC28J60
+  and LAN865x 10BASE-T1S. None can sit inside someone else's gigabit link.
+* **USB-Ethernet bridge instead of passthrough.** It turns the adapter into
+  a USB NIC. It gives gigabit only to USB 3 hosts, so it fails the
+  requirement for the main target. Different product.
 
 ## 5. Suggested next steps
 

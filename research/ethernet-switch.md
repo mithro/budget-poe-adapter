@@ -41,16 +41,26 @@ checked 2026‑10‑21. **[LCSC]**/**[JLC]** links are in §6.
 
 ## 2. Candidates
 
-| Part | GbE PHYs | Extra MAC(s) | Mgmt from external MCU | Pkg | LCSC price (1 / ~30 / volume) | Stock | JLCPCB |
+| Part | GbE PHYs | Extra MAC(s) | Host mgmt | Pkg | LCSC price (1 / ~30 / volume) | Stock | JLCPCB |
 |---|---|---|---|---|---|---|---|
-| **Realtek RTL8363NB‑VB‑CG** | 2 | 1 × RGMII/MII/RMII/TMII | SMI (MDC/MDIO), I²C‑like slave, I²C EEPROM autoload, INT pin | QFN‑76 9×9 | $2.61 / $1.96 / $1.43 (1k) | 1,562 | C2835942, extended |
-| Realtek RTL8367S‑CG | 5 | SGMII/HSGMII + RGMII/MII | SMI (MDC/MDIO), SPI slave, EEPROM; embedded 8051 (strap‑disable) | LQFP‑128 14×14 | $2.67 / $1.98 / $1.49 (990) | 4,648 | C2760849 |
-| Realtek RTL8364NB‑VB‑CG | (more ports, same family; verify config) | — | same family as RTL8363NB | QFN‑88 10×10 | $6.69 / $4.80 / $4.32 (100) | 151 | C3013610, extended |
-| **Motorcomm YT9215S** | 5 | SGMII/HSGMII + RGMII/MII/RMII | MDIO slave, I²C slave, UART; on‑chip RISC‑V, SPI flash, EEPROM | LQFP‑128‑EP 14×14 | $3.98 / $3.22 / $1.92 (900) | 57 | C5899183, extended |
-| Motorcomm YT9215SC | 5 | as above | as above | LQFP‑128 | $4.59 / $3.55 / $2.89 (900) | 115 | via LCSC C51037433 |
-| Motorcomm YT9215RBH (‑40…85 °C) | 5 | as above | as above | LQFP‑128 | $13.18 / $10.22 / $9.31 (90) | 83 | via LCSC C5449202 |
-| Motorcomm YT9213NB | 2 | 1 | MDIO (same family) | ? | not found at LCSC | — | — |
-| Microchip KSZ9893RNXI | 2 | 1 × RGMII/MII/RMII | SPI, I²C, MIIM | VQFN‑64 | $16.10 / $14.15 / $13.07 (100) | 37 | via LCSC C633484 |
+| **Realtek RTL8363NB-VB-CG** | 2 | 1 × RGMII/MII/RMII/TMII | SMI, I²C-like slave | QFN-76 9×9 | $2.61 / $1.96 / $1.43 (1k) | 1,562 | C2835942, extended |
+| Realtek RTL8367S-CG | 5 | SGMII/HSGMII + RGMII/MII | SMI, SPI slave | LQFP-128 14×14 | $2.67 / $1.98 / $1.49 (990) | 4,648 | C2760849 |
+| Realtek RTL8364NB-VB-CG | ? | — | As RTL8363NB | QFN-88 10×10 | $6.69 / $4.80 / $4.32 (100) | 151 | C3013610, extended |
+| **Motorcomm YT9215S** | 5 | SGMII/HSGMII + RGMII/MII/RMII | MDIO slave, I²C slave, UART | LQFP-128-EP 14×14 | $3.98 / $3.22 / $1.92 (900) | 57 | C5899183, extended |
+| Motorcomm YT9215SC | 5 | As YT9215S | As YT9215S | LQFP-128 | $4.59 / $3.55 / $2.89 (900) | 115 | via LCSC C51037433 |
+| Motorcomm YT9215RBH | 5 | As YT9215S | As YT9215S | LQFP-128 | $13.18 / $10.22 / $9.31 (90) | 83 | via LCSC C5449202 |
+| Motorcomm YT9213NB | 2 | 1 | MDIO | ? | not found at LCSC | — | — |
+| Microchip KSZ9893RNXI | 2 | 1 × RGMII/MII/RMII | SPI, I²C, MIIM | VQFN-64 | $16.10 / $14.15 / $13.07 (100) | 37 | via LCSC C633484 |
+
+* **RTL8363NB-VB-CG.** SMI is MDC/MDIO. Also has I²C EEPROM autoload and an
+  INT pin.
+* **RTL8367S-CG.** Also has EEPROM autoload and an embedded 8051
+  (strap-disable).
+* **RTL8364NB-VB-CG.** More ports, same family as the RTL8363NB; verify the
+  port configuration.
+* **YT9215S / SC / RBH.** Also have an on-chip RISC-V core, SPI flash and
+  EEPROM. The RBH is the −40…85 °C part.
+* **YT9213NB.** Same family as the YT9215.
 
 Prices are at the qty‑1 / ~30 / largest LCSC break shown. JLCPCB charges a
 small loading fee per unique "extended" part per order (no basic switch ICs
@@ -89,12 +99,26 @@ power is good), use the cable diagnostics, and drive LEDs.
 
 ## 4. MCU attachment options
 
-| MCU | Data path to switch | Notes |
+| MCU | Data path to switch | Can send frames? |
 |---|---|---|
-| **WCH CH32V307 / CH32V317** | Native Ethernet MAC → RMII/MII to RTL8363NB ext port | Cleanest. The MAC talks to the switch as if it were a PHY (point RMII/MII at the switch's PHY‑mode). WCH ships a TCP/IP lib (and lwIP ports exist). Has a built‑in 10BASE‑T PHY too, unused here. |
-| **WCH CH32V208** | Its built‑in 10BASE‑T PHY → a **copper** switch port | Its MAC is (as far as I know; not verified here) only wired to the internal 10M PHY, so it needs a copper port: use the YT9215S / RTL8367S (spare PHYs), with capacitor coupling and no magnetics on a short on‑board trace. Wastes a GbE PHY, but no extra parts. |
-| **RP2040 / RP2350** | PIO RMII at 10 Mbit/s (community PIO‑RMII drivers exist) | No MAC, so PIO + CPU does framing/CRC. Fine for LLDP + a little management traffic; not for throughput. |
-| **CH32V003 / any MCU** | None: management only over SMI/I²C | Reads link state and counters, sets config. Cannot send LLDP or be reachable on the network. |
+| **WCH CH32V307 / CH32V317** | Native MAC → RMII/MII ext port | Yes |
+| **WCH CH32V208** | Built-in 10BASE-T PHY → copper port | Yes |
+| **RP2040 / RP2350** | PIO RMII at 10 Mbit/s | Yes, low throughput |
+| **CH32V003 / any MCU** | None (SMI/I²C management only) | No |
+
+* **CH32V307 / CH32V317.** Cleanest. The native Ethernet MAC connects by
+  RMII/MII to the RTL8363NB ext port and talks to the switch as if it were a
+  PHY (point RMII/MII at the switch's PHY-mode). WCH ships a TCP/IP lib (and
+  lwIP ports exist). It has a built-in 10BASE-T PHY too, unused here.
+* **CH32V208.** Its MAC is (as far as I know; not verified here) only wired
+  to the internal 10M PHY, so it needs a **copper** switch port: use the
+  YT9215S / RTL8367S (spare PHYs), with capacitor coupling and no magnetics
+  on a short on-board trace. Wastes a GbE PHY, but no extra parts.
+* **RP2040 / RP2350.** Community PIO-RMII drivers exist. There is no MAC, so
+  PIO + CPU does framing/CRC. Fine for LLDP + a little management traffic;
+  not for throughput.
+* **CH32V003 / any MCU.** Reads link state and counters, sets config. Cannot
+  send LLDP or be reachable on the network.
 
 A practical split, matching `poe.md` §6.3: a tiny CH32V003‑class part does the
 PoE signature/classification from cold start; the switch plus a CH32V307 (or
@@ -108,15 +132,30 @@ Short answer: **none of them is cheaper than the RTL8363NB at JLCPCB/LCSC
 today.** The domestic gigabit switch vendors are Motorcomm (裕太微) and JLSemi
 (景略). Only Motorcomm parts are stocked at LCSC/JLCPCB.
 
-| Vendor / part | Config | Mgmt / CPU port | Availability & price | Notes |
+| Vendor / part | Config | Mgmt / CPU port | At LCSC/JLCPCB? | Verdict |
 |---|---|---|---|---|
-| Motorcomm **YT9215S** | 5 GbE PHY + 2 MAC | MDIO/I²C slave, RGMII/MII/RMII + SGMII; on‑chip RISC‑V | LCSC/JLCPCB C5899183: $3.98 @1, $2.12 @90, $1.92 @900 | Cheapest Chinese option that's actually buyable. Still ~35 % dearer than RTL8363NB at volume and 4× the board area (LQFP‑128). |
-| Motorcomm **YT9213NB** | 2 GbE PHY + 1 MAC | MDIO (same family as YT9215) | Not found at LCSC/JLCPCB or szlcsc | The exact RTL8363NB equivalent. Has upstream Linux `yt921x` support. Price would need a Motorcomm distributor quote. |
-| Motorcomm YT9214NB | 2 GbE PHY + 2 MAC | MDIO | Not found | Same as above with a second MAC. |
-| JLSemi **JL6107‑PC / JL6107S‑PC / JL6107SC** | 5 GbE + 2 ext (RGMII/MII/RMII, SGMII) | Managed | Not at LCSC/JLCPCB; distributor VOOHU; no public price | Marketed as pin‑compatible drop‑ins for RTL8367RB / RTL8367S / RTL8367SC. Pin compatibility claims are unverified. |
-| JLSemi JL6105‑NC | 5 GbE | **Unmanaged, no CPU port** | Not at LCSC | Useless here: the MCU can't attach or manage it. |
-| JLSemi JL6110 | 8 + 2 | Managed | — | Too big. |
-| JLSemi JL5104 / JL5106C | 4–5 port | MII/RMII | — | 100 Mbit only; fails the GbE requirement. |
+| Motorcomm **YT9215S** | 5 GbE PHY + 2 MAC | MDIO/I²C slave | Yes, C5899183 | Cheapest buyable |
+| Motorcomm **YT9213NB** | 2 GbE PHY + 1 MAC | MDIO | No | RTL8363NB equivalent |
+| Motorcomm YT9214NB | 2 GbE PHY + 2 MAC | MDIO | No | YT9213NB + second MAC |
+| JLSemi **JL6107-PC / JL6107S-PC / JL6107SC** | 5 GbE + 2 ext | Managed | No | Pin compatibility unverified |
+| JLSemi JL6105-NC | 5 GbE | **Unmanaged, no CPU port** | No | Useless here |
+| JLSemi JL6110 | 8 + 2 | Managed | — | Too big |
+| JLSemi JL5104 / JL5106C | 4–5 port | MII/RMII | — | 100 Mbit only |
+
+* **YT9215S.** CPU port is RGMII/MII/RMII + SGMII, with an on-chip RISC-V.
+  LCSC/JLCPCB price: $3.98 @1, $2.12 @90, $1.92 @900. The cheapest Chinese
+  option that's actually buyable. Still ~35 % dearer than the RTL8363NB at
+  volume and 4× the board area (LQFP-128).
+* **YT9213NB.** Same family as the YT9215. Not found at LCSC/JLCPCB or
+  szlcsc. The exact RTL8363NB equivalent. Has upstream Linux `yt921x`
+  support. A price would need a Motorcomm distributor quote.
+* **YT9214NB.** Not found. Same as the YT9213NB with a second MAC.
+* **JL6107-PC / JL6107S-PC / JL6107SC.** Ext ports are RGMII/MII/RMII and
+  SGMII. Not at LCSC/JLCPCB; distributor VOOHU; no public price. Marketed as
+  pin-compatible drop-ins for the RTL8367RB / RTL8367S / RTL8367SC. The pin
+  compatibility claims are unverified.
+* **JL6105-NC.** Not at LCSC. The MCU can't attach to it or manage it.
+* **JL5104 / JL5106C.** Fail the GbE requirement.
 
 JLSemi's selection guide mentions a "3+1" port gigabit part, but I couldn't
 find a part number for it. If it exists, it would be the other Chinese

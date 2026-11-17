@@ -24,10 +24,16 @@ Spreadsheet copy: the *Dev boards* tab of the [comparison sheet](https://docs.go
 
 ## 1. Official evaluation boards
 
-| Chip | Official EVB | Public availability |
+| Chip | Official EVB | On public sale |
 |---|---|---|
-| RTL8367S-CG | Realtek reference designs and EVBs exist for partners. The leaked "Realtek Unmanaged Switch Programming Guide" (Rev 1.3.11, 2017) is marked confidential for development partners **[V]** | None found on Mouser, Digi-Key, LCSC, AliExpress, eBay or Amazon **[V]** |
-| YT9215S / SC / RB | Motorcomm's product page mentions no EVB or reference design **[V]** | None found **[V]** |
+| RTL8367S-CG | Partners only **[V]** | None found **[V]** |
+| YT9215S / SC / RB | None mentioned **[V]** | None found **[V]** |
+
+* **RTL8367S-CG.** Realtek reference designs and EVBs exist for partners. The
+  leaked "Realtek Unmanaged Switch Programming Guide" (Rev 1.3.11, 2017) is
+  marked confidential for development partners. Nothing was found on Mouser,
+  Digi-Key, LCSC, AliExpress, eBay or Amazon.
+* **YT9215.** Motorcomm's product page mentions no EVB or reference design.
 
 Schematic + PCB + BOM packs for RTL8367S designs circulate on Chinese forums (e.g. [bbs.16rd.com thread 585232](https://bbs.16rd.com/thread-585232-1-1.html)). They are useful as reference layouts but are of unclear provenance and licence.
 
@@ -37,11 +43,28 @@ Schematic + PCB + BOM packs for RTL8367S designs circulate on Chinese forums (e.
 
 All of these are "dumb" switches where the RTL8367S boots from a small EEPROM with no host CPU. That is exactly the configuration where we could load our own 8051 code over SMI.
 
-| Product | HW version with RTL8367S | Board-level access | Indicative price and where to buy |
-|---|---|---|---|
-| **TP-Link TL-SG105** (metal, 5-port) | **V6.0** [V: Gough Lui teardown](https://goughlui.com/2022/02/27/unbox-teardown-tp-link-tl-sg105-5-port-gigabit-desktop-ethernet-switch/) | Serial EEPROM next to the chip, no flash, no header. Roomy metal case, easy to open | **amazon.com.au**: about A$20–29 (Gough Lui paid about A$20 on Amazon AU; AU retailers A$27–35 per [PriceMe](https://www.priceme.com.au/TP-Link-TL-SG105/p-888455411.aspx)). **eBay**: [ebay.com.au TL-SG105 listings](https://www.ebay.com.au/sch/i.html?_nkw=TP-Link+TL-SG105+v6), often A$20–30 new, less used. **AliExpress**: available but versions unclear |
-| **TP-Link LS1005G** (LiteWave, plastic) | **V1** [V: TechInfoDepot](https://techinfodepot.shoutwiki.com/wiki/TP-LINK_LS1005G_V1) | RTL8367S + 24C02 (2 Kbit) EEPROM only | **amazon.com.au**: RRP A$24.95, seen at A$16 ([OzBargain](https://ozbargain.com.au/node/738664)). US Amazon often US$9–12. **eBay** and **AliExpress**: common, A$12–20 |
-| **TP-Link TL-SG1005D** (plastic) | **rev 7** [V: McMCCRU](https://github.com/McMCCRU/Arduino_RTL8367C) | 24Cxx EEPROM socket pins: pin 5 = SDA, pin 6 = SCK, pin 8 = 3.3 V, pins 1–4 = GND. Remove the EEPROM and drive SMI from an MCU | **AliExpress** / **eBay**: about A$15–25. Less common on Amazon AU now (TL-SG105 / LS1005G have replaced it) |
+| Product | Case | HW version | Evidence | Config storage | Price (A$) |
+|---|---|---|---|---|---|
+| **TP-Link TL-SG105** | Metal, 5-port | **V6.0** | [V: Gough Lui teardown](https://goughlui.com/2022/02/27/unbox-teardown-tp-link-tl-sg105-5-port-gigabit-desktop-ethernet-switch/) | Serial EEPROM | 20–35 |
+| **TP-Link LS1005G** | Plastic (LiteWave) | **V1** | [V: TechInfoDepot](https://techinfodepot.shoutwiki.com/wiki/TP-LINK_LS1005G_V1) | 24C02 EEPROM (2 Kbit) | 12–25 |
+| **TP-Link TL-SG1005D** | Plastic | **rev 7** | [V: McMCCRU](https://github.com/McMCCRU/Arduino_RTL8367C) | 24Cxx EEPROM | 15–25 |
+
+Board access and where to buy:
+
+* **TL-SG105 V6.0.** Serial EEPROM next to the chip, no flash, no header.
+  Roomy metal case, easy to open. **amazon.com.au**: about A$20–29 (Gough Lui
+  paid about A$20 on Amazon AU; AU retailers A$27–35 per
+  [PriceMe](https://www.priceme.com.au/TP-Link-TL-SG105/p-888455411.aspx)).
+  **eBay**: [ebay.com.au TL-SG105 listings](https://www.ebay.com.au/sch/i.html?_nkw=TP-Link+TL-SG105+v6),
+  often A$20–30 new, less used. **AliExpress**: available but versions
+  unclear.
+* **LS1005G V1.** RTL8367S + 24C02 EEPROM only. **amazon.com.au**: RRP
+  A$24.95, seen at A$16 ([OzBargain](https://ozbargain.com.au/node/738664)).
+  US Amazon often US$9–12. **eBay** and **AliExpress**: common, A$12–20.
+* **TL-SG1005D rev 7.** 24Cxx EEPROM socket pins: pin 5 = SDA, pin 6 = SCK,
+  pin 8 = 3.3 V, pins 1–4 = GND. Remove the EEPROM and drive SMI from an MCU.
+  **AliExpress** / **eBay**: about A$15–25. Less common on Amazon AU now
+  (TL-SG105 / LS1005G have replaced it).
 
 How to use one as a dev board: **[I]**, building on the [V] items above.
 
@@ -56,46 +79,109 @@ Variants to avoid: newer hardware versions of these models may move to RTL8367S-
 
 Useful if we want the switch on a real CPU port with a working Linux driver to compare against, or to sniff SMI traffic while the vendor driver loads the 8051.
 
-| Product | SoC and link | Notes | Indicative price and where to buy |
-|---|---|---|---|
-| **MERCUSYS MR85X** (AX3000) | MT7981B. RTL8367S on 2500base-X fixed link, reset on GPIO 39, UART0 115200 8N1 [V: OpenWrt commit](https://git.openwrt.org/b2648d89517c05f7b5633e1d79a989c3e5fd011e) | Supported in OpenWrt. Current model | **AU retail** A$123.50 ([icit.net.au](https://icit.net.au/product/mr85x-mercusys-mr85x-ax3000-dual-band-wi-fi-6-router/)); **amazon.com.au** and **eBay** listings around A$100–130; **AliExpress**: occasional |
-| **TP-Link Archer C5 v4** | MT7620A. RTL8367S (driven by the old rtl8367b swconfig driver) [V: OpenWrt forum](https://forum.openwrt.org/t/reduce-number-of-drivers-for-rtl8367s/237681) | Old and cheap; OpenWrt supported | **eBay** used: about A$20–40 |
-| **TP-Link EC220-G5 v2** | MT7620A-class, RTL8367S [V] | ISP-branded, cheap second-hand | **eBay** used |
-| **TOTOLINK A8000RU** | MT7622, RTL8367S on 2500base-X [V: OpenWrt PR #24861](https://github.com/openwrt/openwrt/pull/24861) | OpenWrt supported | **AliExpress** / **eBay**: about US$50–80 |
-| **Buffalo WSR-2533DHP2** | MT7622, RTL8367S on 2500base-X [V] | Japan market | **eBay** (Japanese sellers) |
+| Product | SoC | Switch link | Evidence | OpenWrt | Price |
+|---|---|---|---|---|---|
+| **MERCUSYS MR85X** (AX3000) | MT7981B | 2500base-X | [V: OpenWrt commit](https://git.openwrt.org/b2648d89517c05f7b5633e1d79a989c3e5fd011e) | Yes | A$100–130 |
+| **TP-Link Archer C5 v4** | MT7620A | Not stated | [V: OpenWrt forum](https://forum.openwrt.org/t/reduce-number-of-drivers-for-rtl8367s/237681) | Yes | A$20–40 used |
+| **TP-Link EC220-G5 v2** | MT7620A-class | Not stated | [V] | Not stated | Cheap used |
+| **TOTOLINK A8000RU** | MT7622 | 2500base-X | [V: OpenWrt PR #24861](https://github.com/openwrt/openwrt/pull/24861) | Yes | US$50–80 |
+| **Buffalo WSR-2533DHP2** | MT7622 | 2500base-X | [V] | Not stated | Not stated |
+
+* **MERCUSYS MR85X.** The RTL8367S is on a 2500base-X fixed link, with reset
+  on GPIO 39 and UART0 at 115200 8N1. Current model. **AU retail** A$123.50
+  ([icit.net.au](https://icit.net.au/product/mr85x-mercusys-mr85x-ax3000-dual-band-wi-fi-6-router/));
+  **amazon.com.au** and **eBay** listings around A$100–130; **AliExpress**:
+  occasional.
+* **TP-Link Archer C5 v4.** The RTL8367S is driven by the old rtl8367b
+  swconfig driver. Old and cheap. **eBay** used: about A$20–40.
+* **TP-Link EC220-G5 v2.** ISP-branded, cheap second-hand on **eBay**.
+* **TOTOLINK A8000RU.** **AliExpress** / **eBay**: about US$50–80.
+* **Buffalo WSR-2533DHP2.** Japan market; **eBay** (Japanese sellers).
 
 Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII/HSGMII patches for RTL8367S posted June 2026), plus OpenWrt's `rtl8367b`/`rtk-gsw` drivers. **[V]**
 
 ### 2c. Open hardware RTL8367S boards
 
-| Project | What it is | Status and access |
-|---|---|---|
-| [AlbrechtL/rpi-managed-switch-4-port](https://github.com/AlbrechtL/rpi-managed-switch-4-port) | RTL8367S + Raspberry Pi Zero + ENC28J60, KiCad, GPL-3.0, "ready for JLCPCB production". Software: OpenWrt fork using `rtl8365mb` DSA [V] | Author estimates about US$54/unit for 2-unit PCBA [V]. Pi link is only about 5 Mbit/s over SPI. 8051/UART/flash not broken out. Good layout reference |
-| [PCBWay: RTL8367S-4GE+SFP Gigabit Optical Switch](https://www.pcbway.com/project/sponsor/RTL8367S_4GE_SFP_Gigabit_Optical_Switch_7f271618.html) | 4 × GE + SFP on SGMII, USB 5 V input, MT2492 buck, on-chip 1.1 V DC-DC [V] | No licence stated; ships a Realtek config `.bin` "non-commercial use only". Order through PCBWay. Closest to our use-case (SerDes port in use) |
-| [BrixIT: Making a Linux-managed network switch](https://blog.brixit.nl/making-a-linux-managed-network-switch/) | Martijn Braam's RTL8367S board driven from a PINE64 A64-LTS over GPIO SMI, strap solder jumpers, optional SPI-flash footprint [V] | No repo linked. Useful notes on straps and the minimal config |
-| [maxx-ukoo/rtl8367-controller](https://github.com/maxx-ukoo/rtl8367-controller) | Replaces the MCU in a ZX900-AFG-82N PoE switch (2 × RTL8367S over RGMII) with an STM32F103 over SMI [V] | Shows a retail PoE switch with RTL8367S plus a TMI7608S PoE controller, close to our topology |
-| [libc0607/Realtek_switch_hacking](https://github.com/libc0607/Realtek_switch_hacking) | Docs, ESP8266 SMI tools, Yakigani RTL8370 IROM programmer, RTL8367RB+ESP8266 open board [V] | Best community hub for Realtek 8051 work |
+| Project | Switch IC | Controller | Kind |
+|---|---|---|---|
+| [AlbrechtL/rpi-managed-switch-4-port](https://github.com/AlbrechtL/rpi-managed-switch-4-port) | RTL8367S | Raspberry Pi Zero | Open board (KiCad, GPL-3.0) |
+| [PCBWay: RTL8367S-4GE+SFP Gigabit Optical Switch](https://www.pcbway.com/project/sponsor/RTL8367S_4GE_SFP_Gigabit_Optical_Switch_7f271618.html) | RTL8367S | None | Shared PCBWay project |
+| [BrixIT: Making a Linux-managed network switch](https://blog.brixit.nl/making-a-linux-managed-network-switch/) | RTL8367S | PINE64 A64-LTS | Blog write-up |
+| [maxx-ukoo/rtl8367-controller](https://github.com/maxx-ukoo/rtl8367-controller) | 2 × RTL8367S | STM32F103 | Retail switch mod |
+| [libc0607/Realtek_switch_hacking](https://github.com/libc0607/Realtek_switch_hacking) | RTL8367RB | ESP8266 | Docs, tools, open board |
+
+* **AlbrechtL/rpi-managed-switch-4-port.** RTL8367S + Raspberry Pi Zero +
+  ENC28J60, "ready for JLCPCB production". Software: OpenWrt fork using
+  `rtl8365mb` DSA [V]. The author estimates about US$54/unit for 2-unit PCBA
+  [V]. The Pi link is only about 5 Mbit/s over SPI. 8051/UART/flash are not
+  broken out. Good layout reference.
+* **PCBWay RTL8367S-4GE+SFP.** 4 × GE + SFP on SGMII, USB 5 V input, MT2492
+  buck, on-chip 1.1 V DC-DC [V]. No licence stated; ships a Realtek config
+  `.bin` marked "non-commercial use only". Order through PCBWay. Closest to
+  our use-case (SerDes port in use).
+* **BrixIT.** Martijn Braam's RTL8367S board driven from a PINE64 A64-LTS
+  over GPIO SMI, with strap solder jumpers and an optional SPI-flash
+  footprint [V]. No repo linked. Useful notes on straps and the minimal
+  config.
+* **maxx-ukoo/rtl8367-controller.** Replaces the MCU in a ZX900-AFG-82N PoE
+  switch (2 × RTL8367S over RGMII) with an STM32F103 over SMI [V]. Shows a
+  retail PoE switch with RTL8367S plus a TMI7608S PoE controller, close to
+  our topology.
+* **libc0607/Realtek_switch_hacking.** Docs, ESP8266 SMI tools, the Yakigani
+  RTL8370 IROM programmer and an RTL8367RB + ESP8266 open board [V]. Best
+  community hub for Realtek 8051 work.
 
 ## 3. YT9215 options
 
 ### 3a. Which part has the CPU
 
-| Part | Motorcomm product page | LCSC draft datasheet | Ports |
+| Part | Ports | CPU on product page | CPU in LCSC draft datasheet |
 |---|---|---|---|
-| YT9215S | No CPU listed [V: [motor-comm.com](https://www.motor-comm.com/product/switching-chip)] | "Integrated RISC-V microprocessor", JTAG0/1, UART0–2, SPI flash, `STRAP_DIS_MCU` pin 75 [V: [datasheet](https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf)] | 5 GE + 1 SGMII + 1 RGMII |
-| YT9215SC | "内置高性能RISC-V 核心CPU", "支持简单网管" [V] | Same pin functions [V] | 5 GE + 2 SerDes (SGMII / 2.5G) |
-| YT9215RB | No CPU [V] | n/a | 5 GE + 2 RGMII |
-| YT9218N / YT9218MB | RISC-V CPU + simple management [V] | n/a | 8-port |
+| YT9215S | 5 GE + 1 SGMII + 1 RGMII | No **[V]** | Yes **[V]** |
+| YT9215SC | 5 GE + 2 SerDes (SGMII / 2.5G) | Yes **[V]** | Yes **[V]** |
+| YT9215RB | 5 GE + 2 RGMII | No **[V]** | n/a |
+| YT9218N / YT9218MB | 8-port | Yes **[V]** | n/a |
+
+* **Product page** ([motor-comm.com](https://www.motor-comm.com/product/switching-chip)).
+  The YT9215SC entry says "内置高性能RISC-V 核心CPU" and "支持简单网管". The
+  YT9218N / YT9218MB entry lists a RISC-V CPU and simple management. The
+  YT9215S and YT9215RB entries list no CPU.
+* **YT9215S draft datasheet**
+  ([LCSC](https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf)).
+  "Integrated RISC-V microprocessor", JTAG0/1, UART0–2, SPI flash and
+  `STRAP_DIS_MCU` on pin 75. The YT9215SC datasheet has the same pin
+  functions.
 
 So on retail YT9215S boards the core is probably present but unsupported and likely strapped off. **[I]** Plan any CPU work on the **YT9215SC**.
 
 ### 3b. Retail products with YT9215
 
-| Product | Chip and link | Access | Indicative price and where to buy |
-|---|---|---|---|
-| **Xiaomi CR881x** (CR8816 / CR8818 etc., China carrier AX3000 mesh units; M79 board) | IPQ5018 + YT9215S. CPU port 8 on SGMII / 2500base-X, MDIO addr 0x1d, reset on GPIO 35 [V: [OpenWrt forum](https://forum.openwrt.org/t/ipq5018-yt9215s-and-1000base-x-2500base-x/241325), [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150)] | UART on J1 (VCC-RX-GND-TX), OpenWrt via [hzyitc/openwrt-redmi-ax3000](https://github.com/hzyitc/openwrt-redmi-ax3000). Switch probe is still flaky on some boards [V] | Mostly sold second-hand in China (Xianyu). **AliExpress** and **eBay**: occasional CR880x/CR881x listings, typically US$25–50; check the model is **CR881x**, since the CR880x (CR8806/8808/8809) and Redmi AX3000 are not confirmed to use the YT9215 **[I]** |
-| **BDY-G98 / 彼度云 G98** (RK3588 NAS/router, 8 LAN) | 2 × YT9215S, each on an RK3588 GMAC over `rgmii-txid`, MDIO addr 0x1d [V: [GitHub issue](https://github.com/yifengyou/BDY_G98_RK3588/issues/6)] | Linux DSA via `yt921x`. Cross-chip forwarding lock-up bug reported [V] | China-market box; not found on Amazon AU / eBay / AliExpress in this search |
-| Unnamed RK3568 / RK3588 industrial boards | Several CSDN write-ups of RK3568/RK3588 + YT9215 MAC-to-MAC designs [V: [CSDN](https://blog.csdn.net/xuesong10210/article/details/135957672)] | Product names not given | n/a |
+| Product | Host SoC | Switch | Switch link | MDIO addr | Linux support |
+|---|---|---|---|---|---|
+| **Xiaomi CR881x** | IPQ5018 | YT9215S | SGMII / 2500base-X | 0x1d | OpenWrt fork |
+| **BDY-G98 / 彼度云 G98** | RK3588 | 2 × YT9215S | `rgmii-txid` | 0x1d | DSA `yt921x` |
+| Unnamed industrial boards | RK3568 / RK3588 | YT9215 | MAC-to-MAC | n/a | n/a |
+
+* **Xiaomi CR881x** (CR8816 / CR8818 etc., China carrier AX3000 mesh units;
+  M79 board). CPU port 8 on SGMII / 2500base-X, reset on GPIO 35 [V:
+  [OpenWrt forum](https://forum.openwrt.org/t/ipq5018-yt9215s-and-1000base-x-2500base-x/241325),
+  [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150)].
+  UART on J1 (VCC-RX-GND-TX), OpenWrt via
+  [hzyitc/openwrt-redmi-ax3000](https://github.com/hzyitc/openwrt-redmi-ax3000).
+  The switch probe is still flaky on some boards [V]. Mostly sold second-hand
+  in China (Xianyu). **AliExpress** and **eBay**: occasional CR880x/CR881x
+  listings, typically US$25–50; check the model is **CR881x**, since the
+  CR880x (CR8806/8808/8809) and Redmi AX3000 are not confirmed to use the
+  YT9215 **[I]**.
+* **BDY-G98 / 彼度云 G98** (RK3588 NAS/router, 8 LAN). Each YT9215S sits on
+  an RK3588 GMAC [V:
+  [GitHub issue](https://github.com/yifengyou/BDY_G98_RK3588/issues/6)]. A
+  cross-chip forwarding lock-up bug is reported [V]. China-market box; not
+  found on Amazon AU / eBay / AliExpress in this search.
+* **Unnamed RK3568 / RK3588 industrial boards.** Several CSDN write-ups of
+  RK3568/RK3588 + YT9215 MAC-to-MAC designs [V:
+  [CSDN](https://blog.csdn.net/xuesong10210/article/details/135957672)].
+  Product names are not given.
 
 I found **no cheap unmanaged retail switch** confirmed to use a YT9215. Motorcomm targets "dumb switch" use, so some Chinese-brand 5-port switches likely use it, but none were identified in teardowns. **[I]**
 

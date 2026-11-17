@@ -160,10 +160,15 @@ centre taps used.
 
 | Parameter | PSE | PD |
 |---|---|---|
-| Probe voltage | 2.8–10 V, at least 2 points ≥ 1 V apart | valid in 2.7–10.1 V |
-| Accept resistance (slope ΔV/ΔI) | 19–26.5 kΩ accept; <15 kΩ or >33 kΩ reject | **23.75–26.25 kΩ** (use 24.9 kΩ 1 %) |
-| Capacitance | must accept ≤ 150 nF | 50–120 nF (typ. 100 nF / 100 V) |
-| Offsets allowed | – | ≤ 1.9 V voltage offset (bridge drops), ≤ 10 µA current offset |
+| Probe voltage | 2.8–10 V, at least 2 points ≥ 1 V apart | Valid in 2.7–10.1 V |
+| Resistance (slope ΔV/ΔI) | Accept 19–26.5 kΩ | **23.75–26.25 kΩ** |
+| Resistance, reject | <15 kΩ or >33 kΩ | – |
+| Capacitance | Must accept ≤ 150 nF | 50–120 nF |
+| Voltage offset | – | ≤ 1.9 V |
+| Current offset | – | ≤ 10 µA |
+
+For the PD, use a 24.9 kΩ 1 % resistor and typically 100 nF / 100 V. The
+voltage offset allowance covers the bridge drops.
 
 The PSE measures *incremental* resistance, so diode drops are tolerated, but
 anything nonlinear or leaky in 2.7–10.1 V breaks detection. **This is why the
@@ -274,12 +279,16 @@ adapter does not need it. Physical classification alone gets up to Class 8.
 
 ## 5. Raspberry Pi 5 power budget against PoE classes
 
-| Granted | PD input | 5 V output at ~90 % (incl. bridge losses) | Pi 5 behaviour |
+| Granted | PD input | 5 V output at ~90 % | Pi 5 behaviour |
 |---|---|---|---|
-| Class 3 (af, 1 event) | 13 W | ~11.5 W ≈ 2.3 A | boots, but USB current limited to 600 mA; may brown out under load |
-| Class 4 (at, 2 events) | 25.5 W (28.3 W peak) | ~22.5 W ≈ 4.5 A | similar to the official PoE+ HAT (5 V / 4 A) |
-| Class 5 (bt, 4 events) | 40 W | ~35 W | **full 5 V / 5 A with margin** |
-| Class 6 (bt) | 51 W | ~45 W | full power plus headroom for other loads |
+| Class 3 (af, 1 event) | 13 W | ~11.5 W ≈ 2.3 A | Boots, USB limited to 600 mA |
+| Class 4 (at, 2 events) | 25.5 W (28.3 W peak) | ~22.5 W ≈ 4.5 A | Like the official PoE+ HAT |
+| Class 5 (bt, 4 events) | 40 W | ~35 W | **Full 5 V / 5 A with margin** |
+| Class 6 (bt) | 51 W | ~45 W | Full power plus headroom |
+
+The 5 V output figures include bridge losses. At Class 3 the Pi 5 may brown
+out under load. The official PoE+ HAT delivers 5 V / 4 A. The Class 6
+headroom is for other loads.
 
 So the adapter should request **Class 5 or 6**, count events, and tell the
 USB-PD side whether it may offer 5 V / 5 A or only 5 V / 3 A (or a ~4.5 A
@@ -351,16 +360,26 @@ it could have been given. Fine for an af/at-only product; loses bt.
 
 ### 6.4 Minimal external parts (architecture B)
 
-| Function | Part(s) | Notes |
+| Function | Part(s) | Key figure |
 |---|---|---|
-| Polarity / mode | 2 bridges (8 × 100 V diodes; Schottky or ideal-diode MOSFET bridge for efficiency at 0.6–1 A) | one bridge per pairset |
-| Surge | SMAJ58A TVS | across bridge output |
-| Signature | 24.9 kΩ 1 % + 100 nF/100 V | optionally disconnected by a MOSFET after power-on (saves ~2 mW, and bt requires the signature to look invalid in some states) |
-| Class/mark sink | NPN or NMOS + sense resistor + reference from MCU PWM-RC | 0–45 mA, ~1 W during class (20 V × 44 mA) for ≤ 105 ms |
-| MCU bootstrap supply | depletion NMOS / zener / HV LDO + UVLO comparator | on > 12 V, off < 6 V |
-| Hot-swap switch | 100 V NMOS, low side, gate driven by MCU with RC slew limit | inrush < 400 mA |
-| Sensing | voltage divider, sense resistor + optional op-amp | to MCU ADC |
-| Power stage | 60 V synchronous buck to the USB-PD rail(s) | outside PoE negotiation scope |
+| Polarity / mode | 2 bridges (8 × 100 V diodes) | One bridge per pairset |
+| Surge | SMAJ58A TVS | Across bridge output |
+| Signature | 24.9 kΩ 1 % + 100 nF/100 V | – |
+| Class/mark sink | NPN or NMOS + sense resistor | 0–45 mA for ≤ 105 ms |
+| MCU bootstrap supply | Depletion NMOS / zener / HV LDO + UVLO comparator | On > 12 V, off < 6 V |
+| Hot-swap switch | 100 V NMOS, low side | Inrush < 400 mA |
+| Sensing | Voltage divider, sense resistor | To MCU ADC |
+| Power stage | 60 V synchronous buck | Feeds the USB-PD rail(s) |
+
+* **Polarity / mode.** Schottky, or an ideal-diode MOSFET bridge for
+  efficiency at 0.6–1 A.
+* **Signature.** Optionally disconnected by a MOSFET after power-on. That
+  saves ~2 mW, and bt requires the signature to look invalid in some states.
+* **Class/mark sink.** The reference comes from an MCU PWM-RC. About 1 W
+  during class (20 V × 44 mA).
+* **Hot-swap switch.** Gate driven by the MCU with an RC slew limit.
+* **Sensing.** Optional op-amp on the sense resistor.
+* **Power stage.** Outside PoE negotiation scope.
 
 That is roughly 15–25 jellybean parts. For comparison, dedicated PD controller
 ICs (TI TPS2375/TPS2378, TPS23730 for bt; ADI/Silvertel PD modules; Silicon

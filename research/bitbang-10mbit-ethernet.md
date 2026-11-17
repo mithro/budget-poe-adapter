@@ -55,12 +55,25 @@ remember them, not re-read for this note.
 
 | # | Approach | Link partner on the board | Extra BOM | Proven? | Verdict |
 |---|---|---|---|---|---|
-| A | **RP2040 PIO RMII/MII MAC → RTL8363NB ext port (MAC-to-MAC)** | Switch ext MAC port in PHY mode | $0 (replaces CH32V307, ≈ −$0.40) | PIO RMII proven against a LAN8720; against a switch port, not yet | **Recommended** for the switch SKU |
-| B | RP2040 PIO direct 10BASE-T → spare copper port of a bigger switch | RTL8367S / YT9215S copper PHY, cap-coupled | Bigger switch, ≈ +$0.5–2 over RTL8363NB | Direct 10BASE-T proven against real switches over a cable | Works, but costs more than A |
-| C | RP2040 PIO RMII → SR8201F PHY → own magjack | Whatever the user plugs into the second port | ≈ $0.23 PHY + ~$0.05 crystal + magjack | Proven with LAN8720 | Only for a product with a separate management port |
-| D | RP2040 PIO direct 10BASE-T → own magjack | Same as C | Magjack + a few resistors | Proven (TCP 5–7 Mbit/s) | Same as C, cheaper, flakier RX |
-| E | CH32X035/CH32V003 DMA-driven MII → switch ext port | Switch ext MAC port, MII PHY mode, 10M | $0 | **Not done by anyone I found** | Research item |
-| F | Any bit-banged port on the PoE cable itself | None: gigabit uses all four pairs | — | — | Dead end |
+| A | **RP2040 PIO RMII/MII → switch ext port** | Switch ext MAC port, PHY mode | $0 | Partly | **Recommended** |
+| B | RP2040 PIO 10BASE-T → spare copper port | Switch copper PHY, cap-coupled | ≈ +$0.5–2 | Yes | Costs more than A |
+| C | RP2040 PIO RMII → SR8201F PHY → magjack | The user's device | ≈ $0.28 + magjack | Yes | Separate mgmt port only |
+| D | RP2040 PIO 10BASE-T → own magjack | Same as C | Magjack + a few resistors | Yes | As C, cheaper, flakier RX |
+| E | CH32X035/CH32V003 DMA MII → switch ext port | Switch ext MAC port, MII PHY mode | $0 | **No** | Research item |
+| F | Bit-banged port on the PoE cable itself | None | — | — | Dead end |
+
+* **A.** MAC-to-MAC into the RTL8363NB ext port. It replaces the CH32V307
+  (≈ −$0.40). PIO RMII is proven against a LAN8720; against a switch port,
+  not yet. Recommended for the switch SKU.
+* **B.** Uses a spare copper port of a bigger switch (RTL8367S / YT9215S),
+  ≈ +$0.5–2 over the RTL8363NB. Direct 10BASE-T is proven against real
+  switches over a cable. Works, but costs more than A.
+* **C.** The link partner is whatever the user plugs into the second port.
+  Extra BOM is ≈ $0.23 PHY + ~$0.05 crystal + magjack. Proven with a LAN8720.
+  Only for a product with a separate management port.
+* **D.** Proven (TCP 5–7 Mbit/s).
+* **E.** The ext port runs at 10M. **Not done by anyone I found.**
+* **F.** Gigabit uses all four pairs, so there is nothing to attach to.
 
 ## 3. Direct on the wire (10BASE-T from MCU pins)
 
@@ -85,13 +98,30 @@ remember them, not re-read for this note.
 
 ### 3.2 Projects
 
-| Project | MCU | TX | RX | Hardware | Notes |
+| Project | Year | MCU | TX | RX | Scope |
 |---|---|---|---|---|---|
-| [holysnippet/pico_eth_doc] (Robin Guillaume, 2022) | RP2040 | PIO, 2 consecutive GPIOs | PIO, 1 GPIO with resistor bias + Schmitt input | 10/100 transformer or magjack, ~8 resistors, 4 caps; **no comparator** | lwIP (NO_SYS=1), 1 PIO block, 4 DMA, 2 IRQs; sys clock 120 or 240 MHz; **TCP 5–7 Mbit/s** (iperf 2). No NLP detection on RX. Beta. BSD-3 |
-| Pico-10BASE-T (kingyoPiyo, 2022) ([Tom's Hardware]) | RP2040 | PIO, 2 GPIOs, 2 × 47 Ω + 470 Ω | None | Pulse transformer recommended | UDP transmit only. The ancestor of the RP2040 work |
-| [Pico-100BASE-TX] (Steve Markgraf, 2025) | RP2040/RP2350 | PIO+DMA, MLT-3 with 2 GPIOs, 4B5B + scrambler | None | Pulse transformer or a switch in between | Transmit only, 100 Mbit/s. Shows the TX side scales; RX at 125 Mbaud MLT-3 does not exist |
-| [cnlohr/espthernet] (Charles Lohr, 2016) | ESP8266 | I2S at 40 MHz | I2S at 40 MHz, oversampled | Line driver recommended, magnetics | Half duplex (NLP). Author: "a party trick, not a legitimate engineering solution" |
-| ethertiny (Charles Lohr) / IgorPlug-UDP / [PA3FWM avreth] | ATtiny85 / AVR | Bit-banged | Overclocked USI, or BPSK-in-payload trick | Resistors, bias | Shows how little hardware is needed; not a basis for a product |
+| [holysnippet/pico_eth_doc] | 2022 | RP2040 | PIO, 2 GPIOs | PIO, 1 GPIO | Full lwIP stack |
+| Pico-10BASE-T ([Tom's Hardware]) | 2022 | RP2040 | PIO, 2 GPIOs | None | UDP transmit only |
+| [Pico-100BASE-TX] | 2025 | RP2040/RP2350 | PIO + DMA, 2 GPIOs | None | Transmit only |
+| [cnlohr/espthernet] | 2016 | ESP8266 | I2S at 40 MHz | I2S at 40 MHz | Half duplex |
+| ethertiny / IgorPlug-UDP / [PA3FWM avreth] | — | ATtiny85 / AVR | Bit-banged | Overclocked USI or BPSK trick | Demos |
+
+* **pico_eth_doc** (Robin Guillaume). TX on 2 consecutive GPIOs; RX on 1 GPIO
+  with resistor bias + Schmitt input. Hardware: 10/100 transformer or
+  magjack, ~8 resistors, 4 caps; **no comparator**. lwIP (NO_SYS=1), 1 PIO
+  block, 4 DMA, 2 IRQs; sys clock 120 or 240 MHz; **TCP 5–7 Mbit/s**
+  (iperf 2). No NLP detection on RX. Beta. BSD-3.
+* **Pico-10BASE-T** (kingyoPiyo). TX through 2 × 47 Ω + 470 Ω; pulse
+  transformer recommended. The ancestor of the RP2040 work.
+* **Pico-100BASE-TX** (Steve Markgraf). MLT-3 with 2 GPIOs, 4B5B +
+  scrambler, at 100 Mbit/s; pulse transformer or a switch in between. Shows
+  the TX side scales; RX at 125 Mbaud MLT-3 does not exist.
+* **cnlohr/espthernet** (Charles Lohr). RX is oversampled. Line driver
+  recommended, plus magnetics. Half duplex (NLP). Author: "a party trick, not
+  a legitimate engineering solution".
+* **ethertiny (Charles Lohr) / IgorPlug-UDP / avreth.** RX uses an
+  overclocked USI, or a BPSK-in-payload trick. Hardware is resistors and
+  bias. Shows how little hardware is needed; not a basis for a product.
 
 ### 3.3 Fit for this adapter
 
@@ -114,10 +144,17 @@ remember them, not re-read for this note.
 
 ### 4.1 Projects
 
-| Project | MCU | Interface | Notes |
-|---|---|---|---|
-| [sandeepmistry/pico-rmii-ethernet] (fork: [suryatmodulus]) | RP2040 | PIO RMII + MDIO, LAN8720 | **10 Mbit/s only** (TX at 100 had a bug). RP2040 is clocked **from the PHY's 50 MHz REF_CLK** (underclocked to 50 MHz). lwIP NO_SYS |
-| [Mongoose pico-rmii] ([article][embeddedrelated]) | RP2040 | PIO RMII + PIO SMI, LAN8720 | 10 Mbit/s only, autoneg restricted to 10M. 50 MHz ref clock from PHY drives CPU+PIO. TX via DMA → PIO FIFO; RX ping-pong DMA, PIO IRQ at end of frame. CRC in software. Full duplex only. RX buffer swap must fit inside the 9.6 µs inter-frame gap |
+| Project | MCU | Interface | PHY | Speed |
+|---|---|---|---|---|
+| [sandeepmistry/pico-rmii-ethernet] (fork: [suryatmodulus]) | RP2040 | PIO RMII + MDIO | LAN8720 | 10 Mbit/s only |
+| [Mongoose pico-rmii] ([article][embeddedrelated]) | RP2040 | PIO RMII + PIO SMI | LAN8720 | 10 Mbit/s only |
+
+* **pico-rmii-ethernet.** TX at 100 had a bug. The RP2040 is clocked **from
+  the PHY's 50 MHz REF_CLK** (underclocked to 50 MHz). lwIP NO_SYS.
+* **Mongoose pico-rmii.** Autoneg is restricted to 10M. The 50 MHz ref clock
+  from the PHY drives CPU + PIO. TX via DMA → PIO FIFO; RX ping-pong DMA, PIO
+  IRQ at end of frame. CRC in software. Full duplex only. The RX buffer swap
+  must fit inside the 9.6 µs inter-frame gap.
 
 ### 4.2 Why 10 Mbit/s RMII is easy and 100 is not
 

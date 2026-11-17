@@ -36,19 +36,69 @@ Each statement is marked as one of:
 
 | | RTL8367S-CG | YT9215S | RTL8363NB-VB-CG |
 |---|---|---|---|
-| CPU core | Synopsys DesignWare DW8051 **[V]** | Nuclei N205 ("RISC-V 205") **[V]** (press article, not datasheet) | None in datasheet **[V]** |
-| ISA | MCS-51 (8051), 4 clocks per machine cycle, about 2.4× a classic 8051 per clock **[V]** | RV32IMAC-class (N200 series is RV32IEMACB-configurable) **[V]/[I]** | None |
-| Clock | Selectable via DW8051_RATE (reg 0x1336 bits 6:4): 200 / 125 / 100 / 62.5 / 20.8 MHz **[D]**. Reset default unknown | Unknown. The switch core clock is 125 MHz (8 ns cycle in yt921x driver) **[V]**. MCU is probably ≤125 MHz **[I]** | None |
-| Code memory | Instruction RAM loaded at boot. 8 KB window × IROM_MSB page bits (2-bit field), so 16–32 KB **[V]/[I]**. 32 KB EEPROM autoload matches | Unknown (N200 has configurable ILM/DLM SRAM and optional I-cache) **[V]/[I]** | None |
-| Data memory | 256 B internal RAM (DW8051 standard) **[I]**. XDATA size unknown; vendor blob uses XDATA up to ≥0x0630 **[D]** | Unknown | None |
-| Boot source | Strap-selected: 24Cxx EEPROM or SPI flash → "Embedded 8051 Instruction Memory", or loaded by an external host over SMI **[V]** | SPI flash (one interface, two pin positions via SPF_MUX_SEL, single/dual-I/O) **[V]**. Format unknown | None |
-| Image format, signing | Raw 8051 code at address 0, no header, checksum or signature for SMI loading **[V]/[D]**. Flash/EEPROM image framing unknown | Unknown | None |
-| Peripherals the CPU reaches | Whole switch register space via SFR bus **[D]**; internal NIC (regs 0x1A00–0x1A5C) **[V]**; 8051 interrupt sources (link change, LLDP/EEE, loop detect, cable diag, ACL…) **[V]**; GPIO, register-level I²C master on GPIOs, UART, timers 0/1/2 **[V]/[D]**; host-mailbox regs 0x13A0–0x13A7 **[V]** | "MCU port 10" for packets **[V]**; trap-to-internal-CPU bit **[V]**; 2× UART, I²C master, MDIO master, GPIO, LEDs, JTAG ×2 **[V]** | None |
-| Docs available | Datasheet section 9.17 "Embedded 8051" exists but its body isn't public. GPL rtl8367c API with full register header; leaked RTL8367RB/MB register table | Draft datasheet only, plus the Linux yt921x driver | Datasheet Rev 1.2 + GPL rtl8367c |
-| Toolchain | SDCC (as RTLPlayground) or Keil C51 (Realtek's own) | GCC rv32imac (upstream or Nuclei SDK), OpenOCD + JTAG **[I]** | None |
-| Community work | RTLPlayground (RTL8372/73, same SFR scheme); Yakigani (RTL8370 IROM loader); Netgear GS105E/GS308E "Plus" firmware runs on this family's 8051 | None found | None |
-| User firmware feasible? | **Yes in principle, undocumented.** Medium-high effort | **Unknown, very high effort** | **No** |
-| Replaces our MCU? | No: no USB, no PD PHY | No: same, plus no docs | No |
+| CPU core | Synopsys DW8051 **[V]** | Nuclei N205 **[V]** | None **[V]** |
+| ISA | MCS-51 (8051) **[V]** | RV32IMAC-class **[V]/[I]** | None |
+| Clock | 20.8–200 MHz, selectable **[D]** | Unknown, probably ≤125 MHz **[I]** | None |
+| Code memory | 16–32 KB RAM **[V]/[I]** | Unknown | None |
+| Data memory | 256 B internal RAM **[I]** | Unknown | None |
+| Boot source | EEPROM, SPI flash or host SMI **[V]** | SPI flash **[V]** | None |
+| Image format | Raw 8051 code **[V]/[D]** | Unknown | None |
+| Image signing | None **[V]/[D]** | Unknown | None |
+| Packet path to CPU | Internal NIC **[V]** | MCU port 10 **[V]** | None |
+| Other peripherals | GPIO, I²C, UART, timers **[V]/[D]** | UART ×2, I²C, MDIO, GPIO, JTAG ×2 **[V]** | None |
+| Docs available | GPL API + register header | Draft datasheet + Linux driver | Datasheet + GPL API |
+| Toolchain | SDCC or Keil C51 | GCC rv32imac, OpenOCD **[I]** | None |
+| Community work | RTLPlayground, Yakigani, Netgear | None found | None |
+| User firmware feasible? | **Yes in principle** | **Unknown** | **No** |
+| Effort | Medium-high | Very high | n/a |
+| Replaces our MCU? | No | No | No |
+
+Notes on the rows:
+
+* **CPU core.** The RTL8367S core is the Synopsys DesignWare DW8051. The
+  YT9215S core is the Nuclei N205 ("RISC-V 205"); the source is a press
+  article, not the datasheet. The RTL8363NB datasheet lists no CPU.
+* **ISA.** The DW8051 uses 4 clocks per machine cycle, about 2.4× a classic
+  8051 per clock **[V]**. The N200 series is RV32IEMACB-configurable.
+* **Clock.** RTL8367S: selected by DW8051_RATE (reg 0x1336 bits 6:4) from
+  200 / 125 / 100 / 62.5 / 20.8 MHz; the reset default is unknown. YT9215S:
+  the switch core clock is 125 MHz (8 ns cycle in the yt921x driver) **[V]**,
+  so the MCU is probably ≤125 MHz.
+* **Code memory.** RTL8367S: instruction RAM loaded at boot, an 8 KB window ×
+  IROM_MSB page bits (2-bit field), so 16–32 KB; the 32 KB EEPROM autoload
+  matches. YT9215S: the N200 has configurable ILM/DLM SRAM and an optional
+  I-cache **[V]/[I]**, but the sizes in this chip are unknown.
+* **Data memory.** RTL8367S: 256 B is the DW8051 standard. XDATA size is
+  unknown; the vendor blob uses XDATA up to ≥0x0630 **[D]**.
+* **Boot source.** RTL8367S: strap-selected 24Cxx EEPROM or SPI flash into the
+  "Embedded 8051 Instruction Memory", or loaded by an external host over SMI.
+  YT9215S: one SPI flash interface on two pin positions via SPF_MUX_SEL,
+  single/dual-I/O; the format is unknown.
+* **Image format and signing.** RTL8367S: raw 8051 code at address 0 with no
+  header, checksum or signature for SMI loading. The flash/EEPROM image
+  framing is unknown.
+* **Packet path and peripherals.** RTL8367S: the CPU reaches the whole switch
+  register space via the SFR bus **[D]**; an internal NIC (regs
+  0x1A00–0x1A5C) **[V]**; 8051 interrupt sources (link change, LLDP/EEE, loop
+  detect, cable diag, ACL…) **[V]**; GPIO, a register-level I²C master on
+  GPIOs, UART and timers 0/1/2 **[V]/[D]**; and host-mailbox regs
+  0x13A0–0x13A7 **[V]**. YT9215S: "MCU port 10" for packets **[V]**, a
+  trap-to-internal-CPU bit **[V]**, plus 2× UART, I²C master, MDIO master,
+  GPIO, LEDs and JTAG ×2 **[V]**.
+* **Docs available.** RTL8367S: datasheet section 9.17 "Embedded 8051" exists
+  but its body isn't public; there is the GPL rtl8367c API with a full
+  register header, and a leaked RTL8367RB/MB register table. YT9215S: draft
+  datasheet only, plus the Linux yt921x driver. RTL8363NB: datasheet Rev 1.2
+  plus GPL rtl8367c.
+* **Toolchain.** RTL8367S: SDCC (as RTLPlayground uses) or Keil C51
+  (Realtek's own). YT9215S: GCC rv32imac (upstream or Nuclei SDK), with
+  OpenOCD + JTAG.
+* **Community work.** RTLPlayground (RTL8372/73, same SFR scheme); Yakigani
+  (RTL8370 IROM loader); Netgear GS105E/GS308E "Plus" firmware runs on this
+  family's 8051.
+* **User firmware.** RTL8367S: feasible in principle but undocumented.
+* **Replaces our MCU?** No for all three: none has USB or a PD PHY, and the
+  YT9215S also has no docs.
 
 ## RTL8367S: DW8051
 

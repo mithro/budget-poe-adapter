@@ -61,9 +61,15 @@ Every USB-C power source must implement this, even without PD.
 
 | Role | Component | Value |
 |---|---|---|
-| Source advertises current | **Rp** pull-up on CC1 and CC2 | Default USB: 56 kΩ to 5 V / 36 kΩ to 3.3 V / 80 µA. **1.5 A: 22 kΩ / 12 kΩ / 180 µA. 3.0 A: 10 kΩ / 4.7 kΩ / 330 µA** |
+| Source advertises current | **Rp** pull-up on CC1 and CC2 | See the next table |
 | Sink | **Rd** pull-down | 5.1 kΩ |
-| Active cable / VCONN powered | **Ra** | 0.8 to 1.2 kΩ on the unused CC |
+| Active cable / VCONN powered | **Ra** on the unused CC | 0.8 to 1.2 kΩ |
+
+| Rp advertises | Rp to 5 V | Rp to 3.3 V | Or current source |
+|---|---|---|---|
+| Default USB | 56 kΩ | 36 kΩ | 80 µA |
+| **1.5 A** | 22 kΩ | 12 kΩ | 180 µA |
+| **3.0 A** | 10 kΩ | 4.7 kΩ | 330 µA |
 
 Using a 3.3 V pull-up is ideal for an MCU because the CC node then stays within 3.3 V GPIO/ADC limits. With 4.7 kΩ to 3.3 V and Rd 5.1 kΩ, CC sits at about 1.72 V.
 
@@ -198,22 +204,37 @@ Message types needed for a minimal source:
 
 | Function | Requirement | Cheap implementation |
 |---|---|---|
-| CC attach / orientation | 2 channels, distinguish 0.8 V / 2.6 V windows, ms speed | ADC or comparator with threshold |
-| Rp switching (3 A vs 1.5 A) | per CC, two pull-up values | 2 GPIOs with 4.7 k / 12 k to 3.3 V |
-| VBUS monitor | 0 to 5.5 V (25 V if ever above 5 V), vSafe0V detection | ADC + divider |
-| VBUS current | over-current shutdown, optional | sense resistor + ADC or comparator; or an eFuse/load switch with ILIM |
-| Variable VBUS (9/15/20 V) | only if you go beyond the Pi | PWM-filtered "DAC" injected into the buck FB node; 10-bit+ for PPS 20 mV steps |
+| CC attach / orientation | 2 channels, 0.8 V / 2.6 V windows | ADC or comparator with threshold |
+| Rp switching (3 A vs 1.5 A) | Per CC, two pull-up values | 2 GPIOs, 4.7 k / 12 k to 3.3 V |
+| VBUS monitor | 0 to 5.5 V, vSafe0V detection | ADC + divider |
+| VBUS current | Over-current shutdown, optional | Sense resistor + ADC or comparator |
+| Variable VBUS (9/15/20 V) | Only if you go beyond the Pi | PWM "DAC" into the buck FB node |
 | VCONN | 5 V, ≤ 1 W, on unused CC | 2 small P-FETs |
-| D+/D- legacy (optional) | BC1.2 DCP short, or Apple 2.7 V/2.0 V dividers, or QC detection | resistors; QC needs 2 comparator/ADC channels at ≈0.325 V and ≈2 V thresholds |
+| D+/D- legacy (optional) | BC1.2, Apple or QC signalling | Resistors |
+
+* **CC attach / orientation.** Millisecond speed is enough.
+* **VBUS monitor.** The range becomes 25 V if VBUS ever goes above 5 V.
+* **VBUS current.** An eFuse/load switch with ILIM is the alternative.
+* **Variable VBUS.** The "DAC" is a filtered PWM; it needs 10 bits or more
+  for PPS 20 mV steps.
+* **D+/D- legacy.** BC1.2 DCP short, or Apple 2.7 V/2.0 V dividers, or QC
+  detection. QC needs 2 comparator/ADC channels at ≈0.325 V and ≈2 V
+  thresholds.
 
 ### 6.4 MCU candidates (rough)
 
-| MCU | Clock | Comparator/OPA | Timer capture + DMA | Notes |
+| MCU | Clock | Comparator/OPA | Timer capture + DMA | Price |
 |---|---|---|---|---|
-| CH32V003 | 48 MHz | 1 OPA (usable as comparator) | yes | about $0.10; tight RAM (2 KB) but a sink/source PD stack fits |
+| CH32V003 | 48 MHz | 1 OPA | yes | about $0.10 |
 | CH32V203 | 144 MHz | OPA ×2–4 | yes | about $0.30–0.50 |
-| CH32X035 | 48 MHz | yes | yes | **native USB PD PHY**, about $0.25: fallback if bit-bang fails |
-| RP2040 / RP2350 | 133 / 150 MHz | **none**, needs external comparator | PIO | PIO makes BMC TX/RX easy |
+| CH32X035 | 48 MHz | yes | yes | about $0.25 |
+| RP2040 / RP2350 | 133 / 150 MHz | **none** | PIO | – |
+
+* **CH32V003.** The OPA is usable as a comparator. Tight RAM (2 KB), but a
+  sink/source PD stack fits.
+* **CH32X035.** Has a **native USB PD PHY**: the fallback if bit-bang fails.
+* **RP2040 / RP2350.** Needs an external comparator. PIO makes BMC TX/RX
+  easy.
 
 Prices are approximate LCSC single-reel figures (verify).
 

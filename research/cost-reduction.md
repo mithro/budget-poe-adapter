@@ -48,16 +48,30 @@ controller really costs ~$1.40, both numbers rise by ~$0.80.
 
 | # | Change | Δ $ @1k | Δ parts | Risk |
 |---|---|---:|---:|---|
-| 1 | CH32V203 + 8 MHz crystal → CH32X035F8U6 (QFN20) or F7P6 (TSSOP20) | −0.14 | −3 | Low |
-| 2 | Hardware PD PHY + internal Rp current sources: drop BMC TX divider and 4 Rp resistors | −0.05 | −5 | Low |
-| 3 | Buck EN as the VBUS switch: drop PMOS, gate zener, NPN, 2 resistors | −0.10 | −5 | Medium |
-| 4 | Discharge FET → bleeder resistor; VBUS shunt → buck's own current limit | −0.03 | −2 | Low–medium |
-| 5 | Hot-swap FET: 100 V 20 A DFN5x6 → 100 V ~2–3 A SOT-23/SOT-223 | −0.10 | 0 | Low |
-| 6 | 8 discrete Schottkys → 2 Schottky bridges (MBS/ABS, 100 V 2 A) | ±0.00 | −6 | Low |
-| 7 | RJ45s without shield tabs or LEDs (or SMD jacks); full-SMD USB-C receptacle | −0.15 | −2 (LEDs) | Low |
-| 8 | Fewer placements and joints overall (~45 parts), single-sided, JLCPCB basic-library passives with consolidated values | −0.08 | — | Low |
+| 1 | MCU: CH32V203 + crystal → CH32X035 | −0.14 | −3 | Low |
+| 2 | Hardware PD PHY + internal Rp sources | −0.05 | −5 | Low |
+| 3 | Buck EN as the VBUS switch | −0.10 | −5 | Medium |
+| 4 | Simpler VBUS discharge and current sense | −0.03 | −2 | Low–medium |
+| 5 | Smaller hot-swap FET | −0.10 | 0 | Low |
+| 6 | 8 discrete Schottkys → 2 Schottky bridges | ±0.00 | −6 | Low |
+| 7 | Plainer RJ45 and USB-C connectors | −0.15 | −2 (LEDs) | Low |
+| 8 | Fewer placements, basic-library passives | −0.08 | — | Low |
 | | **Subtotal, low/medium risk** | **≈ −0.65** | **≈ −20** | |
-| 9 | MCU-driven synchronous buck (§4.2) instead of a buck controller | −0.50 more | −1 | **High** |
+| 9 | MCU-driven synchronous buck (§4.2) | −0.50 more | −1 | **High** |
+
+1. CH32V203 + 8 MHz crystal → CH32X035F8U6 (QFN20) or F7P6 (TSSOP20).
+2. The hardware PD PHY and internal Rp current sources drop the BMC TX
+   divider and 4 Rp resistors.
+3. Drops the PMOS, gate zener, NPN and 2 resistors.
+4. Discharge FET → bleeder resistor; VBUS shunt → the buck's own current
+   limit.
+5. 100 V 20 A DFN5x6 → 100 V ~2–3 A SOT-23/SOT-223.
+6. Bridges are MBS/ABS, 100 V 2 A.
+7. RJ45s without shield tabs or LEDs (or SMD jacks); full-SMD USB-C
+   receptacle.
+8. Fewer placements and joints overall (~45 parts), single-sided, JLCPCB
+   basic-library passives with consolidated values.
+9. Instead of a buck controller.
 
 Not changed: polarity bridges (both pairsets needed for bt and for Mode A/B
 PSEs), surge TVS, CC 12 V-short protection (CH32X035 CC pins are rated only
@@ -100,14 +114,20 @@ Chinese vendors now make PD interface ICs with an integrated pass switch and
 some with an integrated DC-DC (sources: chongdiantou.com and QQ News market
 surveys, LCSC):
 
-| Part | Std | What's integrated | Notes |
+| Part | Std | What's integrated | Package |
 |---|---|---|---|
-| **TMI7303B** | af/at, 25 W | PD + 100 V 0.48 Ω pass switch, DFN-10 | **$0.267 @1k [live]**, in stock |
-| TMI7301 | af, 15 W | PD + switch, SOP-8 | JLCPCB extended part |
-| SD4924S / SD4923E (Silan) | af/at | PD + 100 V 0.6 Ω switch | |
-| AS7001EP / AS7060AE (Ashare) | at / af/at | PD + 100 V switch | |
-| **AS7829AE** (Ashare) | af | PD + 100 V hot-swap + **80 V non-isolated buck**, ESOP-8 | 1.2 A out, 13 W: one-chip "lite" SKU (Pi Zero/ESP32), too small for a Pi 5 |
-| AS7016AQ / AS7064BQ / JWH7232 / TME7350 / TMI7321 | af–at | PD + flyback (PSR) controller | isolated, not useful here |
+| **TMI7303B** | af/at, 25 W | PD + 100 V 0.48 Ω pass switch | DFN-10 |
+| TMI7301 | af, 15 W | PD + switch | SOP-8 |
+| SD4924S / SD4923E (Silan) | af/at | PD + 100 V 0.6 Ω switch | — |
+| AS7001EP / AS7060AE (Ashare) | at / af/at | PD + 100 V switch | — |
+| **AS7829AE** (Ashare) | af | PD + 100 V hot-swap + **80 V buck** | ESOP-8 |
+| AS7016AQ / AS7064BQ / JWH7232 / TME7350 / TMI7321 | af–at | PD + flyback (PSR) controller | — |
+
+* **TMI7303B.** **$0.267 @1k [live]**, in stock.
+* **TMI7301.** JLCPCB extended part.
+* **AS7829AE.** The buck is non-isolated, 1.2 A out, 13 W: a one-chip "lite"
+  SKU (Pi Zero/ESP32), too small for a Pi 5.
+* **Flyback parts.** Isolated, not useful here.
 
 **None supports 802.3bt.** A PD IC also can't be combined with MCU-driven bt
 classes, because it presents its own class current at every event. So:

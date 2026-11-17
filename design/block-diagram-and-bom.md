@@ -40,15 +40,29 @@ cameras and small displays. 9/15/20 V and PPS are out of scope.
 
 ### What changes in hardware compared with 5 V only
 
-| Change | Why | Cost delta @1k |
+| # | Change | Cost delta @1k |
 |---|---|---:|
-| 5 V / 12 V select: a GPIO-driven NMOS switches an extra resistor into the buck's feedback divider | Two fixed set points, no PWM "DAC". With the GPIO low or floating the buck outputs 5 V, so a firmware fault can't leave 12 V on a 5 V-only sink | +$0.02 |
-| Output caps rated 16–25 V | 12 V rail | +$0.02 |
-| VBUS PMOS gets a gate zener and an NPN driver | Keeps Vgs within limits when switching 12 V | +$0.02 |
-| 15 V TVS on VBUS instead of 6–7 V | Clamp level for a 12 V rail | +$0.01 |
-| CC1/CC2 protection against a 12 V short (series NMOS clamps or a CC OVP IC) | A bad cable or plug twist can put VBUS on CC, which would kill 3.3 V MCU pins | +$0.10 |
-| 3.3 V rail fed from a 5–12 V rail (18 V-rated buck / 16 V LDO) | The rail it was fed from is no longer fixed at 5 V | +$0.01–0.05 |
-| **Total** | | **≈ +$0.20** |
+| 1 | 5 V / 12 V select on the buck feedback | +$0.02 |
+| 2 | Output caps rated 16–25 V | +$0.02 |
+| 3 | Gate zener and NPN driver on the VBUS PMOS | +$0.02 |
+| 4 | 15 V TVS on VBUS instead of 6–7 V | +$0.01 |
+| 5 | CC1/CC2 protection against a 12 V short | +$0.10 |
+| 6 | 3.3 V rail fed from a 5–12 V rail | +$0.01–0.05 |
+| | **Total** | **≈ +$0.20** |
+
+Why each change is needed:
+
+1. A GPIO-driven NMOS switches an extra resistor into the buck's feedback
+   divider. That gives two fixed set points with no PWM "DAC". With the GPIO
+   low or floating the buck outputs 5 V, so a firmware fault can't leave 12 V
+   on a 5 V-only sink.
+2. The rail can now be 12 V.
+3. Keeps Vgs within limits when switching 12 V.
+4. The clamp level for a 12 V rail.
+5. A bad cable or plug twist can put VBUS on CC, which would kill 3.3 V MCU
+   pins. Use series NMOS clamps or a CC OVP IC.
+6. The rail it was fed from is no longer fixed at 5 V. Use an 18 V-rated
+   buck or a 16 V LDO.
 
 The buck controller, FETs and inductor do not change: 57 V → 5 V at 5 A is
 still the sizing case, and 12 V is at most ~3 A. Firmware gets one extra PDO,
@@ -90,16 +104,25 @@ See [`block-diagram.svg`](block-diagram.svg) / [`block-diagram.png`](block-diagr
 
 | Block | With switch | Without switch |
 |---|---:|---:|
-| PoE front end (bridges, TVS, signature, class sink, bootstrap, hot-swap) | 0.53 | 0.53 |
-| Output buck, 5 V / 12 V (controller, 2 FETs, inductor, caps, FB select) | 1.09 | 1.09 |
+| PoE front end | 0.53 | 0.53 |
+| Output buck, 5 V / 12 V | 1.09 | 1.09 |
 | 3.3 V logic rail | 0.15 | 0.04 |
-| USB-C output (receptacle, VBUS switch, CC network + 12 V protection, ESD) | 0.42 | 0.42 |
+| USB-C output | 0.42 | 0.42 |
 | Ethernet magnetics and jacks | 1.75 | 0.70 |
 | Switch IC + crystal + passives | 1.62 | – |
 | MCU + crystal + passives | 1.38 | 0.43 |
 | PCB | 0.45 | 0.20 |
-| JLCPCB assembly (amortised setup + extended-part fees) | 1.20 | 0.70 |
+| JLCPCB assembly | 1.20 | 0.70 |
 | **Total** | **8.59** | **4.11** |
+
+What the blocks contain:
+
+* **PoE front end:** bridges, TVS, signature, class sink, bootstrap,
+  hot-swap.
+* **Output buck:** controller, 2 FETs, inductor, caps, FB select.
+* **USB-C output:** receptacle, VBUS switch, CC network + 12 V protection,
+  ESD.
+* **JLCPCB assembly:** amortised setup + extended-part fees.
 
 Not included: enclosure (~$0.30–0.80), captive 5 A USB-C cable instead of a
 receptacle (~$0.50–0.80), test/programming, shipping, duties.

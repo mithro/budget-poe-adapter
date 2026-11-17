@@ -22,6 +22,17 @@ The schematic is a KiCad 7 hierarchical project. Open `lx-is601f.kicad_sch`; the
 
 Parts on the PoE module are renumbered R1xx/D1xx/U101 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. PIN1 is drawn as J4 and the LED6 header as J5 for the same reason.
 
+## Confidence codes
+
+| Code | Meaning | Schematic wire |
+|---|---|---|
+| **C** | Confirmed: traced on both sides, or measured | green, solid |
+| **V** | Seen on one side only (trace or pad adjacency in a photo) | blue, solid |
+| **I** | Inferred from the datasheet, the part marking or usual practice | orange, dashed |
+| **U** | Unknown: the pin exists, its destination is not traced | red, dotted |
+
+Current count: 0 C, 107 V, 237 I, 228 U pin connections (572 in all). **No net is confirmed yet.** The photos are handheld and oblique, and inner layers are invisible, so continuity checks are needed before anything can be marked C.
+
 ## What the board is
 
 A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered device:

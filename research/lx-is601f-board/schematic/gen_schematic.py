@@ -163,8 +163,8 @@ power = sheet('power.kicad_sch', 'Power input and 3.3 V buck', 'A3', '2')
 switch = sheet('switch.kicad_sch', 'Switch IC YT9215SCH', 'A2', '3')
 eth = sheet('ethernet_poe.kicad_sch', 'Ports 1-4 (PoE): magnetics, ESD, RJ45', 'A3', '4')
 upl = sheet('uplink_sfp.kicad_sch', 'Port 5 uplink and SFP', 'A3', '5')
-poe = sheet('poe_module.kicad_sch', 'PoE PSE module (daughterboard)', 'A4', '6')
-leds = sheet('leds.kicad_sch', 'Port LEDs', 'A4', '7')
+poe = sheet('poe_module.kicad_sch', 'PoE PSE module (daughterboard)', 'A3', '6')
+leds = sheet('leds.kicad_sch', 'Port LEDs', 'A3', '7')
 ALL = [root, power, switch, eth, upl, poe, leds]
 
 LEGEND = ('Wire style = confidence of each connection\n'
@@ -266,7 +266,7 @@ s.textbox('3.3 V buck\n- PU1 marking "2622 SCT 6DC" = SCT2622. Pin functions are
           '- Values are decoded EIA-96 codes (49C = 31.6k, 86C = 73.2k, 30D = 200k).\n'
           '- Which resistors form the FB divider is not checked: measure TC1 (expect 3.3 V).\n'
           '- PC2 and R11 sit next to PU1; nets not traced.\n\n'
-          'The 1.15 V core rail (+1V15) is made by U4\'s internal regulator through L3\n(sheet "Switch IC YT9215SCH").', m(295), m(105), m(112), m(40))
+          'The 1.15 V core rail (+1V15) is made by U4\'s internal regulator through L3\n(sheet "Switch IC YT9215SCH").', m(210), m(45), m(110))
 
 # ---------------------------------------------------------------- SWITCH (A2 594 x 420)
 s = switch
@@ -355,7 +355,7 @@ for p in range(5):
 s.textbox('Port mapping (inferred from placement)\nP0 -> DXFRM4 -> J1 port 1\nP1 -> DXFRM3 -> J1 port 2\nP2 -> DXFRM2 -> J1 port 3\n'
           'P3 -> DXFRM5 -> J1 port 4\nP4 -> DXFRM6 -> J3 uplink\nMDIn: 0..7 = A+ A- B+ B- C+ C- D+ D-', m(295), m(200), m(60), m(30))
 # U4B SerDes
-s.frame(m(460), m(15), m(575), m(110), 'U4B: SerDes')
+s.frame(m(460), m(15), m(560), m(110), 'U4B: SerDes')
 uB = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(485), m(55), unit=2, node=u4node)
 for n, net in (('39', 'SDS0_TXP'), ('38', 'SDS0_TXN'), ('41', 'SDS0_RXP'), ('42', 'SDS0_RXN')):
     s.stub(uB, n, net, 'U', length=m(15.24), kind='hier', shape='output' if 'TX' in net else 'input')
@@ -363,8 +363,8 @@ for n, net in (('32', 'SDS1_TXP'), ('31', 'SDS1_TXN'), ('34', 'SDS1_RXP'), ('35'
     s.stub(uB, n, net, 'U', length=m(7.62))
 s.textbox('Which SerDes feeds the SFP (U12) is not traced;\nSerDes 0 is assumed. SerDes 1 nets end here.', m(465), m(85), m(60), m(10))
 # U4D power
-s.frame(m(290), m(280), m(575), m(365), 'U4D: supply pins')
-uD = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(360), m(322), unit=4, node=u4node)
+s.frame(m(460), m(120), m(560), m(262), 'U4D: supply pins')
+uD = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(510), m(170), unit=4, node=u4node)
 lp = u4units[3]['left']
 _r = u4units[3]['right']; _k = _r.index(None)
 rp, bp = _r[:_k], _r[_k + 1:]
@@ -382,13 +382,13 @@ s.wire([(xb, uD.p(bp[0][0])[1]), (xb, uD.p(bp[-1][0])[1])], 'I'); gnd(s, (xb, uD
 s.textbox('Supplies (datasheet): AVDDH, DVDDIO, SVDDH, HV_SWR = 3.3 V;\nAVDDL, DVDDL, SVDDL, PLLVDDL = 1.15 V (1.08-1.32 V).\n\n'
           'About 30 0402 decoupling capacitors surround U4 (C19, C21,\nC22, C25, C26, C30, C45, C48, C49, C92-C97, C100, C105,\nC111-C113, C119, C122-C126, ...). '
           'Their rails are not traced,\nso they are not drawn.\n\nEPAD (pin 129) is GND; a screw through the board clamps the\nheatsink onto it.',
-          m(415), m(295), m(85))
+          m(465), m(220), m(90))
 
 # ---------------------------------------------------------------- PORT BLOCK
 gnode = g2401_symbol()
 
 
-def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=195, h=105):
+def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=185, h=104.14):
     s.frame(x0, y0, x0 + w, y0 + h, title)
     yb = y0 + m(12.7)
     s.label('P%d_MDI[0..7]' % p, (x0 + m(22.86), yb), (-1, 0), kind='hier')
@@ -418,7 +418,7 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=195, h=10
     for pin, net in (('24', 'POE%d' % poe_base), ('21', 'POE%d' % (poe_base + 1)), ('18', 'P%d_CT45' % p), ('15', 'P%d_CT78' % p)):
         s.stub(t, pin, net, 'U', length=m(10.16))
     for k, ed in enumerate(eds):
-        ex, ey = x0 + m(45 + 75 * k), y0 + m(85)
+        ex, ey = x0 + m(45 + 75 * k), y0 + m(82.55)
         e = s.place('Power_Protection:SRV05-4', ed, '"05U"', ex, ey, ref_at=(ex + m(5.08), ey - m(15.24)), val_at=(ex + m(5.08), ey - m(12.7)), center=set())
         for pin, mi in zip(('1', '3', '4', '6'), ([0, 1, 2, 3] if k == 0 else [4, 5, 6, 7])):
             s.stub(e, pin, 'P%d_MDI%d' % (p, mi), 'I', length=m(5.08))
@@ -429,8 +429,8 @@ s = eth
 PORTS = [(0, 'DXFRM4', 'J1 port 1 (PoE)', ('ED1', 'ED10'), 1), (1, 'DXFRM3', 'J1 port 2 (PoE)', ('ED2', 'ED3'), 3),
          (2, 'DXFRM2', 'J1 port 3 (PoE)', ('ED4', 'ED5'), 5), (3, 'DXFRM5', 'J1 port 4 (PoE)', ('ED6', 'ED7'), 7)]
 for i, (p, xf, jv, eds, pb) in enumerate(PORTS):
-    x0 = m(12.7 + (i % 2) * 198.12)
-    y0 = m(12.7 + (i // 2) * 109.22)
+    x0 = m(12.7 + (i % 2) * 187.96)
+    y0 = m(12.7 + (i // 2) * 106.68)
     port_block(s, p, xf, 'J1%s' % 'ABCD'[i], 'RJ45 ' + jv, eds, x0, y0, pb,
                'Port %d: U4 P%d -> %s -> J1 port %d' % (i + 1, p, xf, i + 1))
 # PoE bus to the module sheet
@@ -446,7 +446,7 @@ s.textbox('Notes: PoE assumed on the centre taps of pairs 1-2 / 3-6 (POE odd/eve
           'Pairs 4-5 / 7-8 centre taps (Pn_CT45/CT78) assumed to go to Bob-Smith terminations on the bottom. '
           'Bottom parts under J1 not yet assigned: 12x SMB "CP06C" (D6, D8-D18), 1206 caps C16, C38, C55, C56, C60-C62, C65, C71, C75, C98, ..., '
           '0603 resistors R15, R32, R67, R71-R76, R82-R84. J1 is one 1x4 RJ45 block, drawn as J1A-J1D. G2401PR pinout assumed. '
-          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(10), m(243.84), m(165), size=1.1)
+          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(12.7), m(241.3), m(165), size=1.1)
 
 # ---------------------------------------------------------------- UPLINK + SFP
 s = upl
@@ -606,6 +606,9 @@ ROOTU = root.uuid
 open(os.path.join(HERE, root.fname), 'w').write(root.render(ROOTU, '/' + ROOTU))
 for ch in ALL[1:]:
     open(os.path.join(HERE, ch.fname), 'w').write(ch.render(ROOTU, '/' + ROOTU + '/' + ch.uuid))
+for sh in ALL:
+    rep = sh.margin_report
+    print('margin check %-24s %s' % (sh.fname, 'ok' if not rep else '%d items too close: %s' % (len(rep), rep[:6])))
 
 rows = []
 for sh in ALL:

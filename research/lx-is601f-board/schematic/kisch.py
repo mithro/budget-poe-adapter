@@ -528,7 +528,60 @@ class Sheet:
             out.append(node)
         if path == '/' + root_uuid:
             out.append(['sheet_instances', ['path', Q('/'), ['page', Q(self.page)]]])
+        self._shift(out)
+        self._check_margins(out)
         return pretty(out)
+
+    # page padding -------------------------------------------------------
+    PAPER = {'A4': (297, 210), 'A3': (420, 297), 'A2': (594, 420), 'A1': (841, 594)}
+    MARGIN = 10.0                     # clear space inside the page border (mm)
+    BORDER = 10.0                     # KiCad's drawing border inset (mm)
+    TITLE_BLOCK = (120.0, 44.0)       # title block footprint incl. its border gap (mm)
+    offset = (10.16, 7.62)            # everything is drawn this far right/down
+
+    def _shift(self, out):
+        dx, dy = self.offset
+        def walk(n):
+            if not isinstance(n, list) or not n:
+                return
+            if n[0] in ('at', 'start', 'end', 'xy') and len(n) >= 3 and isinstance(n[1], (int, float)):
+                n[1] = round(n[1] + dx, 4); n[2] = round(n[2] + dy, 4)
+                return
+            for c in n[1:]:
+                walk(c)
+        for item in out[1:]:
+            if isinstance(item, list) and item and item[0] not in ('lib_symbols', 'title_block', 'sheet_instances'):
+                walk(item)
+
+    def _check_margins(self, out):
+        """Report anything closer than MARGIN to the page border or the title block."""
+        W, H = self.PAPER[self.paper]
+        lo, hix, hiy = self.BORDER + self.MARGIN, W - self.BORDER - self.MARGIN, H - self.BORDER - self.MARGIN
+        tbx, tby = W - self.BORDER - self.TITLE_BLOCK[0] - self.MARGIN, H - self.BORDER - self.TITLE_BLOCK[1] - self.MARGIN
+        bad = []
+        for item in out[1:]:
+            if not isinstance(item, list) or not item or item[0] in ('lib_symbols', 'title_block', 'sheet_instances'):
+                continue
+            pts = []
+            def walk(n):
+                if not isinstance(n, list) or not n:
+                    return
+                if n[0] in ('at', 'start', 'end', 'xy') and len(n) >= 3 and isinstance(n[1], (int, float)):
+                    pts.append((n[1], n[2])); return
+                if n[0] == 'property' and n[1] in ('Footprint', 'Datasheet', 'Intersheetrefs'):
+                    return
+                for c in n[1:]:
+                    walk(c)
+            walk(item if item[0] != 'symbol' else [x for x in item if not (isinstance(x, list) and x and x[0] == 'property' and 'hide' in str(x))])
+            if item[0] == 'text_box':
+                at, sz = find(item, 'at')[0], find(item, 'size')[0]
+                pts.append((at[1] + sz[1], at[2] + sz[2]))
+            for x, y in pts:
+                if x < lo or y < lo or x > hix or y > hiy or (x > tbx and y > tby):
+                    bad.append((item[0], round(x, 1), round(y, 1)))
+                    break
+        self.margin_report = bad
+
 
 
 def pretty(node, ind=0):

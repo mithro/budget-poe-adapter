@@ -39,23 +39,36 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 |---|---|---|---|
 | GbE copper PHYs | 2 | 5 | 5 |
 | Unused PHYs | 0 | 3 | 3 |
-| Extension ports | 1 (GMAC1) | 2 (GMAC1, GMAC2) | 2 (GMAC1, GMAC2) |
-| MCU port modes | RGMII, MII, RMII, TMII | RGMII, MII | RGMII, MII, RMII |
-| RMII to MCU | Yes | No (MII only) | Yes |
+| Extension ports | 1 | 2 | 2 |
+| Extension port GMAC1 | Yes | Yes | Yes |
+| Extension port GMAC2 | No | Yes | Yes |
+| MCU port mode: RGMII | Yes | Yes | Yes |
+| MCU port mode: MII | Yes | Yes | Yes |
+| MCU port mode: RMII | Yes | No | Yes |
+| MCU port mode: TMII | Yes | No | No |
 | SerDes lanes | 0 | 1 | 1 |
-| SerDes modes | None | SGMII, HSGMII | SGMII, HSGMII, 1000BASE-X, 2500BASE-X, 100BASE-FX |
-| SerDes line rate | None | 1.25 or 3.125 GBd | 1.25 or 3.125 GBd |
+| SerDes mode: SGMII | None | Yes | Yes |
+| SerDes mode: HSGMII | None | Yes | Yes |
+| SerDes mode: 1000BASE-X | None | Not listed | Yes |
+| SerDes mode: 2500BASE-X | None | Not listed | Yes |
+| SerDes mode: 100BASE-FX | None | Not listed | Yes |
+| SerDes line rate, low | None | 1.25 GBd | 1.25 GBd |
+| SerDes line rate, high | None | 3.125 GBd | 3.125 GBd |
 | SerDes max data rate | None | 2.5 Gbit/s | 2.5 Gbit/s |
 
 ## Management
 
 | Feature | RTL8363NB-VB-CG | RTL8367S-CG | YT9215S |
 |---|---|---|---|
-| External CPU interface | SMI (MDIO), I²C-like | SMI (MDIO), SPI | MDIO, I²C |
+| CPU interface: SMI (MDIO) | Yes | Yes | Yes |
+| CPU interface: I²C | I²C-like | Not listed | Yes |
+| CPU interface: SPI | Not listed | Yes | Not listed |
 | Interrupt output | Yes | Yes | Yes |
 | EEPROM autoload | 32 KB | 32 KB | 16 KB |
-| Linux driver | rtl8365mb (DSA) | rtl8365mb (DSA) | yt921x (DSA) |
-| Register documentation | NDA; GPL rtl8367c API | NDA; GPL rtl8367c API | Draft datasheet; Linux yt921x |
+| Linux driver | rtl8365mb | rtl8365mb | yt921x |
+| Linux driver type | DSA | DSA | DSA |
+| Vendor register documentation | NDA | NDA | Draft datasheet |
+| Open register source | GPL rtl8367c API | GPL rtl8367c API | Linux yt921x |
 
 ## Embedded CPU
 
@@ -64,8 +77,12 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 | CPU core | None | 8051 | RISC-V |
 | CPU clock | None | ? | ? |
 | CPU memory | None | ? | ? |
-| Code storage | None | EEPROM or SPI flash | SPI flash, single or dual |
-| Disable strap | None | DIS_8051, pull-up | DIS_MCU, pull-up |
+| Code storage: EEPROM | None | Yes | Not listed |
+| Code storage: SPI flash | None | Yes | Yes |
+| SPI flash single I/O | None | ? | Yes |
+| SPI flash dual I/O | None | ? | Yes |
+| Disable strap | None | DIS_8051 | DIS_MCU |
+| Disable strap level | None | Pull-up | Pull-up |
 | Internal CPU port | None | ? | Port 10 |
 | SDK | None | NDA only | None public |
 | Useful here | None | No | No |
@@ -77,10 +94,12 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 | MAC address table | 2K entries | 2K entries | 4K entries |
 | VLAN table | 4K entries | 4K entries | 4K entries |
 | Jumbo frames | 9,216 B | 9,216 B | 9,216 B |
-| Priority queues | 8 | 8 | 8 unicast, 4 multicast |
+| Priority queues | 8 | 8 | 8 |
+| Multicast queues | Not listed | Not listed | 4 |
 | ACL rules | 48 | 96 | 384 |
 | Link aggregation | None | 2 groups | 2 groups |
-| Port mirroring | Port-based | Port-based | Port- and flow-based |
+| Port-based mirroring | Yes | Yes | Yes |
+| Flow-based mirroring | Not listed | Not listed | Yes |
 | IGMP/MLD snooping | Yes | Yes | Yes |
 | LLDP / OAM | ? | Yes | Yes |
 
@@ -88,18 +107,26 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 
 | Feature | RTL8363NB-VB-CG | RTL8367S-CG | YT9215S |
 |---|---|---|---|
-| EEE (802.3az) | Yes | Yes, strap-enabled | ? |
+| EEE (802.3az) | Yes | Yes | ? |
+| EEE enabled by strap | Not listed | Yes | ? |
 | Cable diagnostics | RTCT | RTCT | VCT |
-| LEDs | 3 per port, parallel or serial | 2 per port, parallel or serial | 2 per port, parallel or serial |
-| Other PHY features | Green Ethernet power saving | Green Ethernet, loop detection | 400 m at 100 Mbit/s (LRE), WoL, loop detection |
+| LEDs per port | 3 | 2 | 2 |
+| Parallel LED drive | Yes | Yes | Yes |
+| Serial LED drive | Yes | Yes | Yes |
+| Green Ethernet power saving | Yes | Yes | Not listed |
+| Loop detection | Not listed | Yes | Yes |
+| Long reach (LRE) | Not listed | Not listed | 400 m at 100 Mbit/s |
+| Wake-on-LAN | Not listed | Not listed | Yes |
 
 ## Power & package
 
 | Feature | RTL8363NB-VB-CG | RTL8367S-CG | YT9215S |
 |---|---|---|---|
-| Package | QFN-76 9×9 mm | LQFP-128 14×14 mm | LQFP-128-EP 14×14 mm |
+| Package | QFN-76 | LQFP-128 | LQFP-128-EP |
+| Body size | 9×9 mm | 14×14 mm | 14×14 mm |
 | Body area | 81 mm² | 196 mm² | 196 mm² |
-| Supply | 3.3 V, int. 1.1 V buck | 3.3 V, int. 1.1 V buck | 3.3 V, int. 1.1 V buck |
+| Supply | 3.3 V | 3.3 V | 3.3 V |
+| Core rail | Int. 1.1 V buck | Int. 1.1 V buck | Int. 1.1 V buck |
 | Clock | 25 MHz crystal | 25 MHz crystal | 25 MHz crystal |
 | Power draw | ? | ? | ? |
 | Operating temp. | ? | ? | 0–70 °C |
@@ -108,30 +135,42 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 
 | Feature | RTL8363NB-VB-CG | RTL8367S-CG | YT9215S |
 |---|---|---|---|
-| Crystal | 25 MHz ±50 ppm, 2 load caps | 25 MHz ±50 ppm, 2 load caps, 150 Ω | 25 MHz, 2 load caps |
+| Crystal | 25 MHz | 25 MHz | 25 MHz |
+| Crystal tolerance | ±50 ppm | ±50 ppm | ? |
+| Crystal load caps | 2 | 2 | 2 |
+| Crystal series resistor | Not listed | 150 Ω | Not listed |
 | Oscillator option | 3.3 V 25 MHz OSC | 3.3 V 25 MHz OSC | 3.3 V 25 MHz OSC |
 | Buck inductor | ? | 2.2 µH | ? |
-| Buck capacitors | ? | 10 µF on LX output, 10 µF on HV_SWR | 10 µF on HV_SWR |
+| Buck capacitor on LX output | ? | 10 µF | ? |
+| Buck capacitor on HV_SWR | ? | 10 µF | 10 µF |
 | EN_SWR resistor | 4.7 kΩ | 1 kΩ | 1 kΩ |
 | Bias resistor | 2.49 kΩ 1% | 2.49 kΩ 1% | 2.49 kΩ 1% |
-| Reset | Int. 75 kΩ pull-up | Int. 75 kΩ pull-up | Ext. pull-up |
-| Strap resistors | 4.7 kΩ per strap | 4.7 kΩ per strap | 4.7 kΩ per strap, plus 3 reserved pull-ups |
+| Reset pull-up | Internal | Internal | External |
+| Reset pull-up value | 75 kΩ | 75 kΩ | ? |
+| Strap resistors | 4.7 kΩ per strap | 4.7 kΩ per strap | 4.7 kΩ per strap |
+| Reserved pull-ups | Not listed | Not listed | 3 |
 | Unused MAC inputs | 1 kΩ pull-down | 1 kΩ pull-down | ? |
-| Interrupt pin | ? | 1 kΩ or 4.7 kΩ | ? |
+| Interrupt pin resistor, option 1 | ? | 1 kΩ | ? |
+| Interrupt pin resistor, option 2 | ? | 4.7 kΩ | ? |
 | EEPROM | Optional 24Cxx | Optional 24Cxx | Optional 24Cxx |
 | SPI flash | None | Optional | Optional |
 | MDI termination | None | None | None |
 | Magnetics | 2 GbE transformers | 2 GbE transformers | 2 GbE transformers |
-| LED resistors | Optional, 1 per LED | Optional, 1 per LED | Optional, 1 per LED |
+| LED resistors | Optional | Optional | Optional |
+| LED resistors per LED | 1 | 1 | 1 |
 | Decoupling | ? | ? | ? |
 
 ## Fit for this adapter
 
 | Feature | RTL8363NB-VB-CG | RTL8367S-CG | YT9215S |
 |---|---|---|---|
-| MCU attach | RMII/MII ext. port | MII ext. port, or a spare PHY | RMII/MII ext. port, or a spare PHY |
-| Main advantage | Exact port count, smallest | Cheapest at 100 pcs | Second source to Realtek |
-| Main risk | NDA register docs | Idle power of 3 spare PHYs | 57 in stock, draft datasheet |
+| MCU attach on ext. port, RMII | Yes | No | Yes |
+| MCU attach on ext. port, MII | Yes | Yes | Yes |
+| MCU attach on a spare PHY | No | Yes | Yes |
+| Main advantage | Exact port count | Cheapest at 100 pcs | Second source to Realtek |
+| Second advantage | Smallest | – | – |
+| Main risk | NDA register docs | Idle power of 3 spare PHYs | 57 in stock |
+| Second risk | – | – | Draft datasheet |
 
 ## Feature notes
 

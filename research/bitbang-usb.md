@@ -41,13 +41,22 @@ Sean "xobs" Cross did with grainuum?
 
 From [`gigabit-piggyback.md`](gigabit-piggyback.md) §A ("host relay"):
 
-| Job | Content | Size | Rate | Needs bulk/high throughput? |
-|---|---|---|---|---|
-| Status reports | PoE class, PSE type, Vin/Iin, PD contract | tens of bytes | ~1/s | No |
-| Status reports | Temperature, faults | tens of bytes | ~1/s | No |
-| LLDP power request/grant | Relayed by a host daemon (`lldpd`) | a few bytes | per change | No |
-| Firmware update | From the host | 8–32 KB | rare | No (slow is fine) |
-| USB NIC for the host | Out of scope: host has gigabit via passthrough | Mbit/s | – | **Yes** |
+| Job | Size | Rate | Needs bulk/high throughput? | In scope | Note |
+|---|---|---|---|---|---|
+| Status reports | tens of bytes | ~1/s | No | Yes | Fields are listed below |
+| LLDP power request/grant | a few bytes | per change | No | Yes | Relayed by a host daemon (`lldpd`) |
+| Firmware update from the host | 8–32 KB | rare | No (slow is fine) | Yes | – |
+| Act as a USB NIC for the host | Mbit/s | – | **Yes** | No | Host already has gigabit via the passthrough |
+
+| Status report field |
+|---|
+| PoE class |
+| PSE type |
+| Vin |
+| Iin |
+| PD contract |
+| Temperature |
+| Faults |
 
 So a low-speed HID device covers everything the design needs.
 
@@ -59,56 +68,87 @@ the same for hardware and software USB; see `gigabit-piggyback.md` §A option 2.
 
 ## 2. Survey of software USB device stacks
 
-| Stack | Author | MCU / core | Clock | Speed | What works | License |
-|---|---|---|---|---|---|---|
-| **grainuum** ("Palawan") | Sean "xobs" Cross | Cortex-M0+ (NXP Kinetis KL-series) | 48 MHz | LS | HID, HID bootloader | MIT |
-| **V-USB** | Objective Development | 8-bit AVR | 12–20 MHz | LS | HID, vendor control | GPLv2 or commercial |
-| **rv003usb** | Charles "cnlohr" Lohr | WCH CH32V003 (RISC-V RV32EC) | 48 MHz | LS | HID, HID bootloader | MIT |
-| **stm32f030-vusb** | ads830e | STM32F030F4P6 (Cortex-M0) | 48 MHz | LS | Mouse only | ? |
-| **Pico-PIO-USB** | sekigon-gonnoc | RP2040 / RP2350 PIO | 48 MHz × N | **FS** device; FS + LS host | HID device example | MIT |
-| **ValentyUSB** (Fomu) | xobs, Luke Valenty et al. | iCE40UP5K FPGA gateware | 48 MHz | FS | Full device incl. DFU | ? |
+| Stack | Alias | Author | Co-author | MCU | Also runs on | Core | Clock | Device speed | USB host | HID | HID bootloader | Other | License | Alt license |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **grainuum** | "Palawan" | Sean "xobs" Cross | – | NXP Kinetis KL-series | – | Cortex-M0+ | 48 MHz | LS | – | Yes | Yes | – | MIT | – |
+| **V-USB** | – | Objective Development | – | 8-bit AVR | – | AVR | 12–20 MHz | LS | – | Yes | – | Vendor control | GPLv2 | Commercial |
+| **rv003usb** | – | Charles "cnlohr" Lohr | – | WCH CH32V003 | – | RISC-V RV32EC | 48 MHz | LS | – | Yes | Yes | – | MIT | – |
+| **stm32f030-vusb** | – | ads830e | – | STM32F030F4P6 | – | Cortex-M0 | 48 MHz | LS | – | Mouse only | – | – | ? | – |
+| **Pico-PIO-USB** | – | sekigon-gonnoc | – | RP2040 | RP2350 | PIO | 48 MHz × N | **FS** | Yes | Device example | – | – | MIT | – |
+| **ValentyUSB** | Fomu | xobs | Luke Valenty et al. | iCE40UP5K FPGA | – | Gateware | 48 MHz | FS | – | – | – | Full device | ? | – |
 
 | Stack | Property | Value |
 |---|---|---|
 | grainuum | MCU requirement | Cortex-M0+ with single-cycle IO |
-| grainuum | HID bootloader | "Driver-free", incl. Windows |
-| grainuum | Pins | D+ and D− may sit on **different GPIO banks** |
-| grainuum | Pin adjacency | Non-adjacent pins allowed |
+| grainuum | HID bootloader drivers | "Driver-free" |
+| grainuum | Bootloader works on Windows | Yes |
+| grainuum | D+ / D− GPIO banks | May be **different GPIO banks** |
+| grainuum | D+ / D− pin adjacency | Not required |
 | grainuum | CPU cost | 32 CPU cycles per bit |
-| grainuum | Talk | 33C3 "No USB? No problem." |
-| grainuum | References | [33C3], [grainuum] |
+| grainuum | Talk venue | 33C3 |
+| grainuum | Talk title | "No USB? No problem." |
+| grainuum | Reference 1 | [33C3] |
+| grainuum | Reference 2 | [grainuum] |
 | V-USB | Age | The original (2007-ish) |
-| V-USB | Clocks supported | 12, 12.8, 15, 16, 16.5, 18, 20 MHz only |
-| V-USB | 12.8 / 16.5 MHz versions | Run from the AVR's RC oscillator |
+| V-USB | Clock option 1 | 12 MHz |
+| V-USB | Clock option 2 | 12.8 MHz |
+| V-USB | Clock option 3 | 15 MHz |
+| V-USB | Clock option 4 | 16 MHz |
+| V-USB | Clock option 5 | 16.5 MHz |
+| V-USB | Clock option 6 | 18 MHz |
+| V-USB | Clock option 7 | 20 MHz |
+| V-USB | Other clocks | Not supported |
+| V-USB | RC oscillator version 1 | 12.8 MHz |
+| V-USB | RC oscillator version 2 | 16.5 MHz |
 | V-USB | RC oscillator trim | From USB frames |
-| V-USB | CDC-ACM | Forks (AVR-CDC) use out-of-spec LS bulk |
-| V-USB | References | [V-USB] |
-| rv003usb | Clock source | HSI trimmed from 1 ms SOF/keep-alive |
-| rv003usb | HID types | Keyboard, mouse, gamepad, raw HID, WebUSB |
+| V-USB | CDC-ACM forks | AVR-CDC |
+| V-USB | CDC-ACM transport | Out-of-spec LS bulk |
+| V-USB | Reference | [V-USB] |
+| rv003usb | Clock source | HSI |
+| rv003usb | HSI trim source | 1 ms SOF/keep-alive |
+| rv003usb | HID type 1 | Keyboard |
+| rv003usb | HID type 2 | Mouse |
+| rv003usb | HID type 3 | Gamepad |
+| rv003usb | HID type 4 | Raw HID |
+| rv003usb | HID type 5 | WebUSB |
 | rv003usb | HID bootloader size | **1,920 bytes** |
-| rv003usb | CDC and MIDI | Partial |
-| rv003usb | RNDIS | "VERY SLOW", Windows only |
+| rv003usb | CDC | Partial |
+| rv003usb | MIDI | Partial |
+| rv003usb | RNDIS speed | "VERY SLOW" |
+| rv003usb | RNDIS hosts | Windows only |
 | rv003usb | Receiver | Pin-change interrupt in assembly |
-| rv003usb | Pins | D+, D−, pull-up on one port, pins 0–4 only |
-| rv003usb | USB IRQ | Must be top priority and never pre-empted |
+| rv003usb | D+ / D− / pull-up placement | All on one port |
+| rv003usb | Allowed pins | 0–4 only |
+| rv003usb | USB IRQ priority | Must be top |
+| rv003usb | USB IRQ pre-emption | Never allowed |
 | rv003usb | Other critical sections | ≤ ~40 cycles |
 | rv003usb | Status | Still "beta" |
-| rv003usb | References | [rv003usb] |
+| rv003usb | Reference | [rv003usb] |
 | stm32f030-vusb | Clock source | Internal RC |
 | stm32f030-vusb | Origin | Port of the STM8 V-USB-style code |
 | stm32f030-vusb | Status | Proof of concept |
-| stm32f030-vusb | References | [f030-vusb] |
-| stm32f030-vusb | PY32F002 port | Tried; no result reported ([py32 issue]) |
-| Pico-PIO-USB | Clock source | PIO clocked at 48 MHz × N from sys clock |
-| Pico-PIO-USB | Clock divider | Fractional divider allowed |
-| Pico-PIO-USB | TinyUSB | Driver for both roles |
-| Pico-PIO-USB | Resources | 1 PIO, 3 state machines, 32 instructions, ~15 KB |
-| Pico-PIO-USB | External parts | 1.5 kΩ D+ pull-up, 22 Ω series resistors |
+| stm32f030-vusb | Reference | [f030-vusb] |
+| stm32f030-vusb | PY32F002 port | Someone tried |
+| stm32f030-vusb | PY32F002 port result | None reported |
+| stm32f030-vusb | PY32F002 port reference | [py32 issue] |
+| Pico-PIO-USB | PIO clock | 48 MHz × N from sys clock |
+| Pico-PIO-USB | Fractional clock divider | Allowed |
+| Pico-PIO-USB | Host speed 1 | FS |
+| Pico-PIO-USB | Host speed 2 | LS |
+| Pico-PIO-USB | TinyUSB driver for device role | Yes |
+| Pico-PIO-USB | TinyUSB driver for host role | Yes |
+| Pico-PIO-USB | PIO blocks | 1 |
+| Pico-PIO-USB | State machines | 3 |
+| Pico-PIO-USB | PIO instructions | 32 |
+| Pico-PIO-USB | Code size | ~15 KB |
+| Pico-PIO-USB | D+ pull-up | 1.5 kΩ external |
+| Pico-PIO-USB | Series resistors | 22 Ω |
 | Pico-PIO-USB | RX CRC | Done by the CPU in an IRQ |
 | Pico-PIO-USB | CPU load | One core is busy during transfers |
-| Pico-PIO-USB | References | [PIO-USB] |
+| Pico-PIO-USB | Reference | [PIO-USB] |
 | ValentyUSB | DFU | foboot |
-| ValentyUSB | Kind | "Soft" USB in logic, not CPU bit-banging |
+| ValentyUSB | Kind | "Soft" USB in logic |
+| ValentyUSB | CPU bit-banging | No |
 | ValentyUSB | Why listed | For completeness |
 | ValentyUSB | Fit | An FPGA is far over the price cap |
 
@@ -140,17 +180,20 @@ bit-level work in hardware state machines and the CPU only handles bytes.
 
 ## 3. Low-speed limits that matter here
 
-| Limit | Effect | Workaround | Verdict |
-|---|---|---|---|
-| Max packet 8 bytes (USB 2.0 §5.7–5.8) | Larger blocks go in 8-byte pieces | Control transfers (HID feature reports) | Fine for telemetry and DFU |
-| Only control and interrupt endpoints | As above | As above | Fine for telemetry and DFU |
-| Interrupt `bInterval` ≥ 10 ms by spec | ~800 B/s per interrupt endpoint by the book | Control-transfer DFU is quicker | Fine either way |
-| Hosts and `bInterval` | Hosts often poll faster | – | Fine either way |
-| No bulk | No CDC-ECM/NCM/RNDIS on Linux | – | Can't be a network interface |
-| Linux usbnet drivers | They reject LS devices | – | [rv003usb test_ethernet] |
-| Linux USB core | It converts LS bulk to interrupt | – | [LS bulk patch] |
-| CDC-ACM needs bulk | Out of spec; works by luck on some hosts | HID, or WebUSB/vendor control | Avoid CDC-ACM |
-| LS edge rates from plain GPIOs | Some hubs/hosts, long cables less tolerant | 33–47 Ω series resistors | Test with the Pi 5 and a laptop |
+| Limit | Value | Effect | Workaround | Alt workaround | Verdict | Note | Reference |
+|---|---|---|---|---|---|---|---|
+| Max packet | 8 bytes | Larger blocks go in 8-byte pieces | HID feature reports (control transfers) | – | Fine | Enough for telemetry | USB 2.0 §5.7–5.8 |
+| Max packet | 8 bytes | As above | As above | – | Fine | Enough for DFU | USB 2.0 §5.7–5.8 |
+| Control endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
+| Interrupt endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
+| Interrupt `bInterval` | ≥ 10 ms by spec | ~800 B/s per interrupt endpoint | Control-transfer DFU is quicker | – | Fine either way | Hosts often poll faster | – |
+| Bulk endpoints | Not allowed | No CDC-ECM/NCM/RNDIS on Linux | – | – | Can't be a network interface | – | – |
+| Linux usbnet drivers | Reject LS devices | – | – | – | – | – | [rv003usb test_ethernet] |
+| Linux USB core | Converts LS bulk to interrupt | – | – | – | – | – | [LS bulk patch] |
+| CDC-ACM | Needs bulk | Out of spec | HID | WebUSB/vendor control | Avoid | Works by luck on some hosts | – |
+| LS edge rates from plain GPIOs | – | Some hubs/hosts are less tolerant | 33–47 Ω series resistors | – | Needs testing | Long cables are less tolerant too | – |
+
+The edge-rate tests should use the Pi 5 and a laptop.
 
 HID is driverless everywhere and also reachable from a browser (WebHID/WebUSB),
 so a config page for the adapter could be a static web page.
@@ -159,12 +202,14 @@ so a config page for the adapter could be a static web page.
 
 ### Cost
 
-| Option | MCU $ (from MCU comparison) | USB | PD PHY | Notes |
-|---|---|---|---|---|
-| CH32X035G8U6 (current pick) | $0.312 @100 | HW FS | **HW** | Crystal-less, 5 V supply, comparators |
-| CH570Q | $0.233 @50 | HW FS | ✗ | No ADC; PD would be bit-banged |
-| CH32V003F4P6 + rv003usb | $0.244 @50 | SW **LS** | ✗ | PD also bit-banged on the same core |
-| RP2040 + Pico-PIO-USB | $0.786 @100 | HW FS + SW FS | ✗ | Only useful as a second port |
+| MCU | USB stack | MCU $ | At qty | USB | Second USB | PD PHY | PD method | Crystal-less | 5 V supply | Comparators | ADC | Note |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CH32X035G8U6 | – | $0.312 | 100 | HW FS | – | **HW** | Hardware | Yes | Yes | Yes | – | Current pick |
+| CH570Q | – | $0.233 | 50 | HW FS | – | ✗ | Bit-banged | – | – | – | No | – |
+| CH32V003F4P6 | rv003usb | $0.244 | 50 | SW **LS** | – | ✗ | Bit-banged on the same core | – | – | – | – | – |
+| RP2040 | Pico-PIO-USB | $0.786 | 100 | HW FS | SW FS | ✗ | – | – | – | – | – | Only useful as a second port |
+
+The MCU prices are from the MCU comparison.
 
 The saving from bit-banging is ≤ $0.07 against the CH32X035, and it is negative
 against a CH570Q, which has hardware USB for the same money.

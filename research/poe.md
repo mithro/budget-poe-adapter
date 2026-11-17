@@ -42,29 +42,29 @@ anything a design depends on should be re-checked against IEEE 802.3-2022
 
 ## 2. The standards
 
-| Standard | Name | PSE Type | Classes | PSE out (W) | PD in (W) | PSE V | Pairs powered | Max current |
-|---|---|---|---|---|---|---|---|---|
-| 802.3af (2003) | PoE | Type 1 | 0–3 | 15.4 | 12.95 (13.0) | 44–57 | 2 | 350 mA |
-| 802.3at (2009) | PoE+ | Type 2 | 0–4 | 30 | 25.5 | 50–57 | 2 | 600 mA |
-| 802.3bt (2018) | 4PPoE | Type 3 | 0–6 | 60 | 51 | 50–57 | 2 or 4 | 600 mA / pair |
-| 802.3bt (2018) | 4PPoE | Type 4 | 0–8 | 90 | 71.3 | 52–57 | 4 | ~960 mA / pair |
+| Standard | Year | Name | PSE Type | Min class | Max class | PSE out (W) | PD in (W) | PD in, rounded (W) | PSE V min | PSE V max | Pairs powered | Alt pairs powered | Max current | Current basis |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 802.3af | 2003 | PoE | Type 1 | 0 | 3 | 15.4 | 12.95 | 13.0 | 44 | 57 | 2 | – | 350 mA | – |
+| 802.3at | 2009 | PoE+ | Type 2 | 0 | 4 | 30 | 25.5 | – | 50 | 57 | 2 | – | 600 mA | – |
+| 802.3bt | 2018 | 4PPoE | Type 3 | 0 | 6 | 60 | 51 | – | 50 | 57 | 2 | 4 | 600 mA | Per pair |
+| 802.3bt | 2018 | 4PPoE | Type 4 | 0 | 8 | 90 | 71.3 | – | 52 | 57 | 4 | – | ~960 mA | Per pair |
 
 All of these were folded into IEEE 802.3-2022: Type 1/2 in clause 33, Type 3/4
 in clause 145. Cable model: 20 Ω loop (Type 1), 12.5 Ω (Type 2/3/4, per pairset).
 
 ### Per-class power **[EA]**
 
-| Class | PD max (W) | PSE min out (W) | PD peak (W) |
-|---|---|---|---|
-| 0 | 13.0 (as Class 3) | 15.4 | – |
-| 1 | 3.84 | 4.0 | 5.0 |
-| 2 | 6.49 | 6.7 | 8.36 |
-| 3 | 13.0 | 14.0 | 14.4 |
-| 4 | 25.5 | 30.0 | 28.3 |
-| 5 | 40.0 | 45.0 | 42.0 |
-| 6 | 51.0 | 60.0 | 53.5 |
-| 7 | 62.0 | 75.0 | 65.1 |
-| 8 | 71.3 | 90.0 | 74.9 |
+| Class | PD max (W) | PSE min out (W) | PD peak (W) | Note |
+|---|---|---|---|---|
+| 0 | 13.0 | 15.4 | – | Same as Class 3 |
+| 1 | 3.84 | 4.0 | 5.0 | – |
+| 2 | 6.49 | 6.7 | 8.36 | – |
+| 3 | 13.0 | 14.0 | 14.4 | – |
+| 4 | 25.5 | 30.0 | 28.3 | – |
+| 5 | 40.0 | 45.0 | 42.0 | – |
+| 6 | 51.0 | 60.0 | 53.5 | – |
+| 7 | 62.0 | 75.0 | 65.1 | – |
+| 8 | 71.3 | 90.0 | 74.9 | – |
 
 ### Minimum PD-side voltage by assigned class and PSE type **[EA]**
 
@@ -160,11 +160,18 @@ centre taps used.
 
 | Parameter | PSE | PD | PD design value |
 |---|---|---|---|
-| Probe voltage | 2.8–10 V, at least 2 points ≥ 1 V apart | valid in 2.7–10.1 V | – |
-| Accept resistance (slope ΔV/ΔI) | 19–26.5 kΩ | **23.75–26.25 kΩ** | 24.9 kΩ 1 % |
-| Reject resistance | <15 kΩ or >33 kΩ | – | – |
-| Capacitance | must accept ≤ 150 nF | 50–120 nF | typ. 100 nF / 100 V |
-| Voltage offset allowed | – | ≤ 1.9 V (bridge drops) | – |
+| Probe voltage, min | 2.8 V | 2.7 V | – |
+| Probe voltage, max | 10 V | 10.1 V | – |
+| Probe points | At least 2 | – | – |
+| Probe point spacing | ≥ 1 V | – | – |
+| Accept resistance (slope ΔV/ΔI), min | 19 kΩ | **23.75 kΩ** | 24.9 kΩ 1 % |
+| Accept resistance (slope ΔV/ΔI), max | 26.5 kΩ | **26.25 kΩ** | 24.9 kΩ 1 % |
+| Reject resistance, below | 15 kΩ | – | – |
+| Reject resistance, above | 33 kΩ | – | – |
+| Capacitance, min | – | 50 nF | 100 nF (typ.) |
+| Capacitance, max | 150 nF (must accept) | 120 nF | 100 nF (typ.) |
+| Capacitor voltage rating | – | – | 100 V |
+| Voltage offset allowed (bridge drops) | – | ≤ 1.9 V | – |
 | Current offset allowed | – | ≤ 10 µA | – |
 
 The PSE measures *incremental* resistance, so diode drops are tolerated, but
@@ -175,15 +182,15 @@ MCU and its regulator must be completely off below ~11–12 V.**
 
 PSE drives 15.5–20.5 V (PD sees ≥ 14.5 V) and measures current. **[EA]**
 
-| Class signature | PD current |
-|---|---|
-| 0 | 1–4 mA |
-| 1 | 9–12 mA |
-| 2 | 17–20 mA |
-| 3 | 26–30 mA |
-| 4 | 36–44 mA |
+| Class signature | PD current min | PD current max | PSE threshold min (roughly) | PSE threshold max (roughly) |
+|---|---|---|---|---|
+| 0 | 1 mA | 4 mA | 0 mA | 5 mA |
+| 1 | 9 mA | 12 mA | 8 mA | 13 mA |
+| 2 | 17 mA | 20 mA | 16 mA | 21 mA |
+| 3 | 26 mA | 30 mA | 25 mA | 31 mA |
+| 4 | 36 mA | 44 mA | 35 mA | 45 mA |
 
-(PSE thresholds are wider: roughly 0–5, 8–13, 16–21, 25–31, 35–45 mA.)
+PSE thresholds are wider than the PD currents.
 
 Between class events the PSE drops to a **mark event**: 7–10 V (PD sees
 6.9–10 V), PD must draw **0.25–4 mA** and must *not* reset. Below 2.8 V for
@@ -191,14 +198,15 @@ Between class events the PSE drops to a **mark event**: 7–10 V (PD sees
 
 Event timing **[EA]**:
 
-| Event | Duration |
-|---|---|
-| First class event, Type 1 PSE | 6–75 ms |
-| First class event, Type 2 PSE | 6–30 ms |
-| First class event, Type 3/4 PSE ("long class event") | **88–105 ms** |
-| 2nd–5th class events | ≤ 20 ms (≥ 6 ms) |
-| Mark events | ~6–12 ms |
-| Detection → power on | ≤ 400 ms |
+| Event | PSE type | Min | Max | Note |
+|---|---|---|---|---|
+| First class event | Type 1 | 6 ms | 75 ms | – |
+| First class event | Type 2 | 6 ms | 30 ms | – |
+| First class event | Type 3 | **88 ms** | **105 ms** | "Long class event" |
+| First class event | Type 4 | **88 ms** | **105 ms** | "Long class event" |
+| 2nd–5th class events | Any | 6 ms | 20 ms | – |
+| Mark events | Any | ~6 ms | ~12 ms | – |
+| Detection → power on | Any | – | 400 ms | – |
 
 The PD can tell a Type 3/4 PSE from the long first event (≤ 75 ms ⇒ Type 1/2,
 ≥ 88 ms ⇒ Type 3/4).
@@ -207,13 +215,13 @@ The PD can tell a Type 3/4 PSE from the long first event (≤ 75 ms ⇒ Type 1/2
 it runs; the PD learns its granted power by *counting* events. Single-signature
 PD signatures for bt classes **[EA]**:
 
-| PD class | Events 1, 2, 3, 4, 5 present |
-|---|---|
-| 0–4 | that class every event |
-| 5 | 4, 4, 0, 0 |
-| 6 | 4, 4, 1, 1 |
-| 7 | 4, 4, 2, 2, 2 |
-| 8 | 4, 4, 3, 3, 3 |
+| PD class | Event 1 | Event 2 | Event 3 | Event 4 | Event 5 |
+|---|---|---|---|---|---|
+| 0–4 | Own class | Own class | Own class | Own class | Own class |
+| 5 | 4 | 4 | 0 | 0 | – |
+| 6 | 4 | 4 | 1 | 1 | – |
+| 7 | 4 | 4 | 2 | 2 | 2 |
+| 8 | 4 | 4 | 3 | 3 | 3 |
 
 Max events: Type 1 PSE = 1, Type 2 = 2, Type 3 = 4, Type 4 = 5.
 
@@ -221,10 +229,19 @@ Granted (assigned) class vs events seen, for a bt PD **[EA]**:
 
 | PD class | 1 event | 2 events | 3 events | 4 events | 5 events |
 |---|---|---|---|---|---|
-| 5 | 3 (13 W) | 4 (25.5 W) | 4 | 5 (40 W) | – |
-| 6 | 3 | 4 | 4 | 6 (51 W) | – |
-| 7 | 3 | 4 | 4 | 6 | 7 (62 W) |
-| 8 | 3 | 4 | 4 | 6 | 8 (71.3 W) |
+| 5 | 3 | 4 | 4 | 5 | – |
+| 6 | 3 | 4 | 4 | 6 | – |
+| 7 | 3 | 4 | 4 | 6 | 7 |
+| 8 | 3 | 4 | 4 | 6 | 8 |
+
+| Assigned class | Power |
+|---|---|
+| 3 | 13 W |
+| 4 | 25.5 W |
+| 5 | 40 W |
+| 6 | 51 W |
+| 7 | 62 W |
+| 8 | 71.3 W |
 
 "Power demotion": a PSE short of budget deliberately gives fewer events (e.g. 3
 events ⇒ Class 4) rather than refusing. **The PD must then limit itself to the
@@ -258,9 +275,14 @@ disconnects:
 | | Class 1–4 | Class 5–8 |
 |---|---|---|
 | I_hold (min) | 10 mA | 16 mA |
-| Min on-time, Type 1/2 PSE | 75 ms | – |
-| Min on-time, Type 3/4 PSE (long class event seen) | 7 ms | 7 ms |
-| Max dropout | 250 ms (Type 1/2), 310 ms (Type 3/4) | 310 ms |
+| Min on-time with a Type 1 PSE | 75 ms | – |
+| Min on-time with a Type 2 PSE | 75 ms | – |
+| Min on-time with a Type 3 PSE (long class event seen) | 7 ms | 7 ms |
+| Min on-time with a Type 4 PSE (long class event seen) | 7 ms | 7 ms |
+| Max dropout with a Type 1 PSE | 250 ms | – |
+| Max dropout with a Type 2 PSE | 250 ms | – |
+| Max dropout with a Type 3 PSE | 310 ms | 310 ms |
+| Max dropout with a Type 4 PSE | 310 ms | 310 ms |
 
 A Pi running never comes near this. It matters if the Pi is shut down: the
 MCU can pulse a dummy load (or itself at full speed) to keep the port alive, or
@@ -276,12 +298,14 @@ adapter does not need it. Physical classification alone gets up to Class 8.
 
 ## 5. Raspberry Pi 5 power budget against PoE classes
 
-| Granted | PD input | 5 V output at ~90 % (incl. bridge losses) | Pi 5 behaviour | Caveat |
-|---|---|---|---|---|
-| Class 3 (af, 1 event) | 13 W | ~11.5 W ≈ 2.3 A | boots, but USB current limited to 600 mA | may brown out under load |
-| Class 4 (at, 2 events) | 25.5 W (28.3 W peak) | ~22.5 W ≈ 4.5 A | similar to the official PoE+ HAT (5 V / 4 A) | – |
-| Class 5 (bt, 4 events) | 40 W | ~35 W | **full 5 V / 5 A with margin** | – |
-| Class 6 (bt) | 51 W | ~45 W | full power | headroom for other loads |
+| Granted | Standard | Events | PD input | PD peak | 5 V output | 5 V current | Pi 5 behaviour | Caveat | Comparable to |
+|---|---|---|---|---|---|---|---|---|---|
+| Class 3 | af | 1 | 13 W | – | ~11.5 W | ≈ 2.3 A | Boots with USB current limited to 600 mA | May brown out under load | – |
+| Class 4 | at | 2 | 25.5 W | 28.3 W | ~22.5 W | ≈ 4.5 A | – | – | Official PoE+ HAT (5 V at 4 A) |
+| Class 5 | bt | 4 | 40 W | – | ~35 W | – | **Full 5 V at 5 A** | Has margin | – |
+| Class 6 | bt | – | 51 W | – | ~45 W | – | Full power | Headroom for other loads | – |
+
+The 5 V output assumes ~90 % efficiency, including bridge losses.
 
 So the adapter should request **Class 5 or 6**, count events, and tell the
 USB-PD side whether it may offer 5 V / 5 A or only 5 V / 3 A (or a ~4.5 A
@@ -294,11 +318,19 @@ research thread.
 
 ### 6.1 Measurement
 
-| Quantity | Range | Needed resolution | Rate |
-|---|---|---|---|
-| Port voltage (after bridge) | 0–60 V | ~0.1 V (to place 2.7/10.1/14.5/20.5/42 V windows) | ≥ 1 kHz |
-| Class/mark current | 0–50 mA | ≤ 0.5 mA (36–44 mA window is ±10 %) | ≥ 1 kHz |
-| Load current (optional) | 0–2 A | ~10 mA | ~1 kHz |
+| Quantity | Range min | Range max | Needed resolution | Why | Rate |
+|---|---|---|---|---|---|
+| Port voltage (after bridge) | 0 V | 60 V | ~0.1 V | To place the voltage windows below | ≥ 1 kHz |
+| Class/mark current | 0 mA | 50 mA | ≤ 0.5 mA | The 36–44 mA window is ±10 % | ≥ 1 kHz |
+| Load current (optional) | 0 A | 2 A | ~10 mA | – | ~1 kHz |
+
+| Voltage window edge to resolve |
+|---|
+| 2.7 V |
+| 10.1 V |
+| 14.5 V |
+| 20.5 V |
+| 42 V |
 
 A 60 V : 3.3 V divider (e.g. 330 kΩ / 18 kΩ) into a 12-bit ADC gives ~15 mV/LSB.
 The CH32V003 has a 10-bit ADC (~60 mV/LSB on that divider): still fine. The
@@ -353,17 +385,49 @@ it could have been given. Fine for an af/at-only product; loses bt.
 
 ### 6.4 Minimal external parts (architecture B)
 
-| Function | Part(s) | Connection | Figures | Notes |
-|---|---|---|---|---|
-| Polarity / mode | 2 bridges (8 × 100 V diodes) | one bridge per pairset | 0.6–1 A | Schottky or ideal-diode MOSFET bridge for efficiency |
-| Surge | SMAJ58A TVS | across bridge output | – | – |
-| Signature | 24.9 kΩ 1 % + 100 nF/100 V | – | – | – |
-| Signature disconnect (optional) | MOSFET | opens after power-on | saves ~2 mW | bt needs an invalid-looking signature in some states |
-| Class/mark sink | NPN or NMOS + sense resistor | reference from MCU PWM-RC | 0–45 mA for ≤ 105 ms | ~1 W during class (20 V × 44 mA) |
-| MCU bootstrap supply | depletion NMOS / zener / HV LDO + UVLO comparator | – | on > 12 V, off < 6 V | – |
-| Hot-swap switch | 100 V NMOS, low side | gate driven by MCU with RC slew limit | inrush < 400 mA | – |
-| Sensing | voltage divider, sense resistor + optional op-amp | to MCU ADC | – | – |
-| Power stage | 60 V synchronous buck | to the USB-PD rail(s) | – | outside PoE negotiation scope |
+| Function | Property | Value |
+|---|---|---|
+| Polarity / mode | Part | 2 bridges |
+| Polarity / mode | Diodes | 8 × 100 V |
+| Polarity / mode | Placement | One bridge per pairset |
+| Polarity / mode | Current | 0.6–1 A |
+| Polarity / mode | Diode option 1 | Schottky |
+| Polarity / mode | Diode option 2 | Ideal-diode MOSFET bridge (for efficiency) |
+| Surge | Part | SMAJ58A TVS |
+| Surge | Placement | Across bridge output |
+| Signature | Resistor | 24.9 kΩ 1 % |
+| Signature | Capacitor | 100 nF |
+| Signature | Capacitor rating | 100 V |
+| Signature | Optional disconnect | MOSFET |
+| Signature | Disconnect when | After power-on |
+| Signature | Disconnect saving | ~2 mW |
+| Signature | Why bt wants it | The signature must look invalid in some states |
+| Class/mark sink | Transistor option 1 | NPN |
+| Class/mark sink | Transistor option 2 | NMOS |
+| Class/mark sink | Sense resistor | Yes |
+| Class/mark sink | Reference | MCU PWM-RC |
+| Class/mark sink | Current range | 0–45 mA |
+| Class/mark sink | Duration | ≤ 105 ms |
+| Class/mark sink | Dissipation during class | ~1 W |
+| Class/mark sink | Worst case | 20 V × 44 mA |
+| MCU bootstrap supply | Pass element option 1 | Depletion NMOS |
+| MCU bootstrap supply | Pass element option 2 | Zener |
+| MCU bootstrap supply | Pass element option 3 | HV LDO |
+| MCU bootstrap supply | UVLO comparator | Yes |
+| MCU bootstrap supply | Turns on | > 12 V |
+| MCU bootstrap supply | Turns off | < 6 V |
+| Hot-swap switch | Part | 100 V NMOS |
+| Hot-swap switch | Position | Low side |
+| Hot-swap switch | Gate drive | MCU |
+| Hot-swap switch | Slew limit | RC |
+| Hot-swap switch | Inrush | < 400 mA |
+| Sensing | Voltage | Divider |
+| Sensing | Current | Sense resistor |
+| Sensing | Op-amp | Optional |
+| Sensing | Destination | MCU ADC |
+| Power stage | Part | 60 V synchronous buck |
+| Power stage | Output | The USB-PD rail(s) |
+| Power stage | Scope | Outside PoE negotiation |
 
 That is roughly 15–25 jellybean parts. For comparison, dedicated PD controller
 ICs (TI TPS2375/TPS2378, TPS23730 for bt; ADI/Silvertel PD modules; Silicon

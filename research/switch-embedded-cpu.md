@@ -37,59 +37,95 @@ Each statement is marked as one of:
 | | RTL8367S-CG | YT9215S | RTL8363NB-VB-CG |
 |---|---|---|---|
 | CPU core | Synopsys DesignWare DW8051 **[V]** | Nuclei N205 ("RISC-V 205") **[V]** | None in datasheet **[V]** |
-| CPU core source | – | Press article, not datasheet | – |
+| CPU core source | – | Press article (not the datasheet) | – |
 | ISA | MCS-51 (8051) **[V]** | RV32IMAC-class **[V]/[I]** | None |
 | ISA options | – | N200 series is RV32IEMACB-configurable | – |
 | Clocks per machine cycle | 4 **[V]** | – | – |
-| Speed per clock | About 2.4× a classic 8051 **[V]** | – | – |
-| CPU clock | 200 / 125 / 100 / 62.5 / 20.8 MHz **[D]** | Unknown, probably ≤125 MHz **[I]** | None |
-| CPU clock select | DW8051_RATE, reg 0x1336 bits 6:4 **[D]** | – | – |
+| Speed per clock vs classic 8051 | About 2.4× **[V]** | – | – |
+| CPU clock | Selectable **[D]** | Unknown | None |
+| CPU clock estimate | – | ≤125 MHz **[I]** | – |
+| CPU clock option 1 | 200 MHz **[D]** | – | – |
+| CPU clock option 2 | 125 MHz **[D]** | – | – |
+| CPU clock option 3 | 100 MHz **[D]** | – | – |
+| CPU clock option 4 | 62.5 MHz **[D]** | – | – |
+| CPU clock option 5 | 20.8 MHz **[D]** | – | – |
+| CPU clock select field | DW8051_RATE **[D]** | – | – |
+| CPU clock select register | 0x1336 **[D]** | – | – |
+| CPU clock select bits | 6:4 **[D]** | – | – |
 | CPU clock reset default | Unknown | – | – |
-| Switch core clock | – | 125 MHz (8 ns cycle in yt921x driver) **[V]** | – |
+| Switch core clock | – | 125 MHz **[V]** | – |
+| Switch core clock source | – | 8 ns cycle in yt921x driver | – |
 | Code memory | Instruction RAM loaded at boot | Unknown | None |
 | Code memory size | 16–32 KB **[V]/[I]** | Unknown | None |
-| Code memory paging | 8 KB window × IROM_MSB (2-bit field) | – | – |
+| Code memory window | 8 KB | – | – |
+| Code memory page field | IROM_MSB (2 bits) | – | – |
 | Code memory options | – | N200: configurable ILM/DLM SRAM **[V]/[I]** | – |
 | Instruction cache | – | N200: optional **[V]/[I]** | – |
 | EEPROM autoload size | 32 KB (matches the code size) | – | – |
 | Internal RAM | 256 B (DW8051 standard) **[I]** | Unknown | None |
 | XDATA size | Unknown | – | – |
 | XDATA used by vendor blob | Up to ≥0x0630 **[D]** | – | – |
-| Boot source | 24Cxx EEPROM, SPI flash or host SMI **[V]** | SPI flash **[V]** | None |
+| Boot from EEPROM | Yes **[V]** | – | None |
+| Boot EEPROM type | 24Cxx | – | – |
+| Boot from SPI flash | Yes **[V]** | Yes **[V]** | None |
+| Boot from host over SMI | Yes **[V]** | – | None |
 | Boot source select | Strap | – | – |
 | Boot target | "Embedded 8051 Instruction Memory" | – | – |
-| SPI flash interfaces | – | One, on two pin positions **[V]** | – |
+| SPI flash interfaces | – | 1 **[V]** | – |
+| SPI flash pin positions | – | 2 **[V]** | – |
 | SPI flash pin select | – | SPF_MUX_SEL | – |
-| SPI flash I/O modes | – | Single/dual-I/O | – |
+| SPI flash single I/O | – | Yes | – |
+| SPI flash dual I/O | – | Yes | – |
+| SPI flash image format | – | Unknown | – |
 | Image format | Raw 8051 code at address 0 **[V]/[D]** | Unknown | None |
-| Header, checksum, signature | None for SMI loading **[V]/[D]** | Unknown | None |
+| Header (SMI loading) | None **[V]/[D]** | Unknown | None |
+| Checksum (SMI loading) | None **[V]/[D]** | Unknown | None |
+| Signature (SMI loading) | None **[V]/[D]** | Unknown | None |
 | Flash/EEPROM image framing | Unknown | Unknown | None |
 | Switch register access | Whole space via SFR bus **[D]** | – | None |
-| Packet path to CPU | Internal NIC, regs 0x1A00–0x1A5C **[V]** | "MCU port 10" **[V]** | None |
+| Packet path to CPU | Internal NIC **[V]** | "MCU port 10" **[V]** | None |
+| Internal NIC registers | 0x1A00–0x1A5C **[V]** | – | – |
 | Trap to CPU | – | Trap-to-internal-CPU bit **[V]** | None |
-| Interrupt sources | Link change, LLDP/EEE, loop detect **[V]** | – | None |
-| More interrupt sources | Cable diag, ACL… **[V]** | – | None |
+| Interrupt: link change | Yes **[V]** | – | None |
+| Interrupt: LLDP/EEE | Yes **[V]** | – | None |
+| Interrupt: loop detect | Yes **[V]** | – | None |
+| Interrupt: cable diag | Yes **[V]** | – | None |
+| Interrupt: ACL | Yes **[V]** | – | None |
+| Interrupt: others | Yes (list continues) **[V]** | – | None |
 | UART | Yes **[V]/[D]** | 2× **[V]** | None |
-| I²C master | Register-level, on GPIOs **[V]/[D]** | Yes **[V]** | None |
+| I²C master | Yes **[V]/[D]** | Yes **[V]** | None |
+| I²C master type | Register-level | – | – |
+| I²C master pins | GPIOs | – | – |
 | MDIO master | – | Yes **[V]** | None |
 | GPIO | Yes **[V]/[D]** | Yes **[V]** | None |
 | LEDs | – | Yes **[V]** | None |
 | Timers | 0/1/2 **[V]/[D]** | – | None |
 | JTAG | – | ×2 **[V]** | None |
-| Host mailbox | Regs 0x13A0–0x13A7 **[V]** | – | None |
-| Datasheet | §9.17 "Embedded 8051", body not public | Draft only | Rev 1.2 |
-| Other docs | GPL rtl8367c API, full register header | Linux yt921x driver | GPL rtl8367c |
+| Host mailbox registers | 0x13A0–0x13A7 **[V]** | – | None |
+| Datasheet | Section exists | Draft only | Rev 1.2 |
+| Datasheet CPU section | §9.17 "Embedded 8051" | – | – |
+| CPU section body public? | No | – | – |
+| Open API | GPL rtl8367c | – | GPL rtl8367c |
+| Register header in the API | Full | – | – |
+| Linux driver as a reference | – | yt921x | – |
 | Leaked docs | RTL8367RB/MB register table | – | – |
-| Toolchain | SDCC or Keil C51 | GCC rv32imac **[I]** | None |
-| Toolchain source | SDCC as RTLPlayground; Keil is Realtek's own | Upstream or Nuclei SDK | – |
+| Toolchain 1 | SDCC | GCC rv32imac **[I]** | None |
+| Toolchain 1 source | As used by RTLPlayground | Upstream | – |
+| Toolchain 2 | Keil C51 | GCC rv32imac (Nuclei SDK) **[I]** | None |
+| Toolchain 2 source | Realtek's own | Nuclei SDK | – |
 | Debugger | – | OpenOCD + JTAG **[I]** | – |
-| Community work | RTLPlayground, Yakigani, Netgear "Plus" | None found | None |
-| RTLPlayground | RTL8372/73, same SFR scheme | – | – |
-| Yakigani | RTL8370 IROM loader | – | – |
-| Netgear GS105E/GS308E "Plus" | Firmware runs on this family's 8051 | – | – |
-| User firmware feasible? | **Yes in principle, undocumented** | **Unknown** | **No** |
+| Community projects | 3 | None found | None |
+| Community: RTLPlayground target | RTL8372/73 | – | – |
+| Community: RTLPlayground relevance | Same SFR scheme | – | – |
+| Community: Yakigani | RTL8370 IROM loader | – | – |
+| Community: Netgear "Plus" models | GS105E/GS308E | – | – |
+| Community: Netgear "Plus" relevance | Firmware runs on this family's 8051 | – | – |
+| User firmware feasible? | **Yes in principle** | **Unknown** | **No** |
+| User firmware documented? | **No** | No | – |
 | Effort | Medium-high | Very high | – |
-| Replaces our MCU? | No: no USB, no PD PHY | No: same, plus no docs | No |
+| Replaces our MCU? | No | No | No |
+| Has USB | No | No | – |
+| Has a PD PHY | No | No | – |
 
 A dash means not applicable or not stated.
 
@@ -135,12 +171,12 @@ A dash means not applicable or not stated.
 
 The boot path is set by three straps, per datasheet §7.5 and Table 8:
 
-| DISAUTOLOAD | DIS_8051 | EN_SPIF | At power-on or reset |
-|---|---|---|---|
-| 0 | 0 | 0 | EEPROM (24Cxx, up to 32 KB) → 8051 instruction memory |
-| 0 | 0 | 1 | SPI flash → 8051 instruction memory |
-| 1 | 0 (must be) | – | EEPROM → registers |
-| 1 | – | – | Nothing |
+| DISAUTOLOAD | DIS_8051 | EN_SPIF | Loads from | Loads to | Source part | Max size |
+|---|---|---|---|---|---|---|
+| 0 | 0 | 0 | EEPROM | 8051 instruction memory | 24Cxx | 32 KB |
+| 0 | 0 | 1 | SPI flash | 8051 instruction memory | – | – |
+| 1 | 0 (must be) | – | EEPROM | Registers | – | – |
+| 1 | – | – | Nothing | – | – | – |
 
 - SPI flash pins: SPIF_CLK/D0/D1/CS on pins 48/49/53/54. UART_RX/TX are on pins 45/46.
 - **Host-loaded path, as the vendor API and the Linux v2 patch do it:**

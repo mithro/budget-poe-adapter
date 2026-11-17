@@ -49,26 +49,35 @@ $0.786 @100. Prices are LCSC, read live where marked **[live]**; others come fro
 |---|---|---|
 | What the host gets | A point-to-point link to the adapter | A real LAN interface |
 | Addressing | e.g. 192.168.7.0/30 | DHCP from the network |
-| Use | Status page, config, telemetry | Network for a USB-C-only device |
-| Also used for | Firmware update, PoE/PD info | – |
-| Ethernet silicon | None | NIC chip, or MCU MAC + switch port |
+| Use 1 | Status page | Network for a USB-C-only device |
+| Use 2 | Config | – |
+| Use 3 | Telemetry | – |
+| Use 4 | Firmware update | – |
+| Use 5 | PoE/PD info | – |
+| Ethernet silicon, option 1 | None | NIC chip |
+| Ethernet silicon, option 2 | – | MCU MAC with a switch port |
 | Works on the passthrough SKU | Yes | No (no free pair) |
-| SKU needed | Any | Switch SKU or a NIC-only SKU |
-| Extra cost | $0 | $0 (switch SKU, firmware) to ~$0.75 (CH397A + crystal) |
+| SKU needed, option 1 | Any | Switch SKU |
+| SKU needed, option 2 | – | NIC-only SKU |
+| Extra cost on the switch SKU | $0 | $0 (firmware only) |
+| Extra cost with a NIC chip | – | ~$0.75 |
+| NIC chip parts | – | CH397A with a crystal |
 
 ## 2. Host OS support for the USB classes
 
-| Class | Linux | macOS | Windows 11 | Windows 10 | Android |
-|---|---|---|---|---|---|
-| CDC-ECM | in-box (`cdc_ether`) | in-box | **no in-box driver** | **no in-box driver** | usually (kernel config) |
-| CDC-NCM | in-box (`cdc_ncm`) | in-box (recent versions; verify) | in-box | lacks it per postmarketOS ([pmOS]) | usually |
-| RNDIS | in-box but disliked | needs third-party driver | in-box | in-box | usually |
+| Class | Linux | Linux driver | macOS | Windows 11 | Windows 10 | Android |
+|---|---|---|---|---|---|---|
+| CDC-ECM | in-box | `cdc_ether` | in-box | **no in-box driver** | **no in-box driver** | usually (kernel config) |
+| CDC-NCM | in-box | `cdc_ncm` | in-box in recent versions (verify) | in-box | lacks it | usually |
+| RNDIS | in-box but disliked | – | needs third-party driver | in-box | in-box | usually |
 
-| Class | Traits | Notes |
-|---|---|---|
-| CDC-ECM | Simplest; 64-byte packets, one frame per transfer | – |
-| CDC-NCM | Batches frames; best for throughput | pico-usb-wifi uses NCM ([pico-usb-wifi]) |
-| RNDIS | Fallback for older Windows only | Linux removal proposed ([RNDIS removal]) |
+| Class | Trait | Packet size | Framing | Used by | Reference |
+|---|---|---|---|---|---|
+| CDC-ECM | Simplest | 64-byte packets | One frame per transfer | – | – |
+| CDC-NCM | Best for throughput | – | Batches frames | pico-usb-wifi | [pico-usb-wifi] |
+| CDC-NCM | Missing from Windows 10 | – | – | Reported by postmarketOS | [pmOS] |
+| RNDIS | Fallback for older Windows only | – | – | – | – |
+| RNDIS | Linux removal proposed | – | – | – | [RNDIS removal] |
 
 Practical choice: **NCM, with RNDIS as an optional second configuration** if
 Windows 10 matters. TinyUSB's `net_lwip_webserver` example builds ECM, RNDIS or
@@ -90,43 +99,62 @@ rejects low-speed network devices ([`bitbang-usb.md`](bitbang-usb.md) §3).
 
 ### 4.1 Virtual NIC (MCU only)
 
-| Part | $ @100 | USB | Flash | SRAM | Stack |
-|---|---|---|---|---|---|
-| **CH32X035G8U6** (current pick) | $0.312 | FS device | 62 KB | 20 KB | TinyUSB ([TinyUSB]) |
-| RP2040 | $0.786 | FS device | ext. QSPI | 264 KB | TinyUSB + lwIP, known to work |
+| Part | $ @100 | USB | Flash | SRAM | USB stack | IP stack | Status |
+|---|---|---|---|---|---|---|---|
+| **CH32X035G8U6** (current pick) | $0.312 | FS device | 62 KB | 20 KB | TinyUSB ([TinyUSB]) | – | – |
+| RP2040 | $0.786 | FS device | ext. QSPI | 264 KB | TinyUSB | lwIP | Known to work |
 
 | Part | Property | Value |
 |---|---|---|
-| CH32X035G8U6 | TinyUSB support | `OPT_MCU_CH32X035` and a USBFS driver |
+| CH32X035G8U6 | TinyUSB MCU option | `OPT_MCU_CH32X035` |
+| CH32X035G8U6 | TinyUSB driver | USBFS |
 | CH32X035G8U6 | Endpoint buffers | 64-byte (fine for FS) |
-| CH32X035G8U6 | lwIP with TCP | Fits flash, but tight in 20 KB RAM |
-| CH32X035G8U6 | Safer choice | A UDP-only stack or uIP-style HTTP |
-| CH32X035G8U6 | Confidence | **Estimate, needs a build to confirm** |
+| CH32X035G8U6 | lwIP with TCP in flash | Fits |
+| CH32X035G8U6 | lwIP with TCP in 20 KB RAM | Tight |
+| CH32X035G8U6 | Safer choice 1 | A UDP-only stack |
+| CH32X035G8U6 | Safer choice 2 | uIP-style HTTP |
+| CH32X035G8U6 | Confidence | **Estimate** |
+| CH32X035G8U6 | Next step | **A build to confirm** |
 | RP2040 | RAM | Plenty |
-| RP2040 | Drawbacks | Dearer, and needs flash + crystal |
+| RP2040 | Price | Dearer |
+| RP2040 | Extra part 1 | Flash |
+| RP2040 | Extra part 2 | Crystal |
 
 ### 4.2 Bridging NIC
 
-| Option | Parts | USB | Ethernet | Firmware |
-|---|---|---|---|---|
-| **CH397A** | CH397A (QFN-24 4×4, LCSC [C7465328]) | **HS** 480 Mbit/s | 10/100 MAC + PHY, auto-MDIX, 50 Ω terminations | None (fixed-function) |
-| Switch SKU, RP2040 | RP2040 PIO RMII → RTL8363NB ext port → RP2040 USB | FS | via switch | TinyUSB NCM + L2 bridge in firmware |
-| Switch SKU, CH32V307 | CH32V307 (as in `ethernet-switch.md`) | **HS** | RGMII/RMII MAC → switch | WCH/TinyUSB NCM + bridge |
-| CH32X035 + CH390H | CH390H is an SPI MAC+PHY | FS | 10/100 | MCU bridges SPI ⇄ USB |
-| RP2040 + PIO 10BASE-T | Direct on the wire | FS | bit-banged 10M, 5–7 Mbit/s TCP | Two experimental stacks combined |
-| CH579M / CH32V208WBU6 | USB FS + 10M PHY in one chip | FS | 10BASE-T | MCU bridge |
+| Option | MCU | Ethernet chip | Package | LCSC | USB | USB rate | Ethernet | Auto-MDIX | Terminations | Firmware |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **CH397A** | – | CH397A | QFN-24 4×4 | [C7465328] | **HS** | 480 Mbit/s | 10/100 MAC + PHY | Yes | 50 Ω built in | None (fixed-function) |
+| Switch SKU with RP2040 | RP2040 | RTL8363NB ext port | – | – | FS | – | PIO RMII via the switch | – | – | TinyUSB NCM + L2 bridge |
+| Switch SKU with CH32V307 | CH32V307 | Switch | – | – | **HS** | – | RGMII/RMII MAC → switch | – | – | WCH/TinyUSB NCM + bridge |
+| CH32X035 with CH390H | CH32X035 | CH390H (SPI MAC+PHY) | – | – | FS | – | 10/100 | – | – | MCU bridges SPI ⇄ USB |
+| RP2040 with PIO 10BASE-T | RP2040 | None (direct on the wire) | – | – | FS | – | Bit-banged 10M | – | – | Two experimental stacks combined |
+| CH579M | CH579M | Built-in 10M PHY | – | – | FS | – | 10BASE-T | – | – | MCU bridge |
+| CH32V208WBU6 | CH32V208WBU6 | Built-in 10M PHY | – | – | FS | – | 10BASE-T | – | – | MCU bridge |
 
-| Option | Silicon $ | Verdict | Why |
-|---|---|---|---|
-| **CH397A** | **$0.672 @100, $0.596 @1k [live]** + 25 MHz crystal | **Best standalone NIC** | Cheapest, fastest, no firmware |
-| Switch SKU, RP2040 | $0 extra | Good | Same board serves an Ethernet Pi *and* a USB-only device |
-| Switch SKU, CH32V307 | $0 extra (already in that BOM, $2.15 @1k) | Fastest switch-SKU option | But the RP2040 swap saves ~$0.40 |
-| CH32X035 + CH390H | $0.31 + $0.94 [live] = $1.25 | Over cap | Slower and more work than CH397A |
-| RP2040 + PIO 10BASE-T | $0.79 + flash + crystal | Not worth it | "not recommended for PoE equipment" ([pico_eth_doc]) |
-| CH579M / CH32V208WBU6 | $1.21 / $1.42 | Over cap | – |
+| Option | Silicon $ @100 | Silicon $ @1k | Extra part 1 | Extra part 2 | Verdict | Reason | Second reason | Third reason |
+|---|---|---|---|---|---|---|---|---|
+| **CH397A** | **$0.672** | **$0.596 [live]** | 25 MHz crystal | – | **Best standalone NIC** | Cheapest | Fastest | No firmware |
+| Switch SKU with RP2040 | – | $0 extra | – | – | Good | Same board serves an Ethernet Pi | It also serves a USB-only device | – |
+| Switch SKU with CH32V307 | – | $0 extra | – | – | Fastest switch-SKU option | Already in that BOM at $2.15 @1k | The RP2040 swap saves ~$0.40 | – |
+| CH32X035 with CH390H | – | $1.25 | – | – | Over cap | Slower than the CH397A | More work than the CH397A | – |
+| RP2040 with PIO 10BASE-T | – | $0.79 | Flash | Crystal | Not worth it | 5–7 Mbit/s TCP | "not recommended for PoE equipment" | – |
+| CH579M | – | $1.21 | – | – | Over cap | – | – | – |
+| CH32V208WBU6 | – | $1.42 | – | – | Over cap | – | – | – |
 
-The CH397A keeps its config, MAC and VID/PID in built-in flash. The "not
-recommended" quote is pico_eth_doc's own.
+| Part of the CH32X035 with CH390H option | $ [live] |
+|---|---|
+| CH32X035 | $0.31 |
+| CH390H | $0.94 |
+| Total | $1.25 |
+
+| CH397A built-in flash holds |
+|---|
+| Config |
+| MAC |
+| VID/PID |
+
+The "not recommended" quote is pico_eth_doc's own ([pico_eth_doc]).
 
 **USB-NIC SKU sketch (no passthrough):** PoE RJ45 + magnetics → CH397A → USB-C
 D+/D−; the CH32X035 still does PoE, the buck and USB-PD. Extra BOM over the
@@ -141,13 +169,16 @@ CH335, not priced here) or the CH397A alone (power info then only via PD).
 
 ## 5. Data roles: the part that needs testing
 
-| Device on the USB-C end | Default role when the adapter powers it | What makes the adapter a USB device | Notes |
-|---|---|---|---|
-| Raspberry Pi 4/5 | Pi is device (dwc2 gadget) | `dtoverlay=dwc2,dr_mode=host` on the Pi | or PD `DR_Swap` |
-| Laptop | Laptop is device by Type-C default when sinking | PD `DR_Swap` (what docks do) | most laptops accept |
-| Phone / tablet (Android) | Device | PD `DR_Swap` | generally supported; test |
-| Phone / tablet (iPadOS) | Device | PD `DR_Swap` | supports USB Ethernet as host; test |
-| Pi Zero / micro-USB boards | Device (micro-USB OTG) | Needs an OTG-host adapter cable | out of scope |
+| Device on the USB-C end | Default role when the adapter powers it | What makes the adapter a USB device | Alternative | Notes |
+|---|---|---|---|---|
+| Raspberry Pi 4 | Pi is device (dwc2 gadget) | `dtoverlay=dwc2,dr_mode=host` on the Pi | PD `DR_Swap` | – |
+| Raspberry Pi 5 | Pi is device (dwc2 gadget) | `dtoverlay=dwc2,dr_mode=host` on the Pi | PD `DR_Swap` | – |
+| Laptop | Laptop is device (Type-C default when sinking) | PD `DR_Swap` | – | What docks do. Most laptops accept |
+| Android phone | Device | PD `DR_Swap` | – | Generally supported. Needs testing |
+| Android tablet | Device | PD `DR_Swap` | – | Generally supported. Needs testing |
+| iPad (iPadOS) | Device | PD `DR_Swap` | – | Supports USB Ethernet as host. Needs testing |
+| Pi Zero | Device (micro-USB OTG) | Needs an OTG-host adapter cable | – | Out of scope |
+| Other micro-USB boards | Device (micro-USB OTG) | Needs an OTG-host adapter cable | – | Out of scope |
 
 The CH32X035's hardware PD PHY handles the BMC; the `DR_Swap` message and the
 Type-C state machine are firmware. Without a successful swap, both ends try to

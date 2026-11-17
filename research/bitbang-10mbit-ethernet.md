@@ -53,17 +53,33 @@ remember them, not re-read for this note.
 
 ## 2. Options ranked for this adapter
 
-| # | Approach | Link partner on the board | Extra BOM | Proven? | Proven against | Verdict |
-|---|---|---|---|---|---|---|
-| A | **RP2040 PIO RMII/MII MAC → RTL8363NB ext port** | Switch ext MAC port in PHY mode | $0 (replaces CH32V307, ≈ −$0.40) | Partly | LAN8720 yes; a switch port not yet | **Recommended** for the switch SKU |
-| B | RP2040 PIO direct 10BASE-T → spare copper port | RTL8367S / YT9215S copper PHY, cap-coupled | ≈ +$0.5–2 over RTL8363NB | Yes | Real switches over a cable | Works, but costs more than A |
-| C | RP2040 PIO RMII → SR8201F PHY → own magjack | Whatever the user plugs into the second port | ≈ $0.23 PHY + ~$0.05 crystal + magjack | Yes | LAN8720 | Only with a separate management port |
-| D | RP2040 PIO direct 10BASE-T → own magjack | Same as C | Magjack + a few resistors | Yes | TCP 5–7 Mbit/s | Same as C, cheaper, flakier RX |
-| E | CH32X035/CH32V003 DMA-driven MII → switch ext port | Switch ext MAC port, MII PHY mode, 10M | $0 | **No** | Not done by anyone I found | Research item |
-| F | Any bit-banged port on the PoE cable itself | None: gigabit uses all four pairs | — | — | — | Dead end |
+| # | MCU | Alt MCU | Method | Via | Ends at | Switch | Alt switch | Link partner on the board |
+|---|---|---|---|---|---|---|---|---|
+| A | **RP2040** | – | **PIO RMII/MII MAC** | – | **Switch ext port (MAC-to-MAC)** | RTL8363NB | – | Switch ext MAC port in PHY mode |
+| B | RP2040 | – | PIO direct 10BASE-T | – | Spare copper port | RTL8367S | YT9215S | Copper PHY (cap-coupled) |
+| C | RP2040 | – | PIO RMII | SR8201F PHY | Own magjack | – | – | Whatever the user plugs into the second port |
+| D | RP2040 | – | PIO direct 10BASE-T | – | Own magjack | – | – | Same as C |
+| E | CH32X035 | CH32V003 | DMA-driven MII | – | Switch ext port | – | – | Switch ext MAC port (MII PHY mode at 10M) |
+| F | Any | – | Any bit-banged port | – | The PoE cable itself | – | – | None |
 
-Option A is MAC-to-MAC. Option B needs a bigger switch with a spare copper
-port.
+| # | Extra BOM | PHY | Crystal | Magjack | Passives | Replaces | Saving | Proven? | Proven against | Not yet proven |
+|---|---|---|---|---|---|---|---|---|---|---|
+| A | $0 | – | – | – | – | CH32V307 | ≈ $0.40 | Partly | LAN8720 | A switch port |
+| B | ≈ +$0.5–2 over RTL8363NB | – | – | – | – | – | – | Yes | Real switches over a cable | – |
+| C | – | ≈ $0.23 | ~$0.05 | Needed | – | – | – | Yes | LAN8720 | – |
+| D | – | – | – | Needed | A few resistors | – | – | Yes | TCP at 5–7 Mbit/s | – |
+| E | $0 | – | – | – | – | – | – | **No** | – | Not done by anyone I found |
+| F | — | – | – | – | – | – | – | — | – | – |
+
+| # | Verdict | Upside | Downside |
+|---|---|---|---|
+| A | **Recommended** for the switch SKU | – | – |
+| B | Works | – | Costs more than A |
+| C | Only for a product with a separate management port | – | – |
+| D | Same as C | Cheaper | Flakier RX |
+| E | Research item | – | – |
+| F | Dead end | – | Gigabit uses all four pairs |
+
 
 ## 3. Direct on the wire (10BASE-T from MCU pins)
 
@@ -88,40 +104,64 @@ port.
 
 ### 3.2 Projects
 
-| Project | Author | Year | MCU | TX | RX |
-|---|---|---|---|---|---|
-| [holysnippet/pico_eth_doc] | Robin Guillaume | 2022 | RP2040 | PIO, 2 consecutive GPIOs | PIO, 1 GPIO, resistor bias + Schmitt input |
-| Pico-10BASE-T ([Tom's Hardware]) | kingyoPiyo | 2022 | RP2040 | PIO, 2 GPIOs, 2 × 47 Ω + 470 Ω | None |
-| [Pico-100BASE-TX] | Steve Markgraf | 2025 | RP2040/RP2350 | PIO+DMA, MLT-3 with 2 GPIOs, 4B5B + scrambler | None |
-| [cnlohr/espthernet] | Charles Lohr | 2016 | ESP8266 | I2S at 40 MHz | I2S at 40 MHz, oversampled |
-| ethertiny | Charles Lohr | – | ATtiny85 / AVR | Bit-banged | Overclocked USI, or BPSK-in-payload trick |
-| IgorPlug-UDP / [PA3FWM avreth] | – | – | ATtiny85 / AVR | Bit-banged | Overclocked USI, or BPSK-in-payload trick |
+| Project | Author | Year | MCU | Alt MCU | TX method | TX pins | RX method | RX pins |
+|---|---|---|---|---|---|---|---|---|
+| [holysnippet/pico_eth_doc] | Robin Guillaume | 2022 | RP2040 | – | PIO | 2 consecutive GPIOs | PIO | 1 GPIO |
+| Pico-10BASE-T ([Tom's Hardware]) | kingyoPiyo | 2022 | RP2040 | – | PIO | 2 GPIOs | None | – |
+| [Pico-100BASE-TX] | Steve Markgraf | 2025 | RP2040 | RP2350 | PIO+DMA | 2 GPIOs | None | – |
+| [cnlohr/espthernet] | Charles Lohr | 2016 | ESP8266 | – | I2S at 40 MHz | – | I2S at 40 MHz | – |
+| AVR projects (listed below) | – | – | ATtiny85 | AVR | Bit-banged | – | Overclocked USI | – |
+
+| AVR project | Author |
+|---|---|
+| ethertiny | Charles Lohr |
+| IgorPlug-UDP | – |
+| [PA3FWM avreth] | – |
 
 | Project | Property | Value |
 |---|---|---|
-| pico_eth_doc | Line hardware | 10/100 transformer or magjack |
-| pico_eth_doc | Passives | ~8 resistors, 4 caps |
+| pico_eth_doc | Line hardware option 1 | 10/100 transformer |
+| pico_eth_doc | Line hardware option 2 | Magjack |
+| pico_eth_doc | Resistors | ~8 |
+| pico_eth_doc | Capacitors | 4 |
 | pico_eth_doc | Comparator | **None needed** |
+| pico_eth_doc | RX bias | Resistor |
+| pico_eth_doc | RX input | Schmitt |
 | pico_eth_doc | Stack | lwIP (NO_SYS=1) |
-| pico_eth_doc | Resources | 1 PIO block, 4 DMA, 2 IRQs |
-| pico_eth_doc | Sys clock | 120 or 240 MHz |
-| pico_eth_doc | Throughput | **TCP 5–7 Mbit/s** (iperf 2) |
+| pico_eth_doc | PIO blocks | 1 |
+| pico_eth_doc | DMA channels | 4 |
+| pico_eth_doc | IRQs | 2 |
+| pico_eth_doc | Sys clock option 1 | 120 MHz |
+| pico_eth_doc | Sys clock option 2 | 240 MHz |
+| pico_eth_doc | TCP throughput | **5–7 Mbit/s** |
+| pico_eth_doc | Measured with | iperf 2 |
 | pico_eth_doc | NLP detection on RX | No |
 | pico_eth_doc | Status | Beta |
 | pico_eth_doc | Licence | BSD-3 |
+| Pico-10BASE-T | TX resistor value 1 | 2 × 47 Ω |
+| Pico-10BASE-T | TX resistor value 2 | 470 Ω |
 | Pico-10BASE-T | Line hardware | Pulse transformer recommended |
 | Pico-10BASE-T | Scope | UDP transmit only |
 | Pico-10BASE-T | Role | The ancestor of the RP2040 work |
-| Pico-100BASE-TX | Line hardware | Pulse transformer or a switch in between |
-| Pico-100BASE-TX | Scope | Transmit only, 100 Mbit/s |
+| Pico-100BASE-TX | Line code | MLT-3 |
+| Pico-100BASE-TX | Block code | 4B5B |
+| Pico-100BASE-TX | Scrambler | Yes |
+| Pico-100BASE-TX | Line hardware option 1 | Pulse transformer |
+| Pico-100BASE-TX | Line hardware option 2 | A switch in between |
+| Pico-100BASE-TX | Scope | Transmit only |
+| Pico-100BASE-TX | Rate | 100 Mbit/s |
 | Pico-100BASE-TX | Lesson | Shows the TX side scales |
 | Pico-100BASE-TX | RX | RX at 125 Mbaud MLT-3 does not exist |
-| espthernet | Line hardware | Line driver recommended, magnetics |
+| espthernet | RX sampling | Oversampled |
+| espthernet | Line driver | Recommended |
+| espthernet | Magnetics | Yes |
 | espthernet | Duplex | Half duplex (NLP) |
 | espthernet | Author's view | "a party trick, not a legitimate engineering solution" |
-| ethertiny / IgorPlug-UDP / avreth | Line hardware | Resistors, bias |
-| ethertiny / IgorPlug-UDP / avreth | Lesson | Shows how little hardware is needed |
-| ethertiny / IgorPlug-UDP / avreth | Fit | Not a basis for a product |
+| AVR projects | Alternative RX method | BPSK-in-payload trick |
+| AVR projects | Line hardware 1 | Resistors |
+| AVR projects | Line hardware 2 | Bias |
+| AVR projects | Lesson | Shows how little hardware is needed |
+| AVR projects | Fit | Not a basis for a product |
 
 ### 3.3 Fit for this adapter
 
@@ -144,10 +184,10 @@ port.
 
 ### 4.1 Projects
 
-| Project | MCU | Interface | PHY | Speed |
-|---|---|---|---|---|
-| [sandeepmistry/pico-rmii-ethernet] (fork: [suryatmodulus]) | RP2040 | PIO RMII + MDIO | LAN8720 | **10 Mbit/s only** |
-| [Mongoose pico-rmii] ([article][embeddedrelated]) | RP2040 | PIO RMII + PIO SMI | LAN8720 | 10 Mbit/s only |
+| Project | Fork | Article | MCU | Interface | Management | PHY | Speed |
+|---|---|---|---|---|---|---|---|
+| [sandeepmistry/pico-rmii-ethernet] | [suryatmodulus] | – | RP2040 | PIO RMII | MDIO | LAN8720 | **10 Mbit/s only** |
+| [Mongoose pico-rmii] | – | [article][embeddedrelated] | RP2040 | PIO RMII | PIO SMI | LAN8720 | 10 Mbit/s only |
 
 | Project | Property | Value |
 |---|---|---|
@@ -158,7 +198,8 @@ port.
 | Mongoose pico-rmii | Autoneg | Restricted to 10M |
 | Mongoose pico-rmii | Clocking | 50 MHz ref clock from PHY drives CPU+PIO |
 | Mongoose pico-rmii | TX | DMA → PIO FIFO |
-| Mongoose pico-rmii | RX | Ping-pong DMA, PIO IRQ at end of frame |
+| Mongoose pico-rmii | RX | Ping-pong DMA |
+| Mongoose pico-rmii | RX end of frame | PIO IRQ |
 | Mongoose pico-rmii | CRC | In software |
 | Mongoose pico-rmii | Duplex | Full duplex only |
 | Mongoose pico-rmii | Timing limit | RX buffer swap inside the 9.6 µs inter-frame gap |
@@ -199,11 +240,11 @@ relay, it would need a MAC. A software one is conceivable over MII at 10M:
 
 ### 4.4 Cheap PHYs if a standalone port is wanted
 
-| Part | Interface | Pkg | $ @100 | $ @1k | Stock | Notes |
-|---|---|---|---|---|---|---|
-| CoreChips SR8201F ([C378491]) | MII/RMII, 10/100 | QFN-32 | **$0.266** | **$0.229** | 6,895 **[live]** | Internal 1.1 V, auto-MDIX. Cheapest found |
-| WCH CH182H ([C22370607]) | MII/RMII, 10/100 | QFN-32 | $0.452 | $0.390 | **Out of stock [live]** | |
-| Microchip LAN8710A ([C46185]) | MII/RMII | QFN-32 | $0.545 | $0.513 | 5,829 **[live]** | LAN8720A is the one the PIO drivers test against |
+| Vendor | Part | LCSC | MII | RMII | Speed | Pkg | $ @100 | $ @1k | Stock | Core supply | Auto-MDIX | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| CoreChips | SR8201F | [C378491] | Yes | Yes | 10/100 | QFN-32 | **$0.266** | **$0.229** | 6,895 **[live]** | Internal 1.1 V | Yes | Cheapest found |
+| WCH | CH182H | [C22370607] | Yes | Yes | 10/100 | QFN-32 | $0.452 | $0.390 | **Out of stock [live]** | – | – | – |
+| Microchip | LAN8710A | [C46185] | Yes | Yes | – | QFN-32 | $0.545 | $0.513 | 5,829 **[live]** | – | – | LAN8720A is the one the PIO drivers test against |
 
 All need a 25 MHz crystal (or 50 MHz RMII clock) and magnetics. The PIO
 drivers use a few LAN87xx-specific MDIO registers to force 10M; for SR8201F

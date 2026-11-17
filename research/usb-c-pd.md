@@ -19,19 +19,36 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1/3.2), BC1.2, and
 
 ## 2. USB power standards: voltages and currents
 
-| Mechanism | Signalling | Voltage | Max current / power | Relevance as a source |
-|---|---|---|---|---|
-| USB 2.0 default | none | 5 V | 500 mA (2.5 W) | baseline |
-| USB 3.x default | none | 5 V | 900 mA (4.5 W) | baseline |
-| BC1.2 DCP / CDP | D+/D- (DCP: D+ shorted to D-) | 5 V | 1.5 A (7.5 W) | trivial on a power-only port |
-| Apple divider | fixed voltages on D+/D- | 5 V | 1 / 2.1 / 2.4 A | resistors only |
-| Type-C Current | Rp value on CC | 5 V | Default / 1.5 A / 3.0 A (15 W) | **required for any USB-C source** |
-| USB PD Fixed (SPR) | BMC on CC | 5, 9, 15, 20 V | 3 A; 5 A with 5 A e-marked cable → 100 W | 5 V/5 A for Pi 5 |
-| USB PD PPS (PD 3.0) | BMC on CC | 3.3 to 21 V, 20 mV steps | 50 mA current-limit steps, ≤ 100 W | needs tightly controlled converter; skip |
-| USB PD EPR Fixed (PD 3.1) | BMC + EPR mode entry | 28, 36, 48 V | 5 A → 140 / 180 / 240 W | out of PoE budget (bt max ≈ 71 W at the PD) |
-| USB PD AVS (3.1 EPR; 3.2 adds SPR AVS) | BMC | EPR 15 to 48 V in 100 mV steps; SPR AVS 9 to 20 V (verify) | | skip |
-| Qualcomm QC 2.0 / 3.0 | D+/D- voltage levels / pulses | 5/9/12/(20) V; QC3 200 mV steps | ~18 W | only if serving phones on legacy ports |
-| Samsung AFC, Huawei FCP/SCP | proprietary single-wire / D+/D- | 9 V etc. | | skip |
+| Mechanism | Signalling line | Signalling detail | Voltage | Voltage step | Max current | With 5 A cable | Max power | Relevance as a source | Reason |
+|---|---|---|---|---|---|---|---|---|---|
+| USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W | Baseline | – |
+| USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W | Baseline | – |
+| BC1.2 DCP | D+/D- | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
+| BC1.2 CDP | D+/D- | – | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
+| Apple divider, level 1 | D+/D- | Fixed voltages | 5 V | – | 1 A | – | – | Resistors only | – |
+| Apple divider, level 2 | D+/D- | Fixed voltages | 5 V | – | 2.1 A | – | – | Resistors only | – |
+| Apple divider, level 3 | D+/D- | Fixed voltages | 5 V | – | 2.4 A | – | – | Resistors only | – |
+| Type-C Current, default | CC | Rp value | 5 V | – | Default | – | – | **Required for any USB-C source** | – |
+| Type-C Current, 1.5 A | CC | Rp value | 5 V | – | 1.5 A | – | – | **Required for any USB-C source** | – |
+| Type-C Current, 3.0 A | CC | Rp value | 5 V | – | 3.0 A | – | 15 W | **Required for any USB-C source** | – |
+| USB PD Fixed (SPR) | CC | BMC | 5 V | – | 3 A | 5 A | – | 5 V at 5 A for the Pi 5 | – |
+| USB PD Fixed (SPR) | CC | BMC | 9 V | – | 3 A | 5 A | – | – | – |
+| USB PD Fixed (SPR) | CC | BMC | 15 V | – | 3 A | 5 A | – | – | – |
+| USB PD Fixed (SPR) | CC | BMC | 20 V | – | 3 A | 5 A | 100 W | – | – |
+| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | 50 mA limit steps | – | ≤ 100 W | Skip | Needs a tightly controlled converter |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 28 V | – | 5 A | – | 140 W | Out of PoE budget | bt max ≈ 71 W at the PD |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 36 V | – | 5 A | – | 180 W | Out of PoE budget | bt max ≈ 71 W at the PD |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W | Out of PoE budget | bt max ≈ 71 W at the PD |
+| USB PD EPR AVS (PD 3.1) | CC | BMC | 15 to 48 V | 100 mV | – | – | – | Skip | – |
+| USB PD SPR AVS (PD 3.2) | CC | BMC | 9 to 20 V (verify) | – | – | – | – | Skip | – |
+| Qualcomm QC 2.0 | D+/D- | Voltage levels | 5 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | D+/D- | Voltage levels | 9 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | D+/D- | Voltage levels | 12 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | D+/D- | Voltage levels | 20 V (optional) | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 3.0 | D+/D- | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W | Only for phones on legacy ports | – |
+| Samsung AFC | D+/D- or a single wire | Proprietary | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei FCP | D+/D- or a single wire | Proprietary | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei SCP | D+/D- or a single wire | Proprietary | 9 V etc. | – | – | – | – | Skip | – |
 
 **PD power rules (SPR source profiles):** a source rated at P watts must offer every lower standard voltage. ≤15 W offers 5 V; 15 to 27 W also offers 9 V; 27 to 45 W also offers 15 V; >45 W also offers 20 V. A **5 V-only 25 W source is not a "PD Power Rule" compliant 27 W supply** (a compliant 27 W source must also offer 9 V/3 A). The Pi official PSU offers 5.1 V/5 A plus 9/12/15 V at lower current (verify exact PDO list). This matters only for certification, not function.
 
@@ -59,11 +76,11 @@ Every USB-C power source must implement this, even without PD.
 
 ### 4.1 Resistors
 
-| Role | Component | Value |
-|---|---|---|
-| Source advertises current | **Rp** pull-up on CC1 and CC2 | See the next table |
-| Sink | **Rd** pull-down | 5.1 kΩ |
-| Active cable / VCONN powered | **Ra** on the unused CC | 0.8 to 1.2 kΩ |
+| Role | Component | Type | Where | Value min | Value max |
+|---|---|---|---|---|---|
+| Source advertises current | **Rp** | Pull-up | Each CC pin | See the next table | See the next table |
+| Sink | **Rd** | Pull-down | – | 5.1 kΩ | 5.1 kΩ |
+| Active cable (VCONN powered) | **Ra** | – | The unused CC | 0.8 kΩ | 1.2 kΩ |
 
 | Rp advertises | Rp to 5 V | Rp to 3.3 V | Or current source |
 |---|---|---|---|
@@ -77,13 +94,19 @@ Using a 3.3 V pull-up is ideal for an MCU because the CC node then stays within 
 
 Source-side detection (what the MCU ADC/comparator must distinguish), in volts (verify):
 
-| Rp advertised | Ra present | Rd present | Open |
-|---|---|---|---|
-| Default | < 0.2 | 0.25 to 1.5 | > 1.6 |
-| 1.5 A | < 0.4 | 0.45 to 1.5 | > 1.6 |
-| 3.0 A | < 0.8 | 0.85 to 2.45 | > 2.6 |
+| Rp advertised | Ra present, below | Rd present, min | Rd present, max | Open, above |
+|---|---|---|---|---|
+| Default | 0.2 | 0.25 | 1.5 | 1.6 |
+| 1.5 A | 0.4 | 0.45 | 1.5 | 1.6 |
+| 3.0 A | 0.8 | 0.85 | 2.45 | 2.6 |
 
-Sink-side (vRd) windows that tell the sink what current it may draw: **Default 0.2 to 0.66 V, 1.5 A 0.66 to 1.23 V, 3.0 A 1.23 to 2.04 V.**
+Sink-side (vRd) windows that tell the sink what current it may draw:
+
+| Source advertises | vRd min | vRd max |
+|---|---|---|
+| **Default** | **0.2 V** | **0.66 V** |
+| **1.5 A** | **0.66 V** | **1.23 V** |
+| **3.0 A** | **1.23 V** | **2.04 V** |
 
 With 3 A Rp, one comparator or ADC channel per CC pin suffices: below 0.8 V means Ra, 0.85 to 2.45 V means Rd (attached sink), above 2.6 V means open. The CC that sees Rd gives the plug orientation, and PD runs on that pin. A 10 to 12-bit ADC at a few ksps is plenty.
 
@@ -135,7 +158,16 @@ Preamble | SOP* (4 K-codes) | Header (16b) | 0–7 Data Objects (32b each) | CRC
 | 6 | 01110 | E | 11100 |
 | 7 | 01111 | F | 11101 |
 
-K-codes: **Sync-1 11000, Sync-2 10001, Sync-3 00110, RST-1 00111, RST-2 11001, EOP 01101.**
+K-codes:
+
+| K-code | 5b |
+|---|---|
+| **Sync-1** | **11000** |
+| **Sync-2** | **10001** |
+| **Sync-3** | **00110** |
+| **RST-1** | **00111** |
+| **RST-2** | **11001** |
+| **EOP** | **01101** |
 
 - Ordered sets: **SOP** = S1 S1 S1 S2 (port partner). **SOP'** = S1 S1 S3 S3 (cable plug near end). **SOP''** = S1 S3 S1 S3. **Hard Reset** = R1 R1 R1 R2. **Cable Reset** = R1 S1 R1 S3. A receiver should accept an ordered set when 3 of 4 K-codes match.
 - **CRC-32:** same as Ethernet (poly 0x04C11DB7, init 0xFFFFFFFF, reflected, final inversion), over header + data objects, transmitted as 4b5b like data. Hardware CRC on CH32/RP2040 (DMA sniffer) helps.
@@ -202,26 +234,58 @@ Message types needed for a minimal source:
 
 ### 6.3 Other analog needs
 
-| Function | Requirement | Cheap implementation | Alternative or detail |
-|---|---|---|---|
-| CC attach / orientation | 2 channels, 0.8 V / 2.6 V windows, ms speed | ADC or comparator with threshold | – |
-| Rp switching (3 A vs 1.5 A) | per CC, two pull-up values | 2 GPIOs with 4.7 k / 12 k to 3.3 V | – |
-| VBUS monitor | 0 to 5.5 V, vSafe0V detection | ADC + divider | 25 V range if ever above 5 V |
-| VBUS current | over-current shutdown, optional | sense resistor + ADC or comparator | or an eFuse/load switch with ILIM |
-| Variable VBUS (9/15/20 V) | only if you go beyond the Pi | PWM-filtered "DAC" injected into the buck FB node | 10-bit+ for PPS 20 mV steps |
-| VCONN | 5 V, ≤ 1 W, on unused CC | 2 small P-FETs | – |
-| D+/D- legacy (optional): BC1.2 | DCP short | resistors | – |
-| D+/D- legacy (optional): Apple | 2.7 V / 2.0 V dividers | resistors | – |
-| D+/D- legacy (optional): QC | QC detection | 2 comparator/ADC channels | thresholds at ≈0.325 V and ≈2 V |
+| Function | Property | Value |
+|---|---|---|
+| CC attach / orientation | Channels | 2 |
+| CC attach / orientation | Window 1 | 0.8 V |
+| CC attach / orientation | Window 2 | 2.6 V |
+| CC attach / orientation | Speed | ms |
+| CC attach / orientation | Implementation option 1 | ADC |
+| CC attach / orientation | Implementation option 2 | Comparator with threshold |
+| Rp switching (3 A vs 1.5 A) | Scope | Per CC |
+| Rp switching (3 A vs 1.5 A) | Pull-up values | 2 |
+| Rp switching (3 A vs 1.5 A) | Implementation | 2 GPIOs |
+| Rp switching (3 A vs 1.5 A) | Pull-up for 3 A | 4.7 k to 3.3 V |
+| Rp switching (3 A vs 1.5 A) | Pull-up for 1.5 A | 12 k to 3.3 V |
+| VBUS monitor | Range | 0 to 5.5 V |
+| VBUS monitor | Range if ever above 5 V | 25 V |
+| VBUS monitor | Must detect | vSafe0V |
+| VBUS monitor | Implementation | ADC with a divider |
+| VBUS current | Purpose | Over-current shutdown |
+| VBUS current | Required | Optional |
+| VBUS current | Implementation option 1 | Sense resistor with ADC |
+| VBUS current | Implementation option 2 | Sense resistor with comparator |
+| VBUS current | Implementation option 3 | eFuse/load switch with ILIM |
+| Variable VBUS | Voltage 1 | 9 V |
+| Variable VBUS | Voltage 2 | 15 V |
+| Variable VBUS | Voltage 3 | 20 V |
+| Variable VBUS | Needed | Only if you go beyond the Pi |
+| Variable VBUS | Implementation | PWM-filtered "DAC" injected into the buck FB node |
+| Variable VBUS | Resolution | 10-bit+ |
+| Variable VBUS | Resolution set by | PPS 20 mV steps |
+| VCONN | Voltage | 5 V |
+| VCONN | Power | ≤ 1 W |
+| VCONN | Where | The unused CC |
+| VCONN | Implementation | 2 small P-FETs |
+| D+/D- legacy (optional): BC1.2 | Signature | DCP short |
+| D+/D- legacy (optional): BC1.2 | Implementation | Resistors |
+| D+/D- legacy (optional): Apple | Divider voltage 1 | 2.7 V |
+| D+/D- legacy (optional): Apple | Divider voltage 2 | 2.0 V |
+| D+/D- legacy (optional): Apple | Implementation | Resistors |
+| D+/D- legacy (optional): QC | Needs | QC detection |
+| D+/D- legacy (optional): QC | Comparator/ADC channels | 2 |
+| D+/D- legacy (optional): QC | Threshold 1 | ≈0.325 V |
+| D+/D- legacy (optional): QC | Threshold 2 | ≈2 V |
 
 ### 6.4 MCU candidates (rough)
 
-| MCU | Clock | Comparator/OPA | Timer capture + DMA | Price | Notes |
-|---|---|---|---|---|---|
-| CH32V003 | 48 MHz | 1 OPA (usable as comparator) | yes | about $0.10 | tight RAM (2 KB) but a sink/source PD stack fits |
-| CH32V203 | 144 MHz | OPA ×2–4 | yes | about $0.30–0.50 | – |
-| CH32X035 | 48 MHz | yes | yes | about $0.25 | **native USB PD PHY**: fallback if bit-bang fails |
-| RP2040 / RP2350 | 133 / 150 MHz | **none**, needs external comparator | PIO | – | PIO makes BMC TX/RX easy |
+| MCU | Clock | OPA | Comparator | Timer capture + DMA | Price low | Price high | RAM | PD stack fits | PD PHY | Note |
+|---|---|---|---|---|---|---|---|---|---|---|
+| CH32V003 | 48 MHz | 1 | Via the OPA | yes | about $0.10 | about $0.10 | 2 KB (tight) | Yes (sink/source) | – | – |
+| CH32V203 | 144 MHz | ×2–4 | – | yes | about $0.30 | about $0.50 | – | – | – | – |
+| CH32X035 | 48 MHz | yes | yes | yes | about $0.25 | about $0.25 | – | – | **Native USB PD PHY** | Fallback if bit-bang fails |
+| RP2040 | 133 MHz | **None** | **None** (external one needed) | PIO | – | – | – | – | – | PIO makes BMC TX/RX easy |
+| RP2350 | 150 MHz | **None** | **None** (external one needed) | PIO | – | – | – | – | – | PIO makes BMC TX/RX easy |
 
 Prices are approximate LCSC single-reel figures (verify).
 

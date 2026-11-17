@@ -27,12 +27,26 @@ The board netlist (`schematic/netlist-schematic.enet`) uses an RTL8367S-CG symbo
 
 One interface. The `SPF_MUX_SEL` strap on pin 48 picks which pins it uses. Pin 48 has an internal pull-down, and pull-down selects **SPF1**.
 
-| Signal | SPF0 (pull pin 48 up) | SPF1 (pin 48 low, the default) |
+| Group | Signal | Pin | GPIO | Other function | Strap on pin |
+|---|---|---|---|---|---|
+| SPF0 | SCK | 48 | GPIO9 | RGMII TXD0 | `SPF_MUX_SEL` |
+| SPF0 | SI | 49 | GPIO10 | RGMII TXCTL | – |
+| SPF0 | SO | 53 | GPIO14 | RGMII RXD0 | – |
+| SPF0 | CS# | 54 | GPIO15 | RGMII RXD1 | – |
+| SPF1 | SCK | 77 | GPIO40 | P2LED1 | – |
+| SPF1 | SI | 71 | GPIO34 | P4LED1 | – |
+| SPF1 | SO | 72 | GPIO35 | P3LED1 | – |
+| SPF1 | CS# | 76 | GPIO39 | – | `DISAUTOLOAD` |
+
+| Group | Pin 48 level | Default |
 |---|---|---|
-| SCK | 48 (GPIO9, RGMII TXD0) | 77 (GPIO40, P2LED1) |
-| SI (chip output → flash DI/IO0) | 49 (GPIO10, RGMII TXCTL) | 71 (GPIO34, P4LED1) |
-| SO (flash DO/IO1 → chip) | 53 (GPIO14, RGMII RXD0) | 72 (GPIO35, P3LED1) |
-| CS# | 54 (GPIO15, RGMII RXD1) | 76 (GPIO39, `DISAUTOLOAD` strap) |
+| SPF0 | Pulled up | No |
+| SPF1 | Low | Yes |
+
+| Signal | Driven by | Flash pin | Flash I/O name |
+|---|---|---|---|
+| SI | Chip | DI | IO0 |
+| SO | Flash | DO | IO1 |
 
 - `EN_SPIF` (pin 74, GPIO37/P3LED0) is the enable strap: pull up to enable **[V]**.
 - SPF0 takes over the extension-port RGMII/MII pins. If the adapter's MCU link uses that port, flash has to go on SPF1 **[I]**.
@@ -40,12 +54,16 @@ One interface. The `SPF_MUX_SEL` strap on pin 48 picks which pins it uses. Pin 4
 
 ### JTAG (two groups, both shared with LEDs and straps) [V]
 
-| Signal | JTAG0 | JTAG1 |
-|---|---|---|
-| TCK | 73 (GPIO36, `EN_PWRLIGHT` strap) | 79 (GPIO44, `EN_PHY` strap) |
-| TMS | 79 (GPIO44, shared with JTAG1 TCK) | 71 (GPIO34, P4LED1) |
-| TDI | 81 (GPIO46, LED_CK, `SMI_SEL` strap) | 72 (GPIO35, P3LED1) |
-| TDO | 80 (GPIO45, LED_DA) | 77 (GPIO40, P2LED1) |
+| Group | Signal | Pin | GPIO | Other function | Strap on pin |
+|---|---|---|---|---|---|
+| JTAG0 | TCK | 73 | GPIO36 | – | `EN_PWRLIGHT` |
+| JTAG0 | TMS | 79 | GPIO44 | JTAG1 TCK | `EN_PHY` |
+| JTAG0 | TDI | 81 | GPIO46 | LED_CK | `SMI_SEL` |
+| JTAG0 | TDO | 80 | GPIO45 | LED_DA | – |
+| JTAG1 | TCK | 79 | GPIO44 | JTAG0 TMS | `EN_PHY` |
+| JTAG1 | TMS | 71 | GPIO34 | P4LED1 | – |
+| JTAG1 | TDI | 72 | GPIO35 | P3LED1 | – |
+| JTAG1 | TDO | 77 | GPIO40 | P2LED1 | – |
 
 - Pin 79 is listed as both JTAG1_TCK and JTAG0_TMS in both drafts. The two groups cannot be used at once **[V]**.
 - JTAG1 uses the same pins as SPF1 (71/72/77), so it cannot coexist with flash on SPF1 **[I]**.
@@ -53,11 +71,14 @@ One interface. The `SPF_MUX_SEL` strap on pin 48 picks which pins it uses. Pin 4
 
 ### UART
 
-| UART | RX | TX |
-|---|---|---|
-| UART0 | 45 (GPIO6, RGMII TXD3, SWITCH_ID_1 strap) | 46 (GPIO7, RGMII TXD2) |
-| UART1 | 19 (GPIO2, INTERRUPT) | 75 (GPIO38, P2LED0, `DIS_MCU` strap) |
-| UART2 | 73 (GPIO36, `EN_PWRLIGHT` strap) | 75 (same pin as UART1 TX) **[C]** |
+| UART | Signal | Pin | GPIO | Other function | Strap on pin | Evidence |
+|---|---|---|---|---|---|---|
+| UART0 | RX | 45 | GPIO6 | RGMII TXD3 | SWITCH_ID_1 | – |
+| UART0 | TX | 46 | GPIO7 | RGMII TXD2 | – | – |
+| UART1 | RX | 19 | GPIO2 | INTERRUPT | – | – |
+| UART1 | TX | 75 | GPIO38 | P2LED0 | `DIS_MCU` | – |
+| UART2 | RX | 73 | GPIO36 | – | `EN_PWRLIGHT` | – |
+| UART2 | TX | 75 | GPIO38 | UART1 TX (same pin) | `DIS_MCU` | **[C]** |
 
 - UART0 appears in the pin table of both drafts and in the Draft_05 UART table. The Draft_01 UART table leaves it out.
 - On the RTL8367S symbol, pins 45/46 are labelled UART_RX/UART_TX. So UART0 is the Realtek-compatible console position **[V]**.
@@ -72,22 +93,24 @@ One interface. The `SPF_MUX_SEL` strap on pin 48 picks which pins it uses. Pin 4
 
 ### How the mirrored board wires these pins [V, from the netlist]
 
-| Pin | Function | Board net and parts | Strap level |
-|---|---|---|---|
-| 45, 46 (UART0) | console | **no net, no pad** | — |
-| 19 (UART1 RX) | — | no net | — |
-| 48 SPF_MUX_SEL | — | no net (internal PD → SPF1) | 0 |
-| 74 EN_SPIF | P3_LED0 | R27 4.7 k to GND, R31 to LED | 0 → flash off |
-| 75 DIS_MCU / UART1-2 TX | P2_LED0 | R19 4.7 k to GND, R25 to LED | **0 → MCU enabled** |
-| 76 DISAUTOLOAD / SPF1_CS | DISAUTOLOAD | R11 4.7 k to 3V3, TP14 | 1 → no autoload |
-| 73 JTAG0_TCK / UART2_RX | EN_PWRLIGHT | R12 4.7 k to 3V3 | 1 |
-| 79 JTAG1_TCK / JTAG0_TMS | P1_LED0 | R17 to 3V3, R23 to LED | 1 |
-| 80 JTAG0_TDO | P0_LED1 | R16 to 3V3, R22 to LED | 1 |
-| 81 JTAG0_TDI | P0_LED0 | R15 to 3V3, R21 to LED | 1 |
-| 71 JTAG1_TMS / SPF1_SI | P4_LED1 | R30 to 3V3, R34 to LED | 1 |
-| 72 JTAG1_TDI / SPF1_SO | P3_LED1 | R28 to GND, R32 to LED | 0 |
-| 77 JTAG1_TDO / SPF1_SCK | P2_LED1 | R20 to GND, R26 to LED | 0 |
-| 87, 88 (EEPROM I²C) | — | no net | — |
+| Pin | Signal 1 | Signal 2 | Signal 3 | Board net | Strap resistor | Value | Pulls to | LED resistor | Test point | Strap level | Effect |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 45 | UART0 RX (console) | – | – | **None** | – | – | – | – | **No pad** | — | – |
+| 46 | UART0 TX (console) | – | – | **None** | – | – | – | – | **No pad** | — | – |
+| 19 | UART1 RX | – | – | None | – | – | – | – | – | — | – |
+| 48 | SPF_MUX_SEL | – | – | None | Internal | – | GND | – | – | 0 | SPF1 selected |
+| 74 | EN_SPIF | – | – | P3_LED0 | R27 | 4.7 k | GND | R31 | – | 0 | Flash off |
+| 75 | DIS_MCU | UART1 TX | UART2 TX | P2_LED0 | R19 | 4.7 k | GND | R25 | – | 0 | **MCU enabled** |
+| 76 | DISAUTOLOAD | SPF1_CS | – | DISAUTOLOAD | R11 | 4.7 k | 3V3 | – | TP14 | 1 | No autoload |
+| 73 | JTAG0_TCK | UART2_RX | – | EN_PWRLIGHT | R12 | 4.7 k | 3V3 | – | – | 1 | – |
+| 79 | JTAG1_TCK | JTAG0_TMS | – | P1_LED0 | R17 | – | 3V3 | R23 | – | 1 | – |
+| 80 | JTAG0_TDO | – | – | P0_LED1 | R16 | – | 3V3 | R22 | – | 1 | – |
+| 81 | JTAG0_TDI | – | – | P0_LED0 | R15 | – | 3V3 | R21 | – | 1 | – |
+| 71 | JTAG1_TMS | SPF1_SI | – | P4_LED1 | R30 | – | 3V3 | R34 | – | 1 | – |
+| 72 | JTAG1_TDI | SPF1_SO | – | P3_LED1 | R28 | – | GND | R32 | – | 0 | – |
+| 77 | JTAG1_TDO | SPF1_SCK | – | P2_LED1 | R20 | – | GND | R26 | – | 0 | – |
+| 87 | EEPROM I²C | – | – | None | – | – | – | – | – | — | – |
+| 88 | EEPROM I²C | – | – | None | – | – | – | – | – | — | – |
 
 What the wiring means:
 - The board runs with the MCU **enabled** but with no flash and no EEPROM. In the SCH table, DISAUTOLOAD=1 is "no action". So the MCU probably sits in its boot ROM doing nothing **[I]**.
@@ -98,40 +121,76 @@ What the wiring means:
 
 Sources: [YT9215SC Draft_07, 2023-02-28](https://atta.szlcsc.com/upload/public/pdf/source/20251231/E8DA45036F659501F9799590211A88C7.pdf) and [YT9215SCH V1.03, 2025-02-10](https://atta.szlcsc.com/upload/public/pdf/source/20251231/76B4B53D0DFB99DA2607FBF198C74D22.pdf).
 
-| Function | Pins | Notes |
-|---|---|---|
-| SPF0 | SCK 49, SI 50, SO 54, CS 55 | `SPF_MUX_SEL` on 49, pull-up selects SPF0 **[V]** |
-| SPF1 (default) | SO 78, SI 79, CS 81, SCK 83 | **[V]** both docs |
-| EN_SPIF / DIS_MCU / DISAUTOLOAD | 75 / 76 / 77 | **[V]** |
-| UART0 | RX 46, TX 47 | **[V]** both docs |
-| UART1 | RX 70 (DIS_SPIS strap), TX 76 (DIS_MCU strap) | **[V]** both docs |
-| JTAG0 | TCK 73, TMS 72, TDI 74, TDO 90 | Draft_07 only; **removed in V1.03** |
-| JTAG1 | TCK 83, TMS 81, TDI 84, TDO 67 | Draft_07 only; **removed in V1.03** |
-| EEPROM / slave I²C | SCL 91, SDA 92 | slave SPI on 90–93 |
+| Function | Signal | Pin | Strap on pin | Evidence | Documents | Note |
+|---|---|---|---|---|---|---|
+| SPF0 | SCK | 49 | `SPF_MUX_SEL` | **[V]** | – | Pull-up selects SPF0 |
+| SPF0 | SI | 50 | – | **[V]** | – | – |
+| SPF0 | SO | 54 | – | **[V]** | – | – |
+| SPF0 | CS | 55 | – | **[V]** | – | – |
+| SPF1 (default) | SO | 78 | – | **[V]** | Both | – |
+| SPF1 (default) | SI | 79 | – | **[V]** | Both | – |
+| SPF1 (default) | CS | 81 | – | **[V]** | Both | – |
+| SPF1 (default) | SCK | 83 | – | **[V]** | Both | – |
+| Strap | EN_SPIF | 75 | EN_SPIF | **[V]** | – | – |
+| Strap | DIS_MCU | 76 | DIS_MCU | **[V]** | – | – |
+| Strap | DISAUTOLOAD | 77 | DISAUTOLOAD | **[V]** | – | – |
+| UART0 | RX | 46 | – | **[V]** | Both | – |
+| UART0 | TX | 47 | – | **[V]** | Both | – |
+| UART1 | RX | 70 | DIS_SPIS | **[V]** | Both | – |
+| UART1 | TX | 76 | DIS_MCU | **[V]** | Both | – |
+| JTAG0 | TCK | 73 | – | – | Draft_07 only | **Removed in V1.03** |
+| JTAG0 | TMS | 72 | – | – | Draft_07 only | **Removed in V1.03** |
+| JTAG0 | TDI | 74 | – | – | Draft_07 only | **Removed in V1.03** |
+| JTAG0 | TDO | 90 | – | – | Draft_07 only | **Removed in V1.03** |
+| JTAG1 | TCK | 83 | – | – | Draft_07 only | **Removed in V1.03** |
+| JTAG1 | TMS | 81 | – | – | Draft_07 only | **Removed in V1.03** |
+| JTAG1 | TDI | 84 | – | – | Draft_07 only | **Removed in V1.03** |
+| JTAG1 | TDO | 67 | – | – | Draft_07 only | **Removed in V1.03** |
+| EEPROM and slave I²C | SCL | 91 | – | – | – | – |
+| EEPROM and slave I²C | SDA | 92 | – | – | – | – |
+| Slave SPI | – | 90–93 | – | – | – | – |
 
 SCH V1.03 boot table (Table 25) **[V]**:
 
-| DISAUTOLOAD | DIS_MCU | EN_SPIF | DIS_SPIS | SMI_SEL | Loads |
-|---|---|---|---|---|---|
-| 0 | 0 | 0 | 1 | 1 | EEPROM → MCU RAM |
-| 0 | 0 | 1 | X | X | **XIP from SPI flash** |
-| 0 | 1 | 0 | X | X | EEPROM → registers |
-| 0 | 1 | 1 | X | X | Flash → RAM (as printed; odd with the MCU disabled) **[C]** |
-| others | | | | | no action |
+| DISAUTOLOAD | DIS_MCU | EN_SPIF | DIS_SPIS | SMI_SEL | Loads from | Loads to | Note |
+|---|---|---|---|---|---|---|---|
+| 0 | 0 | 0 | 1 | 1 | EEPROM | MCU RAM | – |
+| 0 | 0 | 1 | X | X | **SPI flash** | **XIP** | – |
+| 0 | 1 | 0 | X | X | EEPROM | Registers | – |
+| 0 | 1 | 1 | X | X | Flash | RAM | As printed **[C]** |
+| others | | | | | no action | – | – |
+
+The last flash row is odd, because it loads RAM with the MCU disabled.
 
 ## YT9215RB (RTL8367RB-VB pinout)
 
 Source: [YT9215RB Draft_05, 2023-02-16 (LCSC)](https://datasheet.lcsc.com/datasheet/pdf/762da1ba434211a9b4be1fec673c7fcf.pdf?productCode=C5449202) **[V]**.
 
-| Function | Pins |
-|---|---|
-| SPF0 | SCK 44 (`SPF_MUX_SEL`), SI 45, SO 49, CS 50 |
-| SPF1 | SO 80, SI 81, CS 83, SCK 84 |
-| JTAG0 | TCK 75, TMS 74, TDI 76, TDO 92 |
-| JTAG1 | TCK 84, TMS 83, TDI 85, TDO 20 |
-| UART0 | RX 41, TX 42 |
-| UART1 | RX 72, TX 78 (`DIS_MCU` strap) |
-| Straps | EN_SPIF 77, DIS_MCU 78, DISAUTOLOAD 79 |
+| Function | Signal | Pin | Strap on pin |
+|---|---|---|---|
+| SPF0 | SCK | 44 | `SPF_MUX_SEL` |
+| SPF0 | SI | 45 | – |
+| SPF0 | SO | 49 | – |
+| SPF0 | CS | 50 | – |
+| SPF1 | SO | 80 | – |
+| SPF1 | SI | 81 | – |
+| SPF1 | CS | 83 | – |
+| SPF1 | SCK | 84 | – |
+| JTAG0 | TCK | 75 | – |
+| JTAG0 | TMS | 74 | – |
+| JTAG0 | TDI | 76 | – |
+| JTAG0 | TDO | 92 | – |
+| JTAG1 | TCK | 84 | – |
+| JTAG1 | TMS | 83 | – |
+| JTAG1 | TDI | 85 | – |
+| JTAG1 | TDO | 20 | – |
+| UART0 | RX | 41 | – |
+| UART0 | TX | 42 | – |
+| UART1 | RX | 72 | – |
+| UART1 | TX | 78 | `DIS_MCU` |
+| Strap | EN_SPIF | 77 | EN_SPIF |
+| Strap | DIS_MCU | 78 | DIS_MCU |
+| Strap | DISAUTOLOAD | 79 | DISAUTOLOAD |
 
 ## Other Motorcomm parts
 
@@ -166,14 +225,30 @@ Tim's photographed boards (silkscreen LX-IS601F V2.0) carry a **YT9215SCH**, not
 
 Pin 1 is the lead beside the small dimple; pins 65–96 face the crystal Y6, pins 33–64 face R44/R89/R92/R93. Traced from top-side photos only **[I]**:
 
-| Function | Pin | Where it lands |
-|---|---|---|
-| UART0 RX / TX | 46 / 47 | no trace, chip leads only |
-| UART1 RX / TX | 70 / 76 | each to a via just above the chip (76 is also DIS_MCU) |
-| SPF1 SCK / SI / SO / CS | 83 / 79 / 78 / 81 | 83, 78, 81 to vias; 79 has no trace |
-| SPF0 SCK / SI / SO / CS | 49 / 50 / 54 / 55 | chip-side pads of R93 / R92 / R89 / R44 |
-| JTAG0 TCK / TMS / TDI / TDO (2023 draft names) | 73 / 72 / 74 / 90 | 72, 73 are LED traces; 74 to a via; 90 no trace |
-| JTAG1 TCK / TMS / TDI / TDO (2023 draft names) | 83 / 81 / 84 / 67 | vias for 83, 81, 84; 67 no trace |
-| EN_SPIF / DIS_MCU / DISAUTOLOAD | 75 / 76 / 77 | vias |
+| Function | Signal | Pin | Where it lands | Part | Note |
+|---|---|---|---|---|---|
+| UART0 | RX | 46 | No trace (chip lead only) | – | – |
+| UART0 | TX | 47 | No trace (chip lead only) | – | – |
+| UART1 | RX | 70 | Via just above the chip | – | – |
+| UART1 | TX | 76 | Via just above the chip | – | Also DIS_MCU |
+| SPF1 | SCK | 83 | Via | – | – |
+| SPF1 | SI | 79 | No trace | – | – |
+| SPF1 | SO | 78 | Via | – | – |
+| SPF1 | CS | 81 | Via | – | – |
+| SPF0 | SCK | 49 | Chip-side resistor pad | R93 | – |
+| SPF0 | SI | 50 | Chip-side resistor pad | R92 | – |
+| SPF0 | SO | 54 | Chip-side resistor pad | R89 | – |
+| SPF0 | CS | 55 | Chip-side resistor pad | R44 | – |
+| JTAG0 | TCK | 73 | LED trace | – | 2023 draft name |
+| JTAG0 | TMS | 72 | LED trace | – | 2023 draft name |
+| JTAG0 | TDI | 74 | Via | – | 2023 draft name |
+| JTAG0 | TDO | 90 | No trace | – | 2023 draft name |
+| JTAG1 | TCK | 83 | Via | – | 2023 draft name |
+| JTAG1 | TMS | 81 | Via | – | 2023 draft name |
+| JTAG1 | TDI | 84 | Via | – | 2023 draft name |
+| JTAG1 | TDO | 67 | No trace | – | 2023 draft name |
+| Strap | EN_SPIF | 75 | Via | – | – |
+| Strap | DIS_MCU | 76 | Via | – | – |
+| Strap | DISAUTOLOAD | 77 | Via | – | – |
 
 Not known: where the vias go on other layers, strap levels, and what the far pads of R44/R89/R92/R93 connect to. A bottom-side photo and a continuity check would settle these. One oddity: pin 86 (AVDDH in the datasheet) appears to run to R22 beside the crystal, which was not resolved.

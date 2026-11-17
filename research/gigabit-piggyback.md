@@ -38,15 +38,17 @@ the rest are estimates carried over from the BOM CSV.
 
 ## 2. Options ranked
 
-| # | Approach | How | MCU can send? | Works with any host? | Δ BOM vs passive variant @1k | Verdict |
-|---|---|---|---|---|---|---|
-| A | **Host relay over USB-C** | MCU ↔ host on USB 2.0; host speaks on Ethernet | Via the host | No, needs a daemon | ≈ $0.00–0.05 | **Best cheap option** |
-| B | **3-port switch, trimmed** | RTL8363NB, cap-coupled device port, RP2040 on RMII | Yes | Yes | ≈ +$3.3–3.6 (est.) | Best standalone option; needs bench validation |
-| C | 3-port switch as designed | RTL8363NB + CH32V307 | Yes | Yes | ≈ +$4.50 | Baseline, lowest risk |
-| D | Switch with embedded CPU | YT9215S RISC-V does the networking | Yes | Yes | ≈ +$3.5–4 (est.) | Only if Motorcomm gives an SDK |
-| E | PoE-layer signalling | Class events, Autoclass | Not really | Yes | $0 (already in design) | Already used; tells the PD its power grant only |
-| F | Analog link sensing | Pair activity; 10/100/1000 by which pairs are active | No | Yes | ≈ $0.05–0.10 | Status only; risks return loss |
-| G | Passive and overlay schemes | Each one is listed in §4 | — | — | — | Dead ends (§4) |
+| # | Approach | Switch IC | MCU | MCU link | Mechanism | Second mechanism | MCU can send? | Works with any host? | Needs | Δ BOM low | Δ BOM high | Basis | Verdict | Remark |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| A | **Host relay over USB-C** | – | – | USB 2.0 to the host | Host speaks on Ethernet | – | Via the host | No | A daemon on the host | ≈ $0.00 | ≈ $0.05 | – | **Best cheap option** | – |
+| B | **3-port switch, trimmed** | RTL8363NB | RP2040 | RMII | Cap-coupled device port | – | Yes | Yes | – | ≈ +$3.3 | ≈ +$3.6 | Estimate | Best standalone option | Needs bench validation |
+| C | 3-port switch as designed | RTL8363NB | CH32V307 | – | – | – | Yes | Yes | – | ≈ +$4.50 | ≈ +$4.50 | – | Baseline | Lowest risk |
+| D | Switch with embedded CPU | YT9215S | Its RISC-V core | – | The core does the networking | – | Yes | Yes | A Motorcomm SDK | ≈ +$3.5 | ≈ +$4 | Estimate | Only if Motorcomm gives an SDK | – |
+| E | PoE-layer signalling | – | – | – | Class events | Autoclass | Not really | Yes | – | $0 | $0 | Already in design | Already used | Tells the PD its power grant only |
+| F | Analog link sensing | – | – | – | Detect pair activity | 10/100/1000 by which pairs are active | No | Yes | – | ≈ $0.05 | ≈ $0.10 | – | Status only | Risks return loss |
+| G | Passive and overlay schemes | – | – | – | Each one is listed in §4 | – | — | — | – | — | — | – | Dead ends (§4) | – |
+
+The Δ BOM columns are against the passive variant @1k.
 
 Approach G covers the passive tap, spare pairs, 10BASE-T1S, PoE-DC powerline,
 autoneg next pages and PHY-PHY + FPGA ideas.

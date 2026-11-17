@@ -46,18 +46,41 @@ controller really costs ~$1.40, both numbers rise by ~$0.80.
 
 ## 2. Itemised changes (no-switch variant)
 
-| # | Change | Removes | Replaced by | Δ $ @1k | Δ parts | Risk |
-|---|---|---|---|---:|---:|---|
-| 1 | MCU swap | CH32V203 + 8 MHz crystal | CH32X035F8U6 (QFN20) or F7P6 (TSSOP20) | −0.14 | −3 | Low |
-| 2 | PD in hardware | BMC TX divider, 4 Rp resistors | Hardware PD PHY + internal Rp current sources | −0.05 | −5 | Low |
-| 3 | VBUS switch | PMOS, gate zener, NPN, 2 resistors | Buck EN as the VBUS switch | −0.10 | −5 | Medium |
-| 4 | VBUS discharge and current sense | Discharge FET, VBUS shunt | Bleeder resistor, buck's own current limit | −0.03 | −2 | Low–medium |
-| 5 | Hot-swap FET | 100 V 20 A DFN5x6 | 100 V ~2–3 A SOT-23/SOT-223 | −0.10 | 0 | Low |
-| 6 | Bridge diodes | 8 discrete Schottkys | 2 Schottky bridges (MBS/ABS, 100 V 2 A) | ±0.00 | −6 | Low |
-| 7 | Connectors | RJ45 shield tabs and LEDs | Plain or SMD RJ45s; full-SMD USB-C receptacle | −0.15 | −2 (LEDs) | Low |
-| 8 | Assembly | Placements and joints (~45 parts overall) | Single-sided; JLCPCB basic passives, consolidated values | −0.08 | — | Low |
-| | **Subtotal, low/medium risk** | | | **≈ −0.65** | **≈ −20** | |
-| 9 | Output buck | Buck controller | MCU-driven synchronous buck (§4.2) | −0.50 more | −1 | **High** |
+| # | Change | Δ $ @1k | Δ parts | Risk |
+|---|---|---:|---:|---|
+| 1 | MCU swap | −0.14 | −3 | Low |
+| 2 | PD in hardware | −0.05 | −5 | Low |
+| 3 | Buck EN as the VBUS switch | −0.10 | −5 | Medium |
+| 4 | Simpler VBUS discharge and current sense | −0.03 | −2 | Low–medium |
+| 5 | Smaller hot-swap FET | −0.10 | 0 | Low |
+| 6 | Schottky bridges | ±0.00 | −6 | Low |
+| 7 | Plainer connectors | −0.15 | −2 (LEDs) | Low |
+| 8 | Leaner assembly | −0.08 | — | Low |
+| | **Subtotal, low/medium risk** | **≈ −0.65** | **≈ −20** | |
+| 9 | MCU-driven synchronous buck (§4.2) | −0.50 more | −1 | **High** |
+
+| # | Removed | Replaced by | Alternative |
+|---|---|---|---|
+| 1 | CH32V203 | CH32X035F8U6 (QFN20) | CH32X035F7P6 (TSSOP20) |
+| 1 | 8 MHz crystal | – | – |
+| 2 | BMC TX divider | Hardware PD PHY | – |
+| 2 | 4 Rp resistors | Internal Rp current sources | – |
+| 3 | PMOS | Buck EN pin | – |
+| 3 | Gate zener | – | – |
+| 3 | NPN | – | – |
+| 3 | 2 resistors | – | – |
+| 4 | Discharge FET | Bleeder resistor | – |
+| 4 | VBUS shunt | Buck's own current limit | – |
+| 5 | 100 V 20 A FET (DFN5x6) | 100 V ~2–3 A FET (SOT-23) | SOT-223 |
+| 6 | 8 discrete Schottkys | 2 MBS Schottky bridges (100 V 2 A) | ABS bridges |
+| 7 | RJ45 shield tabs | RJ45s without them | SMD jacks |
+| 7 | RJ45 LEDs | – | – |
+| 7 | – | Full-SMD USB-C receptacle | – |
+| 8 | Placements and joints | ~45 parts overall | – |
+| 8 | – | Single-sided assembly | – |
+| 8 | – | JLCPCB basic-library passives | – |
+| 8 | – | Consolidated passive values | – |
+| 9 | Buck controller | MCU-driven synchronous buck | – |
 
 Not changed: polarity bridges (both pairsets needed for bt and for Mode A/B
 PSEs), surge TVS, CC 12 V-short protection (CH32X035 CC pins are rated only
@@ -100,14 +123,23 @@ Chinese vendors now make PD interface ICs with an integrated pass switch and
 some with an integrated DC-DC (sources: chongdiantou.com and QQ News market
 surveys, LCSC):
 
-| Part | Std | What's integrated | Package | Notes |
-|---|---|---|---|---|
-| **TMI7303B** | af/at, 25 W | PD + 100 V 0.48 Ω pass switch | DFN-10 | **$0.267 @1k [live]**, in stock |
-| TMI7301 | af, 15 W | PD + switch | SOP-8 | JLCPCB extended part |
-| SD4924S / SD4923E (Silan) | af/at | PD + 100 V 0.6 Ω switch | – | – |
-| AS7001EP / AS7060AE (Ashare) | at / af/at | PD + 100 V switch | – | – |
-| **AS7829AE** (Ashare) | af | PD + 100 V hot-swap + **80 V non-isolated buck** | ESOP-8 | 1.2 A out, 13 W |
-| AS7016AQ / AS7064BQ / JWH7232 / TME7350 / TMI7321 | af–at | PD + flyback (PSR) controller | – | Isolated, not useful here |
+| Part | Vendor | af | at | Power | Switch rating | Switch Rds | DC-DC | Package | Note |
+|---|---|---|---|---|---|---|---|---|---|
+| **TMI7303B** | – | Yes | Yes | 25 W | 100 V | 0.48 Ω | – | DFN-10 | In stock |
+| TMI7301 | – | Yes | – | 15 W | Yes | – | – | SOP-8 | JLCPCB extended part |
+| SD4924S | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – |
+| SD4923E | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – |
+| AS7001EP | Ashare | – | Yes | – | 100 V | – | – | – | – |
+| AS7060AE | Ashare | Yes | Yes | – | 100 V | – | – | – | – |
+| **AS7829AE** | Ashare | Yes | – | 13 W | 100 V hot-swap | – | **80 V non-isolated buck** | ESOP-8 | 1.2 A out |
+| AS7016AQ | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
+| AS7064BQ | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
+| JWH7232 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
+| TME7350 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
+| TMI7321 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
+
+All of these integrate the PD interface. The TMI7303B costs **$0.267 @1k
+[live]**. The isolated flyback parts are not useful here.
 
 The AS7829AE would make a one-chip "lite" SKU (Pi Zero/ESP32), but it is too
 small for a Pi 5.

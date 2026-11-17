@@ -4,7 +4,8 @@ Tim's photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with
 Pixel 7 Pro. The originals (3072 x 4080) are in the
 [Google Photos album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9). This folder holds
 copies resized to 1600 px (`web/`), 240 px thumbnails (`thumbs/`) and annotated
-callouts (`annotated/`). EXIF data, including GPS, was stripped from every copy.
+callouts (`annotated/`). In the callouts a small ring marks the exact spot and a
+numbered badge, joined to it by a line, sits beside it so markings stay readable. EXIF data, including GPS, was stripped from every copy.
 Photo numbers follow the album order.
 
 ## The two boards
@@ -113,8 +114,8 @@ glare.
 Board A, close-up of U4 and its neighbours. This is the best shot of the board A
 marking: `MOTORCOMM / YT9215SCH / VKTP18287 / 3200111C / 3AU2612M0`. Pin 1 is next to
 the small dimple at the lower left (the large circle at the upper right is a mould
-mark). R44, R89, R92 and R93 are the resistors on the UART/SPI/JTAG pins traced in
-[`../README.md`](../README.md).
+mark). R44, R89, R92 and R93 sit on U4's SPF0 SPI-flash lines (CS, SO, SI and SCK);
+see [`../README.md`](../README.md).
 
 ![Photo 06 annotated](annotated/06.jpg)
 

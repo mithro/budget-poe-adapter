@@ -27,3 +27,7 @@ see [`../motorcomm-debug-pins.md`](../motorcomm-debug-pins.md).
   (58/59, 68/69), the decoupling capacitor on pin 82 and the crystal.
 * Routing was traced from top-side photos only. Where the vias go on other layers, the
   strap levels, and what the far pads of R44/R89/R92/R93 connect to are not known.
+
+## Schematic
+
+A reverse-engineered KiCad schematic of the whole board, with each connection marked confirmed, seen, inferred or unknown, is in [`schematic/`](schematic/). Its [README](schematic/README.md) lists what is known about the board and the measurements still needed.

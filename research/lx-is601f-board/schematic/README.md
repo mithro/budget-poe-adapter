@@ -1,28 +1,26 @@
-# LX-IS601F V2.0 board: reverse-engineering notes (pass 1)
+# LX-IS601F V2.0 board: reverse-engineered schematic
 
 Traced 2026-11-17 from Tim's Google Photos album (34 photos, Pixel 7 Pro, two boards). Nothing here has been probed with a meter yet.
 
 ## Files
 
+The schematic is a KiCad 7 hierarchical project. Open `lx-is601f.kicad_sch`; the root page is a block diagram and each block is its own sheet.
+
 | File | What it is |
 |---|---|
-| `schematic/lx-is601f.kicad_sch` | KiCad 7 schematic, one A1 sheet. Nets are joined by labels. Wire style shows confidence. |
-| `schematic/lx-is601f-schematic.pdf` | PDF export of the schematic. |
-| `schematic/lx-is601f-schematic.png` | PNG export (200 dpi). |
-| `schematic/lx-is601f-nets.csv` | Every pin with its net and confidence code. Sort by `net` to get a netlist. |
-| `schematic/gen_schematic.py` | Generates the `.kicad_sch` and the CSV from one data model. Edit this, not the `.kicad_sch`. |
-| `lx-is601f-debug-pins-annotated.png`, `annotate.py`, `photo-u4-*.jpg` | Earlier work: U4 debug and flash pins. |
+| `lx-is601f.kicad_sch` | Root sheet: block diagram, confidence legend, how-to-read notes. |
+| `power.kicad_sch` | DC input, protection, PU1 SCT2622 3.3 V buck. |
+| `switch.kicad_sch` | U4 YT9215SCH in four units: clock/reset/EEPROM/flash/GPIO, copper MDI, SerDes, supply pins. |
+| `ethernet_poe.kicad_sch` | Ports 1-4: G2401PR magnetics, `05U` ESD, J1 (drawn J1A-J1D), PoE centre taps. |
+| `uplink_sfp.kicad_sch` | Port 5 uplink (DXFRM6, J3) and the U12 SFP connector. |
+| `poe_module.kicad_sch` | PIN1 header and the PoE PSE daughterboard (U1 `2184A`). |
+| `leds.kicad_sch` | FX/POW LED array, LED6 header, LED7/LED8. |
+| `lx-is601f-schematic.pdf` | PDF of all seven sheets. |
+| `renders/` | PNG of each sheet (`after-*`) and of the pass-1 single sheet (`before-pass1.png`). |
+| `lx-is601f-nets.csv` | Every pin with its net, confidence code and sheet. Sort by `net` to get a netlist. |
+| `gen_schematic.py`, `kisch.py` | Generate every sheet and the CSV from one data model, then export KiCad's netlist and check it against the model. Edit these, not the `.kicad_sch` files. |
 
-## Confidence codes
-
-| Code | Meaning | Schematic wire |
-|---|---|---|
-| **C** | Confirmed: traced on both sides, or measured | green, solid |
-| **V** | Seen on one side only (trace or pad adjacency in a photo) | blue, solid |
-| **I** | Inferred from the datasheet, the part marking or usual practice | orange, dashed |
-| **U** | Unknown: the pin exists, its destination is not traced | red, dotted |
-
-Pass 1 count: 0 C, 70 V, 282 I, 178 U pin connections (530 in all). **No net is confirmed yet.** The photos are handheld and oblique, and inner layers are invisible, so continuity checks are needed before anything can be marked C.
+Parts on the PoE module are renumbered R1xx/D1xx/U101 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. PIN1 is drawn as J4 and the LED6 header as J5 for the same reason.
 
 ## What the board is
 

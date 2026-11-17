@@ -4,7 +4,7 @@ Question: can the adapter's MCU get onto Ethernet with no MAC/PHY silicon of
 its own, either by driving 10BASE-T on the wire straight from GPIO, or by
 running the MAC in software (RP2040 PIO) against an external PHY or a switch
 port? Context: price cap is the RP2040 (~$0.79 @100); see
-`risc-v-mcu-comparison.md`, `gigabit-piggyback.md` and `ethernet-switch.md`.
+[`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md).
 
 Requirement (Tim, 2026-10-22): **10 Mbit/s is fully acceptable** for the MCU's
 own network link, so the 10M-only limits below are not a problem.
@@ -25,15 +25,15 @@ remember them, not re-read for this note.
 * **The problem in this product is not the bit-banging, it is the link
   partner.** The adapter is a gigabit passthrough. A 1000BASE-T link uses all
   four pairs in both directions, so there is no wire on the PoE cable that a
-  bit-banged 10BASE-T port could talk on (see `gigabit-piggyback.md` §1, §4).
+  bit-banged 10BASE-T port could talk on (see [`gigabit-piggyback.md`](gigabit-piggyback.md) §1, §4).
   A bit-banged port needs something on the board to talk to, and that means
-  the 3-port switch from `ethernet-switch.md`.
+  the 3-port switch from [`ethernet-switch.md`](ethernet-switch.md).
 * **Best fit: PIO MAC to the switch's extension MAC port, with no PHY at all.**
   The RTL8363NB's extension port speaks RMII/MII in PHY mode, so an RP2040
   can run the existing PIO RMII code (or a simpler MII variant at 10 Mbit/s)
   straight into it. That replaces the CH32V307 in the switch design for
   $0 of extra silicon, which is the "RP2040 on RMII" trim already costed in
-  `gigabit-piggyback.md` §3 (≈ −$0.40). This is the recommendation.
+  [`gigabit-piggyback.md`](gigabit-piggyback.md) §3 (≈ −$0.40). This is the recommendation.
 * **Direct 10BASE-T from GPIO into a switch copper port also works on paper**
   (cap-coupled, no magnetics, on-board trace), but the RTL8363NB has no spare
   copper PHY, so it needs a bigger switch (RTL8367S, YT9215S), which costs
@@ -44,7 +44,7 @@ remember them, not re-read for this note.
   25 MHz crystal and a magjack. It only makes sense as a second cable
   (management port), which the passthrough product doesn't have. If you did
   want that, the WCH CH390H SPI MAC+PHY at ~$0.94 (from
-  `risc-v-mcu-comparison.md`) is simpler and frees the PIO.
+  [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md)) is simpler and frees the PIO.
 * **Without PIO (CH32X035, CH32V003), MII at 10 Mbit/s is the only plausible
   bit-bang target.** MII at 10M is a 2.5 MHz nibble clock supplied by the
   PHY/switch, slow enough for timer-triggered DMA to and from a GPIO port on
@@ -171,13 +171,13 @@ remember them, not re-read for this note.
   the cable the user cares about.
 * **On-board use (chip to chip) is clean electrically.** Into a switch copper
   PHY over a few cm of trace, cap-coupled with no magnetics (same idea as the
-  cap-coupled device port in `gigabit-piggyback.md` §3), the RX eye is large
+  cap-coupled device port in [`gigabit-piggyback.md`](gigabit-piggyback.md) §3), the RX eye is large
   and the passive bias receiver from pico_eth_doc should be reliable. Send
   FLPs advertising 10BASE-T full duplex so the switch doesn't fall back to
   half duplex.
 * **But it needs a spare copper PHY.** RTL8363NB has exactly two (PoE side,
   device side) plus one MAC. A 5-port part (RTL8367S, YT9215S at ~$1.92
-  @900 per `ethernet-switch.md`) has spares, but then option A on the
+  @900 per [`ethernet-switch.md`](ethernet-switch.md)) has spares, but then option A on the
   RTL8363NB is cheaper and needs no analog front end at all.
 
 ## 4. Via a PHY or a switch port (software MAC)
@@ -253,7 +253,7 @@ that would be a small port, using the standard BMCR/ANAR registers.
 ## 5. Recommendation
 
 1. **Cheap SKU:** don't bit-bang Ethernet. Use the host relay over USB
-   (`gigabit-piggyback.md` option A).
+   ([`gigabit-piggyback.md`](gigabit-piggyback.md) option A).
 2. **Switch SKU:** RTL8363NB + **RP2040 running a PIO RMII MAC into the
    switch's extension port** (MAC-to-MAC, no PHY, no magnetics, no analog
    front end). Start from the Mongoose pico-rmii driver; change the MDIO
@@ -263,7 +263,7 @@ that would be a small port, using the standard BMCR/ANAR registers.
    * RTL8363NB ext port in RMII PHY mode at 10 Mbit/s against PIO RMII:
      who sources the 50 MHz clock (the PIO driver expects to be clocked by it).
    * RP2040 idle current with the PIO MAC running vs. the PoE MPS budget
-     (`poe.md` §6.3).
+     ([`poe.md`](poe.md) §6.3).
    * Optional: CH32X035 DMA-driven MII (§4.3). If it works, the switch SKU
      doesn't need a second MCU at all.
 

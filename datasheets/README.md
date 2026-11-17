@@ -17,12 +17,12 @@ kept here unmodified (only renamed) so the notes can cite a fixed copy.
 
 | File | MD5 | Name in the switch board repo |
 | --- | --- | --- |
-| `YT9215S_Datasheet_Draft_01_2022-11-08.pdf` | `b3e4347a85bf0c4a828ef7f092006c6f` | `attachments/YT9215S_Datasheet_draft_V0.1.pdf` |
-| `YT9215S_Datasheet_Draft_05_2023-02-21.pdf` | `28ca822ad9a5fbdbcebd1037d3b18076` | – |
-| `YT9215SC_Datasheet_Draft_07_2023-02-28.pdf` | `159f2e734e7c6c036ae3e3df6edd92ad` | – |
-| `YT9215SCH_Datasheet_V1.03_2025-02-10.pdf` | `0f751119c66ffdac0fd8198d6e603314` | – |
-| `YT9215RB_Datasheet_Draft_05_2023-02-16.pdf` | `19bb5f993a24c597d663caebb21810ae` | – |
-| `Motorcomm_Product_Selection_Guide_2023-03-08.pdf` | `5025e54d6e6ca72b76c5ba4b840ccbba` | `attachments/裕太微电子产品选型20230308.pdf` |
+| [`YT9215S_Datasheet_Draft_01_2022-11-08.pdf`](motorcomm/YT9215S_Datasheet_Draft_01_2022-11-08.pdf) | `b3e4347a85bf0c4a828ef7f092006c6f` | [`attachments/YT9215S_Datasheet_draft_V0.1.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/YT9215S_Datasheet_draft_V0.1.pdf) |
+| [`YT9215S_Datasheet_Draft_05_2023-02-21.pdf`](motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf) | `28ca822ad9a5fbdbcebd1037d3b18076` | – |
+| [`YT9215SC_Datasheet_Draft_07_2023-02-28.pdf`](motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) | `159f2e734e7c6c036ae3e3df6edd92ad` | – |
+| [`YT9215SCH_Datasheet_V1.03_2025-02-10.pdf`](motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) | `0f751119c66ffdac0fd8198d6e603314` | – |
+| [`YT9215RB_Datasheet_Draft_05_2023-02-16.pdf`](motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) | `19bb5f993a24c597d663caebb21810ae` | – |
+| [`Motorcomm_Product_Selection_Guide_2023-03-08.pdf`](motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) | `5025e54d6e6ca72b76c5ba4b840ccbba` | [`attachments/裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) |
 
 The three YT9215 variants have three different pinouts (S = RTL8367S-compatible,
 SC/SCH = RTL8367SC-compatible, RB = RTL8367RB-VB-compatible). Always take pin numbers

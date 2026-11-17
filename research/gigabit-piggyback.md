@@ -2,8 +2,8 @@
 
 Question: can the adapter's MCU get onto (listen to, or send on) the
 passthrough gigabit link more cheaply than with the 3‑port switch from
-`ethernet-switch.md` (RTL8363NB + CH32V307, about **+$4.50** per unit over
-the passive variant in `design/block-diagram-and-bom.md`)?
+[`ethernet-switch.md`](ethernet-switch.md) (RTL8363NB + CH32V307, about **+$4.50** per unit over
+the passive variant in [`design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md))?
 
 Researched 2026‑10‑21. Prices are LCSC, checked live where marked **[live]**;
 the rest are estimates carried over from the BOM CSV.
@@ -95,7 +95,7 @@ What the host daemon does:
   passthrough, so `lldpd` on the host can advertise the adapter's request
   (`configure dot3 power pd supported enabled ... requested <mW>`) and pass
   the PSE's "allocated" answer back to the MCU, which then updates the PD
-  PDOs. This closes the gap `poe.md` §4.5 noted ("passthrough has no PHY so
+  PDOs. This closes the gap [`poe.md`](poe.md) §4.5 noted ("passthrough has no PHY so
   cannot speak LLDP").
 * Firmware update of the adapter MCU from the host (DFU over the same link).
 
@@ -141,7 +141,7 @@ Trims worth bench‑testing:
    enough for LLDP and management. The RP2040 also does USB host/device for
    option A, and has the PIO to bit‑bang USB‑PD BMC. Costs: no hardware MAC
    (CPU does CRC/framing), higher idle current, which matters for the ≤ 4 mA
-   PoE mark‑event budget (`poe.md` §6.3), so a CH32V003 cold‑start helper is
+   PoE mark‑event budget ([`poe.md`](poe.md) §6.3), so a CH32V003 cold‑start helper is
    likely needed (+$0.15). Net ≈ −$0.30 to −$0.45.
 3. **Stay on 4 layers.** Two GbE ports plus a QFN‑76 switch really wants
    controlled impedance; I wouldn't try to save the $0.25 here.
@@ -165,7 +165,7 @@ RTL8367S has an embedded 8051 in the same role, also undocumented.
 ### E. PoE‑layer signalling (what we already get for free)
 
 * PSE → PD: number of class events (power grant), first‑class‑event length
-  (PSE type 1/2 vs 3/4), and Autoclass on bt. Already in `poe.md` §4.
+  (PSE type 1/2 vs 3/4), and Autoclass on bt. Already in [`poe.md`](poe.md) §4.
 * PD → PSE: the class signature only. A PD can also drop its MPS to get
   power removed and re‑detected, which is a crude one‑bit "reset me" signal.
 * No standard PSE carries data over the PoE DC. Any data‑over‑DC scheme would
@@ -245,4 +245,4 @@ The reasoning behind each row:
 * **[LAN Tap]** Throwing Star LAN Tap Pro (passive tap, 10/100 only): https://www.elektor.com/products/great-scott-gadgets-throwing-star-lan-tap-pro
 * RP2040 at LCSC (C2040), $0.73 @1k, 41,863 in stock: https://lcsc.com/product-detail/C2040.html
 * YT8531C‑CA at LCSC (C22472312), $0.79 @1k, 7,563 in stock: https://www.lcsc.com/product-detail/C22472312.html
-* Earlier project research: `ethernet-switch.md`, `poe.md`, `../design/block-diagram-and-bom.md`
+* Earlier project research: [`ethernet-switch.md`](ethernet-switch.md), [`poe.md`](poe.md), [`../design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md)

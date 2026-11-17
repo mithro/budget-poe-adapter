@@ -3,8 +3,8 @@
 ![Block diagram](block-diagram.svg)
 
 Rough first pass, 2026-10-21 (updated for 5 V + 12 V output). Built
-from `research/poe.md`, `research/usb-c-pd.md` and
-`research/ethernet-switch.md`. Line items and per-line prices are in
+from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
+[`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
 [`bom-rough.csv`](bom-rough.csv). The diagram is also available as
 [`block-diagram.png`](block-diagram.png).
 
@@ -75,7 +75,7 @@ back to 5 V on Hard Reset or detach.
 ### What the PoE class allows
 
 The PDOs the adapter offers come from the PoE class it was granted (counted
-class events, `poe.md` §4.2), at roughly 90 % efficiency:
+class events, [`poe.md`](../research/poe.md) §4.2), at roughly 90 % efficiency:
 
 | Granted PoE class | Standard | PD input | USB-C budget | With the switch | 5 V PDO | 5 V with the Pi override | 12 V PDO |
 |---|---|---|---|---|---|---|---|
@@ -84,7 +84,7 @@ class events, `poe.md` §4.2), at roughly 90 % efficiency:
 | Class 5 | bt | 40 W | ~35 W | – | 5 A* | – | 2.9 A |
 | Class 6 | bt | 51 W | ~45 W | – | 5 A* | – | 3 A |
 
-\* 5 A needs a captive or e-marked cable (`usb-c-pd.md` §5.4).
+\* 5 A needs a captive or e-marked cable ([`usb-c-pd.md`](../research/usb-c-pd.md) §5.4).
 
 **Caveat:** a 5 V + 12 V source does not follow the PD "power rules", which
 expect 9 V on any source above 15 W. This only matters for certification.
@@ -99,7 +99,7 @@ See [`block-diagram.svg`](block-diagram.svg) / [`block-diagram.png`](block-diagr
   CH32V307 sits on the switch's RMII port. Power path: PoE front end → 60 V
   sync buck (5 V or 12 V, selected by the MCU) → VBUS switch → USB-C.
 * **B (without switch):** RJ45 IN → 4-channel PoE splitter transformer →
-  RJ45 OUT (`poe.md` §3 option 2; the Pi's own magnetics stay in the link).
+  RJ45 OUT ([`poe.md`](../research/poe.md) §3 option 2; the Pi's own magnetics stay in the link).
   Option 1, back-to-back magjacks, costs about $1 more and is lower risk on
   return loss. The power path is the same as A, with a CH32V203 as the MCU.
 
@@ -154,7 +154,7 @@ receptacle (~$0.50–0.80), test/programming, shipping, duties.
 3. **CH32V307 is overkill as an MCU but cheap for what it brings.** It is the
    only cheap WCH part with a MAC that can talk RMII to the switch. Its price
    is an estimate ($1.10–1.60 depending on package).
-4. **MCU power during PoE mark events.** `poe.md` §6.3 requires ≤ 4 mA total
+4. **MCU power during PoE mark events.** [`poe.md`](../research/poe.md) §6.3 requires ≤ 4 mA total
    during mark events. A CH32V307 running from its internal oscillator at low
    clock may or may not fit that. If it doesn't, add a CH32V003 (~$0.12) as a
    cold-start PoE controller that wakes the CH32V307 after power-on. That adds

@@ -30,7 +30,7 @@ $0.786 @100. Prices are LCSC, read live where marked **[live]**; others come fro
    * In the **switch SKU** it is firmware only: the MCU already sits on the
      switch's extension MAC port, so it can bridge that port to its USB device
      as an NCM NIC. With an RP2040 (the RMII recommendation in
-     `bitbang-10mbit-ethernet.md`) that is USB FS, about 5–9 Mbit/s.
+     [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md)) that is USB FS, about 5–9 Mbit/s.
 3. **The catch is USB data roles, not silicon.** The adapter is the Type-C
    power source, so by default it is the USB *host* and the powered device is
    the USB *device*. To be a NIC, the adapter must be the USB device. That needs
@@ -39,7 +39,7 @@ $0.786 @100. Prices are LCSC, read live where marked **[live]**; others come fro
    `dtoverlay=dwc2,dr_mode=host`). This is firmware on the PD side, but it has
    to be tested with each class of device.
 4. **The passthrough SKU can't also be a bridging NIC.** Gigabit uses all
-   four pairs (`gigabit-piggyback.md`), so there is no second link for a NIC
+   four pairs ([`gigabit-piggyback.md`](gigabit-piggyback.md)), so there is no second link for a NIC
    chip. Option 1 works on it; option 2 needs either the switch or a separate
    "USB NIC" SKU where the RJ45 ends at the CH397A instead of passing through.
 

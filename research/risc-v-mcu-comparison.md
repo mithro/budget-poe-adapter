@@ -111,7 +111,7 @@ time. ? = not confirmed; None = absent.
 * **CH572D**: Cheapest part here with both USB FS (host + device) and BLE 5.0. No ADC: PoE voltage/class sensing would need the comparator plus its 16-step reference. Only 230 in stock at LCSC today. Needs 32 MHz crystal and antenna matching. Bluetooth only, so no Ethernet/Wi-Fi network on its own.
 * **CH32X033F8P6**: Same die family as CH32X035 but no USB-PD/Type-C block (no CC pins). Crystal-less USB.
 * **CH32X035G8U6**: Hardware USB-PD PHY (BMC + CRC), Rp current sources, crystal-less USB, 5 V supply, op-amps and comparator for PoE sensing, TIM1 complementary PWM with dead time for an MCU-driven buck. 27 GPIO. Network: via the USB host relay (the Pi speaks for it on Ethernet), or pair with a BK7238 for Wi-Fi (~$0.98 together @100).
-* **CH32X035F8U6**: The part cost-reduction.md chose. 19 GPIO. The datasheet ordering table lists no comparator for this package (the QFN28 has 1, LQFP48 has 3); check before relying on comparator-based current limit. Network: as CH32X035G8U6.
+* **CH32X035F8U6**: The part [`cost-reduction.md`](cost-reduction.md) chose. 19 GPIO. The datasheet ordering table lists no comparator for this package (the QFN28 has 1, LQFP48 has 3); check before relying on comparator-based current limit. Network: as CH32X035G8U6.
 * **CH32L103K8U6**: USB FS device + USB-PD PHY, low-power. Out of stock at LCSC today (reference price only). 3.3 V supply; whether USB runs crystal-less is not confirmed.
 * **CH32V203F6P6**: Current BOM's MCU family. No PD PHY (PD must be bit-banged). USB normally uses an 8 MHz crystal.
 * **CH32V203G6U6**: As CH32V203F6P6 in QFN-28.
@@ -132,7 +132,7 @@ time. ? = not confirmed; None = absent.
 * **CH32V317WCU6**: Built-in 10/100 Ethernet PHY and USB HS + FS.
 * **GD32VF103RBT6**: USB FS OTG. Out of stock at LCSC (reference price).
 * **ESP32-C6FH4**: Wi-Fi 6 + BLE 5 + 802.15.4. Out of stock at LCSC (reference price, lowest tier 200). USB Serial/JTAG only.
-* **CH32V307RCT6**: Built-in 10M PHY plus a gigabit MAC (RGMII). The switch design in ethernet-switch.md uses this part.
+* **CH32V307RCT6**: Built-in 10M PHY plus a gigabit MAC (RGMII). The switch design in [`ethernet-switch.md`](ethernet-switch.md) uses this part.
 * **ESP32-C5-WROOM-1**: Dual-band Wi-Fi 6. LCSC has the module only, no bare chip; out of stock (reference price).
 * **ESP8684H2**: ESP32-C2 with 2 MB flash in package. No USB at all. Out of stock at LCSC; $0.8365 is LCSC's 'from' price, tier not shown.
 * **BL602C-20-Q2I**: Out of stock at LCSC; $1.041 is LCSC's 'from' price, tier not shown. Open-source SDK and community support exist.

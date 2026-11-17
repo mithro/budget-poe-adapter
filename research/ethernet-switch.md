@@ -1,6 +1,6 @@
 # Cheap ~3-port gigabit switch ICs for the PoE → USB-C adapter
 
-Goal: replace the passive PoE passthrough (see `poe.md` §3) with a tiny
+Goal: replace the passive PoE passthrough (see [`poe.md`](poe.md) §3) with a tiny
 managed switch so the adapter's MCU can sit on the network: report what was
 negotiated (PoE class, link speed, USB-PD contract), talk LLDP, expose
 counters and settings. Topology:
@@ -154,11 +154,11 @@ CH32V208's MAC is, as far as I know (not verified here), only wired to its
 internal 10M PHY, which is why it needs a copper port. The RP2040 option is
 not for throughput.
 
-A practical split, matching `poe.md` §6.3: a tiny CH32V003‑class part does the
+A practical split, matching [`poe.md`](poe.md) §6.3: a tiny CH32V003‑class part does the
 PoE signature/classification from cold start; the switch plus a CH32V307 (or
 RP2040) come up after the hot‑swap FET closes and handle networking, LLDP and
 USB‑PD reporting. With an Ethernet‑capable MCU the adapter can now do **LLDP
-power negotiation**, which `poe.md` §4.5 said a passive passthrough could not.
+power negotiation**, which [`poe.md`](poe.md) §4.5 said a passive passthrough could not.
 
 ## 4a. Chinese alternatives (follow-up, 2026‑10‑21)
 
@@ -226,7 +226,7 @@ Sources for this section:
 * **YT9213NB**: worth asking Motorcomm distributors; same family as the
   YT9215 with upstream Linux support, and the right port count.
 * Layout: two sets of GbE magnetics are still needed (one per jack), plus the
-  PoE centre‑tap extraction on the input side as in `poe.md` §3 option 1.
+  PoE centre‑tap extraction on the input side as in [`poe.md`](poe.md) §3 option 1.
 
 ## 6. Sources
 

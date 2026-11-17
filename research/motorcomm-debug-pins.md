@@ -4,12 +4,12 @@ Researched 2026-11-16. Covers the YT9215 family (S, SC/SCH, RB). Tags: **[V]** v
 
 ## Headline findings
 
-1. **The three YT9215 variants have three different pinouts.** Each one is a pin-for-pin drop-in for a different Realtek part. The Motorcomm selection guide (2023-03-08, `attachments/裕太微电子产品选型20230308.pdf` in the board repo) says so **[V]**:
+1. **The three YT9215 variants have three different pinouts.** Each one is a pin-for-pin drop-in for a different Realtek part. The Motorcomm selection guide (2023-03-08, [`attachments/裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) in the board repo) says so **[V]**:
    - YT9215S matches the RTL8367S;
    - YT9215RB matches the RTL8367RB-VB;
    - YT9215SC/SCH matches the RTL8367SC.
 
-   So pin numbers from one variant's datasheet **cannot** be used for another. `switch-embedded-cpu.md` (2026-10-22) quoted YT9215SC pin numbers and said the S has "the same LQFP-128 pinout family". That is wrong for pin numbers. The XTAL pins show it: they are 83/84 on the S, 87/88 on the SC and 89/90 on the RB.
+   So pin numbers from one variant's datasheet **cannot** be used for another. [`switch-embedded-cpu.md`](switch-embedded-cpu.md) (2026-10-22) quoted YT9215SC pin numbers and said the S has "the same LQFP-128 pinout family". That is wrong for pin numbers. The XTAL pins show it: they are 83/84 on the S, 87/88 on the SC and 89/90 on the RB.
 2. **Every YT9215 variant has the RISC-V MCU** **[V]**. The selection guide marks S, RB and SC all "内置RISC-V" (built-in RISC-V). The S and RB datasheets both list "Integrated RISC-V microprocessor", the `DIS_MCU` strap, SPI flash, two UARTs and two JTAG groups. This corrects the memory note that only the SC has the CPU.
 3. **The newest datasheet drops JTAG.** The 2025 YT9215SCH datasheet (V1.03, 2025-02-10) removed every JTAG pin name. The same pins are now listed as GPIO, LED and I²C only. UART and SPI-flash pins remain. Either Motorcomm stopped documenting JTAG or it is disabled in production silicon **[I]**. Treat JTAG as unconfirmed until it has been probed.
 4. **The 2025 SCH datasheet is the first public MCU description** **[V]**:
@@ -19,7 +19,7 @@ Researched 2026-11-16. Covers the YT9215 family (S, SC/SCH, RB). Tags: **[V]** v
 
 ## YT9215S (RTL8367S pinout, used on the mirrored board)
 
-Sources: YT9215S Datasheet Draft_01 (2022-11-08, `attachments/YT9215S_Datasheet_draft_V0.1.pdf` in the repo). Also Draft_05 (2023-02-21) on [LCSC/szlcsc](https://atta.szlcsc.com/upload/public/pdf/source/20230829/432918AE041FF2F1E459558942DE4628.pdf). Both drafts give the same pin numbers **[V]**.
+Sources: YT9215S Datasheet Draft_01 (2022-11-08, [`attachments/YT9215S_Datasheet_draft_V0.1.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/YT9215S_Datasheet_draft_V0.1.pdf) in the repo). Also Draft_05 (2023-02-21) on [LCSC/szlcsc](https://atta.szlcsc.com/upload/public/pdf/source/20230829/432918AE041FF2F1E459558942DE4628.pdf). Both drafts give the same pin numbers **[V]**.
 
 The board netlist (`schematic/netlist-schematic.enet`) uses an RTL8367S-CG symbol. It has XTAL on 83/84 and nRESET on 86, and the author reports it boots with a YT9215S fitted. That confirms the shipping S silicon uses this pinout **[V]**.
 
@@ -221,7 +221,7 @@ Source: [YT9215RB Draft_05, 2023-02-16 (LCSC)](https://datasheet.lcsc.com/datash
 
 ## Photographed LX-IS601F V2.0 boards (added 2026-11-16)
 
-Tim's photographed boards (silkscreen LX-IS601F V2.0) carry a **YT9215SCH**, not a YT9215S, so the SC/SCH pin numbers above apply, not the S numbers **[V, chip marking on two boards]**. Annotated photo: `lx-is601f-board/lx-is601f-debug-pins-annotated.png`.
+Tim's photographed boards (silkscreen LX-IS601F V2.0) carry a **YT9215SCH**, not a YT9215S, so the SC/SCH pin numbers above apply, not the S numbers **[V, chip marking on two boards]**. Annotated photo: [`lx-is601f-board/lx-is601f-debug-pins-annotated.png`](lx-is601f-board/lx-is601f-debug-pins-annotated.png).
 
 Pin 1 is the lead beside the small dimple; pins 65–96 face the crystal Y6, pins 33–64 face R44/R89/R92/R93. Traced from top-side photos only **[I]**:
 

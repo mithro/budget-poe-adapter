@@ -57,11 +57,11 @@ The project is at the research stage. There is no schematic or PCB here yet.
 * [mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0):
   mirror of an open-hardware 5-port gigabit switch built around the Motorcomm YT9215S
   (EasyEDA source, schematic, PCB, Gerbers, BOM). It is the reference design for the
-  YT9215S notes here. The `attachments/...` paths quoted in
+  YT9215S notes here. The [`attachments/...`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/tree/main/attachments) paths quoted in
   [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) refer to that repository;
   the same two files are also in [`datasheets/motorcomm/`](datasheets/motorcomm/).
 
 ## Licence
 
-See [`LICENSE`](LICENSE). Vendor datasheets under `datasheets/` remain the property of
+See [`LICENSE`](LICENSE). Vendor datasheets under [`datasheets/`](datasheets/) remain the property of
 their vendors.

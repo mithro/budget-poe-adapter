@@ -1,6 +1,6 @@
 # Dev boards and off-the-shelf hardware for the RTL8367S and YT9215S
 
-Researched 2026-10-22. Companion to `switch-embedded-cpu.md` (what the embedded CPUs are) and `switch-detail-comparison.md`. This note answers: what can we buy today to experiment with the RTL8367S DW8051 and the YT9215 RISC-V core, and how easy is it to reach the chip's pins on each?
+Researched 2026-10-22. Companion to [`switch-embedded-cpu.md`](switch-embedded-cpu.md) (what the embedded CPUs are) and [`switch-detail-comparison.md`](switch-detail-comparison.md). This note answers: what can we buy today to experiment with the RTL8367S DW8051 and the YT9215 RISC-V core, and how easy is it to reach the chip's pins on each?
 
 Tags: **[V]** read in a cited source, **[I]** my inference. Prices are indicative from listings and deal sites seen on 2026-10-22, not quotes. Retail switches change chips between hardware versions, so **always check the hardware version (Vx.y) on the label** before buying.
 
@@ -16,7 +16,7 @@ Spreadsheet copy: the *Dev boards* tab of the [comparison sheet](https://docs.go
   - For a cleaner board with a real CPU link, the routers MERCUSYS MR85X (MT7981B, RTL8367S over 2500base-X) and TP-Link Archer C5 v4 (MT7620A) run OpenWrt with the switch already on DSA/swconfig. **[V]**
   - Open-hardware designs to copy or order from JLCPCB: AlbrechtL's `rpi-managed-switch-4-port` (GPL-3.0, KiCad) and the PCBWay "RTL8367S-4GE+SFP" project. **[V]**
 - **YT9215: much thinner.**
-  - **Correction to `switch-embedded-cpu.md`:** Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU. **[V]**
+  - **Correction to [`switch-embedded-cpu.md`](switch-embedded-cpu.md):** Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU. **[V]**
   - The YT9215S draft datasheet on LCSC still says "Integrated RISC-V microprocessor" and has a `STRAP_DIS_MCU` pin, so the core is probably on the die but not supported on the S. **[V]/[I]** For CPU work, buy the **YT9215SC**.
   - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII/2500base-X) and the BDY-G98 / 彼度云 G98 RK3588 box (two YT9215S over RGMII). **[V]** Both are mostly sold in China.
   - The practical dev board is to **build our own**: one LQFP-128 chip (YT9215S about US$1.92 at LCSC), plus the open-hardware 5-port YT9215S switch on OSHWHub as a reference layout. **[V]/[I]**
@@ -99,7 +99,7 @@ How to use one as a dev board: **[I]**, building on the [V] items above.
 
 1. Desolder the EEPROM and solder a 6-pin header to its pads (SDA, SCK, 3.3 V, GND).
 2. Wire an RP2040 (Pico) to SDA/SCK. Port the GPL `rtl8367c` SMI routines, or start from McMCCRU's Arduino sketch.
-3. Load test code into the 8051 IROM: assert `DW8051_RST`, enable `ACS_IROM_EN`, write bytes to 0xE000+, release reset (see `switch-embedded-cpu.md` boot flow).
+3. Load test code into the 8051 IROM: assert `DW8051_RST`, enable `ACS_IROM_EN`, write bytes to 0xE000+, release reset (see [`switch-embedded-cpu.md`](switch-embedded-cpu.md) boot flow).
 4. For printf debug, tack a wire to the chip's UART TX (pin 46). For flash boot experiments, add a SOIC-8 SPI flash on SPIF pins 48/49/53/54 and set the EN_SPIF strap.
 
 Variants to avoid: newer hardware versions of these models may move to RTL8367S-VB, RTL8367RB-VB or a different vendor. Older TL-SG1005D v5 uses "RTL8367" (no S, per [shaddack's notes](https://shaddack.mauriceward.com/notes/ethernet.webt)). AliExpress "5-port gigabit switch module" PCBAs are almost all **RTL8367RB** (older RTL8367B family), not the S (e.g. [eBay 135146159571](https://www.ebay.com/itm/135146159571)). **[V]**

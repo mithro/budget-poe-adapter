@@ -1,8 +1,8 @@
 # Cost and part-count reduction for the PoE → USB-C adapter
 
 Researched 2026-10-21. Scope: everything except the switch-vs-passthrough
-question (covered in `gigabit-piggyback.md` and `ethernet-switch.md`). The
-baseline is the **no-switch variant in `design/bom-rough.csv` (≈ $4.11 @1k,
+question (covered in [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md)). The
+baseline is the **no-switch variant in [`design/bom-rough.csv`](../design/bom-rough.csv) (≈ $4.11 @1k,
 ~65 placed parts)**. Prices marked **[live]** were read from LCSC product pages
 today; everything else is an estimate on the same basis as the BOM CSV.
 
@@ -15,7 +15,7 @@ today; everything else is an estimate on the same basis as the BOM CSV.
   TX divider, the RX comparator setup and the four switchable Rp resistors.
   It runs at **2.2 mA at 8 MHz**, inside the 4 mA PoE mark-event limit, so the
   CH32V003 helper is not needed. Its USB port is also what the "host relay"
-  option in `gigabit-piggyback.md` needs. **≈ −$0.19, −8 parts.**
+  option in [`gigabit-piggyback.md`](gigabit-piggyback.md) needs. **≈ −$0.19, −8 parts.**
 * **Let the buck be the VBUS switch.** A synchronous buck with EN low outputs
   0 V, so the PMOS load switch, its gate zener and NPN driver can go. A bleeder
   resistor replaces the discharge FET. **≈ −$0.13, −5 parts**, medium risk
@@ -92,12 +92,12 @@ From the WCH datasheet (V1.7) and LCSC:
 
 * **USB PD controller + PHY** on PC14/PC15 (CC1/CC2): PD 2.0/3.0, Source,
   Sink and DRP, automatic BMC encode/decode and CRC. The GoodCRC 195 µs
-  deadline, the main bit-bang risk in `usb-c-pd.md` §5, becomes a hardware job.
+  deadline, the main bit-bang risk in [`usb-c-pd.md`](usb-c-pd.md) §5, becomes a hardware job.
 * **CC pull-up current sources** of 80/180/330 µA, i.e. Default/1.5 A/3 A Rp
   without resistors.
 * **Analog:** 3 rail-to-rail comparators (15 ns, output straight into TIM2),
   2 OPA/PGA (×4–×32), 12-bit ADC with 14 channels. Enough for the Vport and
-  class-current loop in `poe.md` §6, the 12 V/5 V VBUS check and output current
+  class-current loop in [`poe.md`](poe.md) §6, the 12 V/5 V VBUS check and output current
   sensing through a PGA.
 * **Supply:** 2.0–5.5 V (3.0–5.3 V with PD/USB on). **Run at 8 MHz HSI:
   2.2 mA**; sleep 1.3–1.5 mA. That fits the ≤ 4 mA mark-event budget with
@@ -147,7 +147,7 @@ small for a Pi 5.
 **None supports 802.3bt.** A PD IC also can't be combined with MCU-driven bt
 classes, because it presents its own class current at every event. So:
 
-* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from `poe.md` §6.4.
+* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from [`poe.md`](poe.md) §6.4.
 * **at-only SKU (≤ ~22 W):** TMI7303B replaces the signature, class sink,
   hot-swap FET and most of the UVLO/bootstrap. Roughly cost-neutral
   (~+$0.05) but ~6 fewer parts and much less compliance risk. The MCU then

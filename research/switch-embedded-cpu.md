@@ -1,8 +1,8 @@
 # Embedded CPUs in the candidate switch ICs: RTL8367S, YT9215S, RTL8363NB
 
-> **Correction (2026-10-22, see `switch-cpu-dev-boards.md`):** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC** (and YT9218N/MB), not the YT9215S or YT9215RB. The YT9215S draft datasheet still mentions the RISC-V MCU, so the core is probably on the die but unsupported. Plan any CPU work on the YT9215SC.
+> **Correction (2026-10-22, see [`switch-cpu-dev-boards.md`](switch-cpu-dev-boards.md)):** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC** (and YT9218N/MB), not the YT9215S or YT9215RB. The YT9215S draft datasheet still mentions the RISC-V MCU, so the core is probably on the die but unsupported. Plan any CPU work on the YT9215SC.
 
-Researched 2026-10-22. This note looks at the CPU inside each candidate switch chip and asks whether it could run our own firmware and replace, or shrink, the external MCU (RP2040-class or CH32X035) in the PoE → USB-C adapter. It builds on `switch-detail-comparison.md` and `ethernet-switch-comparison.md` and does not repeat the datasheet basics given there.
+Researched 2026-10-22. This note looks at the CPU inside each candidate switch chip and asks whether it could run our own firmware and replace, or shrink, the external MCU (RP2040-class or CH32X035) in the PoE → USB-C adapter. It builds on [`switch-detail-comparison.md`](switch-detail-comparison.md) and [`ethernet-switch-comparison.md`](ethernet-switch-comparison.md) and does not repeat the datasheet basics given there.
 
 Each statement is marked as one of:
 
@@ -297,7 +297,7 @@ From the [YT9215SC datasheet Draft 0.7](https://cdn.promelec.ru/upload/grab/data
 - **SPI flash.**
   - One flash interface placed on either of two pin sets by `SPF_MUX_SEL`: SPF0 on pins 49/50/54/55, SPF1 on pins 78/79/81/83.
   - Enabled by `EN_SPIF` (pin 75).
-  - "Dual mode/Single mode" means SPI I/O width, not two flash chips. *This corrects "single or dual flash" in `switch-detail-comparison.md`.*
+  - "Dual mode/Single mode" means SPI I/O width, not two flash chips. *This corrects "single or dual flash" in [`switch-detail-comparison.md`](switch-detail-comparison.md).*
 - **MCU disable.** `DIS_MCU` on pin 76, shared with GPIO38/UART1_TX/P2LED2. Pull-up disables the MCU.
 - **Peripherals.**
   - UART0 on pins 46/47, UART1 on pins 70/76.

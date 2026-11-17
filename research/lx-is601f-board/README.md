@@ -10,10 +10,10 @@ see [`../motorcomm-debug-pins.md`](../motorcomm-debug-pins.md).
 
 | File | Kind | Shows | Also shows | Needs |
 | --- | --- | --- | --- | --- |
-| `lx-is601f-debug-pins-annotated.png` | Annotated image | Pin table | Notes on confidence | – |
-| `photo-u4-macro.jpg` | Source photo | Close-up of U4 | Heatsink removed | – |
-| `photo-u4-wide.jpg` | Source photo | Wider view of a second board | Same layout | – |
-| `annotate.py` | Script (`python3 annotate.py`) | Draws the annotations | – | Pillow |
+| [`lx-is601f-debug-pins-annotated.png`](lx-is601f-debug-pins-annotated.png) | Annotated image | Pin table | Notes on confidence | – |
+| [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of U4 | Heatsink removed | – |
+| [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of a second board | Same layout | – |
+| [`annotate.py`](annotate.py) | Script (`python3 annotate.py`) | Draws the annotations | – | Pillow |
 
 ![Annotated debug pins](lx-is601f-debug-pins-annotated.png)
 

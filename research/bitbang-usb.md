@@ -64,7 +64,7 @@ So a low-speed HID device covers everything the design needs.
 host (DFP) and the Pi is the device. For the adapter to be a USB *device*, the
 host side must run as host on that port (laptops, phones, most SBCs do; a Pi
 needs `dtoverlay=dwc2,dr_mode=host`), or the two must do a PD `DR_Swap`. This is
-the same for hardware and software USB; see `gigabit-piggyback.md` §A option 2.
+the same for hardware and software USB; see [`gigabit-piggyback.md`](gigabit-piggyback.md) §A option 2.
 
 ## 2. Survey of software USB device stacks
 
@@ -231,7 +231,7 @@ against a CH570Q, which has hardware USB for the same money.
 
 ### Where software USB still earns a place
 
-* A **CH32V003 cold-start/PoE helper** (as considered in `usb-c-pd.md`) could
+* A **CH32V003 cold-start/PoE helper** (as considered in [`usb-c-pd.md`](usb-c-pd.md)) could
   expose a HID debug and DFU port for free if two GPIOs reach D+/D−. Not needed
   with the CH32X035, which already meets the 4 mA PoE mark-event limit
   ([`cost-reduction.md`](cost-reduction.md)).

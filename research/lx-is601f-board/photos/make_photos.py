@@ -15,14 +15,54 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 FONT_R = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 
-# Callouts: photo -> (title, [(targets, label, badge)]).
+# Rotation applied to each photo so all share one orientation (see README):
+# top side with the RJ45 block on the left and the LX-IS601F silkscreen readable;
+# bottom side as if the board were flipped left-to-right (RJ45 block on the right).
+# Values are degrees counter-clockwise; photos not listed are already upright.
+ROTATE = {'04': 180, '21': 90, '22': 180, '23': 180, '24': 270, '25': 270,
+          '26': 90, '27': 180, '28': 180, '29': 180, '30': 90, '31': 90, '32': 90}
+
+
+# Crop box (x0, y0, x1, y1) in percent of the rotated photo, trimming background
+# around the board. Photos not listed are close-ups that are board edge to edge.
+CROP = {'01': (5, 19, 97, 88), '02': (10, 22, 92, 80), '03': (10, 26, 92, 81),
+        '04': (8, 15, 90, 82), '05': (1, 10, 100, 80), '08': (1, 17, 100, 79),
+        '17': (0, 6, 95, 100), '18': (0, 16, 94, 100), '19': (0, 0, 62, 100),
+        '21': (12, 9, 100, 100), '22': (15, 33, 100, 100), '24': (0, 0, 57, 79),
+        '25': (0, 0, 64, 100), '26': (29, 0, 100, 100), '33': (0, 0, 100, 74),
+        '34': (0, 0, 100, 73)}
+
+
+def crop(im, key):
+    if key not in CROP:
+        return im
+    x0, y0, x1, y1 = CROP[key]
+    w, h = im.size
+    return im.crop((round(w * x0 / 100), round(h * y0 / 100), round(w * x1 / 100), round(h * y1 / 100)))
+
+
+def crop_xy(xy, key, clamp=False):
+    """Map a percentage position on the rotated photo into the cropped photo."""
+    x0, y0, x1, y1 = CROP.get(key, (0, 0, 100, 100))
+    x, y = (xy[0] - x0) * 100 / (x1 - x0), (xy[1] - y0) * 100 / (y1 - y0)
+    if clamp:
+        x, y = min(max(x, 4), 96), min(max(y, 3), 97)
+    return x, y
+
+
+def rot_xy(xy, deg):
+    """Map an (x, y) percentage position through a counter-clockwise rotation."""
+    x, y = xy
+    return {0: (x, y), 90: (y, 100 - x), 180: (100 - x, 100 - y), 270: (100 - y, x)}[deg]
+
+
+# Callouts (positions measured on the photo before rotation): photo -> (title, [(targets, label, badge)]).
 # Positions are percentages of the photo's width and height. Each target gets a small
 # ring; a numbered badge sits at `badge` with a leader line to every target, so badges
 # can be put on empty background instead of over markings.
 CALLOUTS = {
     '04': ('Board A, top, heatsink removed', [
         ([(36, 56)], 'U4 YT9215SCH switch IC', (36, 92)),
-        ([(96, 14)], 'Removed heatsink (thermal pad residue)', (86, 8)),
         ([(51, 29)], 'U12 SFP host connector, no cage', (51, 12)),
         ([(20, 30)], 'Single RJ45', (20, 12)),
         ([(81, 60)], 'RJ45 block', (95, 60)),
@@ -81,9 +121,12 @@ CALLOUTS = {
 }
 
 
-def strip(im):
-    """Return an upright copy with no EXIF/GPS."""
+def strip(im, deg=0):
+    """Return an upright copy with no EXIF/GPS, rotated `deg` counter-clockwise."""
     im = ImageOps.exif_transpose(im)
+    if deg:
+        im = im.transpose({90: Image.Transpose.ROTATE_90, 180: Image.Transpose.ROTATE_180,
+                           270: Image.Transpose.ROTATE_270}[deg])
     out = Image.new('RGB', im.size)
     out.paste(im)
     return out
@@ -134,13 +177,16 @@ def main(src):
         os.makedirs(os.path.join(HERE, sub), exist_ok=True)
     for n in range(1, 35):
         key = f'{n:02d}'
-        im = strip(Image.open(os.path.join(src, key + '.jpg')))
+        im = crop(strip(Image.open(os.path.join(src, key + '.jpg')), ROTATE.get(key, 0)), key)
         web = im.copy(); web.thumbnail((1600, 1600))
         web.save(os.path.join(HERE, 'web', key + '.jpg'), quality=85, optimize=True)
         th = im.copy(); th.thumbnail((240, 240))
         th.save(os.path.join(HERE, 'thumbs', key + '.jpg'), quality=82, optimize=True)
         if key in CALLOUTS:
             title, pts = CALLOUTS[key]
+            deg = ROTATE.get(key, 0)
+            pts = [([crop_xy(rot_xy(t, deg), key) for t in ts], lab, crop_xy(rot_xy(b, deg), key, True))
+                   for ts, lab, b in pts]
             annotate(im, title, pts).save(os.path.join(HERE, 'annotated', key + '.jpg'), quality=85, optimize=True)
 
 

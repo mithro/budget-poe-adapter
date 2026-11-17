@@ -4,7 +4,14 @@ Tim's photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with
 Pixel 7 Pro. The originals (3072 x 4080) are in the
 [Google Photos album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9). This folder holds
 copies resized to 1600 px (`web/`), 240 px thumbnails (`thumbs/`) and annotated
-callouts (`annotated/`). In the callouts a small ring marks the exact spot and a
+callouts (`annotated/`). The copies are rotated to one orientation and cropped to the
+board (the originals in the album are untouched):
+
+* **Top side:** RJ45 block on the left, `LX-IS601F V2.0` silkscreen readable at the
+  bottom right, J2 and the blue disc capacitors along the top.
+* **Bottom side (24-29):** as if the board were flipped left-to-right, so the RJ45
+  block is on the right and the top edge stays at the top. The bottom shots were
+  oriented from the RJ45 pin rows, the six disc-capacitor pins and the J2 pads. In the callouts a small ring marks the exact spot and a
 numbered badge, joined to it by a line, sits beside it so markings stay readable. EXIF data, including GPS, was stripped from every copy.
 Photo numbers follow the album order.
 
@@ -46,7 +53,7 @@ or the number for the notes. Times are the camera's local time.
 | [01](#photo-01) | [<img src="thumbs/01.jpg" width="120">](web/01.jpg) | A | Top | Whole board | Heatsink on U4 | 09:23 |
 | [02](#photo-02) | [<img src="thumbs/02.jpg" width="120">](web/02.jpg) | A | Top | Whole board | Heatsink on U4 | 09:24 |
 | [03](#photo-03) | [<img src="thumbs/03.jpg" width="120">](web/03.jpg) | A | Top | Whole board, angled | Heatsink on U4 | 09:24 |
-| [04](#photo-04) | [<img src="thumbs/04.jpg" width="120">](web/04.jpg) | A | Top | Whole board, rotated | Heatsink off; U12 SFP connector ✎ | 09:48 |
+| [04](#photo-04) | [<img src="thumbs/04.jpg" width="120">](web/04.jpg) | A | Top | Whole board | Heatsink off; U12 SFP connector ✎ | 09:48 |
 | [05](#photo-05) | [<img src="thumbs/05.jpg" width="120">](web/05.jpg) | A | Top | Whole board, angled | U4 exposed | 09:48 |
 | [06](#photo-06) | [<img src="thumbs/06.jpg" width="120">](web/06.jpg) | A | Top | U4 close-up | U4 marking, Y6, debug resistors ✎ | 09:48 |
 | [07](#photo-07) | [<img src="thumbs/07.jpg" width="120">](web/07.jpg) | B | Top | U4 + PoE module corner | U4 marking, PSE U1 | 09:48 |
@@ -60,12 +67,12 @@ or the number for the notes. Times are the camera's local time.
 | [15](#photo-15) | [<img src="thumbs/15.jpg" width="120">](web/15.jpg) | A | Top | U4 + power, angled | PU1, PL3, C4 | 09:50 |
 | [16](#photo-16) | [<img src="thumbs/16.jpg" width="120">](web/16.jpg) | A | Top | Centre, wide | U4, magnetics, TC1 | 09:50 |
 | [17](#photo-17) | [<img src="thumbs/17.jpg" width="120">](web/17.jpg) | A | Top | Centre, wide | U4, magnetics, TC1 | 09:50 |
-| [18](#photo-18) | [<img src="thumbs/18.jpg" width="120">](web/18.jpg) | A | Top | Centre, wide | Heatsink in frame | 09:50 |
+| [18](#photo-18) | [<img src="thumbs/18.jpg" width="120">](web/18.jpg) | A | Top | Centre, wide | U4, magnetics, TC1 | 09:50 |
 | [19](#photo-19) | [<img src="thumbs/19.jpg" width="120">](web/19.jpg) | A? | Top | Power corner | PU1 SCT2622, C4, L2 | 13:41 |
 | [20](#photo-20) | [<img src="thumbs/20.jpg" width="120">](web/20.jpg) | A | Top | U4 + port 6 magnetics | U4 marking, DXFRM6 | 13:41 |
 | [21](#photo-21) | [<img src="thumbs/21.jpg" width="120">](web/21.jpg) | A | Top | Port edge corner | Empty PoE header, LED pads ✎ | 13:41 |
 | [22](#photo-22) | [<img src="thumbs/22.jpg" width="120">](web/22.jpg) | A | Top | Port edge corner | LED6-8, R68 | 13:41 |
-| [23](#photo-23) | [<img src="thumbs/23.jpg" width="120">](web/23.jpg) | A | Top | U4, rotated 180 | U4, Y6, L2 | 13:42 |
+| [23](#photo-23) | [<img src="thumbs/23.jpg" width="120">](web/23.jpg) | A | Top | U4 area | U4, Y6, L2 | 13:42 |
 | [24](#photo-24) | [<img src="thumbs/24.jpg" width="120">](web/24.jpg) | ? | Bottom | RJ45 block pins | D19, D21, C69, C73 | 13:42 |
 | [25](#photo-25) | [<img src="thumbs/25.jpg" width="120">](web/25.jpg) | ? | Bottom | RJ45 block pins | D8-D14 port diodes | 13:42 |
 | [26](#photo-26) | [<img src="thumbs/26.jpg" width="120">](web/26.jpg) | ? | Bottom | Under U4 | U6 empty, U10 EEPROM ✎ | 13:42 |
@@ -99,8 +106,8 @@ Board A, same view as 02 at a slight angle.
 
 ### Photo 04
 
-Board A after the heatsink was taken off U4 (the heatsink is at the top right, with
-thermal-pad residue). The board is rotated 180° relative to 01-03.
+Board A after the heatsink was taken off U4. The heatsink, with thermal-pad residue,
+was beside the board in the original shot and is cropped out here.
 
 ![Photo 04 annotated](annotated/04.jpg)
 
@@ -174,7 +181,7 @@ Board A, same area as 16 at an angle.
 
 ### Photo 18
 
-Board A, same area as 16, with the removed heatsink in the top right of the frame.
+Board A, same area as 16 from slightly further back.
 
 ### Photo 19
 
@@ -200,8 +207,7 @@ Board A, the RJ45 block end: LED7, LED8, R68 and the empty LED6 footprint.
 
 ### Photo 23
 
-Board A, U4 area rotated 180°: Y6, L2 `701`, D5 `SS510` and the blue disc
-capacitors.
+Board A, U4 area: Y6, L2 `701`, D5 `SS510` and the blue disc capacitors.
 
 ### Photo 24
 
@@ -269,5 +275,6 @@ apart.
 python3 make_photos.py /path/to/originals   # 01.jpg .. 34.jpg in album order
 ```
 
-Callout positions are listed in the script as fractions of each photo's width and
-height.
+The script lists each photo's rotation (`ROTATE`) and crop box (`CROP`). Callout
+positions are percentages of the original photo; the script maps them through the
+rotation and crop.

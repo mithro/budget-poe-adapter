@@ -11,7 +11,7 @@ The project is at the research stage. There is no schematic or PCB here yet.
 | --- | --- |
 | [`design/`](design/) | Block diagram and rough BOM for the current concept. |
 | [`research/`](research/) | Research notes: PoE, USB-C PD, switch ICs, MCUs and how to attach an MCU to the network. |
-| [`datasheets/`](datasheets/) | Datasheets: Motorcomm switch ICs and the parts on the two switch boards (included), Realtek switch ICs (linked). See [`datasheets/README.md`](datasheets/README.md). |
+| [`datasheets/`](datasheets/README.md) | Datasheets: Motorcomm switch ICs and the parts on the two switch boards (included), Realtek switch ICs (linked). See [`datasheets/README.md`](datasheets/README.md). |
 
 ### Design
 
@@ -61,5 +61,5 @@ The project is at the research stage. There is no schematic or PCB here yet.
 
 ## Licence
 
-See [`LICENSE`](LICENSE). Vendor datasheets under [`datasheets/`](datasheets/) remain the property of
+See [`LICENSE`](LICENSE). Vendor datasheets under [`datasheets/`](datasheets/README.md) remain the property of
 their vendors.

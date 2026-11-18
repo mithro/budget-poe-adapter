@@ -313,7 +313,7 @@ These are visible but are not identified.
 
 - Three blue radial disc parts stand beside <a href="#lx-p4">P4</a> ([photo-board-b-top.jpg](lx-is601f-board/photo-board-b-top.jpg)). They are taken to be surge protection parts on the power input.
 - A row of six LEDs sits along the board edge beside G1, under the edge of the PoE module ([photo-u4-wide.jpg](lx-is601f-board/photo-u4-wide.jpg) and [photo-poe-module.jpg](lx-is601f-board/photo-poe-module.jpg)). The
-  silkscreen under them reads RJ7 to RJ18. No part is visible at those labels, so what they designate is not known; they are
+  silkscreen under them reads RJ7 to RJ18. No part is visible at those labels, so what they designate is not confirmed; they are
   taken to be the LED series resistors.
 - A group of option footprints sits next to <a href="#lx-u6">U6</a> on the bottom side and is partly populated ([photo-bottom-under-u4.jpg](lx-is601f-board/photo-bottom-under-u4.jpg)).
 
@@ -322,13 +322,13 @@ These are visible but are not identified.
 
 | File | Board | Side | Shows |
 |---|---|---|---|
-| [photo-bottom-under-u4.jpg](lx-is601f-board/photo-bottom-under-u4.jpg) | Not known | Bottom | Area under <a href="#lx-u4">U4</a> with the strap array |
+| [photo-bottom-under-u4.jpg](lx-is601f-board/photo-bottom-under-u4.jpg) | Not known | Bottom | Area under <a href="#lx-u4">U4</a> with the strap resistor array |
 | [strap-resistors-annotated.jpg](lx-is601f-board/strap-resistors-annotated.jpg) | Not known | Bottom | Strap resistor array with decoded levels |
 | [lx-is601f-debug-pins-annotated.png](lx-is601f-board/lx-is601f-debug-pins-annotated.png) | B | Top | Debug pins of <a href="#lx-u4">U4</a> with a pin table |
 | [photo-u4-wide.jpg](lx-is601f-board/photo-u4-wide.jpg) | A | Top | Area around <a href="#lx-u4">U4</a> |
 | [photo-u4-macro.jpg](lx-is601f-board/photo-u4-macro.jpg) | B | Top | Close-up of <a href="#lx-u4">U4</a> with the heatsink removed |
 | [photo-board-b-top.jpg](lx-is601f-board/photo-board-b-top.jpg) | B | Top | Whole board |
-| [photo-poe-module.jpg](lx-is601f-board/photo-poe-module.jpg) | B | Top | PoE module |
+| [photo-poe-module.jpg](lx-is601f-board/photo-poe-module.jpg) | B | Top | Plug-in PoE module |
 
 The originals are in the [photo album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9). The folder notes are in
 [lx-is601f-board/README.md](lx-is601f-board/README.md).
@@ -347,8 +347,8 @@ The originals are in the [photo album](https://photos.app.goo.gl/f4gAaRwkkgGWYLG
 
 Check 5 is not certain to work as written. The register name and address come from the Linux driver, as noted in
 [motorcomm-debug-pins.md](motorcomm-debug-pins.md); neither datasheet lists it. With DIS_SPIS (pin <a href="#lx-pin-70">70</a>) = 1 and SMI_SEL (pin <a href="#lx-pin-85">85</a>) = 1 the
-[datasheet, page 45](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=45) selects the slave I²C interface in one place and the slave SMI interface in
-[another, page 47](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=47), and the I²C pins are shared with the EEPROM bus. If slave SMI answers, its address is 0x1d
+[datasheet, page 45](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=45) selects the slave I²C interface in one place and the slave SMI interface per the
+[datasheet, page 47](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=47) in another, and the I²C pins are shared with the EEPROM bus. If slave SMI answers, its address is 0x1d
 (pin <a href="#lx-pin-80">80</a>, MID29 = 1).
 
 ## wu-kou YT9215S V2.0
@@ -530,7 +530,7 @@ at reset and the switch runs on its register defaults as an unmanaged five-port 
 | <a id="wk-pin-15"></a>15 | No connect | Unconnected | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) |
 | <a id="wk-pin-16"></a>16 | No connect | Unconnected | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) |
 
-All columns are tagged <a href="#tag-r">R</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet). With the extension port, the SerDes, the I²C pins and the interrupt pin all
+All columns are tagged <a href="#tag-r">R</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet), except Group, which is tagged <a href="#tag-d">D</a> from the datasheet pin tables. With the extension port, the SerDes, the I²C pins and the interrupt pin all
 unconnected, there is no management interface on the board. Pins <a href="#wk-pin-15">15</a> and <a href="#wk-pin-16">16</a> are NC pins that the [datasheet, page 32](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32)
 says must be left floating.
 

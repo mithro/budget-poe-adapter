@@ -1,0 +1,3 @@
+# Reference pages are written by the Sphinx build (tools/gen_docs.py).
+docs/reference/
+__pycache__/

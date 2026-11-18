@@ -1,0 +1,73 @@
+/* Colours of the diagrams, for the light and the dark theme of Furo. */
+body {
+  --yt-fg: #1c1e21;
+  --yt-dim: #5a6270;
+  --yt-line: #4b5563;
+  --yt-thin: #9aa3af;
+  --yt-box: #eef4fb;
+  --yt-ro: #e6f5e9;
+  --yt-sp: #fdf1dc;
+  --yt-rsv: #eceef1;
+  --yt-alt: #f3ecfa;
+  --yt-sig: #1d4ed8;
+  --yt-hover: #cfe3fb;
+}
+@media (prefers-color-scheme: dark) {
+  body:not([data-theme="light"]) {
+    --yt-fg: #e6e8eb;
+    --yt-dim: #a3acb9;
+    --yt-line: #9aa3af;
+    --yt-thin: #6b7280;
+    --yt-box: #1f2a3a;
+    --yt-ro: #1d3324;
+    --yt-sp: #3a2f17;
+    --yt-rsv: #26292e;
+    --yt-alt: #2e2440;
+    --yt-sig: #7fb0ff;
+    --yt-hover: #2c4466;
+  }
+}
+body[data-theme="dark"] {
+  --yt-fg: #e6e8eb;
+  --yt-dim: #a3acb9;
+  --yt-line: #9aa3af;
+  --yt-thin: #6b7280;
+  --yt-box: #1f2a3a;
+  --yt-ro: #1d3324;
+  --yt-sp: #3a2f17;
+  --yt-rsv: #26292e;
+  --yt-alt: #2e2440;
+  --yt-sig: #7fb0ff;
+  --yt-hover: #2c4466;
+}
+
+.yt-figure { margin: 1rem 0 1.25rem; }
+.yt-figure figcaption, .yt-figure .caption { font-size: 0.85em; color: var(--yt-dim); text-align: left; }
+.yt-scroll { overflow-x: auto; }
+svg.yt-d { display: block; max-width: 100%; height: auto; min-width: 560px; }
+svg.yt-d text { font-family: var(--font-stack--monospace, ui-monospace, Menlo, Consolas, monospace); font-size: 11px; fill: var(--yt-fg); }
+svg.yt-d .yt-s { font-size: 9px; fill: var(--yt-dim); }
+svg.yt-d .yt-b { font-weight: 600; }
+svg.yt-d .yt-box { fill: var(--yt-box); stroke: var(--yt-line); stroke-width: 1; }
+svg.yt-d .yt-ro { fill: var(--yt-ro); }
+svg.yt-d .yt-sp { fill: var(--yt-sp); }
+svg.yt-d .yt-rsv { fill: var(--yt-rsv); }
+svg.yt-d .yt-alt { fill: var(--yt-alt); }
+svg.yt-d .yt-ln { stroke: var(--yt-line); stroke-width: 1; fill: none; }
+svg.yt-d .yt-thin { stroke: var(--yt-thin); stroke-width: 1; fill: none; }
+svg.yt-d .yt-dash { stroke: var(--yt-thin); stroke-width: 1; stroke-dasharray: 4 3; fill: none; }
+svg.yt-d .yt-sig { stroke: var(--yt-sig); stroke-width: 1.6; fill: none; }
+svg.yt-d .yt-fill { fill: var(--yt-line); }
+svg.yt-d a:hover .yt-box { fill: var(--yt-hover); }
+svg.yt-d a text { text-decoration: none; }
+
+/* Reference tables: keep bit ranges and names on one line. */
+table.yt-fields td:nth-child(1), table.yt-fields td:nth-child(2),
+table.yt-sources td:nth-child(1), table.yt-sources td:nth-child(3) { white-space: nowrap; }
+table.yt-facts td:first-child { white-space: nowrap; font-weight: 600; }
+table.yt-fields p, table.yt-sources p, table.yt-facts p { margin: 0; }
+svg.yt-d a, svg.yt-d a:hover { text-decoration: none; }
+table.yt-fields, table.yt-sources, table.yt-facts { width: 100%; }
+/* Side-by-side code examples: keep the cells aligned at the top. */
+table.docutils td > div[class^="highlight-"] { margin: 0; }
+table.docutils td { vertical-align: top; }

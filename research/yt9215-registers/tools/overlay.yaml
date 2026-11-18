@@ -1,0 +1,1442 @@
+# Hand-written part of the YT921x register description.
+#
+# tools/extract.py reads addresses, bit positions and enumerated values from
+# the Linux driver and the vendor SDK. Everything below is what those sources
+# do not carry: block assignment, titles, descriptions, access types, index
+# ranges and reset values. Descriptions may use the documentation roles
+# :reg:`NAME`, :field:`REG.FIELD` and :ref:`text <label>`; they are turned into
+# plain text for the SVD, SystemRDL and binding files.
+
+device:
+  name: YT921x
+  vendor: Motorcomm
+  title: Motorcomm YT921x Gigabit Ethernet switch family
+  address_bits: 32
+  data_bits: 32
+  ports: 11
+
+# One row per part the identification sequence can tell apart.
+#   major    CHIP_ID.MAJOR
+#   mode     CHIP_MODE.MODE
+#   extmode  configuration byte 0xfb (see EDATA_CTRL)
+#   phy / xmii / serdes  port numbers that have that kind of interface
+chips:
+  - {name: YT9215SC, family: yt9215, major: 0x9002, mode: 1, extmode: 0, phy: [0, 1, 2, 3, 4], xmii: [9], serdes: [8, 9]}
+  - {name: YT9215S, family: yt9215, major: 0x9002, mode: 2, extmode: 0, phy: [0, 1, 2, 3, 4], xmii: [9], serdes: [8]}
+  - {name: YT9215RB, family: yt9215, major: 0x9002, mode: 3, extmode: 0, phy: [0, 1, 2, 3, 4], xmii: [8, 9], serdes: []}
+  - {name: YT9214NB, family: yt9215, major: 0x9002, mode: 3, extmode: 2, phy: [1, 3], xmii: [9], serdes: [8]}
+  - {name: YT9213NB, family: yt9215, major: 0x9002, mode: 3, extmode: 3, phy: [1, 3], xmii: [9], serdes: [9]}
+  - {name: YT9218N, family: yt9218, major: 0x9001, mode: 0, extmode: 0, phy: [0, 1, 2, 3, 4, 5, 6, 7], xmii: [], serdes: []}
+  - {name: YT9218MB, family: yt9218, major: 0x9001, mode: 1, extmode: 0, phy: [0, 1, 2, 3, 4, 5, 6, 7], xmii: [8, 9], serdes: [8, 9]}
+
+blocks:
+  - id: system
+    title: Reset, identification and global control
+    guide: bringup
+    summary: Reset, feature enables, part identification, pin strap overrides, I/O voltage, the temperature sensor and the configuration byte store.
+  - id: cpu
+    title: CPU port and frame tagging
+    guide: cpu-tag
+    summary: Which port leads to the host CPU, whether frames on it carry the 8-byte CPU tag, and where trapped frames are sent.
+  - id: port
+    title: Port MAC and external interfaces
+    guide: ports
+    summary: Per-port speed, duplex, flow control and MAC enables, frame size, and the SGMII and xMII interfaces of ports 8 and 9.
+  - id: mbus
+    title: MDIO master buses
+    guide: phy
+    summary: Two MDIO masters inside the switch, one for the built-in PHYs and SerDes PCS and one for PHYs on the external MDIO pins.
+  - id: eee
+    title: Energy Efficient Ethernet
+    guide: ports
+    summary: Per-port Energy Efficient Ethernet (EEE) enables.
+  - id: mib
+    title: Port counters
+    guide: mib
+    summary: Per-port packet and byte counters (MIB) and their control register.
+  - id: led
+    title: LEDs
+    guide: leds
+    summary: What each port LED shows, forced LED states, blink timing, and the serial and parallel LED output mapping.
+  - id: vlan
+    title: VLAN
+    guide: vlan
+    summary: The 4096-entry VLAN table, port default VLANs, tag protocol identifiers, and ingress and egress VLAN filtering.
+  - id: qos
+    title: Priority mapping
+    guide: qos
+    summary: Mapping of DSCP and VLAN priority to the internal priority and colour, and per-port priority sources.
+  - id: l2
+    title: Port isolation, spanning tree and learning
+    guide: forwarding
+    summary: Which ports may forward to which, per-port spanning tree state, address learning control and the ageing timer.
+  - id: fdb
+    title: Forwarding database
+    guide: fdb
+    summary: The command interface to the 4096-entry MAC address table.
+  - id: flood
+    title: Flooding and unknown destinations
+    guide: forwarding
+    summary: Where broadcast, multicast and unknown-destination frames may be flooded, and what happens to frames with an unknown destination.
+  - id: lag
+    title: Link aggregation
+    guide: lag
+    summary: Two link aggregation groups of up to four ports and the hash that spreads traffic over them.
+  - id: acl
+    title: Access control list
+    guide: acl
+    summary: The 384-entry match and action table, its 48 blocks of eight key slots, and the user-defined field windows.
+  - id: meter
+    title: Meters and ingress rate limiting
+    guide: rate
+    summary: Token bucket meters used for per-port ingress rate limiting and by ACL rules.
+  - id: shape
+    title: Egress shaping
+    guide: rate
+    summary: Per-port egress token bucket shapers.
+  - id: mirror
+    title: Port mirroring
+    guide: mirror
+    summary: Copying frames received or sent on chosen ports to one monitor port.
+
+# Address regions. A register belongs to the region with the highest base that
+# is not above its address. Names follow the vendor SDK module names where the
+# SDK has one.
+regions:
+  - {name: EXT_MBUS, base: 0x6a000, title: External MDIO master}
+  - {name: GLOBAL, base: 0x80000, title: Global control and port MACs}
+  - {name: EEE_MAC, base: 0xa0000, title: Per-port EEE}
+  - {name: EEE, base: 0xb0000, title: EEE control}
+  - {name: MIB, base: 0xc0000, title: Port counters}
+  - {name: LED, base: 0xd0000, title: LED control}
+  - {name: EDATA, base: 0xe0000, title: Configuration byte store and clock}
+  - {name: INT_MBUS, base: 0xf0000, title: Internal MDIO master}
+  - {name: EGRESS, base: 0x100000, title: Egress tag processing}
+  - {name: L2, base: 0x180000, title: Layer 2 forwarding and VLAN table}
+  - {name: ACL_ACTION, base: 0x1c0000, title: ACL action table}
+  - {name: ACL, base: 0x200000, title: ACL keys and control}
+  - {name: PARSER, base: 0x210000, title: Ingress parser}
+  - {name: METER, base: 0x220000, title: Ingress meters}
+  - {name: PORT_VLAN, base: 0x230000, title: Ingress port VLAN}
+  - {name: QUEUE, base: 0x300000, title: Queue manager}
+  - {name: SCHED, base: 0x340000, title: Egress scheduler}
+
+inherit:
+  PON_STRAP_FUNC: {from: PON_STRAP_CAP}
+  PON_STRAP_VAL: {from: PON_STRAP_CAP}
+  PORT_CTRL: {from: PORT_STATUS, except: [LINK]}
+  FILTER_UNK_UCAST: {from: FILTER_BCAST}
+  FILTER_UNK_MCAST: {from: FILTER_BCAST}
+  FILTER_MCAST: {from: FILTER_BCAST}
+  ACT_UNK_UCAST: {from: ACT_UNK_MCAST, except: [BYPASS_DROP_RMA, BYPASS_DROP_IGMP]}
+  FDB_IN0: {from: FDB_OUT0}
+  FDB_IN1: {from: FDB_OUT1}
+  FDB_IN2: {from: FDB_OUT2}
+  EXT_MBUS_OP: {from: INT_MBUS_OP}
+  EXT_MBUS_CTRL: {from: INT_MBUS_CTRL}
+  IPM_DSCP: {from: IPM_PCP}
+  LED0_PORT: {from: LED2_PORT, only: [ACT_EEE_BLINK, ACT_LOOPDETECT_BLINK, ACT_ACTIVE_BLINK, ACT_DUPLEX_FULL, ACT_DUPLEX_HALF, ACT_TX_BLINK, ACT_RX_BLINK, ACT_TX, ACT_RX, ACT_1000M, ACT_100M, ACT_10M, ACT_COLLISION_BLINK, ACT_1000M_BLINK, ACT_100M_BLINK, ACT_10M_BLINK]}
+  LED1_PORT: {from: LED2_PORT, only: [ACT, ACT_EEE_BLINK, ACT_LOOPDETECT_BLINK, ACT_ACTIVE_BLINK, ACT_DUPLEX_FULL, ACT_DUPLEX_HALF, ACT_TX_BLINK, ACT_RX_BLINK, ACT_TX, ACT_RX, ACT_1000M, ACT_100M, ACT_10M, ACT_COLLISION_BLINK, ACT_1000M_BLINK, ACT_100M_BLINK, ACT_10M_BLINK]}
+  ACL_MASK: {from: ACL_KEY, only: []}
+
+default_ranges:
+  port: {first: 0, count: 11}
+  grp: {first: 0, count: 3}
+  bin: {first: 0, count: 8}
+ranges:
+  SERDES: {port: {first: 8, count: 2}}
+  XMII: {port: {first: 8, count: 2}}
+  MDIO_POLLING: {port: {first: 8, count: 2}}
+  SERDES_CTRL.PORT: {port: {first: 8, count: 2}}
+  XMII_CTRL.PORT: {port: {first: 8, count: 2}}
+  TPID_EGR: {x: {first: 0, count: 4, name: n}}
+  TPID_IGR: {x: {first: 0, count: 4, name: n}}
+  PORT_IGR_TPID.STAG: {x: {first: 0, count: 4, name: n}}
+  PORT_IGR_TPID.CTAG: {x: {first: 0, count: 4, name: n}}
+  IPM_DSCP: {n: {first: 0, count: 64, name: dscp}}
+  IPM_PCP: {map: {first: 0, count: 2}, dei: {first: 0, count: 2}, pcp: {first: 0, count: 8}}
+  PORT_PRIO_ORD.APP: {m: {first: 0, count: 8, name: app}}
+  STP: {n: {first: 0, count: 16, name: inst}}
+  LAG_GROUP: {n: {first: 0, count: 2, name: lag}}
+  LAG_MEMBER: {n: {first: 0, count: 2, name: lag}, m: {first: 0, count: 4, name: slot}}
+  VLAN_CTRL: {vlan: {first: 0, count: 4096, name: vid}}
+  LED0_PORT: {port: {first: 0, count: 10}}
+  LED1_PORT: {port: {first: 0, count: 10}}
+  LED2_PORT: {port: {first: 0, count: 10}}
+  LED_SER_MAP: {grp: {first: 0, count: 3}, port: {first: 0, count: 2, scale: 5, name: half}}
+  LED_SER_MAP.DST_PORT: {port: {first: 0, count: 5, name: slot}}
+  LED_SER_MAP.DST_LED: {port: {first: 0, count: 5, name: slot}}
+  LED_PAR_INV.INV: {grp: {first: 0, count: 3}, port: {first: 0, count: 10}}
+  LED_PAR_MAP: {port: {first: 0, count: 10}}
+  ACL_ACT: {n: {first: 0, count: 384, name: entry}}
+  ACL_ENTRY: {blk: {first: 0, count: 48}}
+  ACL_KEY: {blk: {first: 0, count: 48}, bin: {first: 0, count: 8}}
+  ACL_MASK: {blk: {first: 0, count: 48}, bin: {first: 0, count: 8}}
+  UDF_CTRL: {x: {first: 0, count: 16, name: n}}
+  METER_CTRL: {x: {first: 0, count: 75, name: meter}}
+  METER_STAT: {x: {first: 0, count: 75, name: meter}}
+field_prefix:
+  FDB_OUT0: FDB_IO0
+  FDB_OUT1: FDB_IO1
+  FDB_OUT2: FDB_IO2
+  PORT_IGR_TPID: PORT_IGR_TPIDn
+aliases:
+  LEDx_PORT_: LED2_PORT_
+
+acl_layouts:
+  MAC_xA0: {name: MAC_ADDR0, rename: {MAC_xA0: ADDR}, title: MAC address high 32 bits, types: [MAC_DA0, MAC_SA0]}
+  MAC_DA1_SA1: {title: MAC address low 16 bits of destination and source, types: [MAC_DA1_SA1]}
+  VLAN: {title: VLAN tags with tag format, types: [VLAN]}
+  VTAG: {title: VLAN tags, types: [VTAG]}
+  IPV4: {title: IPv4 address, types: [IPV4_DA, IPV4_SA]}
+  IPV6: {name: IPV6_ADDR0, rename: {ADDRx: ADDR}, title: IPv6 address bits 127 to 96, types: [IPV6_DA0, IPV6_SA0]}
+  IPV6_xA1: {name: IPV6_ADDR1, rename: {ADDRx: ADDR}, title: IPv6 address bits 95 to 64, types: [IPV6_DA1, IPV6_SA1]}
+  IPV6_xA2: {name: IPV6_ADDR2, rename: {ADDRx: ADDR}, title: IPv6 address bits 63 to 32, types: [IPV6_DA2, IPV6_SA2]}
+  IPV6_xA3: {name: IPV6_ADDR3, rename: {ADDRx: ADDR}, title: IPv6 address bits 31 to 0, types: [IPV6_DA3, IPV6_SA3]}
+  MISC: {title: IP header and TCP flags, types: [MISC]}
+  L4: {title: Layer 4 ports, types: [L4]}
+  UDF: {title: User-defined fields, types: [UDF0, UDF1, UDF2, UDF3, UDF4, UDF5, UDF6, UDF7]}
+  ETHERTYPE: {title: EtherType, types: [ETHERTYPE]}
+
+enums:
+  speed:
+    title: Link speed codes
+    desc: Speed code used by every SPEED field.
+    values: {'10': 10 Mbit/s, '100': 100 Mbit/s, '1000': 1000 Mbit/s, '10000': 10 Gbit/s code; no YT921x port runs at this speed, '2500': 2500 Mbit/s}
+  app_selector:
+    title: Priority sources
+    desc: Index of a priority source in :reg:`PORT_PRIO_ORD`.
+    values:
+      MAC_SA: Priority of the matching source address entry in the forwarding database
+      MAC_DA: Priority of the matching destination address entry in the forwarding database
+      VID: Priority of the VLAN table entry
+      ACL: Priority set by an ACL rule
+      DSCP: Priority mapped from the IP DSCP value through :reg:`IPM_DSCP`
+      CVLAN_PCP: Priority mapped from the customer VLAN tag through :reg:`IPM_PCP`
+      SVLAN_PCP: Priority mapped from the service VLAN tag through :reg:`IPM_PCP`
+      PORT: Port default priority from :field:`PORT_QOS.PRIO`
+  acl_type:
+    title: ACL key types
+    desc: Value of :field:`ACL_KEY.TYPE`; it selects which layout the rest of the key slot uses.
+    values:
+      NA: Slot not used
+      MAC_DA0: Destination MAC address bits 47 to 16
+      MAC_SA0: Source MAC address bits 47 to 16
+      MAC_DA1_SA1: Destination and source MAC address bits 15 to 0
+      VLAN: VLAN identifiers and priorities with tag format
+      VTAG: VLAN identifiers and priorities
+      IPV4_DA: IPv4 destination address
+      IPV4_SA: IPv4 source address
+      IPV6_DA0: IPv6 destination address bits 127 to 96
+      IPV6_DA1: IPv6 destination address bits 95 to 64
+      IPV6_DA2: IPv6 destination address bits 63 to 32
+      IPV6_DA3: IPv6 destination address bits 31 to 0
+      IPV6_SA0: IPv6 source address bits 127 to 96
+      IPV6_SA1: IPv6 source address bits 95 to 64
+      IPV6_SA2: IPv6 source address bits 63 to 32
+      IPV6_SA3: IPv6 source address bits 31 to 0
+      MISC: IP protocol, type of service, TCP flags and frame class
+      L4: TCP or UDP source and destination ports
+      UDF0: User-defined field windows 0 and 1
+      UDF1: User-defined field windows 2 and 3
+      UDF2: User-defined field windows 4 and 5
+      UDF3: User-defined field windows 6 and 7
+      UDF4: User-defined field windows 8 and 9
+      UDF5: User-defined field windows 10 and 11
+      UDF6: User-defined field windows 12 and 13
+      UDF7: User-defined field windows 14 and 15
+      ETHERTYPE: EtherType
+  l2_type:
+    title: Layer 2 frame formats
+    desc: Frame encapsulation code matched by the L2_TYPE field of an ACL key.
+    values: {ETH: Other Ethernet framing, ETHV2: Ethernet II, ETHSAP: IEEE 802.3 with LLC, ETHSNAP: IEEE 802.3 with LLC and SNAP}
+  l3_type:
+    title: Layer 3 protocol classes
+    desc: Protocol class matched by the L3_TYPE field of an ACL key.
+    values: {OTHER: Any other protocol, IPV4: IPv4, IPV6: IPv6, ARP: ARP, LLDP: LLDP, PAE: IEEE 802.1X port access entity, ERP: Ethernet ring protection, SLOW_PROTOCOL: IEEE 802.3 slow protocols such as LACP}
+  l4_type:
+    title: Layer 4 protocol classes
+    desc: Protocol class matched by the L4_TYPE field of an ACL key.
+    values: {OTHER: Any other protocol, TCP: TCP, UDP: UDP, UDPLITE: UDP-Lite, ICMP: ICMP, IGMP: IGMP, MLD: Multicast Listener Discovery, ND: IPv6 Neighbour Discovery}
+  udf_type:
+    title: User-defined field bases
+    desc: Header that a user-defined field offset is counted from, in :field:`UDF_CTRL.UDF_TYPE`.
+    values: {L2: Start of the Ethernet header, L3: Start of the layer 3 header, L4: Start of the layer 4 header}
+
+constants:
+  SWITCHID_NUM: Number of switch IDs that can share one MDIO address
+  EDATA_EXTMODE: Address of the extended mode byte in the configuration byte store
+  EDATA_LEN: Size of the configuration byte store in bytes
+  FDB_NUM: Number of forwarding database entries
+  MSTI_NUM: Number of spanning tree instances
+  METER_NUM: Number of general-purpose meters; the 11 per-port meters follow them
+  LAG_NUM: Number of link aggregation groups
+  LAG_PORT_NUM: Member slots in one link aggregation group
+  PRIO_NUM: Number of internal priorities
+  MAJOR_YT9215: CHIP_ID.MAJOR of the YT9215 family
+  MAJOR_YT9218: CHIP_ID.MAJOR of the YT9218 family
+  RST_DELAY_US: Microseconds to wait after starting a hardware reset
+  FRAME_SIZE_MAX: Largest value of MAC_FRAME.SIZE in bytes
+  TAG_LEN: Length of the CPU tag in bytes
+  ACL_BLK_NUM: Number of ACL blocks
+  UDF_NUM: Number of user-defined field windows
+  LED_GROUP_NUM: LED groups per port
+  LED_PORT_NUM: Ports that have LED outputs
+  PORT_NUM: Number of switch ports including the internal microcontroller port 10
+  LED_BLINK_MIN: Shortest LED blink cycle in milliseconds
+  LED_BLINK_DEF: Default LED blink cycle in milliseconds
+  LED_BLINK_MAX: Longest LED blink cycle in milliseconds
+  TOKEN_BYTE_C: Token scale exponent in byte mode; one token is 2^1 bytes at unit 0
+  TOKEN_PKT_C: Token scale exponent in packet mode; one token is 2^-6 packets at unit 0
+  TOKEN_RATE_C: Extra exponent applied to rate tokens
+  METER_SLOT_MIN: Smallest allowed METER_SLOT.SLOT
+  PORT_SHAPE_SLOT_MIN: Smallest allowed PORT_SHAPE_SLOT.SLOT
+  ACL_ENT_PER_BLK: Key slots in one ACL block
+  ACL_NUM: Number of ACL action entries
+  ACL_ORD_NUM: Number of ACL rule order values
+
+counters:
+  RX_BROADCAST: Broadcast frames received
+  RX_PAUSE: Pause frames received
+  RX_MULTICAST: Multicast frames received
+  RX_CRC_ERR: Frames received with a bad frame check sequence
+  RX_ALIGN_ERR: Frames received with an alignment error
+  RX_UNDERSIZE_ERR: Frames received shorter than 64 bytes with a good frame check sequence
+  RX_FRAG_ERR: Frames received shorter than 64 bytes with a bad frame check sequence
+  RX_PKT_SZ_64: Frames received with a length of 64 bytes
+  RX_PKT_SZ_65_TO_127: Frames received with a length of 65 to 127 bytes
+  RX_PKT_SZ_128_TO_255: Frames received with a length of 128 to 255 bytes
+  RX_PKT_SZ_256_TO_511: Frames received with a length of 256 to 511 bytes
+  RX_PKT_SZ_512_TO_1023: Frames received with a length of 512 to 1023 bytes
+  RX_PKT_SZ_1024_TO_1518: Frames received with a length of 1024 to 1518 bytes
+  RX_PKT_SZ_1519_TO_MAX: Frames received longer than 1518 bytes
+  RX_GOOD_BYTES: Bytes received in good frames
+  RX_BAD_BYTES: Bytes received in bad frames
+  RX_OVERSIZE_ERR: Frames received longer than the frame size limit
+  RX_DROPPED: Received frames dropped by the switch
+  TX_BROADCAST: Broadcast frames sent
+  TX_PAUSE: Pause frames sent
+  TX_MULTICAST: Multicast frames sent
+  TX_UNDERSIZE_ERR: Frames sent shorter than 64 bytes
+  TX_PKT_SZ_64: Frames sent with a length of 64 bytes
+  TX_PKT_SZ_65_TO_127: Frames sent with a length of 65 to 127 bytes
+  TX_PKT_SZ_128_TO_255: Frames sent with a length of 128 to 255 bytes
+  TX_PKT_SZ_256_TO_511: Frames sent with a length of 256 to 511 bytes
+  TX_PKT_SZ_512_TO_1023: Frames sent with a length of 512 to 1023 bytes
+  TX_PKT_SZ_1024_TO_1518: Frames sent with a length of 1024 to 1518 bytes
+  TX_PKT_SZ_1519_TO_MAX: Frames sent longer than 1518 bytes
+  TX_GOOD_BYTES: Bytes sent in good frames
+  TX_COLLISION: Collisions seen while sending
+  TX_EXCESSIVE_COLLISION: Frames not sent after 16 collisions
+  TX_MULTIPLE_COLLISION: Frames sent after more than one collision
+  TX_SINGLE_COLLISION: Frames sent after exactly one collision
+  TX_PKT: Good frames sent
+  TX_DEFERRED: Frames whose first transmit attempt was deferred
+  TX_LATE_COLLISION: Collisions seen later than 512 bit times into a frame
+  RX_OAM: OAM frames received
+  TX_OAM: OAM frames sent
+
+registers:
+  RST:
+    block: system
+    title: Reset control
+    desc: |
+      Starts a reset of the switch. Write :field:`RST.HW` and poll the register until it reads 0;
+      :ref:`Reset <bringup-reset>` gives the full sequence.
+    fields:
+      HW: {desc: "Write 1 to reset the whole chip, as the reset pin does. The bit clears itself when the reset is complete."}
+      SW: {desc: "Write 1 for a software reset. No public driver uses this bit, so what it leaves untouched is not known.", inferred: true}
+  FUNC:
+    block: system
+    title: Function enables
+    desc: |
+      Switches optional function blocks on. A block that is off ignores its own registers.
+    fields:
+      METER: {desc: "Enables the meters (:reg:`METER_CTRL`, :reg:`PORT_METER`)."}
+      ACL: {desc: "Enables the access control list (:reg:`ACL_KEY`, :reg:`ACL_ACT`)."}
+      MIB: {desc: "Enables the port counters (:reg:`MIB_DATA`)."}
+  CHIP_ID:
+    block: system
+    title: Chip identification
+    access: ro
+    desc: |
+      Identifies the chip family. Read it right after reset, as described in
+      :ref:`Identify the part <bringup-identify>`.
+    add_fields:
+      MINOR: {lsb: 0, width: 16, desc: "Lower half of the chip ID. Its values are not catalogued.", inferred: true}
+    fields:
+      MAJOR: {desc: "Family code. 0x9002 is the YT9215 family and 0x9001 the YT9218 family."}
+  CHIP_MODE:
+    block: system
+    title: Package variant
+    access: ro
+    desc: |
+      Tells the parts of one family apart. The meaning of each value is listed in
+      :ref:`Identify the part <bringup-identify>`.
+    fields:
+      MODE: {desc: "Package variant code."}
+  SYS_CLK:
+    block: system
+    title: System clock select
+    desc: |
+      Shows which core clock the switch runs from. The meter and shaper time slots
+      (:reg:`METER_SLOT`, :reg:`PORT_SHAPE_SLOT`) count in units of eight core clock periods.
+    fields:
+      SEL:
+        desc: "Core clock selection."
+        values: {125M: "125 MHz core clock, 8 ns period (YT9215 family)", 167M: "167 MHz core clock, 6 ns period (YT9218 family)", 143M: "143 MHz core clock, 7 ns period"}
+  IO_LEVEL:
+    block: system
+    title: I/O voltage select
+    desc: |
+      Sets the signalling voltage of the digital pins. The field positions differ between the
+      YT9215 and YT9218 families.
+    fields:
+      NORMAL:
+        desc: "Voltage of the general digital I/O pins."
+        values: {3V3: "3.3 V", 1V8: "1.8 V"}
+      RGMII0:
+        desc: "Voltage of the first xMII interface pins."
+        values: {3V3: "3.3 V", 2V5: "2.5 V", 1V8: "1.8 V"}
+      RGMII1:
+        desc: "Voltage of the second xMII interface pins."
+        values: {3V3: "3.3 V", 2V5: "2.5 V", 1V8: "1.8 V"}
+  MAC_ADDR_HI2:
+    block: system
+    title: Switch MAC address, high part
+    desc: |
+      Upper two bytes of the MAC address the switch itself uses as a source address, for example
+      in the pause frames it sends.
+    inferred: true
+    add_fields:
+      ADDR: {lsb: 0, width: 16, desc: "MAC address bytes 0 and 1, byte 0 in bits 15 to 8.", inferred: true}
+  MAC_ADDR_LO4:
+    block: system
+    title: Switch MAC address, low part
+    desc: |
+      Lower four bytes of the switch MAC address; see :reg:`MAC_ADDR_HI2`.
+    inferred: true
+    add_fields:
+      ADDR: {lsb: 0, width: 32, desc: "MAC address bytes 2 to 5, byte 2 in bits 31 to 24.", inferred: true}
+  PON_STRAP_FUNC:
+    block: system
+    title: Pin strap override enable
+    desc: |
+      Selects, per function, whether the switch uses the level sampled on the strap pin at
+      power-on (bit clear) or the value in :reg:`PON_STRAP_VAL` (bit set).
+    fields:
+      EEE: {desc: "Take the Energy Efficient Ethernet setting from :field:`PON_STRAP_VAL.EEE`."}
+      LOOP_DETECT: {desc: "Take the loop detection setting from :field:`PON_STRAP_VAL.LOOP_DETECT`.", inferred: true}
+  PON_STRAP_VAL:
+    block: system
+    title: Pin strap override value
+    desc: |
+      Values used in place of the power-on straps for every function whose bit is set in
+      :reg:`PON_STRAP_FUNC`.
+    fields:
+      EEE: {desc: "1 turns Energy Efficient Ethernet on for the built-in PHYs."}
+      LOOP_DETECT: {desc: "1 turns loop detection on.", inferred: true}
+  PON_STRAP_CAP:
+    block: system
+    title: Pin strap capture
+    access: ro
+    desc: |
+      Levels that were sampled on the strap pins at power-on.
+    inferred: true
+    fields:
+      EEE: {desc: "Captured Energy Efficient Ethernet strap.", inferred: true}
+      LOOP_DETECT: {desc: "Captured loop detection strap.", inferred: true}
+  SENSOR:
+    block: system
+    title: Sensor enable
+    desc: |
+      Enables the on-chip sensors.
+    fields:
+      TEMP: {desc: "Enables the temperature sensor that :reg:`TEMP` reads."}
+  TEMP:
+    block: system
+    title: Temperature sensor reading
+    access: ro
+    desc: |
+      Raw reading of the die temperature sensor. The conversion to degrees is not documented.
+    inferred: true
+    add_fields:
+      VALUE: {lsb: 0, width: 32, desc: "Raw sensor value; scale and offset are not known.", inferred: true}
+  EDATA_CTRL:
+    block: system
+    title: Configuration byte store command
+    desc: |
+      Command register of the 256-byte factory configuration store. Writing it starts the
+      command; :ref:`Identify the part <bringup-identify>` shows the read sequence.
+    fields:
+      ADDR: {desc: "Byte address, 0 to 255."}
+      OP:
+        desc: "Command."
+        values: {READ: "Read the byte at ADDR into :field:`EDATA_DATA.DATA`"}
+  EDATA_DATA:
+    block: system
+    title: Configuration byte store data and status
+    access: ro
+    desc: |
+      Result and state of the last :reg:`EDATA_CTRL` command.
+    fields:
+      DATA: {desc: "Byte that was read."}
+      STATUS:
+        desc: "State of the store."
+        values: {IDLE: "No command is running; DATA is valid"}
+
+  EXT_CPU_PORT:
+    block: cpu
+    title: External CPU port
+    desc: |
+      Names the port that leads to the host CPU and turns CPU tagging on for it; see
+      :ref:`CPU port and frame tag <cpu-tag>`.
+    fields:
+      TAG_EN: {desc: "Frames to and from the CPU port carry the 8-byte CPU tag."}
+      PORT_EN: {desc: "PORT is valid and that port is treated as the CPU port."}
+      PORT: {desc: "Number of the CPU port, 0 to 10."}
+  CPU_TAG_TPID:
+    block: cpu
+    title: CPU tag EtherType
+    reset: 0x9988
+    desc: |
+      EtherType that opens the CPU tag. Reading the reset value back is a cheap check that
+      register access works.
+    fields:
+      TPID: {desc: "EtherType of the CPU tag."}
+  CPU_COPY:
+    block: cpu
+    title: CPU copy destination
+    desc: |
+      Chooses where frames that are trapped or copied to the CPU go.
+    fields:
+      FORCE_INT_PORT: {desc: "Always send such frames to the internal microcontroller port.", inferred: true}
+      TO_INT_CPU: {desc: "Send such frames to the internal microcontroller on port 10."}
+      TO_EXT_CPU: {desc: "Send such frames to the external CPU port set in :reg:`EXT_CPU_PORT`."}
+
+  PORT_CTRL:
+    block: port
+    title: Port control
+    desc: |
+      Forces or negotiates the MAC settings of one port. Bits 7 to 0 have the same layout as
+      :reg:`PORT_STATUS`; with :field:`PORT_CTRL.LINK_AN` clear the MAC uses the values written
+      here. :ref:`Bring a port up <ports-up>` gives the order of writes.
+    fields:
+      PAUSE_AN: {desc: "Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE."}
+      LINK_AN: {desc: "Take speed and duplex from the attached PHY or in-band status and ignore the forced bits."}
+      HALF_PAUSE: {desc: "Use back pressure for flow control in half duplex."}
+      DUPLEX_FULL: {desc: "Forced duplex: 1 is full duplex."}
+      RX_PAUSE: {desc: "Honour received pause frames."}
+      TX_PAUSE: {desc: "Send pause frames when the port is congested."}
+      RX_MAC_EN: {desc: "Enables the receive side of the MAC."}
+      TX_MAC_EN: {desc: "Enables the transmit side of the MAC."}
+      SPEED: {desc: "Forced speed.", enum: speed}
+  PORT_STATUS:
+    block: port
+    title: Port status
+    access: ro
+    desc: |
+      Link state and the MAC settings one port is running with.
+    fields:
+      LINK: {desc: "1 while the link is up."}
+      DUPLEX_FULL: {desc: "1 for full duplex."}
+      RX_PAUSE: {desc: "Receive pause is active."}
+      TX_PAUSE: {desc: "Transmit pause is active."}
+      RX_MAC_EN: {desc: "The receive side of the MAC is enabled."}
+      TX_MAC_EN: {desc: "The transmit side of the MAC is enabled."}
+      SPEED: {desc: "Current speed.", enum: speed}
+  MAC_FRAME:
+    block: port
+    title: MAC frame size
+    desc: |
+      Largest frame the MAC of one port accepts.
+    fields:
+      SIZE: {desc: "Maximum frame length in bytes, counted from the destination address to the frame check sequence. The largest value is 0x2400 (9216).", unit: bytes}
+  SERDES_CTRL:
+    block: port
+    title: SerDes enable
+    desc: |
+      Powers the SGMII SerDes of ports 8 and 9. A port uses either its SerDes or its xMII pins;
+      clear the matching bit in :reg:`XMII_CTRL` when setting one here.
+    fields:
+      TEST: {desc: "SerDes test mode. Clear it before use."}
+      PORTn: {desc: "Enables the SerDes of port 8 (bit 0) or port 9 (bit 1)."}
+  SERDES:
+    block: port
+    title: SerDes mode and forced link
+    desc: |
+      Protocol of one SerDes and, when the link is not negotiated in-band, its forced link
+      settings. The SerDes PCS registers themselves are standard MDIO registers reached through
+      the :ref:`internal MDIO master <phy-mbus>` at the address of the port number.
+    fields:
+      MODE:
+        desc: "SerDes protocol."
+        values: {SGMII: "SGMII, the switch is the MAC side", REVSGMII: "SGMII, the switch is the PHY side", 1000BASEX: "1000BASE-X", 100BASEX: "100BASE-FX", 2500BASEX: "2500BASE-X"}
+      RX_PAUSE: {desc: "Forced receive pause."}
+      TX_PAUSE: {desc: "Forced transmit pause."}
+      LINK: {desc: "Forces the link up."}
+      DUPLEX_FULL: {desc: "Forced duplex: 1 is full duplex."}
+      SPEED: {desc: "Forced speed.", enum: speed}
+  XMII_CTRL:
+    block: port
+    title: xMII enable
+    desc: |
+      Enables the parallel MAC interface (MII, RMII or RGMII) pins of ports 8 and 9. The bit
+      order is the reverse of the port order.
+    fields:
+      PORTn: {desc: "Enables the xMII pins of port 8 (bit 1) or port 9 (bit 0)."}
+  XMII:
+    block: port
+    title: xMII mode and timing
+    desc: |
+      Mode, clock direction and RGMII delays of one parallel MAC interface.
+    fields:
+      MODE:
+        desc: "Interface type."
+        values: {MII: "MII, the switch is the MAC side", REVMII: "MII, the switch is the PHY side", RMII: "RMII, the switch is the MAC side", REVRMII: "RMII, the switch is the PHY side", RGMII: "RGMII", DISABLE: "Interface off"}
+      LINK: {desc: "Forces the link of the interface up."}
+      EN: {desc: "Enables the interface.", inferred: true}
+      SOFT_RST: {desc: "Resets the interface logic.", inferred: true}
+      RGMII_TX_DELAY_150PS: {desc: "Fine RGMII transmit clock delay in steps of about 150 ps.", inferred: true}
+      TX_CLK_IN: {desc: "The transmit clock pin is an input.", inferred: true}
+      RX_CLK_IN: {desc: "The receive clock pin is an input.", inferred: true}
+      RGMII_TX_DELAY_2NS: {desc: "Adds about 2 ns to the RGMII transmit clock.", inferred: true}
+      RGMII_TX_CLK_OUT: {desc: "Drives the RGMII transmit clock.", inferred: true}
+      RGMII_RX_DELAY_150PS: {desc: "RGMII receive clock delay in steps of about 150 ps.", inferred: true}
+      RMII_PHY_TX_CLK_OUT: {desc: "Drives the RMII reference clock when the switch is the PHY side.", inferred: true}
+      REVMII_TX_CLK_OUT: {desc: "Drives the MII transmit clock when the switch is the PHY side.", inferred: true}
+      REVMII_RX_CLK_OUT: {desc: "Drives the MII receive clock when the switch is the PHY side.", inferred: true}
+  MDIO_POLLING:
+    block: port
+    title: External port link override
+    desc: |
+      Link state of port 8 or 9 as the switch would otherwise learn it by polling a PHY on the
+      external MDIO bus. Write the real link state here when the port is wired straight to
+      another MAC.
+    fields:
+      DUPLEX_FULL: {desc: "1 for full duplex."}
+      LINK: {desc: "1 for link up."}
+      SPEED: {desc: "Link speed.", enum: speed}
+
+  EXT_MBUS_OP:
+    block: mbus
+    title: External MDIO master start
+    desc: |
+      Starts a transfer on the external MDIO master and shows when it has finished; see
+      :ref:`MDIO master transfer <phy-mbus>`.
+    fields:
+      START: {desc: "Write 1 to start the transfer set up in :reg:`EXT_MBUS_CTRL`. Reads 1 until the transfer is complete."}
+  INT_MBUS_OP:
+    block: mbus
+    title: Internal MDIO master start
+    desc: |
+      Starts a transfer on the internal MDIO master and shows when it has finished; see
+      :ref:`MDIO master transfer <phy-mbus>`.
+    fields:
+      START: {desc: "Write 1 to start the transfer set up in :reg:`INT_MBUS_CTRL`. Reads 1 until the transfer is complete."}
+  EXT_MBUS_CTRL:
+    block: mbus
+    title: External MDIO master command
+    desc: |
+      Address and direction of the next transfer on the external MDIO pins.
+    fields: &mbusctrl
+      PORT: {desc: "PHY address, 0 to 31. On the internal bus it equals the port number."}
+      REG: {desc: "PHY register number, 0 to 31."}
+      TYPE:
+        desc: "Frame format. The field position is a guess of the upstream Linux driver author."
+        inferred: true
+        values: {C22: "IEEE 802.3 clause 22 frame"}
+      OP:
+        desc: "Direction. The field position is a guess of the upstream Linux driver author."
+        inferred: true
+        values: {WRITE: "Write the register", READ: "Read the register"}
+  INT_MBUS_CTRL:
+    block: mbus
+    title: Internal MDIO master command
+    desc: |
+      Address and direction of the next transfer to a built-in PHY or SerDes PCS.
+    fields: *mbusctrl
+  EXT_MBUS_DOUT:
+    block: mbus
+    title: External MDIO master write data
+    desc: Data for the next write transfer on the external MDIO master.
+    add_fields: &mbusdata
+      DATA: {lsb: 0, width: 16, desc: "The 16-bit PHY register value.", inferred: false}
+  INT_MBUS_DOUT:
+    block: mbus
+    title: Internal MDIO master write data
+    desc: Data for the next write transfer on the internal MDIO master.
+    add_fields: *mbusdata
+  EXT_MBUS_DIN:
+    block: mbus
+    title: External MDIO master read data
+    access: ro
+    desc: Data returned by the last read transfer on the external MDIO master.
+    add_fields: *mbusdata
+  INT_MBUS_DIN:
+    block: mbus
+    title: Internal MDIO master read data
+    access: ro
+    desc: Data returned by the last read transfer on the internal MDIO master.
+    add_fields: *mbusdata
+
+  EEE_VAL:
+    block: eee
+    title: Port EEE value
+    desc: |
+      Per-port Energy Efficient Ethernet setting inside the MAC.
+    fields:
+      DATA: {desc: "1 enables low power idle on the port."}
+  EEE_CTRL:
+    block: eee
+    title: EEE port enable
+    desc: |
+      One Energy Efficient Ethernet enable bit per port; see :ref:`Energy Efficient Ethernet <ports-eee>`.
+    fields:
+      ENn: {desc: "Enables Energy Efficient Ethernet on port n."}
+
+  MIB_CTRL:
+    block: mib
+    title: Counter control
+    desc: |
+      Clears port counters.
+    inferred: true
+    fields:
+      CLEAN: {desc: "Write 1 to clear the selected counters.", inferred: true}
+      PORT: {desc: "Port whose counters are cleared when ONE_PORT is set.", inferred: true}
+      ONE_PORT: {desc: "Clear the counters of the port in PORT.", inferred: true}
+      ALL_PORT: {desc: "Clear the counters of every port.", inferred: true}
+  MIB_DATA:
+    block: mib
+    title: Port counter block
+    access: ro
+    desc: |
+      Start of the counter block of one port. Each counter sits at a fixed byte offset inside
+      the block, listed in :ref:`Port counters <mib-counters>`.
+    add_fields:
+      COUNT: {lsb: 0, width: 32, desc: "Counter value, or the low 32 bits of a 64-bit counter.", inferred: false}
+
+  LED_CTRL:
+    block: led
+    title: LED global control
+    desc: |
+      Chooses between parallel and serial LED outputs and sets the loop detection blink rate.
+    inferred: true
+    fields:
+      UNK: {desc: "Function not known.", inferred: true}
+      LOOPDETECT_BLINK: {desc: "Blink cycle used to signal a detected loop: 512 ms times the field value.", inferred: true}
+      PORT_NUM: {desc: "Number of ports shifted out in serial mode.", inferred: true}
+      MODE:
+        desc: "LED output mode."
+        inferred: true
+        values: {PARALLEL: "One pin per LED", SERIAL: "LED states shifted out on a clock and data pin pair"}
+  LED0_PORT:
+    block: led
+    title: LED group 0 behaviour
+    desc: |
+      Conditions that light or blink LED 0 of one port. Each set bit adds one condition; the LED
+      shows the combination. :ref:`LEDs <leds>` explains the three LED groups.
+    fields:
+      ACT: {desc: "All behaviour bits of this LED as one mask.", group: true}
+      ACT_LINK_TRY_DIS: {desc: "Function not known; only present for LED 0.", inferred: true}
+      ACT_COLLISION_BLINK_INDI: {desc: "Function not known; only present for LED 0.", inferred: true}
+      <<: &ledact
+        ACT_EEE_BLINK: {desc: "Blink while the port is in low power idle.", inferred: true}
+        ACT_LOOPDETECT_BLINK: {desc: "Blink when a loop is detected on the port.", inferred: true}
+        ACT_ACTIVE_BLINK: {desc: "Blink on any activity.", inferred: true}
+        ACT_DUPLEX_FULL: {desc: "On while the link is up in full duplex."}
+        ACT_DUPLEX_HALF: {desc: "On while the link is up in half duplex."}
+        ACT_TX_BLINK: {desc: "Blink while frames are sent."}
+        ACT_RX_BLINK: {desc: "Blink while frames are received."}
+        ACT_TX: {desc: "On while frames are sent.", inferred: true}
+        ACT_RX: {desc: "On while frames are received.", inferred: true}
+        ACT_1000M: {desc: "On while the link is up at 1000 Mbit/s."}
+        ACT_100M: {desc: "On while the link is up at 100 Mbit/s."}
+        ACT_10M: {desc: "On while the link is up at 10 Mbit/s."}
+        ACT_COLLISION_BLINK: {desc: "Blink on collisions."}
+        ACT_1000M_BLINK: {desc: "Blink on activity at 1000 Mbit/s.", inferred: true}
+        ACT_100M_BLINK: {desc: "Blink on activity at 100 Mbit/s.", inferred: true}
+        ACT_10M_BLINK: {desc: "Blink on activity at 10 Mbit/s.", inferred: true}
+  LED1_PORT:
+    block: led
+    title: LED group 1 behaviour and blink timing
+    desc: |
+      Conditions that light or blink LED 1 of one port, plus the blink timing shared by all
+      three LEDs of the port.
+    fields:
+      OTHER_BLINK: {desc: "Alternative blink cycle, 512 ms shifted right by the field value. An LED uses it when its :field:`LED2_PORT.FORCE_BLINK` field is 3."}
+      EEE_BLINK: {desc: "Blink cycle for the low power idle indication, 512 ms shifted right by the field value.", inferred: true}
+      BLINK_DUTY_COMP: {desc: "Swaps the on and off parts of the blink cycle, so that BLINK_DUTY gives the off fraction."}
+      BLINK_DUTY:
+        desc: "Fraction of the blink cycle the LED is on."
+        values: {'1_2': "On for 1/2 of the cycle", '2_3': "On for 2/3 of the cycle", '3_4': "On for 3/4 of the cycle", '5_6': "On for 5/6 of the cycle"}
+      ACT: {desc: "All behaviour bits of this LED as one mask.", group: true}
+      <<: *ledact
+  LED2_PORT:
+    block: led
+    title: LED group 2 behaviour and forced states
+    desc: |
+      Conditions that light or blink LED 2 of one port, plus the forced state of all three LEDs
+      of the port.
+    fields:
+      FORCEn:
+        desc: "Forced state of LED n of this port."
+        values: {DONTCARE: "Not forced; the LED follows its behaviour bits", BLINK: "Blink at the rate in FORCE_BLINK", "ON": "On", "OFF": "Off"}
+      FORCE_BLINKn:
+        desc: "Blink cycle of LED n when it is forced to blink: 512 ms shifted left by the field value."
+        values: {OTHER: "Use the cycle in :field:`LED1_PORT.OTHER_BLINK`"}
+      ACT: {desc: "All behaviour bits of this LED as one mask.", group: true}
+      <<: *ledact
+  LED_SER_CTRL:
+    block: led
+    title: Serial LED control
+    desc: |
+      Settings of the serial LED output.
+    inferred: true
+    fields:
+      UNK: {desc: "Function not known; possibly a delay.", inferred: true}
+      ACTIVE_LOW: {desc: "Serial LED data is active low.", inferred: true}
+      GRP_NUM: {desc: "Number of LED groups shifted out per port, minus one.", inferred: true}
+  LED_SER_MAP:
+    block: led
+    title: Serial LED position map
+    desc: |
+      Chooses which LED is shifted out at each position of the serial stream. One register
+      holds five positions; index ``half`` is 0 for ports 0 to 4 and 1 for ports 5 to 9.
+    inferred: true
+    fields:
+      DSTn_PORT: {desc: "Port whose LED is shown at position n.", inferred: true}
+      DSTn_LED: {desc: "LED group shown at position n.", inferred: true}
+  LED_PAR_PORTS:
+    block: led
+    title: Parallel LED port enable
+    desc: |
+      Parallel LED outputs in use. The bit layout is not known.
+    inferred: true
+    add_fields:
+      VALUE: {lsb: 0, width: 32, desc: "Layout not known.", inferred: true}
+  LED_PAR_INV:
+    block: led
+    title: Parallel LED polarity
+    desc: |
+      Inverts individual parallel LED outputs, for LEDs wired active low.
+    fields:
+      INVnm: {desc: "Inverts the output of LED group ``grp`` of port ``port``; the bit number is 10 × grp + port."}
+  LED_PAR_MAP:
+    block: led
+    title: Parallel LED pin map
+    desc: |
+      Chooses which LED each parallel LED pin of one port position shows.
+    inferred: true
+    fields:
+      DSTn_PORT: {desc: "Port whose LED is shown on pin group n.", inferred: true}
+      DSTn_LED: {desc: "LED group shown on pin group n.", inferred: true}
+
+  PVID_SEL:
+    block: vlan
+    title: Lookup VLAN select
+    desc: |
+      Chooses, per port, which VLAN tag selects the VLAN table entry.
+    inferred: true
+    fields:
+      SVID_PORTn: {desc: "Port n looks frames up by the service VLAN ID in place of the customer VLAN ID.", inferred: true}
+  PORT_EGR:
+    block: vlan
+    title: Port egress tag protocol select
+    desc: |
+      Chooses which :reg:`TPID_EGR` entry a port writes into the VLAN tags it adds on transmit.
+    inferred: true
+    fields:
+      TPID_CTAG: {desc: "Index of the :reg:`TPID_EGR` entry used for customer tags.", inferred: true}
+      TPID_STAG: {desc: "Index of the :reg:`TPID_EGR` entry used for service tags.", inferred: true}
+  TPID_EGR:
+    block: vlan
+    title: Egress tag protocol identifiers
+    desc: |
+      Four tag protocol identifier values a port can write into transmitted VLAN tags.
+    inferred: true
+    fields:
+      TPID: {desc: "Tag protocol identifier, for example 0x8100.", inferred: true}
+  TPID_IGR:
+    block: vlan
+    title: Ingress tag protocol identifiers
+    desc: |
+      Four tag protocol identifier values the parser can recognise as a VLAN tag.
+      :reg:`PORT_IGR_TPID` chooses which of them each port accepts.
+    fields:
+      TPID: {desc: "Tag protocol identifier, for example 0x8100.", inferred: true}
+  PORT_IGR_TPID:
+    block: vlan
+    title: Port ingress tag recognition
+    desc: |
+      Chooses which :reg:`TPID_IGR` entries one port treats as a customer tag and which as a
+      service tag. :ref:`VLAN-aware and VLAN-unaware ports <vlan-aware>` shows how this makes
+      a port ignore VLAN tags.
+    fields:
+      STAG: {desc: "Bit n set: :reg:`TPID_IGR` entry n marks a service tag on this port."}
+      CTAG: {desc: "Bit n set: :reg:`TPID_IGR` entry n marks a customer tag on this port."}
+  VLAN_IGR_FILTER:
+    block: vlan
+    title: Ingress VLAN filter
+    desc: |
+      Per-port ingress VLAN membership check.
+    fields:
+      PORTn_BYPASS_IGMP: {desc: "IGMP frames received on port n skip the ingress membership check.", inferred: true}
+      PORTn: {desc: "Port n drops received frames whose VLAN does not list the port as a member."}
+  VLAN_EGR_FILTER:
+    block: vlan
+    title: Egress VLAN filter
+    desc: |
+      Per-port egress VLAN membership check.
+    inferred: true
+    fields:
+      PORTn: {desc: "Port n does not send frames whose VLAN does not list the port as a member.", inferred: true}
+  VLAN_CTRL:
+    block: vlan
+    words: 2
+    title: VLAN table entry
+    desc: |
+      One 64-bit entry per VLAN ID. Write the low word, then the high word; the entry takes
+      effect when the high word is written. :ref:`VLAN table <vlan-table>` shows how to build
+      an entry.
+    fields:
+      UNTAG_PORTS: {desc: "Ports that send frames of this VLAN without a tag, one bit per port."}
+      STP_ID: {desc: "Spanning tree instance of this VLAN; selects the :reg:`STP` register."}
+      SVLAN_EN: {desc: "Meaning uncertain; no public driver sets it. The Linux driver names the bit as a service VLAN enable. The vendor SDK names it SVL_EN, which suggests shared VLAN learning, that is, learning by FID in place of the VLAN ID.", inferred: true}
+      FID: {desc: "Filtering ID for address learning and lookup. No public driver writes it; the Linux driver leaves it 0 and addresses the forwarding database by VLAN ID, so when the field takes effect is not known (see SVLAN_EN). The field crosses the boundary between the two words.", inferred: true}
+      LEARN_DIS: {desc: "Source addresses of frames in this VLAN are not learned."}
+      PRIO_EN: {desc: "Frames of this VLAN get the priority in PRIO.", inferred: true}
+      PRIO: {desc: "VLAN priority, a source for :reg:`PORT_PRIO_ORD`.", inferred: true}
+      PORTS: {desc: "Member ports, one bit per port."}
+      BYPASS_1X_AC: {desc: "Frames of this VLAN skip IEEE 802.1X access control.", inferred: true}
+      METER_EN: {desc: "Frames of this VLAN are rate limited by the meter in METER_ID.", inferred: true}
+      METER_ID: {desc: "Meter number, an index of :reg:`METER_CTRL`.", inferred: true}
+  PORT_VLAN_CTRL:
+    block: vlan
+    title: Port default VLAN
+    desc: |
+      VLAN IDs and priorities given to frames that arrive on a port without the matching tag.
+    fields:
+      SVLAN_PRIO_EN: {desc: "Use SVLAN_PRIO as the default service tag priority.", inferred: true}
+      CVLAN_PRIO_EN: {desc: "Use CVLAN_PRIO as the default customer tag priority.", inferred: true}
+      SVID: {desc: "Default service VLAN ID."}
+      CVID: {desc: "Default customer VLAN ID (the port VLAN ID)."}
+      SVLAN_PRIO: {desc: "Default service tag priority.", inferred: true}
+      CVLAN_PRIO: {desc: "Default customer tag priority.", inferred: true}
+  PORT_VLAN_CTRL1:
+    block: vlan
+    title: Port acceptable frame types
+    desc: |
+      Drops tagged or untagged frames on receive, per tag kind.
+    fields:
+      VLAN_RANGE_EN: {desc: "Enables VLAN range matching with the profile in VLAN_RANGE_PROFILE_ID.", inferred: true}
+      VLAN_RANGE_PROFILE_ID: {desc: "VLAN range profile number.", inferred: true}
+      SVLAN_DROP_TAGGED: {desc: "Drop received frames that carry a service tag.", inferred: true}
+      SVLAN_DROP_UNTAGGED: {desc: "Drop received frames that carry no service tag.", inferred: true}
+      CVLAN_DROP_TAGGED: {desc: "Drop received frames that carry a customer tag."}
+      CVLAN_DROP_UNTAGGED: {desc: "Drop received frames that carry no customer tag."}
+
+  IPM_DSCP:
+    block: qos
+    title: DSCP to internal priority map
+    desc: |
+      Internal priority and colour for each of the 64 IP DSCP values.
+    fields: &ipm
+      PRIO: {desc: "Internal priority, 0 to 7."}
+      COLOR:
+        desc: "Drop precedence colour used by the meters."
+        values: {GREEN: "Green, lowest drop precedence", YELLOW: "Yellow", RED: "Red, highest drop precedence"}
+  IPM_PCP:
+    block: qos
+    title: VLAN priority to internal priority map
+    desc: |
+      Internal priority and colour for each VLAN tag priority. There are two maps (index
+      ``map``); each has one entry per drop eligible bit value (``dei``) and priority code
+      point (``pcp``). :reg:`PORT_QOS` picks the map a port uses.
+    fields: *ipm
+  PORT_QOS:
+    block: qos
+    title: Port priority
+    desc: |
+      Port default priority and the choice of :reg:`IPM_PCP` map.
+    fields:
+      CVLAN_PRIO_MAP_ID: {desc: "Index ``map`` of the :reg:`IPM_PCP` map used for customer tags.", inferred: true}
+      SVLAN_PRIO_MAP_ID: {desc: "Index ``map`` of the :reg:`IPM_PCP` map used for service tags.", inferred: true}
+      PRIO: {desc: "Port default priority, 0 to 7."}
+      PRIO_EN: {desc: "Enables the port default priority."}
+  PORT_PRIO_ORD:
+    block: qos
+    title: Port priority source order
+    desc: |
+      Ranks the sources of a frame's internal priority on one port. Each source has a 3-bit
+      weight; the source with the highest non-zero weight that applies to the frame wins.
+      :ref:`Priority sources <qos-sources>` lists the source numbers.
+    fields:
+      APPm: {desc: "Weight of priority source ``app``. 0 disables the source, except for the port default priority which is enabled by :field:`PORT_QOS.PRIO_EN`."}
+
+  PORT_ISOLATION:
+    block: l2
+    title: Port isolation
+    desc: |
+      Destination ports that frames received on one port must not be sent to. This is the
+      mechanism that separates ports into groups; see :ref:`Port isolation <forwarding-isolation>`.
+    fields:
+      BLOCKn: {desc: "Frames received on this port are never sent to port n."}
+  STP:
+    block: l2
+    title: Spanning tree port states
+    desc: |
+      Port states of one spanning tree instance, two bits per port. A VLAN chooses its
+      instance with :field:`VLAN_CTRL.STP_ID`.
+    fields:
+      PORTn:
+        desc: "State of port n in this instance."
+        values: {DISABLED: "Port neither forwards nor learns", LEARNING: "Port learns addresses but does not forward", BLOCKING: "Port neither forwards nor learns; it still receives bridge protocol frames", FORWARD: "Port forwards and learns"}
+  PORT_LEARN:
+    block: l2
+    title: Port address learning
+    desc: |
+      Controls learning of source addresses on one port.
+    fields:
+      VID_LEARN_MULTI_EN: {desc: "Function not known.", inferred: true}
+      VID_LEARN_MODE: {desc: "Function not known.", inferred: true}
+      VID_LEARN_EN: {desc: "Function not known.", inferred: true}
+      SUSPEND_COPY_EN: {desc: "Copy frames with a not yet learned source address to the CPU.", inferred: true}
+      SUSPEND_DROP_EN: {desc: "Drop frames with a not yet learned source address.", inferred: true}
+      DIS: {desc: "Disables address learning on the port."}
+      LIMIT_EN: {desc: "Enables the limit in LIMIT.", inferred: true}
+      LIMIT: {desc: "Largest number of addresses learned on the port. The vendor SDK lists this field as 13 bits wide, at bits 15 to 3.", inferred: true}
+      DROP_ON_EXCEEDED: {desc: "Drop frames with a new source address once the limit is reached.", inferred: true}
+      MODE:
+        desc: "Who learns addresses."
+        inferred: true
+        values: {AUTO: "The switch learns by itself", AUTO_AND_COPY: "The switch learns and copies the frame to the CPU", CPU_CONTROL: "Only the CPU adds entries"}
+  AGEING:
+    block: l2
+    title: Address ageing interval
+    desc: |
+      Time base of forwarding database ageing.
+    fields:
+      INTERVAL: {desc: "Ageing time in units of 5 seconds.", unit: 5 s}
+
+  FDB_IN0:
+    block: fdb
+    title: Forwarding database command data 0
+    desc: |
+      First input word of a forwarding database command; see
+      :ref:`Forwarding database <fdb>`.
+    fields: &fdb0
+      ADDR_HI4: {desc: "MAC address bytes 0 to 3, byte 0 in bits 31 to 24."}
+  FDB_IN1:
+    block: fdb
+    title: Forwarding database command data 1
+    desc: Second input word of a forwarding database command.
+    fields: &fdb1
+      EGR_PRIO_EN: {desc: "Apply PRIO to frames sent to this address.", inferred: true}
+      STATUS:
+        desc: "State of the entry."
+        values: {INVALID: "Entry is empty", MIN_TIME: "Dynamic entry about to age out", MOVE_AGING_MAX_TIME: "Dynamic entry that moved to another port", MAX_TIME: "Dynamic entry just learned or refreshed", PENDING: "Entry waiting for the CPU to confirm it", STATIC: "Static entry; never ages out"}
+      FID: {desc: "Filtering ID of the entry. The Linux driver writes the VLAN ID here."}
+      ADDR_LO2: {desc: "MAC address bytes 4 and 5, byte 4 in bits 15 to 8."}
+  FDB_IN2:
+    block: fdb
+    title: Forwarding database command data 2
+    desc: Third input word of a forwarding database command.
+    fields: &fdb2
+      MOVE_AGING_STATUS: {desc: "Ageing state of an entry that moved between ports.", inferred: true}
+      IGR_DROP: {desc: "Drop frames received from this address.", inferred: true}
+      EGR_PORTS: {desc: "Ports that frames to this address are sent to, one bit per port."}
+      EGR_DROP: {desc: "Drop frames sent to this address.", inferred: true}
+      COPY_TO_CPU: {desc: "Also copy frames to this address to the CPU.", inferred: true}
+      IGR_PRIO_EN: {desc: "Apply PRIO to frames received from this address.", inferred: true}
+      PRIO: {desc: "Priority given by this entry, a source for :reg:`PORT_PRIO_ORD`.", inferred: true}
+      NEW_VID: {desc: "Replacement VLAN ID for frames matching the entry.", inferred: true}
+  FDB_OP:
+    block: fdb
+    title: Forwarding database command
+    desc: |
+      Selects and starts a forwarding database command. Write the input words first, then this
+      register with START set, then wait for :field:`FDB_RESULT.DONE`.
+    fields:
+      INDEX: {desc: "Entry index, 0 to 4095, used when MODE_INDEX is set."}
+      MODE_INDEX: {desc: "0 addresses the entry by MAC address and filtering ID; 1 addresses it by INDEX."}
+      FLUSH_MCAST: {desc: "A flush removes multicast entries in place of unicast entries.", inferred: true}
+      FLUSH:
+        desc: "Scope of a flush."
+        values: {ALL: "Every entry", PORT: "Entries of the ports in :field:`FDB_IN2.EGR_PORTS`", PORT_VID: "Entries of those ports with the filtering ID in :field:`FDB_IN1.FID`", VID: "Entries with the filtering ID in :field:`FDB_IN1.FID`"}
+      FLUSH_STATIC: {desc: "A flush also removes static entries."}
+      NEXT_TYPE:
+        desc: "Which entries GET_NEXT walks."
+        values: {UCAST_PORT: "Unicast entries of one port", UCAST_VID: "Unicast entries of one filtering ID", UCAST: "All unicast entries", MCAST: "Multicast entries"}
+      OP:
+        desc: "Command."
+        values: {ADD: "Add or replace an entry", DEL: "Delete an entry", GET_ONE: "Read one entry", GET_NEXT: "Read the next used entry after INDEX", FLUSH: "Delete many entries"}
+      START: {desc: "Write 1 to start the command."}
+  FDB_RESULT:
+    block: fdb
+    title: Forwarding database command result
+    access: ro
+    desc: |
+      Completion flag and outcome of the last :reg:`FDB_OP` command.
+    fields:
+      DONE: {desc: "1 when the command has finished."}
+      NOTFOUND: {desc: "No entry matched."}
+      OVERWRITED: {desc: "An existing entry was replaced to make room.", inferred: true}
+      INDEX: {desc: "Index of the entry the command acted on."}
+  FDB_OUT0:
+    block: fdb
+    title: Forwarding database result data 0
+    access: ro
+    desc: First word of the entry read by a GET_ONE or GET_NEXT command.
+    fields: *fdb0
+  FDB_OUT1:
+    block: fdb
+    title: Forwarding database result data 1
+    access: ro
+    desc: Second word of the entry read by a GET_ONE or GET_NEXT command.
+    fields: *fdb1
+  FDB_OUT2:
+    block: fdb
+    title: Forwarding database result data 2
+    access: ro
+    desc: Third word of the entry read by a GET_ONE or GET_NEXT command.
+    fields: *fdb2
+  FDB_HW_FLUSH:
+    block: fdb
+    title: Automatic flush
+    desc: |
+      Lets the switch remove learned addresses on its own.
+    inferred: true
+    fields:
+      ON_LINKDOWN: {desc: "Remove the dynamic entries of a port when its link goes down.", inferred: true}
+
+  FILTER_UNK_UCAST:
+    block: flood
+    title: Unknown unicast flood filter
+    desc: |
+      Ports that do not receive flooded frames with an unknown unicast destination.
+    fields: &filter
+      PORTS: {desc: "Bit n set: frames of this class are not flooded to port n."}
+  FILTER_UNK_MCAST:
+    block: flood
+    title: Unknown multicast flood filter
+    desc: Ports that do not receive flooded frames with an unknown multicast destination.
+    fields: *filter
+  FILTER_MCAST:
+    block: flood
+    title: Multicast flood filter
+    desc: Ports that do not receive multicast frames.
+    inferred: true
+    fields: *filter
+  FILTER_BCAST:
+    block: flood
+    title: Broadcast flood filter
+    desc: Ports that do not receive broadcast frames.
+    inferred: true
+    fields: *filter
+  ACT_UNK_UCAST:
+    block: flood
+    title: Unknown unicast action
+    desc: |
+      What the switch does with a frame whose unicast destination is not in the forwarding
+      database, chosen per receiving port.
+    fields:
+      ACTn: &actunk
+        desc: "Action for frames received on port n."
+        values: {FORWARD: "Flood the frame", TRAP: "Send the frame to the CPU only", DROP: "Discard the frame", COPY: "Flood the frame and copy it to the CPU. The copy carries no usable source port; do not use"}
+  ACT_UNK_MCAST:
+    block: flood
+    title: Unknown multicast action
+    desc: |
+      What the switch does with a frame whose multicast destination is not in the forwarding
+      database, chosen per receiving port.
+    fields:
+      BYPASS_DROP_RMA: {desc: "Reserved multicast addresses are exempt from the DROP action.", inferred: true}
+      BYPASS_DROP_IGMP: {desc: "IGMP frames are exempt from the DROP action.", inferred: true}
+      ACTn: *actunk
+
+  LAG_GROUP:
+    block: lag
+    title: Link aggregation group
+    desc: |
+      Member ports and member count of one link aggregation group.
+    fields:
+      PORTS: {desc: "Member ports, one bit per port."}
+      MEMBER_NUM: {desc: "Number of valid :reg:`LAG_MEMBER` slots of the group."}
+  LAG_MEMBER:
+    block: lag
+    title: Link aggregation member slot
+    desc: |
+      Port in one of the four member slots of a group. The hash result picks a slot.
+    fields:
+      PORT: {desc: "Port number in this slot."}
+  LAG_HASH:
+    block: lag
+    title: Link aggregation hash inputs
+    desc: |
+      Frame fields that feed the hash which spreads traffic over the members of a group.
+    fields:
+      L4_SPORT: {desc: "Include the layer 4 source port."}
+      L4_DPORT: {desc: "Include the layer 4 destination port."}
+      IP_PROTO: {desc: "Include the IP protocol number."}
+      IP_SRC: {desc: "Include the IP source address."}
+      IP_DST: {desc: "Include the IP destination address."}
+      MAC_SA: {desc: "Include the source MAC address."}
+      MAC_DA: {desc: "Include the destination MAC address."}
+      SRC_PORT: {desc: "Include the receiving port."}
+
+  ACL_PERMIT_UNMATCH:
+    block: acl
+    title: ACL unmatched frame permit
+    desc: |
+      Ports on which a frame that matches no ACL rule is still forwarded.
+    fields:
+      PORTS: {desc: "Bit n set: frames received on port n that match no rule are forwarded."}
+  ACL_PORT:
+    block: acl
+    title: ACL port enable
+    desc: |
+      Ports whose received frames are checked against the access control list.
+    fields:
+      PORTS: {desc: "Bit n set: the access control list is applied to port n."}
+  ACL_BLK_CMD:
+    block: acl
+    title: ACL block command
+    desc: |
+      Opens one ACL block for modification and commits it; see
+      :ref:`Writing a rule <acl-write>`.
+    fields:
+      BLKID: {desc: "Block number, 0 to 47."}
+      MODIFY: {desc: "1 opens the block for writing; writing 0 commits the changes."}
+  ACL_BLK_KEEP:
+    block: acl
+    title: ACL block keep mask
+    desc: |
+      While a block is open, marks the key slots that the commit must leave unchanged.
+    fields:
+      GRPIDn: {desc: "Group number for slot n during the commit.", inferred: true}
+      KEEPn: {desc: "Slot n keeps its current key and mask."}
+  ACL_ENTRY:
+    block: acl
+    title: ACL block slot enables
+    desc: |
+      Enables the eight key slots of one block and groups slots into rules. Slots with the
+      same group number must all match for the rule to hit; the group number is also the slot
+      whose :reg:`ACL_ACT` entry holds the action.
+    fields:
+      GRPIDm: {desc: "Group number of slot m: the slot number that names the rule."}
+      ENm: {desc: "Slot m is in use."}
+  ACL_KEY:
+    block: acl
+    words: 2
+    title: ACL key slot
+    desc: |
+      Value half of one key slot. Index ``blk`` is the block and ``bin`` the slot in the
+      block. The layout of bits 35 to 0 and of the range flags depends on
+      :field:`ACL_KEY.TYPE`.
+    fields: &aclfields
+      ORD: {desc: "Order of the rule; when several rules match, the lowest value wins."}
+      SPORTS: {desc: "Receiving ports the rule applies to, one bit per port."}
+      REVERSE: {desc: "The slot matches when the frame does not match the key."}
+      TYPE: {desc: "Key type; selects the layout of the rest of the slot.", enum: acl_type}
+      L2_TYPE: {desc: "Frame encapsulation.", enum: l2_type}
+      L3_TYPE: {desc: "Layer 3 protocol class.", enum: l3_type}
+      L4_TYPE: {desc: "Layer 4 protocol class.", enum: l4_type}
+      L4/TYPE: {desc: "Layer 4 protocol class.", enum: l4_type}
+      MAC_xA0: {desc: "MAC address bytes 0 to 3, byte 0 in bits 31 to 24."}
+      MAC_DA1: {desc: "Destination MAC address bytes 4 and 5."}
+      MAC_SA1: {desc: "Source MAC address bytes 4 and 5."}
+      SVID_RANGE_EN: {desc: "Match the service VLAN ID as a range: the key holds the lowest and the mask the highest value."}
+      CVID_RANGE_EN: {desc: "Match the customer VLAN ID as a range: the key holds the lowest and the mask the highest value."}
+      CDEI: {desc: "Drop eligible bit of the customer tag."}
+      CPRI: {desc: "Priority of the customer tag."}
+      CTAG_FMT: {desc: "Customer tag format of the frame; the codes are not documented.", inferred: true}
+      SDEI: {desc: "Drop eligible bit of the service tag."}
+      SPRI: {desc: "Priority of the service tag."}
+      STAG_FMT: {desc: "Service tag format of the frame; the codes are not documented.", inferred: true}
+      SVID: {desc: "Service VLAN ID."}
+      CVID: {desc: "Customer VLAN ID."}
+      ADDR_RANGE_EN: {desc: "Match the address as a range: the key holds the lowest and the mask the highest value."}
+      FRAG: {desc: "The packet is an IP fragment."}
+      ADDR: {desc: "IPv4 address, first byte in bits 31 to 24."}
+      ADDRx: {desc: "32 bits of the IPv6 address, most significant byte in bits 31 to 24."}
+      IP_OPTION: {desc: "The packet has IP options or extension headers."}
+      FIRST_FRAG: {desc: "The packet is the first fragment."}
+      PPPOE_FLAG: {desc: "The frame carries PPPoE."}
+      TCP_FLAGS: {desc: "TCP flags byte."}
+      IP_PROTO: {desc: "IP protocol number."}
+      TOS: {desc: "IPv4 type of service or IPv6 traffic class byte."}
+      DPORT_RANGE_EN: {desc: "Match the destination port as a range: the key holds the lowest and the mask the highest value."}
+      SPORT_RANGE_EN: {desc: "Match the source port as a range: the key holds the lowest and the mask the highest value."}
+      DPORT: {desc: "Layer 4 destination port."}
+      SPORT: {desc: "Layer 4 source port."}
+      IS_IGMP: {desc: "The frame is an IGMP message."}
+      UDF0: {desc: "Two bytes from the even-numbered user-defined field window of the pair."}
+      UDF1: {desc: "Two bytes from the odd-numbered user-defined field window of the pair."}
+      ETHERTYPE_RANGE_EN: {desc: "Match the EtherType as a range: the key holds the lowest and the mask the highest value."}
+      ETHERTYPE: {desc: "EtherType."}
+  ACL_MASK:
+    block: acl
+    words: 2
+    title: ACL mask slot
+    desc: |
+      Mask half of one key slot. A set bit means the same bit of :reg:`ACL_KEY` must match;
+      the layouts are those of the key. For a field matched as a range the mask holds the
+      highest value.
+    fields: *aclfields
+  ACL_ACT:
+    block: acl
+    words: 3
+    title: ACL action entry
+    desc: |
+      96-bit action of one rule. The entry index is 8 × block + slot of the rule's group.
+      Write the three words in rising address order.
+    fields:
+      STAG:
+        desc: "Service tag handling on transmit."
+        inferred: true
+        values: &tagact {DONTCARE: "Leave to the normal VLAN rules", UNTAG: "Send without the tag", TAG: "Send with the tag", KEEP: "Send as received"}
+      CTAG:
+        desc: "Customer tag handling on transmit."
+        inferred: true
+        values: *tagact
+      FWD:
+        desc: "Forwarding action, used when FWD_EN is set."
+        values: {FWD: "Forward normally", COPY: "Forward and also send to FWD_REDIR_DPORTS", REDIR: "Send only to FWD_REDIR_DPORTS", TRAP: "Send only to the CPU"}
+      FWD_REDIR_DPORTS: {desc: "Destination ports for COPY and REDIR, one bit per port. REDIR with no port set drops the frame."}
+      FWD_EN: {desc: "Enables the forwarding action."}
+      SDEI: {desc: "New drop eligible bit of the service tag."}
+      SDEI_REPLACE: {desc: "Replace the drop eligible bit of the service tag."}
+      SPRI: {desc: "New priority of the service tag."}
+      SPRI_REPLACE: {desc: "Replace the priority of the service tag."}
+      SVID: {desc: "New service VLAN ID. The field crosses the boundary between words 1 and 2."}
+      SVID_REPLACE: {desc: "Replace the service VLAN ID."}
+      CDEI: {desc: "New drop eligible bit of the customer tag."}
+      CDEI_REPLACE: {desc: "Replace the drop eligible bit of the customer tag."}
+      CPRI: {desc: "New priority of the customer tag."}
+      CPRI_REPLACE: {desc: "Replace the priority of the customer tag."}
+      CVID: {desc: "New customer VLAN ID."}
+      CVID_REPLACE: {desc: "Replace the customer VLAN ID."}
+      PRIO: {desc: "Internal priority given to the frame, a source for :reg:`PORT_PRIO_ORD`."}
+      PRIO_EN: {desc: "Enables PRIO."}
+      COLOR:
+        desc: "Colour given to the frame."
+        inferred: true
+        values: {GREEN: "Green", YELLOW: "Yellow", RED: "Red"}
+      COLOR_EN: {desc: "Enables COLOR.", inferred: true}
+      DSCP: {desc: "New IP DSCP value.", inferred: true}
+      DSCP_REPLACE: {desc: "Replace the IP DSCP value.", inferred: true}
+      METER_ID: {desc: "Meter that rate limits matching frames, an index of :reg:`METER_CTRL`."}
+      METER_EN: {desc: "Enables METER_ID."}
+      MIRROR_EN: {desc: "Copy matching frames to the monitor port in :field:`MIRROR.PORT`.", inferred: true}
+      FLOWSTAT_EN: {desc: "Count matching frames in the flow counter FLOWSTAT_ID.", inferred: true}
+      FLOWSTAT_ID: {desc: "Flow counter number.", inferred: true}
+      GPIO_EN: {desc: "Signal a match on the pin in GPIO_PIN.", inferred: true}
+      GPIO_PIN: {desc: "Pin number.", inferred: true}
+      INTR_EN: {desc: "Raise an interrupt on a match.", inferred: true}
+  UDF_CTRL:
+    block: acl
+    title: User-defined field window
+    desc: |
+      Position of one two-byte window that ACL keys of type UDF can match. Key type UDFk
+      matches windows 2k and 2k + 1.
+    fields:
+      UDF_TYPE: {desc: "Header the offset is counted from.", enum: udf_type}
+      UDF_OFFSET: {desc: "Offset of the window from that header, in units of two bytes.", inferred: true}
+
+  PORT_RATE:
+    block: meter
+    title: Port rate accounting
+    desc: |
+      Per-frame overhead that rate limiting adds to the frame length.
+    inferred: true
+    fields:
+      GAP_VALUE: {desc: "Bytes added per frame for preamble and inter-frame gap when a meter has BYTE_MODE_INCLUDE_GAP set.", reset: 20, unit: bytes, inferred: true}
+  METER_SLOT:
+    block: meter
+    title: Meter time slot
+    desc: |
+      Period at which every meter adds tokens to its buckets.
+    fields:
+      SLOT: {desc: "Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed value is 80."}
+  PORT_METER:
+    block: meter
+    title: Port ingress meter
+    desc: |
+      Attaches one of the per-port meters to the receive side of a port.
+    fields:
+      EN: {desc: "Enables ingress rate limiting on the port."}
+      ID: {desc: "Port meter number n; the meter is entry 64 + n of :reg:`METER_CTRL`."}
+  METER_CTRL:
+    block: meter
+    words: 3
+    title: Meter configuration
+    desc: |
+      96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are
+      general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters.
+      :ref:`Token arithmetic <rate-tokens>` gives the conversion from bit rates.
+    fields:
+      METER_EN: {desc: "Enables the meter."}
+      TOKEN_OVERFLOW_EN: {desc: "Tokens that overflow the committed bucket spill into the excess bucket (RFC 4115 coupling)."}
+      DROP:
+        desc: "Colours that are dropped."
+        values: {GYR: "Drop green, yellow and red frames", YR: "Drop yellow and red frames", R: "Drop red frames", NONE: "Drop nothing; only colour the frame"}
+      COLOR_BLIND: {desc: "Ignore the colour the frame already has.", inferred: true}
+      UNIT: {desc: "Token scale: every token value is multiplied by 4 to the power of UNIT."}
+      BYTE_MODE_INCLUDE_GAP: {desc: "In byte mode, add :field:`PORT_RATE.GAP_VALUE` bytes to each frame.", inferred: true}
+      PKT_MODE: {desc: "0 meters bytes; 1 meters packets."}
+      RFC2698: {desc: "0 selects the RFC 4115 algorithm; 1 selects RFC 2698.", inferred: true}
+      CBS: {desc: "Committed burst size in tokens. The field crosses the boundary between words 1 and 2."}
+      CIR: {desc: "Committed information rate in tokens per time slot."}
+      EBS: {desc: "Excess burst size in tokens. The field crosses the boundary between words 0 and 1."}
+      EIR: {desc: "Excess information rate in tokens per time slot."}
+  METER_STAT:
+    block: meter
+    words: 2
+    access: ro
+    title: Meter token state
+    desc: |
+      Current token counts of one meter. The bit layout is not known.
+    inferred: true
+    add_fields:
+      VALUE: {lsb: 0, width: 64, desc: "Layout not known.", inferred: true}
+
+  PORT_SHAPE_SLOT:
+    block: shape
+    title: Shaper time slot
+    desc: |
+      Period at which every port shaper adds tokens to its bucket.
+    fields:
+      SLOT: {desc: "Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed value is 80."}
+  PORT_SHAPE_CTRL:
+    block: shape
+    words: 2
+    title: Port egress shaper
+    desc: |
+      64-bit configuration of the single token bucket that limits what one port sends.
+      :ref:`Token arithmetic <rate-tokens>` gives the conversion from bit rates.
+    fields:
+      EN: {desc: "Enables the shaper."}
+      PKT_MODE: {desc: "0 shapes bytes; 1 shapes packets."}
+      UNIT: {desc: "Token scale: every token value is multiplied by 4 to the power of UNIT."}
+      CBS: {desc: "Burst size in tokens."}
+      CIR: {desc: "Rate in tokens per time slot."}
+  PORT_SHAPE_STAT:
+    block: shape
+    access: ro
+    title: Port shaper token state
+    desc: |
+      Current token count of one port shaper. The bit layout is not known.
+    inferred: true
+    add_fields:
+      VALUE: {lsb: 0, width: 32, desc: "Layout not known.", inferred: true}
+
+  MIRROR:
+    block: mirror
+    title: Port mirroring
+    desc: |
+      Source ports and the single monitor port of port mirroring.
+    fields:
+      IGR_PORTS: {desc: "Ports whose received frames are copied to the monitor port, one bit per port."}
+      EGR_PORTS: {desc: "Ports whose sent frames are copied to the monitor port, one bit per port."}
+      PORT: {desc: "Monitor port number."}

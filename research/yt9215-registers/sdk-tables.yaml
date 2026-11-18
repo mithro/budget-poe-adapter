@@ -1,0 +1,5437 @@
+# Vendor SDK table list. Written by tools/extract.py.
+schema: 1
+source:
+  repo: https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk
+  commit: d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e
+  index: switch_sdk/core/fal/tiger/fal_tiger_index.c
+  struct: switch_sdk/core/fal/tiger/fal_tiger_struct.c
+  modules: switch_sdk/core/fal/tiger/fal_tiger_mem.h
+modules:
+- name: SWITCH_CORE_GLOBAL
+  base: 0x80000
+- name: PTX
+  base: 0x100000
+- name: IPE_L2
+  base: 0x180000
+- name: IPE_ACL
+  base: 0x200000
+- name: IPE_IPR
+  base: 0x210000
+- name: IPE_IM
+  base: 0x220000
+- name: IPE_IV
+  base: 0x230000
+- name: IPE_PTP_IPR
+  base: 0x2f0000
+- name: QM
+  base: 0x300000
+- name: TX_MAC
+  base: 0x320000
+- name: SCH
+  base: 0x340000
+tables:
+- name: GLOBAL_CTRL0
+  address: 0x80000
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 9
+  struct_line: 10
+  registers: [RST]
+  fields:
+  - name: CHIP_SW_RST
+    lsb: 1
+    width: 1
+    line: 11
+- name: GLOBAL_CTRL1
+  address: 0x80004
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 17
+  struct_line: 14
+  registers: [FUNC]
+  fields:
+  - name: METER_EN
+    lsb: 4
+    width: 1
+    line: 15
+  - name: AC_EN
+    lsb: 3
+    width: 1
+    line: 16
+  - name: ACL_EN
+    lsb: 2
+    width: 1
+    line: 17
+  - name: MIB_EN
+    lsb: 1
+    width: 1
+    line: 18
+  - name: INTERRUP_POLARITY
+    lsb: 0
+    width: 1
+    line: 19
+- name: EXT_CPU_PORT_CTRL
+  address: 0x8000c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 25
+  struct_line: 22
+  registers: [EXT_CPU_PORT]
+  fields:
+  - name: EXT_CPU_TAG_EN
+    lsb: 15
+    width: 1
+    line: 23
+  - name: EXT_CPU_PORT_EN
+    lsb: 14
+    width: 1
+    line: 24
+  - name: EXT_CPU_PORT_NUM
+    lsb: 0
+    width: 4
+    line: 25
+- name: CPU_TAG_TPID
+  address: 0x80010
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 33
+  struct_line: 28
+  registers: [CPU_TAG_TPID]
+  fields:
+  - name: TPID
+    lsb: 0
+    width: 16
+    line: 29
+- name: LOOK_UP_VLAN_SEL
+  address: 0x80014
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 41
+  struct_line: 32
+  registers: [PVID_SEL]
+  fields:
+  - name: LOOK_UP_VLAN_SEL
+    lsb: 0
+    width: 11
+    line: 33
+- name: INTR_MASK
+  address: 0x80040
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 49
+  struct_line: 36
+  registers: []
+  fields:
+  - name: OVER_TEMP_INRPT_STATUS
+    lsb: 28
+    width: 1
+    line: 37
+  - name: MDIO_TRANS_DONE_INT
+    lsb: 27
+    width: 1
+    line: 38
+  - name: ACL_HIT
+    lsb: 26
+    width: 1
+    line: 39
+  - name: DYING_GASP_INT_P
+    lsb: 25
+    width: 1
+    line: 40
+  - name: PKT_WOL_MAGIC_INT_P
+    lsb: 24
+    width: 1
+    line: 41
+  - name: QM_FLUSH_DONE_P
+    lsb: 23
+    width: 1
+    line: 42
+  - name: HW_INI_DONE
+    lsb: 22
+    width: 1
+    line: 43
+  - name: IGMP_LEARN_FULL
+    lsb: 21
+    width: 1
+    line: 44
+  - name: IGMP_DELETE
+    lsb: 20
+    width: 1
+    line: 45
+  - name: FDB_LEARN_CREATE
+    lsb: 19
+    width: 1
+    line: 46
+  - name: FDB_LEARN_MOVE
+    lsb: 18
+    width: 1
+    line: 47
+  - name: FDB_DELETE
+    lsb: 17
+    width: 1
+    line: 48
+  - name: FDB_LEARN_FULL
+    lsb: 16
+    width: 1
+    line: 49
+  - name: CPU_OP_DONE
+    lsb: 15
+    width: 1
+    line: 50
+  - name: ACL_ACT
+    lsb: 14
+    width: 1
+    line: 51
+  - name: BRIDGE_CONGESTION
+    lsb: 13
+    width: 1
+    line: 52
+  - name: LOOP_DETECT
+    lsb: 12
+    width: 1
+    line: 53
+  - name: EEPROM_LOAD_DONE
+    lsb: 11
+    width: 1
+    line: 54
+  - name: SG_INT1
+    lsb: 10
+    width: 1
+    line: 55
+  - name: SG_INT0
+    lsb: 9
+    width: 1
+    line: 56
+  - name: PHY_INT7
+    lsb: 8
+    width: 1
+    line: 57
+  - name: PHY_INT6
+    lsb: 7
+    width: 1
+    line: 58
+  - name: PHY_INT5
+    lsb: 6
+    width: 1
+    line: 59
+  - name: PHY_INT4
+    lsb: 5
+    width: 1
+    line: 60
+  - name: PHY_INT3
+    lsb: 4
+    width: 1
+    line: 61
+  - name: PHY_INT2
+    lsb: 3
+    width: 1
+    line: 62
+  - name: PHY_INT1
+    lsb: 2
+    width: 1
+    line: 63
+  - name: PHY_INT0
+    lsb: 1
+    width: 1
+    line: 64
+  - name: HW_EXCEPTION
+    lsb: 0
+    width: 1
+    line: 65
+- name: INTR_STATUS
+  address: 0x80044
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 57
+  struct_line: 68
+  registers: []
+  fields: []
+- name: GLOBAL_MAC_ADDR0
+  address: 0x80080
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 65
+  struct_line: 71
+  registers: [MAC_ADDR_HI2]
+  fields:
+  - name: MAC_ADDR_BYTE4
+    lsb: 8
+    width: 8
+    line: 72
+  - name: MAC_ADDR_BYTE5
+    lsb: 0
+    width: 8
+    line: 73
+- name: GLOBAL_MAC_ADDR1
+  address: 0x80084
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 73
+  struct_line: 76
+  registers: [MAC_ADDR_LO4]
+  fields:
+  - name: MAC_ADDR_BYTE0
+    lsb: 24
+    width: 8
+    line: 77
+  - name: MAC_ADDR_BYTE1
+    lsb: 16
+    width: 8
+    line: 78
+  - name: MAC_ADDR_BYTE2
+    lsb: 8
+    width: 8
+    line: 79
+  - name: MAC_ADDR_BYTE3
+    lsb: 0
+    width: 8
+    line: 80
+- name: EEE_CTRL
+  address: 0x80088
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 81
+  struct_line: 83
+  registers: []
+  fields: []
+- name: SG_PHY
+  address: 0x8008c
+  stride: 4
+  bytes: 4
+  entries: 2
+  index_line: 89
+  struct_line: 86
+  registers: [SERDES]
+  fields:
+  - name: APPLICATION_MODE
+    lsb: 7
+    width: 3
+    line: 87
+  - name: PAUSE
+    lsb: 5
+    width: 2
+    line: 88
+  - name: LINK
+    lsb: 4
+    width: 1
+    line: 89
+  - name: DUPLEX_MODE
+    lsb: 3
+    width: 1
+    line: 90
+  - name: SPEED_MODE
+    lsb: 0
+    width: 3
+    line: 91
+- name: PORT_CTRL
+  address: 0x80100
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 97
+  struct_line: 94
+  registers: [PORT_CTRL]
+  fields:
+  - name: FLOW_LINK_AN
+    lsb: 10
+    width: 1
+    line: 95
+  - name: AN_LINK_EN
+    lsb: 9
+    width: 1
+    line: 96
+  - name: HALF_FC_EN
+    lsb: 8
+    width: 1
+    line: 97
+  - name: DUPLEX_MODE
+    lsb: 7
+    width: 1
+    line: 98
+  - name: RX_FC_EN
+    lsb: 6
+    width: 1
+    line: 99
+  - name: TX_FC_EN
+    lsb: 5
+    width: 1
+    line: 100
+  - name: RXMAC_EN
+    lsb: 4
+    width: 1
+    line: 101
+  - name: TXMAC_EN
+    lsb: 3
+    width: 1
+    line: 102
+  - name: SPEED_MODE
+    lsb: 0
+    width: 3
+    line: 103
+- name: PORT_STATUS
+  address: 0x80200
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 105
+  struct_line: 106
+  registers: [PORT_STATUS]
+  fields:
+  - name: LINK
+    lsb: 8
+    width: 1
+    line: 107
+  - name: DUPLEX_MODE
+    lsb: 7
+    width: 1
+    line: 108
+  - name: RX_FC_EN
+    lsb: 6
+    width: 1
+    line: 109
+  - name: TX_FC_EN
+    lsb: 5
+    width: 1
+    line: 110
+  - name: RXMAC_EN
+    lsb: 4
+    width: 1
+    line: 111
+  - name: TXMAC_EN
+    lsb: 3
+    width: 1
+    line: 112
+  - name: SPEED_MODE
+    lsb: 0
+    width: 3
+    line: 113
+- name: LOOP_DETECT_TOP_CTRL
+  address: 0x80230
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 113
+  struct_line: 116
+  registers: []
+  fields:
+  - name: BUZZER_MODE
+    lsb: 26
+    width: 2
+    line: 117
+  - name: BUZZER_EN
+    lsb: 25
+    width: 1
+    line: 118
+  - name: UNIT_ID_REMOTE1
+    lsb: 23
+    width: 2
+    line: 119
+  - name: UNIT_ID_REMOTE0
+    lsb: 21
+    width: 2
+    line: 120
+  - name: UNIT_ID_LOCAL
+    lsb: 19
+    width: 2
+    line: 121
+  - name: EN
+    lsb: 18
+    width: 1
+    line: 122
+  - name: LOOP_DETECT_TPID
+    lsb: 2
+    width: 16
+    line: 123
+  - name: GENERATE_MODE
+    lsb: 1
+    width: 1
+    line: 124
+  - name: GENERATE_WAY
+    lsb: 0
+    width: 1
+    line: 125
+- name: PON_STRAP_EN
+  address: 0x80320
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 121
+  struct_line: 128
+  registers: [PON_STRAP_FUNC]
+  fields: []
+- name: PON_STRAP_VAL
+  address: 0x80324
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 129
+  struct_line: 131
+  registers: [PON_STRAP_VAL]
+  fields: []
+- name: PON_STRAP
+  address: 0x80328
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 137
+  struct_line: 134
+  registers: [PON_STRAP_CAP]
+  fields: []
+- name: MDIO_POLLING
+  address: 0x80364
+  stride: 4
+  bytes: 4
+  entries: 2
+  index_line: 145
+  struct_line: 137
+  registers: [MDIO_POLLING]
+  fields:
+  - name: DUPLEX
+    lsb: 4
+    width: 1
+    line: 138
+  - name: LINK
+    lsb: 3
+    width: 1
+    line: 139
+  - name: SPEED
+    lsb: 0
+    width: 3
+    line: 140
+- name: OAM_DYING_GASP
+  address: 0x80380
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 153
+  struct_line: 143
+  registers: []
+  fields: []
+- name: ACL2GPIO
+  address: 0x80384
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 161
+  struct_line: 146
+  registers: []
+  fields: []
+- name: EXTIF0_MODE
+  address: 0x80400
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 169
+  struct_line: 149
+  registers: [XMII]
+  fields:
+  - name: XMII_MODE
+    lsb: 29
+    width: 3
+    line: 150
+  - name: RGMII_DELAY_TYPE_SEL
+    lsb: 28
+    width: 1
+    line: 151
+  - name: EN_MACMODE_LNKDN_SWH
+    lsb: 26
+    width: 1
+    line: 152
+  - name: RGMII_TXC_DLY100_10_EN
+    lsb: 20
+    width: 1
+    line: 153
+  - name: XMII_LINK_UP
+    lsb: 19
+    width: 1
+    line: 154
+  - name: XMII_PORT_EN
+    lsb: 18
+    width: 1
+    line: 155
+  - name: XMII_SOFT_RST
+    lsb: 17
+    width: 1
+    line: 156
+  - name: RGMII_TXC_DELAY_SEL
+    lsb: 13
+    width: 4
+    line: 157
+  - name: REMII_RX_XMII_SEL
+    lsb: 12
+    width: 1
+    line: 158
+  - name: XMII_TXC_IN_SEL
+    lsb: 11
+    width: 1
+    line: 159
+  - name: XMII_RXC_IN_SEL
+    lsb: 10
+    width: 1
+    line: 160
+  - name: REVERT_TXD
+    lsb: 9
+    width: 1
+    line: 161
+  - name: RGMII_TXC_DELAY_EN
+    lsb: 8
+    width: 1
+    line: 162
+  - name: RGMII_TXC_OUT_SEL
+    lsb: 7
+    width: 1
+    line: 163
+  - name: RGMII_RXC_DELAY_SEL
+    lsb: 3
+    width: 4
+    line: 164
+  - name: RMII_PHY_TXC_OUT_SEL
+    lsb: 2
+    width: 1
+    line: 165
+  - name: REMII_TXC_OUT_SEL
+    lsb: 1
+    width: 1
+    line: 166
+  - name: REMII_RXC_OUT_SEL
+    lsb: 0
+    width: 1
+    line: 167
+- name: EXTIF0_MODE2
+  address: 0x80404
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 177
+  struct_line: 170
+  registers: []
+  fields: []
+- name: EXTIF1_MODE
+  address: 0x80408
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 185
+  struct_line: 173
+  registers: []
+  fields:
+  - name: XMII_MODE
+    lsb: 29
+    width: 3
+    line: 174
+  - name: RGMII_DELAY_TYPE_SEL
+    lsb: 28
+    width: 1
+    line: 175
+  - name: EN_MACMODE_LNKDN_SWH
+    lsb: 26
+    width: 1
+    line: 176
+  - name: RGMII_TXC_DLY100_10_EN
+    lsb: 20
+    width: 1
+    line: 177
+  - name: XMII_LINK_UP
+    lsb: 19
+    width: 1
+    line: 178
+  - name: XMII_PORT_EN
+    lsb: 18
+    width: 1
+    line: 179
+  - name: XMII_SOFT_RST
+    lsb: 17
+    width: 1
+    line: 180
+  - name: RGMII_TXC_DELAY_SEL
+    lsb: 13
+    width: 4
+    line: 181
+  - name: REMII_RX_XMII_SEL
+    lsb: 12
+    width: 1
+    line: 182
+  - name: XMII_TXC_IN_SEL
+    lsb: 11
+    width: 1
+    line: 183
+  - name: XMII_RXC_IN_SEL
+    lsb: 10
+    width: 1
+    line: 184
+  - name: REVERT_TXD
+    lsb: 9
+    width: 1
+    line: 185
+  - name: RGMII_TXC_DELAY_EN
+    lsb: 8
+    width: 1
+    line: 186
+  - name: RGMII_TXC_OUT_SEL
+    lsb: 7
+    width: 1
+    line: 187
+  - name: RGMII_RXC_DELAY_SEL
+    lsb: 3
+    width: 4
+    line: 188
+  - name: RMII_PHY_TXC_OUT_SEL
+    lsb: 2
+    width: 1
+    line: 189
+  - name: REMII_TXC_OUT_SEL
+    lsb: 1
+    width: 1
+    line: 190
+  - name: REMII_RXC_OUT_SEL
+    lsb: 0
+    width: 1
+    line: 191
+- name: EXTIF1_MODE2
+  address: 0x8040c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 193
+  struct_line: 194
+  registers: []
+  fields: []
+- name: TPID_PROFILE0
+  address: 0x210000
+  stride: 4
+  bytes: 4
+  entries: 2
+  index_line: 201
+  struct_line: 197
+  registers: [TPID_IGR]
+  fields:
+  - name: TPID
+    lsb: 0
+    width: 16
+    line: 198
+- name: TPID_PROFILE1
+  address: 0x210008
+  stride: 4
+  bytes: 4
+  entries: 2
+  index_line: 209
+  struct_line: 201
+  registers: []
+  fields:
+  - name: TPID
+    lsb: 0
+    width: 16
+    line: 202
+- name: PARSER_PORT_CTRLN
+  address: 0x210010
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 217
+  struct_line: 205
+  registers: [PORT_IGR_TPID]
+  fields:
+  - name: STAG_TPID_MASK
+    lsb: 4
+    width: 4
+    line: 206
+  - name: CTAG_TPID_MASK
+    lsb: 0
+    width: 4
+    line: 207
+- name: LINK_AGG_HASH_CTRL
+  address: 0x210090
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 225
+  struct_line: 210
+  registers: [LAG_HASH]
+  fields:
+  - name: HASH_FIELD_SEL
+    lsb: 0
+    width: 8
+    line: 211
+- name: UDF_CTRLN
+  address: 0x210094
+  stride: 4
+  bytes: 4
+  entries: 16
+  index_line: 233
+  struct_line: 214
+  registers: [UDF_CTRL]
+  fields:
+  - name: UDF_TYPE
+    lsb: 7
+    width: 2
+    line: 215
+  - name: UDF_OFFSET
+    lsb: 0
+    width: 7
+    line: 216
+- name: PARSER_ERP_OUI
+  address: 0x2100d4
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 241
+  struct_line: 219
+  registers: []
+  fields: []
+- name: PARSER_ERP_ETHTYPE
+  address: 0x2100d8
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 249
+  struct_line: 222
+  registers: []
+  fields: []
+- name: PARSER_ERP_UDF_CTRL
+  address: 0x2100dc
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 257
+  struct_line: 225
+  registers: []
+  fields: []
+- name: PARSER_ERP_UDFN
+  address: 0x2100e0
+  stride: 4
+  bytes: 4
+  entries: 4
+  index_line: 265
+  struct_line: 228
+  registers: []
+  fields: []
+- name: DOS_TCP_FLAGS0
+  address: 0x2100f0
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 273
+  struct_line: 231
+  registers: []
+  fields:
+  - name: COPY_TO_CPU
+    lsb: 16
+    width: 1
+    line: 233
+  - name: TCP_FLAGS_MASK
+    lsb: 10
+    width: 6
+    line: 234
+  - name: SEQ_NUM0_MASK
+    lsb: 9
+    width: 1
+    line: 235
+  - name: PUBLIC_TCP_SPORT_MASK
+    lsb: 8
+    width: 1
+    line: 236
+  - name: TCP_FLAGS
+    lsb: 2
+    width: 6
+    line: 237
+  - name: SEQ_NUM0
+    lsb: 1
+    width: 1
+    line: 238
+  - name: PUBLIC_TCP_SPORT
+    lsb: 0
+    width: 1
+    line: 239
+- name: DOS_TCP_FLAGS1
+  address: 0x2100f4
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 281
+  struct_line: 242
+  registers: []
+  fields: []
+- name: DOS_TCP_FLAGS2
+  address: 0x2100f8
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 289
+  struct_line: 245
+  registers: []
+  fields: []
+- name: DOS_TCP_FLAGS3
+  address: 0x2100fc
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 297
+  struct_line: 248
+  registers: []
+  fields: []
+- name: DOS_TCP_FLAGS4
+  address: 0x210100
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 305
+  struct_line: 251
+  registers: []
+  fields: []
+- name: DOS_TCP_FLAGS5
+  address: 0x210104
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 313
+  struct_line: 254
+  registers: []
+  fields: []
+- name: DOS_CTRL
+  address: 0x210108
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 321
+  struct_line: 257
+  registers: []
+  fields:
+  - name: VLAN_CFI1DROP_EN
+    lsb: 29
+    width: 1
+    line: 258
+  - name: PORT_EN_MASK
+    lsb: 18
+    width: 11
+    line: 259
+  - name: TCP_HEADER_PARTIAL_COPY_TO_CPU
+    lsb: 17
+    width: 1
+    line: 260
+  - name: LARGE_IPV6_ICMP_COPY_TO_CPU
+    lsb: 16
+    width: 1
+    line: 261
+  - name: LARGE_IPV4_ICMP_COPY_TO_CPU
+    lsb: 15
+    width: 1
+    line: 262
+  - name: TCP_FRAG_OFFSET1_COPY_TO_CPU
+    lsb: 14
+    width: 1
+    line: 263
+  - name: TCP_SPORT_EQ_DPORT_COPY_TO_CPU
+    lsb: 13
+    width: 1
+    line: 264
+  - name: UDP_SPORT_EQ_DPORT_COPY_TO_CPU
+    lsb: 12
+    width: 1
+    line: 265
+  - name: ICMP_PRAG_COPY_TO_CPU
+    lsb: 11
+    width: 1
+    line: 266
+  - name: SIP_EQ_DIP_COPY_TO_CPU
+    lsb: 10
+    width: 1
+    line: 267
+  - name: MACSA_EQ_MACDA_COPY_TO_CPU
+    lsb: 9
+    width: 1
+    line: 268
+  - name: TCP_HEADER_PARTIAL_DROP
+    lsb: 8
+    width: 1
+    line: 269
+  - name: LARGE_IPV6_ICMP_DROP
+    lsb: 7
+    width: 1
+    line: 270
+  - name: LARGE_IPV4_ICMP_DROP
+    lsb: 6
+    width: 1
+    line: 271
+  - name: TCP_FRAG_OFFSET1_DROP
+    lsb: 5
+    width: 1
+    line: 272
+  - name: TCP_SPORT_EQ_DPORT_DROP
+    lsb: 4
+    width: 1
+    line: 273
+  - name: UDP_SPORT_EQ_DPORT_DROP
+    lsb: 3
+    width: 1
+    line: 274
+  - name: ICMP_PRAG_DROP
+    lsb: 2
+    width: 1
+    line: 275
+  - name: SIP_EQ_DIP_DROP
+    lsb: 1
+    width: 1
+    line: 276
+  - name: MACSA_EQ_MACDA_DROP
+    lsb: 0
+    width: 1
+    line: 277
+- name: DOS_LARGE_ICMP_CTRL
+  address: 0x21010c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 329
+  struct_line: 280
+  registers: []
+  fields:
+  - name: IPV6_ICMP_MAX_SIZE
+    lsb: 16
+    width: 13
+    line: 281
+  - name: IPV4_ICMP_MAX_SIZE
+    lsb: 0
+    width: 13
+    line: 282
+- name: OAM_EN_CTRL
+  address: 0x210110
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 337
+  struct_line: 285
+  registers: []
+  fields:
+  - name: EN
+    lsb: 0
+    width: 11
+    line: 286
+- name: WOL_CTRL
+  address: 0x21011c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 345
+  struct_line: 289
+  registers: []
+  fields:
+  - name: WOL_ETH_TYPE
+    lsb: 1
+    width: 16
+    line: 290
+  - name: WOL_EN
+    lsb: 0
+    width: 1
+    line: 291
+- name: DOS_CTRL1
+  address: 0x210120
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 353
+  struct_line: 294
+  registers: []
+  fields:
+  - name: DA_ZERO_DROP_EN
+    lsb: 3
+    width: 1
+    line: 295
+  - name: SA_ZERO_DROP_EN
+    lsb: 2
+    width: 1
+    line: 296
+  - name: SA_BC_DROP_EN
+    lsb: 1
+    width: 1
+    line: 297
+  - name: SA_MC_DROP_EN
+    lsb: 0
+    width: 1
+    line: 298
+- name: PROTOCOL_BASED_VLANN
+  address: 0x230000
+  stride: 4
+  bytes: 4
+  entries: 4
+  index_line: 361
+  struct_line: 301
+  registers: []
+  fields:
+  - name: VALID
+    lsb: 19
+    width: 1
+    line: 302
+  - name: L2_TYPE_BITMAP
+    lsb: 16
+    width: 3
+    line: 303
+  - name: ETH_TYPE
+    lsb: 0
+    width: 16
+    line: 304
+- name: PORT_VLAN_CTRLN
+  address: 0x230010
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 369
+  struct_line: 307
+  registers: [PORT_VLAN_CTRL]
+  fields:
+  - name: PRIORITY_TAG_SVID_EN
+    lsb: 31
+    width: 1
+    line: 308
+  - name: PRIORITY_TAG_CVID_EN
+    lsb: 30
+    width: 1
+    line: 309
+  - name: DEFAULT_SVID
+    lsb: 18
+    width: 12
+    line: 310
+  - name: DEFAULT_CVID
+    lsb: 6
+    width: 12
+    line: 311
+  - name: DEFAULT_SPRIO
+    lsb: 3
+    width: 3
+    line: 312
+  - name: DEFAULT_CPRIO
+    lsb: 0
+    width: 3
+    line: 313
+- name: PORT_VLAN_CTRL1N
+  address: 0x230080
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 377
+  struct_line: 316
+  registers: [PORT_VLAN_CTRL1]
+  fields:
+  - name: VLAN_RANGE_MODE
+    lsb: 8
+    width: 1
+    line: 317
+  - name: VLAN_RANGE_PROFILE_ID
+    lsb: 4
+    width: 4
+    line: 318
+  - name: STAG_AFT
+    lsb: 2
+    width: 2
+    line: 319
+  - name: CTAG_AFT
+    lsb: 0
+    width: 2
+    line: 320
+- name: VLAN_TRANS_UNTAG_VID_MODE_CTRL
+  address: 0x230108
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 385
+  struct_line: 323
+  registers: []
+  fields:
+  - name: MODE
+    lsb: 0
+    width: 22
+    line: 324
+- name: VLAN_RANGE_PROFILEN
+  address: 0x230200
+  stride: 16
+  bytes: 12
+  entries: 10
+  index_line: 393
+  struct_line: 327
+  registers: []
+  fields:
+  - name: MAX_VID3
+    lsb: 84
+    width: 12
+    line: 328
+  - name: MIN_VID3
+    lsb: 72
+    width: 12
+    line: 329
+  - name: MAX_VID2_1
+    lsb: 64
+    width: 8
+    line: 330
+  - name: MAX_VID2_0
+    lsb: 60
+    width: 4
+    line: 331
+  - name: MIN_VID2
+    lsb: 48
+    width: 12
+    line: 332
+  - name: MAX_VID1
+    lsb: 36
+    width: 12
+    line: 333
+  - name: MIN_VID1_1
+    lsb: 32
+    width: 4
+    line: 334
+  - name: MIN_VID1_0
+    lsb: 24
+    width: 8
+    line: 335
+  - name: MAX_VID0
+    lsb: 12
+    width: 12
+    line: 336
+  - name: MIN_VID0
+    lsb: 0
+    width: 12
+    line: 337
+- name: PROTOCOL_BASED_VLAN_DATA_TBL
+  address: 0x230300
+  stride: 4
+  bytes: 4
+  entries: 44
+  index_line: 401
+  struct_line: 340
+  registers: []
+  fields:
+  - name: SVID_CMD
+    lsb: 26
+    width: 2
+    line: 341
+  - name: SVID
+    lsb: 14
+    width: 12
+    line: 342
+  - name: CVID_CMD
+    lsb: 12
+    width: 2
+    line: 343
+  - name: CVID
+    lsb: 0
+    width: 12
+    line: 344
+- name: VLAN_XLATE_ACTION_TBL
+  address: 0x230400
+  stride: 8
+  bytes: 8
+  entries: 64
+  index_line: 409
+  struct_line: 347
+  registers: []
+  fields:
+  - name: SVID_CMD
+    lsb: 38
+    width: 2
+    line: 348
+  - name: NEW_SVID_1
+    lsb: 32
+    width: 6
+    line: 349
+  - name: NEW_SVID_0
+    lsb: 26
+    width: 6
+    line: 350
+  - name: CVID_CMD
+    lsb: 24
+    width: 2
+    line: 351
+  - name: NEW_CVID
+    lsb: 12
+    width: 12
+    line: 352
+  - name: SPRIO_CMD
+    lsb: 10
+    width: 2
+    line: 353
+  - name: NEW_SPRIO
+    lsb: 7
+    width: 3
+    line: 354
+  - name: NEW_SDEI
+    lsb: 6
+    width: 1
+    line: 355
+  - name: CPRIO_CMD
+    lsb: 4
+    width: 2
+    line: 356
+  - name: NEW_CPRIO
+    lsb: 1
+    width: 3
+    line: 357
+  - name: NEW_CDEI
+    lsb: 0
+    width: 1
+    line: 358
+- name: VLAN_XLATE_TBL
+  address: 0x230600
+  stride: 8
+  bytes: 8
+  entries: 64
+  index_line: 417
+  struct_line: 361
+  registers: []
+  fields:
+  - name: VALID
+    lsb: 43
+    width: 1
+    line: 362
+  - name: SVID_1
+    lsb: 32
+    width: 11
+    line: 363
+  - name: SVID_0
+    lsb: 31
+    width: 1
+    line: 364
+  - name: SVID_INCL
+    lsb: 30
+    width: 1
+    line: 365
+  - name: STAG_FMT
+    lsb: 28
+    width: 2
+    line: 366
+  - name: STAG_FMT_INCL
+    lsb: 27
+    width: 1
+    line: 367
+  - name: CVID
+    lsb: 15
+    width: 12
+    line: 368
+  - name: CVID_INCL
+    lsb: 14
+    width: 1
+    line: 369
+  - name: CTAG_FMT
+    lsb: 12
+    width: 2
+    line: 370
+  - name: CTAG_FMT_INCL
+    lsb: 11
+    width: 1
+    line: 371
+  - name: SRC_PORT_MASK
+    lsb: 0
+    width: 11
+    line: 372
+- name: ACL_BLK_KEEP_CTRL
+  address: 0x201000
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 425
+  struct_line: 375
+  registers: [ACL_BLK_KEEP]
+  fields:
+  - name: GRPID7
+    lsb: 29
+    width: 3
+    line: 376
+  - name: KEEP7
+    lsb: 28
+    width: 1
+    line: 377
+  - name: GRPID6
+    lsb: 25
+    width: 3
+    line: 378
+  - name: KEEP6
+    lsb: 24
+    width: 1
+    line: 379
+  - name: GRPID5
+    lsb: 21
+    width: 3
+    line: 380
+  - name: KEEP5
+    lsb: 20
+    width: 1
+    line: 381
+  - name: GRPID4
+    lsb: 17
+    width: 3
+    line: 382
+  - name: KEEP4
+    lsb: 16
+    width: 1
+    line: 383
+  - name: GRPID3
+    lsb: 13
+    width: 3
+    line: 384
+  - name: KEEP3
+    lsb: 12
+    width: 1
+    line: 385
+  - name: GRPID2
+    lsb: 9
+    width: 3
+    line: 386
+  - name: KEEP2
+    lsb: 8
+    width: 1
+    line: 387
+  - name: GRPID1
+    lsb: 5
+    width: 3
+    line: 388
+  - name: KEEP1
+    lsb: 4
+    width: 1
+    line: 389
+  - name: GRPID0
+    lsb: 1
+    width: 3
+    line: 390
+  - name: KEEP0
+    lsb: 0
+    width: 1
+    line: 391
+- name: ACL_PORT_CTRL
+  address: 0x202000
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 433
+  struct_line: 394
+  registers: [ACL_PORT]
+  fields:
+  - name: ENABLE
+    lsb: 0
+    width: 11
+    line: 395
+- name: ACL_BLK_CMD
+  address: 0x202004
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 441
+  struct_line: 398
+  registers: [ACL_BLK_CMD]
+  fields:
+  - name: BLKID
+    lsb: 1
+    width: 6
+    line: 399
+  - name: CMD
+    lsb: 0
+    width: 1
+    line: 400
+- name: RULE_EXT_CTRL
+  address: 0x203000
+  stride: 4
+  bytes: 4
+  entries: 48
+  index_line: 449
+  struct_line: 403
+  registers: [ACL_ENTRY]
+  fields:
+  - name: GRPID7
+    lsb: 29
+    width: 3
+    line: 404
+  - name: VALID7
+    lsb: 28
+    width: 1
+    line: 405
+  - name: GRPID6
+    lsb: 25
+    width: 3
+    line: 406
+  - name: VALID6
+    lsb: 24
+    width: 1
+    line: 407
+  - name: GRPID5
+    lsb: 21
+    width: 3
+    line: 408
+  - name: VALID5
+    lsb: 20
+    width: 1
+    line: 409
+  - name: GRPID4
+    lsb: 17
+    width: 3
+    line: 410
+  - name: VALID4
+    lsb: 16
+    width: 1
+    line: 411
+  - name: GRPID3
+    lsb: 13
+    width: 3
+    line: 412
+  - name: VALID3
+    lsb: 12
+    width: 1
+    line: 413
+  - name: GRPID2
+    lsb: 9
+    width: 3
+    line: 414
+  - name: VALID2
+    lsb: 8
+    width: 1
+    line: 415
+  - name: GRPID1
+    lsb: 5
+    width: 3
+    line: 416
+  - name: VALID1
+    lsb: 4
+    width: 1
+    line: 417
+  - name: GRPID0
+    lsb: 1
+    width: 3
+    line: 418
+  - name: VALID0
+    lsb: 0
+    width: 1
+    line: 419
+- name: ACL_RULE_BIN0
+  address: 0x204000
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 457
+  struct_line: 422
+  registers: [ACL_KEY]
+  fields: []
+- name: ACL_RULE_BIN1
+  address: 0x204200
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 465
+  struct_line: 425
+  registers: []
+  fields: []
+- name: ACL_RULE_BIN2
+  address: 0x204400
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 473
+  struct_line: 428
+  registers: []
+  fields: []
+- name: ACL_RULE_BIN3
+  address: 0x204600
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 481
+  struct_line: 431
+  registers: []
+  fields: []
+- name: ACL_RULE_BIN4
+  address: 0x204800
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 489
+  struct_line: 434
+  registers: []
+  fields: []
+- name: ACL_RULE_BIN5
+  address: 0x204a00
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 497
+  struct_line: 437
+  registers: []
+  fields: []
+- name: ACL_RULE_BIN6
+  address: 0x204c00
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 505
+  struct_line: 440
+  registers: []
+  fields: []
+- name: ACL_RULE_BIN7
+  address: 0x204e00
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 513
+  struct_line: 443
+  registers: []
+  fields: []
+- name: ACL_RULE_MASK_BIN0
+  address: 0x205000
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 521
+  struct_line: 446
+  registers: [ACL_MASK]
+  fields: []
+- name: ACL_RULE_MASK_BIN1
+  address: 0x205200
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 529
+  struct_line: 449
+  registers: []
+  fields: []
+- name: ACL_RULE_MASK_BIN2
+  address: 0x205400
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 537
+  struct_line: 452
+  registers: []
+  fields: []
+- name: ACL_RULE_MASK_BIN3
+  address: 0x205600
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 545
+  struct_line: 455
+  registers: []
+  fields: []
+- name: ACL_RULE_MASK_BIN4
+  address: 0x205800
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 553
+  struct_line: 458
+  registers: []
+  fields: []
+- name: ACL_RULE_MASK_BIN5
+  address: 0x205a00
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 561
+  struct_line: 461
+  registers: []
+  fields: []
+- name: ACL_RULE_MASK_BIN6
+  address: 0x205c00
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 569
+  struct_line: 464
+  registers: []
+  fields: []
+- name: ACL_RULE_MASK_BIN7
+  address: 0x205e00
+  stride: 8
+  bytes: 8
+  entries: 48
+  index_line: 577
+  struct_line: 467
+  registers: []
+  fields: []
+- name: MAC_DA0_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 585
+  struct_line: 470
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 471
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 472
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 473
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 474
+  - name: L3_TYPE
+    lsb: 32
+    width: 4
+    line: 475
+  - name: MAC_DA0
+    lsb: 0
+    width: 32
+    line: 476
+- name: MAC_DA0_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 593
+  struct_line: 479
+  registers: []
+  fields:
+  - name: L3_TYPE
+    lsb: 32
+    width: 4
+    line: 480
+  - name: MAC_DA0
+    lsb: 0
+    width: 32
+    line: 481
+- name: MAC_DA1_SA1_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 601
+  struct_line: 484
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 485
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 486
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 487
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 488
+  - name: RSVD
+    lsb: 35
+    width: 1
+    line: 489
+  - name: L2_TYPE
+    lsb: 32
+    width: 3
+    line: 490
+  - name: MAC_DA1
+    lsb: 16
+    width: 16
+    line: 491
+  - name: MAC_SA1
+    lsb: 0
+    width: 16
+    line: 492
+- name: MAC_DA1_SA1_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 609
+  struct_line: 495
+  registers: []
+  fields:
+  - name: RSVD
+    lsb: 35
+    width: 1
+    line: 496
+  - name: L2_TYPE
+    lsb: 32
+    width: 3
+    line: 497
+  - name: MAC_DA1
+    lsb: 16
+    width: 16
+    line: 498
+  - name: MAC_SA1
+    lsb: 0
+    width: 16
+    line: 499
+- name: MAC_SA0_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 617
+  struct_line: 502
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 503
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 504
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 505
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 506
+  - name: L3_TYPE
+    lsb: 32
+    width: 4
+    line: 507
+  - name: MAC_SA0
+    lsb: 0
+    width: 32
+    line: 508
+- name: MAC_SA0_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 625
+  struct_line: 511
+  registers: []
+  fields:
+  - name: L3_TYPE
+    lsb: 32
+    width: 4
+    line: 512
+  - name: MAC_SA0
+    lsb: 0
+    width: 32
+    line: 513
+- name: IPV4_DA_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 633
+  struct_line: 516
+  registers: []
+  fields:
+  - name: RANGE0_EN
+    lsb: 62
+    width: 1
+    line: 517
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 518
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 519
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 520
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 521
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 522
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 523
+  - name: IPV4_DA
+    lsb: 0
+    width: 32
+    line: 524
+- name: IPV4_DA_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 641
+  struct_line: 527
+  registers: []
+  fields:
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 528
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 529
+  - name: IPV4_DA
+    lsb: 0
+    width: 32
+    line: 530
+- name: IPV4_SA_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 649
+  struct_line: 533
+  registers: []
+  fields:
+  - name: RANGE0_EN
+    lsb: 62
+    width: 1
+    line: 534
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 535
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 536
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 537
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 538
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 539
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 540
+  - name: IPV4_SA
+    lsb: 0
+    width: 32
+    line: 541
+- name: IPV4_SA_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 657
+  struct_line: 544
+  registers: []
+  fields:
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 545
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 546
+  - name: IPV4_SA
+    lsb: 0
+    width: 32
+    line: 547
+- name: L4_PORT_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 665
+  struct_line: 550
+  registers: []
+  fields:
+  - name: RANGE1_EN
+    lsb: 63
+    width: 1
+    line: 551
+  - name: RANGE0_EN
+    lsb: 62
+    width: 1
+    line: 552
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 553
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 554
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 555
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 556
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 557
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 558
+  - name: L4_DPORT
+    lsb: 16
+    width: 16
+    line: 559
+  - name: L4_SPORT
+    lsb: 0
+    width: 16
+    line: 560
+- name: L4_PORT_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 673
+  struct_line: 563
+  registers: []
+  fields:
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 564
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 565
+  - name: L4_DPORT
+    lsb: 16
+    width: 16
+    line: 566
+  - name: L4_SPORT
+    lsb: 0
+    width: 16
+    line: 567
+- name: VLAN_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 681
+  struct_line: 570
+  registers: []
+  fields:
+  - name: RANGE1_EN
+    lsb: 63
+    width: 1
+    line: 571
+  - name: RANGE0_EN
+    lsb: 62
+    width: 1
+    line: 572
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 573
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 574
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 575
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 576
+  - name: CDEI
+    lsb: 35
+    width: 1
+    line: 577
+  - name: CPRI
+    lsb: 32
+    width: 3
+    line: 578
+  - name: CTAG_FMT
+    lsb: 30
+    width: 2
+    line: 579
+  - name: SDEI
+    lsb: 29
+    width: 1
+    line: 580
+  - name: SPRI
+    lsb: 26
+    width: 3
+    line: 581
+  - name: STAG_FMT
+    lsb: 24
+    width: 2
+    line: 582
+  - name: SVID
+    lsb: 12
+    width: 12
+    line: 583
+  - name: CVID
+    lsb: 0
+    width: 12
+    line: 584
+- name: VLAN_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 689
+  struct_line: 587
+  registers: []
+  fields:
+  - name: CDEI
+    lsb: 35
+    width: 1
+    line: 588
+  - name: CPRI
+    lsb: 32
+    width: 3
+    line: 589
+  - name: CTAG_FMT
+    lsb: 30
+    width: 2
+    line: 590
+  - name: SDEI
+    lsb: 29
+    width: 1
+    line: 591
+  - name: SPRI
+    lsb: 26
+    width: 3
+    line: 592
+  - name: STAG_FMT
+    lsb: 24
+    width: 2
+    line: 593
+  - name: SVID
+    lsb: 12
+    width: 12
+    line: 594
+  - name: CVID
+    lsb: 0
+    width: 12
+    line: 595
+- name: MISC_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 697
+  struct_line: 598
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 599
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 600
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 601
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 602
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 603
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 604
+  - name: RSVD
+    lsb: 31
+    width: 1
+    line: 605
+  - name: PPPOE_FLAG
+    lsb: 30
+    width: 1
+    line: 606
+  - name: IP_1ST_FRAGMENT
+    lsb: 29
+    width: 1
+    line: 607
+  - name: IP_OPTION
+    lsb: 28
+    width: 1
+    line: 608
+  - name: TCP_FLAGS
+    lsb: 20
+    width: 8
+    line: 609
+  - name: IP_PROTOCOL
+    lsb: 12
+    width: 8
+    line: 610
+  - name: TOS
+    lsb: 4
+    width: 8
+    line: 611
+  - name: L3_TYPE
+    lsb: 0
+    width: 4
+    line: 612
+- name: MISC_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 705
+  struct_line: 615
+  registers: []
+  fields:
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 616
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 617
+  - name: RSVD
+    lsb: 31
+    width: 1
+    line: 618
+  - name: PPPOE_FLAG
+    lsb: 30
+    width: 1
+    line: 619
+  - name: IP_1ST_FRAGMENT
+    lsb: 29
+    width: 1
+    line: 620
+  - name: IP_OPTION
+    lsb: 28
+    width: 1
+    line: 621
+  - name: TCP_FLAGS
+    lsb: 20
+    width: 8
+    line: 622
+  - name: IP_PROTOCOL
+    lsb: 12
+    width: 8
+    line: 623
+  - name: TOS
+    lsb: 4
+    width: 8
+    line: 624
+  - name: L3_TYPE
+    lsb: 0
+    width: 4
+    line: 625
+- name: UDF_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 713
+  struct_line: 628
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 629
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 630
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 631
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 632
+  - name: RSVD
+    lsb: 33
+    width: 3
+    line: 633
+  - name: IS_IGMP
+    lsb: 32
+    width: 1
+    line: 634
+  - name: UDF0
+    lsb: 16
+    width: 16
+    line: 635
+  - name: UDF1
+    lsb: 0
+    width: 16
+    line: 636
+- name: UDF_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 721
+  struct_line: 639
+  registers: []
+  fields:
+  - name: RSVD
+    lsb: 33
+    width: 3
+    line: 640
+  - name: IS_IGMP
+    lsb: 32
+    width: 1
+    line: 641
+  - name: UDF0
+    lsb: 16
+    width: 16
+    line: 642
+  - name: UDF1
+    lsb: 0
+    width: 16
+    line: 643
+- name: IPV6_DA0_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 729
+  struct_line: 646
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 647
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 648
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 649
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 650
+  - name: RSVD
+    lsb: 35
+    width: 1
+    line: 651
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 652
+  - name: IPV6_DA0
+    lsb: 0
+    width: 32
+    line: 653
+- name: IPV6_DA0_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 737
+  struct_line: 656
+  registers: []
+  fields:
+  - name: RSVD
+    lsb: 35
+    width: 1
+    line: 657
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 658
+  - name: IPV6_DA0
+    lsb: 0
+    width: 32
+    line: 659
+- name: IPV6_DA1_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 745
+  struct_line: 662
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 663
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 664
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 665
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 666
+  - name: IP_OPTION
+    lsb: 35
+    width: 1
+    line: 667
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 668
+  - name: IPV6_DA1
+    lsb: 0
+    width: 32
+    line: 669
+- name: IPV6_DA1_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 753
+  struct_line: 672
+  registers: []
+  fields:
+  - name: IP_OPTION
+    lsb: 35
+    width: 1
+    line: 673
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 674
+  - name: IPV6_DA1
+    lsb: 0
+    width: 32
+    line: 675
+- name: IPV6_DA2_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 761
+  struct_line: 678
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 679
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 680
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 681
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 682
+  - name: IP_FIRST_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 683
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 684
+  - name: IPV6_DA2
+    lsb: 0
+    width: 32
+    line: 685
+- name: IPV6_DA2_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 769
+  struct_line: 688
+  registers: []
+  fields:
+  - name: IP_FIRST_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 689
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 690
+  - name: IPV6_DA2
+    lsb: 0
+    width: 32
+    line: 691
+- name: IPV6_DA3_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 777
+  struct_line: 694
+  registers: []
+  fields:
+  - name: RANGE0_EN
+    lsb: 62
+    width: 1
+    line: 695
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 696
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 697
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 698
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 699
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 700
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 701
+  - name: IPV6_DA3
+    lsb: 0
+    width: 32
+    line: 702
+- name: IPV6_DA3_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 785
+  struct_line: 705
+  registers: []
+  fields:
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 706
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 707
+  - name: IPV6_DA3
+    lsb: 0
+    width: 32
+    line: 708
+- name: IPV6_SA0_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 793
+  struct_line: 711
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 712
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 713
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 714
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 715
+  - name: RSVD
+    lsb: 35
+    width: 1
+    line: 716
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 717
+  - name: IPV6_SA0
+    lsb: 0
+    width: 32
+    line: 718
+- name: IPV6_SA0_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 801
+  struct_line: 721
+  registers: []
+  fields:
+  - name: RSVD
+    lsb: 35
+    width: 1
+    line: 722
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 723
+  - name: IPV6_SA0
+    lsb: 0
+    width: 32
+    line: 724
+- name: IPV6_SA1_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 809
+  struct_line: 727
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 728
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 729
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 730
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 731
+  - name: IP_OPTION
+    lsb: 35
+    width: 1
+    line: 732
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 733
+  - name: IPV6_SA1
+    lsb: 0
+    width: 32
+    line: 734
+- name: IPV6_SA1_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 817
+  struct_line: 737
+  registers: []
+  fields:
+  - name: IP_OPTION
+    lsb: 35
+    width: 1
+    line: 738
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 739
+  - name: IPV6_SA1
+    lsb: 0
+    width: 32
+    line: 740
+- name: IPV6_SA2_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 825
+  struct_line: 743
+  registers: []
+  fields:
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 744
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 745
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 746
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 747
+  - name: IP_FIRST_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 748
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 749
+  - name: IPV6_SA2
+    lsb: 0
+    width: 32
+    line: 750
+- name: IPV6_SA2_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 833
+  struct_line: 753
+  registers: []
+  fields:
+  - name: IP_FIRST_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 754
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 755
+  - name: IPV6_SA2
+    lsb: 0
+    width: 32
+    line: 756
+- name: IPV6_SA3_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 841
+  struct_line: 759
+  registers: []
+  fields:
+  - name: RANGE0_EN
+    lsb: 62
+    width: 1
+    line: 760
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 761
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 762
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 763
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 764
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 765
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 766
+  - name: IPV6_SA3
+    lsb: 0
+    width: 32
+    line: 767
+- name: IPV6_SA3_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 849
+  struct_line: 770
+  registers: []
+  fields:
+  - name: IP_FRAGMENT
+    lsb: 35
+    width: 1
+    line: 771
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 772
+  - name: IPV6_SA3
+    lsb: 0
+    width: 32
+    line: 773
+- name: VID_PRI_DEI_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 857
+  struct_line: 776
+  registers: []
+  fields:
+  - name: RANGE1_EN
+    lsb: 63
+    width: 1
+    line: 777
+  - name: RANGE0_EN
+    lsb: 62
+    width: 1
+    line: 778
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 779
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 780
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 781
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 782
+  - name: RSV
+    lsb: 32
+    width: 4
+    line: 783
+  - name: CDEI
+    lsb: 31
+    width: 1
+    line: 784
+  - name: CPRI
+    lsb: 28
+    width: 3
+    line: 785
+  - name: SDEI
+    lsb: 27
+    width: 1
+    line: 786
+  - name: SPRI
+    lsb: 24
+    width: 3
+    line: 787
+  - name: SVID
+    lsb: 12
+    width: 12
+    line: 788
+  - name: CVID
+    lsb: 0
+    width: 12
+    line: 789
+- name: VID_PRI_DEI_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 4
+  entries: 1
+  index_line: 865
+  struct_line: 792
+  registers: []
+  fields:
+  - name: CDEI
+    lsb: 31
+    width: 1
+    line: 793
+  - name: CPRI
+    lsb: 28
+    width: 3
+    line: 794
+  - name: SDEI
+    lsb: 27
+    width: 1
+    line: 795
+  - name: SPRI
+    lsb: 24
+    width: 3
+    line: 796
+  - name: SVID
+    lsb: 12
+    width: 12
+    line: 797
+  - name: CVID
+    lsb: 0
+    width: 12
+    line: 798
+- name: ETHER_TYPE_VALUE_RULE
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 873
+  struct_line: 801
+  registers: []
+  fields:
+  - name: RANGE_EN
+    lsb: 62
+    width: 1
+    line: 802
+  - name: PRIO
+    lsb: 53
+    width: 9
+    line: 803
+  - name: SRC_PORT_MASK
+    lsb: 42
+    width: 11
+    line: 804
+  - name: LOGIC_NOT
+    lsb: 41
+    width: 1
+    line: 805
+  - name: RULE_TYPE
+    lsb: 36
+    width: 5
+    line: 806
+  - name: RSV1
+    lsb: 35
+    width: 1
+    line: 807
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 808
+  - name: RSV0
+    lsb: 16
+    width: 16
+    line: 809
+  - name: ETHER_TYPE_VALUE
+    lsb: 0
+    width: 16
+    line: 810
+- name: ETHER_TYPE_VALUE_RULE_MASK
+  address: 0x0
+  stride: 8
+  bytes: 8
+  entries: 1
+  index_line: 881
+  struct_line: 813
+  registers: []
+  fields:
+  - name: RSV1
+    lsb: 35
+    width: 1
+    line: 814
+  - name: L4_TYPE
+    lsb: 32
+    width: 3
+    line: 815
+  - name: RSV0
+    lsb: 16
+    width: 16
+    line: 816
+  - name: ETHER_TYPE_VALUE
+    lsb: 0
+    width: 16
+    line: 817
+- name: DSCP_TO_INT_PRIO_MAP
+  address: 0x180000
+  stride: 4
+  bytes: 4
+  entries: 64
+  index_line: 889
+  struct_line: 820
+  registers: [IPM_DSCP]
+  fields:
+  - name: INT_PRIO
+    lsb: 2
+    width: 3
+    line: 821
+  - name: INT_DP
+    lsb: 0
+    width: 2
+    line: 822
+- name: PRI_TO_INT_PRIO_MAP
+  address: 0x180100
+  stride: 4
+  bytes: 4
+  entries: 32
+  index_line: 897
+  struct_line: 825
+  registers: [IPM_PCP]
+  fields:
+  - name: INT_PRIO
+    lsb: 2
+    width: 3
+    line: 826
+  - name: INT_DP
+    lsb: 0
+    width: 2
+    line: 827
+- name: QOS_PORT_CTRLN
+  address: 0x180180
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 905
+  struct_line: 830
+  registers: [PORT_QOS]
+  fields:
+  - name: CPRI_MAP_SEL
+    lsb: 5
+    width: 1
+    line: 831
+  - name: SPRI_MAP_SEL
+    lsb: 4
+    width: 1
+    line: 832
+  - name: PORT_INTPRI
+    lsb: 1
+    width: 3
+    line: 833
+  - name: PORT_INTPRI_EN
+    lsb: 0
+    width: 1
+    line: 834
+- name: QOS_MERGE_PRECEDENCE_CTRLN
+  address: 0x180200
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 913
+  struct_line: 837
+  registers: [PORT_PRIO_ORD]
+  fields:
+  - name: PORT_PRI_PRECEDENCE
+    lsb: 21
+    width: 3
+    line: 838
+  - name: SPRI2INT_PRI_PRECEDENCE
+    lsb: 18
+    width: 3
+    line: 839
+  - name: CPRI2INT_PRI_PRECEDENCE
+    lsb: 15
+    width: 3
+    line: 840
+  - name: DSCP2INT_PRI_PRECEDENCE
+    lsb: 12
+    width: 3
+    line: 841
+  - name: ACL_INT_PRI_PRECEDENCE
+    lsb: 9
+    width: 3
+    line: 842
+  - name: VLAN_INT_PRI_PRECEDENCE
+    lsb: 6
+    width: 3
+    line: 843
+  - name: MAC_DA_INT_PRI_PRECEDENCE
+    lsb: 3
+    width: 3
+    line: 844
+  - name: MAC_SA_INT_PRI_PRECEDENCE
+    lsb: 0
+    width: 3
+    line: 845
+- name: HDR_ERR_ACTION
+  address: 0x180270
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 921
+  struct_line: 848
+  registers: []
+  fields: []
+- name: L2_VLAN_INGRESS_FILTER_EN
+  address: 0x180280
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 929
+  struct_line: 851
+  registers: [VLAN_IGR_FILTER]
+  fields:
+  - name: IGMP_BYPASS_EN
+    lsb: 11
+    width: 11
+    line: 852
+  - name: FILTER_EN
+    lsb: 0
+    width: 11
+    line: 853
+- name: L2_ARP_BCAST_PER_PORT_CTRL
+  address: 0x180284
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 937
+  struct_line: 856
+  registers: []
+  fields:
+  - name: DROP
+    lsb: 11
+    width: 11
+    line: 857
+  - name: COPY_TO_CPU
+    lsb: 0
+    width: 11
+    line: 858
+- name: L2_ND_PER_PORT_CTRL
+  address: 0x180288
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 945
+  struct_line: 861
+  registers: []
+  fields:
+  - name: DROP
+    lsb: 11
+    width: 11
+    line: 862
+  - name: COPY_TO_CPU
+    lsb: 0
+    width: 11
+    line: 863
+- name: L2_LLDP_EEE_PER_PORT_CTRL
+  address: 0x18028c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 953
+  struct_line: 866
+  registers: []
+  fields:
+  - name: DROP
+    lsb: 11
+    width: 11
+    line: 867
+  - name: COPY_TO_CPU
+    lsb: 0
+    width: 11
+    line: 868
+- name: L2_LLDP_PER_PORT_CTRL
+  address: 0x180290
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 961
+  struct_line: 871
+  registers: []
+  fields:
+  - name: DROP
+    lsb: 11
+    width: 11
+    line: 872
+  - name: COPY_TO_CPU
+    lsb: 0
+    width: 11
+    line: 873
+- name: L2_PORT_ISOLATION_CTRLN
+  address: 0x180294
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 969
+  struct_line: 876
+  registers: [PORT_ISOLATION]
+  fields:
+  - name: ISOLATED_PORT_MASK
+    lsb: 0
+    width: 11
+    line: 877
+- name: L2_ERP_PER_PORT_CTRL
+  address: 0x18030c
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 977
+  struct_line: 880
+  registers: []
+  fields: []
+- name: L2_STP_STATEN
+  address: 0x18038c
+  stride: 4
+  bytes: 4
+  entries: 16
+  index_line: 985
+  struct_line: 883
+  registers: [STP]
+  fields:
+  - name: STATE
+    lsb: 0
+    width: 22
+    line: 884
+- name: L2_SRC_MATCH_CTRL
+  address: 0x1803cc
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 993
+  struct_line: 887
+  registers: []
+  fields:
+  - name: SRC_MATCH_DISCARD
+    lsb: 0
+    width: 11
+    line: 888
+- name: L2_LEARN_PER_PORT_CTRLN
+  address: 0x1803d0
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1001
+  struct_line: 891
+  registers: [PORT_LEARN]
+  fields:
+  - name: VID_LEARN_MULTI_EN
+    lsb: 22
+    width: 1
+    line: 892
+  - name: VID_LEARN_MODE
+    lsb: 21
+    width: 1
+    line: 893
+  - name: VID_LEARN_EN
+    lsb: 20
+    width: 1
+    line: 894
+  - name: SUSPEND_COPY_EN
+    lsb: 19
+    width: 1
+    line: 895
+  - name: SUSPEND_DROP_EN
+    lsb: 18
+    width: 1
+    line: 896
+  - name: LEARN_DISABLE
+    lsb: 17
+    width: 1
+    line: 897
+  - name: LEARN_LIMIT_EN
+    lsb: 16
+    width: 1
+    line: 898
+  - name: LEARN_LIMIT_NUM
+    lsb: 3
+    width: 13
+    line: 899
+  - name: LEARN_LIMIT_DROP
+    lsb: 2
+    width: 1
+    line: 900
+  - name: LEARN_MODE
+    lsb: 0
+    width: 2
+    line: 901
+- name: L2_STATION_MOVE_CTRL0
+  address: 0x1803fc
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1009
+  struct_line: 904
+  registers: []
+  fields: []
+- name: L2_STATION_MOVE_CTRL1
+  address: 0x180400
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1017
+  struct_line: 907
+  registers: []
+  fields: []
+- name: L2_PORT_LEARN_MAC_CNTN
+  address: 0x180404
+  stride: 4
+  bytes: 4
+  entries: 13
+  index_line: 1025
+  struct_line: 910
+  registers: []
+  fields:
+  - name: MAC_CNT
+    lsb: 0
+    width: 13
+    line: 911
+- name: L2_LEARN_GLOBAL_CTRL
+  address: 0x180438
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1033
+  struct_line: 914
+  registers: []
+  fields:
+  - name: LEARN_MODE
+    lsb: 17
+    width: 2
+    line: 915
+  - name: GIP_LEARN_OVERWRITE_ALLOW
+    lsb: 16
+    width: 1
+    line: 916
+  - name: SA_LEARN_OVERWRITE_ALLOW
+    lsb: 15
+    width: 1
+    line: 917
+  - name: LEARN_LIMIT_EN
+    lsb: 14
+    width: 1
+    line: 918
+  - name: LEARN_LIMIT_NUM
+    lsb: 1
+    width: 13
+    line: 919
+  - name: LEARN_LIMIT_DROP
+    lsb: 0
+    width: 1
+    line: 920
+- name: L2_LEARN_MAC_CNT
+  address: 0x18043c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1041
+  struct_line: 923
+  registers: []
+  fields:
+  - name: MAC_CNT
+    lsb: 0
+    width: 13
+    line: 924
+- name: L2_AGING_CTRL
+  address: 0x180440
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1049
+  struct_line: 927
+  registers: [AGEING]
+  fields:
+  - name: AGING_INTERVAL
+    lsb: 0
+    width: 16
+    line: 928
+- name: L2_AGING_PER_PORT_CTRL
+  address: 0x180448
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1057
+  struct_line: 931
+  registers: []
+  fields:
+  - name: AGING_EN
+    lsb: 0
+    width: 11
+    line: 932
+- name: L2_FDB_TBL_OP_DATA_0
+  address: 0x180454
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1065
+  struct_line: 935
+  registers: [FDB_IN0]
+  fields:
+  - name: MAC_DA_0
+    lsb: 0
+    width: 32
+    line: 936
+- name: L2_FDB_TBL_OP_DATA_1
+  address: 0x180458
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1073
+  struct_line: 939
+  registers: [FDB_IN1]
+  fields:
+  - name: DMAC_INT_PRI_EN
+    lsb: 31
+    width: 1
+    line: 940
+  - name: STATUS
+    lsb: 28
+    width: 3
+    line: 941
+  - name: FID
+    lsb: 16
+    width: 12
+    line: 942
+  - name: MAC_DA_1
+    lsb: 0
+    width: 16
+    line: 943
+- name: L2_FDB_TBL_OP_DATA_2
+  address: 0x18045c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1081
+  struct_line: 946
+  registers: [FDB_IN2]
+  fields:
+  - name: MOVE_AGING_STATUS
+    lsb: 30
+    width: 2
+    line: 947
+  - name: SMAC_DROP
+    lsb: 29
+    width: 1
+    line: 948
+  - name: DST_PORT_MASK
+    lsb: 18
+    width: 11
+    line: 949
+  - name: DMAC_DROP
+    lsb: 17
+    width: 1
+    line: 950
+  - name: COPY_TO_CPU
+    lsb: 16
+    width: 1
+    line: 951
+  - name: SMAC_INT_PRI_EN
+    lsb: 15
+    width: 1
+    line: 952
+  - name: INT_PRI
+    lsb: 12
+    width: 3
+    line: 953
+  - name: NEW_VID
+    lsb: 0
+    width: 12
+    line: 954
+- name: L2_FDB_TBL_OP
+  address: 0x180460
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1089
+  struct_line: 957
+  registers: [FDB_OP]
+  fields:
+  - name: ENTRY_INDEX
+    lsb: 11
+    width: 12
+    line: 958
+  - name: OP_MODE
+    lsb: 10
+    width: 1
+    line: 959
+  - name: FLUSH_MODE
+    lsb: 7
+    width: 3
+    line: 960
+  - name: FLUSH_STATIC_EN
+    lsb: 6
+    width: 1
+    line: 961
+  - name: GET_NEXT_TYPE
+    lsb: 4
+    width: 2
+    line: 962
+  - name: OP_CMD
+    lsb: 1
+    width: 3
+    line: 963
+  - name: OP_START
+    lsb: 0
+    width: 1
+    line: 964
+- name: L2_FDB_TBL_OP_RESULT
+  address: 0x180464
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1097
+  struct_line: 967
+  registers: [FDB_RESULT]
+  fields:
+  - name: OP_DONE
+    lsb: 15
+    width: 1
+    line: 968
+  - name: LOOKUP_FAIL
+    lsb: 14
+    width: 1
+    line: 969
+  - name: OVERWRITE
+    lsb: 13
+    width: 1
+    line: 970
+  - name: OP_RESULT
+    lsb: 12
+    width: 1
+    line: 971
+  - name: ENTRY_INDEX
+    lsb: 0
+    width: 12
+    line: 972
+- name: L2_IGMP_STATIC_ROUTER_PORT_MASK
+  address: 0x180468
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1105
+  struct_line: 975
+  registers: []
+  fields:
+  - name: PORT_MASK
+    lsb: 0
+    width: 11
+    line: 976
+- name: L2_IGMP_DYNAMIC_ROUTER_PORT_CTRL
+  address: 0x18046c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1113
+  struct_line: 979
+  registers: []
+  fields:
+  - name: ALLOW_DYNAMIC_PORT_MASK
+    lsb: 4
+    width: 11
+    line: 980
+  - name: TIMER_VAL
+    lsb: 0
+    width: 4
+    line: 981
+- name: L2_IGMP_DYNAMIC_ROUTER_PORT
+  address: 0x180470
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1121
+  struct_line: 984
+  registers: []
+  fields: []
+- name: L2_IGMP_DYNAMIC_ROUTER_PORT0_TIMER
+  address: 0x180474
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1129
+  struct_line: 987
+  registers: []
+  fields: []
+- name: L2_IGMP_DYNAMIC_ROUTER_PORT1_TIMER
+  address: 0x180478
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1137
+  struct_line: 990
+  registers: []
+  fields: []
+- name: L2_IGMP_GLOBAL_CTRL
+  address: 0x18047c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1145
+  struct_line: 993
+  registers: []
+  fields:
+  - name: REPORT_LEAVE_ROUTER_FWD_CTRL
+    lsb: 11
+    width: 1
+    line: 994
+  - name: REPORT_LEAVE_FWD
+    lsb: 10
+    width: 1
+    line: 995
+  - name: IGMP_FORCE_ROUTER_DST
+    lsb: 9
+    width: 1
+    line: 996
+  - name: MLD_OP
+    lsb: 7
+    width: 2
+    line: 997
+  - name: IGMP_OP
+    lsb: 5
+    width: 2
+    line: 998
+  - name: FAST_LEAVE_EN
+    lsb: 4
+    width: 1
+    line: 999
+  - name: BYPASS_IPV6_00XX
+    lsb: 3
+    width: 1
+    line: 1000
+  - name: BYPASS_224_0_0_X
+    lsb: 2
+    width: 1
+    line: 1001
+  - name: BYPASS_224_0_1_X
+    lsb: 1
+    width: 1
+    line: 1002
+  - name: BYPASS_239_255_255_X
+    lsb: 0
+    width: 1
+    line: 1003
+- name: L2_IGMP_PER_PORT_CTRL
+  address: 0x180480
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1153
+  struct_line: 1006
+  registers: []
+  fields:
+  - name: BYPASS_FLOW_METER
+    lsb: 7
+    width: 1
+    line: 1007
+  - name: BYPASS_PORT_METER
+    lsb: 6
+    width: 1
+    line: 1008
+  - name: BYPASS_STORM
+    lsb: 5
+    width: 1
+    line: 1009
+  - name: ALLOW_LEAVE_PKT
+    lsb: 4
+    width: 1
+    line: 1010
+  - name: ALLOW_REPORT_PKT
+    lsb: 3
+    width: 1
+    line: 1011
+  - name: ALLOW_QUERY_PKT
+    lsb: 2
+    width: 1
+    line: 1012
+  - name: VLAN_LEAKY
+    lsb: 1
+    width: 1
+    line: 1013
+  - name: PORT_ISOLATE_LEAKY
+    lsb: 0
+    width: 1
+    line: 1014
+- name: L2_FDB_TBL_OP_DATA_0_DUMMY
+  address: 0x1804b0
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1161
+  struct_line: 1017
+  registers: [FDB_OUT0]
+  fields:
+  - name: MAC_DA_0
+    lsb: 0
+    width: 32
+    line: 1018
+- name: L2_FDB_TBL_OP_DATA_1_DUMMY
+  address: 0x1804b4
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1169
+  struct_line: 1021
+  registers: [FDB_OUT1]
+  fields:
+  - name: DMAC_INT_PRI_EN
+    lsb: 31
+    width: 1
+    line: 1022
+  - name: STATUS
+    lsb: 28
+    width: 3
+    line: 1023
+  - name: FID
+    lsb: 16
+    width: 12
+    line: 1024
+  - name: MAC_DA_1
+    lsb: 0
+    width: 16
+    line: 1025
+- name: L2_FDB_TBL_OP_DATA_2_DUMMY
+  address: 0x1804b8
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1177
+  struct_line: 1028
+  registers: [FDB_OUT2]
+  fields:
+  - name: MOVE_AGING_STATUS
+    lsb: 30
+    width: 2
+    line: 1029
+  - name: SMAC_DROP
+    lsb: 29
+    width: 1
+    line: 1030
+  - name: DST_PORT_MASK
+    lsb: 18
+    width: 11
+    line: 1031
+  - name: DMAC_DROP
+    lsb: 17
+    width: 1
+    line: 1032
+  - name: COPY_TO_CPU
+    lsb: 16
+    width: 1
+    line: 1033
+  - name: SMAC_INT_PRI_EN
+    lsb: 15
+    width: 1
+    line: 1034
+  - name: INT_PRI
+    lsb: 12
+    width: 3
+    line: 1035
+  - name: NEW_VID
+    lsb: 0
+    width: 12
+    line: 1036
+- name: L2_IGMP_DYNAMIC_ROUTER_PORT_DUMMY
+  address: 0x1804bc
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1185
+  struct_line: 1039
+  registers: []
+  fields:
+  - name: PORT1
+    lsb: 4
+    width: 4
+    line: 1040
+  - name: PORT0
+    lsb: 0
+    width: 4
+    line: 1041
+- name: L2_IGMP_DYNAMIC_ROUTER_PORT0_TIMER_DUMMY
+  address: 0x1804c0
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1193
+  struct_line: 1044
+  registers: []
+  fields: []
+- name: L2_IGMP_DYNAMIC_ROUTER_PORT1_TIMER_DUMMY
+  address: 0x1804c4
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1201
+  struct_line: 1047
+  registers: []
+  fields: []
+- name: L2_IGMP_LEARN_CTRL
+  address: 0x180500
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1209
+  struct_line: 1050
+  registers: []
+  fields:
+  - name: LIMIT_EN
+    lsb: 13
+    width: 1
+    line: 1051
+  - name: MAX_GROUP_NUM
+    lsb: 0
+    width: 13
+    line: 1052
+- name: L2_IGMP_LEARN_GROUP_CNT
+  address: 0x180504
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1217
+  struct_line: 1055
+  registers: []
+  fields:
+  - name: CNT
+    lsb: 0
+    width: 13
+    line: 1056
+- name: L2_UNKNOWN_UCAST_FILTER_MASK
+  address: 0x180508
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1225
+  struct_line: 1059
+  registers: [FILTER_UNK_UCAST]
+  fields:
+  - name: UNKNOWN_UCAST_FILTER_MASK
+    lsb: 0
+    width: 11
+    line: 1060
+- name: L2_UNKNOWN_MCAST_FILTER_MASK
+  address: 0x18050c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1233
+  struct_line: 1063
+  registers: [FILTER_UNK_MCAST]
+  fields:
+  - name: UNKNOWN_MCAST_FILTER_MASK
+    lsb: 0
+    width: 11
+    line: 1064
+- name: L2_MCAST_FILTER_MASK
+  address: 0x180510
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1241
+  struct_line: 1067
+  registers: [FILTER_MCAST]
+  fields:
+  - name: MCAST_FILTER_MASK
+    lsb: 0
+    width: 11
+    line: 1068
+- name: L2_BCAST_FILTER_MASK
+  address: 0x180514
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1249
+  struct_line: 1071
+  registers: [FILTER_BCAST]
+  fields:
+  - name: BCAST_FILTER_MASK
+    lsb: 0
+    width: 11
+    line: 1072
+- name: L2_PORT_VLAN_TRANSPARENT_CTRL
+  address: 0x180518
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1257
+  struct_line: 1075
+  registers: []
+  fields:
+  - name: PORTMASK
+    lsb: 0
+    width: 11
+    line: 1076
+- name: L2_EGR_VLAN_FILTER_EN
+  address: 0x180598
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1265
+  struct_line: 1079
+  registers: [VLAN_EGR_FILTER]
+  fields:
+  - name: FILTER_EN
+    lsb: 0
+    width: 11
+    line: 1080
+- name: L2_DOT1X_CTRL1
+  address: 0x18059c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1273
+  struct_line: 1083
+  registers: []
+  fields:
+  - name: DOT1X_EN
+    lsb: 0
+    width: 11
+    line: 1084
+- name: L2_DOT1X_CTRL2
+  address: 0x1805a0
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1281
+  struct_line: 1087
+  registers: []
+  fields:
+  - name: MC_RX_BYPASS
+    lsb: 25
+    width: 1
+    line: 1088
+  - name: BC_RX_BYPASS
+    lsb: 24
+    width: 1
+    line: 1089
+  - name: MC_TX_BYPASS
+    lsb: 23
+    width: 1
+    line: 1090
+  - name: BC_TX_BYPASS
+    lsb: 22
+    width: 1
+    line: 1091
+  - name: RX_PERMIT_PORT_MASK
+    lsb: 11
+    width: 11
+    line: 1092
+  - name: TX_PERMIT_PORT_MASK
+    lsb: 0
+    width: 11
+    line: 1093
+- name: IPMC_LEAKY_CTRL
+  address: 0x1805a4
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1289
+  struct_line: 1096
+  registers: []
+  fields:
+  - name: IPMC_VLAN_LEAKY
+    lsb: 1
+    width: 1
+    line: 1097
+  - name: IPMC_PORT_ISOLATION_LEAKY
+    lsb: 0
+    width: 1
+    line: 1098
+- name: LINK_AGG_GROUPN
+  address: 0x1805a8
+  stride: 4
+  bytes: 4
+  entries: 2
+  index_line: 1297
+  struct_line: 1101
+  registers: [LAG_GROUP]
+  fields:
+  - name: PORT_MASK
+    lsb: 3
+    width: 11
+    line: 1102
+  - name: MEMBER_NUM
+    lsb: 0
+    width: 3
+    line: 1103
+- name: LINK_AGG_MEMBERN
+  address: 0x1805b0
+  stride: 4
+  bytes: 4
+  entries: 8
+  index_line: 1305
+  struct_line: 1106
+  registers: [LAG_MEMBER]
+  fields:
+  - name: PORT
+    lsb: 0
+    width: 4
+    line: 1107
+- name: RMA_CTRLN
+  address: 0x1805d0
+  stride: 4
+  bytes: 4
+  entries: 48
+  index_line: 1313
+  struct_line: 1110
+  registers: []
+  fields:
+  - name: BYPASS_STORM
+    lsb: 12
+    width: 1
+    line: 1111
+  - name: BYPASS_FLOW_METER
+    lsb: 11
+    width: 1
+    line: 1112
+  - name: BYPASS_PORT_METER
+    lsb: 10
+    width: 1
+    line: 1113
+  - name: DROP
+    lsb: 9
+    width: 1
+    line: 1114
+  - name: COPY_TO_CPU
+    lsb: 8
+    width: 1
+    line: 1115
+  - name: VLAN_LEAKY
+    lsb: 7
+    width: 1
+    line: 1116
+  - name: PORT_ISOLATE_LEAKY
+    lsb: 6
+    width: 1
+    line: 1117
+  - name: CPU_CODE
+    lsb: 0
+    width: 6
+    line: 1118
+- name: CPU_COPY_DST_CTRL
+  address: 0x180690
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1321
+  struct_line: 1121
+  registers: [CPU_COPY]
+  fields:
+  - name: FORCE_INT_PORT
+    lsb: 2
+    width: 1
+    line: 1122
+  - name: TO_INT_CPU
+    lsb: 1
+    width: 1
+    line: 1123
+  - name: TO_EXT_CPU
+    lsb: 0
+    width: 1
+    line: 1124
+- name: ACL_UNMATCH_PERMIT_ENABLE_CTRL
+  address: 0x1806a0
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1329
+  struct_line: 1127
+  registers: [ACL_PERMIT_UNMATCH]
+  fields:
+  - name: ENABLE
+    lsb: 0
+    width: 11
+    line: 1128
+- name: OAM_MUX_ACT
+  address: 0x1806ac
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1337
+  struct_line: 1131
+  registers: []
+  fields:
+  - name: MUX_ACT
+    lsb: 0
+    width: 22
+    line: 1132
+- name: OAM_PAR_ACT
+  address: 0x1806b0
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1345
+  struct_line: 1135
+  registers: []
+  fields:
+  - name: PAR_ACT
+    lsb: 1
+    width: 22
+    line: 1136
+  - name: BYPASS_IM_AC_EN
+    lsb: 0
+    width: 1
+    line: 1137
+- name: CASCADE_CTRL
+  address: 0x1806b4
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1353
+  struct_line: 1140
+  registers: []
+  fields:
+  - name: PORT1
+    lsb: 5
+    width: 4
+    line: 1141
+  - name: PORT0
+    lsb: 1
+    width: 4
+    line: 1142
+  - name: EN
+    lsb: 0
+    width: 1
+    line: 1143
+- name: LOOP_DETECT_ACT_CTRL
+  address: 0x1806b8
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1361
+  struct_line: 1146
+  registers: []
+  fields: []
+- name: IGMP_ROUTER_PORT_AGING_CTRL
+  address: 0x1806bc
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1369
+  struct_line: 1149
+  registers: []
+  fields:
+  - name: AGING_INTERVAL
+    lsb: 0
+    width: 8
+    line: 1150
+- name: MULTI_VLAN_TBL
+  address: 0x180700
+  stride: 4
+  bytes: 4
+  entries: 8
+  index_line: 1377
+  struct_line: 1153
+  registers: []
+  fields:
+  - name: FID1
+    lsb: 14
+    width: 12
+    line: 1154
+  - name: MULTI_EN1
+    lsb: 13
+    width: 1
+    line: 1155
+  - name: FID0
+    lsb: 1
+    width: 12
+    line: 1156
+  - name: MULTI_EN0
+    lsb: 0
+    width: 1
+    line: 1157
+- name: L2_LEARN_CLEAR_OP
+  address: 0x180730
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1385
+  struct_line: 1160
+  registers: []
+  fields: []
+- name: L2_UC_UNKNOWN_ACT_CTRL
+  address: 0x180734
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1393
+  struct_line: 1163
+  registers: [ACT_UNK_UCAST]
+  fields:
+  - name: L2_UC_UNKNOWN_ACT
+    lsb: 0
+    width: 22
+    line: 1164
+- name: L2_MC_UNKNOWN_ACT_CTRL
+  address: 0x180738
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1401
+  struct_line: 1167
+  registers: [ACT_UNK_MCAST]
+  fields:
+  - name: L2_MC_UNKNOWN_DROP_RMABYPASS
+    lsb: 23
+    width: 1
+    line: 1168
+  - name: L2_MC_UNKNOWN_DROP_IGMPBYPASS
+    lsb: 22
+    width: 1
+    line: 1169
+  - name: L2_MC_UNKNOWN_ACT
+    lsb: 0
+    width: 22
+    line: 1170
+- name: L2_LAG_LEARN_LIMIT_CTRLN
+  address: 0x180808
+  stride: 4
+  bytes: 4
+  entries: 2
+  index_line: 1409
+  struct_line: 1173
+  registers: []
+  fields:
+  - name: LEARN_LIMIT_EN
+    lsb: 14
+    width: 1
+    line: 1174
+  - name: LEARN_LIMIT_NUM
+    lsb: 1
+    width: 13
+    line: 1175
+  - name: LEARN_LIMIT_DROP
+    lsb: 0
+    width: 1
+    line: 1176
+- name: L2_LOOP_DETECT_FLAG
+  address: 0x180810
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1417
+  struct_line: 1179
+  registers: []
+  fields: []
+- name: L2_LOOP_DETECT_FLAG_DUMMY
+  address: 0x180814
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1425
+  struct_line: 1182
+  registers: []
+  fields: []
+- name: L2_LOOP_DETECT_TIMER
+  address: 0x180818
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1433
+  struct_line: 1185
+  registers: []
+  fields: []
+- name: L2_ARP_BCAST_PER_PORT_CTRL1
+  address: 0x180940
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1441
+  struct_line: 1188
+  registers: []
+  fields: []
+- name: L2_ND_PER_PORT_CTRL1
+  address: 0x180944
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1449
+  struct_line: 1191
+  registers: []
+  fields: []
+- name: L2_LLDP_EEE_PER_PORT_CTRL1
+  address: 0x180948
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1457
+  struct_line: 1194
+  registers: []
+  fields: []
+- name: L2_LLDP_PER_PORT_CTRL1
+  address: 0x18094c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1465
+  struct_line: 1197
+  registers: []
+  fields: []
+- name: L2_ARP_BCAST_ND_PER_PORT_CTRL2
+  address: 0x180950
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1473
+  struct_line: 1200
+  registers: []
+  fields: []
+- name: L2_LLDP_EEE_PER_PORT_CTRL2
+  address: 0x180954
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1481
+  struct_line: 1203
+  registers: []
+  fields: []
+- name: L2_FDB_HW_FLUSH_CTRL
+  address: 0x180958
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1489
+  struct_line: 1206
+  registers: [FDB_HW_FLUSH]
+  fields:
+  - name: GLOBAL_EN
+    lsb: 0
+    width: 1
+    line: 1207
+- name: L2_UNI_QUE_CTRL
+  address: 0x18095c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1497
+  struct_line: 1210
+  registers: []
+  fields: []
+- name: L2_VLAN_TBL
+  address: 0x188000
+  stride: 8
+  bytes: 8
+  entries: 4096
+  index_line: 1505
+  struct_line: 1213
+  registers: [VLAN_CTRL]
+  fields:
+  - name: UNTAG_MEMBER_BITMAP
+    lsb: 40
+    width: 11
+    line: 1214
+  - name: STP_ID
+    lsb: 36
+    width: 4
+    line: 1215
+  - name: SVL_EN
+    lsb: 35
+    width: 1
+    line: 1216
+  - name: FID_1
+    lsb: 32
+    width: 3
+    line: 1217
+  - name: FID_0
+    lsb: 23
+    width: 9
+    line: 1218
+  - name: LEARN_DISABLE
+    lsb: 22
+    width: 1
+    line: 1219
+  - name: INT_PRI_VALID
+    lsb: 21
+    width: 1
+    line: 1220
+  - name: INT_PRI
+    lsb: 18
+    width: 3
+    line: 1221
+  - name: PORT_MEMBER_BITMAP
+    lsb: 7
+    width: 11
+    line: 1222
+  - name: BYPASS_1X_ACCESS_CONTROL
+    lsb: 6
+    width: 1
+    line: 1223
+  - name: METER_EN
+    lsb: 5
+    width: 1
+    line: 1224
+  - name: METER_ID
+    lsb: 0
+    width: 5
+    line: 1225
+- name: L2_FDB_TBL_BIN0
+  address: 0x198000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1513
+  struct_line: 1228
+  registers: []
+  fields:
+  - name: MOVE_AGING_STATUS
+    lsb: 94
+    width: 2
+    line: 1229
+  - name: SMAC_DROP
+    lsb: 93
+    width: 1
+    line: 1230
+  - name: DST_PORT_MASK
+    lsb: 82
+    width: 11
+    line: 1231
+  - name: DMAC_DROP
+    lsb: 81
+    width: 1
+    line: 1232
+  - name: COPY_TO_CPU
+    lsb: 80
+    width: 1
+    line: 1233
+  - name: SMAC_INT_PRI_EN
+    lsb: 79
+    width: 1
+    line: 1234
+  - name: INT_PRI
+    lsb: 76
+    width: 3
+    line: 1235
+  - name: NEW_VID
+    lsb: 64
+    width: 12
+    line: 1236
+  - name: DMAC_INT_PRI_EN
+    lsb: 63
+    width: 1
+    line: 1237
+  - name: STATUS
+    lsb: 60
+    width: 3
+    line: 1238
+  - name: FID
+    lsb: 48
+    width: 12
+    line: 1239
+  - name: MAC_DA_1
+    lsb: 32
+    width: 16
+    line: 1240
+  - name: MAC_DA_0
+    lsb: 0
+    width: 32
+    line: 1241
+- name: L2_FDB_TBL_BIN1
+  address: 0x19a000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1521
+  struct_line: 1244
+  registers: []
+  fields: []
+- name: L2_FDB_TBL_BIN2
+  address: 0x19c000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1529
+  struct_line: 1247
+  registers: []
+  fields: []
+- name: L2_FDB_TBL_BIN3
+  address: 0x19e000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1537
+  struct_line: 1250
+  registers: []
+  fields: []
+- name: L2_FDB_TBL_BIN4
+  address: 0x1a0000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1545
+  struct_line: 1253
+  registers: []
+  fields: []
+- name: L2_FDB_TBL_BIN5
+  address: 0x1a2000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1553
+  struct_line: 1256
+  registers: []
+  fields: []
+- name: L2_FDB_TBL_BIN6
+  address: 0x1a4000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1561
+  struct_line: 1259
+  registers: []
+  fields: []
+- name: L2_FDB_TBL_BIN7
+  address: 0x1a6000
+  stride: 16
+  bytes: 12
+  entries: 512
+  index_line: 1569
+  struct_line: 1262
+  registers: []
+  fields: []
+- name: ACL_ACTION_TBL
+  address: 0x1c0000
+  stride: 16
+  bytes: 12
+  entries: 384
+  index_line: 1577
+  struct_line: 1265
+  registers: [ACL_ACT]
+  fields:
+  - name: STAG_ASSIGN
+    lsb: 89
+    width: 2
+    line: 1266
+  - name: CTAG_ASSIGN
+    lsb: 87
+    width: 2
+    line: 1267
+  - name: FWD_DECISION_TYPE
+    lsb: 85
+    width: 2
+    line: 1268
+  - name: DEST_PORT_MASK
+    lsb: 74
+    width: 11
+    line: 1269
+  - name: FWD_DECISION_EN
+    lsb: 73
+    width: 1
+    line: 1270
+  - name: SDEI
+    lsb: 72
+    width: 1
+    line: 1271
+  - name: SDEI_REPLACE_EN
+    lsb: 71
+    width: 1
+    line: 1272
+  - name: SPRI
+    lsb: 68
+    width: 3
+    line: 1273
+  - name: SPRI_REPLACE_EN
+    lsb: 67
+    width: 1
+    line: 1274
+  - name: SVID_1
+    lsb: 64
+    width: 3
+    line: 1275
+  - name: SVID_0
+    lsb: 55
+    width: 9
+    line: 1276
+  - name: SVID_REPLACE_EN
+    lsb: 54
+    width: 1
+    line: 1277
+  - name: CDEI
+    lsb: 53
+    width: 1
+    line: 1278
+  - name: CDEI_REPLACE_EN
+    lsb: 52
+    width: 1
+    line: 1279
+  - name: CPRI
+    lsb: 49
+    width: 3
+    line: 1280
+  - name: CPRI_REPLACE_EN
+    lsb: 48
+    width: 1
+    line: 1281
+  - name: CVID
+    lsb: 36
+    width: 12
+    line: 1282
+  - name: CVID_REPLACE_EN
+    lsb: 35
+    width: 1
+    line: 1283
+  - name: INT_PRI_1
+    lsb: 33
+    width: 2
+    line: 1284
+  - name: INT_PRI_0
+    lsb: 32
+    width: 1
+    line: 1285
+  - name: INT_PRI_VALID
+    lsb: 31
+    width: 1
+    line: 1286
+  - name: INT_DP
+    lsb: 29
+    width: 2
+    line: 1287
+  - name: INT_DP_VALID
+    lsb: 28
+    width: 1
+    line: 1288
+  - name: DSCP
+    lsb: 22
+    width: 6
+    line: 1289
+  - name: DSCP_REPLACE_EN
+    lsb: 21
+    width: 1
+    line: 1290
+  - name: METER_ID
+    lsb: 15
+    width: 6
+    line: 1291
+  - name: METER_EN
+    lsb: 14
+    width: 1
+    line: 1292
+  - name: MIRROR_EN
+    lsb: 13
+    width: 1
+    line: 1293
+  - name: FLOW_STATS_EN
+    lsb: 12
+    width: 1
+    line: 1294
+  - name: FLOW_STATS_PTR
+    lsb: 6
+    width: 6
+    line: 1295
+  - name: GPIO_EN
+    lsb: 5
+    width: 1
+    line: 1296
+  - name: GPIO_PIN
+    lsb: 1
+    width: 4
+    line: 1297
+  - name: INTR_EN
+    lsb: 0
+    width: 1
+    line: 1298
+- name: PORT_RATE_CTRLN
+  address: 0x220000
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1585
+  struct_line: 1301
+  registers: [PORT_RATE]
+  fields:
+  - name: GAP_VALUE
+    lsb: 0
+    width: 5
+    line: 1302
+- name: STORM_CTRL_TIMESLOT
+  address: 0x220100
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1593
+  struct_line: 1305
+  registers: []
+  fields:
+  - name: TIMESLOT
+    lsb: 0
+    width: 12
+    line: 1306
+- name: METER_TIMESLOT
+  address: 0x220104
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1601
+  struct_line: 1309
+  registers: [METER_SLOT]
+  fields:
+  - name: TIMESLOT
+    lsb: 0
+    width: 12
+    line: 1310
+- name: PORT_METER_CTRLN
+  address: 0x220108
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1609
+  struct_line: 1313
+  registers: [PORT_METER]
+  fields:
+  - name: METER_EN
+    lsb: 4
+    width: 1
+    line: 1314
+  - name: METER_ID
+    lsb: 0
+    width: 4
+    line: 1315
+- name: STORM_CTRL_MC_TYPE_CTRL
+  address: 0x220140
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1617
+  struct_line: 1318
+  registers: []
+  fields:
+  - name: STORM_CTRL_MC_TYPE
+    lsb: 0
+    width: 11
+    line: 1319
+- name: DROP_EVENT_LOG
+  address: 0x220158
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1625
+  struct_line: 1322
+  registers: []
+  fields: []
+- name: STATS_OFFSET
+  address: 0x22015c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1633
+  struct_line: 1325
+  registers: []
+  fields: []
+- name: STORM_CTRL_CONFIG_TBL
+  address: 0x220200
+  stride: 4
+  bytes: 4
+  entries: 33
+  index_line: 1641
+  struct_line: 1328
+  registers: []
+  fields:
+  - name: CIR
+    lsb: 13
+    width: 19
+    line: 1329
+  - name: CBS
+    lsb: 3
+    width: 10
+    line: 1330
+  - name: GAP_INC
+    lsb: 2
+    width: 1
+    line: 1331
+  - name: RATE_MODE
+    lsb: 1
+    width: 1
+    line: 1332
+  - name: STORM_EN
+    lsb: 0
+    width: 1
+    line: 1333
+- name: STORM_CTRL_CNT_TBL
+  address: 0x220400
+  stride: 4
+  bytes: 4
+  entries: 33
+  index_line: 1649
+  struct_line: 1336
+  registers: []
+  fields: []
+- name: METER_CONFIG_TBL
+  address: 0x220800
+  stride: 16
+  bytes: 12
+  entries: 75
+  index_line: 1657
+  struct_line: 1339
+  registers: [METER_CTRL]
+  fields:
+  - name: METER_EN
+    lsb: 78
+    width: 1
+    line: 1340
+  - name: CF
+    lsb: 77
+    width: 1
+    line: 1341
+  - name: DROP_COLOR
+    lsb: 75
+    width: 2
+    line: 1342
+  - name: COLOR_MODE
+    lsb: 74
+    width: 1
+    line: 1343
+  - name: TOKEN_UNIT
+    lsb: 71
+    width: 3
+    line: 1344
+  - name: BYTE_RATE_MODE
+    lsb: 70
+    width: 1
+    line: 1345
+  - name: RATE_MODE
+    lsb: 69
+    width: 1
+    line: 1346
+  - name: METER_MODE
+    lsb: 68
+    width: 1
+    line: 1347
+  - name: CBS_1
+    lsb: 64
+    width: 4
+    line: 1348
+  - name: CBS_0
+    lsb: 52
+    width: 12
+    line: 1349
+  - name: CIR
+    lsb: 34
+    width: 18
+    line: 1350
+  - name: EBS_1
+    lsb: 32
+    width: 2
+    line: 1351
+  - name: EBS_0
+    lsb: 18
+    width: 14
+    line: 1352
+  - name: EIR
+    lsb: 0
+    width: 18
+    line: 1353
+- name: METER_TOKEN_TBL
+  address: 0x221000
+  stride: 8
+  bytes: 8
+  entries: 75
+  index_line: 1665
+  struct_line: 1356
+  registers: [METER_STAT]
+  fields: []
+- name: FLOW_STATS_TBL
+  address: 0x221400
+  stride: 8
+  bytes: 8
+  entries: 64
+  index_line: 1673
+  struct_line: 1359
+  registers: []
+  fields:
+  - name: CNT1
+    lsb: 32
+    width: 12
+    line: 1360
+  - name: CNT0
+    lsb: 0
+    width: 32
+    line: 1361
+- name: FLOW_STATS_CFG_TBL
+  address: 0x221c00
+  stride: 4
+  bytes: 4
+  entries: 64
+  index_line: 1681
+  struct_line: 1364
+  registers: []
+  fields:
+  - name: EN
+    lsb: 3
+    width: 1
+    line: 1365
+  - name: MODE
+    lsb: 2
+    width: 1
+    line: 1366
+  - name: SEL
+    lsb: 0
+    width: 2
+    line: 1367
+- name: CPU_CODE_TO_CPU_PRIO_MAPN
+  address: 0x300000
+  stride: 4
+  bytes: 4
+  entries: 64
+  index_line: 1689
+  struct_line: 1370
+  registers: []
+  fields: []
+- name: INT_PRIO_TO_UCAST_QID_MAPN
+  address: 0x300200
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1697
+  struct_line: 1373
+  registers: []
+  fields:
+  - name: PRIO_7_TO_QID
+    lsb: 28
+    width: 3
+    line: 1374
+  - name: PRIO_6_TO_QID
+    lsb: 24
+    width: 3
+    line: 1375
+  - name: PRIO_5_TO_QID
+    lsb: 20
+    width: 3
+    line: 1376
+  - name: PRIO_4_TO_QID
+    lsb: 16
+    width: 3
+    line: 1377
+  - name: PRIO_3_TO_QID
+    lsb: 12
+    width: 3
+    line: 1378
+  - name: PRIO_2_TO_QID
+    lsb: 8
+    width: 3
+    line: 1379
+  - name: PRIO_1_TO_QID
+    lsb: 4
+    width: 3
+    line: 1380
+  - name: PRIO_0_TO_QID
+    lsb: 0
+    width: 3
+    line: 1381
+- name: INT_PRIO_TO_MCAST_QID_MAPN
+  address: 0x300280
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1705
+  struct_line: 1384
+  registers: []
+  fields:
+  - name: PRIO_7_TO_QID
+    lsb: 14
+    width: 2
+    line: 1385
+  - name: PRIO_6_TO_QID
+    lsb: 12
+    width: 2
+    line: 1386
+  - name: PRIO_5_TO_QID
+    lsb: 10
+    width: 2
+    line: 1387
+  - name: PRIO_4_TO_QID
+    lsb: 8
+    width: 2
+    line: 1388
+  - name: PRIO_3_TO_QID
+    lsb: 6
+    width: 2
+    line: 1389
+  - name: PRIO_2_TO_QID
+    lsb: 4
+    width: 2
+    line: 1390
+  - name: PRIO_1_TO_QID
+    lsb: 2
+    width: 2
+    line: 1391
+  - name: PRIO_0_TO_QID
+    lsb: 0
+    width: 2
+    line: 1392
+- name: MIRROR_CTRL
+  address: 0x300300
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1713
+  struct_line: 1395
+  registers: [MIRROR]
+  fields:
+  - name: INGR_MIRROR_EN
+    lsb: 16
+    width: 11
+    line: 1396
+  - name: EGR_MIRROR_EN
+    lsb: 4
+    width: 11
+    line: 1397
+  - name: MIRROR_PORT
+    lsb: 0
+    width: 4
+    line: 1398
+- name: MIRROR_QOS_CTRL
+  address: 0x300304
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1721
+  struct_line: 1401
+  registers: []
+  fields:
+  - name: INGR_MIRROR_INT_PRIO_VALID
+    lsb: 7
+    width: 1
+    line: 1402
+  - name: INGR_MIRROR_INT_PRIO
+    lsb: 4
+    width: 3
+    line: 1403
+  - name: EGR_MIRROR_INT_PRIO_VALID
+    lsb: 3
+    width: 1
+    line: 1404
+  - name: EGR_MIRROR_INT_PRIO
+    lsb: 0
+    width: 3
+    line: 1405
+- name: FLUSH_CFG
+  address: 0x300400
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1729
+  struct_line: 1408
+  registers: []
+  fields:
+  - name: FLUSH_REQ
+    lsb: 31
+    width: 1
+    line: 1409
+  - name: FLUSH_DONE
+    lsb: 30
+    width: 1
+    line: 1410
+  - name: FLUSH_QID
+    lsb: 0
+    width: 8
+    line: 1411
+- name: OQ_ENQ_DIS_TBL
+  address: 0x308000
+  stride: 4
+  bytes: 4
+  entries: 132
+  index_line: 1737
+  struct_line: 1414
+  registers: []
+  fields:
+  - name: ENQ_DIS
+    lsb: 0
+    width: 1
+    line: 1415
+- name: EGR_PORT_CTRLN
+  address: 0x100000
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1745
+  struct_line: 1418
+  registers: [PORT_EGR]
+  fields:
+  - name: CFI_REMARK_EN
+    lsb: 10
+    width: 1
+    line: 1419
+  - name: DEI_REMARK_EN
+    lsb: 9
+    width: 1
+    line: 1420
+  - name: DSCP_REMARK_EN
+    lsb: 8
+    width: 1
+    line: 1421
+  - name: CPRIO_REMARK_EN
+    lsb: 7
+    width: 1
+    line: 1422
+  - name: SPRIO_REMARK_EN
+    lsb: 6
+    width: 1
+    line: 1423
+  - name: CTAG_TPID_SEL
+    lsb: 4
+    width: 2
+    line: 1424
+  - name: STAG_TPID_SEL
+    lsb: 2
+    width: 2
+    line: 1425
+  - name: CPRIO_REMARK_SEL
+    lsb: 1
+    width: 1
+    line: 1426
+  - name: SPRIO_REMARK_SEL
+    lsb: 0
+    width: 1
+    line: 1427
+- name: EGR_PORT_VLAN_CTRLN
+  address: 0x100080
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1753
+  struct_line: 1430
+  registers: []
+  fields:
+  - name: STAG_KEEP_MODE
+    lsb: 31
+    width: 1
+    line: 1431
+  - name: CTAG_KEEP_MODE
+    lsb: 30
+    width: 1
+    line: 1432
+  - name: STAG_MODE
+    lsb: 27
+    width: 3
+    line: 1433
+  - name: DEFAULT_SVID
+    lsb: 15
+    width: 12
+    line: 1434
+  - name: CTAG_MODE
+    lsb: 12
+    width: 3
+    line: 1435
+  - name: DEFAULT_CVID
+    lsb: 0
+    width: 12
+    line: 1436
+- name: EGR_DSCP_REMARKN
+  address: 0x100100
+  stride: 4
+  bytes: 4
+  entries: 32
+  index_line: 1761
+  struct_line: 1439
+  registers: []
+  fields:
+  - name: INT_PRIO_TO_DSCP
+    lsb: 0
+    width: 6
+    line: 1440
+- name: EGR_PRIO_REMARKN
+  address: 0x100200
+  stride: 4
+  bytes: 4
+  entries: 64
+  index_line: 1769
+  struct_line: 1443
+  registers: []
+  fields:
+  - name: INT_PRIO_TO_PRIO
+    lsb: 1
+    width: 3
+    line: 1444
+  - name: INT_PRIO_TO_DEI
+    lsb: 0
+    width: 1
+    line: 1445
+- name: EGR_TPID_PROFILE
+  address: 0x100300
+  stride: 4
+  bytes: 4
+  entries: 4
+  index_line: 1777
+  struct_line: 1448
+  registers: [TPID_EGR]
+  fields:
+  - name: TPID
+    lsb: 0
+    width: 16
+    line: 1449
+- name: EGR_VLAN_TRANS_RULE_CTRLN
+  address: 0x100320
+  stride: 4
+  bytes: 4
+  entries: 32
+  index_line: 1785
+  struct_line: 1452
+  registers: []
+  fields:
+  - name: PKT_STAG_INCL
+    lsb: 28
+    width: 1
+    line: 1453
+  - name: PKT_CTAG_INCL
+    lsb: 27
+    width: 1
+    line: 1454
+  - name: VID0
+    lsb: 15
+    width: 12
+    line: 1455
+  - name: PORT_MASK
+    lsb: 4
+    width: 11
+    line: 1456
+  - name: MVR_INCL
+    lsb: 3
+    width: 1
+    line: 1457
+  - name: SVID_INCL
+    lsb: 2
+    width: 1
+    line: 1458
+  - name: CVID_INCL
+    lsb: 1
+    width: 1
+    line: 1459
+  - name: VALID
+    lsb: 0
+    width: 1
+    line: 1460
+- name: EGR_VLAN_TRANS_RULE_CTRL1N
+  address: 0x1003a0
+  stride: 4
+  bytes: 4
+  entries: 32
+  index_line: 1793
+  struct_line: 1463
+  registers: []
+  fields:
+  - name: VID2
+    lsb: 13
+    width: 12
+    line: 1464
+  - name: VID1
+    lsb: 1
+    width: 12
+    line: 1465
+  - name: VID_RANGE_TYPE
+    lsb: 0
+    width: 1
+    line: 1466
+- name: EGR_VLAN_TRANS_DATA_CTRLN
+  address: 0x100420
+  stride: 4
+  bytes: 4
+  entries: 32
+  index_line: 1801
+  struct_line: 1469
+  registers: []
+  fields:
+  - name: CVID
+    lsb: 14
+    width: 12
+    line: 1470
+  - name: SVID
+    lsb: 2
+    width: 12
+    line: 1471
+  - name: CVID_EN
+    lsb: 1
+    width: 1
+    line: 1472
+  - name: SVID_EN
+    lsb: 0
+    width: 1
+    line: 1473
+- name: EGR_VLAN_TAG_TRANSPARENT_CTRL
+  address: 0x1004a8
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1809
+  struct_line: 1476
+  registers: []
+  fields:
+  - name: STAG_KEEP_SRCPORT_MASK
+    lsb: 13
+    width: 11
+    line: 1477
+  - name: CTAG_KEEP_SRCPORT_MASK
+    lsb: 2
+    width: 11
+    line: 1478
+  - name: STAG_TRANSPARENT_EN
+    lsb: 1
+    width: 1
+    line: 1479
+  - name: CTAG_TRANSPARENT_EN
+    lsb: 0
+    width: 1
+    line: 1480
+- name: CPU_PKT_BYPASSEDIT_CTRL
+  address: 0x1004d4
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1817
+  struct_line: 1483
+  registers: []
+  fields: []
+- name: IPG_PRE_LEN_CFG
+  address: 0x340004
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1825
+  struct_line: 1486
+  registers: []
+  fields: []
+- name: QSCH_SHP_SLOT_TIME_CFG
+  address: 0x340008
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1833
+  struct_line: 1489
+  registers: []
+  fields:
+  - name: QSCH_SHP_SLOT_TIME
+    lsb: 0
+    width: 12
+    line: 1490
+- name: PSCH_SHP_SLOT_TIME_CFG
+  address: 0x34000c
+  stride: 4
+  bytes: 4
+  entries: 1
+  index_line: 1841
+  struct_line: 1493
+  registers: [PORT_SHAPE_SLOT]
+  fields:
+  - name: PSCH_SHP_SLOT_TIME
+    lsb: 0
+    width: 12
+    line: 1494
+- name: QSCH_FLOW_MAP_TBL
+  address: 0x341000
+  stride: 4
+  bytes: 4
+  entries: 132
+  index_line: 1849
+  struct_line: 1497
+  registers: []
+  fields:
+  - name: E_DWRR_WEIGHT
+    lsb: 18
+    width: 10
+    line: 1498
+  - name: C_DWRR_WEIGHT
+    lsb: 8
+    width: 10
+    line: 1499
+  - name: E_PRI
+    lsb: 4
+    width: 4
+    line: 1500
+  - name: C_PRI
+    lsb: 0
+    width: 4
+    line: 1501
+- name: QSCH_C_DWRR_CFG_TBL
+  address: 0x342000
+  stride: 4
+  bytes: 4
+  entries: 132
+  index_line: 1857
+  struct_line: 1504
+  registers: []
+  fields:
+  - name: DWRR_MODE
+    lsb: 0
+    width: 1
+    line: 1505
+- name: QSCH_E_DWRR_CFG_TBL
+  address: 0x343000
+  stride: 4
+  bytes: 4
+  entries: 132
+  index_line: 1865
+  struct_line: 1508
+  registers: []
+  fields:
+  - name: DWRR_MODE
+    lsb: 0
+    width: 1
+    line: 1509
+- name: QSCH_SHP_CFG_TBL
+  address: 0x34c000
+  stride: 16
+  bytes: 12
+  entries: 132
+  index_line: 1873
+  struct_line: 1512
+  registers: []
+  fields:
+  - name: CF
+    lsb: 70
+    width: 1
+    line: 1513
+  - name: E_SHAPER_EN
+    lsb: 69
+    width: 1
+    line: 1514
+  - name: C_SHAPER_EN
+    lsb: 68
+    width: 1
+    line: 1515
+  - name: SHAPER_MODE
+    lsb: 67
+    width: 1
+    line: 1516
+  - name: TOKEN_LEVEL
+    lsb: 64
+    width: 3
+    line: 1517
+  - name: EBS
+    lsb: 50
+    width: 14
+    line: 1518
+  - name: EIR
+    lsb: 32
+    width: 18
+    line: 1519
+  - name: CBS
+    lsb: 18
+    width: 14
+    line: 1520
+  - name: CIR
+    lsb: 0
+    width: 18
+    line: 1521
+- name: QSCH_METER_CFG_TBL
+  address: 0x34f000
+  stride: 4
+  bytes: 4
+  entries: 132
+  index_line: 1881
+  struct_line: 1524
+  registers: []
+  fields:
+  - name: METER_LENGTH
+    lsb: 0
+    width: 2
+    line: 1525
+- name: PSCH_SHP_CFG_TBL
+  address: 0x354000
+  stride: 8
+  bytes: 8
+  entries: 11
+  index_line: 1889
+  struct_line: 1528
+  registers: [PORT_SHAPE_CTRL]
+  fields:
+  - name: C_SHAPER_EN
+    lsb: 36
+    width: 1
+    line: 1529
+  - name: SHAPER_MODE
+    lsb: 35
+    width: 1
+    line: 1530
+  - name: TOKEN_LEVEL
+    lsb: 32
+    width: 3
+    line: 1531
+  - name: CBS
+    lsb: 18
+    width: 14
+    line: 1532
+  - name: CIR
+    lsb: 0
+    width: 18
+    line: 1533
+- name: PSCH_METER_CFG_TBL
+  address: 0x357000
+  stride: 4
+  bytes: 4
+  entries: 11
+  index_line: 1897
+  struct_line: 1536
+  registers: []
+  fields:
+  - name: METER_LENGTH
+    lsb: 0
+    width: 2
+    line: 1537

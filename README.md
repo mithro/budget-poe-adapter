@@ -9,9 +9,9 @@ The project is at the research stage. There is no schematic or PCB here yet.
 
 | Folder | Contents |
 | --- | --- |
-| [`design/`](design/) | Block diagram and rough BOM for the current concept. |
-| [`research/`](research/) | Research notes: PoE, USB-C PD, switch ICs, MCUs and how to attach an MCU to the network. |
-| [`datasheets/`](datasheets/) | Switch IC documentation: Motorcomm datasheets (included) and Realtek datasheets (linked). See [`datasheets/README.md`](datasheets/README.md). |
+| [`design/`](https://github.com/mithro/budget-poe-adapter/tree/main/design) | Block diagram and rough BOM for the current concept. |
+| [`research/`](https://github.com/mithro/budget-poe-adapter/tree/main/research) | Research notes: PoE, USB-C PD, switch ICs, MCUs and how to attach an MCU to the network. |
+| [`datasheets/`](datasheets/README.md) | Switch IC documentation: Motorcomm datasheets (included) and Realtek datasheets (linked). See [`datasheets/README.md`](datasheets/README.md). |
 
 ### Design
 
@@ -37,8 +37,8 @@ The project is at the research stage. There is no schematic or PCB here yet.
 | [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The CPUs inside the RTL8367S (DW8051), YT9215S (RISC-V) and RTL8363NB (none). |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Dev boards and off-the-shelf hardware carrying the RTL8367S and YT9215S. |
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | JTAG, SPI flash and UART pins of the YT9215 S, SC/SCH and RB variants. |
-| [`yt9215-registers/`](research/yt9215-registers/) | YT9215 register map from the Linux driver, cross-checked against the vendor SDK and the datasheets. |
-| [`lx-is601f-board/`](research/lx-is601f-board/) | Annotated photos of a bought LX-IS601F V2.0 board (YT9215SCH) showing where the debug pins come out. |
+| [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x switch programming guide and register reference, with register description files and C, Rust, MicroPython and Zephyr bindings. |
+| [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Annotated photos of a bought LX-IS601F V2.0 board (YT9215SCH) showing where the debug pins come out. |
 | [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking a small device on a gigabit Ethernet link. |
 
 ### Research: MCU and its network link
@@ -57,7 +57,7 @@ The project is at the research stage. There is no schematic or PCB here yet.
   (EasyEDA source, schematic, PCB, Gerbers, BOM). It is the reference design for the
   YT9215S notes here. The `attachments/...` paths quoted in
   [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) refer to that repository;
-  the same two files are also in [`datasheets/motorcomm/`](datasheets/motorcomm/).
+  the same two files are also in [`datasheets/motorcomm/`](https://github.com/mithro/budget-poe-adapter/tree/main/datasheets/motorcomm).
 
 ## Licence
 

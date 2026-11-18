@@ -5499,11 +5499,9 @@ registers:
       fields: [METER_ID]
   block: vlan
   title: VLAN table entry
-  desc: 'One 64-bit entry per VLAN ID. Write the low word, then the high word; the entry takes
+  desc: 'One 64-bit entry per VLAN ID. Write the low word, then the high word.
 
-    effect when the high word is written. :ref:`VLAN table <vlan-table>` shows how to build
-
-    an entry.'
+    :ref:`VLAN table <vlan-table>` shows how to build an entry.'
   access: rw
   words: 2
   sdk:
@@ -8882,9 +8880,8 @@ registers:
     access: rw
     inferred: true
     sdk:
-      status: spans SDK fields
-      fields: [GRPID0, KEEP1, GRPID1, KEEP2, GRPID2, KEEP3, GRPID3, KEEP4, GRPID4, KEEP5, GRPID5, KEEP6,
-        GRPID6, KEEP7, GRPID7]
+      status: same bits
+      fields: [GRPID0]
   - name: KEEP
     linux:
       macro: YT921X_ACL_BLK_KEEP_KEEPn(bin)
@@ -8905,9 +8902,8 @@ registers:
     desc: Slot n keeps its current key and mask.
     access: rw
     sdk:
-      status: spans SDK fields
-      fields: [KEEP0, GRPID0, KEEP1, GRPID1, KEEP2, GRPID2, KEEP3, GRPID3, KEEP4, GRPID4, KEEP5, GRPID5,
-        KEEP6, GRPID6, KEEP7]
+      status: same bits
+      fields: [KEEP0]
   block: acl
   title: ACL block keep mask
   desc: While a block is open, marks the key slots that the commit must leave unchanged.
@@ -9054,9 +9050,8 @@ registers:
     desc: 'Group number of slot m: the slot number that names the rule.'
     access: rw
     sdk:
-      status: spans SDK fields
-      fields: [GRPID0, VALID1, GRPID1, VALID2, GRPID2, VALID3, GRPID3, VALID4, GRPID4, VALID5, GRPID5,
-        VALID6, GRPID6, VALID7, GRPID7]
+      status: same bits
+      fields: [GRPID0]
   - name: EN
     linux:
       macro: YT921X_ACL_ENTRY_ENm(bin)
@@ -9077,9 +9072,8 @@ registers:
     desc: Slot m is in use.
     access: rw
     sdk:
-      status: spans SDK fields
-      fields: [VALID0, GRPID0, VALID1, GRPID1, VALID2, GRPID2, VALID3, GRPID3, VALID4, GRPID4, VALID5,
-        GRPID5, VALID6, GRPID6, VALID7]
+      status: same bits
+      fields: [VALID0]
   block: acl
   title: ACL block slot enables
   desc: 'Enables the eight key slots of one block and groups slots into rules. Slots with the

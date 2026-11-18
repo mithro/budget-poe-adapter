@@ -124,8 +124,7 @@ class YT921x:
         return [self.reg_read(addr + 4 * i) for i in range(n)]
 
     def reg_write_words(self, addr, words):
-        """Write a register of several words in rising address order; a table
-        entry takes effect with its last word."""
+        """Write a register of several words in rising address order."""
         for i, word in enumerate(words):
             self.reg_write(addr + 4 * i, word)
 

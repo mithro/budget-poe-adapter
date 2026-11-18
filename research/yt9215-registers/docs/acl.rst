@@ -60,11 +60,14 @@ A bit set in :reg:`ACL_MASK` means the same bit of the key must match; a clear b
 care". The mask covers only the lower, type-specific bits. :field:`ACL_KEY.TYPE`,
 :field:`ACL_KEY.SPORTS`, :field:`ACL_KEY.ORD` and :field:`ACL_KEY.REVERSE` exist in the key
 alone and always apply; leave their positions in
-the mask at 0.
+the mask at 0. The range flags of a layout, such as :field:`ACL_KEY.L4_DPORT_RANGE_EN`,
+are key-only bits too. With a range flag set, the key holds the lower bound of that field
+and the mask holds the upper bound in place of a bit mask.
 
 Types :val:`acl_type.UDF0` to :val:`acl_type.UDF7` match two-byte windows at configurable offsets. :reg:`UDF_CTRL`
 sets each window: the header it is counted from (:enum:`udf_type`) and the offset in bytes
-from the start of that header. The window is the two bytes at that offset.
+from the start of that header. The window is the two bytes at that offset. Key type
+:val:`acl_type.UDF0` holds windows 0 and 1, the next type windows 2 and 3, and so on.
 
 .. _acl-action:
 

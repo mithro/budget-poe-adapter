@@ -36,12 +36,13 @@ def bringup(mdio):
 # [init]
 def init(mdio, cpu_port_num):
     """Bring the switch up as one group of copper ports with a CPU port."""
-    dev, part = bringup(mdio)  # find, reset, identify
+    dev, part = bringup(mdio)  # find, reset, identify; raises for an unknown part
+    phy_ports = part[4]  # mask of the ports with a built-in PHY
     enable_features(dev)
     cpu_port(dev, cpu_port_num)
     port_force(dev, cpu_port_num, R.SPEED_V1000)
     # One group of all copper ports; each may also reach the CPU port.
-    port_group(dev, part[4], 1 << cpu_port_num)
+    port_group(dev, phy_ports, 1 << cpu_port_num)
     return dev, part
 # [init end]
 
@@ -112,7 +113,7 @@ def vlan_write(dev, vid, members, untagged):
     R.bits_set(entry, R.VLAN_CTRL_PORTS_LSB, R.VLAN_CTRL_PORTS_WIDTH, members)
     R.bits_set(entry, R.VLAN_CTRL_UNTAG_PORTS_LSB, R.VLAN_CTRL_UNTAG_PORTS_WIDTH,
                untagged)
-    # Low word first; the entry takes effect with the high word.
+    # The words are written in rising address order, low word first.
     dev.reg_write_words(R.VLAN_CTRL(vid), entry)
 
 

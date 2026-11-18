@@ -3735,11 +3735,11 @@
           <dim>4096</dim>
           <dimIncrement>0x8</dimIncrement>
           <name>VLAN_CTRL[%s]</name>
-          <description>One 64-bit entry per VLAN ID. Write the low word, then the high word; the entry takes effect when the high word is written. VLAN table shows how to build an entry. Index: vid = 0 to 4095.</description>
+          <description>One 64-bit entry per VLAN ID. Write the low word, then the high word. VLAN table shows how to build an entry. Index: vid = 0 to 4095.</description>
           <addressOffset>0x8000</addressOffset>
           <register>
             <name>W0</name>
-            <description>VLAN table entry: bits 31 to 0. One 64-bit entry per VLAN ID. Write the low word, then the high word; the entry takes effect when the high word is written. VLAN table shows how to build an entry.</description>
+            <description>VLAN table entry: bits 31 to 0. One 64-bit entry per VLAN ID. Write the low word, then the high word. VLAN table shows how to build an entry.</description>
             <addressOffset>0x0</addressOffset>
             <size>32</size>
             <access>read-write</access>
@@ -3807,7 +3807,7 @@
           </register>
           <register>
             <name>W1</name>
-            <description>VLAN table entry: bits 63 to 32. One 64-bit entry per VLAN ID. Write the low word, then the high word; the entry takes effect when the high word is written. VLAN table shows how to build an entry.</description>
+            <description>VLAN table entry: bits 63 to 32. One 64-bit entry per VLAN ID. Write the low word, then the high word. VLAN table shows how to build an entry.</description>
             <addressOffset>0x4</addressOffset>
             <size>32</size>
             <access>read-write</access>

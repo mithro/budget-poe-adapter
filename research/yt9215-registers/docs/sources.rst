@@ -17,6 +17,8 @@ Sources
 
    * - Source
      - Version
+   * - `Vendor driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver>`__
+     - Same commit as the vendor SDK
    * - `Linux driver <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__
      - Commit ``20eef29b7c84`` of the mainline kernel
    * - `Vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
@@ -32,7 +34,7 @@ confirmed by the Linux driver, the reference entries of the registers involved l
 lines of the driver header.
 
 The vendor SDK provides a list of all register tables with field positions, and driver code
-that uses them, but no register descriptions. It also contains a small
+that uses them, but no register descriptions. Its repository also contains a small
 `MDIO driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver>`__.
 
 The datasheet provides the pins, the strap pins and the timing of the management interface.
@@ -66,7 +68,8 @@ Comparison with the vendor SDK
 ------------------------------
 
 The Sources table of each register compares every field with the SDK table at the same
-address.
+address. For an array field whose elements are separated by other bits, the comparison is
+that of its first element.
 
 .. list-table::
    :header-rows: 1
@@ -132,7 +135,8 @@ multicast addresses such as spanning tree BPDUs.
 Reset values
 ~~~~~~~~~~~~
 
-Two reset values are known, both from the Linux driver. Write every other register a function
+Three reset values are stated by the Linux driver: the first in its code, the others in
+comments. None has been read back from hardware by this project. Write every other register a function
 depends on.
 
 .. list-table::
@@ -145,3 +149,5 @@ depends on.
      - ``0x9988``
    * - :field:`PORT_RATE.GAP_VALUE`
      - ``0x14``
+   * - :field:`MAC_FRAME.SIZE`
+     - 9216

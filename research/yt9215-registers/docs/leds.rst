@@ -21,7 +21,7 @@ set.
 A common choice is link plus activity. To light the LED while the link is up at any speed,
 set :field:`LED0_PORT.ACT_1000M`, :field:`LED0_PORT.ACT_100M` and :field:`LED0_PORT.ACT_10M`.
 To blink it on traffic, set :field:`LED0_PORT.ACT_TX_BLINK` and
-:field:`LED0_PORT.ACT_RX_BLINK`; this pair is confirmed by the :ref:`Linux driver <sources-list>`. For LED 0 of
+:field:`LED0_PORT.ACT_RX_BLINK`; all five bits are confirmed by the :ref:`Linux driver <sources-list>`. For LED 0 of
 port 3 that is one write:
 
 .. code-block:: c

@@ -21,7 +21,7 @@ and 16 bits of data.
    :caption: Clause 22 MDIO frames. Bits are sent from left to right; green parts are driven
              by the switch.
 
-The switch answers on one PHY address, ``0x1d`` or ``0x00``, selected by a strap pin at
+The switch answers on one PHY address, ``0x1d`` or ``0x00``, selected by a :ref:`strap pin <access-straps>` at
 power-on. Any MDIO master will do: a hardware MDIO controller, or two GPIO pins as in
 ``BitBangMDIO`` of the :ref:`MicroPython binding <bindings-micropython>`.
 
@@ -108,12 +108,15 @@ names are those of the :download:`YT9215SCH datasheet <../../../datasheets/motor
      - SPI host interface off; ``SMI_SEL`` applies
      - SPI host interface on
    * - ``SMI_SEL``
-     - EEPROM interface
-     - MDIO management interface
+     - I2C host interface
+     - MDIO host interface
 
 ``MID29``, ``DIS_SPIS`` and ``SMI_SEL`` have internal pull-ups and the switch ID pins internal
-pull-downs. The datasheet describes the SPI and I2C host interfaces, which reach the same
-registers; this manual does not cover them.
+pull-downs. For MDIO, leave ``DIS_SPIS`` high and pull ``SMI_SEL`` low: a chip with neither
+pin strapped selects the I2C host interface. The ``SMI_SEL`` row follows the pin table and
+the I2C section of the datasheet; its MDIO section says the pin may be "low or high", which
+contradicts them. The SPI and I2C host interfaces reach the same registers; this manual does
+not cover them.
 
 .. _access-smi:
 

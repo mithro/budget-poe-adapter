@@ -191,6 +191,11 @@ four in :reg:`TPID_EGR`, chosen per port by :field:`PORT_EGR.TPID_CTAG`.
 :reg:`PVID_SEL` makes a port classify by the service tag instead; it belongs to 802.1ad
 setups that no public driver exercises.
 
+Of this section the :ref:`Linux driver <sources-list>` confirms
+:field:`VLAN_CTRL.UNTAG_PORTS`. The behaviour of :reg:`TPID_EGR`, :reg:`PORT_EGR`,
+:reg:`VLAN_EGR_FILTER` and :reg:`PVID_SEL` is inferred from their names and from the names
+the vendor SDK gives the same bits.
+
 .. _vlan-port-based:
 
 Port-based VLANs

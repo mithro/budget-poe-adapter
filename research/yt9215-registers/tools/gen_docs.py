@@ -312,11 +312,41 @@ def used_in(entries):
 
 # ------------------------------------------------------------ register page
 
+MARKUP = re.compile(r"(:[a-z]+:`[^`]*`|``[^`]*``|`[^`]*`__)")
+WORD = re.compile(r"(?<![\w.])[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*(?![\w(\[])")
+SOURCE = re.compile(r"\b(Linux driver|[Vv]endor SDK)\b")
+
+
+def autolink(reg, text, own=None):
+    """Link the fields and values of a register that its descriptions name."""
+    fields, values = {}, {}
+    for lay, f in M.all_fields(reg):
+        short = M.fsym(reg, f, lay)[len(reg["id"]) + 1:]
+        fields.setdefault(f["name"], short)
+        vals = f.get("values") or []
+        for v in vals:
+            values.setdefault(v["name"], ":val:`%s.%s.%s`" % (reg["id"], short, v["name"]))
+
+    def word(mo):
+        w = mo.group(0)
+        if w != own and w in fields and len(w) > 2:
+            return ":field:`%s <%s.%s>`" % (w, reg["id"], fields[w])
+        if w in values and w not in fields and len(w) > 3:
+            return values[w]
+        return w
+
+    parts = MARKUP.split(text)
+    for i in range(0, len(parts), 2):
+        parts[i] = WORD.sub(word, parts[i])
+        parts[i] = SOURCE.sub(lambda mo: ":ref:`%s <sources-list>`" % mo.group(1), parts[i])
+    return "".join(parts)
+
+
 def field_rows(m, reg, fields, lay, show_parts, show_unit, show_reset):
     rows = []
     for f in sorted(fields, key=lambda f: -f["lsb"]):
         sym = M.fsym(reg, f, lay)
-        desc = f["desc"].strip()
+        desc = autolink(reg, f["desc"].strip(), f["name"])
         if f.get("enum"):
             desc += " Values: :enum:`%s`." % f["enum"]
         elif f.get("values"):
@@ -380,7 +410,7 @@ def value_tables(m, reg, fields, lay=None):
         out += [".. rubric:: Values of %s%s" % (M.fdisplay(f), fam), ""]
         rows = [[lit(str(v["value"])),
                  ".. _%s:\n\n%s" % (val_label(sym, v["name"]), lit(v["name"])),
-                 v.get("desc", "")] for v in f["values"]]
+                 autolink(reg, v.get("desc", ""))] for v in f["values"]]
         out += table(["Value", "Name", "Meaning"], rows, [12, 28, 60])
     return out
 
@@ -413,7 +443,7 @@ def register_section(m, reg, guide_refs, mentions):
     out = target(reg_label(reg["id"]))
     out += [".. index:: single: %s (register)" % reg["id"], ""]
     out += heading(reg["id"] + M.index_text(reg), "-")
-    out += ["**%s.** %s" % (reg["title"], reg["desc"].strip()), ""]
+    out += ["**%s.** %s" % (reg["title"], autolink(reg, reg["desc"].strip())), ""]
     rows = [("Address", lit(M.addr_formula(reg)))]
     for d in reg["dims"]:
         rows.append(("Index ``%s``" % d["var"], range_text(d["first"], d["count"])))
@@ -455,7 +485,7 @@ def register_section(m, reg, guide_refs, mentions):
     for lay in reg["layouts"]:
         lf = [f for f in lay["fields"] if not (f.get("key_only") and reg["id"] != "ACL_KEY")]
         out += [".. rubric:: Layout %s: %s" % (lay["name"], lay["title"]), ""]
-        types = ", ".join(lit(t) for t in lay["types"])
+        types = ", ".join(":val:`acl_type.%s`" % t for t in lay["types"])
         out += ["Used when TYPE of the slot (:field:`ACL_KEY.TYPE`, values :enum:`acl_type`) is %s."
                 % types, ""]
         out += [".. yt-bitfield:: " + reg["id"], "   :layout: " + lay["name"], ""]
@@ -611,7 +641,7 @@ def parts_page(m):
     out += heading("Parts", "=")
     out += ["The members of the family and how software tells them apart. "
             ":ref:`bringup-identify` gives the procedure. The identification values come from "
-            "the Linux driver; the YT9215SCH is not in its table and is expected to identify as "
+            "the :ref:`Linux driver <sources-list>`; the YT9215SCH is not in its table and is expected to identify as "
             "the YT9215SC, which is unverified.", ""]
     rows = []
     for c in m.chips:
@@ -645,7 +675,7 @@ def sdk_pages(m):
     out = target("reference-sdk")
     out += heading("Address regions and vendor SDK tables", "=")
     out += [
-        "The vendor SDK carries a machine-generated list of every register table of the chip: "
+        "The :ref:`vendor SDK <sources-list>` carries a machine-generated list of every register table of the chip: "
         "`%s <%s>`__ has the addresses and `%s <%s>`__ the field positions. It has names but no "
         "descriptions. The region pages list, region by region, the registers this manual "
         "describes next to all %d SDK tables, so that a driver writer can see what exists beyond "

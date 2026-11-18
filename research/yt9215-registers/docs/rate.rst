@@ -24,13 +24,14 @@ eight core clock periods; the period is in :ref:`bringup-clock`.
    slot time = SLOT × 8 × core clock period
 
 SLOT is :field:`METER_SLOT.SLOT` for all meters and :field:`PORT_SHAPE_SLOT.SLOT` for all
-port shapers. The smallest SLOT is 80 (:const:`METER_SLOT_MIN`, :const:`PORT_SHAPE_SLOT_MIN`). On a YT9215
-with its 8 ns period that gives 5.12 µs.
+port shapers. The smallest SLOT is 80 (:const:`METER_SLOT_MIN`,
+:const:`PORT_SHAPE_SLOT_MIN`). On a YT9215 with its 8 ns period that gives 5.12 µs.
 
-**Rate and burst.** The rate goes into the field CIR and the burst size into CBS, of
-:reg:`METER_CTRL` for a meter and of :reg:`PORT_SHAPE_CTRL` for a shaper. The field UNIT of
-the same register scales the token size by powers of four so that large rates fit the
-fields.
+**Rate and burst.** For a meter the rate goes into :field:`METER_CTRL.CIR`, the burst size
+into :field:`METER_CTRL.CBS` and the scale into :field:`METER_CTRL.UNIT`; for a shaper they
+go into :field:`PORT_SHAPE_CTRL.CIR`, :field:`PORT_SHAPE_CTRL.CBS` and
+:field:`PORT_SHAPE_CTRL.UNIT`. The formulas call these fields CIR, CBS and UNIT. UNIT scales
+the token size by powers of four so that large rates fit the fields.
 
 .. list-table::
    :header-rows: 1
@@ -66,8 +67,9 @@ drops the colours selected in :field:`METER_CTRL.DROP`. A frame within the commi
 (:field:`METER_CTRL.EIR`, burst :field:`METER_CTRL.EBS`) yellow, and the rest red.
 :field:`METER_CTRL.RFC2698` chooses between the two-rate algorithm of RFC 2698 and that of
 RFC 4115, and :field:`METER_CTRL.COLOR_BLIND` makes the meter ignore a colour the frame
-already has. The :ref:`Linux driver <sources-list>` confirms the committed bucket with red frames dropped; the
-description of the excess bucket and the algorithm choice is inferred from the field names. Meters work only while
+already has. The :ref:`Linux driver <sources-list>` confirms the committed bucket, the
+excess burst with an excess rate of 0 and the dropping of red frames; a non-zero excess rate
+and the algorithm choice are inferred from the field names. Meters work only while
 :field:`FUNC.METER` is set; see :ref:`bringup-features`.
 
 .. yt-bitfield:: METER_CTRL
@@ -92,12 +94,41 @@ description of the excess bucket and the algorithm choice is inferred from the f
 There are :const:`METER_NUM` general meters. To limit what a port may receive (the sequence
 is confirmed by the :ref:`Linux driver <sources-list>`):
 
-1. Write the three words of entry 64 + port of :reg:`METER_CTRL`: :field:`METER_CTRL.CIR`,
-   :field:`METER_CTRL.CBS` and :field:`METER_CTRL.UNIT` from :ref:`rate-tokens`,
-   :field:`METER_CTRL.DROP` = :val:`METER_CTRL.DROP.R` (drop red frames), :field:`METER_CTRL.TOKEN_OVERFLOW_EN`
-   and :field:`METER_CTRL.METER_EN`. Set :field:`METER_CTRL.PKT_MODE` to count packets.
-2. Write :reg:`PORT_METER` of the port with the port number in :field:`PORT_METER.ID` and
+1. Once at start-up, write the slot length to :field:`METER_SLOT.SLOT`; its reset value is
+   not known.
+2. Write the three words of entry 64 + port of :reg:`METER_CTRL` with the fields of the
+   table that follows.
+3. Write :reg:`PORT_METER` of the port with the port number in :field:`PORT_METER.ID` and
    :field:`PORT_METER.EN`.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 44 56
+
+   * - Field
+     - Value
+   * - :field:`METER_CTRL.CIR`
+     - Rate, from :ref:`rate-tokens`
+   * - :field:`METER_CTRL.CBS`
+     - Burst, from :ref:`rate-tokens`
+   * - :field:`METER_CTRL.EBS`
+     - Excess burst, computed like the burst
+   * - :field:`METER_CTRL.EIR`
+     - 0
+   * - :field:`METER_CTRL.UNIT`
+     - Scale, from :ref:`rate-tokens`
+   * - :field:`METER_CTRL.DROP`
+     - :val:`METER_CTRL.DROP.R`
+   * - :field:`METER_CTRL.TOKEN_OVERFLOW_EN`
+     - 1
+   * - :field:`METER_CTRL.METER_EN`
+     - 1
+   * - :field:`METER_CTRL.PKT_MODE`
+     - 1 to count packets, 0 to count bytes
+
+With :field:`METER_CTRL.TOKEN_OVERFLOW_EN` set, tokens that no longer fit the committed
+bucket fill the excess bucket, so with an excess rate of 0 the excess burst acts as a second
+burst allowance, and only red frames are dropped.
 
 In byte mode a meter counts the frame bytes only, unless
 :field:`METER_CTRL.BYTE_MODE_INCLUDE_GAP` adds the per-frame overhead in
@@ -112,7 +143,8 @@ A shaper is a single token bucket on the transmit side of a port.
 
 .. yt-bitfield:: PORT_SHAPE_CTRL
 
-Write the two words of :reg:`PORT_SHAPE_CTRL` with :field:`PORT_SHAPE_CTRL.CIR`,
+Once at start-up, write the slot length to :field:`PORT_SHAPE_SLOT.SLOT`; its reset value is
+not known. Then write the two words of :reg:`PORT_SHAPE_CTRL` with :field:`PORT_SHAPE_CTRL.CIR`,
 :field:`PORT_SHAPE_CTRL.CBS` and :field:`PORT_SHAPE_CTRL.UNIT` from :ref:`rate-tokens` and
 :field:`PORT_SHAPE_CTRL.EN`. Writing zeros turns the shaper off.
 

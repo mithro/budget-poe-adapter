@@ -96,7 +96,7 @@ int yt921x_reg_read_words(struct yt921x *dev, uint32_t addr, uint32_t *words, un
 int yt921x_reg_write_words(struct yt921x *dev, uint32_t addr, const uint32_t *words,
 			   unsigned int n)
 {
-	/* Rising address order: a table entry takes effect with its last word. */
+	/* Rising address order, as the Linux driver writes table entries. */
 	for (unsigned int i = 0; i < n; i++) {
 		int res = yt921x_reg_write(dev, addr + 4u * i, words[i]);
 

@@ -174,6 +174,13 @@ The action registers choose, per receiving port, between four actions:
      -
      - :reg:`FILTER_BCAST`
 
+.. warning::
+
+   The CPU tag carries the same :ref:`code <cpu-tag-codes>` for a trapped and for a copied
+   unknown frame. A host that forwards trapped frames itself must not use
+   :val:`ACT_UNK_UCAST.ACT.COPY`, or those frames are sent twice. The
+   :ref:`Linux driver <sources-list>` states this.
+
 A set bit in a filter register keeps flooded frames of that kind away from the port. This
 polarity is inferred from the register names and from the values the :ref:`Linux driver <sources-list>` writes.
 

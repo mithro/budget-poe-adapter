@@ -175,7 +175,9 @@ Flush
 
 :val:`FDB_OP.OP.FLUSH` removes learned entries in bulk; with :field:`FDB_OP.FLUSH_STATIC` it removes static
 ones as well. It works on unicast entries, or on multicast entries when
-:field:`FDB_OP.FLUSH_MCAST` is set, so emptying the table takes one flush of each kind.
+:field:`FDB_OP.FLUSH_MCAST` is set, so emptying the table takes one flush of each kind. The
+multicast selector is not used by the :ref:`Linux driver <sources-list>`; it follows the
+comment in its header and the flush modes of the :ref:`vendor SDK <sources-list>`.
 
 .. list-table::
    :header-rows: 1
@@ -200,7 +202,8 @@ ones as well. It works on unicast entries, or on multicast entries when
 Flush the entries of a port when its link goes down or its spanning tree state changes, or
 set :field:`FDB_HW_FLUSH.ON_LINKDOWN` and let the switch do the first of these. The
 `vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_l2.c#L385>`__ refuses a flush command
-while that bit is set, so use one method or the other.
+while that bit is set, so use one method or the other. The bit is not used by the
+:ref:`Linux driver <sources-list>`; its meaning follows its name and that SDK code.
 
 .. _fdb-ageing:
 

@@ -204,7 +204,7 @@ def fdb_sequence(ln):
         ("note", 1, "the switch runs the command"),
         (0, 1, "read FDB_RESULT until DONE = 1 (poll every 10 ms, give up after 100 ms)"),
         (1, 0, "NOTFOUND, INDEX"),
-        (0, 1, "read FDB_OUT1, FDB_OUT0, FDB_OUT2 (lookups only)"),
+        (0, 1, "read FDB_OUT0, FDB_OUT1, FDB_OUT2 (lookups only)"),
         (1, 0, "the entry that was found"),
     ])
 
@@ -214,12 +214,12 @@ def acl_sequence(ln):
     return diagrams.sequence("Writing one ACL rule", ["Host", "YT921x"], [
         (0, 1, "write ACL_ACT[8 × block + group]: three words"),
         (0, 1, "write ACL_BLK_CMD = BLKID | MODIFY"),
-        ("note", 1, "block is open; lookups still use the old content"),
+        ("note", 1, "block is open"),
         (0, 1, "write ACL_KEY and ACL_MASK of each slot of the rule: two words each"),
         (0, 1, "write ACL_BLK_KEEP: KEEP for every slot that is not rewritten"),
         (0, 1, "write ACL_ENTRY[block]: EN and GRPID of every slot"),
         (0, 1, "write ACL_BLK_CMD = BLKID (MODIFY = 0)"),
-        ("note", 1, "the block switches to the new content"),
+        ("note", 1, "block is committed"),
     ])
 
 

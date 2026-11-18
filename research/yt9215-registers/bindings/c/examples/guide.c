@@ -154,7 +154,7 @@ int guide_vlan_write(struct yt921x *dev, unsigned int vid, uint16_t members,
 			members);
 	yt921x_bits_set(entry, YT921X_VLAN_CTRL_UNTAG_PORTS_LSB,
 			YT921X_VLAN_CTRL_UNTAG_PORTS_WIDTH, untagged);
-	/* Low word first; the entry takes effect with the high word. */
+	/* The words are written in rising address order, low word first. */
 	return yt921x_reg_write_words(dev, YT921X_VLAN_CTRL(vid), entry,
 				      YT921X_VLAN_CTRL_WORDS);
 }

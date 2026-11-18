@@ -56,8 +56,9 @@ Reading all 39 counters of one port takes 42 register reads, about 11 ms at an M
 1 MHz.
 
 The counter names follow the :ref:`Linux driver <sources-list>`. The
-`vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L171>`__ names three offsets differently,
-so treat the meaning of these three as uncertain.
+`vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L171>`__ names three offsets differently. The
+`vendor SDK header <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_stat.h>`__ agrees with the Linux names at all
+three, so the names used here have two sources and the small vendor driver is the outlier.
 
 .. list-table::
    :header-rows: 1
@@ -65,7 +66,7 @@ so treat the meaning of these three as uncertain.
 
    * - Offset
      - Name here
-     - :ref:`Vendor driver <sources-list>` name
+     - Name in the vendor driver
    * - ``0x4c``
      - :counter:`RX_OVERSIZE_ERR`
      - ``RxOverFlow``
@@ -101,4 +102,5 @@ A clear takes two writes: the first selects the ports with :field:`MIB_CTRL.CLEA
 second sets CLEAN. This is the sequence of the
 `vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L52>`__; the :ref:`Linux driver <sources-list>` defines
 the bits but does not use them. Whether CLEAN clears itself is not known, which is why the
-first write puts it back to 0.
+first write puts it back to 0. The SDK leaves :field:`MIB_CTRL.ALL_PORT` at 0 for a clear of
+every port; what that bit does is not known.

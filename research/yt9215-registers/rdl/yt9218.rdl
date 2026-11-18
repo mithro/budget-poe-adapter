@@ -1169,7 +1169,7 @@ addrmap yt9218 {
 
     reg {
         name = "VLAN table entry";
-        desc = "One 64-bit entry per VLAN ID. Write the low word, then the high word; the entry takes effect when the high word is written. VLAN table shows how to build an entry. Index: vid = 0 to 4095.";
+        desc = "One 64-bit entry per VLAN ID. Write the low word, then the high word. VLAN table shows how to build an entry. Index: vid = 0 to 4095.";
         regwidth = 64;
         field { desc = "Ports that send frames of this VLAN without a tag, one bit per port."; sw = rw; hw = r; } UNTAG_PORTS_10[50:50];
         field { desc = "Ports that send frames of this VLAN without a tag, one bit per port."; sw = rw; hw = r; } UNTAG_PORTS_9[49:49];

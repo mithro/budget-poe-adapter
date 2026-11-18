@@ -194,17 +194,20 @@ Strap overrides, I/O voltage and temperature
 
 Some settings are sampled from strap pins at power-on. :reg:`PON_STRAP_CAP` shows what was
 sampled. To override a strap, write the wanted value to :reg:`PON_STRAP_VAL` and set the same
-bit in :reg:`PON_STRAP_FUNC`; :ref:`ports-eee` uses this for Energy Efficient Ethernet.
+bit in :reg:`PON_STRAP_FUNC`; :ref:`ports-eee` uses this for Energy Efficient Ethernet, which is the one override the
+:ref:`Linux driver <sources-list>` confirms. :reg:`PON_STRAP_CAP` is inferred from its name.
 
 :reg:`IO_LEVEL` sets the signalling voltage of the digital pins and of each xMII interface.
 Its field positions differ between the two families, so a driver has to identify the part
-first.
+first. The fields come from the header of the :ref:`Linux driver <sources-list>`, which does
+not write them; :ref:`ports-xmii` shows the one known use.
 
 Set :field:`SENSOR.TEMP` to start the temperature sensor and read :reg:`TEMP` for a raw value.
 The conversion to degrees is not known.
 
 :reg:`MAC_ADDR_HI2` and :reg:`MAC_ADDR_LO4` hold the MAC address the switch uses as the source
-of frames it generates itself, such as pause frames.
+of frames it generates itself, such as pause frames. This use is inferred from the register
+names; no public code writes them.
 
 .. _bringup-next:
 

@@ -486,6 +486,11 @@ def match_field(reg, fld, t):
     word0 = ((reg["address"] - t["base"]) % t["stride"]) // 4
     lo = 32 * word0 + fld["lsb"]
     hi = lo + fld["width"] - 1
+    arr = fld.get("array")
+    if arr and any(d["step"] > arr["width"] for d in arr["dims"]):
+        # The elements are separated by other bits: compare element 0.
+        lo = 32 * word0 + arr["lsb"]
+        hi = lo + arr["width"] - 1
     over = sorted((f for f in t["fields"]
                    if f["lsb"] <= hi and f["lsb"] + f["width"] - 1 >= lo),
                   key=lambda f: f["lsb"])

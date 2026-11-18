@@ -896,9 +896,8 @@ registers:
     words: 2
     title: VLAN table entry
     desc: |
-      One 64-bit entry per VLAN ID. Write the low word, then the high word; the entry takes
-      effect when the high word is written. :ref:`VLAN table <vlan-table>` shows how to build
-      an entry.
+      One 64-bit entry per VLAN ID. Write the low word, then the high word.
+      :ref:`VLAN table <vlan-table>` shows how to build an entry.
     fields:
       UNTAG_PORTS: {desc: "Ports that send frames of this VLAN without a tag, one bit per port."}
       STP_ID: {desc: "Spanning tree instance of this VLAN; selects the :reg:`STP` register."}

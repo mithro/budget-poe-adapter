@@ -150,8 +150,7 @@ impl<M: Mdio, D: Delay> Yt921x<M, D> {
         Ok(())
     }
 
-    /// Write a register of several 32-bit words, in rising address order:
-    /// a table entry takes effect with its last word.
+    /// Write a register of several 32-bit words, in rising address order.
     pub fn reg_write_words(&mut self, addr: u32, words: &[u32]) -> Result<(), Error<M::Error>> {
         for (i, w) in words.iter().enumerate() {
             self.reg_write(addr + 4 * i as u32, *w)?;

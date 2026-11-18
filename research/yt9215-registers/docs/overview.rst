@@ -74,16 +74,27 @@ What a driver has to do
      - Choose the CPU port and decide whether it carries tags
      - :ref:`cpu-tag`
    * - 5
-     - Configure the external ports and enable the port MACs
+     - Enable the port MACs
      - :ref:`ports-up`
+   * -
+     - Configure the external ports
+     - :ref:`ports-external`
    * - 6
-     - Group ports and set the handling of unknown destinations
+     - Group ports
      - :ref:`forwarding-isolation`
+   * -
+     - Set the handling of unknown destinations
+     - :ref:`forwarding-flood`
    * - 7
      - Add VLANs, static addresses, counters and the rest as needed
      - :doc:`vlan`
 
-The first six steps in code, built from the examples of the pages named in the table:
+A start-up in code, built from the examples of the pages named in the table. It finds,
+resets and identifies the switch, turns on the function blocks, sets up a tagged CPU port
+and puts all copper ports into one group. It leaves three things to the driver: selecting
+the interface of the CPU port (:ref:`ports-external`), enabling the MAC of each copper port
+when its link comes up (:ref:`ports-up`), and the handling of unknown destinations
+(:ref:`forwarding-flood`).
 
 .. tab-set::
 

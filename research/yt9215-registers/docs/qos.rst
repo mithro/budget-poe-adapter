@@ -26,33 +26,32 @@ then still applies when no other source does.
      - Source (:enum:`app_selector`)
      - Priority comes from
    * - 0
-     - ``MAC_SA``
+     - :val:`app_selector.MAC_SA`
      - The forwarding database entry of the source address (:field:`FDB_IN2.PRIO`)
    * - 1
-     - ``MAC_DA``
+     - :val:`app_selector.MAC_DA`
      - The forwarding database entry of the destination address
    * - 2
-     - ``VID``
+     - :val:`app_selector.VID`
      - The VLAN table entry (:field:`VLAN_CTRL.PRIO`)
    * - 3
-     - ``ACL``
+     - :val:`app_selector.ACL`
      - An ACL rule (:field:`ACL_ACT.PRIO`)
    * - 4
-     - ``DSCP``
+     - :val:`app_selector.DSCP`
      - The IP DSCP value, mapped by :reg:`IPM_DSCP`
    * - 5
-     - ``CVLAN_PCP``
+     - :val:`app_selector.CVLAN_PCP`
      - The customer tag priority, mapped by :reg:`IPM_PCP`
    * - 6
-     - ``SVLAN_PCP``
+     - :val:`app_selector.SVLAN_PCP`
      - The service tag priority, mapped by :reg:`IPM_PCP`
    * - 7
-     - ``PORT``
+     - :val:`app_selector.PORT`
      - The port default in :field:`PORT_QOS.PRIO`
 
-To trust DSCP first and the tag priority second, as the :ref:`Linux driver <sources-list>` does for such a request,
-give ``DSCP`` weight 7 and both ``CVLAN_PCP`` and ``SVLAN_PCP`` weight 6. The :ref:`Linux driver <sources-list>` uses
-only these three sources; the others are described from the names in its header.
+To trust DSCP first and the tag priority second, give :val:`app_selector.DSCP` weight 7 and both :val:`app_selector.CVLAN_PCP` and :val:`app_selector.SVLAN_PCP` weight 6. These three sources are confirmed by the
+:ref:`Linux driver <sources-list>`; the others are inferred from the names in its header.
 
 .. _qos-maps:
 

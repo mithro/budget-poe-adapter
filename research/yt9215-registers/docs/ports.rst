@@ -187,35 +187,79 @@ xMII
 5. Force :reg:`PORT_CTRL` to the same speed and duplex as in :ref:`ports-up`.
 
 The :ref:`Linux driver <sources-list>` writes :reg:`MDIO_POLLING` and :field:`XMII.LINK` as in steps 4 and 5 but
-configures no xMII mode. Steps 1 to 3 match the
+configures no xMII mode. Steps 1 to 3 largely match the
 `vendor driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__, which brings up
 RGMII on port 8 with the writes of this table. Other modes follow the field definitions only. RGMII
 delays need checking on the board.
 
 .. list-table::
    :header-rows: 1
-   :widths: 24 22 54
+   :widths: 22 44 34
 
    * - Register
+     - Field
      - Value
-     - Meaning
    * - :reg:`IO_LEVEL`
-     - ``0x0000000f``
-     - Only for 1.8 V RGMII pins
+     - :field:`RGMII0 <IO_LEVEL.YT9215_RGMII0>`
+     - 3
+   * - :reg:`IO_LEVEL`
+     - :field:`RGMII1 <IO_LEVEL.YT9215_RGMII1>`
+     - 3
    * - :reg:`XMII_CTRL`
-     - ``0x00000002``
-     - Port 8 uses its xMII pins
+     - Bit of port 8 in :field:`XMII_CTRL.PORT`
+     - 1
    * - :reg:`XMII` of port 8
-     - ``0x841c0000``
-     - :field:`XMII.MODE` 4 (RGMII), :field:`XMII.LINK`, :field:`XMII.EN`, and bits 26 and 20,
-       which have no known name
+     - :field:`XMII.MODE`
+     - :val:`XMII.MODE.RGMII` (4)
    * - :reg:`XMII` of port 8
-     - Delay fields
-     - :field:`XMII.RGMII_RX_DELAY_150PS`, :field:`XMII.RGMII_TX_DELAY_150PS` and
-       :field:`XMII.RGMII_TX_DELAY_2NS` from the board description
+     - :field:`XMII.LINK`
+     - 1
+   * - :reg:`XMII` of port 8
+     - :field:`XMII.EN`
+     - 1
+   * - :reg:`XMII` of port 8
+     - Bit 26
+     - 1
+   * - :reg:`XMII` of port 8
+     - Bit 20
+     - 1
+   * - :reg:`XMII` of port 8
+     - :field:`XMII.RGMII_RX_DELAY_150PS`
+     - From the board description
+   * - :reg:`XMII` of port 8
+     - :field:`XMII.RGMII_TX_DELAY_150PS`
+     - From the board description
+   * - :reg:`XMII` of port 8
+     - :field:`XMII.RGMII_TX_DELAY_2NS`
+     - From the board description
    * - :reg:`PORT_CTRL` of port 8
-     - ``0x000001fa``
-     - 1000 Mbit/s, full duplex, pause and both MAC directions enabled
+     - :field:`PORT_CTRL.SPEED`
+     - :val:`speed.V1000` (2)
+   * - :reg:`PORT_CTRL` of port 8
+     - :field:`PORT_CTRL.DUPLEX_FULL`
+     - 1
+   * - :reg:`PORT_CTRL` of port 8
+     - :field:`PORT_CTRL.RX_PAUSE`
+     - 1
+   * - :reg:`PORT_CTRL` of port 8
+     - :field:`PORT_CTRL.TX_PAUSE`
+     - 1
+   * - :reg:`PORT_CTRL` of port 8
+     - :field:`PORT_CTRL.HALF_PAUSE`
+     - 1
+   * - :reg:`PORT_CTRL` of port 8
+     - :field:`PORT_CTRL.RX_MAC_EN`
+     - 1
+   * - :reg:`PORT_CTRL` of port 8
+     - :field:`PORT_CTRL.TX_MAC_EN`
+     - 1
+
+The register values are ``0x0000000f`` for :reg:`IO_LEVEL`, ``0x00000002`` for
+:reg:`XMII_CTRL`, ``0x841c0000`` for :reg:`XMII` before the delays and ``0x000001fa`` for
+:reg:`PORT_CTRL`. The vendor driver writes :reg:`IO_LEVEL` only for 1.8 V RGMII pins, and its
+value 3 disagrees with the Linux header, which gives 1.8 V as 2 in these two fields and has
+no value 3; which is right is not known. Bits 26 and 20 of :reg:`XMII` have no known name.
+The vendor driver does not write :reg:`SERDES_CTRL` or :reg:`MDIO_POLLING`.
 
 .. _ports-mtu:
 
@@ -225,8 +269,9 @@ Frame size
 :field:`MAC_FRAME.SIZE` is the longest frame a port accepts, counted from the destination
 address to the frame check sequence. For an IP MTU of *m* bytes write *m* + 18, and 8 more
 (:const:`TAG_LEN`) on a CPU port that carries tags. The largest value is 9216
-(:const:`FRAME_SIZE_MAX`); a comment in the :ref:`Linux driver <sources-list>` gives it as the value after reset
-too, which is not confirmed.
+(:const:`FRAME_SIZE_MAX`). A comment in the :ref:`Linux driver <sources-list>` gives it as
+the value after reset too; like the other :ref:`reset values <sources-reset>` this is not
+confirmed by a read from hardware.
 
 .. _ports-eee:
 

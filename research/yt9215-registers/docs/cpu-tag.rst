@@ -124,7 +124,9 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
 
 A frame with the code FORWARD, PORT_COPY or FDB_COPY has also been sent by the switch to its
 other destinations. A frame that was trapped (ACL, UNK_UCAST, UNK_MCAST) has not, so the host
-must forward it if it should go anywhere. Discard a received frame whose PORT_EN bit is
+must forward it if it should go anywhere. The codes UNK_UCAST and UNK_MCAST do not tell a
+trapped frame from a copied one, so do not combine the copy action of
+:ref:`forwarding-flood` with forwarding in the host. Discard a received frame whose PORT_EN bit is
 clear, as the :ref:`Linux driver <sources-list>` does. Other codes exist; these are the ones the :ref:`Linux driver <sources-list>`
 names, and the meanings of PORT_COPY and FDB_COPY are inferred from the names.
 

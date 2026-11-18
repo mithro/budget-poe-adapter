@@ -7,12 +7,16 @@ with `kicad-cli sch export netlist` (see gen_schematic.py).
 """
 import os, re, uuid
 
-LIBDIR = '/usr/share/kicad/symbols'
+LIBDIR = os.environ.get('KICAD7_SYMBOL_DIR', '/usr/share/kicad/symbols')
 GRID = 1.27
+_NS = uuid.UUID('6c782d69-7336-3031-662d-736368656d61')
+_count = [0]
 
 
 def U():
-    return str(uuid.uuid4())
+    """Next UUID in a fixed sequence, so regenerating gives identical files."""
+    _count[0] += 1
+    return str(uuid.uuid5(_NS, str(_count[0])))
 
 
 # ------------------------------------------------------------ s-expressions
@@ -553,6 +557,33 @@ class Sheet:
             if isinstance(item, list) and item and item[0] not in ('lib_symbols', 'title_block', 'sheet_instances'):
                 walk(item)
 
+    @staticmethod
+    def _text_extents(item):
+        """Estimated far end of each visible string in item (stroke font, about 0.9 x size per character)."""
+        out = []
+        def far(text, at, eff):
+            if 'hide' in eff[0] if eff else False:
+                return
+            size = find(find(eff[0], 'font')[0], 'size')[0][1] if eff else 1.27
+            js = [str(j) for j in find(eff[0], 'justify')[0][1:]] if eff and find(eff[0], 'justify') else []
+            lines = str(text).split('\n')
+            n = max(len(l) for l in lines) * size * 0.9
+            ang = at[3] if len(at) > 3 else 0
+            sgn = -1 if 'right' in js else 1
+            half = 0 if ('left' in js or 'right' in js) else 0.5
+            for f in ((1 - half) * sgn, -half * sgn):
+                d = n * f
+                if ang in (90, 270):
+                    out.append((at[1], at[2] - d))
+                else:
+                    out.append((at[1] + d, at[2] + (len(lines) - 1) * size * 1.62))
+        if item[0] in ('text', 'label', 'hierarchical_label', 'global_label'):
+            far(item[1], find(item, 'at')[0], find(item, 'effects'))
+        for p in find(item, 'property'):
+            if p[1] not in ('Footprint', 'Datasheet', 'Intersheetrefs') and 'hide' not in str(find(p, 'effects')):
+                far(p[2], find(p, 'at')[0], find(p, 'effects'))
+        return out
+
     def _check_margins(self, out):
         """Report anything closer than MARGIN to the page border or the title block."""
         W, H = self.PAPER[self.paper]
@@ -573,9 +604,10 @@ class Sheet:
                 for c in n[1:]:
                     walk(c)
             walk(item if item[0] != 'symbol' else [x for x in item if not (isinstance(x, list) and x and x[0] == 'property' and 'hide' in str(x))])
-            if item[0] == 'text_box':
+            if item[0] in ('text_box', 'sheet'):
                 at, sz = find(item, 'at')[0], find(item, 'size')[0]
                 pts.append((at[1] + sz[1], at[2] + sz[2]))
+            pts += self._text_extents(item)
             for x, y in pts:
                 if x < lo or y < lo or x > hix or y > hiy or (x > tbx and y > tby):
                     bad.append((item[0], round(x, 1), round(y, 1)))

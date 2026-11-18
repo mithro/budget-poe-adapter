@@ -14,10 +14,13 @@ Confidence codes (also the wire style):
   U  unknown: pin exists, destination not traced          red dotted
 
 Run:  python3 gen_schematic.py
-Writes lx-is601f.kicad_sch (+ child sheets), lx-is601f-nets.csv and, when
-kicad-cli is installed, checks the netlist KiCad computes against the model.
+Writes lx-is601f.kicad_sch (+ child sheets) and lx-is601f-nets.csv. When
+kicad-cli and pdftoppm are installed it also checks the netlist KiCad computes
+against the model, writes lx-is601f-schematic.pdf and renders/*.png, and checks
+that each render keeps a clear 10 mm margin. Set KICAD7_SYMBOL_DIR if the KiCad
+symbol libraries are not in /usr/share/kicad/symbols.
 """
-import csv, os, subprocess, sys, collections
+import csv, os, subprocess, sys, collections, tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from kisch import Sheet, box_symbol, snap, U
 
@@ -108,7 +111,7 @@ def u4_symbol():
            ('129', 'EPAD', 'power_in')]
     unitD = dict(left=p33, right=p115 + [None] + gnd, w=25.4)
     units = [unitA, unitB, unitC, unitD]
-    node = box_symbol('YT9215SCH', units, ref='U', value='YT9215SCH')
+    node = box_symbol('YT9215SCH', units, ref='U', value='YT9215SCH', pin_len=5.08)
     allp = set()
     for u in units:
         for side in ('left', 'right', 'top', 'bottom'):
@@ -181,11 +184,11 @@ def gnd(s, p, conf='I', drop=2.54):
 
 def bus(s, pts):
     for a, b in zip(pts, pts[1:]):
-        s.items.append(['bus', ['pts', ['xy', m(a[0]), m(a[1])], ['xy', m(b[0]), m(b[1])]], ['stroke', ['width', 0], ['type', 'default']], ['uuid', U()]])
+        s.items.append(['bus', ['pts', ['xy', snap(a[0]), snap(a[1])], ['xy', snap(b[0]), snap(b[1])]], ['stroke', ['width', 0], ['type', 'default']], ['uuid', U()]])
 
 
 def entry(s, x, y, dx, dy):
-    s.items.append(['bus_entry', ['at', m(x), m(y)], ['size', dx, dy], ['stroke', ['width', 0], ['type', 'default']], ['uuid', U()]])
+    s.items.append(['bus_entry', ['at', snap(x), snap(y)], ['size', dx, dy], ['stroke', ['width', 0], ['type', 'default']], ['uuid', U()]])
 
 
 # ---------------------------------------------------------------- POWER
@@ -201,7 +204,7 @@ link(s, l1, '2', d4, '2', 'VIN_F', 'I')
 link(s, d4, '1', l2, '1', 'VIN_P', 'I')
 p = j2.p('2'); s.wire([p, (m(30), p[1]), (m(30), m(62))], 'I'); s.power('GND', m(30), m(62)); s.mark(j2, '2', 'GND', 'I')
 for i, rv in enumerate(['RV1', 'RV2', 'RV3']):
-    x = m(52 + 12.7 * i)
+    x = m(57 + 12.7 * i)
     v = two(s, 'Device:Varistor', rv, 'MOV?', x, m(53), False)
     s.wire([(x, YL), v.p('1')], 'U'); s.mark(v, '1', 'VIN_F', 'U')
     gnd(s, v.p('2'), 'U', drop=m(62) - v.p('2')[1]); s.mark(v, '2', 'GND', 'U')
@@ -246,7 +249,7 @@ s.wire([pu1.p('8'), pl3.p('1')], 'V'); s.mark(pu1, '8', 'BUCK_SW', 'V'); s.mark(
 d40 = two(s, 'Device:D_Schottky', 'D40', 'Schottky', xn, m(162), False)
 s.wire([(xn, ysw), d40.p('1')], 'I'); s.mark(d40, '1', 'BUCK_SW', 'I')
 gnd(s, d40.p('2'), 'I', drop=m(178) - d40.p('2')[1]); s.mark(d40, '2', 'GND', 'I')
-for x, (r, v, lib) in zip([m(185), m(200), m(212)], [('TC1', '220u 16V', 'Device:C_Polarized'), ('C23', '1206', 'Device:C'), ('C24', '1206', 'Device:C')]):
+for x, (r, v, lib) in zip([m(185), m(203), m(216)], [('TC1', '220u 16V', 'Device:C_Polarized'), ('C23', '1206', 'Device:C'), ('C24', '1206', 'Device:C')]):
     c = two(s, lib, r, v, x, m(162), False)
     s.wire([(x, ysw), c.p('1')], 'I'); s.mark(c, '1', '+3V3', 'I')
     gnd(s, c.p('2'), 'I', drop=m(178) - c.p('2')[1]); s.mark(c, '2', 'GND', 'I')
@@ -312,7 +315,7 @@ fl = [('49', 'R93', 'SPF0_SCK', 'FL_SCK', '6'), ('50', 'R92', 'SPF0_SI', 'FL_SI'
       ('55', 'R44', 'SPF0_CS', 'FL_CS', '1')]
 for i, (n, rr, n1, n2, fp) in enumerate(fl):
     p = uC.p(n)
-    r = two(s, 'Device:R', rr, '0402', m(110), p[1], True, ref_at=(m(116.84), p[1] - 1.0), val_at=(m(125.73), p[1] - 1.0), center=set())
+    r = two(s, 'Device:R', rr, '0402', m(110), p[1], True, ref_at=(m(116.84), p[1] - 1.27), val_at=(m(125.73), p[1] - 1.27), center=set())
     s.wire([r.p('2'), p], 'V'); s.mark(r, '2', n1, 'V'); s.mark(uC, n, n1, 'V')
     q = u6.p(fp)
     xv = m(85 + 2.54 * i)
@@ -330,7 +333,7 @@ s.text('X on pins 46, 47, 90 and 79: no trace leaves\nthe pad in the photos.', m
 LEDMAP = {'85': 'LED_P0', '80': 'LED_P1', '77': 'LED_P2', '75': 'LED_P3', '71': 'LED_P4', '67': 'LED_P9'}
 for n in ('85', '84', '83', '80', '81', '79', '77', '78', '76', '75', '73', '74', '71', '72', '70', '67'):
     if n in LEDMAP:
-        s.stub(uC, n, LEDMAP[n], 'I', length=m(15.24), kind='hier', shape='output')
+        s.stub(uC, n, LEDMAP[n], 'I', length=m(25.4), kind='hier', shape='output')
     elif n == '79':
         s.nc(uC.p('79')); s.mark(uC, '79', '(no trace seen)', 'V')
     else:
@@ -346,12 +349,11 @@ MDIPINS = {0: [95, 96, 97, 98, 100, 101, 102, 103], 1: [105, 106, 107, 108, 110,
            2: [119, 120, 121, 122, 124, 125, 126, 127], 3: [1, 2, 3, 4, 6, 7, 8, 9], 4: [19, 20, 21, 22, 24, 25, 26, 27]}
 for p in range(5):
     ends = [s.stub(uA, n, 'P%d_MDI%d' % (p, k), 'I', length=m(20.32), near=True) for k, n in enumerate(MDIPINS[p])]
-    bx = ends[0][0] + m(2.54)
+    bx = ends[0][0] + G
     for e in ends:
         entry(s, e[0], e[1], G, -G)
-    bus(s, [(bx, ends[0][1] - G * 2), (bx, ends[-1][1] - G)])
-    bus(s, [(bx, ends[0][1] - G * 2), (bx + m(10.16), ends[0][1] - G * 2)])
-    s.label('P%d_MDI[0..7]' % p, (bx + m(10.16), ends[0][1] - G * 2), (1, 0), kind='hier')
+    bus(s, [(bx + m(10.16), ends[0][1] - G), (bx, ends[0][1] - G), (bx, ends[-1][1] - G)])
+    s.label('P%d_MDI[0..7]' % p, (bx + m(10.16), ends[0][1] - G), (1, 0), kind='hier')
 s.textbox('Port mapping (inferred from placement)\nP0 -> DXFRM4 -> J1 port 1\nP1 -> DXFRM3 -> J1 port 2\nP2 -> DXFRM2 -> J1 port 3\n'
           'P3 -> DXFRM5 -> J1 port 4\nP4 -> DXFRM6 -> J3 uplink\nMDIn: 0..7 = A+ A- B+ B- C+ C- D+ D-', m(295), m(200), m(60), m(30))
 # U4B SerDes
@@ -408,8 +410,8 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=185, h=10
         q = t.p(pin); s.wire([q, (xt, q[1])], 'U'); s.mark(t, pin, 'P%d_TCT' % p, 'U')
     s.wire([(xt, t.p('1')[1]), (xt, t.p('10')[1] + m(5.08))], 'U')
     s.label('P%d_TCT' % p, (xt, t.p('10')[1] + m(5.08)), (0, 1))
-    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(170), y0 + m(45), mirror='y',
-                ref_at=(x0 + m(177.8), y0 + m(25.4)), val_at=(x0 + m(177.8), y0 + m(27.94)), center=set())
+    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(157.48), y0 + m(45), mirror='y',
+                ref_at=(x0 + m(165.1), y0 + m(25.4)), val_at=(x0 + m(165.1), y0 + m(27.94)), center=set())
     for tp, jp in [('23', '1'), ('22', '2'), ('20', '3'), ('19', '6'), ('17', '4'), ('16', '5'), ('14', '7'), ('13', '8')]:
         s.stub(t, tp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
         s.stub(j, jp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
@@ -422,7 +424,8 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=185, h=10
         e = s.place('Power_Protection:SRV05-4', ed, '"05U"', ex, ey, ref_at=(ex + m(5.08), ey - m(15.24)), val_at=(ex + m(5.08), ey - m(12.7)), center=set())
         for pin, mi in zip(('1', '3', '4', '6'), ([0, 1, 2, 3] if k == 0 else [4, 5, 6, 7])):
             s.stub(e, pin, 'P%d_MDI%d' % (p, mi), 'I', length=m(5.08))
-        s.pin_power(e, '2', 'GND', 'I'); s.stub(e, '5', 'TBD_P%d_ESD_VP' % p, 'U', length=m(2.54))
+        s.pin_power(e, '2', 'GND', 'I')
+        s.label('TBD_P%d_ESD_VP' % p, e.p('5'), (-1, 0)); s.mark(e, '5', 'TBD_P%d_ESD_VP' % p, 'U')
 
 
 s = eth
@@ -492,8 +495,7 @@ chans = [('R108', 'R8', 'R103', 'R3', 'D101', 'D1'), ('R112', 'R12', 'R109', 'R9
          ('R113', 'R13', 'R110', 'R10', 'D105', 'D5'), ('R114', 'R14', 'R111', 'R11', 'D107', 'D7')]
 for ch, (rs, rss, rd, rds, dd, dds) in enumerate(chans, 1):
     po = pse.p('?%d0' % ch); se = pse.p('?%d1' % ch)
-    rdp = two(s, 'Device:R', rd, '33R', m(170), po[1], True, fields={'Silk': rds + ' (module)'},
-              ref_at=(m(166), po[1] - 1.0), val_at=(m(174), po[1] - 1.0))
+    rdp = two(s, 'Device:R', rd, '33R', m(170), po[1], True, fields={'Silk': rds + ' (module)'})
     s.wire([po, rdp.p('1')], 'U'); s.mark(pse, '?%d0' % ch, 'POE_OUT%d' % ch, 'U'); s.mark(rdp, '1', 'POE_OUT%d' % ch, 'U')
     s.label('POE_OUT%d' % ch, (m(140), po[1]), (1, 0))
     s.stub(rdp, '2', 'TBD_MOD_%s' % rds, 'U', length=m(5.08))
@@ -531,7 +533,7 @@ for i, (net, rf, rp) in enumerate(rws):
             s.label(onet, e, (1, 0))
 s.textbox('- The array LEDs have no visible reference designators: LED101-106 (FX) and\n  LED111-116 (POW) are numbering for this schematic.\n'
           '- Active-low drive from U4 and the RJ-resistor pairing are inferred. Row 6 is\n  assumed to be the SFP (U4 P9LED0, pin 67).\n'
-          '- The POW LEDs are probably driven by the PoE module (not traced).', m(12.7), m(140), m(110), m(25), size=1.1)
+          '- The POW LEDs are probably driven by the PoE module (not traced).', m(17.78), m(140), m(110), m(25), size=1.1)
 s.frame(m(185), m(15), m(284), m(130), 'LED6 header (DNP), LED7, LED8')
 hd = s.place('Connector_Generic:Conn_02x03_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), dnp=True, fields={'Silk': 'LED6'})
 for n in '123456':
@@ -562,13 +564,13 @@ up = s.subsheet(upl, m(240), m(75), m(60), m(18),
 ld = s.subsheet(leds, m(240), m(105), m(60), m(20),
                 [('LED_P0', 'L', 'input'), ('LED_P1', 'L', 'input'), ('LED_P2', 'L', 'input'), ('LED_P3', 'L', 'input'),
                  ('LED_P4', 'L', 'input'), ('LED_P9', 'L', 'input')])
-pm = s.subsheet(poe, m(330), m(45), m(60), m(12), [('POE[1..8]', 'L', 'bidirectional')])
+pm = s.subsheet(poe, m(317.5), m(45), m(60), m(12), [('POE[1..8]', 'L', 'bidirectional')])
 for (x, y, t) in [(m(22), m(50), 'J2 input, protection,\nSCT2622 buck to +3V3'),
                   (m(108), m(90), 'YT9215SCH (4 units),\n25 MHz crystal, EEPROM U10,\nempty flash footprint U6'),
                   (m(255), m(56), 'DXFRM2-5, J1, ED1-ED7, ED10'),
                   (m(255), m(87), 'DXFRM6, J3, ED8-9, SFP U12'),
                   (m(255), m(118), '12 LEDs, LED6 header'),
-                  (m(345), m(52), 'PIN1 header, PSE module')]:
+                  (m(332.74), m(52), 'PIN1 header, PSE module')]:
     s.text(t, x, y, size=1.27, italic=True, color=(90, 90, 90))
 
 
@@ -587,7 +589,7 @@ for k, n in enumerate(('SDS0_TXP', 'SDS0_TXN', 'SDS0_RXP', 'SDS0_RXN')):
 for k, n in enumerate(['LED_P0', 'LED_P1', 'LED_P2', 'LED_P3', 'LED_P4', 'LED_P9']):
     rw(sw[n], ld[n], m(180 + 2.54 * (5 - k)), 'wire')
 a, b = ep['POE[1..8]'], pm['POE[1..8]']
-rw(a, b, m(315), 'bus')
+rw(a, b, m(309.88), 'bus')
 s.textbox(LEGEND, m(15), m(150), m(120), m(35), size=1.5)
 s.textbox('How to read this schematic\n'
           '- One sheet per function. Power nets (+48V, +3V3, +1V15, GND) are global power ports.\n'
@@ -625,9 +627,13 @@ with open(os.path.join(HERE, 'lx-is601f-nets.csv'), 'w', newline='') as f:
 cnt = collections.Counter(r[3] for r in rows)
 print('pins', len(rows), dict(cnt))
 
-# netlist check
-try:
-    out = '/tmp/lx-is601f-check.net'
+# netlist check, PDF and PNG renders (need kicad-cli and pdftoppm)
+RENDERS = ['1-root', '2-power', '3-switch', '4-ethernet-poe', '5-uplink-sfp', '6-poe-module', '7-leds']
+DPI = 110
+
+
+def netlist_check(tmp):
+    out = os.path.join(tmp, 'check.net')
     subprocess.run(['kicad-cli', 'sch', 'export', 'netlist', '-o', out, os.path.join(HERE, root.fname)],
                    check=True, capture_output=True)
     from kisch import parse, find
@@ -652,5 +658,38 @@ try:
         print('  SPLIT', m, k)
     for k, m in list(bad2.items())[:20]:
         print('  MERGED', k, m)
+
+
+def clear_margin(png, paper):
+    """True when the 10 mm band inside the page border and around the title block holds no ink."""
+    from PIL import Image, ImageChops
+    im = Image.open(png).convert('RGB')
+    W, H = Sheet.PAPER[paper]
+    k = im.size[0] / W
+    tb = (W - 10 - 110, H - 10 - 34)          # top-left corner of the title block
+    bands = [(12.6, 12.6, W - 12.6, 20), (12.6, 12.6, 20, H - 12.6), (12.6, H - 20, tb[0] - 10, H - 12.6),
+             (W - 20, 12.6, W - 12.6, tb[1] - 10), (tb[0] - 10, tb[1] - 10, tb[0] - 0.6, H - 12.6),
+             (tb[0] - 10, tb[1] - 10, W - 12.6, tb[1] - 0.6)]
+    for x0, y0, x1, y1 in bands:
+        c = im.crop((round(x0 * k), round(y0 * k), round(x1 * k), round(y1 * k)))
+        if ImageChops.difference(c, Image.new('RGB', c.size, im.getpixel((round(13 * k), round(13 * k))))).getbbox():
+            return False
+    return True
+
+
+def render(tmp):
+    pdf = os.path.join(HERE, 'lx-is601f-schematic.pdf')
+    subprocess.run(['kicad-cli', 'sch', 'export', 'pdf', '-o', pdf, os.path.join(HERE, root.fname)], check=True, capture_output=True)
+    subprocess.run(['pdftoppm', '-r', str(DPI), '-png', pdf, os.path.join(tmp, 'p')], check=True)
+    for i, (name, sh) in enumerate(zip(RENDERS, ALL), 1):
+        png = os.path.join(HERE, 'renders', name + '.png')
+        os.replace(os.path.join(tmp, 'p-%d.png' % i), png)
+        print('render %-28s margin %s' % (name + '.png', 'clear' if clear_margin(png, sh.paper) else 'NOT CLEAR'))
+
+
+try:
+    with tempfile.TemporaryDirectory() as tmp:
+        netlist_check(tmp)
+        render(tmp)
 except FileNotFoundError:
-    print('kicad-cli not found; skipped netlist check')
+    print('kicad-cli or pdftoppm not found; skipped the netlist check and the renders')

@@ -186,7 +186,7 @@ xMII
    :field:`XMII.LINK`.
 5. Force :reg:`PORT_CTRL` to the same speed and duplex as in :ref:`ports-up`.
 
-The :ref:`Linux driver <sources-list>` writes :reg:`MDIO_POLLING` and :field:`XMII.LINK` as in steps 4 and 5 but
+The :ref:`Linux driver <sources-list>` writes :reg:`MDIO_POLLING` and :field:`XMII.LINK` as in step 4 and :reg:`PORT_CTRL` as in step 5, but
 configures no xMII mode. Steps 1 to 3 largely match the
 `vendor driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__, which brings up
 RGMII on port 8 with the writes of this table. Other modes follow the field definitions only. RGMII

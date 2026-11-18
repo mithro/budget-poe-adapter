@@ -126,7 +126,8 @@ is confirmed by the :ref:`Linux driver <sources-list>`):
    * - :field:`METER_CTRL.PKT_MODE`
      - 1 to count packets, 0 to count bytes
 
-With :field:`METER_CTRL.TOKEN_OVERFLOW_EN` set, tokens that no longer fit the committed
+According to the comment in the header of the :ref:`Linux driver <sources-list>`, with
+:field:`METER_CTRL.TOKEN_OVERFLOW_EN` set tokens that no longer fit the committed
 bucket fill the excess bucket, so with an excess rate of 0 the excess burst acts as a second
 burst allowance, and only red frames are dropped.
 

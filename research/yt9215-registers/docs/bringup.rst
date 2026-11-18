@@ -73,7 +73,7 @@ mode is the byte at address ``0xfb`` (:const:`EDATA_EXTMODE`).
    (3).
 2. Write :reg:`EDATA_CTRL` with the byte address in :field:`EDATA_CTRL.ADDR` and
    :val:`EDATA_CTRL.OP.READ` (5) in :field:`EDATA_CTRL.OP`.
-3. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is IDLE again;
+3. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is :val:`EDATA_DATA.STATUS.IDLE` again;
    :field:`EDATA_DATA.DATA` then holds the
    byte.
 

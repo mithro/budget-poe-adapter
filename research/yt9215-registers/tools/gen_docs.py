@@ -317,7 +317,10 @@ WORD = re.compile(r"(?<![\w.])[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)*(?![\w(\[])")
 SOURCE = re.compile(r"\b(Linux driver|[Vv]endor SDK)\b")
 
 
-def autolink(reg, text, own=None):
+PROTOCOLS = {"MII", "RMII", "RGMII", "SGMII"}  # ordinary words that are also value names
+
+
+def autolink(reg, text, own=None, values_too=True):
     """Link the fields and values of a register that its descriptions name."""
     fields, values = {}, {}
     for lay, f in M.all_fields(reg):
@@ -331,7 +334,7 @@ def autolink(reg, text, own=None):
         w = mo.group(0)
         if w != own and w in fields and len(w) > 2:
             return ":field:`%s <%s.%s>`" % (w, reg["id"], fields[w])
-        if w in values and w not in fields and len(w) > 3:
+        if values_too and w in values and w not in fields and w not in PROTOCOLS and len(w) > 3:
             return values[w]
         return w
 
@@ -410,7 +413,7 @@ def value_tables(m, reg, fields, lay=None):
         out += [".. rubric:: Values of %s%s" % (M.fdisplay(f), fam), ""]
         rows = [[lit(str(v["value"])),
                  ".. _%s:\n\n%s" % (val_label(sym, v["name"]), lit(v["name"])),
-                 autolink(reg, v.get("desc", ""))] for v in f["values"]]
+                 autolink(reg, v.get("desc", ""), values_too=False)] for v in f["values"]]
         out += table(["Value", "Name", "Meaning"], rows, [12, 28, 60])
     return out
 

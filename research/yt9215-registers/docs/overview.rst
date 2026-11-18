@@ -90,8 +90,8 @@ What a driver has to do
      - :doc:`vlan`
 
 A start-up in code, built from the examples of the pages named in the table. It finds,
-resets and identifies the switch, turns on the function blocks, sets up a tagged CPU port
-and puts all copper ports into one group. It leaves three things to the driver: selecting
+resets and identifies the switch, turns on the function blocks, sets up a tagged CPU port,
+forces its MAC to 1000 Mbit/s full duplex and puts all copper ports into one group. It leaves three things to the driver: selecting
 the interface of the CPU port (:ref:`ports-external`), enabling the MAC of each copper port
 when its link comes up (:ref:`ports-up`), and the handling of unknown destinations
 (:ref:`forwarding-flood`).

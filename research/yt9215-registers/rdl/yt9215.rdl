@@ -627,7 +627,7 @@ addrmap yt9215 {
 
     reg {
         name = "Parallel LED polarity";
-        desc = "Inverts individual parallel LED outputs, for LEDs wired active low.";
+        desc = "Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits a LED wired active low; set the bit for a LED wired active high.";
         field { desc = "Inverts the output of LED group grp of port port; the bit number is 10 × grp + port."; sw = rw; hw = r; } INV_2_9[29:29];
         field { desc = "Inverts the output of LED group grp of port port; the bit number is 10 × grp + port."; sw = rw; hw = r; } INV_2_8[28:28];
         field { desc = "Inverts the output of LED group grp of port port; the bit number is 10 × grp + port."; sw = rw; hw = r; } INV_2_7[27:27];
@@ -1374,7 +1374,7 @@ addrmap yt9215 {
                 UDF7 = 25 { desc = "User-defined field windows 14 and 15"; };
                 ETHERTYPE = 26 { desc = "EtherType"; };
             };
-            field { desc = "Order of the rule; when several rules match, the lowest value wins."; sw = rw; hw = r; } ORD[61:53];
+            field { desc = "Order of the rule; when several rules match, the highest value wins."; sw = rw; hw = r; } ORD[61:53];
             field { desc = "Receiving ports the rule applies to, one bit per port."; sw = rw; hw = r; } SPORTS_10[52:52];
             field { desc = "Receiving ports the rule applies to, one bit per port."; sw = rw; hw = r; } SPORTS_9[51:51];
             field { desc = "Receiving ports the rule applies to, one bit per port."; sw = rw; hw = r; } SPORTS_8[50:50];
@@ -1444,7 +1444,7 @@ addrmap yt9215 {
             L4 = 2 { desc = "Start of the layer 4 header"; };
         };
         field { desc = "Header the offset is counted from."; sw = rw; hw = r; encode = udf_ctrl_udf_type_e; } UDF_TYPE[8:7];
-        field { desc = "Offset of the window from that header, in units of two bytes."; sw = rw; hw = r; } UDF_OFFSET[6:0];
+        field { desc = "Offset of the two-byte window from the start of that header, in bytes."; sw = rw; hw = r; } UDF_OFFSET[6:0];
     } UDF_CTRL[16] @ 0x210094 += 0x4;
 
     reg {

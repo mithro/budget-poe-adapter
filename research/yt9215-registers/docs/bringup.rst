@@ -135,8 +135,9 @@ period from this table.
 Turn on function blocks
 -----------------------
 
-Three function blocks are off after reset and ignore their registers until enabled in
-:reg:`FUNC`.
+Three function blocks work only while their bit in :reg:`FUNC` is set. The Linux driver sets
+each bit before it uses the block; that the bits are clear after reset is inferred from
+that.
 
 .. list-table::
    :header-rows: 1

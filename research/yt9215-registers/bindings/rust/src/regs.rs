@@ -1765,7 +1765,7 @@ pub const ACL_KEY_BIN_FIRST: u32 = 0;
 pub const ACL_KEY_BIN_COUNT: u32 = 8;
 /// Number of 32-bit words of one ACL_KEY entry.
 pub const ACL_KEY_WORDS: usize = 2;
-/// Order of the rule; when several rules match, the lowest value wins.
+/// Order of the rule; when several rules match, the highest value wins.
 pub const ACL_KEY_ORD: Field = Field { lsb: 53, width: 9 };
 /// Receiving ports the rule applies to, one bit per port.
 pub const fn acl_key_sports(port: u32) -> Field {
@@ -2025,7 +2025,7 @@ pub const UDF_CTRL_N_FIRST: u32 = 0;
 pub const UDF_CTRL_N_COUNT: u32 = 16;
 /// Header the offset is counted from.
 pub const UDF_CTRL_UDF_TYPE: Field = Field { lsb: 7, width: 2 };
-/// Offset of the window from that header, in units of two bytes.
+/// Offset of the two-byte window from the start of that header, in bytes.
 pub const UDF_CTRL_UDF_OFFSET: Field = Field { lsb: 0, width: 7 };
 
 // ==== Meters and ingress rate limiting ====

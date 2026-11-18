@@ -2077,7 +2077,7 @@
         </register>
         <register>
           <name>LED_PAR_INV</name>
-          <description>Inverts individual parallel LED outputs, for LEDs wired active low.</description>
+          <description>Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits a LED wired active low; set the bit for a LED wired active high.</description>
           <addressOffset>0x1C8</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -4901,7 +4901,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -5128,7 +5128,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -5335,7 +5335,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -5527,7 +5527,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -5719,7 +5719,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -5967,7 +5967,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -6201,7 +6201,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -6435,7 +6435,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -6669,7 +6669,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -6903,7 +6903,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -7144,7 +7144,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -7378,7 +7378,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -7577,7 +7577,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -7804,7 +7804,7 @@
                 </field>
                 <field>
                   <name>ORD</name>
-                  <description>Order of the rule; when several rules match, the lowest value wins.</description>
+                  <description>Order of the rule; when several rules match, the highest value wins.</description>
                   <bitOffset>21</bitOffset>
                   <bitWidth>9</bitWidth>
                   <access>read-write</access>
@@ -9034,7 +9034,7 @@
           <fields>
             <field>
               <name>UDF_OFFSET</name>
-              <description>Offset of the window from that header, in units of two bytes.</description>
+              <description>Offset of the two-byte window from the start of that header, in bytes.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>7</bitWidth>
               <access>read-write</access>

@@ -38,11 +38,11 @@ In both modes the MAC passes frames only while :field:`PORT_CTRL.RX_MAC_EN` and
 :field:`PORT_CTRL.TX_MAC_EN` are set. To take a port down, clear those two bits and
 :field:`PORT_CTRL.LINK_AN`.
 
-The Linux driver always forces the MAC: it watches the PHY itself and, on a link change,
-writes the negotiated speed, duplex and pause into :reg:`PORT_CTRL`. A driver without its own
-PHY state machine can set :field:`PORT_CTRL.LINK_AN` and :field:`PORT_CTRL.PAUSE_AN` and leave
-the rest to the switch; the Linux driver uses that mode only for a SerDes with in-band
-status. The speed codes are the :enum:`speed` list.
+Forcing is the confirmed way for a port with a built-in PHY: the Linux driver watches the PHY
+itself and, on a link change, writes the negotiated speed, duplex and pause into
+:reg:`PORT_CTRL`. It sets :field:`PORT_CTRL.LINK_AN` and :field:`PORT_CTRL.PAUSE_AN` only for
+a SerDes with in-band status. That the same bits make a copper port follow its built-in PHY
+is inferred from their names. The speed codes are the :enum:`speed` list.
 
 .. tab-set::
 
@@ -169,8 +169,35 @@ xMII
 5. Force :reg:`PORT_CTRL` to the same speed and duplex as in :ref:`ports-up`.
 
 The Linux driver writes :reg:`MDIO_POLLING` and :field:`XMII.LINK` as in steps 4 and 5 but
-does not configure any xMII mode yet. Steps 2 and 3 follow the field definitions of its header
-and are not confirmed by working code. RGMII delays in particular need checking on the board.
+does not configure any xMII mode. Steps 1 to 3 match the
+`vendor driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__, which brings up
+RGMII on port 8 with the writes below. Other modes follow the field definitions only. RGMII
+delays need checking on the board.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 24 22 54
+
+   * - Register
+     - Value
+     - Meaning
+   * - :reg:`IO_LEVEL`
+     - ``0x0000000f``
+     - Only for 1.8 V RGMII pins
+   * - :reg:`XMII_CTRL`
+     - ``0x00000002``
+     - Port 8 uses its xMII pins
+   * - :reg:`XMII` of port 8
+     - ``0x841c0000``
+     - :field:`XMII.MODE` 4 (RGMII), :field:`XMII.LINK`, :field:`XMII.EN`, and bits 26 and 20,
+       which have no known name
+   * - :reg:`XMII` of port 8
+     - Delay fields
+     - :field:`XMII.RGMII_RX_DELAY_150PS`, :field:`XMII.RGMII_TX_DELAY_150PS` and
+       :field:`XMII.RGMII_TX_DELAY_2NS` from the board description
+   * - :reg:`PORT_CTRL` of port 8
+     - ``0x000001fa``
+     - 1000 Mbit/s, full duplex, pause and both MAC directions enabled
 
 .. _ports-mtu:
 
@@ -180,7 +207,8 @@ Frame size
 :field:`MAC_FRAME.SIZE` is the longest frame a port accepts, counted from the destination
 address to the frame check sequence. For an IP MTU of *m* bytes write *m* + 18, and 8 more
 (:const:`TAG_LEN`) on a CPU port that carries tags. The largest value is 9216
-(:const:`FRAME_SIZE_MAX`), which is also the value after reset.
+(:const:`FRAME_SIZE_MAX`); a comment in the Linux driver gives it as the value after reset
+too, which is not confirmed.
 
 .. _ports-eee:
 

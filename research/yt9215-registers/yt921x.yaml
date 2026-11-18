@@ -4957,7 +4957,8 @@ registers:
       status: no SDK table
   block: led
   title: Parallel LED polarity
-  desc: Inverts individual parallel LED outputs, for LEDs wired active low.
+  desc: Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on,
+    which suits a LED wired active low; set the bit for a LED wired active high.
   access: rw
   words: 1
   sdk:
@@ -9121,7 +9122,7 @@ registers:
       used: true
     lsb: 53
     width: 9
-    desc: Order of the rule; when several rules match, the lowest value wins.
+    desc: Order of the rule; when several rules match, the highest value wins.
     access: rw
     sdk:
       status: SDK lists no fields
@@ -10852,9 +10853,8 @@ registers:
       used: true
     lsb: 0
     width: 7
-    desc: Offset of the window from that header, in units of two bytes.
+    desc: Offset of the two-byte window from the start of that header, in bytes.
     access: rw
-    inferred: true
     sdk:
       status: same bits
       fields: [UDF_OFFSET]

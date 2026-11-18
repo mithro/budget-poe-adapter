@@ -23,7 +23,8 @@ Sources
      - Register and field names with addresses, and working code that shows how they are used
    * - `Vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
      - Commit ``d2c8d6fc721f`` of a public mirror
-     - A generated list of all register tables with field positions; no descriptions
+     - A list of all register tables with field positions, and driver code that uses them; no
+       register descriptions
    * - :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`
      - V1.03
      - Pins, straps and the management interface timing; no register addresses
@@ -107,7 +108,7 @@ What is not known
    * - Command timing
      - How long reset and table commands take is not published; see :ref:`access-wait`.
    * - xMII configuration
-     - No public code configures an xMII mode; see :ref:`ports-xmii`.
+     - Public code exists for RGMII only; see :ref:`ports-xmii`.
    * - Filtering IDs
      - :field:`VLAN_CTRL.FID` and :field:`VLAN_CTRL.SVLAN_EN` are not used by any driver.
    * - Temperature

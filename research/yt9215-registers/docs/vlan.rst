@@ -68,7 +68,8 @@ Port VLAN ID
 ------------
 
 A frame without a customer tag joins the VLAN in :field:`PORT_VLAN_CTRL.CVID`, the port VLAN
-ID. A frame tagged with VLAN ID 0 is handled as untagged.
+ID. A frame tagged with VLAN ID 0 (a priority tag) should be handled as untagged, but the
+switch looks it up in entry 0 of the table; see :ref:`vlan-zero`.
 
 .. yt-bitfield:: PORT_VLAN_CTRL
 
@@ -151,8 +152,10 @@ Other fields of the entry:
 VLAN 0
 ~~~~~~
 
-Because a tag with VLAN ID 0 counts as untagged, the Linux driver writes entry 0 once at
-start-up with all ports as members and learning disabled, and never uses VLAN 0 otherwise.
+The switch does not treat a tag with VLAN ID 0 as "untagged" by itself. Write entry 0 once
+at start-up with all ports as members and :field:`VLAN_CTRL.LEARN_DIS` set, and do not use
+VLAN 0 otherwise. This is what the Linux driver does, with the comment that such frames
+otherwise "confuse the hardware".
 
 .. _vlan-egress:
 

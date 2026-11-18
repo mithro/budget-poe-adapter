@@ -35,7 +35,7 @@ def bringup(mdio):
 
 # [features]
 def enable_features(dev):
-    """Counters, ACL and meters are off after reset."""
+    """Counters, ACL and meters work only while their bit is set."""
     bits = R.FUNC_MIB_M | R.FUNC_ACL_M | R.FUNC_METER_M
     dev.reg_update(R.FUNC, bits, bits)
 # [features end]

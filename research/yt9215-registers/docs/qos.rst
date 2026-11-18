@@ -13,7 +13,8 @@ Priority sources
 
 Up to eight sources can supply the priority of a frame. :reg:`PORT_PRIO_ORD` ranks them per
 port: each source has a 3-bit weight, and of the sources that apply to a frame the one with
-the highest weight wins. Weight 0 turns a source off.
+the highest weight wins. Weight 0 turns a source off, except the port default priority (:field:`PORT_QOS.PRIO`), which
+then still applies when no other source does.
 
 .. yt-bitfield:: PORT_PRIO_ORD
 

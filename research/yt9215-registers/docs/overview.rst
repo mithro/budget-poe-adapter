@@ -39,9 +39,9 @@ below is a link to the page that describes the stage.
 .. yt-diagram:: frame-path
    :caption: Stages a frame passes through, from the receiving to the sending port.
 
-The order shown is a model to reason with. Two points of it are confirmed by the Linux driver:
+The order shown is a model to reason with. One point of it is confirmed by the Linux driver:
 port isolation is applied after the destination lookup (a frame whose known destination is
-blocked is dropped, not flooded), and a frame tagged with VLAN ID 0 is handled as untagged.
+blocked is dropped, not flooded).
 The rest of the order follows how switches of this kind are usually built and is not
 confirmed.
 

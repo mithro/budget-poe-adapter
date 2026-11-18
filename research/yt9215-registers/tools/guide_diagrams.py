@@ -235,7 +235,7 @@ def tagged_frame(ln):
     ]
     tag = [
         {"units": 2, "title": "0x9988", "sub": "EtherType", "top": "bytes 0, 1", "cls": "yt-sp"},
-        {"units": 2, "title": "0x0000", "sub": "not used", "top": "bytes 2, 3", "cls": "yt-rsv"},
+        {"units": 2, "title": "word 1", "sub": "VLAN tag", "top": "bytes 2, 3", "cls": "yt-sp"},
         {"units": 2, "title": "word 2", "sub": "port, priority, code", "top": "bytes 4, 5", "cls": "yt-sp"},
         {"units": 2, "title": "word 3", "sub": "destination ports", "top": "bytes 6, 7", "cls": "yt-sp"},
     ]

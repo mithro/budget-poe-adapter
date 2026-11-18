@@ -819,7 +819,7 @@ registers:
     block: led
     title: Parallel LED polarity
     desc: |
-      Inverts individual parallel LED outputs, for LEDs wired active low.
+      Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits a LED wired active low; set the bit for a LED wired active high.
     fields:
       INVnm: {desc: "Inverts the output of LED group ``grp`` of port ``port``; the bit number is 10 × grp + port."}
   LED_PAR_MAP:
@@ -1235,7 +1235,7 @@ registers:
       block. The layout of bits 35 to 0 and of the range flags depends on
       :field:`ACL_KEY.TYPE`.
     fields: &aclfields
-      ORD: {desc: "Order of the rule; when several rules match, the lowest value wins."}
+      ORD: {desc: "Order of the rule; when several rules match, the highest value wins."}
       SPORTS: {desc: "Receiving ports the rule applies to, one bit per port."}
       REVERSE: {desc: "The slot matches when the frame does not match the key."}
       TYPE: {desc: "Key type; selects the layout of the rest of the slot.", enum: acl_type}
@@ -1342,7 +1342,7 @@ registers:
       matches windows 2k and 2k + 1.
     fields:
       UDF_TYPE: {desc: "Header the offset is counted from.", enum: udf_type}
-      UDF_OFFSET: {desc: "Offset of the window from that header, in units of two bytes.", inferred: true}
+      UDF_OFFSET: {desc: "Offset of the two-byte window from the start of that header, in bytes."}
 
   PORT_RATE:
     block: meter

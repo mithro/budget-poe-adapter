@@ -19,8 +19,8 @@ set.
 .. yt-bitfield:: LED0_PORT
 
 A common choice is link plus activity: set ``ACT_1000M``, ``ACT_100M`` and ``ACT_10M`` to
-light the LED while the link is up at any speed, and ``ACT_ACTIVE_BLINK`` to blink it on
-traffic.
+light the LED while the link is up at any speed, and ``ACT_TX_BLINK`` and ``ACT_RX_BLINK``
+to blink it on traffic, as the Linux driver does.
 
 .. _leds-force:
 
@@ -68,8 +68,10 @@ Output pins
 -----------
 
 :field:`LED_CTRL.MODE` selects how the LED states leave the chip: on parallel pins, one per
-LED, or as a serial stream for an external shift register. :reg:`LED_PAR_INV` inverts single
-parallel outputs for LEDs wired active low, and :reg:`LED_PAR_MAP` and :reg:`LED_SER_MAP`
-choose which LED appears at which pin or stream position. The Linux driver uses the
+LED, or as a serial stream for an external shift register. :reg:`LED_PAR_INV` sets the
+polarity of single parallel outputs: with its bit clear a pin is low while the LED is on,
+which suits a LED wired active low, and with the bit set the pin is high while the LED is on.
+:reg:`LED_PAR_MAP` and :reg:`LED_SER_MAP` choose which LED appears at which pin or stream
+position. The Linux driver uses the
 behaviour, force and inversion registers; the mapping and serial registers are described from
 the definitions in its header.

@@ -51,6 +51,9 @@ The tag is 8 bytes (:const:`TAG_LEN`) placed after the source address, where a V
 be. It begins with the EtherType in :reg:`CPU_TAG_TPID`, ``0x9988`` after reset. The 16-bit
 words are sent most significant byte first.
 
+Word 1 (bytes 2 and 3) holds the VLAN tag of a frame the switch sends to the host; do not
+expect it to be zero. In a frame from the host the switch ignores it, so send 0.
+
 .. yt-diagram:: tagged-frame
    :caption: A frame on the CPU port and the four 16-bit words of the tag.
 

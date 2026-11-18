@@ -26,8 +26,9 @@ Most counters are 32 bits wide and wrap around. A driver that needs longer count
 often enough to see every wrap and adds the differences up in software. The byte counters
 (:counter:`RX_GOOD_BYTES`, :counter:`RX_BAD_BYTES` and :counter:`TX_GOOD_BYTES`) are 64 bits:
 the low word is at the offset and the high word 4 above it. The two words are separate
-register reads, so read the low word, then the high word, and repeat if a second read of the
-low word is smaller than the first.
+register reads, low word first, so a carry between the two reads can make one sample wrong
+by 2\ :sup:`32`. The bindings read each word once, as the Linux driver does; a driver that
+cannot accept that reads the low word again and repeats if it is smaller than before.
 
 .. tab-set::
 
@@ -50,6 +51,27 @@ low word is smaller than the first.
 Reading all 39 counters of one port takes 42 register reads, about 11 ms at an MDC clock of
 1 MHz.
 
+The counter names follow the Linux driver. The
+`vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L171>`__ names three offsets differently,
+so treat the meaning of these three as uncertain.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 16 42 42
+
+   * - Offset
+     - Name here
+     - Vendor driver name
+   * - ``0x4c``
+     - :counter:`RX_OVERSIZE_ERR`
+     - ``RxOverFlow``
+   * - ``0x60``
+     - :counter:`TX_UNDERSIZE_ERR`
+     - ``TxUnderRun``
+   * - ``0x9c``
+     - :counter:`TX_PKT`
+     - ``TxExcDefer``
+
 .. _mib-clear:
 
 Clearing
@@ -59,15 +81,20 @@ Clearing
 
 .. list-table::
    :header-rows: 1
-   :widths: 34 66
+   :widths: 30 35 35
 
    * - Goal
-     - Write to :reg:`MIB_CTRL`
+     - First write to :reg:`MIB_CTRL`
+     - Second write to :reg:`MIB_CTRL`
    * - Clear the counters of every port
-     - :field:`MIB_CTRL.CLEAN` and :field:`MIB_CTRL.ALL_PORT`
+     - ``0``
+     - ``0x40000000`` (:field:`MIB_CTRL.CLEAN`)
    * - Clear the counters of one port
-     - :field:`MIB_CTRL.CLEAN`, :field:`MIB_CTRL.ONE_PORT` and the port number in
-       :field:`MIB_CTRL.PORT`
+     - :field:`MIB_CTRL.ONE_PORT` with the port number in :field:`MIB_CTRL.PORT`
+     - The same value with :field:`MIB_CTRL.CLEAN` added
 
-The Linux driver defines these bits but does not use them, so the exact behaviour, such as
-whether CLEAN clears itself, is not confirmed.
+A clear takes two writes: the first selects the ports with :field:`MIB_CTRL.CLEAN` at 0, the
+second sets CLEAN. This is the sequence of the
+`vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L52>`__; the Linux driver defines
+the bits but does not use them. Whether CLEAN clears itself is not known, which is why the
+first write puts it back to 0.

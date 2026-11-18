@@ -48,15 +48,17 @@ Keys
 
 The upper bits are the same for every slot: :field:`ACL_KEY.TYPE` selects the layout of the
 lower 36 bits, :field:`ACL_KEY.SPORTS` the receiving ports the slot applies to and
-:field:`ACL_KEY.ORD` the order among matching rules, lowest first. The value list
+:field:`ACL_KEY.ORD` the order among matching rules: the rule with the highest ORD wins. The value list
 :enum:`acl_type` names the types, and the :reg:`ACL_KEY` reference shows the layout of each.
 
 A bit set in :reg:`ACL_MASK` means the same bit of the key must match; a clear bit is "don't
-care". Set the mask bits of TYPE as well, or the slot matches frames regardless of type.
+care". The mask covers only the lower, type-specific bits. TYPE, SPORTS, ORD and
+:field:`ACL_KEY.REVERSE` exist in the key alone and always apply; leave their positions in
+the mask at 0.
 
 Types ``UDF0`` to ``UDF7`` match two-byte windows at configurable offsets. :reg:`UDF_CTRL`
-sets each window: the header it is counted from (:enum:`udf_type`) and the offset in units of
-two bytes.
+sets each window: the header it is counted from (:enum:`udf_type`) and the offset in bytes
+from the start of that header. The window is the two bytes at that offset.
 
 .. _acl-action:
 

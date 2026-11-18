@@ -383,8 +383,8 @@ registers:
       (:reg:`METER_SLOT`, :reg:`PORT_SHAPE_SLOT`) count in units of eight core clock periods.
     fields:
       SEL:
-        desc: "Core clock selection."
-        values: {125M: "125 MHz core clock, 8 ns period (YT9215 family)", 167M: "167 MHz core clock, 6 ns period (YT9218 family)", 143M: "143 MHz core clock, 7 ns period"}
+        desc: "Core clock selection. Value 0 means 125 MHz on the YT9215 family and 167 MHz on the YT9218 family; :ref:`Core clock <bringup-clock>` lists the clock periods."
+        values: {125M: "125 MHz core clock", 167M: "167 MHz core clock", 143M: "143 MHz core clock"}
   IO_LEVEL:
     block: system
     title: I/O voltage select

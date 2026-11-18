@@ -13,25 +13,30 @@ Sources
 
 .. list-table::
    :header-rows: 1
-   :widths: 22 34 44
+   :widths: 40 60
 
    * - Source
      - Version
-     - Provides
    * - `Linux driver <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__
      - Commit ``20eef29b7c84`` of the mainline kernel
-     - Register and field names with addresses, and working code that shows how they are used
    * - `Vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
      - Commit ``d2c8d6fc721f`` of a public mirror
-     - A list of all register tables with field positions, and driver code that uses them; no
-       register descriptions
    * - :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`
      - V1.03
-     - Pins, straps and the management interface timing; no register addresses
 
-The Linux driver is in ``drivers/net/dsa/motorcomm/`` with the tag format in
-``net/dsa/tag_yt921x.c``. Each register in the reference links to the line of the driver
-header that defines it and to the SDK table at the same address.
+The Linux driver provides the register and field names with their addresses, and working code
+that shows how they are used. It is in
+`drivers/net/dsa/motorcomm/ <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__, with the tag format in
+`net/dsa/tag_yt921x.c <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/net/dsa/tag_yt921x.c>`__. Where a guide page says a step is
+confirmed by the Linux driver, the reference entries of the registers involved link to the
+lines of the driver header.
+
+The vendor SDK provides a list of all register tables with field positions, and driver code
+that uses them, but no register descriptions. It also contains a small
+`MDIO driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver>`__.
+
+The datasheet provides the pins, the strap pins and the timing of the management interface.
+It contains no register addresses.
 
 .. _evidence:
 
@@ -82,36 +87,61 @@ address.
    * - not in SDK
      - The SDK has the table but no field at these bits.
 
-.. _sources-unknown:
-
 What is not known
 -----------------
 
+Nothing here has been run on a YT921x by this project; the code is tested against a software
+model. The topics of this table are open.
+
 .. list-table::
    :header-rows: 1
-   :widths: 30 70
+   :widths: 40 60
 
    * - Topic
-     - State
+     - Where it matters
    * - Reset values
-     - Unknown except for :reg:`CPU_TAG_TPID`. Write every register a function depends on.
-   * - Hardware testing
-     - Nothing here has been run on a YT921x by this project. The code is tested against a
-       software model.
+     - :ref:`sources-reset`
    * - YT9215SCH identification
-     - Assumed to match the :chip:`YT9215SC`.
+     - :ref:`bringup-identify`
    * - Registers beyond the reference
-     - The :ref:`vendor SDK tables <reference-sdk>` list more than twice as many tables as
-       this manual describes; their meaning is known by name only.
+     - :ref:`reference-sdk`
    * - Order of processing stages
-     - Only partly confirmed; see :ref:`overview-frame-path`.
-   * - Command timing
-     - How long reset and table commands take is not published; see :ref:`access-wait`.
-   * - xMII configuration
-     - Public code exists for RGMII only; see :ref:`ports-xmii`.
+     - :ref:`overview-frame-path`
+   * - Duration of reset and table commands
+     - :ref:`access-wait`
+   * - xMII modes other than RGMII
+     - :ref:`ports-xmii`
    * - Filtering IDs
-     - :field:`VLAN_CTRL.FID` and :field:`VLAN_CTRL.SVLAN_EN` are not used by any driver.
-   * - Temperature
-     - The scale of :reg:`TEMP` is unknown.
+     - :field:`VLAN_CTRL.FID`
+   * - Shared VLAN learning
+     - :field:`VLAN_CTRL.SVLAN_EN`
+   * - Scale of the temperature reading
+     - :reg:`TEMP`
    * - Clause 45 MDIO
-     - The MDIO masters are described for clause 22 only; see :ref:`phy-mbus`.
+     - :ref:`phy-mbus`
+   * - SPI and I2C host interfaces
+     - :ref:`access-straps`
+
+The vendor SDK lists more than twice as many tables as this manual describes; the meaning of
+the others is known by name only. Functions that exist only there include interrupts, queue
+scheduling, storm control, loop detection, IGMP snooping and the handling of reserved
+multicast addresses such as spanning tree BPDUs.
+
+.. _sources-reset:
+
+Reset values
+~~~~~~~~~~~~
+
+Two reset values are known, both from the Linux driver. Write every other register a function
+depends on.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 60 40
+
+   * - Field
+     - Reset value
+   * - :field:`CPU_TAG_TPID.TPID`
+     - ``0x9988``
+   * - :field:`PORT_RATE.GAP_VALUE`
+     - ``0x14``

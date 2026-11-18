@@ -12,7 +12,8 @@ Find the switch
 ---------------
 
 Read :reg:`CHIP_ID` at PHY address ``0x1d`` and, if the family code is not one of the two
-known values, at ``0x00``. The read changes nothing in the switch.
+known values, at ``0x00``. The read changes nothing in the switch. On a board that straps a
+switch ID other than 0, use that ID in every access; :ref:`access-straps` lists the pins.
 
 .. list-table::
    :header-rows: 1
@@ -23,10 +24,13 @@ known values, at ``0x00``. The read changes nothing in the switch.
      - Family
    * - ``0x9002``
      - :const:`MAJOR_YT9215`
-     - YT9215, YT9214 and YT9213 parts
+     - YT9215 family
    * - ``0x9001``
      - :const:`MAJOR_YT9218`
-     - YT9218 parts
+     - YT9218 family
+
+The YT9215 family is the YT9215, YT9214 and YT9213 parts; :ref:`reference-parts` lists every
+part.
 
 .. _bringup-reset:
 
@@ -36,9 +40,11 @@ Reset
 .. yt-diagram:: reset-sequence
    :caption: Reset followed by identification.
 
-1. Write :reg:`RST` with only :field:`RST.HW` set. The Linux driver describes this as almost the
-   same as a reset through the reset pin; every register returns to its default.
-2. Wait 10 ms (:const:`RST_DELAY_US`). The switch does not answer during the reset.
+1. Write :reg:`RST` with only :field:`RST.HW` set. The :ref:`Linux driver <sources-list>` describes this as almost the
+   same as a reset through the reset pin. That every register returns to its default is
+   inferred from that description.
+2. Wait 10 ms (:const:`RST_DELAY_US`), as the :ref:`Linux driver <sources-list>` does before it touches the switch
+   again.
 3. Read :reg:`RST` until the whole register is 0, as described in :ref:`access-wait`.
 4. Read :reg:`CPU_TAG_TPID` and check for ``0x9988``, as described in :ref:`access-check`.
 
@@ -56,16 +62,19 @@ mode. :ref:`reference-parts` has the value of each for every part and
 :ref:`reference-parts-ports` the ports each part has. A driver needs the part to know which
 of ports 8 and 9 exist and whether they have a SerDes or xMII pins.
 
-The configuration byte store is a 256-byte (:const:`EDATA_LEN`) read-only memory inside the
-chip. The extended mode is the byte at address ``0xfb`` (:const:`EDATA_EXTMODE`).
+The configuration byte store (this manual's name for what the :ref:`Linux driver <sources-list>` calls EDATA) is a
+256-byte (:const:`EDATA_LEN`) memory inside the chip. Only reading it is known. The extended
+mode is the byte at address ``0xfb`` (:const:`EDATA_EXTMODE`).
 
 .. yt-diagram:: edata-sequence
    :caption: Reading one byte of the configuration byte store.
 
-1. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is IDLE (3).
-2. Write :reg:`EDATA_CTRL` with the byte address in :field:`EDATA_CTRL.ADDR` and the READ
-   command (5) in :field:`EDATA_CTRL.OP`.
-3. Read :reg:`EDATA_DATA` until STATUS is IDLE again; :field:`EDATA_DATA.DATA` then holds the
+1. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is :val:`EDATA_DATA.STATUS.IDLE`
+   (3).
+2. Write :reg:`EDATA_CTRL` with the byte address in :field:`EDATA_CTRL.ADDR` and
+   :val:`EDATA_CTRL.OP.READ` (5) in :field:`EDATA_CTRL.OP`.
+3. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is IDLE again;
+   :field:`EDATA_DATA.DATA` then holds the
    byte.
 
 .. tab-set::
@@ -93,7 +102,7 @@ chip. The extended mode is the byte at address ``0xfb`` (:const:`EDATA_EXTMODE`)
 ``yt921x_reset()`` and ``yt921x_identify()`` are in
 :download:`yt921x.c <../bindings/c/yt921x.c>`.
 
-The YT9215SCH is not in the part table of the Linux driver. It is expected to report the
+The YT9215SCH is not in the part table of the :ref:`Linux driver <sources-list>`. It is expected to report the
 values of the :chip:`YT9215SC`; this has not been checked on hardware.
 
 .. _bringup-clock:
@@ -135,7 +144,7 @@ period from this table.
 Turn on function blocks
 -----------------------
 
-Three function blocks work only while their bit in :reg:`FUNC` is set. The Linux driver sets
+Three function blocks work only while their bit in :reg:`FUNC` is set. The :ref:`Linux driver <sources-list>` sets
 each bit before it uses the block; that the bits are clear after reset is inferred from
 that.
 
@@ -161,6 +170,8 @@ that.
    .. tab-item:: C
       :sync: c
 
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
+
       .. literalinclude:: ../bindings/c/examples/guide.c
            :language: c
            :start-after: /* [features] */
@@ -168,6 +179,8 @@ that.
 
    .. tab-item:: MicroPython
       :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
 
       .. literalinclude:: ../bindings/micropython/examples/guide.py
            :language: python

@@ -6,6 +6,7 @@
 #include "yt921x.h"
 
 int guide_bringup(struct yt921x *dev, struct yt921x_id *id);
+int guide_init(struct yt921x *dev, unsigned int cpu_port);
 int guide_enable_features(struct yt921x *dev);
 int guide_cpu_port(struct yt921x *dev, unsigned int port);
 int guide_port_force(struct yt921x *dev, unsigned int port, unsigned int speed, bool full_duplex);

@@ -7,7 +7,7 @@ import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ROLE_RE = re.compile(r":(?:reg|field|blk|enum|counter|const|chip|sdk):`([^`<]+?)(?: <[^`]+>)?`")
+ROLE_RE = re.compile(r":(?:reg|field|blk|enum|counter|const|chip|sdk|val):`([^`<]+?)(?: <[^`]+>)?`")
 REF_RE = re.compile(r":(?:ref|doc):`([^`<]+?) <[^`]+>`")
 
 

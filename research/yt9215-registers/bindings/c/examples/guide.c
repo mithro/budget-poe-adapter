@@ -36,6 +36,27 @@ int guide_bringup(struct yt921x *dev, struct yt921x_id *id)
 }
 /* [bringup end] */
 
+/* [init] */
+int guide_init(struct yt921x *dev, unsigned int cpu_port)
+{
+	struct yt921x_id id;
+	int err = guide_bringup(dev, &id); /* find, reset, identify */
+
+	if (!err && !id.part)
+		err = YT921X_ERR_NODEV; /* a part this code does not know */
+	if (!err)
+		err = guide_enable_features(dev);
+	if (!err)
+		err = guide_cpu_port(dev, cpu_port);
+	if (!err)
+		err = guide_port_force(dev, cpu_port, YT921X_SPEED_V1000, true);
+	/* One group of all copper ports; each may also reach the CPU port. */
+	if (!err)
+		err = guide_port_group(dev, id.part->phy_ports, (uint16_t)(1u << cpu_port));
+	return err;
+}
+/* [init end] */
+
 /* [features] */
 int guide_enable_features(struct yt921x *dev)
 {
@@ -63,7 +84,8 @@ int guide_cpu_port(struct yt921x *dev, unsigned int port)
 /* [cpu-port end] */
 
 /* [port-up] */
-int guide_port_force(struct yt921x *dev, unsigned int port, unsigned int speed, bool full_duplex)
+int guide_port_force(struct yt921x *dev, unsigned int port, unsigned int speed,
+		     bool full_duplex)
 {
 	uint32_t mask = YT921X_PORT_CTRL_SPEED_M | YT921X_PORT_CTRL_DUPLEX_FULL_M |
 			YT921X_PORT_CTRL_RX_PAUSE_M | YT921X_PORT_CTRL_TX_PAUSE_M |
@@ -86,8 +108,8 @@ int guide_port_down(struct yt921x *dev, unsigned int port)
 /* [port-up end] */
 
 /* [port-status] */
-int guide_port_status(struct yt921x *dev, unsigned int port, bool *link, unsigned int *speed,
-		      bool *full_duplex)
+int guide_port_status(struct yt921x *dev, unsigned int port, bool *link,
+		      unsigned int *speed, bool *full_duplex)
 {
 	uint32_t val;
 	int err = yt921x_reg_read(dev, YT921X_PORT_STATUS(port), &val);
@@ -123,20 +145,24 @@ int guide_port_group(struct yt921x *dev, uint16_t members, uint16_t cpu_ports)
 /* [isolation end] */
 
 /* [vlan] */
-int guide_vlan_write(struct yt921x *dev, unsigned int vid, uint16_t members, uint16_t untagged)
+int guide_vlan_write(struct yt921x *dev, unsigned int vid, uint16_t members,
+		     uint16_t untagged)
 {
 	uint32_t entry[YT921X_VLAN_CTRL_WORDS] = { 0, 0 };
 
-	yt921x_bits_set(entry, YT921X_VLAN_CTRL_PORTS_LSB, YT921X_VLAN_CTRL_PORTS_WIDTH, members);
-	yt921x_bits_set(entry, YT921X_VLAN_CTRL_UNTAG_PORTS_LSB, YT921X_VLAN_CTRL_UNTAG_PORTS_WIDTH,
-			untagged);
+	yt921x_bits_set(entry, YT921X_VLAN_CTRL_PORTS_LSB, YT921X_VLAN_CTRL_PORTS_WIDTH,
+			members);
+	yt921x_bits_set(entry, YT921X_VLAN_CTRL_UNTAG_PORTS_LSB,
+			YT921X_VLAN_CTRL_UNTAG_PORTS_WIDTH, untagged);
 	/* Low word first; the entry takes effect with the high word. */
-	return yt921x_reg_write_words(dev, YT921X_VLAN_CTRL(vid), entry, YT921X_VLAN_CTRL_WORDS);
+	return yt921x_reg_write_words(dev, YT921X_VLAN_CTRL(vid), entry,
+				      YT921X_VLAN_CTRL_WORDS);
 }
 
 int guide_port_pvid(struct yt921x *dev, unsigned int port, unsigned int vid)
 {
-	return yt921x_reg_update(dev, YT921X_PORT_VLAN_CTRL(port), YT921X_PORT_VLAN_CTRL_CVID_M,
+	return yt921x_reg_update(dev, YT921X_PORT_VLAN_CTRL(port),
+				 YT921X_PORT_VLAN_CTRL_CVID_M,
 				 YT921X_FPREP(YT921X_PORT_VLAN_CTRL_CVID, vid));
 }
 /* [vlan end] */
@@ -152,7 +178,8 @@ static int fdb_run(struct yt921x *dev, uint32_t op, uint32_t *result)
 			       YT921X_FDB_RESULT_DONE_M, result);
 }
 
-static int fdb_key(struct yt921x *dev, const uint8_t mac[6], unsigned int fid, uint32_t status)
+static int fdb_key(struct yt921x *dev, const uint8_t mac[6], unsigned int fid,
+		   uint32_t status)
 {
 	int err = yt921x_reg_write(dev, YT921X_FDB_IN0,
 				   (uint32_t)mac[0] << 24 | (uint32_t)mac[1] << 16 |
@@ -176,7 +203,8 @@ int guide_fdb_add_static(struct yt921x *dev, const uint8_t mac[6], unsigned int 
 
 	if (err)
 		return err;
-	err = yt921x_reg_write(dev, YT921X_FDB_IN2, YT921X_FPREP(YT921X_FDB_IN2_EGR_PORTS, ports));
+	err = yt921x_reg_write(dev, YT921X_FDB_IN2,
+			       YT921X_FPREP(YT921X_FDB_IN2_EGR_PORTS, ports));
 	if (err)
 		return err;
 	return fdb_run(dev, YT921X_FPREP(YT921X_FDB_OP_OP, YT921X_FDB_OP_OP_ADD), &result);
@@ -184,7 +212,8 @@ int guide_fdb_add_static(struct yt921x *dev, const uint8_t mac[6], unsigned int 
 /* [fdb-add end] */
 
 /* [fdb-get] */
-int guide_fdb_lookup(struct yt921x *dev, const uint8_t mac[6], unsigned int fid, uint16_t *ports)
+int guide_fdb_lookup(struct yt921x *dev, const uint8_t mac[6], unsigned int fid,
+		     uint16_t *ports)
 {
 	uint32_t result, out1, out2;
 	int err = fdb_key(dev, mac, fid, 0);

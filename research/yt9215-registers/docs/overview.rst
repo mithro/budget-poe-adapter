@@ -7,6 +7,10 @@ A YT921x is an Ethernet switch with up to eleven ports, numbered 0 to 10. Softwa
 a file of 32-bit registers that it reads and writes over the two-wire MDIO management
 interface. Nothing else is needed to control the switch: there is no firmware to load.
 
+The :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>` describes two more host interfaces to the
+same registers, I2C and SPI, which strap pins select. This manual covers MDIO only;
+:ref:`access-straps` names the pins.
+
 .. yt-diagram:: system
    :caption: A host and the parts of the switch it deals with. The boxes are links.
 
@@ -34,12 +38,12 @@ The path of a frame
 -------------------
 
 The functions of the switch are easiest to learn in the order a frame meets them. Each box
-below is a link to the page that describes the stage.
+of the diagram is a link to the page that describes the stage.
 
 .. yt-diagram:: frame-path
    :caption: Stages a frame passes through, from the receiving to the sending port.
 
-The order shown is a model to reason with. One point of it is confirmed by the Linux driver:
+The order shown is a model to reason with. One point of it is confirmed by the :ref:`Linux driver <sources-list>`:
 port isolation is applied after the destination lookup (a frame whose known destination is
 blocked is dropped, not flooded).
 The rest of the order follows how switches of this kind are usually built and is not
@@ -79,9 +83,33 @@ What a driver has to do
      - Add VLANs, static addresses, counters and the rest as needed
      - :doc:`vlan`
 
-Without any register writes the chip already forwards frames between its ports as an
-unmanaged switch, in the configuration its strap pins select. A driver only has to do the
-steps whose function it needs.
+The first six steps in code, built from the examples of the pages named in the table:
+
+.. tab-set::
+
+   .. tab-item:: C
+      :sync: c
+
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
+
+      .. literalinclude:: ../bindings/c/examples/guide.c
+           :language: c
+           :start-after: /* [init] */
+           :end-before: /* [init end] */
+
+   .. tab-item:: MicroPython
+      :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
+
+      .. literalinclude:: ../bindings/micropython/examples/guide.py
+           :language: python
+           :start-after: # [init]
+           :end-before: # [init end]
+
+A driver only has to do the steps whose function it needs. The datasheet describes the chip
+as usable without a host, forwarding between its ports in the configuration its strap pins
+select; this project has not checked that.
 
 .. _overview-conventions:
 
@@ -106,5 +134,5 @@ Conventions
      - A hexadecimal number.
 
 Register and field names are the ones the :doc:`bindings <bindings>` use. They follow the
-Linux driver, with index letters removed; the :ref:`Sources table <evidence>` of each register
-gives the original Linux name and the vendor SDK name.
+:ref:`Linux driver <sources-list>`, with index letters removed; the :ref:`Sources table <evidence>` of each register
+gives the original Linux name and the :ref:`vendor SDK <sources-list>` name.

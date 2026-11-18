@@ -2406,19 +2406,19 @@
           <fields>
             <field>
               <name>SEL</name>
-              <description>Core clock selection.</description>
+              <description>Core clock selection. Value 0 means 125 MHz on the YT9215 family and 167 MHz on the YT9218 family; Core clock lists the clock periods.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
               <enumeratedValues>
                 <enumeratedValue>
                   <name>V125M</name>
-                  <description>125 MHz core clock, 8 ns period (YT9215 family)</description>
+                  <description>125 MHz core clock</description>
                   <value>0</value>
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V143M</name>
-                  <description>143 MHz core clock, 7 ns period</description>
+                  <description>143 MHz core clock</description>
                   <value>1</value>
                 </enumeratedValue>
               </enumeratedValues>

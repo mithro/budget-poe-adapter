@@ -5,13 +5,13 @@ Everything needed to write a driver for the Motorcomm YT921x Gigabit Ethernet sw
 machine-readable register description, and register definitions with a small access layer
 for C, Rust, MicroPython and Zephyr.
 
-The vendor publishes no register documentation. The content was worked out from the Linux
+The vendor publishes no register documentation. The content is derived from the Linux
 driver and the vendor SDK; [`docs/sources.rst`](docs/sources.rst) explains what comes from
-where and how far it can be trusted. Nothing here has been run on a real YT921x yet.
+where and how far it can be trusted. Nothing here has been run on a real YT921x.
 
 ## Manual
 
-The manual is a Sphinx project and reads best when built (`make docs`, or Read the Docs).
+The manual is a Sphinx project and reads best when built (`make docs`, or on Read the Docs with the [`.readthedocs.yaml`](../../.readthedocs.yaml) of this repository).
 The pages are also readable as source:
 
 | Page | Topic |

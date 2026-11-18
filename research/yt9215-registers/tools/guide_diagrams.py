@@ -101,7 +101,7 @@ def _mdio_cells(read):
         {"units": 3, "title": "ST", "sub": "01", "top": "2"},
         {"units": 3, "title": "OP", "sub": "10 read" if read else "01 write", "top": "2"},
         {"units": 5, "title": "PHYAD", "sub": "0x1d or 0x00", "top": "5"},
-        {"units": 5, "title": "REGAD", "sub": "see below", "top": "5", "cls": "yt-sp"},
+        {"units": 5, "title": "REGAD", "sub": "switch ID, phase", "top": "5", "cls": "yt-sp"},
         {"units": 3, "title": "TA", "sub": "Z0" if read else "10", "top": "2", "cls": drive},
         {"units": 13, "title": "DATA", "sub": "driven by the switch" if read else "driven by the host",
          "top": "16 bits, most significant first", "cls": drive},
@@ -212,7 +212,7 @@ def fdb_sequence(ln):
 @diagram("acl-sequence")
 def acl_sequence(ln):
     return diagrams.sequence("Writing one ACL rule", ["Host", "YT921x"], [
-        (0, 1, "write ACL_ACT[8 × block + slot]: three words"),
+        (0, 1, "write ACL_ACT[8 × block + group]: three words"),
         (0, 1, "write ACL_BLK_CMD = BLKID | MODIFY"),
         ("note", 1, "block is open; lookups still use the old content"),
         (0, 1, "write ACL_KEY and ACL_MASK of each slot of the rule: two words each"),

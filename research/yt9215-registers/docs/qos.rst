@@ -50,8 +50,8 @@ then still applies when no other source does.
      - ``PORT``
      - The port default in :field:`PORT_QOS.PRIO`
 
-To trust DSCP first and the tag priority second, as the Linux driver does for such a request,
-give ``DSCP`` weight 7 and both ``CVLAN_PCP`` and ``SVLAN_PCP`` weight 6. The Linux driver uses
+To trust DSCP first and the tag priority second, as the :ref:`Linux driver <sources-list>` does for such a request,
+give ``DSCP`` weight 7 and both ``CVLAN_PCP`` and ``SVLAN_PCP`` weight 6. The :ref:`Linux driver <sources-list>` uses
 only these three sources; the others are described from the names in its header.
 
 .. _qos-maps:
@@ -69,9 +69,10 @@ There are two :reg:`IPM_PCP` maps; :field:`PORT_QOS.CVLAN_PRIO_MAP_ID` and
 :field:`PORT_QOS.SVLAN_PRIO_MAP_ID` choose the one a port uses for each tag kind. The address
 of an entry is ``0x180100 + 64 × map + 32 × dei + 4 × pcp``.
 
-The Linux driver fills the tables once at start-up: every DSCP value gets the priority that
-IETF RFC 8325 assigns to it, and every tag priority maps to itself, with colour yellow when
-the drop eligible bit is set.
+Fill the tables once at start-up. The :ref:`Linux driver <sources-list>` gives every DSCP value the priority that
+IETF RFC 8325 assigns to it and maps every tag priority to itself, with colour yellow when
+the drop eligible bit is set, and writes both :reg:`IPM_PCP` maps alike. Which map a tag
+kind uses by default is therefore not confirmed.
 
 .. _qos-port:
 

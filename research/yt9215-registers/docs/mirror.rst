@@ -21,6 +21,7 @@ register :reg:`MIRROR` in the :blk:`mirror` block.
    * - :field:`MIRROR.EGR_PORTS`
      - Ports whose sent frames are copied
 
-There is one monitor port for the whole switch. When adding a source port, keep the monitor
+The three fields are confirmed by the :ref:`Linux driver <sources-list>`. There is one monitor port for the whole
+switch. When adding a source port, keep the monitor
 port unchanged if other sources are already set. An ACL rule can mirror selected frames to the
 same monitor port; see :ref:`acl-action`.

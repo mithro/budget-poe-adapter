@@ -71,3 +71,6 @@ table.yt-fields, table.yt-sources, table.yt-facts { width: 100%; }
 /* Side-by-side code examples: keep the cells aligned at the top. */
 table.docutils td > div[class^="highlight-"] { margin: 0; }
 table.docutils td { vertical-align: top; }
+
+/* Code examples: fit 92 columns in the content width. */
+div.highlight pre { font-size: 0.76rem; }

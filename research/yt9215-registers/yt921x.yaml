@@ -1970,7 +1970,7 @@ registers:
         - 179
         used: false
       chip: yt9215
-      desc: 125 MHz core clock, 8 ns period (YT9215 family)
+      desc: 125 MHz core clock
     - name: V167M
       value: 0
       linux:
@@ -1980,7 +1980,7 @@ registers:
         - 180
         used: false
       chip: yt9218
-      desc: 167 MHz core clock, 6 ns period (YT9218 family)
+      desc: 167 MHz core clock
     - name: V143M
       value: 1
       linux:
@@ -1989,10 +1989,11 @@ registers:
         - chip.h
         - 181
         used: true
-      desc: 143 MHz core clock, 7 ns period
+      desc: 143 MHz core clock
     lsb: 0
     width: 2
-    desc: Core clock selection.
+    desc: Core clock selection. Value 0 means 125 MHz on the YT9215 family and 167 MHz on the YT9218 family;
+      :ref:`Core clock <bringup-clock>` lists the clock periods.
     access: rw
     sdk:
       status: no SDK table

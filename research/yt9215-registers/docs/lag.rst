@@ -4,7 +4,10 @@ Link aggregation
 ================
 
 Two groups of up to four ports each (:const:`LAG_NUM`, :const:`LAG_PORT_NUM`) can act as one
-logical link. The registers are in the :blk:`lag` block.
+logical link. The registers are in the :blk:`lag` block. The set-up sequence and the hash
+bits are confirmed by the :ref:`Linux driver <sources-list>`. How a group interacts with
+:ref:`port isolation <forwarding-isolation>` and with learned addresses is not known; give
+all members of a group the same isolation mask, VLAN membership and spanning tree state.
 
 .. _lag-group:
 

@@ -26,7 +26,7 @@ licence.
      - :download:`yt921x_regs.py <../bindings/micropython/yt921x_regs.py>`
      - :download:`yt921x.py <../bindings/micropython/yt921x.py>`
    * - :ref:`Zephyr <bindings-zephyr>`
-     - The C header
+     - :download:`yt921x_regs.h <../bindings/c/yt921x_regs.h>`
      - :download:`yt921x_zephyr.c <../bindings/zephyr/drivers/yt921x_zephyr.c>`
 
 .. _bindings-api:
@@ -143,7 +143,7 @@ that name in a fixed way. The examples are for :reg:`PORT_CTRL`, its field
      - ``PORT_NUM``
 
 A value name that would start with a digit has a ``V`` in front, as in ``V1000``. Values are
-plain numbers; shift them into place with the helpers below.
+plain numbers; shift them into place with these helpers.
 
 .. list-table::
    :header-rows: 1
@@ -338,19 +338,23 @@ How the code is checked
    * - Binding
      - Check
    * - C
-     - Compiled with ``gcc -std=c99 -Wall -Wextra -Werror -pedantic``; the access layer and
-       every example run against the software model
+     - Compiled with ``gcc -std=c99 -Wall -Wextra -Werror -pedantic``
+   * - C
+     - Access layer and every example run against the software model
    * - Rust
-     - ``cargo test`` on the host; built for ``thumbv7em-none-eabihf``
+     - ``cargo test`` on the host
+   * - Rust
+     - Built for ``thumbv7em-none-eabihf``
    * - MicroPython
-     - Run under CPython against the software model, including the bit-banged bus; compiled
-       with ``mpy-cross``
+     - Run under CPython against the software model, with the bit-banged bus
+   * - MicroPython
+     - Compiled with ``mpy-cross``
    * - Zephyr
-     - Sample built for ``native_sim`` and run; it reports that no switch answers
+     - Sample built for ``native_sim`` and run without a switch
    * - All
-     - Every generated address and field position is compared with the description file
+     - Every generated address and field position compared with the description file
 
-None of the code has been run against a real YT921x by this project yet. The software model
+None of the code has been run against a real YT921x by this project. The software model
 implements this manual's understanding of the chip, so the tests show that code and manual
 agree with each other, not that both are right. :download:`Makefile <../Makefile>` runs all
 checks.

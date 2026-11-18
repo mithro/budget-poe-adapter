@@ -695,10 +695,10 @@ addrmap yt9218 {
         name = "System clock select";
         desc = "Shows which core clock the switch runs from. The meter and shaper time slots (METER_SLOT, PORT_SHAPE_SLOT) count in units of eight core clock periods.";
         enum sys_clk_sel_e {
-            V167M = 0 { desc = "167 MHz core clock, 6 ns period (YT9218 family)"; };
-            V143M = 1 { desc = "143 MHz core clock, 7 ns period"; };
+            V167M = 0 { desc = "167 MHz core clock"; };
+            V143M = 1 { desc = "143 MHz core clock"; };
         };
-        field { desc = "Core clock selection."; sw = rw; hw = r; encode = sys_clk_sel_e; } SEL[1:0];
+        field { desc = "Core clock selection. Value 0 means 125 MHz on the YT9215 family and 167 MHz on the YT9218 family; Core clock lists the clock periods."; sw = rw; hw = r; encode = sys_clk_sel_e; } SEL[1:0];
     } SYS_CLK @ 0xE0040;
 
     reg {

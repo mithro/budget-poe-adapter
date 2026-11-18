@@ -34,6 +34,14 @@ int main(void)
 	CHECK(guide_bringup(&dev, &id) == 0);
 	CHECK(dev.phy_addr == 0 && id.part && strcmp(id.part->name, "YT9215SC") == 0);
 
+	/* The whole start-up in one call. */
+	CHECK(guide_init(&dev, 8) == 0);
+	CHECK(*mock_reg(&sw, YT921X_FUNC) == 0x16);
+	CHECK(*mock_reg(&sw, YT921X_EXT_CPU_PORT) == 0xc008);
+	CHECK((*mock_reg(&sw, YT921X_PORT_CTRL(8)) & 0xff) == 0x9a);
+	CHECK(*mock_reg(&sw, YT921X_PORT_ISOLATION(0)) == (0x7ffu & ~0x11eu));
+	*mock_reg(&sw, YT921X_FUNC) = 0;
+
 	CHECK(guide_enable_features(&dev) == 0);
 	CHECK(*mock_reg(&sw, YT921X_FUNC) == 0x16);
 

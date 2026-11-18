@@ -45,6 +45,7 @@ def state():
         m = M.Model()
         _state.update(model=m, targets=gen_docs.targets(m), fields=gen_docs.field_syms(m),
                       blocks={b["id"]: b for b in m.blocks},
+                      fieldobj={M.fsym(r, f, lay): f for r in m.regs for lay, f in M.all_fields(r)},
                       layouts={(r["id"], lay["name"]): lay for r in m.regs for lay in r["layouts"]})
     return _state
 
@@ -57,6 +58,19 @@ def resolve(kind, name):
         return gen_docs.reg_label(name), name, True
     if kind == "field" and name in s["fields"]:
         return gen_docs.field_label(s["fields"][name]), name, True
+    if kind == "val":
+        owner, _, vname = name.rpartition(".")
+        if owner in m.enums:
+            if any(v["name"] == vname for v in m.enums[owner]["values"]):
+                return gen_docs.enum_val_label(owner, vname), vname, True
+        elif owner in s["fields"]:
+            sym = s["fields"][owner]
+            f = s["fieldobj"][sym]
+            if f.get("enum") and any(v["name"] == vname for v in m.enums[f["enum"]]["values"]):
+                return gen_docs.enum_val_label(f["enum"], vname), vname, True
+            if any(v["name"] == vname for v in f.get("values") or []):
+                return gen_docs.val_label(sym, vname), vname, True
+        return None
     if kind == "blk" and name in s["blocks"]:
         return gen_docs.blk_label(name), s["blocks"][name]["title"], False
     if kind == "enum" and name in m.enums:
@@ -161,8 +175,7 @@ class Bitfield(SphinxDirective):
             caption += " with layout %s" % layout["name"]
         family = self.options.get("family")
         if family:
-            caption += {"yt9215": " on parts other than the YT9218",
-                        "yt9218": " on the YT9218"}[family]
+            caption += " on the " + gen_docs.FAMILY[family]
         svg = gen_docs.bitfield_svg(s["model"], reg, family, layout, Links(self).label)
         return [figure(svg, caption)]
 
@@ -186,7 +199,7 @@ def config_inited(app, config):
 
 def setup(app):
     app.add_domain(YtDomain)
-    for kind in ("reg", "field", "blk", "enum", "counter", "const", "chip", "sdk"):
+    for kind in ("reg", "field", "blk", "enum", "counter", "const", "chip", "sdk", "val"):
         app.add_role(kind, YtRole(kind))
     app.add_directive("yt-bitfield", Bitfield)
     app.add_directive("yt-diagram", Diagram)

@@ -402,13 +402,13 @@ pub const EDATA_DATA_STATUS_IDLE: u32 = 3;
 
 /// System clock select.
 pub const SYS_CLK: u32 = 0xe0040;
-/// Core clock selection.
+/// Core clock selection. Value 0 means 125 MHz on the YT9215 family and 167 MHz on the YT9218 family; Core clock lists the clock periods.
 pub const SYS_CLK_SEL: Field = Field { lsb: 0, width: 2 };
-/// 125 MHz core clock, 8 ns period (YT9215 family)
+/// 125 MHz core clock
 pub const SYS_CLK_SEL_V125M: u32 = 0;
-/// 167 MHz core clock, 6 ns period (YT9218 family)
+/// 167 MHz core clock
 pub const SYS_CLK_SEL_V167M: u32 = 0;
-/// 143 MHz core clock, 7 ns period
+/// 143 MHz core clock
 pub const SYS_CLK_SEL_V143M: u32 = 1;
 
 // ==== CPU port and frame tagging ====

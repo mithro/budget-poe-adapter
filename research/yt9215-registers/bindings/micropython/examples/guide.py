@@ -33,6 +33,19 @@ def bringup(mdio):
 # [bringup end]
 
 
+# [init]
+def init(mdio, cpu_port_num):
+    """Bring the switch up as one group of copper ports with a CPU port."""
+    dev, part = bringup(mdio)  # find, reset, identify
+    enable_features(dev)
+    cpu_port(dev, cpu_port_num)
+    port_force(dev, cpu_port_num, R.SPEED_V1000)
+    # One group of all copper ports; each may also reach the CPU port.
+    port_group(dev, part[4], 1 << cpu_port_num)
+    return dev, part
+# [init end]
+
+
 # [features]
 def enable_features(dev):
     """Counters, ACL and meters work only while their bit is set."""
@@ -57,7 +70,8 @@ def port_force(dev, port, speed, full_duplex=True):
     mask = (R.PORT_CTRL_SPEED_M | R.PORT_CTRL_DUPLEX_FULL_M | R.PORT_CTRL_RX_PAUSE_M
             | R.PORT_CTRL_TX_PAUSE_M | R.PORT_CTRL_RX_MAC_EN_M | R.PORT_CTRL_TX_MAC_EN_M
             | R.PORT_CTRL_LINK_AN_M)
-    val = (speed << R.PORT_CTRL_SPEED_S) | R.PORT_CTRL_RX_MAC_EN_M | R.PORT_CTRL_TX_MAC_EN_M
+    val = speed << R.PORT_CTRL_SPEED_S
+    val |= R.PORT_CTRL_RX_MAC_EN_M | R.PORT_CTRL_TX_MAC_EN_M
     if full_duplex:
         val |= R.PORT_CTRL_DUPLEX_FULL_M
     dev.reg_update(R.PORT_CTRL(port), mask, val)
@@ -65,7 +79,8 @@ def port_force(dev, port, speed, full_duplex=True):
 
 def port_down(dev, port):
     dev.reg_update(R.PORT_CTRL(port),
-                   R.PORT_CTRL_LINK_AN_M | R.PORT_CTRL_RX_MAC_EN_M | R.PORT_CTRL_TX_MAC_EN_M, 0)
+                   R.PORT_CTRL_LINK_AN_M | R.PORT_CTRL_RX_MAC_EN_M |
+                   R.PORT_CTRL_TX_MAC_EN_M, 0)
 # [port-up end]
 
 
@@ -95,7 +110,8 @@ def vlan_write(dev, vid, members, untagged):
     """Write one VLAN table entry; ``members`` and ``untagged`` are port masks."""
     entry = [0] * R.VLAN_CTRL_WORDS
     R.bits_set(entry, R.VLAN_CTRL_PORTS_LSB, R.VLAN_CTRL_PORTS_WIDTH, members)
-    R.bits_set(entry, R.VLAN_CTRL_UNTAG_PORTS_LSB, R.VLAN_CTRL_UNTAG_PORTS_WIDTH, untagged)
+    R.bits_set(entry, R.VLAN_CTRL_UNTAG_PORTS_LSB, R.VLAN_CTRL_UNTAG_PORTS_WIDTH,
+               untagged)
     # Low word first; the entry takes effect with the high word.
     dev.reg_write_words(R.VLAN_CTRL(vid), entry)
 
@@ -136,9 +152,11 @@ def fdb_lookup(dev, mac, fid):
     if _fdb_run(dev, R.FDB_OP_OP_GET_ONE) & R.FDB_RESULT_NOTFOUND_M:
         return 0
     out1 = dev.reg_read(R.FDB_OUT1)
-    if R.fget(out1, R.FDB_OUT1_STATUS_M, R.FDB_OUT1_STATUS_S) == R.FDB_OUT1_STATUS_INVALID:
+    status = R.fget(out1, R.FDB_OUT1_STATUS_M, R.FDB_OUT1_STATUS_S)
+    if status == R.FDB_OUT1_STATUS_INVALID:
         return 0
-    return R.fget(dev.reg_read(R.FDB_OUT2), R.FDB_OUT2_EGR_PORTS_M, R.FDB_OUT2_EGR_PORTS_S)
+    out2 = dev.reg_read(R.FDB_OUT2)
+    return R.fget(out2, R.FDB_OUT2_EGR_PORTS_M, R.FDB_OUT2_EGR_PORTS_S)
 # [fdb-get end]
 
 

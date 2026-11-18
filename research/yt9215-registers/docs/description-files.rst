@@ -16,14 +16,13 @@ standard formats.
      - Use
    * - :download:`yt921x.yaml <../yt921x.yaml>`
      - YAML
-     - The source: every register, field, value, counter, constant and part, with
-       descriptions and references to where each came from
+     - The source of every other file
    * - :download:`sdk-tables.yaml <../sdk-tables.yaml>`
      - YAML
-     - The register tables of the vendor SDK, names and bit positions only
+     - The register tables of the :ref:`vendor SDK <sources-list>`, names and bit positions only
    * - :download:`yt9215.svd <../svd/yt9215.svd>`
      - CMSIS-SVD
-     - YT9215 family, for register viewers and code generators such as ``svd2rust``
+     - YT9215 family
    * - :download:`yt9218.svd <../svd/yt9218.svd>`
      - CMSIS-SVD
      - YT9218 family
@@ -65,7 +64,8 @@ follows:
      - A cluster per port with one register per counter
 
 The addresses are register addresses of the switch as used in :ref:`access-smi`, not memory
-addresses of the host. Both files validate against the CMSIS-SVD 1.3 schema.
+addresses of the host. Both files validate against the
+:download:`CMSIS-SVD 1.3 schema <../tools/schema/CMSIS-SVD.xsd>`.
 
 .. _description-files-yaml:
 
@@ -109,16 +109,29 @@ Regenerating
    * - Tool
      - Purpose
    * - :download:`extract.py <../tools/extract.py>`
-     - Builds ``yt921x.yaml`` and ``sdk-tables.yaml`` from a checkout of the Linux driver, a
-       checkout of the vendor SDK and the hand-written descriptions
+     - Builds the two YAML files from the :ref:`Linux driver <sources-list>`, the :ref:`vendor SDK <sources-list>` and the overlay
    * - :download:`overlay.yaml <../tools/overlay.yaml>`
-     - The hand-written part: titles, descriptions, index ranges, parts and corrections
+     - The hand-written descriptions
+   * - :download:`model.py <../tools/model.py>`
+     - Loads the YAML source for the other tools
    * - :download:`generate.py <../tools/generate.py>`
-     - Writes the bindings, the SVD and the SystemRDL files from ``yt921x.yaml``
+     - Runs the five writers
+   * - :download:`gen_c.py <../tools/gen_c.py>`
+     - Writes the C header
+   * - :download:`gen_rust.py <../tools/gen_rust.py>`
+     - Writes the Rust module
+   * - :download:`gen_py.py <../tools/gen_py.py>`
+     - Writes the MicroPython module
+   * - :download:`gen_svd.py <../tools/gen_svd.py>`
+     - Writes the SVD files
+   * - :download:`gen_rdl.py <../tools/gen_rdl.py>`
+     - Writes the SystemRDL files
    * - :download:`gen_docs.py <../tools/gen_docs.py>`
      - Writes the reference pages of this manual during the Sphinx build
    * - :download:`diagrams.py <../tools/diagrams.py>`
-     - Draws the diagrams as SVG
+     - Draws diagrams as SVG
+   * - :download:`guide_diagrams.py <../tools/guide_diagrams.py>`
+     - Holds the content of the guide's diagrams
    * - :download:`yt921x_sphinx.py <../tools/yt921x_sphinx.py>`
      - Sphinx extension: the roles and directives of this manual
    * - :download:`test_generated.py <../tests/test_generated.py>`
@@ -131,5 +144,5 @@ Regenerating
    python3 tools/generate.py
    make check
 
-To change a description, edit ``tools/overlay.yaml`` and run the three commands; never edit a
+To change a description, edit :download:`overlay.yaml <../tools/overlay.yaml>` and run the three commands; never edit a
 generated file.

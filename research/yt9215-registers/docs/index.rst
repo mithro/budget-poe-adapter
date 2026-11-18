@@ -3,15 +3,17 @@
 YT921x switch programmer's guide
 ================================
 
-The Motorcomm YT921x parts (YT9215S, YT9215SC, YT9215SCH, YT9215RB, YT9214NB, YT9213NB,
-YT9218N and YT9218MB) are Gigabit Ethernet switches with built-in copper PHYs. This manual is
+The Motorcomm YT921x parts (:chip:`YT9215S`, :chip:`YT9215SC`, YT9215SCH, :chip:`YT9215RB`,
+:chip:`YT9214NB`, :chip:`YT9213NB`, :chip:`YT9218N` and :chip:`YT9218MB`) are Gigabit Ethernet
+switches with built-in copper PHYs. The YT9215SCH is :ref:`taken to behave <bringup-identify>`
+as the :chip:`YT9215SC`. This manual is
 for someone who writes a driver for one of them from scratch, for example for Zephyr or
 MicroPython: it explains how to reach the registers, how to bring the switch up, how to use
 each function, and it lists every known register bit by bit.
 
 The vendor datasheets describe the pins and the electrical side but contain no register
-addresses. Everything here was worked out from the two public sources that do, the Linux
-driver and the vendor SDK; :doc:`sources` says what comes from where and how far each
+addresses. Everything here is derived from the two public sources that do, the :ref:`Linux driver <sources-list>`
+and the :ref:`vendor SDK <sources-list>`; :doc:`sources` says what comes from where and how far each
 statement can be trusted.
 
 .. toctree::

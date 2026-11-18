@@ -53,6 +53,23 @@ def sdk_label(name):
     return "sdk-" + name.lower()
 
 
+def vals_label(sym):
+    """The value table of a field."""
+    return "vals-" + sym.lower()
+
+
+def val_label(sym, name):
+    """One value of a field."""
+    return "val-%s-%s" % (sym.lower(), name.lower())
+
+
+def enum_val_label(enum, name):
+    return "val-enum-%s-%s" % (enum.lower(), name.lower())
+
+
+FAMILY = {"yt9215": "YT9215 family", "yt9218": "YT9218 family"}
+
+
 def html_id(label):
     """The id docutils gives the target of a label."""
     return re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
@@ -93,9 +110,16 @@ def targets(m):
         page = "reference/" + r["block"]
         put(reg_label(r["id"]), page)
         for lay, f in M.all_fields(r):
-            put(field_label(M.fsym(r, f, lay)), page)
+            sym = M.fsym(r, f, lay)
+            put(field_label(sym), page)
+            if f.get("values"):
+                put(vals_label(sym), page)
+                for v in f["values"]:
+                    put(val_label(sym, v["name"]), page)
     for e in m.enums.values():
         put(enum_label(e["name"]), "reference/enums")
+        for v in e["values"]:
+            put(enum_val_label(e["name"], v["name"]), "reference/enums")
     for c in m.counters:
         put(counter_label(c["name"]), "reference/counters")
     for c in m.constants:
@@ -288,35 +312,24 @@ def used_in(entries):
 
 # ------------------------------------------------------------ register page
 
-def field_rows(m, reg, fields, lay, show_parts):
+def field_rows(m, reg, fields, lay, show_parts, show_unit, show_reset):
     rows = []
     for f in sorted(fields, key=lambda f: -f["lsb"]):
         sym = M.fsym(reg, f, lay)
         desc = f["desc"].strip()
-        a = f.get("array")
-        if a:
-            parts = []
-            for d in a["dims"]:
-                parts.append("%s = %s" % (d["var"], range_text(d["first"], d["count"])))
-            pos = str(a["lsb"])
-            for d in a["dims"]:
-                v = d["var"] if d["first"] == 0 else "(%s − %d)" % (d["var"], d["first"])
-                pos += " + %s" % v if d["step"] == 1 else " + %d × %s" % (d["step"], v)
-            what = "bit" if a["width"] == 1 else "the lowest of %d bits" % a["width"]
-            desc += " Index %s; one element starts at %s %s." % (", ".join(parts), what, pos)
-        if f.get("unit"):
-            desc += " Unit: %s." % f["unit"]
         if f.get("enum"):
             desc += " Values: :enum:`%s`." % f["enum"]
         elif f.get("values"):
-            desc += " The values are listed below."
+            desc += " :ref:`Value list <%s>`." % vals_label(sym)
         name = ".. _%s:\n\n.. index:: single: %s (field of %s)\n\n%s" % (
             field_label(sym), f["name"], reg["id"], lit(M.fdisplay(f)))
         row = [M.bits_text(f["lsb"], f["width"]), name, ACCESS[f["access"]]]
         if show_parts:
-            row.append({"yt9215": "YT921x except YT9218", "yt9218": "YT9218"}.get(f.get("chip"), "all"))
-        if f.get("reset") is not None:
-            desc += " Reset value: %s." % lit("0x%x" % f["reset"])
+            row.append(FAMILY.get(f.get("chip"), "all"))
+        if show_unit:
+            row.append(f.get("unit", ""))
+        if show_reset:
+            row.append(lit("0x%x" % f["reset"]) if f.get("reset") is not None else "")
         row += [evidence_link(f), desc]
         rows.append(row)
     return rows
@@ -324,9 +337,36 @@ def field_rows(m, reg, fields, lay, show_parts):
 
 def field_table(m, reg, fields, lay=None):
     show_parts = any(f.get("chip") for f in fields)
-    head = ["Bits", "Field", "Access"] + (["Parts"] if show_parts else []) + ["Evidence", "Description"]
-    widths = [8, 24, 12] + ([14] if show_parts else []) + [10, 46 if not show_parts else 36]
-    return table(head, field_rows(m, reg, fields, lay, show_parts), widths, "yt-fields")
+    show_unit = any(f.get("unit") for f in fields)
+    show_reset = any(f.get("reset") is not None for f in fields)
+    extra = [(show_parts, "Parts", 14), (show_unit, "Unit", 10), (show_reset, "Reset value", 10)]
+    extra = [(h, w) for on, h, w in extra if on]
+    head = ["Bits", "Field", "Access"] + [h for h, _ in extra] + ["Evidence", "Description"]
+    widths = [8, 24, 12] + [w for _, w in extra] + [10, 46 - sum(w for _, w in extra) // 2]
+    out = table(head, field_rows(m, reg, fields, lay, show_parts, show_unit, show_reset),
+                widths, "yt-fields")
+    return out + array_table(reg, fields, lay)
+
+
+def array_table(reg, fields, lay):
+    """Where the elements of the array fields sit."""
+    rows = []
+    for f in sorted(fields, key=lambda f: -f["lsb"]):
+        a = f.get("array")
+        if not a:
+            continue
+        sym = M.fsym(reg, f, lay)
+        for d in a["dims"]:
+            rows.append([":field:`%s <%s.%s>`" % (M.fdisplay(f), reg["id"], sym[len(reg["id"]) + 1:]),
+                         lit(d["var"]), d["first"], d["first"] + d["count"] - 1,
+                         a["width"], a["lsb"], d["step"]])
+    if not rows:
+        return []
+    out = [".. rubric:: Array fields", "",
+           "The lowest bit of an element is the first bit plus the step times the distance of "
+           "the index from its first value.", ""]
+    return out + table(["Field", "Index", "First index", "Last index", "Bits per element",
+                        "First bit", "Step in bits"], rows, [28, 12, 12, 12, 12, 12, 12])
 
 
 def value_tables(m, reg, fields, lay=None):
@@ -334,8 +374,13 @@ def value_tables(m, reg, fields, lay=None):
     for f in sorted(fields, key=lambda f: -f["lsb"]):
         if not f.get("values"):
             continue
-        out += [".. rubric:: Values of %s" % M.fdisplay(f), ""]
-        rows = [[lit(str(v["value"])), lit(v["name"]), v.get("desc", "")] for v in f["values"]]
+        sym = M.fsym(reg, f, lay)
+        fam = " (%s)" % FAMILY[f["chip"]] if f.get("chip") else ""
+        out += target(vals_label(sym))
+        out += [".. rubric:: Values of %s%s" % (M.fdisplay(f), fam), ""]
+        rows = [[lit(str(v["value"])),
+                 ".. _%s:\n\n%s" % (val_label(sym, v["name"]), lit(v["name"])),
+                 v.get("desc", "")] for v in f["values"]]
         out += table(["Value", "Name", "Meaning"], rows, [12, 28, 60])
     return out
 
@@ -405,7 +450,7 @@ def register_section(m, reg, guide_refs, mentions):
         out += value_tables(m, reg, fields)
     if groups:
         out += [".. rubric:: Field groups", "",
-                "A group is a mask that covers several fields of the table above.", ""]
+                "A group is a mask that covers several fields of this register.", ""]
         out += field_table(m, reg, groups)
     for lay in reg["layouts"]:
         lf = [f for f in lay["fields"] if not (f.get("key_only") and reg["id"] != "ACL_KEY")]
@@ -463,8 +508,8 @@ def index_page(m):
     out += ["   enums", "   counters", "   constants", "   parts", "   regions/index", ""]
     out += target("reference-map")
     out += heading("Address map", "-")
-    out += ["Registers sit at 32-bit addresses that are multiples of four. The regions below are "
-            "the ones this manual has registers in; each box is a link to the complete register "
+    out += ["Registers sit at 32-bit addresses that are multiples of four. The diagram shows the "
+            "regions this manual has registers in; each box is a link to the complete register "
             "list of that region.", "",
             ".. yt-diagram:: address-map", "   :caption: Address regions of the YT921x", ""]
     rows = []
@@ -473,13 +518,13 @@ def index_page(m):
         nt = sum(1 for t in m.sdk["tables"] if sdk_region(m, t) is x)
         rows.append([lit(hexaddr(x["base"])), ":doc:`%s <regions/%s>`" % (x["name"], region_slug(x)),
                      x["title"], n, nt])
-    out += table(["Base address", "Region", "Contents", "Registers described", "Vendor SDK tables"],
+    out += table(["Base address", "Region", "Title", "Registers described", "Vendor SDK tables"],
                  rows, [14, 18, 40, 14, 14])
     out += target("reference-blocks")
     out += heading("Function blocks", "-")
     rows = [[":blk:`%s`" % b["id"], len(m.block_regs(b["id"])),
-             ":doc:`/%s/%s`" % (DOCROOT, b["guide"]), b["summary"]] for b in m.blocks]
-    out += table(["Block", "Registers", "Guide page", "Contents"], rows, [24, 10, 20, 46])
+             ":doc:`/%s/%s`" % (DOCROOT, b["guide"])] for b in m.blocks]
+    out += table(["Block", "Registers", "Guide page"], rows, [40, 20, 40])
     out += target("reference-all")
     out += heading("All registers by address", "-")
     rows = []
@@ -496,7 +541,7 @@ def enums_page(m):
     out = target("reference-enums")
     out += heading("Shared value lists", "=")
     out += ["Value lists that more than one field uses. A field that has its own values lists "
-            "them below its register.", ""]
+            "them with its register.", ""]
     users = {}
     for r in m.regs:
         for lay, f in M.all_fields(r):
@@ -510,7 +555,9 @@ def enums_page(m):
         out += heading("%s: %s" % (e["name"], e["title"]), "-")
         out += [e["desc"].strip(), ""]
         prefix = e["name"].upper()
-        rows = [[lit(str(v["value"])), lit(v["name"]), lit("YT921X_%s_%s" % (prefix, v["name"])),
+        rows = [[lit(str(v["value"])),
+                 ".. _%s:\n\n%s" % (enum_val_label(e["name"], v["name"]), lit(v["name"])),
+                 lit("YT921X_%s_%s" % (prefix, v["name"])),
                  linux_link(m, v.get("linux")), v.get("desc", "")] for v in e["values"]]
         out += table(["Value", "Name", "C name", "Linux source", "Meaning"], rows, [8, 18, 30, 14, 30])
         if users.get(e["name"]):
@@ -524,9 +571,9 @@ def counters_page(m, guide_refs):
     out = target("reference-counters")
     out += heading("Counter list", "=")
     out += ["Each port has a block of counters that starts at :reg:`MIB_DATA`. A counter sits at "
-            "the offset below from the start of the block of its port: address = %s + offset. "
+            "the listed offset from the start of the block of its port: address = %s + offset. "
             "A counter of two words holds its low 32 bits at the offset and its high 32 bits four "
-            "bytes above. In the :ref:`bindings <bindings-naming>` the offset of a counter is named "
+            "bytes higher. In the :ref:`bindings <bindings-naming>` the offset of a counter is named "
             "``YT921X_MIB_`` followed by the counter name (without the prefix in Rust and MicroPython). "
             ":doc:`/%s/mib` shows how to enable, read and clear the counters."
             % (lit(M.addr_formula(mib)), DOCROOT), ""]
@@ -546,7 +593,7 @@ def constants_page(m):
     out += heading("Constants", "=")
     out += ["Sizes and fixed values that the register descriptions rely on. In the "
             ":ref:`bindings <bindings-naming>` each constant is named ``YT921X_`` followed by "
-            "the name below (without the prefix in Rust and MicroPython).", ""]
+            "its name in the table (without the prefix in Rust and MicroPython).", ""]
     rows = []
     for c in m.constants:
         name = ".. _%s:\n\n.. index:: single: %s (constant)\n\n%s" % (
@@ -600,7 +647,7 @@ def sdk_pages(m):
     out += [
         "The vendor SDK carries a machine-generated list of every register table of the chip: "
         "`%s <%s>`__ has the addresses and `%s <%s>`__ the field positions. It has names but no "
-        "descriptions. The pages below list, region by region, the registers this manual "
+        "descriptions. The region pages list, region by region, the registers this manual "
         "describes next to all %d SDK tables, so that a driver writer can see what exists beyond "
         "the %d described registers. Field names on these pages are the SDK's own."
         % (os.path.basename(s["index"]), sdk_url(m, s["index"]),

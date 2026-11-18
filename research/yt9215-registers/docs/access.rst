@@ -76,9 +76,44 @@ Timing
 
 The values are those of the slave management interface in table 38 of the
 :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`.
-The minimum of t1 and the maximum of t6 depend on the pull-up resistor, because the line rises
-only as fast as the resistor charges it. A clock of 1 MHz or less is a safe choice for a
+The datasheet draws MDIO with a 1 kΩ pull-up resistor. The minimum of t1 and the maximum of
+t6 depend on that resistor, because the line rises only as fast as the resistor charges it. A clock of 1 MHz or less is a safe choice for a
 bit-banged bus.
+
+.. _access-straps:
+
+Strap pins
+----------
+
+Five strap pins, read at power-on or reset, decide how a host reaches the switch. The pin
+names are those of the :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 24 38 38
+
+   * - Strap pin
+     - Pulled up
+     - Pulled down
+   * - ``MID29``
+     - PHY address ``0x1d``
+     - PHY address ``0x00``
+   * - ``SWITCH_ID_1``
+     - Bit 1 of the switch ID is 1
+     - Bit 1 of the switch ID is 0
+   * - ``SWITCH_ID_0``
+     - Bit 0 of the switch ID is 1
+     - Bit 0 of the switch ID is 0
+   * - ``DIS_SPIS``
+     - SPI host interface off; ``SMI_SEL`` applies
+     - SPI host interface on
+   * - ``SMI_SEL``
+     - EEPROM interface
+     - MDIO management interface
+
+``MID29``, ``DIS_SPIS`` and ``SMI_SEL`` have internal pull-ups and the switch ID pins internal
+pull-downs. The datasheet describes the SPI and I2C host interfaces, which reach the same
+registers; this manual does not cover them.
 
 .. _access-smi:
 
@@ -103,15 +138,15 @@ what the 16 data bits of the frame are:
      - Always 0.
    * - 3:2
      - Switch ID
-     - Selects one of up to :const:`SWITCHID_NUM` switches that share the PHY address. It is 0
-       for a single switch.
+     - Selects one of up to :const:`SWITCHID_NUM` switches that share the PHY address; see
+       :ref:`access-straps`.
    * - 1
      - DATA
-     - 0: the frame carries half of a register address. 1: it carries half of a register
-       value.
+     - Set when the frame carries half of a register value, clear when it carries half of a
+       register address.
    * - 0
      - READ
-     - 0: the access is a register write. 1: it is a register read.
+     - Set for a register read, clear for a register write.
 
 An access is two frames that set the address, high half first, and two frames that move the
 value, high half first. The READ bit has the same value in all four frames.
@@ -125,41 +160,43 @@ value, high half first. The READ bit has the same value in all four frames.
 With switch ID 0 the four register numbers are 1, 1, 3, 3 for a read and 0, 0, 2, 2 for a
 write.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 50 50
+.. tab-set::
 
-   * - C
-     - MicroPython
-   * - .. code-block:: c
+   .. tab-item:: C
+      :sync: c
 
-          /* read */
-          mdio_write(phy, 1, addr >> 16);
-          mdio_write(phy, 1, addr & 0xffff);
-          hi = mdio_read(phy, 3);
-          lo = mdio_read(phy, 3);
-          value = (uint32_t)hi << 16 | lo;
+      .. code-block:: c
 
-          /* write */
-          mdio_write(phy, 0, addr >> 16);
-          mdio_write(phy, 0, addr & 0xffff);
-          mdio_write(phy, 2, value >> 16);
-          mdio_write(phy, 2, value & 0xffff);
+         /* read */
+         mdio_write(phy, 1, addr >> 16);
+         mdio_write(phy, 1, addr & 0xffff);
+         hi = mdio_read(phy, 3);
+         lo = mdio_read(phy, 3);
+         value = (uint32_t)hi << 16 | lo;
 
-     - .. code-block:: python
+         /* write */
+         mdio_write(phy, 0, addr >> 16);
+         mdio_write(phy, 0, addr & 0xffff);
+         mdio_write(phy, 2, value >> 16);
+         mdio_write(phy, 2, value & 0xffff);
 
-          # read
-          mdio.write(phy, 1, addr >> 16)
-          mdio.write(phy, 1, addr & 0xFFFF)
-          hi = mdio.read(phy, 3)
-          lo = mdio.read(phy, 3)
-          value = (hi << 16) | lo
+   .. tab-item:: MicroPython
+      :sync: micropython
 
-          # write
-          mdio.write(phy, 0, addr >> 16)
-          mdio.write(phy, 0, addr & 0xFFFF)
-          mdio.write(phy, 2, value >> 16)
-          mdio.write(phy, 2, value & 0xFFFF)
+      .. code-block:: python
+
+         # read
+         mdio.write(phy, 1, addr >> 16)
+         mdio.write(phy, 1, addr & 0xFFFF)
+         hi = mdio.read(phy, 3)
+         lo = mdio.read(phy, 3)
+         value = (hi << 16) | lo
+
+         # write
+         mdio.write(phy, 0, addr >> 16)
+         mdio.write(phy, 0, addr & 0xFFFF)
+         mdio.write(phy, 2, value >> 16)
+         mdio.write(phy, 2, value & 0xFFFF)
 
 The complete functions are ``yt921x_reg_read()`` and ``yt921x_reg_write()`` in
 :download:`yt921x.c <../bindings/c/yt921x.c>` and ``YT921x.reg_read()`` and
@@ -167,7 +204,8 @@ The complete functions are ``yt921x_reg_read()`` and ``yt921x_reg_write()`` in
 
 The switch keeps the address between frames, so the four frames of one access must not be
 mixed with those of another. A driver that can be called from several threads takes one lock
-around the whole access, and around every sequence below that spans several registers.
+around the whole access, and around every command sequence that spans several registers
+(:ref:`access-wait`).
 
 One access is 256 MDC cycles. At 1 MHz that is about 0.26 ms, and writing all
 4096 entries of the VLAN table takes about two seconds (two accesses per entry).
@@ -183,8 +221,9 @@ address holds bits 31 to 0, the next word (address + 4) bits 63 to 32, and so on
 reference numbers the bits of the whole register, so a field can cross a word boundary, as
 :field:`VLAN_CTRL.FID` does.
 
-Write the words in rising address order. A table entry takes effect when its last word is
-written, so the switch never uses a half-written entry. To change one field, read all words,
+Write the words in rising address order, as the :ref:`Linux driver <sources-list>` does. That a table entry takes
+effect only when its last word is written, so that the switch never uses a half-written
+entry, is inferred from that order and is not confirmed. To change one field, read all words,
 change the field and write all words back.
 
 The bindings carry helpers for this: ``yt921x_bits_get()`` and ``yt921x_bits_set()`` in C,
@@ -201,7 +240,7 @@ sets a done bit, when it has finished. The reset (:field:`RST.HW`), the MDIO mas
 (:field:`INT_MBUS_OP.START`), the forwarding database (:field:`FDB_RESULT.DONE`) and the
 configuration byte store (:field:`EDATA_DATA.STATUS`) work this way.
 
-The Linux driver polls such a bit every 10 ms and gives up after 100 ms. Those numbers are a
+The :ref:`Linux driver <sources-list>` polls such a bit every 10 ms and gives up after 100 ms. Those numbers are a
 safe starting point; none of the public sources states how long a command really takes.
 ``yt921x_reg_wait()`` in the bindings implements the loop.
 

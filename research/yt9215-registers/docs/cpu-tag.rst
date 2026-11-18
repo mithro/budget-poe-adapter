@@ -14,18 +14,20 @@ Choose the CPU port
 
 Write :reg:`EXT_CPU_PORT` with the port number in :field:`EXT_CPU_PORT.PORT` and
 :field:`EXT_CPU_PORT.PORT_EN` set. Set :field:`EXT_CPU_PORT.TAG_EN` as well if frames on the
-port are to carry the tag described below.
+port are to carry :ref:`the tag <cpu-tag-format>`.
 
 .. yt-bitfield:: EXT_CPU_PORT
 
 :reg:`CPU_COPY` chooses where the switch sends the frames it traps or copies "to the CPU":
-set :field:`CPU_COPY.TO_EXT_CPU` for the port named above. The other two bits direct such
+set :field:`CPU_COPY.TO_EXT_CPU` for the port in :reg:`EXT_CPU_PORT`. The other two bits direct such
 frames to the internal microcontroller on port 10.
 
 .. tab-set::
 
    .. tab-item:: C
       :sync: c
+
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
 
       .. literalinclude:: ../bindings/c/examples/guide.c
            :language: c
@@ -34,6 +36,8 @@ frames to the internal microcontroller on port 10.
 
    .. tab-item:: MicroPython
       :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
 
       .. literalinclude:: ../bindings/micropython/examples/guide.py
            :language: python
@@ -76,7 +80,7 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
      - Meaning
    * - 15
      - PORT_EN
-     - RX_PORT is valid. The Linux driver discards received frames without it.
+     - RX_PORT is valid.
    * - 14:11
      - RX_PORT
      - Port the frame was received on.
@@ -88,7 +92,9 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
      - CODE is valid.
    * - 6:1
      - CODE
-     - Reason the frame reached the CPU, from the table below.
+     - Reason the frame reached the CPU, a :ref:`code <cpu-tag-codes>`.
+
+.. _cpu-tag-codes:
 
 .. list-table::
    :header-rows: 1
@@ -99,7 +105,7 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
      - Reason
    * - ``0x00``
      - FORWARD
-     - Normal forwarding; the switch has already sent the frame to any other destination.
+     - Normal forwarding.
    * - ``0x17``
      - ACL
      - An ACL rule trapped the frame (:field:`ACL_ACT.FWD`).
@@ -111,14 +117,16 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
      - Unknown multicast destination, trapped by :reg:`ACT_UNK_MCAST`.
    * - ``0x1b``
      - PORT_COPY
-     - Copied to the CPU by a port setting; the switch also forwarded it.
+     - Copied to the CPU by a port setting.
    * - ``0x1c``
      - FDB_COPY
-     - Copied to the CPU by a forwarding database entry (:field:`FDB_IN2.COPY_TO_CPU`); the
-       switch also forwarded it.
+     - Copied to the CPU by a forwarding database entry (:field:`FDB_IN2.COPY_TO_CPU`).
 
-A frame that was trapped has not been forwarded by the switch, so the host must forward it if
-it should go anywhere. Other codes exist; these are the ones the Linux driver names.
+A frame with the code FORWARD, PORT_COPY or FDB_COPY has also been sent by the switch to its
+other destinations. A frame that was trapped (ACL, UNK_UCAST, UNK_MCAST) has not, so the host
+must forward it if it should go anywhere. Discard a received frame whose PORT_EN bit is
+clear, as the :ref:`Linux driver <sources-list>` does. Other codes exist; these are the ones the :ref:`Linux driver <sources-list>`
+names, and the meanings of PORT_COPY and FDB_COPY are inferred from the names.
 
 .. _cpu-tag-tx:
 
@@ -151,6 +159,8 @@ tag.
    .. tab-item:: C
       :sync: c
 
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
+
       .. literalinclude:: ../bindings/c/examples/guide.c
            :language: c
            :start-after: /* [tag] */
@@ -159,10 +169,14 @@ tag.
    .. tab-item:: MicroPython
       :sync: micropython
 
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
+
       .. literalinclude:: ../bindings/micropython/examples/guide.py
            :language: python
            :start-after: # [tag]
            :end-before: # [tag end]
 
-The Linux driver sets the action for unknown destinations to drop on the CPU port itself
-(:ref:`forwarding-flood`), so that an untagged frame from the host is not flooded.
+Set the action for unknown destinations to drop on the CPU port itself
+(:ref:`forwarding-flood`), so that an untagged frame from the host is not flooded; the :ref:`Linux driver <sources-list>`
+confirms this setting. That the switch sends a tagged frame to exactly the ports of
+word 3 is how the :ref:`Linux driver <sources-list>` uses the tag.

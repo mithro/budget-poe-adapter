@@ -23,12 +23,14 @@ eight core clock periods; the period is in :ref:`bringup-clock`.
 
    slot time = SLOT × 8 × core clock period
 
-The smallest SLOT is 80 (:const:`METER_SLOT_MIN`, :const:`PORT_SHAPE_SLOT_MIN`). On a YT9215
-with its 8 ns period that gives 5.12 µs. :reg:`METER_SLOT` sets the slot of all meters and
-:reg:`PORT_SHAPE_SLOT` that of all port shapers.
+SLOT is :field:`METER_SLOT.SLOT` for all meters and :field:`PORT_SHAPE_SLOT.SLOT` for all
+port shapers. The smallest SLOT is 80 (:const:`METER_SLOT_MIN`, :const:`PORT_SHAPE_SLOT_MIN`). On a YT9215
+with its 8 ns period that gives 5.12 µs.
 
-**Rate and burst.** UNIT scales the token size by powers of four so that large rates fit
-the fields.
+**Rate and burst.** The rate goes into the field CIR and the burst size into CBS, of
+:reg:`METER_CTRL` for a meter and of :reg:`PORT_SHAPE_CTRL` for a shaper. The field UNIT of
+the same register scales the token size by powers of four so that large rates fit the
+fields.
 
 .. list-table::
    :header-rows: 1
@@ -58,8 +60,14 @@ is then CBS = 65 536 ÷ 32 = 2048.
 Meters
 ------
 
-A meter is a two-rate token bucket (committed and excess) that colours frames green, yellow or
-red and drops the colours selected in :field:`METER_CTRL.DROP`. Meters work only while
+A meter has two token buckets, committed and excess, colours frames green, yellow or red and
+drops the colours selected in :field:`METER_CTRL.DROP`. A frame within the committed rate
+(:field:`METER_CTRL.CIR`, burst :field:`METER_CTRL.CBS`) is green, one within the excess rate
+(:field:`METER_CTRL.EIR`, burst :field:`METER_CTRL.EBS`) yellow, and the rest red.
+:field:`METER_CTRL.RFC2698` chooses between the two-rate algorithm of RFC 2698 and that of
+RFC 4115, and :field:`METER_CTRL.COLOR_BLIND` makes the meter ignore a colour the frame
+already has. The :ref:`Linux driver <sources-list>` confirms the committed bucket with red frames dropped; the
+description of the excess bucket and the algorithm choice is inferred from the field names. Meters work only while
 :field:`FUNC.METER` is set; see :ref:`bringup-features`.
 
 .. yt-bitfield:: METER_CTRL
@@ -72,17 +80,21 @@ red and drops the colours selected in :field:`METER_CTRL.DROP`. Meters work only
      - Kind
      - Attached by
    * - 0 to 63
-     - General (:const:`METER_NUM`)
-     - :field:`ACL_ACT.METER_ID` or :field:`VLAN_CTRL.METER_ID`
+     - General
+     - :field:`ACL_ACT.METER_ID`
+   * - 0 to 63
+     - General
+     - :field:`VLAN_CTRL.METER_ID`
    * - 64 + port
      - Per-port
      - :reg:`PORT_METER` of the port
 
-To limit what a port may receive, as the Linux driver does:
+There are :const:`METER_NUM` general meters. To limit what a port may receive (the sequence
+is confirmed by the :ref:`Linux driver <sources-list>`):
 
-1. Write the three words of ``METER_CTRL[64 + port]``: :field:`METER_CTRL.CIR`,
-   :field:`METER_CTRL.CBS` and :field:`METER_CTRL.UNIT` from the arithmetic above,
-   :field:`METER_CTRL.DROP` = ``R`` (drop red frames), :field:`METER_CTRL.TOKEN_OVERFLOW_EN`
+1. Write the three words of entry 64 + port of :reg:`METER_CTRL`: :field:`METER_CTRL.CIR`,
+   :field:`METER_CTRL.CBS` and :field:`METER_CTRL.UNIT` from :ref:`rate-tokens`,
+   :field:`METER_CTRL.DROP` = :val:`METER_CTRL.DROP.R` (drop red frames), :field:`METER_CTRL.TOKEN_OVERFLOW_EN`
    and :field:`METER_CTRL.METER_EN`. Set :field:`METER_CTRL.PKT_MODE` to count packets.
 2. Write :reg:`PORT_METER` of the port with the port number in :field:`PORT_METER.ID` and
    :field:`PORT_METER.EN`.
@@ -101,7 +113,7 @@ A shaper is a single token bucket on the transmit side of a port.
 .. yt-bitfield:: PORT_SHAPE_CTRL
 
 Write the two words of :reg:`PORT_SHAPE_CTRL` with :field:`PORT_SHAPE_CTRL.CIR`,
-:field:`PORT_SHAPE_CTRL.CBS` and :field:`PORT_SHAPE_CTRL.UNIT` from the arithmetic above and
+:field:`PORT_SHAPE_CTRL.CBS` and :field:`PORT_SHAPE_CTRL.UNIT` from :ref:`rate-tokens` and
 :field:`PORT_SHAPE_CTRL.EN`. Writing zeros turns the shaper off.
 
 :reg:`METER_STAT` and :reg:`PORT_SHAPE_STAT` show the token counts of a meter or shaper; their

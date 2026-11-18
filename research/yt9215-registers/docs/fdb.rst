@@ -31,25 +31,27 @@ Running a command
      - Command
      - Effect
    * - 0
-     - ``ADD``
+     - :val:`FDB_OP.OP.ADD`
      - Write the entry in the input registers, replacing an entry with the same key.
    * - 1
-     - ``DEL``
+     - :val:`FDB_OP.OP.DEL`
      - Remove the entry with the key in the input registers.
    * - 2
-     - ``GET_ONE``
+     - :val:`FDB_OP.OP.GET_ONE`
      - Read the entry with that key, or the entry at :field:`FDB_OP.INDEX`.
    * - 3
-     - ``GET_NEXT``
+     - :val:`FDB_OP.OP.GET_NEXT`
      - Read the next entry after :field:`FDB_OP.INDEX` that matches :field:`FDB_OP.NEXT_TYPE`.
    * - 4
-     - ``FLUSH``
+     - :val:`FDB_OP.OP.FLUSH`
      - Remove many entries, selected by :field:`FDB_OP.FLUSH`.
 
 .. tab-set::
 
    .. tab-item:: C
       :sync: c
+
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
 
       .. literalinclude:: ../bindings/c/examples/guide.c
            :language: c
@@ -58,6 +60,8 @@ Running a command
 
    .. tab-item:: MicroPython
       :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
 
       .. literalinclude:: ../bindings/micropython/examples/guide.py
            :language: python
@@ -78,12 +82,12 @@ An entry is three words. The input registers and the output registers share one 
 .. yt-bitfield:: FDB_IN2
 
 The key is the MAC address, split over :field:`FDB_IN0.ADDR_HI4` and
-:field:`FDB_IN1.ADDR_LO2`, and the filtering ID in :field:`FDB_IN1.FID`, for which the Linux
-driver uses the VLAN ID. For the address ``02:11:22:33:44:55``, ``ADDR_HI4`` is
-``0x02112233`` and ``ADDR_LO2`` is ``0x4455``.
+:field:`FDB_IN1.ADDR_LO2`, and the filtering ID in :field:`FDB_IN1.FID`, for which the :ref:`Linux driver <sources-list>`
+uses the VLAN ID. For the address ``02:11:22:33:44:55``, the first field is
+``0x02112233`` and the second is ``0x4455``.
 
 :field:`FDB_IN1.STATUS` tells static from learned entries and carries the age of learned ones.
-Write ``STATIC`` (7) for an entry that must stay; ``INVALID`` (0) in a result means the slot
+Write :val:`FDB_IN1.STATUS.STATIC` (7) for an entry that must stay; :val:`FDB_IN1.STATUS.INVALID` (0) in a result means the slot
 is empty. :field:`FDB_IN2.EGR_PORTS` is the destination port mask: one bit for a unicast
 address, several for a multicast group.
 
@@ -97,6 +101,8 @@ Add a static entry
    .. tab-item:: C
       :sync: c
 
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
+
       .. literalinclude:: ../bindings/c/examples/guide.c
            :language: c
            :start-after: /* [fdb-add] */
@@ -104,6 +110,8 @@ Add a static entry
 
    .. tab-item:: MicroPython
       :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
 
       .. literalinclude:: ../bindings/micropython/examples/guide.py
            :language: python
@@ -123,6 +131,8 @@ Look an address up
    .. tab-item:: C
       :sync: c
 
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
+
       .. literalinclude:: ../bindings/c/examples/guide.c
            :language: c
            :start-after: /* [fdb-get] */
@@ -130,6 +140,8 @@ Look an address up
 
    .. tab-item:: MicroPython
       :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
 
       .. literalinclude:: ../bindings/micropython/examples/guide.py
            :language: python
@@ -144,16 +156,16 @@ Walk the table
 To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put the index in
 :field:`FDB_OP.INDEX`.
 
-1. Run ``GET_ONE`` with index 0 and handle the entry if its status is not ``INVALID``.
-2. Run ``GET_NEXT`` with the index of the last entry seen. :field:`FDB_OP.NEXT_TYPE` selects
-   what counts as next; for ``UCAST_PORT`` put the ports of interest in
+1. Run :val:`FDB_OP.OP.GET_ONE` with index 0 and handle the entry if its status is not :val:`FDB_IN1.STATUS.INVALID`.
+2. Run :val:`FDB_OP.OP.GET_NEXT` with the index of the last entry seen. :field:`FDB_OP.NEXT_TYPE` selects
+   what counts as next; for :val:`FDB_OP.NEXT_TYPE.UCAST_PORT` put the ports of interest in
    :field:`FDB_IN2.EGR_PORTS` first.
 3. Take the new index from :field:`FDB_RESULT.INDEX` and repeat until the result is
-   ``NOTFOUND`` or the index reaches 4095.
+   :field:`NOTFOUND <FDB_RESULT.NOTFOUND>` or the index reaches 4095 (:const:`FDB_NUM` − 1).
 
 .. warning::
 
-   Never run ``GET_NEXT`` with index 4095. The Linux driver documents that the command then
+   Never run :val:`FDB_OP.OP.GET_NEXT` with index 4095. The :ref:`Linux driver <sources-list>` documents that the command then
    never completes and the database stays stuck until the switch is reset.
 
 .. _fdb-flush:
@@ -161,7 +173,7 @@ To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put t
 Flush
 -----
 
-``FLUSH`` removes learned entries in bulk; with :field:`FDB_OP.FLUSH_STATIC` it removes static
+:val:`FDB_OP.OP.FLUSH` removes learned entries in bulk; with :field:`FDB_OP.FLUSH_STATIC` it removes static
 ones as well. It works on unicast entries, or on multicast entries when
 :field:`FDB_OP.FLUSH_MCAST` is set, so emptying the table takes one flush of each kind.
 
@@ -173,16 +185,16 @@ ones as well. It works on unicast entries, or on multicast entries when
      - :field:`FDB_OP.FLUSH`
      - Entries removed
    * - 0
-     - ``ALL``
+     - :val:`FDB_OP.FLUSH.ALL`
      - Every entry of the selected kind
    * - 1
-     - ``PORT``
+     - :val:`FDB_OP.FLUSH.PORT`
      - Entries of the ports in :field:`FDB_IN2.EGR_PORTS`
    * - 2
-     - ``PORT_VID``
+     - :val:`FDB_OP.FLUSH.PORT_VID`
      - Entries of those ports with the filtering ID in :field:`FDB_IN1.FID`
    * - 3
-     - ``VID``
+     - :val:`FDB_OP.FLUSH.VID`
      - Entries with the filtering ID in :field:`FDB_IN1.FID`
 
 Flush the entries of a port when its link goes down or its spanning tree state changes, or

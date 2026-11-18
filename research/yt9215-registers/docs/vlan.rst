@@ -12,22 +12,37 @@ tags, what each VLAN contains, and how frames leave.
    :widths: 34 33 33
 
    * - Question
-     - Registers
+     - Register
      - Section
    * - Which tags does a port recognise?
-     - :reg:`TPID_IGR`, :reg:`PORT_IGR_TPID`
+     - :reg:`TPID_IGR`
+     - :ref:`vlan-aware`
+   * -
+     - :reg:`PORT_IGR_TPID`
      - :ref:`vlan-aware`
    * - Which VLAN does an untagged frame join?
      - :reg:`PORT_VLAN_CTRL`
      - :ref:`vlan-pvid`
    * - Which frames does a port refuse?
-     - :reg:`PORT_VLAN_CTRL1`, :reg:`VLAN_IGR_FILTER`
+     - :reg:`PORT_VLAN_CTRL1`
+     - :ref:`vlan-filter`
+   * -
+     - :reg:`VLAN_IGR_FILTER`
      - :ref:`vlan-filter`
    * - Which ports belong to a VLAN?
      - :reg:`VLAN_CTRL`
      - :ref:`vlan-table`
    * - Does a frame leave with a tag?
-     - :reg:`VLAN_CTRL`, :reg:`PORT_EGR`, :reg:`TPID_EGR`, :reg:`VLAN_EGR_FILTER`
+     - :reg:`VLAN_CTRL`
+     - :ref:`vlan-egress`
+   * -
+     - :reg:`PORT_EGR`
+     - :ref:`vlan-egress`
+   * -
+     - :reg:`TPID_EGR`
+     - :ref:`vlan-egress`
+   * -
+     - :reg:`VLAN_EGR_FILTER`
      - :ref:`vlan-egress`
 
 The switch knows two kinds of tag, the customer tag (C-tag, the ordinary 802.1Q tag) and the
@@ -51,16 +66,17 @@ which of the four mark a customer tag and which a service tag.
      - :reg:`PORT_IGR_TPID`
      - Effect
    * - VLAN-aware
-     - ``CTAG[0]`` set
-     - A tag with the identifier in ``TPID_IGR[0]`` selects the VLAN of the frame.
+     - Element 0 of :field:`PORT_IGR_TPID.CTAG` set
+     - A tag with the identifier in element 0 of :reg:`TPID_IGR` selects the VLAN of the frame.
    * - VLAN-unaware
-     - ``STAG[0]`` set
+     - Element 0 of :field:`PORT_IGR_TPID.STAG` set
      - The same tag is seen as a service tag. It does not select the VLAN, so every frame
        joins the port VLAN, but its priority bits are still read.
 
-The second row is the method of the Linux driver, which notes that it works although
-:field:`VLAN_CTRL.SVLAN_EN` is never set. The driver relies on ``TPID_IGR[0]`` holding
-``0x8100``; a new driver should write that value to be independent of the reset state.
+Both rows are confirmed by the :ref:`Linux driver <sources-list>`, which notes that the second works although
+:field:`VLAN_CTRL.SVLAN_EN` is never set. Write ``0x8100`` to element 0 of :reg:`TPID_IGR`
+first: the :ref:`Linux driver <sources-list>` relies on that value being there after reset, which is not
+confirmed.
 
 .. _vlan-pvid:
 
@@ -73,7 +89,8 @@ switch looks it up in entry 0 of the table; see :ref:`vlan-zero`.
 
 .. yt-bitfield:: PORT_VLAN_CTRL
 
-The Linux driver gives VLAN-unaware ports the port VLAN ID 4095.
+Give a VLAN-unaware port a port VLAN ID that no tagged traffic uses; the :ref:`Linux driver <sources-list>` uses
+4095.
 
 .. _vlan-filter:
 
@@ -93,8 +110,9 @@ Ingress filtering
    * - Drop tagged frames (an access port)
      - Set :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`
 
-The Linux driver uses the first two and leaves the dropping of unwanted tagged frames to the
-membership check.
+The first two settings are confirmed by the :ref:`Linux driver <sources-list>`. It does not use the third and
+leaves the dropping of unwanted tagged frames to the membership check, so the third is
+inferred from the field name.
 
 .. _vlan-table:
 
@@ -115,6 +133,8 @@ low word first, as :ref:`access-wide` explains.
    .. tab-item:: C
       :sync: c
 
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
+
       .. literalinclude:: ../bindings/c/examples/guide.c
            :language: c
            :start-after: /* [vlan] */
@@ -122,6 +142,8 @@ low word first, as :ref:`access-wide` explains.
 
    .. tab-item:: MicroPython
       :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
 
       .. literalinclude:: ../bindings/micropython/examples/guide.py
            :language: python
@@ -154,8 +176,8 @@ VLAN 0
 
 The switch does not treat a tag with VLAN ID 0 as "untagged" by itself. Write entry 0 once
 at start-up with all ports as members and :field:`VLAN_CTRL.LEARN_DIS` set, and do not use
-VLAN 0 otherwise. This is what the Linux driver does, with the comment that such frames
-otherwise "confuse the hardware".
+VLAN 0 otherwise. The :ref:`Linux driver <sources-list>` confirms the need: its comment says such frames otherwise
+"confuse the hardware".
 
 .. _vlan-egress:
 
@@ -184,5 +206,5 @@ To split the ports into groups that cannot see each other, without any tags on t
    :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`.
 
 Each group then learns addresses under its own VLAN ID, which avoids the lookup problem
-described in :ref:`forwarding-isolation`. The steps use only registers the Linux driver
+described in :ref:`forwarding-isolation`. The steps use only registers the :ref:`Linux driver <sources-list>`
 exercises, but this combination has not been run on hardware by this project.

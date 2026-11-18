@@ -23,6 +23,15 @@ class GuideExamples(unittest.TestCase):
         self.assertEqual(self.dev.phy_addr, 0)
         self.assertEqual(self.part[0], "YT9215SC")
 
+    def test_init(self):
+        sw = MockSwitch(phy_addr=0x1D, major=0x9002, mode=2)
+        dev, part = guide.init(sw, 8)
+        self.assertEqual(part[0], "YT9215S")
+        self.assertEqual(sw.regs[R.FUNC], 0x16)
+        self.assertEqual(sw.regs[R.EXT_CPU_PORT], 0xC008)
+        self.assertEqual(sw.regs[R.PORT_CTRL(8)] & 0xFF, 0x9A)
+        self.assertEqual(sw.regs[R.PORT_ISOLATION(0)], 0x7FF & ~0x11E)
+
     def test_features_and_cpu_port(self):
         guide.enable_features(self.dev)
         self.assertEqual(self.sw.regs[R.FUNC], 0x16)

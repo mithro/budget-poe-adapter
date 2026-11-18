@@ -1,0 +1,102 @@
+block,register,address,address_formula,sdk_table,sdk_entries,sdk_entry_bytes,other_sdk_file,comment,source_file,source_line
+MDIO master buses (PHY access),EXT_MBUS_OP,0x06a000,,,,,sw_yt921x.h,,mdio_bus.h,13
+MDIO master buses (PHY access),EXT_MBUS_CTRL,0x06a004,,,,,sw_yt921x.h,,mdio_bus.h,16
+MDIO master buses (PHY access),EXT_MBUS_DOUT,0x06a008,,,,,sw_yt921x.h,,mdio_bus.h,29
+MDIO master buses (PHY access),EXT_MBUS_DIN,0x06a00c,,,,,sw_yt921x.h,,mdio_bus.h,31
+Global and chip identification,RST,0x080000,,GLOBAL_CTRL0,1,4,,,chip.h,22
+Global and chip identification,FUNC,0x080004,,GLOBAL_CTRL1,1,4,,,chip.h,25
+Global and chip identification,CHIP_ID,0x080008,,,,,chipdef_tiger.h,,chip.h,29
+CPU port and tagging,EXT_CPU_PORT,0x08000c,,EXT_CPU_PORT_CTRL,1,4,,,chip.h,31
+CPU port and tagging,CPU_TAG_TPID,0x080010,,CPU_TAG_TPID,1,4,,,chip.h,36
+VLAN,PVID_SEL,0x080014,,LOOK_UP_VLAN_SEL,1,4,,,chip.h,42
+"Port, MAC and external interface control",SERDES_CTRL,0x080028,,,,,chipdef_tiger.h,,chip.h,44
+Global and chip identification,IO_LEVEL,0x080030,,,,,chipdef_tiger.h,,chip.h,47
+Global and chip identification,MAC_ADDR_HI2,0x080080,,GLOBAL_MAC_ADDR0,1,4,,,chip.h,76
+Global and chip identification,MAC_ADDR_LO4,0x080084,,GLOBAL_MAC_ADDR1,1,4,,,chip.h,77
+"Port, MAC and external interface control",SERDESn,0x08008c,0x8008c + 4 * (port - 8),SG_PHY,2,4,,,chip.h,78
+"Port, MAC and external interface control",PORTn_CTRL,0x080100,0x80100 + 4 * port,PORT_CTRL,11,4,,Bit 7-0 shared with PORT_STATUS,chip.h,92
+"Port, MAC and external interface control",PORTn_STATUS,0x080200,0x80200 + 4 * port,PORT_STATUS,11,4,,,chip.h,96
+Global and chip identification,PON_STRAP_FUNC,0x080320,,PON_STRAP_EN,1,4,,,chip.h,105
+Global and chip identification,PON_STRAP_VAL,0x080324,,PON_STRAP_VAL,1,4,,,chip.h,106
+Global and chip identification,PON_STRAP_CAP,0x080328,,PON_STRAP,1,4,,,chip.h,107
+"Port, MAC and external interface control",MDIO_POLLINGn,0x080364,0x80364 + 4 * (port - 8),MDIO_POLLING,2,4,,,chip.h,110
+Global and chip identification,SENSOR,0x08036c,,,,,fal_tiger_sensor.c,,chip.h,125
+Global and chip identification,TEMP,0x080374,,,,,fal_tiger_sensor.c,,chip.h,127
+Global and chip identification,CHIP_MODE,0x080388,,,,,chipdef_tiger.h,,chip.h,128
+"Port, MAC and external interface control",XMII_CTRL,0x080394,,,,,chipdef_tiger.h,,chip.h,130
+"Port, MAC and external interface control",XMIIn,0x080400,0x80400 + 8 * (port - 8),EXTIF0_MODE,1,4,,,chip.h,132
+"Port, MAC and external interface control",MACn_FRAME,0x081008,0x81008 + 0x1000 * port,,,,fal_tiger_port.c,,chip.h,156
+EEE,EEEn_VAL,0x0a0000,0xa0000 + 0x40 * port,,,,fal_tiger_port.c,,chip.h,160
+EEE,EEE_CTRL,0x0b0000,,,,,fal_tiger_port.c,,chip.h,163
+MIB counters,MIB_CTRL,0x0c0004,,,,,yt_stat.h,,mib.h,13
+MIB counters,MIBn_DATA0,0x0c0100,0xc0100 + 0x100 * port,,,,yt_stat.h,,mib.h,19
+LEDs,LED_CTRL,0x0d0000,,,,,fal_tiger_led.h,,leds.h,14
+LEDs,LED0_PORTn,0x0d0004,0xd0004 + 4 * port,,,,fal_tiger_led.h,,leds.h,24
+LEDs,LED1_PORTn,0x0d0040,0xd0040 + 4 * port,,,,fal_tiger_led.h,,leds.h,28
+LEDs,LED2_PORTn,0x0d0080,0xd0080 + 4 * port,,,,fal_tiger_led.h,,leds.h,40
+LEDs,LED_SER_CTRL,0x0d0100,,,,,fal_tiger_led.h,,leds.h,67
+LEDs,LED_SER_MAPnm,0x0d0104,0xd0104 + 8 * (2 - grp) + 4 * (port / 5),,,,fal_tiger_led.h,,leds.h,72
+LEDs,LED_PAR_PORTS,0x0d01c4,,,,,fal_tiger_led.h,,leds.h,77
+LEDs,LED_PAR_INV,0x0d01c8,,,,,fal_tiger_led.h,,leds.h,78
+LEDs,LED_PAR_MAPn,0x0d01d0,0xd01d0 + 4 * port,,,,fal_tiger_led.h,,leds.h,80
+Global and chip identification,EDATA_CTRL,0x0e0000,,,,,sw_yt921x.h,,chip.h,166
+Global and chip identification,EDATA_DATA,0x0e0004,,,,,sw_yt921x.h,,chip.h,172
+Global and chip identification,SYS_CLK,0x0e0040,,,,,fal_tiger_rate.h,,chip.h,177
+MDIO master buses (PHY access),INT_MBUS_OP,0x0f0000,,,,,sw_yt921x.h,,mdio_bus.h,14
+MDIO master buses (PHY access),INT_MBUS_CTRL,0x0f0004,,,,,sw_yt921x.h,,mdio_bus.h,17
+MDIO master buses (PHY access),INT_MBUS_DOUT,0x0f0008,,,,,sw_yt921x.h,,mdio_bus.h,30
+MDIO master buses (PHY access),INT_MBUS_DIN,0x0f000c,,,,,sw_yt921x.h,,mdio_bus.h,32
+VLAN,PORTn_EGR,0x100000,0x100000 + 4 * port,EGR_PORT_CTRLN,11,4,,,chip.h,183
+VLAN,TPID_EGRn,0x100300,0x100300 + 4 * x,EGR_TPID_PROFILE,4,4,,"[0, 3]",chip.h,188
+QoS priority mapping,IPM_DSCPn,0x180000,0x180000 + 4 * n,DSCP_TO_INT_PRIO_MAP,64,4,,Internal Priority Map,chip.h,191
+QoS priority mapping,IPM_PCPn,0x180100,0x180100 + 4 * (16 * map + 8 * dei + pcp),PRI_TO_INT_PRIO_MAP,32,4,,,chip.h,192
+QoS priority mapping,PORTn_QOS,0x180180,0x180180 + 4 * port,QOS_PORT_CTRLN,11,4,,,chip.h,200
+QoS priority mapping,PORTn_PRIO_ORD,0x180200,0x180200 + 4 * port,QOS_MERGE_PRECEDENCE_CTRLN,11,4,,,chip.h,206
+VLAN,VLAN_IGR_FILTER,0x180280,,L2_VLAN_INGRESS_FILTER_EN,1,4,,,chip.h,223
+"Spanning tree, isolation and learning",PORTn_ISOLATION,0x180294,0x180294 + 4 * port,L2_PORT_ISOLATION_CTRLN,11,4,,,chip.h,226
+"Spanning tree, isolation and learning",STPn,0x18038c,0x18038c + 4 * n,L2_STP_STATEN,16,4,,,chip.h,228
+"Spanning tree, isolation and learning",PORTn_LEARN,0x1803d0,0x1803d0 + 4 * port,L2_LEARN_PER_PORT_CTRLN,11,4,,,chip.h,235
+"Spanning tree, isolation and learning",AGEING,0x180440,,L2_AGING_CTRL,1,4,,,chip.h,251
+FDB (address table),FDB_IN0,0x180454,,L2_FDB_TBL_OP_DATA_0,1,4,,,chip.h,253
+FDB (address table),FDB_IN1,0x180458,,L2_FDB_TBL_OP_DATA_1,1,4,,,chip.h,254
+FDB (address table),FDB_IN2,0x18045c,,L2_FDB_TBL_OP_DATA_2,1,4,,,chip.h,255
+FDB (address table),FDB_OP,0x180460,,L2_FDB_TBL_OP,1,4,,,chip.h,256
+FDB (address table),FDB_RESULT,0x180464,,L2_FDB_TBL_OP_RESULT,1,4,,,chip.h,282
+FDB (address table),FDB_OUT0,0x1804b0,,L2_FDB_TBL_OP_DATA_0_DUMMY,1,4,,,chip.h,288
+FDB (address table),FDB_OUT1,0x1804b4,,L2_FDB_TBL_OP_DATA_1_DUMMY,1,4,,,chip.h,290
+FDB (address table),FDB_OUT2,0x1804b8,,L2_FDB_TBL_OP_DATA_2_DUMMY,1,4,,,chip.h,303
+Flooding and unknown-destination handling,FILTER_UNK_UCAST,0x180508,,L2_UNKNOWN_UCAST_FILTER_MASK,1,4,,,chip.h,315
+Flooding and unknown-destination handling,FILTER_UNK_MCAST,0x18050c,,L2_UNKNOWN_MCAST_FILTER_MASK,1,4,,,chip.h,316
+Flooding and unknown-destination handling,FILTER_MCAST,0x180510,,L2_MCAST_FILTER_MASK,1,4,,,chip.h,317
+Flooding and unknown-destination handling,FILTER_BCAST,0x180514,,L2_BCAST_FILTER_MASK,1,4,,,chip.h,318
+VLAN,VLAN_EGR_FILTER,0x180598,,L2_EGR_VLAN_FILTER_EN,1,4,,,chip.h,322
+Link aggregation,LAG_GROUPn,0x1805a8,0x1805a8 + 4 * n,LINK_AGG_GROUPN,2,4,,,chip.h,324
+Link aggregation,LAG_MEMBERnm,0x1805b0,0x1805b0 + 4 * (4 * n + m),LINK_AGG_MEMBERN,8,4,,,chip.h,329
+CPU port and tagging,CPU_COPY,0x180690,,CPU_COPY_DST_CTRL,1,4,,,chip.h,332
+ACL,ACL_PERMIT_UNMATCH,0x1806a0,,ACL_UNMATCH_PERMIT_ENABLE_CTRL,1,4,,,chip.h,336
+Flooding and unknown-destination handling,ACT_UNK_UCAST,0x180734,,L2_UC_UNKNOWN_ACT_CTRL,1,4,,,chip.h,340
+Flooding and unknown-destination handling,ACT_UNK_MCAST,0x180738,,L2_MC_UNKNOWN_ACT_CTRL,1,4,,,chip.h,341
+FDB (address table),FDB_HW_FLUSH,0x180958,,L2_FDB_HW_FLUSH_CTRL,1,4,,,chip.h,351
+VLAN,VLANn_CTRL,0x188000,0x188000 + 8 * vlan,L2_VLAN_TBL,4096,8,,,chip.h,354
+ACL,ACLn_ACT,0x1c0000,0x1c0000 + 0x10 * n,ACL_ACTION_TBL,384,12,,,tc.h,12
+ACL,ACL_BLK_KEEP,0x201000,,ACL_BLK_KEEP_CTRL,1,4,,,tc.h,74
+ACL,ACL_PORT,0x202000,,ACL_PORT_CTRL,1,4,,,tc.h,78
+ACL,ACL_BLK_CMD,0x202004,,ACL_BLK_CMD,1,4,,,tc.h,82
+ACL,ACLn_ENTRY,0x203000,0x203000 + 4 * blk,RULE_EXT_CTRL,48,4,,,tc.h,86
+ACL,ACLn_KEYm,0x204000,0x204000 + 0x200 * bin + 8 * blk,ACL_RULE_BIN0,48,8,,,tc.h,90
+ACL,ACLn_MASKm,0x205000,0x205000 + 0x200 * bin + 8 * blk,ACL_RULE_MASK_BIN0,48,8,,,tc.h,100
+VLAN,TPID_IGRn,0x210000,0x210000 + 4 * x,TPID_PROFILE0,2,4,,"[0, 3]",chip.h,374
+VLAN,PORTn_IGR_TPID,0x210010,0x210010 + 4 * port,PARSER_PORT_CTRLN,11,4,,,chip.h,376
+Link aggregation,LAG_HASH,0x210090,,LINK_AGG_HASH_CTRL,1,4,,,chip.h,381
+ACL,UDFn_CTRL,0x210094,0x210094 + 4 * x,UDF_CTRLN,16,4,,,tc.h,258
+Meters and ingress policing,PORTn_RATE,0x220000,0x220000 + 4 * port,PORT_RATE_CTRLN,11,4,,,tc.h,270
+Meters and ingress policing,METER_SLOT,0x220104,,METER_TIMESLOT,1,4,,,tc.h,272
+Meters and ingress policing,PORTn_METER,0x220108,0x220108 + 4 * port,PORT_METER_CTRLN,11,4,,,tc.h,274
+Meters and ingress policing,METERn_CTRL,0x220800,0x220800 + 0x10 * x,METER_CONFIG_TBL,75,12,,,tc.h,278
+Meters and ingress policing,METERn_STAT,0x221000,0x221000 + 8 * x,METER_TOKEN_TBL,75,8,,,tc.h,301
+VLAN,PORTn_VLAN_CTRL,0x230010,0x230010 + 4 * port,PORT_VLAN_CTRLN,11,4,,,chip.h,391
+VLAN,PORTn_VLAN_CTRL1,0x230080,0x230080 + 4 * port,PORT_VLAN_CTRL1N,11,4,,,chip.h,400
+Mirroring,MIRROR,0x300300,,MIRROR_CTRL,1,4,,,tc.h,303
+Egress shaping,PORT_SHAPE_SLOT,0x34000c,,PSCH_SHP_SLOT_TIME_CFG,1,4,,,tc.h,313
+Egress shaping,PORTn_SHAPE_CTRL,0x354000,0x354000 + 8 * port,PSCH_SHP_CFG_TBL,11,8,,,tc.h,315
+Egress shaping,PORTn_SHAPE_STAT,0x356000,0x356000 + 4 * port,,,,,,tc.h,324

@@ -17,6 +17,7 @@ Outputs, written one directory up:
   sdk-tables.yaml    every table of the vendor SDK table list
 """
 import argparse
+import fnmatch
 import itertools
 import os
 import re
@@ -202,18 +203,91 @@ def parse_enums(text, hdr):
 FUNCS = {}
 USES = {}
 OWNER = {}
+CSRC = {}
+SHARED = {}   # macro stem -> ids of the registers whose fields carry the macro
+REGMACRO = {}  # register id -> name of its address macro
+
+
+def uses_of(name):
+    """Every use of a macro in a driver source file (not a header), in file order."""
+    name = name.split("(")[0]
+    if name not in USES:
+        pat = re.compile(r"\b%s\b" % re.escape(name))
+        USES[name] = [[fn, OWNER[fn][no - 1] or "", no]
+                      for fn, text in sorted(CSRC.items())
+                      for no, line in enumerate(text.split("\n"), 1) if pat.search(line)]
+    return USES[name]
+
+
+def stem(macro):
+    return re.sub(r"_M$", "", macro.split("(")[0])
+
+
+def register_of(use, regs):
+    """The register among ``regs`` that the code around a use accesses, or None.
+
+    A value is built before the register is written, and a register is read before a
+    field is taken from the value, so the search runs forwards for a line that builds a
+    value and backwards for a line that takes a value apart. The ACL key and mask are
+    told apart by the array that the line assigns to.
+    """
+    fn, func, no = use
+    lines = CSRC[fn].split("\n")
+    text = lines[no - 1]
+    if set(regs) == {"ACL_KEY", "ACL_MASK"}:
+        if re.search(r"mask\[|\bmask\b\s*[|&]?=", text):
+            return {"ACL_MASK"}
+        if re.search(r"key\[|\bkey\b\s*[|&]?=", text):
+            return {"ACL_KEY"}
+        return None
+    pats = {r: re.compile(r"\b%s\b" % re.escape(REGMACRO[r])) for r in regs if r in REGMACRO}
+
+    def hits(i):
+        return {r for r, p in pats.items() if p.search(lines[i])}
+
+    def inside(i):
+        return 0 <= i < len(lines) and OWNER[fn][i] == func
+
+    # the statement that holds the use
+    lo = no - 1
+    while inside(lo - 1) and not re.search(r"[;{}]\s*$|\*/\s*$|^\s*$", lines[lo - 1]):
+        lo -= 1
+    hi = no - 1
+    while inside(hi + 1) and not re.search(r"[;{]\s*$", lines[hi]):
+        hi += 1
+    got = set()
+    for i in range(lo, hi + 1):
+        got |= hits(i)
+    if got:
+        return got
+
+    def scan(step):
+        i, found, left = (hi + 1 if step > 0 else lo - 1), set(), None
+        while inside(i) and abs(i - (no - 1)) <= 40 and (left is None or left > 0):
+            h = hits(i)
+            if h and left is None:
+                left = 8
+            found |= h
+            if left is not None:
+                left -= 1
+            i += step
+        return found
+
+    backwards = "FIELD_GET" in text or re.search(r"[=!]=|\bcase\b|&\s*YT921X", text)
+    order = (-1, 1) if backwards else (1, -1)
+    return scan(order[0]) or scan(order[1]) or None
 
 
 def enum_linux(member, use=None):
     lx = dict(macro=member["cname"], src=member["src"])
     lx["used"] = first_use(lx, ())
-    if use and not lx["used"]:
+    if use and (not lx["used"] or not lx["use"][1]):
         lx["used"] = True
         lx["use"] = Flow([use[0], OWNER[use[0]][use[1] - 1] or "", use[1]])
     return lx
 
 
-def first_use(lx, funcs, *more):
+def first_use(lx, funcs, *more, reg=None):
     """Record where the driver first uses an item, trying its macro and then the others.
 
     A use inside one of ``funcs`` (the functions that touch the register of a field) is
@@ -221,13 +295,23 @@ def first_use(lx, funcs, *more):
     """
     names = [lx["macro"].split("(")[0]]
     names.append(re.sub(r"_M$", "", names[0]))
-    found = [u for n in names + [x.split("(")[0] for x in more if x] for u in USES.get(n, [])]
+    names += [x.split("(")[0] for x in more if x]
+    found = []
+    for n in dict.fromkeys(x for x in names if x):
+        for u in uses_of(n):
+            regs = SHARED.get(stem(n), ())
+            if reg and len(regs) > 1:
+                where = register_of(u, regs)
+                if where and reg not in where:
+                    continue
+            found.append(u)
     lx.pop("use", None)
     if not found:
         return False
     found.sort(key=lambda u: (u[0], u[2]))
-    near = [u for u in found if u[1] and u[1] in funcs]
-    lx["use"] = Flow((near or found)[0])
+    infunc = [u for u in found if u[1]]
+    near = [u for u in infunc if u[1] in funcs]
+    lx["use"] = Flow((near or infunc or found)[0])
     return True
 
 
@@ -261,16 +345,11 @@ def parse_linux(ldir, overlay):
         owner[fn] = own
     FUNCS.update(funcs)
     OWNER.update(owner)
+    CSRC.update(csrc)
 
     def used(cname):
         """True when a driver source file (not a header) uses the macro."""
-        name = cname.split("(")[0]
-        if name not in USES:
-            pat = re.compile(r"\b%s\b" % re.escape(name))
-            USES[name] = [[fn, owner[fn][no - 1] or "", no]
-                          for fn, text in csrc.items()
-                          for no, line in enumerate(text.split("\n"), 1) if pat.search(line)]
-        return bool(USES[name])
+        return bool(uses_of(cname))
 
     for hdr in HEADERS:
         with open(os.path.join(ldir, hdr)) as f:
@@ -626,6 +705,22 @@ def main():
                 k: [copy.deepcopy(f) for f in v if not f.get("key_only")]
                 for k, v in src["layouts"].items()}
 
+    # ---- which registers share a field macro
+    for rid, reg in byid.items():
+        REGMACRO[rid] = reg["linux"]["macro"].split("(")[0]
+        flds = list(reg["fields"])
+        for fl in (reg.get("layouts") or {}).values():
+            flds += fl
+        for fld in flds:
+            lx = fld.get("linux")
+            if not lx:
+                continue
+            macros = [lx["macro"], (fld.get("array") or {}).get("macro")]
+            macros += [v["linux"]["macro"] for v in fld.get("values", []) if v.get("linux")]
+            for mac in macros:
+                if mac:
+                    SHARED.setdefault(stem(mac), set()).add(rid)
+
     # ---- overlay: descriptions and hand-written facts
     oreg = overlay["registers"]
     missing = []
@@ -719,7 +814,7 @@ def main():
         allf = r["fields"] + [f for l in r.get("layouts", []) for f in l["fields"]]
         r["linux"]["used"] = first_use(r["linux"], ())
         rname = r["linux"]["macro"].split("(")[0]
-        rfuncs = {u[1] for u in USES.get(rname, [])}
+        rfuncs = {u[1] for u in uses_of(rname)}
         for fld in allf:
             lx = fld.get("linux")
             if not lx:
@@ -727,7 +822,18 @@ def main():
             vals = [v["linux"]["macro"] for v in fld.get("values", []) if v.get("linux")]
             arr = (fld.get("array") or {}).get("macro")
             # a field counts as used only in a register the driver touches
-            lx["used"] = first_use(lx, rfuncs, arr, *vals) and r["linux"]["used"]
+            lx["used"] = first_use(lx, rfuncs, arr, reg=r["id"]) and r["linux"]["used"]
+            for v in fld.get("values", []):
+                if v.get("linux"):
+                    v["linux"]["used"] = first_use(v["linux"], rfuncs, reg=r["id"]) \
+                        and r["linux"]["used"]
+                    if not v["linux"]["used"]:
+                        v["linux"].pop("use", None)
+                    elif not lx["used"] or (v["linux"]["use"][1] and
+                                            (v["linux"]["use"][0], v["linux"]["use"][2]) <
+                                            (lx["use"][0], lx["use"][2])):
+                        lx["used"] = True
+                        lx["use"] = v["linux"]["use"]
             if not lx["used"]:
                 lx.pop("use", None)
         if len(allf) == 1 and not allf[0].get("linux", {}).get("used") \
@@ -749,7 +855,7 @@ def main():
                [(l["name"], f) for l in r.get("layouts", []) for f in l["fields"]]
         for lay, fld in lays:
             keys = ["%s.%s/%s" % (r["id"], lay, fld["name"]), "%s.%s" % (r["id"], fld["name"])]
-            key = next((k for k in keys if k in ou), None)
+            key = next((p for k in keys for p in ou if fnmatch.fnmatchcase(k, p)), None)
             if key is None:
                 continue
             u, lx = ou[key], fld.get("linux")

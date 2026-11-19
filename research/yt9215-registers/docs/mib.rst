@@ -121,5 +121,5 @@ names and from the two SDK functions.
 It is :ev:`not known` whether :field:`MIB_CTRL.CLEAN` clears itself, which is why the first write
 puts it back to 0. The function
 `fal_tiger_stat_mib_clear_all() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L69>`__ leaves
-:field:`MIB_CTRL.ALL_PORT` at 0 for a clear of every port, and the effect of that bit is
-:ev:`not known`.
+:field:`MIB_CTRL.ALL_PORT` at 0 for a clear of every port, so the reading of that bit as "clear every port" is :ev:`inferred`
+from its name alone.

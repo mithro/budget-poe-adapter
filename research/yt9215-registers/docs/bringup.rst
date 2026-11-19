@@ -249,7 +249,8 @@ Temperature sensor
 ~~~~~~~~~~~~~~~~~~
 
 Set :field:`SENSOR.TEMP` to start the temperature sensor, as :lx:`yt921x_chip_setup` does,
-and read :reg:`TEMP` for a raw value. The conversion to degrees is :ev:`not known`.
+and read :reg:`TEMP`. It is :ev:`inferred` from the name of the register that it holds a raw
+temperature value. The conversion to degrees is :ev:`not known`.
 
 .. _bringup-mac:
 

@@ -57,7 +57,8 @@ plain
 VLAN-aware and VLAN-unaware ports
 ---------------------------------
 
-:reg:`TPID_IGR` holds four tag protocol identifiers. :reg:`PORT_IGR_TPID` says, for each port,
+It is :ev:`inferred` from the name of :reg:`TPID_IGR` that it holds four tag protocol
+identifiers. :reg:`PORT_IGR_TPID` says, for each port,
 which of the four mark a customer tag and which mark a service tag.
 
 .. yt-bitfield:: PORT_IGR_TPID
@@ -125,13 +126,14 @@ Ingress filtering
      - :ev:`confirmed`
    * - Tagged
      - :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`
-     - :ev:`inferred`
+     - :ev:`confirmed`
 
 :lx:`yt921x_vlan_filtering` sets the fields of the rows "VLAN does not include the receiving
 port" and "Untagged" of the :ref:`filter table <vlan-filter-table>`. It sets :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED` for a VLAN-aware
 port that has no port VLAN. It always clears :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`, and
-its comment leaves the dropping of tagged frames to :reg:`VLAN_IGR_FILTER`. The effect of
-setting that field is read from its name. An access port is a use for it.
+its comment leaves the dropping of tagged frames to :reg:`VLAN_IGR_FILTER`. The driver
+therefore :ev:`confirms <confirmed>` the field only by clearing it; the effect of setting it is
+:ev:`inferred` from its name. An access port is a use for it.
 
 .. _vlan-table:
 

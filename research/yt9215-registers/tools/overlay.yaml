@@ -270,7 +270,17 @@ enums:
 # function uses the field although a shared macro suggests it.
 enum_uses:
   speed: [chip.c, 1696]
+  udf_type: [tc.c, 1710]
 uses:
+  "LED?_PORT.ACT_DUPLEX_FULL": [leds.c, 282]
+  "LED?_PORT.ACT_DUPLEX_HALF": [leds.c, 282]
+  "LED?_PORT.ACT_TX_BLINK": [leds.c, 282]
+  "LED?_PORT.ACT_RX_BLINK": [leds.c, 282]
+  "LED?_PORT.ACT_1000M": [leds.c, 282]
+  "LED?_PORT.ACT_100M": [leds.c, 282]
+  "LED?_PORT.ACT_10M": [leds.c, 282]
+  "LED?_PORT.ACT_COLLISION_BLINK": [leds.c, 282]
+  LED1_PORT.ACT: [leds.c, 293]
   FDB_IN1.STATUS: [chip.c, 480]
   FDB_IN1.FID: [chip.c, 480]
   FDB_IN1.ADDR_LO2: [chip.c, 480]

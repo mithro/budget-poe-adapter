@@ -1358,7 +1358,8 @@ enums:
       src:
       - tc.h
       - 265
-      used: false
+      used: true
+      use: [tc.c, yt921x_chip_setup_acl, 1710]
   - name: L3
     value: 1
     desc: Start of the layer 3 header
@@ -1367,7 +1368,7 @@ enums:
       src:
       - tc.h
       - 266
-      use: [tc.c, '', 560]
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 897]
       used: true
   - name: L4
     value: 2
@@ -1377,7 +1378,7 @@ enums:
       src:
       - tc.h
       - 267
-      use: [tc.c, '', 561]
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 954]
       used: true
 registers:
 - id: RST
@@ -1966,7 +1967,7 @@ registers:
       - chip.h
       - 108
       used: true
-      use: [chip.c, yt921x_set_eee, 201]
+      use: [chip.c, yt921x_set_eee, 205]
     lsb: 16
     width: 1
     desc: 1 turns Energy Efficient Ethernet on for the built-in PHYs. :lx:`yt921x_set_eee` sets this bit
@@ -2197,6 +2198,7 @@ registers:
         - chip.h
         - 171
         used: true
+        use: [chip.c, yt921x_edata_read_cont, 2129]
       desc: Read the byte at ADDR into :field:`EDATA_DATA.DATA`
     lsb: 0
     width: 4
@@ -2258,6 +2260,7 @@ registers:
         - chip.h
         - 176
         used: true
+        use: [chip.c, yt921x_edata_wait, 2110]
       desc: No command is running. DATA is valid
     lsb: 0
     width: 4
@@ -2323,6 +2326,7 @@ registers:
         - chip.h
         - 181
         used: true
+        use: [chip.c, yt921x_chip_detect, 2211]
       desc: 143 MHz core clock
     lsb: 0
     width: 2
@@ -2615,6 +2619,7 @@ registers:
         - chip.h
         - 81
         used: true
+        use: [pcs-921x.c, yt921x_serdes_config, 28]
       desc: SGMII as the MAC side
     - name: REVSGMII
       value: 1
@@ -2633,6 +2638,7 @@ registers:
         - chip.h
         - 83
         used: true
+        use: [pcs-921x.c, yt921x_serdes_config, 34]
       desc: 1000BASE-X
     - name: V100BASEX
       value: 3
@@ -2642,6 +2648,7 @@ registers:
         - chip.h
         - 84
         used: true
+        use: [pcs-921x.c, yt921x_serdes_config, 31]
       desc: 100BASE-FX fibre mode
     - name: V2500BASEX
       value: 4
@@ -2651,6 +2658,7 @@ registers:
         - chip.h
         - 85
         used: true
+        use: [pcs-921x.c, yt921x_serdes_config, 37]
       desc: 2500BASE-X
     lsb: 7
     width: 3
@@ -3579,6 +3587,7 @@ registers:
         - mdio_bus.h
         - 24
         used: true
+        use: [mdio_bus.c, yt921x_extif_read, 195]
       desc: '`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame'
     lsb: 8
     width: 4
@@ -3604,6 +3613,7 @@ registers:
         - mdio_bus.h
         - 27
         used: true
+        use: [mdio_bus.c, yt921x_extif_write, 232]
       desc: Write the register
     - name: READ
       value: 2
@@ -3613,6 +3623,7 @@ registers:
         - mdio_bus.h
         - 28
         used: true
+        use: [mdio_bus.c, yt921x_extif_read, 195]
       desc: Read the register
     lsb: 2
     width: 2
@@ -3793,7 +3804,7 @@ registers:
         src:
         - mdio_bus.h
         - 24
-        used: true
+        used: false
       desc: '`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame'
     lsb: 8
     width: 4
@@ -3819,6 +3830,7 @@ registers:
         - mdio_bus.h
         - 27
         used: true
+        use: [mdio_bus.c, yt921x_intif_write, 71]
       desc: Write the register
     - name: READ
       value: 2
@@ -3828,6 +3840,7 @@ registers:
         - mdio_bus.h
         - 28
         used: true
+        use: [mdio_bus.c, yt921x_intif_read, 35]
       desc: Read the register
     lsb: 2
     width: 2
@@ -4304,7 +4317,7 @@ registers:
       - leds.h
       - 54
       used: true
-      use: [leds.c, '', 198]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -4318,7 +4331,7 @@ registers:
       - leds.h
       - 55
       used: true
-      use: [leds.c, '', 198]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -4332,7 +4345,7 @@ registers:
       - leds.h
       - 56
       used: true
-      use: [leds.c, '', 204]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -4346,7 +4359,7 @@ registers:
       - leds.h
       - 57
       used: true
-      use: [leds.c, '', 205]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -4388,7 +4401,7 @@ registers:
       - leds.h
       - 60
       used: true
-      use: [leds.c, '', 201]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -4402,7 +4415,7 @@ registers:
       - leds.h
       - 61
       used: true
-      use: [leds.c, '', 200]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -4416,7 +4429,7 @@ registers:
       - leds.h
       - 62
       used: true
-      use: [leds.c, '', 199]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -4430,7 +4443,7 @@ registers:
       - leds.h
       - 63
       used: true
-      use: [leds.c, '', 207]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -4582,6 +4595,7 @@ registers:
         - leds.h
         - 36
         used: true
+        use: [leds.c, yt921x_led_blink_set, 146]
       desc: On for 1/2 of the cycle
     - name: V2_3
       value: 1
@@ -4591,6 +4605,7 @@ registers:
         - leds.h
         - 37
         used: true
+        use: [leds.c, yt921x_led_blink_set, 149]
       desc: On for 2/3 of the cycle
     - name: V3_4
       value: 2
@@ -4600,6 +4615,7 @@ registers:
         - leds.h
         - 38
         used: true
+        use: [leds.c, yt921x_led_blink_set, 152]
       desc: On for 3/4 of the cycle
     - name: V5_6
       value: 3
@@ -4609,6 +4625,7 @@ registers:
         - leds.h
         - 39
         used: true
+        use: [leds.c, yt921x_led_blink_set, 155]
       desc: On for 5/6 of the cycle
     lsb: 25
     width: 2
@@ -4665,7 +4682,7 @@ registers:
       - leds.h
       - 54
       used: true
-      use: [leds.c, '', 198]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -4679,7 +4696,7 @@ registers:
       - leds.h
       - 55
       used: true
-      use: [leds.c, '', 198]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -4693,7 +4710,7 @@ registers:
       - leds.h
       - 56
       used: true
-      use: [leds.c, '', 204]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -4707,7 +4724,7 @@ registers:
       - leds.h
       - 57
       used: true
-      use: [leds.c, '', 205]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -4749,7 +4766,7 @@ registers:
       - leds.h
       - 60
       used: true
-      use: [leds.c, '', 201]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -4763,7 +4780,7 @@ registers:
       - leds.h
       - 61
       used: true
-      use: [leds.c, '', 200]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -4777,7 +4794,7 @@ registers:
       - leds.h
       - 62
       used: true
-      use: [leds.c, '', 199]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -4791,7 +4808,7 @@ registers:
       - leds.h
       - 63
       used: true
-      use: [leds.c, '', 207]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -4899,6 +4916,7 @@ registers:
         - leds.h
         - 43
         used: true
+        use: [leds.c, yt921x_led_trigger_get, 243]
       desc: Not forced. The LED follows its behaviour bits
     - name: BLINK
       value: 1
@@ -4908,6 +4926,7 @@ registers:
         - leds.h
         - 44
         used: true
+        use: [leds.c, yt921x_led_blink_set, 170]
       desc: Blink at the rate in FORCE_BLINK
     - name: 'ON'
       value: 2
@@ -4917,6 +4936,7 @@ registers:
         - leds.h
         - 45
         used: true
+        use: [leds.c, yt921x_led_force_set, 41]
       desc: 'On'
     - name: 'OFF'
       value: 3
@@ -4926,6 +4946,7 @@ registers:
         - leds.h
         - 46
         used: true
+        use: [leds.c, yt921x_led_force_set, 42]
       desc: 'Off'
     lsb: 18
     width: 10
@@ -4958,6 +4979,7 @@ registers:
         - leds.h
         - 49
         used: true
+        use: [leds.c, yt921x_led_blink_set, 172]
       desc: Use the cycle in :field:`LED1_PORT.OTHER_BLINK`
     lsb: 16
     width: 10
@@ -5023,7 +5045,7 @@ registers:
       - leds.h
       - 54
       used: true
-      use: [leds.c, '', 198]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -5037,7 +5059,7 @@ registers:
       - leds.h
       - 55
       used: true
-      use: [leds.c, '', 198]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -5051,7 +5073,7 @@ registers:
       - leds.h
       - 56
       used: true
-      use: [leds.c, '', 204]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -5065,7 +5087,7 @@ registers:
       - leds.h
       - 57
       used: true
-      use: [leds.c, '', 205]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -5107,7 +5129,7 @@ registers:
       - leds.h
       - 60
       used: true
-      use: [leds.c, '', 201]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -5121,7 +5143,7 @@ registers:
       - leds.h
       - 61
       used: true
-      use: [leds.c, '', 200]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -5135,7 +5157,7 @@ registers:
       - leds.h
       - 62
       used: true
-      use: [leds.c, '', 199]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -5149,7 +5171,7 @@ registers:
       - leds.h
       - 63
       used: true
-      use: [leds.c, '', 207]
+      use: [leds.c, yt921x_led_trigger_set, 282]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -6386,8 +6408,7 @@ registers:
       src:
       - chip.h
       - 195
-      used: true
-      use: [chip.c, yt921x_chip_setup_qos, 2373]
+      used: false
     values:
     - name: GREEN
       value: 0
@@ -6405,7 +6426,7 @@ registers:
         src:
         - chip.h
         - 198
-        used: true
+        used: false
       desc: Yellow
     - name: RED
       value: 2
@@ -6465,7 +6486,7 @@ registers:
       - chip.h
       - 193
       used: true
-      use: [chip.c, yt921x_dsa_port_get_dscp_prio, 2063]
+      use: [chip.c, yt921x_chip_setup_qos, 2367]
     lsb: 2
     width: 3
     desc: Internal priority from 0 to 7.
@@ -6499,6 +6520,7 @@ registers:
         - chip.h
         - 198
         used: true
+        use: [chip.c, yt921x_chip_setup_qos, 2373]
       desc: Yellow
     - name: RED
       value: 2
@@ -6759,6 +6781,7 @@ registers:
         - chip.h
         - 231
         used: true
+        use: [chip.c, yt921x_dsa_port_mst_state_set, 1444]
       desc: Port neither forwards nor learns
     - name: LEARNING
       value: 1
@@ -6768,6 +6791,7 @@ registers:
         - chip.h
         - 232
         used: true
+        use: [chip.c, yt921x_dsa_port_mst_state_set, 1448]
       desc: Port learns addresses but does not forward
     - name: BLOCKING
       value: 2
@@ -6777,6 +6801,7 @@ registers:
         - chip.h
         - 233
         used: true
+        use: [chip.c, yt921x_dsa_port_mst_state_set, 1455]
       desc: Port neither forwards nor learns. It is :ev:`inferred` from `IEEE 802.1D <https://en.wikipedia.org/wiki/IEEE_802.1D>`__
         that the port receives bridge protocol frames
     - name: FORWARD
@@ -6787,6 +6812,7 @@ registers:
         - chip.h
         - 234
         used: true
+        use: [chip.c, yt921x_dsa_port_mst_state_set, 1452]
       desc: Port forwards and learns
     lsb: 0
     width: 22
@@ -7144,7 +7170,7 @@ registers:
         src:
         - chip.h
         - 294
-        used: true
+        used: false
       desc: Entry is empty
     - name: MIN_TIME
       value: 1
@@ -7190,6 +7216,7 @@ registers:
         - chip.h
         - 299
         used: true
+        use: [chip.c, yt921x_fdb_add, 713]
       desc: Static entry that never ages out
     lsb: 28
     width: 3
@@ -7465,6 +7492,7 @@ registers:
         - chip.h
         - 264
         used: true
+        use: [chip.c, yt921x_fdb_flush_raw, 659]
       desc: Entries of the ports in :field:`FDB_IN2.EGR_PORTS`
     - name: PORT_VID
       value: 2
@@ -7474,6 +7502,7 @@ registers:
         - chip.h
         - 265
         used: true
+        use: [chip.c, yt921x_fdb_flush_raw, 661]
       desc: Entries of the ports in :field:`FDB_IN2.EGR_PORTS` with the filtering ID in :field:`FDB_IN1.FID`
     - name: VID
       value: 3
@@ -7523,6 +7552,7 @@ registers:
         - chip.h
         - 270
         used: true
+        use: [chip.c, yt921x_fdb_dump, 608]
       desc: Unicast entries of one port
     - name: UCAST_VID
       value: 1
@@ -7575,6 +7605,7 @@ registers:
         - chip.h
         - 276
         used: true
+        use: [chip.c, yt921x_fdb_add_index_in12, 697]
       desc: Write an entry
     - name: DEL
       value: 1
@@ -7584,6 +7615,7 @@ registers:
         - chip.h
         - 277
         used: true
+        use: [chip.c, yt921x_fdb_leave, 759]
       desc: Delete an entry
     - name: GET_ONE
       value: 2
@@ -7593,6 +7625,7 @@ registers:
         - chip.h
         - 278
         used: true
+        use: [chip.c, yt921x_fdb_has, 501]
       desc: Read one entry
     - name: GET_NEXT
       value: 3
@@ -7602,6 +7635,7 @@ registers:
         - chip.h
         - 279
         used: true
+        use: [chip.c, yt921x_fdb_dump, 609]
       desc: Read the next used entry after INDEX
     - name: FLUSH
       value: 4
@@ -7611,6 +7645,7 @@ registers:
         - chip.h
         - 280
         used: true
+        use: [chip.c, yt921x_fdb_flush_raw, 657]
       desc: Delete many entries
     lsb: 1
     width: 3
@@ -7812,6 +7847,7 @@ registers:
         - chip.h
         - 294
         used: true
+        use: [chip.c, yt921x_fdb_read, 543]
       desc: Entry is empty
     - name: MIN_TIME
       value: 1
@@ -7857,6 +7893,7 @@ registers:
         - chip.h
         - 299
         used: true
+        use: [chip.c, yt921x_fdb_join, 801]
       desc: Static entry that never ages out
     lsb: 28
     width: 3
@@ -8325,6 +8362,7 @@ registers:
         - chip.h
         - 347
         used: true
+        use: [chip.c, yt921x_chip_setup_dsa, 2318]
       desc: Send the frame to the CPU only
     - name: DROP
       value: 2
@@ -8334,6 +8372,7 @@ registers:
         - chip.h
         - 348
         used: true
+        use: [chip.c, yt921x_chip_setup_dsa, 2325]
       desc: Discard the frame
     - name: COPY
       value: 3
@@ -8440,6 +8479,7 @@ registers:
         - chip.h
         - 347
         used: true
+        use: [chip.c, yt921x_chip_setup_dsa, 2318]
       desc: Send the frame to the CPU only
     - name: DROP
       value: 2
@@ -8449,6 +8489,7 @@ registers:
         - chip.h
         - 348
         used: true
+        use: [chip.c, yt921x_chip_setup_dsa, 2325]
       desc: Discard the frame
     - name: COPY
       value: 3
@@ -8919,6 +8960,7 @@ registers:
         - tc.h
         - 27
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1058]
       desc: Forward normally
     - name: COPY
       value: 1
@@ -8937,6 +8979,7 @@ registers:
         - tc.h
         - 29
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1063]
       desc: Send only to FWD_REDIR_DPORTS
     - name: TRAP
       value: 3
@@ -8946,6 +8989,7 @@ registers:
         - tc.h
         - 30
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1137]
       desc: Send only to the CPU
     lsb: 85
     width: 2
@@ -9708,7 +9752,7 @@ registers:
       - tc.h
       - 93
       used: true
-      use: [tc.c, yt921x_acl_find, 1240]
+      use: [tc.c, yt921x_acl_rule_set_ports, 541]
     lsb: 42
     width: 11
     array:
@@ -9767,7 +9811,7 @@ registers:
         - tc.h
         - 138
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l3_type, 445]
+        use: [tc.c, yt921x_acl_entries_set_l3_type, 444]
       lsb: 32
       width: 4
       desc: Layer 3 protocol class.
@@ -10122,7 +10166,7 @@ registers:
         - tc.h
         - 179
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l4_type, 473]
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 472]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10155,7 +10199,7 @@ registers:
         - tc.h
         - 183
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 483]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10201,7 +10245,7 @@ registers:
         - tc.h
         - 183
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 483]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10248,7 +10292,7 @@ registers:
         - tc.h
         - 183
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 483]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10309,7 +10353,7 @@ registers:
         - tc.h
         - 183
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 483]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10356,7 +10400,7 @@ registers:
         - tc.h
         - 195
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l4_type, 492]
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 491]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10453,7 +10497,7 @@ registers:
         - tc.h
         - 206
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l3_type, 449]
+        use: [tc.c, yt921x_acl_entries_set_l3_type, 448]
       lsb: 0
       width: 4
       desc: Layer 3 protocol class.
@@ -10516,7 +10560,7 @@ registers:
         - tc.h
         - 212
         used: true
-        use: [tc.c, yt921x_acl_entries_set_l4_type, 488]
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 487]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -11250,7 +11294,7 @@ registers:
         - tc.h
         - 200
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 931]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 932]
       lsb: 20
       width: 8
       desc: TCP flags byte.
@@ -11264,7 +11308,7 @@ registers:
         - tc.h
         - 202
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 846]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 847]
       lsb: 12
       width: 8
       desc: IP protocol number.
@@ -11278,7 +11322,7 @@ registers:
         - tc.h
         - 204
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 911]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 912]
       lsb: 4
       width: 8
       desc: IPv4 type of service or IPv6 traffic class byte.
@@ -11737,6 +11781,7 @@ registers:
         - tc.h
         - 285
         used: true
+        use: [tc.c, yt921x_meter_config, 227]
       desc: Drop red frames
     - name: NONE
       value: 3
@@ -12182,7 +12227,7 @@ registers:
       - tc.h
       - 310
       used: true
-      use: [tc.c, yt921x_mirror_add, 1621]
+      use: [tc.c, yt921x_mirror_add, 1612]
     lsb: 0
     width: 4
     desc: Monitor port number.

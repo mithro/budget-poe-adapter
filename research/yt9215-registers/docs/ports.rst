@@ -21,7 +21,7 @@ runs with. The low eight bits of the two registers have the same layout.
 There are two ways to run a MAC. With :field:`PORT_CTRL.LINK_AN` set, the MAC takes speed
 and duplex from the in-band status of the SerDes. With it clear, the MAC is forced and uses the
 fields of the :ref:`forced-mode table <ports-forced>`. :field:`PORT_CTRL.PAUSE_AN` does the same
-for pause alone: :lx:`yt921x_serdes_config` sets it only for a 1000BASE-X or 2500BASE-X link with
+for pause alone: :lx:`yt921x_serdes_config` sets it only for a link other than SGMII with
 in-band negotiation enabled whose pause result the MAC may take.
 
 .. _ports-forced:

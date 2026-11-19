@@ -1,4 +1,6 @@
-# Packages needed to build the documentation (python3 -m sphinx -b html . _build/html).
+# Python packages needed to build the documentation (python3 -m sphinx -b html . _build/html).
+# The build also needs Node.js and the WaveDrom renderer:
+#   npm ci --prefix research/yt9215-registers/tools/wavedrom
 sphinx==9.2.0
 myst-parser==5.2.0
 furo==2025.12.19

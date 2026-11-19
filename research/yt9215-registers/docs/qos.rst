@@ -73,7 +73,7 @@ separately.
      - :val:`app_selector.PORT`
      - port default
      - :field:`PORT_QOS.PRIO`
-     - :ev:`inferred`
+     - :ev:`header`
 
 To trust DSCP first and the tag priority second, give :val:`app_selector.DSCP` weight 7 and
 both :val:`app_selector.CVLAN_PCP` and :val:`app_selector.SVLAN_PCP` weight 6. The :ev:`confirmed`

@@ -214,28 +214,33 @@ Egress
 A frame leaves with a customer tag unless the sending port is in :field:`VLAN_CTRL.UNTAG_PORTS` of
 its VLAN. :lx:`yt921x_vlan_add` :ev:`confirms <confirmed>` this field. No function of the
 :ref:`Linux driver <sources-list>` uses the registers of the
-:ref:`egress table <vlan-egress-table>`, so their functions are :ev:`inferred` from their names
+:ref:`tag register table <vlan-egress-table>`, so their functions are :ev:`inferred` from their names
 and from the names of the :ref:`vendor SDK <sources-list>` tables at the same addresses.
 
 .. _vlan-egress-table:
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 46 24
+   :widths: 22 14 42 22
 
    * - Register
+     - Direction
      - Inferred function
      - Vendor SDK table
    * - :reg:`TPID_EGR`
+     - egress
      - Four tag protocol identifiers to send
      - :sdk:`EGR_TPID_PROFILE`
    * - :reg:`PORT_EGR`
+     - egress
      - Choice among the four for each port
      - :sdk:`EGR_PORT_CTRLN`
    * - :reg:`VLAN_EGR_FILTER`
+     - egress
      - Ports that send to member ports only
      - :sdk:`L2_EGR_VLAN_FILTER_EN`
    * - :reg:`PVID_SEL`
+     - ingress
      - Ports that classify by the service tag
      - :sdk:`LOOK_UP_VLAN_SEL`
 

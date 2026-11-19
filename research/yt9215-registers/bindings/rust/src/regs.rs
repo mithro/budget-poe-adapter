@@ -143,7 +143,7 @@ pub const SPEED_V10: u32 = 0;
 pub const SPEED_V100: u32 = 1;
 /// Link speed codes: 1000 Mbit/s.
 pub const SPEED_V1000: u32 = 2;
-/// Link speed codes: 10 Gbit/s code. No YT921x port runs at this speed.
+/// Link speed codes: 10 Gbit/s.
 pub const SPEED_V10000: u32 = 3;
 /// Link speed codes: 2500 Mbit/s.
 pub const SPEED_V2500: u32 = 4;
@@ -264,7 +264,7 @@ pub const UDF_TYPE_L3: u32 = 1;
 /// User-defined field bases: Start of the layer 4 header.
 pub const UDF_TYPE_L4: u32 = 2;
 
-// ==== Reset, identification and global control ====
+// ==== Global control ====
 
 /// Reset control.
 pub const RST: u32 = 0x80000;
@@ -433,9 +433,9 @@ pub const CPU_TAG_TPID_TPID_RESET: u32 = 39304;
 
 /// CPU copy destination.
 pub const CPU_COPY: u32 = 0x180690;
-/// Always send such frames to the internal microcontroller port.
+/// Always send such frames to the built-in microcontroller port.
 pub const CPU_COPY_FORCE_INT_PORT: Field = Field { lsb: 2, width: 1 };
-/// Send such frames to the internal microcontroller on port 10.
+/// Send such frames to the built-in microcontroller on port 10.
 pub const CPU_COPY_TO_INT_CPU: Field = Field { lsb: 1, width: 1 };
 /// Send such frames to the external CPU port set in EXT_CPU_PORT.
 pub const CPU_COPY_TO_EXT_CPU: Field = Field { lsb: 0, width: 1 };
@@ -1227,7 +1227,7 @@ pub const fn port_prio_ord_app(app: u32) -> Field {
 /// All elements of [`port_prio_ord_app`] as one field.
 pub const PORT_PRIO_ORD_APP_ALL: Field = Field { lsb: 0, width: 24 };
 
-// ==== Port isolation, spanning tree and learning ====
+// ==== Port forwarding control ====
 
 /// Port isolation. `port` = 0..=10.
 pub const fn port_isolation(port: u32) -> u32 {
@@ -2077,7 +2077,7 @@ pub const METER_CTRL_METER_EN: Field = Field { lsb: 78, width: 1 };
 pub const METER_CTRL_TOKEN_OVERFLOW_EN: Field = Field { lsb: 77, width: 1 };
 /// Colours that are dropped.
 pub const METER_CTRL_DROP: Field = Field { lsb: 75, width: 2 };
-/// Drop green, yellow and red frames
+/// Drop every frame
 pub const METER_CTRL_DROP_GYR: u32 = 0;
 /// Drop yellow and red frames
 pub const METER_CTRL_DROP_YR: u32 = 1;
@@ -2093,7 +2093,7 @@ pub const METER_CTRL_UNIT: Field = Field { lsb: 71, width: 3 };
 pub const METER_CTRL_BYTE_MODE_INCLUDE_GAP: Field = Field { lsb: 70, width: 1 };
 /// Meter packets. Value 0 meters bytes.
 pub const METER_CTRL_PKT_MODE: Field = Field { lsb: 69, width: 1 };
-/// Select the RFC 2698 algorithm. Value 0 selects the RFC 4115 algorithm.
+/// Select the algorithm of RFC 2698. Value 0 selects that of RFC 4115.
 pub const METER_CTRL_RFC2698: Field = Field { lsb: 68, width: 1 };
 /// Committed burst size in tokens. The field crosses the boundary between words 1 and 2.
 pub const METER_CTRL_CBS: Field = Field { lsb: 52, width: 16 };

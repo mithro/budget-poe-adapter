@@ -602,9 +602,9 @@ def register_section(m, reg, guide_refs, mentions):
         rows.append(("Address range", "%s to %s" % (lit(hexaddr(M.lowest_addr(reg))),
                                                     lit(hexaddr(M.highest_addr(reg))))))
     size = "%d bits" % (32 * reg["words"])
-    if reg["words"] > 1:
-        size += " in %d words; :ref:`word order <access-wide>`" % reg["words"]
     rows.append(("Size", size))
+    if reg["words"] > 1:
+        rows.append((":ref:`Words <access-wide>`", str(reg["words"])))
     rows.append((":ref:`Access <legend-access>`", ACCESS[reg["access"]]))
     if reg.get("reset") is not None:
         rows.append(("Reset value", lit("0x%08x" % reg["reset"])))
@@ -856,7 +856,7 @@ def parts_page(m):
                 rows.append([":chip:`%s`" % c["name"], p, "no", "no", "no", "yes"])
             elif any(kinds):
                 rows.append([":chip:`%s`" % c["name"], p] + ["yes" if k else "no" for k in kinds] + ["no"])
-    out += table(["Part", "Port", "Built-in PHY", "xMII pins", "SerDes", "Internal CPU"], rows,
+    out += table(["Part", "Port", "Built-in PHY", "xMII pins", "SerDes", "Built-in microcontroller"], rows,
                  [20, 10, 18, 16, 16, 20])
     return out
 
@@ -868,7 +868,7 @@ def sdk_pages(m):
     out = target("reference-sdk")
     out += heading("Address regions and vendor SDK tables", "=")
     out += [
-        "The :ref:`vendor SDK <sources-list>` carries a machine-generated list of every register table of the chip: "
+        "The :ref:`vendor SDK <sources-list>` carries a list of every register table of the chip: "
         "`%s <%s>`__ has the addresses and `%s <%s>`__ the field positions. It has names but no "
         "descriptions. The region pages list, region by region, the registers this manual "
         "describes next to all %d SDK tables, so that a driver writer can see what exists beyond "

@@ -382,7 +382,7 @@ regions:
   title: Egress scheduler
 blocks:
 - id: system
-  title: Reset, identification and global control
+  title: Global control
   guide: bringup
   summary: Reset, feature enables, part identification, pin strap overrides, I/O voltage, the temperature
     sensor and the configuration byte store.
@@ -425,7 +425,7 @@ blocks:
   summary: Mapping of DSCP and VLAN priority to the internal priority and colour, and per-port priority
     sources.
 - id: l2
-  title: Port isolation, spanning tree and learning
+  title: Port forwarding control
   guide: forwarding
   summary: Which ports may forward to which, per-port spanning tree state, address learning control and
     the ageing timer.
@@ -736,7 +736,7 @@ enums:
       - 119
   - name: V10000
     value: 3
-    desc: 10 Gbit/s code. No YT921x port runs at this speed
+    desc: 10 Gbit/s
     linux:
       macro: YT921X_SPEED_10000
       src:
@@ -1384,7 +1384,7 @@ registers:
       fields: [MIB_EN]
   block: system
   title: Function enables
-  desc: Switches optional function blocks on. A block that is off ignores its own registers.
+  desc: Switches optional function blocks on.
   access: rw
   words: 1
   sdk:
@@ -1429,7 +1429,7 @@ registers:
       status: no SDK table
   block: system
   title: Chip identification
-  desc: 'Identifies the chip family. Read it right after reset, as described in
+  desc: 'Identifies the chip family. Read it before the reset, as described in
 
     :ref:`Identify the part <bringup-identify>`.'
   access: ro
@@ -2359,7 +2359,7 @@ registers:
       used: false
     lsb: 2
     width: 1
-    desc: Always send such frames to the internal microcontroller port.
+    desc: Always send such frames to the built-in microcontroller port.
     access: rw
     inferred: true
     sdk:
@@ -2374,7 +2374,7 @@ registers:
       used: false
     lsb: 1
     width: 1
-    desc: Send such frames to the internal microcontroller on port 10.
+    desc: Send such frames to the built-in microcontroller on port 10.
     access: rw
     sdk:
       status: same bits
@@ -11543,7 +11543,7 @@ registers:
         - tc.h
         - 283
         used: false
-      desc: Drop green, yellow and red frames
+      desc: Drop every frame
     - name: YR
       value: 1
       linux:
@@ -11647,7 +11647,8 @@ registers:
       used: false
     lsb: 68
     width: 1
-    desc: Select the RFC 2698 algorithm. Value 0 selects the RFC 4115 algorithm.
+    desc: Select the algorithm of `RFC 2698 <https://www.rfc-editor.org/rfc/rfc2698>`__. Value 0 selects
+      that of `RFC 4115 <https://www.rfc-editor.org/rfc/rfc4115>`__.
     access: rw
     inferred: true
     sdk:

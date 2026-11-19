@@ -18,8 +18,9 @@ runs with. The low eight bits of the two registers have the same layout.
 
 .. yt-bitfield:: PORT_CTRL
 
-There are two ways to run a MAC. With :field:`PORT_CTRL.LINK_AN` set, the MAC takes speed,
-duplex and pause from in-band SGMII status. With it clear, the MAC is forced and uses the
+There are two ways to run a MAC. With :field:`PORT_CTRL.LINK_AN` set, the MAC takes speed
+and duplex from in-band SGMII status, and with :field:`PORT_CTRL.PAUSE_AN` set it takes pause
+from there too. With it clear, the MAC is forced and uses the
 fields of the :ref:`forced-mode table <ports-forced>`.
 
 .. _ports-forced:
@@ -235,7 +236,7 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
      - :ev:`confirmed`
 
 The :ref:`Linux driver <sources-list>` names value 3 100BASEX and the |ds| lists the fibre mode of
-the extension ports as 100BASE-FX in the section "Extension Ports Fiber Mode".
+the extension ports under the heading "100FX" of the section "Extension Ports Fiber Mode".
 
 .. _ports-xmii:
 
@@ -292,10 +293,10 @@ its configuration.
      - :field:`XMII.EN`
      - 1
    * - :reg:`XMII` of port 8
-     - bit 26, no name
+     - bit 26
      - 1
    * - :reg:`XMII` of port 8
-     - bit 20, no name
+     - bit 20
      - 1
    * - :reg:`XMII` of port 8
      - :field:`XMII.RGMII_RX_DELAY_150PS`
@@ -328,7 +329,8 @@ its configuration.
      - :field:`PORT_CTRL.TX_MAC_EN`
      - 1
 
-The vendor driver writes four register values.
+The `YT9215RB vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c>`__ writes four register values. The value for :reg:`XMII` leaves out
+the delay fields.
 
 .. list-table::
    :header-rows: 1
@@ -340,15 +342,15 @@ The vendor driver writes four register values.
      - ``0x0000000f``
    * - :reg:`XMII_CTRL`
      - ``0x00000002``
-   * - :reg:`XMII` of port 8, without the delay fields
+   * - :reg:`XMII` of port 8
      - ``0x841c0000``
    * - :reg:`PORT_CTRL` of port 8
      - ``0x000001fa``
 
-The vendor driver writes :reg:`IO_LEVEL` only for 1.8 V RGMII pins. Its value 3 disagrees
+The `YT9215RB vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c>`__ writes :reg:`IO_LEVEL` only for 1.8 V RGMII pins. Its value 3 disagrees
 with :lx:`chip.h`, which gives 1.8 V as 2 in :field:`IO_LEVEL.YT9215_RGMII0` and
 :field:`IO_LEVEL.YT9215_RGMII1` and has no value 3. It is :ev:`not known` which is right. No
-source names bits 26 and 20 of :reg:`XMII`. The vendor driver does not write
+source names bits 26 and 20 of :reg:`XMII`. The :ref:`YT9215RB vendor driver <sources-list>` does not write
 :reg:`SERDES_CTRL` or :reg:`MDIO_POLLING`.
 
 .. _ports-mtu:
@@ -375,4 +377,4 @@ Energy Efficient Ethernet has one enable for the whole chip and one per port.
 2. Port: set the port's :field:`EEE_CTRL.EN` bit and :field:`EEE_VAL.DATA` of the port.
 
 The sequence is :ev:`confirmed` by :lx:`yt921x_set_eee`. A comment in that function calls the
-datasheet of the vendor poor on EEE, and no source explains what the four bits do individually.
+datasheet of the vendor poor on EEE; the |ds| is that datasheet, and no source explains what the four bits do individually.

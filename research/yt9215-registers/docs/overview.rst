@@ -21,11 +21,11 @@ Ports
 -----
 
 Ports 0 to 7 have a built-in Gigabit copper PHY that also runs at 10 and 100 Mbit/s. The
-:ref:`YT9215 family <reference-parts>` has five of them (ports 0 to 4) and the
+:ref:`YT9215 family <reference-parts>` has up to five of them (ports 0 to 4) and the
 :ref:`YT9218 family <reference-parts>` eight. Ports 8 and 9 are the external ports. Depending
 on the part each has an SGMII-class SerDes, parallel MAC pins or both. This manual calls the
-parallel MAC pins xMII; they carry MII, RMII or RGMII. Port 10 leads to a microcontroller
-inside the chip, which a host driver leaves alone. :ref:`reference-parts-ports` lists the
+parallel MAC pins xMII; they carry MII, RMII or RGMII. Port 10 leads to the built-in
+microcontroller, which a host driver leaves alone. :ref:`reference-parts-ports` lists the
 ports of every part.
 
 A host that wants to send and receive frames through the switch connects its own Ethernet MAC

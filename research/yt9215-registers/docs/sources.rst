@@ -50,11 +50,12 @@ of a public copy of the Motorcomm SDK. It
 holds a list of all register tables with field positions, and driver code that uses them,
 but no register descriptions. :ref:`reference-sdk` lists every table.
 
-The YT9215RB vendor driver is a single-file MDIO driver in the same repository as the vendor
-SDK.
+The :ref:`YT9215RB vendor driver <sources-list>` is the single file
+`yt9215rb.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c>`__ in the same repository as the
+:ref:`vendor SDK <sources-list>`.
 
-The datasheet gives the pins, the strap pins and the timing of the management interface. It
-contains no register addresses.
+The |ds| gives the pins, the strap pins and the timing of the management interface. The only
+register address it contains is that of :reg:`RST`, in its section 4.1.2.
 
 .. _evidence:
 
@@ -106,8 +107,8 @@ use of such a word is a link to its row.
 
 A statement with the level driver follows what the code does. A header definition that no
 code uses carries a name and often a list of values, which is taken at face value. An inferred
-statement is a reading of names and can be wrong. The level datasheet applies to pins and
-timing only, so it does not occur in the reference.
+statement is a reading of names and can be wrong. The level datasheet applies to pins, timing
+and the two reset bits of :reg:`RST`, whose notes in the reference cite the section of the |ds|.
 
 The driver level of a field means that some function of the :ref:`Linux driver <sources-list>`
 reads or writes the field. The reference names the first such function in the column "First used

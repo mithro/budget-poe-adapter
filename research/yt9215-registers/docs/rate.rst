@@ -171,7 +171,8 @@ and drops the colours selected in :field:`METER_CTRL.DROP`. Meters work only whi
 :field:`METER_CTRL.RFC2698` chooses between the two-rate algorithm of
 `RFC 2698 <https://www.rfc-editor.org/rfc/rfc2698>`__ and that of
 `RFC 4115 <https://www.rfc-editor.org/rfc/rfc4115>`__. :field:`METER_CTRL.COLOR_BLIND` makes
-the meter ignore a colour the frame already has.
+the meter ignore a colour the frame already has. Both meanings are :ev:`inferred` from the names
+of the fields.
 
 :lx:`yt921x_meter_config` :ev:`confirms <confirmed>` the committed bucket, the excess burst
 with an excess rate of 0 and the dropping of red frames. A non-zero excess rate and the
@@ -255,7 +256,8 @@ allowance, and only red frames are dropped.
 
 In byte mode a meter counts the frame bytes only, unless
 :field:`METER_CTRL.BYTE_MODE_INCLUDE_GAP` adds the per-frame overhead in
-:field:`PORT_RATE.GAP_VALUE`.
+:field:`PORT_RATE.GAP_VALUE`. The comment on the bit in :lx:`tc.h:290` reads "+GAP_VALUE bytes
+each packet"; the bit is a :ev:`header` definition.
 
 .. _rate-shaper:
 

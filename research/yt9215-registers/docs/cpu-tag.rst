@@ -22,7 +22,7 @@ port are to carry :ref:`the tag <cpu-tag-format>`.
 Set :field:`CPU_COPY.TO_EXT_CPU` for the port in :reg:`EXT_CPU_PORT`.
 :lx:`yt921x_chip_setup_dsa` of the :ref:`Linux driver <sources-list>` writes both registers
 in this way. It is :ev:`inferred` from their names that :field:`CPU_COPY.TO_INT_CPU` and
-:field:`CPU_COPY.FORCE_INT_PORT` direct such frames to the internal microcontroller on
+:field:`CPU_COPY.FORCE_INT_PORT` direct such frames to the built-in microcontroller on
 port 10.
 
 .. tab-set::
@@ -87,7 +87,7 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
      - .. _tag-rx-port-en:
 
        PORT_EN
-     - 1 when RX_PORT is valid
+     - 1 when :ref:`RX_PORT <tag-rx-port>` is valid
    * - 14:11
      - .. _tag-rx-port:
 
@@ -102,7 +102,7 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
      - .. _tag-code-en:
 
        CODE_EN
-     - 1 when CODE is valid
+     - 1 when :ref:`CODE <tag-code>` is valid
    * - 6:1
      - .. _tag-code:
 
@@ -163,7 +163,9 @@ Reason codes
      - :field:`FDB_IN2.COPY_TO_CPU`
 
 The six codes are the list ``enum yt921x_tag_code`` of :lx:`tag_yt921x.c:50`, whose comment
-calls the list incomplete. The reasons of :ref:`PORT_COPY <tag-code-port-copy>` and
+calls the list incomplete and adds "Some are configurable via RMA_CTRL_CPU_CODE". The column
+"Register that causes it" is :ev:`inferred` from the names of the codes and of the registers; no
+function of the :ref:`Linux driver <sources-list>` connects a code with a register. The reasons of :ref:`PORT_COPY <tag-code-port-copy>` and
 :ref:`FDB_COPY <tag-code-fdb-copy>` are :ev:`inferred` from the two names.
 
 :lx:`yt921x_tag_rcv` treats the codes in two groups.
@@ -223,7 +225,7 @@ switch sends the frame to exactly the ports of word 3 and removes the tag.
      - .. _tag-tx-port-en:
 
        PORT_EN
-     - 1 when TX_PORTS is valid
+     - 1 when :ref:`TX_PORTS <tag-tx-ports>` is valid
    * - 10:0
      - .. _tag-tx-ports:
 

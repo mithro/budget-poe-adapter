@@ -45,8 +45,8 @@ body[data-theme="dark"] {
 .yt-figure figcaption, .yt-figure .caption { font-size: 0.85em; color: var(--yt-dim); text-align: left; }
 .yt-scroll { overflow-x: auto; }
 svg.yt-d { display: block; max-width: 100%; height: auto; min-width: 560px; }
-svg.yt-d text { font-family: var(--font-stack--monospace, ui-monospace, Menlo, Consolas, monospace); font-size: 11px; fill: var(--yt-fg); }
-svg.yt-d .yt-s { font-size: 9px; fill: var(--yt-dim); }
+svg.yt-d text { font-family: var(--font-stack, system-ui, sans-serif); font-size: 15px; fill: var(--yt-fg); }
+svg.yt-d .yt-s { font-size: 13px; fill: var(--yt-dim); }
 svg.yt-d .yt-b { font-weight: 600; }
 svg.yt-d .yt-box { fill: var(--yt-box); stroke: var(--yt-line); stroke-width: 1; }
 svg.yt-d .yt-ro { fill: var(--yt-ro); }
@@ -75,10 +75,8 @@ table.docutils td { vertical-align: top; }
 /* Code examples: fit 92 columns in the content width. */
 div.highlight pre { font-size: 0.74rem; }
 
-/* Long register and macro names break inside a cell, so no table is wider than the text. */
+/* A long name in a table cell may break at the points the page marks, after an underscore. */
 table.docutils td code,
-table.docutils td .pre,
-table.docutils td a.external {
+table.docutils td .pre {
   white-space: normal;
-  overflow-wrap: anywhere;
 }

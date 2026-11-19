@@ -55,7 +55,7 @@ addrmap yt9218 {
 
     reg {
         name = "Function enables";
-        desc = "Switches optional function blocks on. A block that is off ignores its own registers.";
+        desc = "Switches optional function blocks on.";
         field { desc = "Enables the meters. The meter registers are METER_CTRL and PORT_METER."; sw = rw; hw = r; } METER[4:4];
         field { desc = "Enables the access control list. Its registers include ACL_KEY and ACL_ACT."; sw = rw; hw = r; } ACL[2:2];
         field { desc = "Enables the port counters of MIB_DATA."; sw = rw; hw = r; } MIB[1:1];
@@ -63,7 +63,7 @@ addrmap yt9218 {
 
     reg {
         name = "Chip identification";
-        desc = "Identifies the chip family. Read it right after reset, as described in Identify the part.";
+        desc = "Identifies the chip family. Read it before the reset, as described in Identify the part.";
         field { desc = "Family code. 0x9002 is the YT9215 family and 0x9001 the YT9218 family."; sw = r; hw = w; } MAJOR[31:16];
         field { desc = "Lower half of the chip ID. Its values are not catalogued."; sw = r; hw = w; } MINOR[15:0];
     } CHIP_ID @ 0x80008;
@@ -154,7 +154,7 @@ addrmap yt9218 {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s code. No YT921x port runs at this speed"; };
+            V10000 = 3 { desc = "10 Gbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "SerDes protocol."; sw = rw; hw = r; encode = serdes_mode_e; } MODE[9:7];
@@ -172,7 +172,7 @@ addrmap yt9218 {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s code. No YT921x port runs at this speed"; };
+            V10000 = 3 { desc = "10 Gbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "Take the pause settings from in-band negotiation. yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that RX_PAUSE and TX_PAUSE are then ignored."; sw = rw; hw = r; } PAUSE_AN[10:10];
@@ -193,7 +193,7 @@ addrmap yt9218 {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s code. No YT921x port runs at this speed"; };
+            V10000 = 3 { desc = "10 Gbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "1 while the link is up."; sw = r; hw = w; } LINK[8:8];
@@ -233,7 +233,7 @@ addrmap yt9218 {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s code. No YT921x port runs at this speed"; };
+            V10000 = 3 { desc = "10 Gbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "1 for full duplex."; sw = rw; hw = r; } DUPLEX_FULL[4:4];
@@ -1094,8 +1094,8 @@ addrmap yt9218 {
     reg {
         name = "CPU copy destination";
         desc = "Chooses where frames that are trapped or copied to the CPU go.";
-        field { desc = "Always send such frames to the internal microcontroller port."; sw = rw; hw = r; } FORCE_INT_PORT[2:2];
-        field { desc = "Send such frames to the internal microcontroller on port 10."; sw = rw; hw = r; } TO_INT_CPU[1:1];
+        field { desc = "Always send such frames to the built-in microcontroller port."; sw = rw; hw = r; } FORCE_INT_PORT[2:2];
+        field { desc = "Send such frames to the built-in microcontroller on port 10."; sw = rw; hw = r; } TO_INT_CPU[1:1];
         field { desc = "Send such frames to the external CPU port set in EXT_CPU_PORT."; sw = rw; hw = r; } TO_EXT_CPU[0:0];
     } CPU_COPY @ 0x180690;
 
@@ -1471,7 +1471,7 @@ addrmap yt9218 {
         desc = "96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates. Index: meter = 0 to 74.";
         regwidth = 128;
         enum meter_ctrl_drop_e {
-            GYR = 0 { desc = "Drop green, yellow and red frames"; };
+            GYR = 0 { desc = "Drop every frame"; };
             YR = 1 { desc = "Drop yellow and red frames"; };
             R = 2 { desc = "Drop red frames"; };
             NONE = 3 { desc = "Drop nothing and only colour the frame"; };
@@ -1483,7 +1483,7 @@ addrmap yt9218 {
         field { desc = "Token scale. Every token value is multiplied by 4 to the power of UNIT."; sw = rw; hw = r; } UNIT[73:71];
         field { desc = "Add PORT_RATE.GAP_VALUE bytes to each frame in byte mode."; sw = rw; hw = r; } BYTE_MODE_INCLUDE_GAP[70:70];
         field { desc = "Meter packets. Value 0 meters bytes."; sw = rw; hw = r; } PKT_MODE[69:69];
-        field { desc = "Select the RFC 2698 algorithm. Value 0 selects the RFC 4115 algorithm."; sw = rw; hw = r; } RFC2698[68:68];
+        field { desc = "Select the algorithm of RFC 2698. Value 0 selects that of RFC 4115."; sw = rw; hw = r; } RFC2698[68:68];
         field { desc = "Committed burst size in tokens. The field crosses the boundary between words 1 and 2."; sw = rw; hw = r; } CBS[67:52];
         field { desc = "Committed information rate in tokens per time slot."; sw = rw; hw = r; } CIR[51:34];
         field { desc = "Excess burst size in tokens. The field crosses the boundary between words 0 and 1."; sw = rw; hw = r; } EBS[33:18];

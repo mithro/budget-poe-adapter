@@ -13,7 +13,7 @@ unusual way: one register access takes four MDIO frames.
 The MDIO bus
 ------------
 
-MDC is a clock driven by the host. MDIO is a data line driven by either side. The pin list of the
+MDC is a clock driven by the host. MDIO is a data line driven by either side. Table 18, "Management Interface Pins", of the
 |ds| gives the MDIO pin of the switch the type open drain, and the note under table 38 gives the
 timing with a pull-up resistor of 1 kΩ. The board therefore needs a pull-up resistor on MDIO. A
 frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit PHY address, a
@@ -194,7 +194,9 @@ value, high half first. The READ bit has the same value in all four frames.
    :caption: Register write. All four frames are MDIO writes.
 
 With switch ID 0 the four register numbers are 1, 1, 3, 3 for a read and 0, 0, 2, 2 for a
-write.
+write. The bits of the register number are :ev:`header` definitions in :lx:`chip.h:11`, and the
+two sequences are :ev:`confirmed` by :lx:`yt921x_reg_mdio_read` and
+:lx:`yt921x_reg_mdio_write`.
 
 .. tab-set::
 
@@ -234,9 +236,11 @@ write.
          mdio.write(phy, 2, value >> 16)
          mdio.write(phy, 2, value & 0xFFFF)
 
-The complete functions are ``yt921x_reg_read()`` and ``yt921x_reg_write()`` in
-:download:`yt921x.c <../bindings/c/yt921x.c>` and ``YT921x.reg_read()`` and
-``YT921x.reg_write()`` in :download:`yt921x.py <../bindings/micropython/yt921x.py>`.
+The complete functions are :ref:`yt921x_reg_read() <bindings-api>` and
+:ref:`yt921x_reg_write() <bindings-api>` in :download:`yt921x.c <../bindings/c/yt921x.c>`
+and :ref:`YT921x.reg_read() <bindings-api>` and
+:ref:`YT921x.reg_write() <bindings-api>` in
+:download:`yt921x.py <../bindings/micropython/yt921x.py>`.
 
 The switch keeps the address between frames, so the four frames of one access must not be
 mixed with those of another. A driver that can be called from several threads takes one lock
@@ -319,7 +323,7 @@ sets a done bit, when it has finished.
 :lx:`yt921x_reg_wait` of the :ref:`Linux driver <sources-list>` polls such a bit every 10 ms
 and gives up after 100 ms; :lx:`smi.c:11` and :lx:`smi.c:12` define the two times. It is
 :ev:`not known` how long a command takes. The function
-``yt921x_reg_wait()`` of :download:`yt921x.c <../bindings/c/yt921x.c>` implements the same
+:ref:`yt921x_reg_wait() <bindings-api>` of :download:`yt921x.c <../bindings/c/yt921x.c>` implements the same
 loop.
 
 .. _access-check:

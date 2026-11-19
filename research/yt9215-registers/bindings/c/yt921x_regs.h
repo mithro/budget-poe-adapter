@@ -196,7 +196,7 @@ static inline void yt921x_bits_set(uint32_t *words, unsigned int lsb,
 #define YT921X_UDF_TYPE_L3 1u
 #define YT921X_UDF_TYPE_L4 2u
 
-/* ==== Reset, identification and global control ==== */
+/* ==== Global control ==== */
 
 /** Reset control */
 #define YT921X_RST UINT32_C(0x80000)
@@ -1035,7 +1035,7 @@ static inline void yt921x_bits_set(uint32_t *words, unsigned int lsb,
 #define YT921X_PORT_PRIO_ORD_APP_ALL_M UINT32_C(0x00ffffff)
 #define YT921X_PORT_PRIO_ORD_APP_ALL_S 0u
 
-/* ==== Port isolation, spanning tree and learning ==== */
+/* ==== Port forwarding control ==== */
 
 /** Port isolation. port = 0..10 */
 #define YT921X_PORT_ISOLATION(port) \

@@ -150,7 +150,7 @@ UDF_TYPE_L2 = const(0)
 UDF_TYPE_L3 = const(1)
 UDF_TYPE_L4 = const(2)
 
-# ==== Reset, identification and global control ====
+# ==== Global control ====
 
 # Reset control
 RST = const(0x80000)
@@ -1163,7 +1163,7 @@ def PORT_PRIO_ORD_APP_M(app):
 PORT_PRIO_ORD_APP_ALL_M = const(0x00ffffff)
 PORT_PRIO_ORD_APP_ALL_S = const(0)
 
-# ==== Port isolation, spanning tree and learning ====
+# ==== Port forwarding control ====
 
 # Port isolation. port = 0..10
 def PORT_ISOLATION(port):

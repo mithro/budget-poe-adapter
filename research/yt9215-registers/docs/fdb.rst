@@ -29,32 +29,38 @@ The sequence is :ev:`confirmed` by :lx:`yt921x_fdb_add`, :lx:`yt921x_fdb_wait` a
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 22 26 42
+   :widths: 8 22 22 24 24
 
    * - Value
      - Command
      - Effect
-     - Entry is selected by
+     - Selector
+     - Second selector
    * - 0
      - :val:`FDB_OP.OP.ADD`
      - write one entry
      - :ref:`key <fdb-entry>`
+     - none
    * - 1
      - :val:`FDB_OP.OP.DEL`
      - remove one entry
      - :ref:`key <fdb-entry>`
+     - none
    * - 2
      - :val:`FDB_OP.OP.GET_ONE`
      - read one entry
-     - :ref:`key <fdb-entry>` or :field:`FDB_OP.INDEX`
+     - :ref:`key <fdb-entry>`
+     - :field:`FDB_OP.INDEX`
    * - 3
      - :val:`FDB_OP.OP.GET_NEXT`
      - read the next entry
-     - :field:`FDB_OP.INDEX` with :field:`FDB_OP.NEXT_TYPE`
+     - :field:`FDB_OP.INDEX`
+     - :field:`FDB_OP.NEXT_TYPE`
    * - 4
      - :val:`FDB_OP.OP.FLUSH`
      - remove many entries
      - :field:`FDB_OP.FLUSH`
+     - none
 
 It is :ev:`not known` whether :val:`FDB_OP.OP.ADD` by key replaces an entry that has the same
 key. :lx:`yt921x_fdb_join` looks the entry up first and writes an existing entry back by its
@@ -185,7 +191,8 @@ To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put t
 3. Take the new index from :field:`FDB_RESULT.INDEX` and repeat until the result is
    :field:`NOTFOUND <FDB_RESULT.NOTFOUND>` or the index reaches 4095 (:const:`FDB_NUM` − 1).
 
-The three steps are :ev:`confirmed` by :lx:`yt921x_fdb_dump`.
+The three steps are :ev:`confirmed` by :lx:`yt921x_fdb_dump`, which reads each entry with
+:lx:`yt921x_fdb_read`.
 
 .. warning::
 
@@ -204,10 +211,10 @@ removes static ones as well. The command and the rows :val:`FDB_OP.FLUSH.PORT` a
 :ev:`confirmed` by :lx:`yt921x_fdb_flush_raw`. The other two rows have the level
 :ev:`header`.
 
-The command works on unicast entries, or on multicast entries when
-:field:`FDB_OP.FLUSH_MCAST` is set, so emptying the table takes one flush of each kind. The
-field has the level :ev:`header`: the comment on its definition in :lx:`chip.h:260` reads
-"ucast / mcast", and no function of the :ref:`Linux driver <sources-list>` sets it.
+It is :ev:`inferred` that the command works on unicast entries, or on multicast entries when
+:field:`FDB_OP.FLUSH_MCAST` is set, so that emptying the table takes one flush of each kind. The
+only source is the comment on the definition of the field in :lx:`chip.h:260`, which reads
+"ucast / mcast". No function of the :ref:`Linux driver <sources-list>` sets the field.
 
 .. _fdb-flush-table:
 
@@ -241,8 +248,8 @@ Flush the entries of a port when its link goes down or its spanning tree state c
 `fal_tiger_l2_fdb_addr_flush() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_l2.c#L385>`__
 of the :ref:`vendor SDK <sources-list>` refuses a flush command while
 :field:`FDB_HW_FLUSH.ON_LINKDOWN` is set, so use one method or the other. The meaning of the
-bit is :ev:`inferred` from its name and from that SDK function. No function of the Linux
-driver sets it.
+bit is :ev:`inferred` from its name and from that SDK function. No function of the
+:ref:`Linux driver <sources-list>` sets it.
 
 .. _fdb-ageing:
 

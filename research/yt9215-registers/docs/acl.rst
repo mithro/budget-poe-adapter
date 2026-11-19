@@ -64,11 +64,13 @@ alone and always apply; leave their positions in
 the mask at 0. The range flags of a layout, such as :field:`ACL_KEY.L4_DPORT_RANGE_EN`,
 are key-only bits too. With a range flag set, the key holds the lower bound of that field
 and the mask holds the upper bound in place of a bit mask.
+:lx:`yt921x_acl_rule_ext_parse_flow_entries` fills the two port ranges in this way.
 
 Types :val:`acl_type.UDF0` to :val:`acl_type.UDF7` match two-byte windows at configurable offsets.
 :reg:`UDF_CTRL` sets each window: the header it is counted from (:enum:`udf_type`) and the offset
 in bytes from the start of that header. The window is the two bytes at that offset. Key type
-:val:`acl_type.UDF0` holds windows 0 and 1, the next type windows 2 and 3, and so on.
+:val:`acl_type.UDF0` holds windows 0 and 1, the next type windows 2 and 3, and so on, as the
+comment in :lx:`tc.h:121` states.
 
 .. _acl-action:
 
@@ -169,7 +171,7 @@ Writing a rule
 --------------
 
 A block is changed as a whole: open it, write the new content, and commit. It is
-:ev:`inferred` from the names MODIFY and KEEP that the switch keeps using the old content
+:ev:`inferred` from the names :field:`ACL_BLK_CMD.MODIFY` and :field:`ACL_BLK_KEEP.KEEP` that the switch keeps using the old content
 until the commit.
 
 .. yt-diagram:: acl-sequence

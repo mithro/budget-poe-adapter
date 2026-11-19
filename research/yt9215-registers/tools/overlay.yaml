@@ -31,7 +31,7 @@ chips:
 
 blocks:
   - id: system
-    title: Reset, identification and global control
+    title: Global control
     guide: bringup
     summary: Reset, feature enables, part identification, pin strap overrides, I/O voltage, the temperature sensor and the configuration byte store.
   - id: cpu
@@ -67,7 +67,7 @@ blocks:
     guide: qos
     summary: Mapping of DSCP and VLAN priority to the internal priority and colour, and per-port priority sources.
   - id: l2
-    title: Port isolation, spanning tree and learning
+    title: Port forwarding control
     guide: forwarding
     summary: Which ports may forward to which, per-port spanning tree state, address learning control and the ageing timer.
   - id: fdb
@@ -202,7 +202,7 @@ enums:
   speed:
     title: Link speed codes
     desc: Speed code used by every SPEED field.
-    values: {'10': 10 Mbit/s, '100': 100 Mbit/s, '1000': 1000 Mbit/s, '10000': 10 Gbit/s code. No YT921x port runs at this speed, '2500': 2500 Mbit/s}
+    values: {'10': 10 Mbit/s, '100': 100 Mbit/s, '1000': 1000 Mbit/s, '10000': 10 Gbit/s, '2500': 2500 Mbit/s}
   app_selector:
     title: Priority sources
     desc: Index of a priority source in :reg:`PORT_PRIO_ORD`.
@@ -350,7 +350,7 @@ registers:
     block: system
     title: Function enables
     desc: |
-      Switches optional function blocks on. A block that is off ignores its own registers.
+      Switches optional function blocks on.
     fields:
       METER: {desc: "Enables the meters. The meter registers are :reg:`METER_CTRL` and :reg:`PORT_METER`."}
       ACL: {desc: "Enables the access control list. Its registers include :reg:`ACL_KEY` and :reg:`ACL_ACT`."}
@@ -360,7 +360,7 @@ registers:
     title: Chip identification
     access: ro
     desc: |
-      Identifies the chip family. Read it right after reset, as described in
+      Identifies the chip family. Read it before the reset, as described in
       :ref:`Identify the part <bringup-identify>`.
     add_fields:
       MINOR: {lsb: 0, width: 16, desc: "Lower half of the chip ID. Its values are not catalogued.", inferred: true}
@@ -512,8 +512,8 @@ registers:
     desc: |
       Chooses where frames that are trapped or copied to the CPU go.
     fields:
-      FORCE_INT_PORT: {desc: "Always send such frames to the internal microcontroller port.", inferred: true}
-      TO_INT_CPU: {desc: "Send such frames to the internal microcontroller on port 10."}
+      FORCE_INT_PORT: {desc: "Always send such frames to the built-in microcontroller port.", inferred: true}
+      TO_INT_CPU: {desc: "Send such frames to the built-in microcontroller on port 10."}
       TO_EXT_CPU: {desc: "Send such frames to the external CPU port set in :reg:`EXT_CPU_PORT`."}
 
   PORT_CTRL:
@@ -1381,12 +1381,12 @@ registers:
       TOKEN_OVERFLOW_EN: {desc: "Tokens that overflow the committed bucket spill into the excess bucket. The :lx:`comment on the field <tc.h:280>` reads \"RFC4115: yellow use unused green bw\"."}
       DROP:
         desc: "Colours that are dropped."
-        values: {GYR: "Drop green, yellow and red frames", YR: "Drop yellow and red frames", R: "Drop red frames", NONE: "Drop nothing and only colour the frame"}
+        values: {GYR: "Drop every frame", YR: "Drop yellow and red frames", R: "Drop red frames", NONE: "Drop nothing and only colour the frame"}
       COLOR_BLIND: {desc: "Ignore the colour the frame already has.", inferred: true}
       UNIT: {desc: "Token scale. Every token value is multiplied by 4 to the power of UNIT."}
       BYTE_MODE_INCLUDE_GAP: {desc: "Add :field:`PORT_RATE.GAP_VALUE` bytes to each frame in byte mode.", inferred: true}
       PKT_MODE: {desc: "Meter packets. Value 0 meters bytes."}
-      RFC2698: {desc: "Select the RFC 2698 algorithm. Value 0 selects the RFC 4115 algorithm.", inferred: true}
+      RFC2698: {desc: "Select the algorithm of `RFC 2698 <https://www.rfc-editor.org/rfc/rfc2698>`__. Value 0 selects that of `RFC 4115 <https://www.rfc-editor.org/rfc/rfc4115>`__.", inferred: true}
       CBS: {desc: "Committed burst size in tokens. The field crosses the boundary between words 1 and 2."}
       CIR: {desc: "Committed information rate in tokens per time slot."}
       EBS: {desc: "Excess burst size in tokens. The field crosses the boundary between words 0 and 1."}

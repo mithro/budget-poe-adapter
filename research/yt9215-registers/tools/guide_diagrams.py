@@ -35,42 +35,42 @@ def _box(s, x, y, w, h, title, lines=(), cls="", href=None):
     if href:
         s.open_link(href)
     s.rect(x, y, w, h, "yt-box " + cls, 4)
-    top = y + h / 2 - 6.5 * len(lines) + 4
+    top = y + h / 2 - 8 * len(lines) + 5
     s.text(x + w / 2, top, title, "yt-b")
     for i, t in enumerate(lines):
-        s.text(x + w / 2, top + 14 + 13 * i, t, "yt-s")
+        s.text(x + w / 2, top + 17 + 16 * i, t, "yt-s")
     if href:
         s.close_link()
 
 
 @diagram("system")
 def system(ln):
-    s = diagrams.Svg(748, 270, "A host microcontroller and the YT921x")
-    _box(s, 1, 60, 150, 150, "Host", ["microcontroller", "running the driver"])
-    s.rect(270, 1, 290, 268, "yt-box yt-rsv", 6)
-    s.text(415, 20, "YT921x", "yt-b")
-    _box(s, 290, 40, 250, 54, "Register file", ["32-bit registers, 32-bit addresses"],
+    s = diagrams.Svg(748, 290, "A host microcontroller and the YT921x")
+    _box(s, 1, 70, 130, 150, "Host", ["microcontroller", "running the", "driver"])
+    s.rect(250, 1, 290, 288, "yt-box yt-rsv", 6)
+    s.text(395, 22, "YT921x", "yt-b")
+    _box(s, 270, 36, 250, 72, "Register file", ["32-bit registers,", "32-bit addresses"],
          href=ln.page("reference/index"))
-    _box(s, 290, 112, 250, 54, "Switch core", ["VLAN, forwarding database, ACL, queues"],
+    _box(s, 270, 120, 250, 72, "Switch core", ["VLAN, forwarding database,", "ACL, queues"],
          href=ln.page("overview", "overview-frame-path"))
-    _box(s, 290, 184, 250, 66, "MDIO masters", ["internal: built-in PHYs, SerDes PCS",
-                                                  "external: PHYs on the MDIO pins"],
+    _box(s, 270, 204, 250, 72, "MDIO masters", ["internal: built-in PHYs",
+                                                  "external: PHYs on the pins"],
          href=ln.page("phy"))
-    s.arrow(151, 67, 290, 67)
-    s.arrow(290, 67, 151, 67)
-    s.text(210, 60, "MDC, MDIO")
-    s.text(210, 82, "register access", "yt-s")
-    s.arrow(151, 139, 290, 139)
-    s.arrow(290, 139, 151, 139)
-    s.text(210, 132, "CPU port")
-    s.text(210, 154, "Ethernet frames", "yt-s")
-    _box(s, 620, 30, 127, 58, "Ports 0 to 7", ["built-in copper PHY"], href=ln.page("ports"))
-    _box(s, 620, 106, 127, 58, "Ports 8 and 9", ["SerDes or xMII"],
+    s.arrow(131, 72, 270, 72)
+    s.arrow(270, 72, 131, 72)
+    s.text(200, 64, "MDC, MDIO")
+    s.text(200, 90, "register access", "yt-s")
+    s.arrow(131, 156, 270, 156)
+    s.arrow(270, 156, 131, 156)
+    s.text(200, 148, "CPU port")
+    s.text(200, 174, "Ethernet frames", "yt-s")
+    _box(s, 600, 36, 147, 72, "Ports 0 to 7", ["built-in", "copper PHY"], href=ln.page("ports"))
+    _box(s, 600, 120, 147, 72, "Ports 8 and 9", ["SerDes or xMII"],
          href=ln.page("ports", "ports-external"))
-    _box(s, 620, 182, 127, 58, "Port 10", ["internal", "microcontroller"])
-    for y in (59, 135, 211):
-        s.arrow(560, y, 620, y)
-        s.arrow(620, y, 560, y)
+    _box(s, 600, 204, 147, 72, "Port 10", ["built-in", "microcontroller"])
+    for y in (72, 156, 240):
+        s.arrow(540, y, 600, y)
+        s.arrow(600, y, 540, y)
     return s
 
 
@@ -97,14 +97,14 @@ def frame_path(ln):
 def _mdio_cells(read):
     drive = "yt-ro" if read else ""
     return [
-        {"units": 6, "title": "PRE", "sub": "32 ones", "top": "32 bits"},
+        {"units": 5, "title": "PRE", "sub": "32 ones", "top": "32 bits"},
         {"units": 3, "title": "ST", "sub": "01", "top": "2"},
-        {"units": 3, "title": "OP", "sub": "10 read" if read else "01 write", "top": "2"},
-        {"units": 5, "title": "PHYAD", "sub": "0x1d or 0x00", "top": "5"},
-        {"units": 5, "title": "REGAD", "sub": "switch ID, phase", "top": "5", "cls": "yt-sp"},
+        {"units": 5, "title": "OP", "sub": "10 read" if read else "01 write", "top": "2"},
+        {"units": 7, "title": "PHYAD", "sub": "0x1d or 0x00", "top": "5"},
+        {"units": 8, "title": "REGAD", "sub": "switch ID, phase", "top": "5", "cls": "yt-sp"},
         {"units": 3, "title": "TA", "sub": "Z0" if read else "10", "top": "2", "cls": drive},
-        {"units": 13, "title": "DATA", "sub": "driven by the switch" if read else "driven by the host",
-         "top": "16 bits, most significant first", "cls": drive},
+        {"units": 11, "title": "DATA", "sub": "driven by the switch" if read else "driven by the host",
+         "top": "16 bits, highest first", "cls": drive},
     ]
 
 
@@ -263,15 +263,15 @@ def tag_word3(ln):
 
 @diagram("token-bucket")
 def token_bucket(ln):
-    s = diagrams.Svg(748, 150, "Token bucket of a meter or shaper")
-    _box(s, 1, 40, 170, 60, "Time slot", ["SLOT × 8 core clock periods"],
+    s = diagrams.Svg(748, 112, "Token bucket of a meter or shaper")
+    _box(s, 1, 11, 170, 90, "Time slot", ["SLOT × 8 core", "clock periods"],
          href=ln.reg("METER_SLOT"))
-    _box(s, 250, 30, 200, 80, "Bucket", ["holds up to CBS tokens", "token size scales with 4^UNIT"],
+    _box(s, 250, 1, 230, 110, "Bucket", ["holds up to CBS tokens", "token size scales", "with 4^UNIT"],
          cls="yt-sp")
-    _box(s, 540, 40, 207, 60, "Frame", ["spends tokens for its length,", "or is coloured or delayed"])
-    s.arrow(171, 70, 250, 70)
-    s.text(210, 62, "+ CIR")
-    s.text(210, 86, "each slot", "yt-s")
-    s.arrow(450, 70, 540, 70)
-    s.text(495, 62, "tokens")
+    _box(s, 560, 1, 187, 110, "Frame", ["spends tokens for", "its length, or is", "coloured or delayed"])
+    s.arrow(171, 56, 250, 56)
+    s.text(210, 48, "+ CIR")
+    s.text(210, 74, "each slot", "yt-s")
+    s.arrow(480, 56, 560, 56)
+    s.text(520, 48, "tokens")
     return s

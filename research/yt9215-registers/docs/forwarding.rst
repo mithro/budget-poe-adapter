@@ -17,8 +17,9 @@ to. Setting bit *n* in the register of port *p* blocks the direction from *p* to
 
 .. yt-bitfield:: PORT_ISOLATION
 
-Isolation separates ports into groups without VLANs. The table gives the bits to clear in
-:reg:`PORT_ISOLATION`; every other bit of the register is set.
+Isolation separates ports into groups without VLANs. Each row of the table is one
+arrangement of ports. The column "Bits to clear" names the bits of :reg:`PORT_ISOLATION` that are
+0 for the port; every other bit of that register is 1.
 
 .. list-table::
    :header-rows: 1

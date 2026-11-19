@@ -96,7 +96,8 @@ describes a clause 45 transfer.
            :start-after: # [phy]
            :end-before: # [phy end]
 
-The functions ``yt921x_phy_read()`` and ``yt921x_phy_write()`` of
+The functions :ref:`yt921x_phy_read() <bindings-api>` and
+:ref:`yt921x_phy_write() <bindings-api>` of
 :download:`yt921x.c <../bindings/c/yt921x.c>` implement the sequence for both masters.
 
 .. _phy-registers:

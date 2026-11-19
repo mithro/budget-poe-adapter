@@ -8,15 +8,15 @@ description.
 """
 from html import escape
 
-FONT = 11          # px, monospace
-CHAR = FONT * 0.602  # advance of one monospace character
-SMALL = 9
-CHAR_S = SMALL * 0.602
+FONT = 15          # px, the sans-serif font of the page
+CHAR = FONT * 0.58  # upper estimate of the mean advance of one character
+SMALL = 13
+CHAR_S = SMALL * 0.58
 
 #: Colours for an SVG saved as a file. Inline SVGs use the page style sheet.
 STYLE = """
-.yt-d text{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;fill:#1c1e21}
-.yt-d .yt-s{font-size:9px;fill:#5a6270}
+.yt-d text{font-family:system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;fill:#1c1e21}
+.yt-d .yt-s{font-size:13px;fill:#5a6270}
 .yt-d .yt-b{font-weight:600}
 .yt-d .yt-box{fill:#eef4fb;stroke:#4b5563;stroke-width:1}
 .yt-d .yt-ro{fill:#eaf6ec}
@@ -92,22 +92,25 @@ class Svg:
 
 # ---------------------------------------------------------------- bit fields
 
-CELL = 23
+ROW_BITS = 16      # bits drawn in one row, so that a bit is wide enough for a name
+WIDTH = 748
 PAD = 6
 
 
 def bitfield(label, words, fields, bits=32):
-    """Register diagram: one row of ``bits`` bits per word, the highest bit on
-    the left.
+    """Register diagram: rows of at most 16 bits, the highest bit on the left.
 
     ``fields`` is a list of dicts with ``name``, ``lsb``, ``width`` and
     optionally ``cls`` (box class), ``href``, ``tip`` and ``ticks`` (bit
-    numbers where a thin divider is drawn, for arrays).
+    numbers where a thin divider is drawn, for arrays). A field that crosses
+    the end of a row is drawn in both rows.
     """
-    cell = CELL * 32 // bits
+    per = min(bits, ROW_BITS)
+    cell = (WIDTH - 2 * PAD) // per
+    total = words * bits
     rows = []
-    for w in range(words):
-        lo, hi = bits * w, bits * w + bits - 1
+    for lo in range(total - per, -1, -per):
+        hi = lo + per - 1
         segs = []
         for f in fields:
             a, b = max(f["lsb"], lo), min(f["lsb"] + f["width"] - 1, hi)
@@ -122,19 +125,19 @@ def bitfield(label, words, fields, bits=32):
             top = a - 1
         if top >= lo:
             full.append((lo, top, None))
-        tall = 30
+        tall = 38
         for a, b, f in full:
-            if f and tw(f["name"]) > (b - a + 1) * cell - 4:
-                tall = max(tall, tw(f["name"]) + 12)
+            if f and tw(f["name"]) > (b - a + 1) * cell - 6:
+                tall = max(tall, len(f["name"]) * FONT * 0.7 + 16)
         rows.append((lo, full, tall))
-    width = bits * cell + 2 * PAD
-    height = sum(18 + t + 8 for _, _, t in rows) + 2
+    width = per * cell + 2 * PAD
+    height = sum(20 + t + 10 for _, _, t in rows) + 2
     s = Svg(width, height, label)
     y = 2
     for lo, full, tall in rows:
-        ny, by = y + 12, y + 18
+        ny, by = y + 15, y + 20
         for a, b, f in full:
-            x = PAD + (bits - 1 - (b - lo)) * cell
+            x = PAD + (per - 1 - (b - lo)) * cell
             w = (b - a + 1) * cell
             if f and f.get("href"):
                 s.open_link(f["href"], f.get("tip"))
@@ -142,20 +145,20 @@ def bitfield(label, words, fields, bits=32):
             if f:
                 for t in f.get("ticks", ()):
                     if a < t <= b:
-                        tx = PAD + (bits - 1 - (t - lo)) * cell + cell
-                        s.line(tx, by + tall - 6, tx, by + tall, "yt-thin")
-                if tw(f["name"]) <= w - 4:
-                    s.text(x + w / 2, by + tall / 2 + 4, f["name"])
+                        tx = PAD + (per - 1 - (t - lo)) * cell + cell
+                        s.line(tx, by + tall - 7, tx, by + tall, "yt-thin")
+                if tw(f["name"]) <= w - 6:
+                    s.text(x + w / 2, by + tall / 2 + 5, f["name"])
                 else:
-                    s.text(x + w / 2 + 4, by + tall / 2, f["name"], rotate=True)
+                    s.text(x + w / 2 + 5, by + tall / 2, f["name"], rotate=True)
             if f and f.get("href"):
                 s.close_link()
             if a == b:
                 s.text(x + w / 2, ny, str(a), "yt-s")
             else:
-                s.text(x + 3, ny, str(b), "yt-s", "start")
-                s.text(x + w - 3, ny, str(a), "yt-s", "end")
-        y = by + tall + 8
+                s.text(x + 4, ny, str(b), "yt-s", "start")
+                s.text(x + w - 4, ny, str(a), "yt-s", "end")
+        y = by + tall + 10
     return s
 
 
@@ -172,30 +175,30 @@ def strip(label, rows, width=748, unit_labels=False):
     left = left + 12 if left else 0
     row_h = 0
     for _, cells in rows:
-        row_h = max(row_h, 14 + (40 if any(c.get("sub") for c in cells) else 28) + 10)
+        row_h = max(row_h, 18 + (46 if any(c.get("sub") for c in cells) else 32) + 10)
     s = Svg(width, row_h * len(rows) + 2, label)
     y = 2
     for name, cells in rows:
         total = sum(c["units"] for c in cells)
         scale = (width - left - 2) / total
-        box_h = row_h - 24
+        box_h = row_h - 28
         if name:
-            s.text(0, y + 14 + box_h / 2 + 4, name, "yt-b", "start")
+            s.text(0, y + 18 + box_h / 2 + 5, name, "yt-b", "start")
         x = left + 1
         for c in cells:
             w = c["units"] * scale
             if c.get("href"):
                 s.open_link(c["href"], c.get("tip"))
-            s.rect(x, y + 14, w, box_h, "yt-box " + c.get("cls", ""))
+            s.rect(x, y + 18, w, box_h, "yt-box " + c.get("cls", ""))
             if c.get("sub"):
-                s.text(x + w / 2, y + 14 + box_h / 2 - 2, c["title"], "yt-b")
-                s.text(x + w / 2, y + 14 + box_h / 2 + 12, c["sub"], "yt-s")
+                s.text(x + w / 2, y + 18 + box_h / 2 - 3, c["title"], "yt-b")
+                s.text(x + w / 2, y + 18 + box_h / 2 + 14, c["sub"], "yt-s")
             else:
-                s.text(x + w / 2, y + 14 + box_h / 2 + 4, c["title"], "yt-b")
+                s.text(x + w / 2, y + 18 + box_h / 2 + 5, c["title"], "yt-b")
             if c.get("href"):
                 s.close_link()
             if c.get("top"):
-                s.text(x + w / 2, y + 10, c["top"], "yt-s")
+                s.text(x + w / 2, y + 13, c["top"], "yt-s")
             x += w
         y += row_h
     return s
@@ -252,7 +255,7 @@ def pipeline(label, stages, per_row=4, width=748):
     gap = 26
     bw = (width - 2 - gap * (per_row - 1)) / per_row
     lines = max(len(st.get("lines", ())) for st in stages)
-    bh = 26 + 13 * lines + 6
+    bh = 28 + 16 * lines + 8
     nrows = (len(stages) + per_row - 1) // per_row
     s = Svg(width, nrows * (bh + gap) - gap + 2, label)
     for i, st in enumerate(stages):
@@ -261,9 +264,9 @@ def pipeline(label, stages, per_row=4, width=748):
         if st.get("href"):
             s.open_link(st["href"])
         s.rect(x, y, bw, bh, "yt-box " + st.get("cls", ""), 4)
-        s.text(x + bw / 2, y + 17, st["title"], "yt-b")
+        s.text(x + bw / 2, y + 20, st["title"], "yt-b")
         for k, t in enumerate(st.get("lines", ())):
-            s.text(x + bw / 2, y + 33 + 13 * k, t, "yt-s")
+            s.text(x + bw / 2, y + 39 + 16 * k, t, "yt-s")
         if st.get("href"):
             s.close_link()
         if i + 1 < len(stages):
@@ -284,8 +287,8 @@ def addrmap(label, rows, width=748):
     A row is a dict with ``addr`` (text), ``name``, ``title``, ``note`` and
     optionally ``href``; ``gap`` set draws a break above the row.
     """
-    row_h = 26
-    left = 78
+    row_h = 30
+    left = 84
     height = sum(row_h + (8 if r.get("gap") else 0) for r in rows) + 2
     s = Svg(width, height, label)
     y = 1
@@ -295,12 +298,12 @@ def addrmap(label, rows, width=748):
         if r.get("href"):
             s.open_link(r["href"])
         s.rect(left, y, width - left - 1, row_h, "yt-box " + r.get("cls", ""))
-        s.text(left + 10, y + 17, r["name"], "yt-b", "start")
-        s.text(left + 150, y + 17, r["title"], "", "start")
-        s.text(width - 10, y + 17, r.get("note", ""), "yt-s", "end")
+        s.text(left + 10, y + 20, r["name"], "yt-b", "start")
+        s.text(left + 130, y + 20, r["title"], "", "start")
+        s.text(width - 10, y + 20, r.get("note", ""), "yt-s", "end")
         if r.get("href"):
             s.close_link()
-        s.text(left - 8, y + 17, r["addr"], "", "end")
+        s.text(left - 8, y + 20, r["addr"], "", "end")
         y += row_h
     return s
 
@@ -309,7 +312,8 @@ def addrmap(label, rows, width=748):
 
 def smi_timing(label="MDC and MDIO timing of the management interface"):
     """MDC/MDIO timing with the six parameters of the datasheet."""
-    s = Svg(748, 250, label)
+    s = Svg(748, 264, label)
+    s.add('<g transform="translate(0 12)">')
     x0, per = 110, 200
     hi, lo = 40, 80
     s.text(8, 64, "MDC", "yt-b", "start")
@@ -358,4 +362,5 @@ def smi_timing(label="MDC and MDIO timing of the management interface"):
     s.text((c + 740) / 2, ym + 4, "bit n − 1")
     s.line(r2, hi, r2, 246, "yt-dash")
     dim(r2, c, 242, "t6", above=True)
+    s.add("</g>")
     return s

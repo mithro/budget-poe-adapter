@@ -66,22 +66,9 @@ header
 of the :ref:`vendor SDK <sources-list>` agrees with the Linux name, so this manual uses the Linux
 names.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 16 42 42
-
-   * - Offset
-     - Name in this manual
-     - Name in the YT9215RB vendor driver
-   * - ``0x4c``
-     - :counter:`RX_OVERSIZE_ERR`
-     - ``RxOverFlow``
-   * - ``0x60``
-     - :counter:`TX_UNDERSIZE_ERR`
-     - ``TxUnderRun``
-   * - ``0x9c``
-     - :counter:`TX_PKT`
-     - ``TxExcDefer``
+That table holds two more names that differ, both in entries that are commented out:
+"TxUnderRun" at the offset ``0x60``, where the Linux name is :counter:`TX_UNDERSIZE_ERR`, and
+"TxExcDefer" at the offset ``0x9c``, where the Linux name is :counter:`TX_PKT`.
 
 .. _mib-clear:
 
@@ -130,6 +117,7 @@ The fields of :reg:`MIB_CTRL` have the level :ev:`header`: :lx:`mib.h` defines t
 function of the :ref:`Linux driver <sources-list>` uses them.
 
 It is :ev:`not known` whether :field:`MIB_CTRL.CLEAN` clears itself, which is why the first write
-puts it back to 0. The function ``fal_tiger_stat_mib_clear_all()`` leaves
+puts it back to 0. The function
+`fal_tiger_stat_mib_clear_all() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L69>`__ leaves
 :field:`MIB_CTRL.ALL_PORT` at 0 for a clear of every port, and the effect of that bit is
 :ev:`not known`.

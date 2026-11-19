@@ -113,7 +113,8 @@ The three steps are :ev:`confirmed` by :lx:`yt921x_edata_read`.
            :start-after: # [bringup]
            :end-before: # [bringup end]
 
-The functions ``yt921x_reset()`` and ``yt921x_identify()`` are in
+The functions :ref:`yt921x_reset() <bindings-api>` and
+:ref:`yt921x_identify() <bindings-api>` are in
 :download:`yt921x.c <../bindings/c/yt921x.c>`.
 
 .. _bringup-sch:
@@ -133,7 +134,8 @@ Core clock
 need it, because their time slots count core clock periods. :ref:`rate-tokens` uses the
 period of the :ref:`clock table <bringup-clock-table>`. The periods are those that
 :lx:`yt921x_chip_detect` assigns for each value. The frequencies are the names of the values
-in :lx:`chip.h:178`.
+in :lx:`chip.h:179`. A comment in :lx:`chip.h:178` adds "unknown: 167M", so a part may run from a
+fourth clock that has no value name.
 
 .. _bringup-clock-table:
 

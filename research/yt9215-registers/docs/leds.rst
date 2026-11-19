@@ -100,7 +100,7 @@ The blink cycle of a forced LED depends on its element of :field:`LED2_PORT.FORC
 
 The cycle of :field:`LED1_PORT.OTHER_BLINK` is 512 ms shifted right by the field value, so its
 shortest cycle is 64 ms (:const:`LED_BLINK_MIN`). :field:`LED1_PORT.BLINK_DUTY` sets the on
-fraction for all LEDs of the port. The shift rule of :field:`LED1_PORT.OTHER_BLINK` is the comment
+fraction for all LEDs of the port, which is :ev:`confirmed` by :lx:`yt921x_led_blink_set`. The shift rule of :field:`LED1_PORT.OTHER_BLINK` is the comment
 on the field in :lx:`leds.h:29`, and the shift rule of :field:`LED2_PORT.FORCE_BLINK` is the
 comment in :lx:`leds.h:47`. :lx:`yt921x_led_blink_set` writes the three fields.
 

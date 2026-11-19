@@ -164,7 +164,7 @@
         </register>
         <register>
           <name>FUNC</name>
-          <description>Switches optional function blocks on. A block that is off ignores its own registers.</description>
+          <description>Switches optional function blocks on.</description>
           <addressOffset>0x4</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -194,7 +194,7 @@
         </register>
         <register>
           <name>CHIP_ID</name>
-          <description>Identifies the chip family. Read it right after reset, as described in Identify the part.</description>
+          <description>Identifies the chip family. Read it before the reset, as described in Identify the part.</description>
           <addressOffset>0x8</addressOffset>
           <size>32</size>
           <access>read-only</access>
@@ -450,7 +450,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s code. No YT921x port runs at this speed</description>
+                  <description>10 Gbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -557,7 +557,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s code. No YT921x port runs at this speed</description>
+                  <description>10 Gbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -658,7 +658,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s code. No YT921x port runs at this speed</description>
+                  <description>10 Gbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -815,7 +815,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s code. No YT921x port runs at this speed</description>
+                  <description>10 Gbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -3586,14 +3586,14 @@
             </field>
             <field>
               <name>TO_INT_CPU</name>
-              <description>Send such frames to the internal microcontroller on port 10.</description>
+              <description>Send such frames to the built-in microcontroller on port 10.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>FORCE_INT_PORT</name>
-              <description>Always send such frames to the internal microcontroller port.</description>
+              <description>Always send such frames to the built-in microcontroller port.</description>
               <bitOffset>2</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -9211,7 +9211,7 @@
               </field>
               <field>
                 <name>RFC2698</name>
-                <description>Select the RFC 2698 algorithm. Value 0 selects the RFC 4115 algorithm.</description>
+                <description>Select the algorithm of RFC 2698. Value 0 selects that of RFC 4115.</description>
                 <bitOffset>4</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -9253,7 +9253,7 @@
                 <enumeratedValues>
                   <enumeratedValue>
                     <name>GYR</name>
-                    <description>Drop green, yellow and red frames</description>
+                    <description>Drop every frame</description>
                     <value>0</value>
                   </enumeratedValue>
                   <enumeratedValue>

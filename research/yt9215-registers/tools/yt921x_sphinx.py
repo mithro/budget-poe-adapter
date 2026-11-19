@@ -240,6 +240,24 @@ def config_inited(app, config):
     config.html_static_path.append(os.path.join(docs, "_static"))
 
 
+def break_names(app, doctree, docname):
+    """Let a long name in a table cell break after an underscore, not inside a word."""
+    if app.builder.format != "html":
+        return
+    for entry in doctree.findall(nodes.entry):
+        for text in list(entry.findall(nodes.Text)):
+            value = text.astext()
+            if "_" not in value.strip("_") or len(value) < 12 or " " in value:
+                continue
+            parts = value.split("_")
+            new = []
+            for i, part in enumerate(parts):
+                new.append(nodes.Text(part + ("_" if i < len(parts) - 1 else "")))
+                if i < len(parts) - 1:
+                    new.append(nodes.raw("", "<wbr>", format="html"))
+            text.parent.replace(text, [n for n in new if n.astext()])
+
+
 def setup(app):
     app.add_domain(YtDomain)
     for kind in ("reg", "field", "blk", "enum", "counter", "const", "chip", "sdk", "val"):
@@ -250,4 +268,5 @@ def setup(app):
     app.add_directive("yt-diagram", Diagram)
     app.add_css_file("yt921x.css")
     app.connect("config-inited", config_inited)
+    app.connect("doctree-resolved", break_names)
     return {"parallel_read_safe": True, "parallel_write_safe": True}

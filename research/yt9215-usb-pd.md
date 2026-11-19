@@ -136,7 +136,31 @@ With Rp off and VBUS off, a sink sees an unpowered port and waits. This has four
 - The BMC driver must stay off through reset, which the [strap pins](#pins-used) of option C do not give for free.
 - The reset state of the GPIO pins decides whether all this holds before firmware runs. The datasheet gives the strap pulls and not the reset state of every GPIO [**U**](#evidence-codes).
 
-The grant also sets what the port may advertise. The Rp value and the current in Source_Capabilities are chosen after the grant, from the [power budget per PoE class](poe.md#5-raspberry-pi-5-power-budget-against-poe-classes), less what the switch itself draws.
+<a id="power-budget"></a>
+
+### Power budget hand-off
+
+What the port offers is derived from what the upstream PoE switch grants, so nothing is offered before the grant is known. The PoE side hands over three values:
+
+| Value | Source |
+|---|---|
+| Granted power at the PoE input | Classification result or LLDP allocation |
+| Efficiency of the 5 V converter | Converter design |
+| Power the adapter uses itself | Measurement of the switch and its supplies |
+
+The current available at 5 V is the granted power times the efficiency, less the adapter's own power, divided by 5 V. The [power budget per PoE class](poe.md#5-raspberry-pi-5-power-budget-against-poe-classes) gives the figures before the adapter's own use. The offer follows from that current [**I**](#evidence-codes):
+
+| Current available at 5 V | Rp | Source_Capabilities |
+|---|---|---|
+| Under 1.5 A | Off | None |
+| 1.5 A to under 3 A | 12 kΩ | None |
+| 3 A to under 5 A | 12 kΩ and 7.5 kΩ | 5 V at the available current |
+| 5 A or more | 12 kΩ and 7.5 kΩ | 5 V at 5 A |
+
+- Below 3 A the port advertises by Rp alone. PD 3 uses the two Rp values for collision avoidance, so a PD source has to be able to show the 3 A value.
+- An offer above 3 A relies on the [captive cable](#captive-cable).
+- If an LLDP allocation changes while a sink is attached, the source sends a new Source_Capabilities message. If the new budget is below the running contract, the sink has to accept the lower offer before the adapter may count on it.
+- The source enforces the offer with the current limit of the VBUS load switch, because a sink is not bound by Rp.
 
 ## What the YT9215 offers
 

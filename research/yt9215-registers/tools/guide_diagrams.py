@@ -1,9 +1,10 @@
-"""The block, sequence and layout diagrams of the guide pages, by the name the
+"""The block, sequence and frame diagrams of the guide pages, by the name the
 yt-diagram directive uses.
 
 Each function takes a link builder (``yt921x_sphinx.Links``) and returns a
-``diagrams.Svg``. The register and timing diagrams are WaveDrom sources in
-the pages themselves.
+``diagrams.Svg``. The timing diagrams are WaveDrom sources in the pages
+themselves, and ``gen_docs.py`` builds the WaveDrom sources of the register
+diagrams.
 """
 import diagrams
 import model as M

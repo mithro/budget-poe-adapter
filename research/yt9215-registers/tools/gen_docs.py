@@ -272,9 +272,11 @@ def range_text(first, count):
 # ----------------------------------------------------------------- diagrams
 
 def register_diagram(m, reg, family=None, layout=None):
-    """WaveDrom source of the diagram of one register, and the label and the
-    tooltip of each name in it."""
-    fields, links = [], {}
+    """WaveDrom sources of the diagram of one register, the highest word first.
+
+    Each source comes with the ``(label, tooltip)`` of its named fields,
+    lowest bit first."""
+    fields = []
 
     def add(f, lay, kind):
         sym = M.fsym(reg, f, lay)
@@ -282,12 +284,10 @@ def register_diagram(m, reg, family=None, layout=None):
         if f.get("array") and not M.packed(f):
             for idx, lsb, width in M.elems(f):
                 name = f["name"] + "".join("[%d]" % i for i in idx)
-                fields.append({"name": name, "lsb": lsb, "width": width, "type": kind})
-                links[name] = link
+                fields.append({"name": name, "lsb": lsb, "width": width, "type": kind, "link": link})
             return
-        name = M.fdisplay(f)
-        fields.append({"name": name, "lsb": f["lsb"], "width": f["width"], "type": kind})
-        links[name] = link
+        fields.append({"name": M.fdisplay(f), "lsb": f["lsb"], "width": f["width"], "type": kind,
+                       "link": link})
 
     for f in M.visible_fields(reg, family):
         add(f, None, wavedrom_diagrams.TYPE_READ_ONLY if f["access"] == "ro" else None)
@@ -296,7 +296,7 @@ def register_diagram(m, reg, family=None, layout=None):
             if f.get("key_only") and reg["id"] != "ACL_KEY":
                 continue
             add(f, layout, wavedrom_diagrams.TYPE_LAYOUT)
-    return wavedrom_diagrams.register(fields, 32 * reg["words"]), links
+    return wavedrom_diagrams.register(fields, 32 * reg["words"])
 
 
 # -------------------------------------------------------------- guide scan
@@ -681,7 +681,8 @@ def index_page(m):
         "The reference describes every register of this manual, grouped by function. Each "
         "register has its address, a bit diagram, a field table and its sources.",
         "",
-        "`WaveDrom <https://wavedrom.com/>`__ draws the bit diagrams from the register description. "
+        "`WaveDrom <https://wavedrom.com/>`__ draws the bit diagrams from the "
+        ":ref:`register description <description-files-yaml>`. "
         "A diagram has the highest bit on the left and 32 bits in a row. The name of a field "
         "is a link to its description. The :ref:`shading table <legend-diagram>` gives the "
         "meaning of the background of a field.",
@@ -699,7 +700,7 @@ def index_page(m):
         "   * - green",
         "     - :ref:`read-only <legend-access>` field",
         "   * - blue",
-        "     - field of a layout",
+        "     - field of a :ref:`layout <acl-key>`",
         "   * - grey",
         "     - no field",
         "",

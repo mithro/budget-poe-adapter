@@ -24,6 +24,7 @@ The reference pages are written into the source tree when the build starts,
 so one ``sphinx-build`` run is all a build needs. A name that does not exist
 is an error, and so is a link without a target when ``nitpicky`` is set.
 """
+import json
 import os
 import sys
 
@@ -36,8 +37,6 @@ from sphinx.util.nodes import make_refnode, split_explicit_title
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-
-import json  # noqa: E402
 
 import gen_docs  # noqa: E402
 import guide_diagrams  # noqa: E402
@@ -231,11 +230,17 @@ class Bitfield(SphinxDirective):
         family = self.options.get("family")
         if family:
             caption += " on the " + gen_docs.FAMILY[family]
-        source, names = gen_docs.register_diagram(s["model"], reg, family, layout)
         ln = Links(self)
-        links = {name: (ln.label(label), tip) for name, (label, tip) in names.items()}
+        words = gen_docs.register_diagram(s["model"], reg, family, layout)
+        svg = ""
         try:
-            svg = wavedrom_diagrams.render(source, "Bit fields of " + reg["id"], links)
+            for i, (source, names) in enumerate(words):
+                label = caption
+                if len(words) > 1:
+                    top = 32 * (len(words) - i) - 1
+                    label += ", bits %d to %d" % (top, top - 31)
+                links = [(ln.label(target), tip) for target, tip in names]
+                svg += wavedrom_diagrams.render(source, label, links)
         except wavedrom_diagrams.RenderError as err:
             raise self.error(str(err))
         return [figure(svg, caption, (reg["id"], ln.reg(reg["id"])), ["yt-wavedrom"])]

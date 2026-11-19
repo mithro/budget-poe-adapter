@@ -42,8 +42,11 @@ check-python:
 		done; \
 	fi
 
-docs:
+tools/wavedrom/node_modules: tools/wavedrom/package-lock.json
 	npm ci --prefix tools/wavedrom
+	touch $@
+
+docs: tools/wavedrom/node_modules
 	$(PYTHON) -m sphinx -b html -W --keep-going -n $(ROOT) $(BUILD)/html
 
 clean:

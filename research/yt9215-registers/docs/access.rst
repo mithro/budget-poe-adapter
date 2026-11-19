@@ -21,8 +21,9 @@ frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit
 5-bit register number and 16 bits of data.
 
 .. wavedrom::
-   :caption: MDIO frames. Bits are sent from left to right; the switch drives the green parts
-             and the host drives the others.
+   :caption: MDIO frames. Bits are sent from left to right. In a read, nobody drives the first
+             TA bit, and the switch drives the second TA bit low and then the green DATA bits.
+             The host drives all other bits.
 
    {"signal": [
      {"name": "Field", "period": 0.5, "wave": "=....=.=.=...=...=.=......",
@@ -184,7 +185,7 @@ what the 16 data bits of the frame are:
      {"name": "READ", "bits": 1},
      {"name": "DATA", "bits": 1},
      {"name": "switch ID", "bits": 2},
-     {"name": "0", "bits": 1}
+     {"bits": 1}
    ], "config": {"bits": 5}}
 
 .. list-table::
@@ -231,6 +232,7 @@ value, high half first. The READ bit has the same value in all four frames.
 
    {"signal": [
      {"name": "MDIO frame", "wave": "=..=..=..=..", "data": ["write", "write", "read", "read"]},
+     {"name": "REGAD switch ID", "wave": "=..=..=..=..", "data": ["ID", "ID", "ID", "ID"]},
      {"name": "REGAD bit DATA", "wave": "=..=..=..=..", "data": ["0", "0", "1", "1"]},
      {"name": "REGAD bit READ", "wave": "=..=..=..=..", "data": ["1", "1", "1", "1"]},
      {"name": "Frame data", "wave": "=..=..7..7..",
@@ -242,6 +244,7 @@ value, high half first. The READ bit has the same value in all four frames.
 
    {"signal": [
      {"name": "MDIO frame", "wave": "=..=..=..=..", "data": ["write", "write", "write", "write"]},
+     {"name": "REGAD switch ID", "wave": "=..=..=..=..", "data": ["ID", "ID", "ID", "ID"]},
      {"name": "REGAD bit DATA", "wave": "=..=..=..=..", "data": ["0", "0", "1", "1"]},
      {"name": "REGAD bit READ", "wave": "=..=..=..=..", "data": ["0", "0", "0", "0"]},
      {"name": "Frame data", "wave": "=..=..=..=..",

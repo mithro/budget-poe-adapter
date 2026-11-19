@@ -1,10 +1,10 @@
-"""Draw the block, sequence and layout diagrams of the documentation as SVG.
+"""Draw the block, sequence and frame diagrams of the documentation as SVG.
 
 Every function returns one ``<svg>`` element as text. The drawings use CSS
 classes only; the colours come from ``docs/_static/yt921x.css`` when the SVG
 is placed inline in a page, or from :data:`STYLE` when it is saved as a file.
-Boxes can carry a link. ``wavedrom_diagrams.py`` draws the register and
-timing diagrams.
+Boxes can carry a link. WaveDrom draws the register and timing diagrams,
+through ``wavedrom_diagrams.py``.
 """
 from html import escape
 
@@ -51,10 +51,8 @@ class Svg:
     def path(self, d, cls="yt-ln"):
         self.add('<path d="%s" class="%s"/>' % (d, cls))
 
-    def text(self, x, y, s, cls="", anchor="middle", rotate=False):
+    def text(self, x, y, s, cls="", anchor="middle"):
         attr = ' class="%s"' % cls if cls else ""
-        if rotate:
-            attr += ' transform="rotate(-90 %.1f %.1f)"' % (x, y)
         self.add('<text x="%.1f" y="%.1f" text-anchor="%s"%s>%s</text>'
                  % (x, y, anchor, attr, escape(s)))
 

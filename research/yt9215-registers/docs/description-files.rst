@@ -162,15 +162,15 @@ Regenerating
    * - :download:`gen_docs.py <../tools/gen_docs.py>`
      - Writes the reference pages of this manual during the Sphinx build
    * - :download:`wavedrom_diagrams.py <../tools/wavedrom_diagrams.py>`
-     - Builds the `WaveDrom <https://wavedrom.com/>`__ source of each register diagram
+     - Builds the `WaveDrom <https://wavedrom.com/>`__ source of each register diagram and runs the renderer
    * - :download:`render.js <../tools/wavedrom/render.js>`
      - Draws register and timing diagrams with WaveDrom
    * - :download:`package.json <../tools/wavedrom/package.json>`
      - Names the WaveDrom version for ``npm ci``
    * - :download:`diagrams.py <../tools/diagrams.py>`
-     - Draws block, sequence and layout diagrams as SVG
+     - Draws block, sequence and frame diagrams as SVG
    * - :download:`guide_diagrams.py <../tools/guide_diagrams.py>`
-     - Holds the content of the guide's block, sequence and layout diagrams
+     - Holds the content of the guide's block, sequence and frame diagrams
    * - :download:`yt921x_sphinx.py <../tools/yt921x_sphinx.py>`
      - Sphinx extension of this manual
    * - :download:`test_generated.py <../tests/test_generated.py>`

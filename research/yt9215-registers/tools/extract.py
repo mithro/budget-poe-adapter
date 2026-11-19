@@ -283,7 +283,7 @@ def enum_linux(member, use=None, table_use=None):
     lx["used"] = first_use(lx, ())
     if isinstance(use, dict):
         # A use in an inline function of a header: file, line and function per value.
-        use = use.get(member["name"])
+        use = use.get(str(member["name"]))
         if use:
             lx["used"] = True
             lx["use"] = Flow([use[0], use[2], use[1]])

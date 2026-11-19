@@ -718,7 +718,8 @@ enums:
       src:
       - chip.h
       - 117
-      used: false
+      used: true
+      use: [chip.h, ethtool_speed_to_yt921x, 544]
   - name: V100
     value: 1
     desc: 100 Mbit/s
@@ -727,7 +728,8 @@ enums:
       src:
       - chip.h
       - 118
-      used: false
+      used: true
+      use: [chip.h, ethtool_speed_to_yt921x, 546]
   - name: V1000
     value: 2
     desc: 1000 Mbit/s
@@ -736,7 +738,8 @@ enums:
       src:
       - chip.h
       - 119
-      used: false
+      used: true
+      use: [chip.h, ethtool_speed_to_yt921x, 548]
   - name: V10000
     value: 3
     desc: 10 Gbit/s
@@ -745,7 +748,8 @@ enums:
       src:
       - chip.h
       - 120
-      used: false
+      used: true
+      use: [chip.h, ethtool_speed_to_yt921x, 552]
   - name: V2500
     value: 4
     desc: 2500 Mbit/s
@@ -754,7 +758,8 @@ enums:
       src:
       - chip.h
       - 121
-      used: false
+      used: true
+      use: [chip.h, ethtool_speed_to_yt921x, 550]
 - name: app_selector
   title: Priority sources
   desc: Index of a priority source in :reg:`PORT_PRIO_ORD`.

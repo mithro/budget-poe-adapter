@@ -270,11 +270,11 @@ enums:
 # function uses the field although a shared macro suggests it.
 enum_uses:
   speed:
-    V10: [chip.h, 544, ethtool_speed_to_yt921x]
-    V100: [chip.h, 546, ethtool_speed_to_yt921x]
-    V1000: [chip.h, 548, ethtool_speed_to_yt921x]
-    V2500: [chip.h, 550, ethtool_speed_to_yt921x]
-    V10000: [chip.h, 552, ethtool_speed_to_yt921x]
+    "10": [chip.h, 544, ethtool_speed_to_yt921x]
+    "100": [chip.h, 546, ethtool_speed_to_yt921x]
+    "1000": [chip.h, 548, ethtool_speed_to_yt921x]
+    "2500": [chip.h, 550, ethtool_speed_to_yt921x]
+    "10000": [chip.h, 552, ethtool_speed_to_yt921x]
     INVALID: [chip.h, 554, ethtool_speed_to_yt921x]
 # The same for a list whose values the driver keeps in a table; only the values in the
 # table take the use.

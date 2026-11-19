@@ -543,9 +543,9 @@ s.textbox('- The 12 array LEDs carry the silk names RJ7-RJ18, one pair of names 
           '- The silk labels the positions P1 to P5; the unlabelled position (RJ7, RJ8) is\n  assumed to be the SFP (U4 P9LED0, pin 67).\n'
           '- No resistors sit inside the array. R2-R5, R103 and R110-R114 beside it may be\n  the LED resistors (not traced); the anode supply and the active-low drive from\n  U4 are inferred.\n'
           '- The POW LEDs are probably driven by the PoE module (not traced).', m(17.78), m(140), m(125), m(34), size=1.1)
-s.frame(m(185), m(15), m(284), m(130), 'LED6 header (DNP), LED7, LED8')
-hd = s.place('Connector_Generic:Conn_02x03_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), fields={'Silk': 'LED6'})
-for n in '123456':
+s.frame(m(185), m(15), m(284), m(130), 'LED6 footprint (DNP), LED7, LED8')
+hd = s.place('Connector_Generic:Conn_02x02_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), fields={'Silk': 'LED6'})
+for n in '1234':
     s.stub(hd, n, 'TBD_LED6_%s' % n, 'U', length=m(5.08))
 for i, lr in enumerate(('LED7', 'LED8')):
     d = two(s, 'Device:LED', lr, '0603', m(225), m(70 + 12.7 * i), True)
@@ -578,7 +578,7 @@ for (x, y, t) in [(m(22), m(50), 'J2 input, protection,\nSCT2622 buck to +3V3'),
                   (m(108), m(90), 'YT9215SCH (4 units),\n25 MHz crystal, EEPROM U10,\nempty flash footprint U6'),
                   (m(255), m(56), 'DXFRM2-5, J1, ED1-ED7, ED10'),
                   (m(255), m(87), 'DXFRM6, J3, ED8-ED9, SFP U12'),
-                  (m(255), m(118), '12 LEDs, LED6 header'),
+                  (m(255), m(118), '12 LEDs, LED6 footprint'),
                   (m(332.74), m(52), 'PIN1 header, PSE module')]:
     s.text(t, x, y, size=1.27, italic=True, color=(90, 90, 90))
 

@@ -47,6 +47,7 @@ They differ in what is fitted and in the markings read from the photos:
 | TC1 marking | `YX 220 16V` | `220 16V MB` |
 | PU1 marking line 2 | `SCT 6DC` | `SCT 5DC` |
 | PU1 marking line 3 | `2U650` | `29580` |
+| D40 marking line 1 | `LGE` | Not visible |
 | D40 marking line 2 | `SS310` | Not visible |
 
 Board A is the non-PoE build: the 8-hole header for the PoE module is empty and U12
@@ -71,7 +72,7 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 | PU1 | SCT2622 buck regulator | Top | ESOP-8 | `2622` |  |  | 3.3 V out |
 | PL3 | Buck inductor | Top | SMD | `100` |  |  | 10 µH |
 | L3 | Inductor | Top | SMD | `4R7` |  |  | 4.7 µH |
-| D40 | Buck diode | Top | SMA | `LGE` |  |  |  |
+| D40 | Buck diode | Top | SMA |  |  |  |  |
 | D4 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
 | D5 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
 | L2 | Input inductor | Top | SMD | `701` |  |  |  |
@@ -226,6 +227,8 @@ local time.
 | [14](#photo-14) | PL3 |
 | [14](#photo-14) | C4 |
 | [14](#photo-14) | D40 |
+| [14](#photo-14) | D4 |
+| [14](#photo-14) | D5 |
 | [15](#photo-15) | PU1 |
 | [15](#photo-15) | PL3 |
 | [15](#photo-15) | C4 |

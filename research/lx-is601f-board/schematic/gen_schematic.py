@@ -339,16 +339,14 @@ s.stub(u6, '3', 'TBD_U6_WP', 'U', length=m(5.08)); s.stub(u6, '7', 'TBD_U6_HOLD'
 s.textbox('U6: empty SOP-8 footprint on the bottom, assumed SPI NOR\nflash (25-series pinout). R40, R94, R96, R98, R100, R102,\nR109 sit next to it. '
           'R44, R89, R92 and R93 run to U4 pins\n55, 54, 50 and 49 on the top side.', m(15), m(240), m(70))
 for n in ('46', '47', '90'):
-    s.nc(uC.p(n)); s.mark(uC, n, '(no trace seen)', 'V')
+    s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
 for n in ('93', '44', '48', '51', '52', '53', '56', '57'):
     s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
-s.text('X on pins 46, 47, 90, 79 and 67: no trace leaves\nthe pad in the photos.', m(143), m(195), size=1.27, italic=True)
+s.text('Pins 46, 47, 67, 79 and 90: no trace leaves the pad outward in the\ntop-side photos. A route under the package is not ruled out.', m(143), m(195), size=1.27, italic=True)
 LEDMAP = {'85': 'LED_P0', '80': 'LED_P1', '77': 'LED_P2', '75': 'LED_P3', '71': 'LED_P4'}
 for n in ('85', '84', '83', '80', '81', '79', '77', '78', '76', '75', '73', '74', '71', '72', '70', '67'):
     if n in LEDMAP:
         s.stub(uC, n, LEDMAP[n], 'I', length=m(25.4), kind='hier', shape='output')
-    elif n in ('79', '67'):
-        s.nc(uC.p(n)); s.mark(uC, n, '(no trace seen)', 'V')
     else:
         s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
 for n in ('14', '15', '116'):
@@ -549,7 +547,7 @@ for i, (net, rf, rp, pos) in enumerate(rws):
         else:
             s.label(onet, e, (1, 0))
 s.textbox('- The 12 array LEDs carry the silk names RJ7-RJ18, one pair of names per position.\n  Which name of a pair is the FX LED and which the POW LED is assumed; the pair\n  at P5 is printed in the order RJ10, RJ9.\n'
-          '- The silk labels the positions P1 to P5; what drives the unlabelled position\n  (RJ7, RJ8) is unknown: no trace leaves U4 pin 67 (P9LED0) on the top layer.\n'
+          '- The silk labels the positions P1 to P5; what drives the unlabelled position\n  (RJ7, RJ8) is unknown: no trace leaves U4 pin 67 (P9LED0) outward on the top layer.\n'
           '- No resistors sit inside the array. R2-R5, R103 and R110-R114 beside it may be\n  the LED resistors (not traced); the anode supply and the active-low drive from\n  U4 are inferred.\n'
           '- The POW LEDs are probably driven by the PoE module (not traced).', m(17.78), m(140), m(125), m(34), size=1.1)
 s.frame(m(185), m(15), m(284), m(130), 'LED6 footprint (DNP), LED7 and LED8 with R68')

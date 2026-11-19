@@ -95,7 +95,7 @@ c.save('u4-pin-numbering-annotated.png')
 c = Crop(src, (1180, 580, 2540, 2130))
 fp = font(30)
 TOP = [  # pin, text, colour
-    (67, '67  JTAG1_TDO* — no trace', JTAG),
+    (67, '67  JTAG1_TDO* — no visible trace', JTAG),
     (70, '70  UART1_RX · DIS_SPIS', UART),
     (72, '72  JTAG0_TMS* (P4LED1)', JTAG),
     (73, '73  JTAG0_TCK* (P3LED1)', JTAG),
@@ -104,13 +104,13 @@ TOP = [  # pin, text, colour
     (76, '76  UART1_TX · DIS_MCU strap', UART),
     (77, '77  DISAUTOLOAD strap (P2LED0)', STRAP),
     (78, '78  SPF1_SO (P2LED1)', SPI),
-    (79, '79  SPF1_SI — no trace', SPI),
+    (79, '79  SPF1_SI — no visible trace', SPI),
     (81, '81  SPF1_CS · JTAG1_TMS*', SPI),
     (83, '83  SPF1_SCK · JTAG1_TCK* · EN_PHY', SPI),
     (84, '84  JTAG1_TDI* (LED_DA)', JTAG),
     (87, '87  XTALO', REF), (88, '88  XTALI', REF),
     (89, '89  nRESET', REF),
-    (90, '90  JTAG0_TDO* — no trace', JTAG),
+    (90, '90  JTAG0_TDO* — no visible trace', JTAG),
     (91, '91  SCL / MDC', I2C), (92, '92  SDA / MDIO', I2C),
 ]
 for n, t, col in TOP:
@@ -135,7 +135,7 @@ c = Crop(src, (1540, 1740, 3072, 2260))
 RIGHT = [
     (55, 'SPF0_CS → R44   55', SPI), (54, 'SPF0_SO → R89   54', SPI),
     (50, 'SPF0_SI → R92   50', SPI), (49, 'SPF0_SCK · SPF_MUX_SEL strap → R93   49', SPI),
-    (47, 'UART0_TX — no trace   47', UART), (46, 'UART0_RX — no trace   46', UART),
+    (47, 'UART0_TX — no visible trace   47', UART), (46, 'UART0_RX — no visible trace   46', UART),
 ]
 for n, t, col in RIGHT:
     y = righty(n)

@@ -19,6 +19,8 @@ The pin tables of both parts, and the route of each debug pin on this board, are
 | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink |
 | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of [U4](../motorcomm-debug-pins.md#lx-u4) on board A |
 | [`u4-surroundings.jpg`](u4-surroundings.jpg) | Cropped photo | [U4](../motorcomm-debug-pins.md#lx-u4) and the named parts beside it, from [`photo-u4-wide.jpg`](photo-u4-wide.jpg) |
+| [`u4-corner-pins-65-71-photo-12.jpg`](u4-corner-pins-65-71-photo-12.jpg) | Cropped photo | Leads 65 to 71 of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, at the full resolution of [photo 12](photos/README.md#photo-12) |
+| [`u4-corner-pins-65-70-photo-13.jpg`](u4-corner-pins-65-70-photo-13.jpg) | Cropped photo | Leads 65 to 70 of [U4](../motorcomm-debug-pins.md#lx-u4) on board A, at the full resolution of [photo 13](photos/README.md#photo-13) |
 | [`annotate.py`](annotate.py) | Script | Draws the annotations and makes the crop |
 | [`photos/`](photos/README.md) | Photo catalogue | 34 photos of the two boards |
 
@@ -84,6 +86,16 @@ there anticlockwise as seen from the top, 32 to a side, and checked against thes
 | Decoupling capacitor C25 | 82 |
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [87](../motorcomm-debug-pins.md#sch-pin-87) |
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [88](../motorcomm-debug-pins.md#sch-pin-88) |
+
+### Pins with no trace
+
+Pins [46](../motorcomm-debug-pins.md#sch-pin-46), [47](../motorcomm-debug-pins.md#sch-pin-47), [67](../motorcomm-debug-pins.md#sch-pin-67), [79](../motorcomm-debug-pins.md#sch-pin-79) and [90](../motorcomm-debug-pins.md#sch-pin-90) have no trace leaving the pad outward. The two crops below show this for pin 67 at the full resolution of the album photos: leads 65 and 66 sit on a copper pour, leads 68 to 71 each have a trace, and the pad of lead 67 between them has none.
+
+![Leads 65 to 71 of U4 on board B, with no trace above lead 67](u4-corner-pins-65-71-photo-12.jpg)
+
+![Leads 65 to 70 of U4 on board A, with no trace above lead 67](u4-corner-pins-65-70-photo-13.jpg)
+
+A top-side photo shows only the copper outside the package. A trace that runs inward from a pad to a via under the package body is hidden, so these pins are not proven unconnected. A continuity check from each lead settles it.
 
 Routing was traced from top-side photos only. Where the vias go on other layers, the
 strap levels, and what the far pads of [R44](../motorcomm-debug-pins.md#lx-r44), [R89](../motorcomm-debug-pins.md#lx-r89), [R92](../motorcomm-debug-pins.md#lx-r92) and [R93](../motorcomm-debug-pins.md#lx-r93) connect to are unknown.

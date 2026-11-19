@@ -371,7 +371,7 @@ The routes were read from photos of the top side only, and the lead numbers were
 
 | Value | Meaning |
 |---|---|
-| Lead only | No trace leaves the lead on the top layer |
+| Lead only | No trace leaves the lead outward on the top layer |
 | Via | A trace runs from the lead to a via |
 | Resistor pad | A trace runs from the lead to the nearer pad of the resistor in the "Part" column |
 | LED trace | A trace runs from the lead towards the port LEDs |
@@ -405,7 +405,7 @@ The routes were read from photos of the top side only, and the lead numbers were
 - The vias for pins [70](#sch-pin-70) and [76](#sch-pin-76) sit just above the chip in the [annotated photo of the top edge](#annotated-top-edge).
 - Pin [76](#sch-pin-76) is both UART1 TX and the `DIS_MCU` strap.
 - The vias of pins [83](#sch-pin-83) and [84](#sch-pin-84) sit in the `C96` silkscreen label: the via of pin 83 inside the letter C, the via of pin 84 against its lower left edge.
-- Pins [46](#sch-pin-46), [47](#sch-pin-47), [67](#sch-pin-67), [79](#sch-pin-79) and [90](#sch-pin-90) are "Lead only", so a wire has to be soldered to the lead itself, at 0.4 mm pitch.
+- Pins [46](#sch-pin-46), [47](#sch-pin-47), [67](#sch-pin-67), [79](#sch-pin-79) and [90](#sch-pin-90) are "Lead only", so a wire has to be soldered to the lead itself, at 0.4 mm pitch. The top-side photos cannot show a trace that runs inward under the package to a via, so these pins are not proven unconnected.
 - On the flash buses SI is the chip's output to the flash DI pin, and SO is the flash DO pin into the chip.
 - [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) names pin [90](#sch-pin-90) GPIO47 and pin [67](#sch-pin-67) GPIO31.
 - The nRESET trace from pin <a id="sch-pin-89"></a>89 runs under the left half of the `R23` silkscreen label, then up beside the R23 footprint to a via level with the top of [Y6](#lx-y6)'s corner mark, ringed 89 in the [annotated photo of the top edge](#annotated-top-edge) [**I**](#evidence-codes). The label hides part of the trace.

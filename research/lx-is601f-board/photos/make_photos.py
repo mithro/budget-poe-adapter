@@ -25,13 +25,13 @@ ROTATE = {'04': 180, '21': 90, '22': 180, '23': 180, '24': 270, '25': 270,
 
 # Crop box (x0, y0, x1, y1) in percent of the rotated photo: the bounding box of the
 # board. On angled shots some background stays in the corners of that box. Photos not
-# listed show board from edge to edge.
-CROP = {'01': (5, 19, 97, 88), '02': (10, 22, 92, 80), '03': (10, 26, 92, 81),
-        '04': (8, 15, 90, 82), '05': (1, 10, 100, 80), '08': (1, 17, 100, 79),
+# listed need no crop.
+CROP = {'01': (5, 22.2, 97, 88), '02': (11, 23.3, 92, 80), '03': (10, 26, 92, 81),
+        '04': (8, 16.8, 90, 78.3), '05': (1, 10, 100, 80), '08': (1, 17, 100, 79),
         '14': (0, 0, 98, 100), '15': (0, 0, 98, 100),
         '17': (0, 6, 95, 100), '18': (0, 17, 92, 100), '19': (0, 0, 62, 100),
         '21': (12, 9, 100, 100), '22': (15, 33, 100, 100), '24': (0, 0, 57, 79),
-        '25': (0, 12, 63, 100), '26': (29, 0, 100, 100), '27': (0, 8, 98, 100),
+        '25': (0, 12, 63, 100), '26': (31.3, 0, 100, 100), '27': (0, 8, 98, 100),
         '30': (0, 9, 100, 100), '33': (0, 0, 100, 74), '34': (0, 0, 100, 73)}
 
 
@@ -44,67 +44,70 @@ def crop(im, key):
 
 
 # Callouts: photo -> (title, [(targets, label, badge)]). Positions are percentages of
-# the width and height of the rotated, cropped photo. A target (x, y) gets a small ring
-# and a target (x0, y0, x1, y1) gets a box around a group of parts. A numbered badge
-# sits at `badge` with a leader line to every target, so badges can be put on empty
-# background instead of over markings.
+# the width and height of the rotated, cropped photo. A target (x0, y0, x1, y1) is a box
+# drawn around a part, so the marking inside it stays readable; a target (x, y) is a
+# small ring for a spot with no marking. A numbered badge sits at `badge` with a leader
+# line to the first target; further targets of the same callout are only outlined. A badge position below 0 or above 100 puts the badge in the
+# plain margin that surrounds the photo.
 CALLOUTS = {
     '04': ('Board A, top, heatsink removed', [
-        ([(68.3, 43.3)], 'U4 YT9215SCH switch IC', (68.3, 3)),
-        ([(50.0, 83.6)], 'U12 SFP host connector, no cage', (50.0, 97)),
-        ([(87.8, 82.1)], 'Single RJ45', (87.8, 97)),
-        ([(13.4, 37.3)], 'RJ45 block', (4, 37.3)),
-        ([(39.0, 67.2)], 'G2401PR magnetics (date 2632)', (29.3, 97)),
-        ([(89.0, 49.3)], 'PU1 SCT2622 3.3 V buck', (96, 52.2)),
-        ([(86.6, 27.0)], 'L2 "701" input inductor', (96, 28.4)),
-        ([(87.8, 10.4)], 'J2 POWER2 input connector', (96, 3)),
-        ([(72.0, 13.4)], 'Blue disc capacitors (x3)', (80.5, 3)),
-        ([(25.6, 25.4)], 'PoE module header, empty', (11, 17)),
+        ([(59.5, 36.5, 76, 53.5)], 'U4 YT9215SCH switch IC', (57.3, 42)),
+        ([(44, 80, 56, 95)], 'U12 SFP host connector, no cage', (50, 103)),
+        ([(79, 74, 98, 92)], 'Single RJ45', (88, 103)),
+        ([(1.5, 9.5, 22, 82)], 'RJ45 block', (-3, 40)),
+        ([(32, 59.5, 45, 76)], 'G2401PR magnetics (date 2632)', (37, 103)),
+        ([(85, 46.3, 91.3, 52.3)], 'PU1 SCT2622 3.3 V buck', (103, 49)),
+        ([(76, 22.5, 89, 30.5)], 'L2 "701" input inductor', (103, 23.5)),
+        ([(81.5, 5, 93.5, 15)], 'J2 POWER2 input connector', (103, 10)),
+        ([(64.5, 4.5, 79.5, 16.5)], 'RV1-RV3 blue disc parts', (72, -3)),
+        ([(23, 11, 26.5, 34)], 'PoE module header, empty', (27, -3)),
     ]),
     '08': ('Board B, top: PoE module + SFP', [
-        ([(60.6, 32.5)], 'U4 YT9215SCH switch IC', (65.7, 3)),
-        ([(51.5, 16.1)], 'PoE PSE module, U1 "2184A"', (47.5, 3)),
-        ([(29.3, 77.4)], 'SFP cage over U12', (29.3, 97)),
-        ([(16.2, 37.1)], 'RJ45 block', (7.1, 3)),
-        ([(87.9, 72.6)], 'Single RJ45', (91.9, 97)),
-        ([(83.8, 41.9)], 'PU1 SCT2622 3.3 V buck', (94.9, 29.0)),
-        ([(75.4, 17.6)], 'L2 "701" input inductor', (95.8, 17)),
-        ([(80.8, 8.1)], 'J2 power input', (93.9, 3)),
-        ([(60.6, 62.9)], 'G2401PR magnetics (date 2523A)', (57.6, 97)),
-        ([(68.0, 93.6)], 'Silkscreen LX-IS601F V2.0', (64.5, 97.8)),
+        ([(58, 30.5, 73.3, 47.5)], 'U4 YT9215SCH switch IC', (54, 46.3)),
+        ([(28, 5, 57.5, 28.5)], 'PoE PSE module, U1 "2184A"', (40, -3)),
+        ([(2, 69, 55, 89)], 'SFP cage over U12', (29, 103)),
+        ([(6, 2.5, 29, 65)], 'RJ45 block', (-3, 30)),
+        ([(79.5, 59, 96, 80)], 'Single RJ45', (103, 70)),
+        ([(82, 41, 87.6, 46)], 'PU1 SCT2622 3.3 V buck', (103, 44)),
+        ([(74.5, 17, 85, 25)], 'L2 "701" input inductor', (103, 19)),
+        ([(75.5, 2, 84.5, 13.5)], 'J2 power input', (103, 7)),
+        ([(53, 59, 69, 71.5)], 'G2401PR magnetics (date 2523A)', (56.5, 103)),
+        ([(63.5, 88, 77, 98)], 'Silkscreen LX-IS601F V2.0', (70, 103)),
     ]),
     '06': ('Board A, U4 close-up', [
-        ([(62.0, 54.0)], 'U4 YT9215SCH, lot VKTP18287', (68.0, 66.0)),
-        ([(38.0, 53.0)], 'Pin-1 dimple', (13.0, 70.0)),
-        ([(49.0, 13.0)], 'Y6 25.000 MHz crystal', (62.0, 20.0)),
-        ([(83.2, 38.9, 88.6, 47.1)], 'R44, R89, R92, R93 (top to bottom): SPI flash lines (SPF0)', (79.4, 61.2)),
-        ([(85.3, 10.0)], 'L2 "701" input inductor', (74.0, 7.0)),
-        ([(10.0, 12.0)], 'ED1, one of the SOT-23-6 ESD arrays', (5.0, 22.0)),
-        ([(84.0, 27.0)], '"4R7" inductor', (72.0, 26.0)),
-        ([(35.0, 93.0)], 'G2401PR magnetics', (55.0, 92.0)),
+        ([(29, 29.5, 77, 62)], 'U4 YT9215SCH, lot VKTP18287', (67, 64.7)),
+        ([(35.5, 51.7, 39.8, 55)], 'Pin-1 dimple', (24, 57)),
+        ([(43.5, 11.6, 54.5, 17.2)], 'Y6 25.000 MHz crystal', (62, 20)),
+        ([(83, 39.2, 88.8, 47)], 'R44, R89, R92, R93 (top to bottom): SPI flash lines (SPF0)', (80, 43)),
+        ([(80, 3, 100, 17)], 'L2 "701" input inductor', (72, 13)),
+        ([(4.5, 8.3, 15.3, 15.8)], 'ED1, one of the SOT-23-6 ESD arrays', (7, 20.5)),
+        ([(78.5, 22.5, 90.5, 33.5)], '"4R7" inductor', (104, 28)),
+        ([(10, 89, 59, 100)], 'G2401PR magnetics', (5, 95)),
     ]),
     '21': ('Board A, port edge, no PoE module', [
-        ([(38.6, 65.4), (38.6, 48.9), (38.6, 27.0)], 'PoE module header, 8 holes, empty', (4, 45.1)),
-        ([(77.3, 16.5)], 'POW / FX LED resistor pads (RJ7-RJ18)', (79.5, 3)),
-        ([(23.9, 15.4)], 'LED6 through-hole footprint, empty', (11.4, 3)),
-        ([(34.1, 13.2), (36.3, 13.2)], 'LED7 (left), LED8 (right)', (46, 2.5)),
-        ([(54.5, 33.0)], 'G2401PR magnetics (date 2632)', (48.9, 18.7)),
-        ([(75.0, 72.5), (78.4, 53.8), (81.8, 41.8)], 'ESD arrays ED2, ED1, ED10', (69.3, 48.4)),
+        ([(37.2, 24, 41.2, 68)], 'PoE module header, 8 holes, empty', (44.3, 47)),
+        ([(68.8, 3.5, 88, 21.5)], 'POW and FX LED resistor pads (RJ7-RJ18)', (79, -4)),
+        ([(20, 9, 32, 22.5)], 'LED6 through-hole footprint, empty', (14, 14)),
+        ([(32.8, 10, 38, 16.2)], 'LED7 (left), LED8 (right)', (42, -4)),
+        ([(48.5, 17, 62.5, 51.5)], 'G2401PR magnetics (date 2632)', (53, -4)),
+        ([(75, 48.5, 81.3, 56.3)], 'ED1, one of the SOT-23-6 ESD arrays', (79.3, 45.3)),
     ]),
     '26': ('Bottom side, under U4', [
-        ([(18.3, 56.0)], 'U6 8-pin footprint, unpopulated', (4, 56.0)),
-        ([(60.1, 24.6)], 'U10 HK24C08 I2C EEPROM', (43.7, 12.0)),
-        ([(40.8, 55.0)], 'Tinned via field (probably under U4)', (4, 78.0)),
-        ([(9.9, 63.0)], 'Small tinned via grid', (4, 68.0)),
-        ([(84.5, 43.0), (84.5, 20.0)], 'Port-side row of 1206 capacitors', (70.4, 35.0)),
+        ([(10.5, 48, 20, 62.5)], 'U6 8-pin footprint, unpopulated', (-3, 55)),
+        ([(50.7, 20.5, 60.5, 33)], 'U10 HK24C08 I2C EEPROM', (55.5, -3)),
+        ([(35, 50, 44.5, 59.5)], 'Tinned pad with a solder blob, under U4', (48, 56.5)),
+        ([(3.5, 59, 11, 64.5)], 'Small tinned via grid', (-3, 62)),
+        ([(81, 2, 91, 50.5)], 'Port-side row of 1206 capacitors', (75.5, 26)),
     ]),
     '32': ('Board B, PoE PSE module', [
-        ([(72.0, 45.0)], 'U1 "2184A 533AQ1H" (PSE, unidentified)', (79.0, 55.0)),
-        ([(61.0, 60.0), (49.0, 46.8), (50.9, 35.0), (60.1, 26.2)], 'R8, R12, R13, R14: R250 (0.25 ohm) sense', (42.0, 39.0)),
-        ([(30.4, 54.0), (30.4, 43.0), (30.4, 32.0), (30.4, 21.0)], 'D1, D3, D5, D7 diodes "RGS 2616"', (9.0, 38.0)),
-        ([(25.0, 57.0)], 'PIN1: 8-pin module header', (9.0, 70.0)),
-        ([(86.7, 94.0)], 'U4 YT9215SCH (lot VKJC09324)', (78.0, 90.0)),
-        ([(92.8, 46.2)], 'Y6 25 MHz crystal', (84.0, 56.0)),
+        ([(60, 30, 74, 47.5)], 'U1 "2184A 533AQ1H" (PSE, unidentified)', (59.5, 29.5)),
+        ([(47.5, 43.5, 55, 50.5), (48.5, 26.5, 54, 36), (59, 51.5, 64.5, 61), (59.5, 18, 64.5, 28)],
+         'R12, R13, R8, R14: R250 (0.25 ohm) sense', (45, 47.5)),
+        ([(30, 49.5, 39.5, 57.5), (30, 38.5, 39.5, 46.5), (30, 27.5, 39.5, 35.5), (30, 16.5, 39.5, 24.5),
+          (66, 10, 74.5, 17.5)], 'D1, D3, D5, D7 and one more diode: "RGS 2616"', (44.5, 58.5)),
+        ([(23, 15.5, 27.5, 59)], 'PIN1: 8-pin module header', (14, 37)),
+        ([(81.5, 68, 100, 100)], 'U4 YT9215SCH (lot VKJC09324)', (78, 88)),
+        ([(87, 42.3, 94, 48.5)], 'Y6 25 MHz crystal', (97.5, 39.5)),
     ]),
 }
 
@@ -120,14 +123,20 @@ def strip(im, deg=0):
     return out
 
 
+PAD = 56    # plain margin around an annotated photo, for badges
+
+
 def annotate(im, title, points, height=1000):
-    im = im.copy()
-    im.thumbnail((10000, height))
-    w, h = im.size
+    photo = im.copy()
+    photo.thumbnail((10000, height))
+    w, h = photo.size
+    im = Image.new('RGB', (w + 2 * PAD, h + 2 * PAD), (250, 250, 248))
+    im.paste(photo, (PAD, PAD))
     d = ImageDraw.Draw(im)
     f = ImageFont.truetype(FONT, 24)
+    f2 = ImageFont.truetype(FONT, 18)        # two-digit badge numbers
     red = (220, 20, 20)
-    P = lambda xy: (xy[0] * w / 100, xy[1] * h / 100)
+    P = lambda xy: (PAD + xy[0] * w / 100, PAD + xy[1] * h / 100)
     def shape(t):
         """Pixel box of a target: a ring around a point, or the given box."""
         if len(t) == 2:
@@ -137,7 +146,7 @@ def annotate(im, title, points, height=1000):
 
     for targets, _, badge in points:          # leader lines first, under everything
         bx, by = P(badge)
-        for t in targets:
+        for t in targets[:1]:
             x0, y0, x1, y1 = shape(t)
             if len(t) == 2:                   # to the centre of a ring
                 tx, ty = (x0 + x1) / 2, (y0 + y1) / 2
@@ -154,7 +163,8 @@ def annotate(im, title, points, height=1000):
     for i, (_, _, badge) in enumerate(points, 1):
         bx, by = P(badge)
         d.ellipse((bx - r, by - r, bx + r, by + r), fill=red, outline='white', width=3)
-        d.text((bx, by), str(i), font=f, fill='white', anchor='mm')
+        d.text((bx, by), str(i), font=f if i < 10 else f2, fill='white', anchor='mm')
+    w, h = im.size
     fl = ImageFont.truetype(FONT_R, 22)
     pw = max(d.textlength(lab, font=fl) for _, lab, _ in points) + 110
     pw = int(max(pw, d.textlength(title, font=ImageFont.truetype(FONT, 26)) + 50))

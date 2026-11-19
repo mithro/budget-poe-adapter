@@ -13,30 +13,30 @@ counters and settings. Topology:
 
 Two gigabit copper ports carry the user's traffic; the MCU port only needs
 ≤10 Mbit/s. Prices are LCSC (the part source JLCPCB assembly draws from),
-checked 2026‑10‑21. **[LCSC]**/**[JLC]** links are in §6.
+checked 2026‑10‑21. **[LCSC]** and **[JLC]** links are in §6.
 
 ## 1. TL;DR
 
 * **Pick: Realtek RTL8363NB‑VB‑CG.** Exactly the right shape: 2 × 10/100/1000
-  PHYs + 1 extension MAC that does **RGMII / MII / RMII / TMII**, QFN‑76
+  PHYs + 1 extension MAC that does **RGMII, MII, RMII or TMII**, QFN‑76
   9 × 9 mm, single 3.3 V input (built‑in 1.1 V switching regulator), 25 MHz
   crystal. **$2.61 @1, $1.96 @30, $1.43 @1k**, 1,562 in stock at LCSC; listed
   in the JLCPCB assembly library as C2835942 (extended part).
-* The MCU plugs into the extension port over **RMII/MII with no PHY and no
-  magnetics on the MCU side**. Management is over slave **SMI (MDC/MDIO)** or
+* The MCU plugs into the extension port over **RMII or MII with no PHY and no
+  magnetics on the MCU side**. Management is over slave **SMI (MDC and MDIO)** or
   a Realtek I²C‑like 2‑wire bus (strap‑selected), both trivial to bit‑bang
-  from a CH32V/RP2040, plus an interrupt pin for link changes.
-* Runner‑up / second source: **Motorcomm YT9215S** (5 GbE PHY + 2 MAC,
+  from a CH32V and RP2040, plus an interrupt pin for link changes.
+* Runner‑up and second source: **Motorcomm YT9215S** (5 GbE PHY + 2 MAC,
   LQFP‑128, $3.98 @1, $1.92 @900, in the JLCPCB library as C5899183). Bigger
   and more pins, but cheap at volume, has an on‑chip RISC‑V MCU, and has an
   upstream Linux DSA driver (`yt921x`). Motorcomm's exact‑fit **YT9213NB**
-  (2 PHY + 1 MAC) exists but I found no LCSC/JLCPCB listing.
+  (2 PHY + 1 MAC) exists but I found no LCSC and JLCPCB listing.
 * The Microchip **KSZ9893** is the "nicely documented" 3‑port GbE part
-  (SPI/I²C/MDIO management, open datasheet) but costs **$13–16** at LCSC: 6–10×
+  (SPI, I²C or MDIO management, open datasheet) but costs **$13–16** at LCSC: 6–10×
   the Realtek part. Only worth it if Realtek's NDA‑ish documentation becomes
   a blocker.
 * NextPCB: their parts arm (HQ Online) blocks automated lookup, so I could not
-  confirm stock. They source from the Shenzhen market where RTL8363NB/RTL8367S
+  confirm stock. They source from the Shenzhen market where RTL8363NB and RTL8367S
   are common; check by hand before committing (see §5).
 
 ## 2. Candidates
@@ -76,7 +76,7 @@ Management from an external MCU, and what else is on the chip:
 | Motorcomm YT9213NB | ? | – | – | – | – | – | — | Not found | — |
 | Microchip KSZ9893RNXI | VQFN-64 | – | $16.10 | $14.15 | $13.07 | 100 | 37 | C633484 | Via LCSC |
 
-Prices are at the qty‑1 / ~30 / largest LCSC break shown. JLCPCB charges a
+Prices are at the qty‑1, ~30 and largest LCSC break shown. JLCPCB charges a
 small loading fee per unique "extended" part per order (no basic switch ICs
 exist).
 
@@ -100,14 +100,14 @@ far too expensive.
 * **Software exists.** Realtek's GPL "rtl8367c" switch API (used in OpenWrt
   and many vendor SDKs) covers this chip family. Linux has an upstream DSA
   driver, [`drivers/net/dsa/realtek/rtl8365mb.c`](https://codebrowser.dev/linux/linux/drivers/net/dsa/realtek/rtl8365mb.c.html), that drives the RTL8363NB /
-  RTL8365MB / RTL8367S family. Both are good references for register
+  RTL8365MB and RTL8367S family. Both are good references for register
   sequences even on a bare‑metal MCU.
 * **Caveat:** full Realtek register docs are under NDA. The public datasheet
   covers pins, straps and features; register details come from the GPL code
   above.
 
-What the MCU can do through SMI/I²C: read per‑port link/speed/duplex/autoneg
-results, force speeds, read RFC‑style MIB counters, set VLANs/QoS,
+What the MCU can do through SMI or I²C: read per‑port link, speed, duplex and autoneg
+results, force speeds, read RFC‑style MIB counters, set VLANs and QoS,
 mirror ports, disable ports (e.g. hold the device‑side port down until PoE
 power is good), use the cable diagnostics, and drive LEDs.
 
@@ -164,7 +164,7 @@ internal 10M PHY, which is why it needs a copper port. The RP2040 option is
 not for throughput.
 
 A practical split, matching [`poe.md`](poe.md) §6.3: a tiny CH32V003‑class part does the
-PoE signature/classification from cold start; the switch plus a CH32V307 (or
+PoE signature and classification from cold start; the switch plus a CH32V307 (or
 RP2040) come up after the hot‑swap FET closes and handle networking, LLDP and
 USB‑PD reporting. With an Ethernet‑capable MCU the adapter can do **LLDP
 power negotiation**, which [`poe.md`](poe.md) §4.5 said a passive passthrough could not.
@@ -172,7 +172,7 @@ power negotiation**, which [`poe.md`](poe.md) §4.5 said a passive passthrough c
 ## 4a. Chinese alternatives
 
 Short answer: **none of them is cheaper than the RTL8363NB at JLCPCB or LCSC.** The domestic gigabit switch vendors are Motorcomm (裕太微) and JLSemi
-(景略). Only Motorcomm parts are stocked at LCSC/JLCPCB.
+(景略). Only Motorcomm parts are stocked at LCSC and JLCPCB.
 
 | Vendor | Part | PHY speed | PHY ports | Ext ports | Managed | MDIO | I²C | RGMII | MII | RMII | SGMII | On-chip CPU | Sold as drop-in for |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -211,14 +211,14 @@ Takeaways:
   YT9215S is the only Chinese part you can buy there today. It's a reasonable
   second source if a single‑vendor Realtek BOM is a concern.
 * Unit price for YT9213NB or a JLSemi 3+1 part could come in below
-  $1.4. That would need direct quotes (Motorcomm / VOOHU for JLSemi), and they
+  $1.4. That would need direct quotes (Motorcomm and VOOHU for JLSemi), and they
   would have to be consigned to JLCPCB/NextPCB as customer‑supplied parts.
-* Keep the RMII/MDIO design vendor‑neutral (strap‑free management, RMII to
+* Keep the RMII or MDIO design vendor‑neutral (strap‑free management, RMII to
   the MCU). Then a YT9213NB swap later only changes the footprint and driver.
 
 Sources for this section:
 * JLSemi switch selection guide (BigGo): https://finance.biggo.com.tw/news/irXqrp0Bh5an-7Gh2XnU
-* JL6107/JL6110 pin‑compatibility article: https://damodev.csdn.net/6a4332fb10ee7a33f2844cb5.html
+* JL6107 and JL6110 pin‑compatibility article: https://damodev.csdn.net/6a4332fb10ee7a33f2844cb5.html
 * VOOHU JL6105 page: https://www.voohuele.com/jl6105-series/
 * JL6107‑PC as RTL8367RB replacement (CSDN): https://blog.csdn.net/Maryfang/article/details/154916461
 * Motorcomm YT921x variants (Linux binding): https://www.kernel.org/doc/Documentation/devicetree/bindings/net/dsa/motorcomm%2Cyt921x.yaml
@@ -227,11 +227,11 @@ Sources for this section:
 
 * **Power draw.** I did not find a datasheet power figure for RTL8363NB in the
   pages reached. Expect a few hundred mW to ~1 W with two GbE links up; this
-  comes out of the PoE budget and must be counted before MPS/inrush design.
+  comes out of the PoE budget and must be counted before MPS and inrush design.
 * **NextPCB / HQ Online availability** could not be checked automatically
   (site blocks robots). Search RTL8363NB‑VB‑CG, RTL8367S‑CG, YT9215S there by
   hand. HQ Online does list other Realtek Ethernet parts (RTL8201F, RTL8309M).
-* **RTL8363NB vs RTL8363SB/SC**: the SB/SC variants add SGMII/HSGMII on the
+* **RTL8363NB vs RTL8363SB and RTL8363SC**: the SB and SC variants add SGMII or HSGMII on the
   extension port; not needed here, and they were not found at LCSC.
 * **YT9213NB**: worth asking Motorcomm distributors; same family as the
   YT9215 with upstream Linux support, and the right port count.

@@ -25,7 +25,7 @@ kept here unmodified (only renamed) so the notes can cite a fixed copy.
 | [`Motorcomm_Product_Selection_Guide_2023-03-08.pdf`](motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) | `5025e54d6e6ca72b76c5ba4b840ccbba` | [`attachments/裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) |
 
 The three YT9215 variants have three different pinouts (S = RTL8367S-compatible,
-SC/SCH = RTL8367SC-compatible, RB = RTL8367RB-VB-compatible). Always take pin numbers
+SC and SCH = RTL8367SC-compatible, RB = RTL8367RB-VB-compatible). Always take pin numbers
 from the exact variant's datasheet. See
 [`../research/motorcomm-debug-pins.md`](../research/motorcomm-debug-pins.md).
 

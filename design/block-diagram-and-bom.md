@@ -11,7 +11,7 @@ from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../resear
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
 RTL8363NB price ($1.43 @1k) was checked live (in the switch research). Every
 other price is an estimate from typical LCSC pricing for that part class and
-is tagged high/medium/low confidence in the CSV. Treat the totals as ±30 %.
+is tagged high, medium or low confidence in the CSV. Treat the totals as ±30 %.
 
 ## Summary
 
@@ -34,7 +34,7 @@ is tagged high/medium/low confidence in the CSV. Treat the totals as ±30 %.
 | PCB | 4-layer | 2-layer possible |
 
 The switch costs about **$4.50 extra** per unit. Of that, $1.62 is the switch
-and its crystal/passives, $0.95 is the bigger MCU, $1.05 is the second set of
+and its crystal and passives, $0.95 is the bigger MCU, $1.05 is the second set of
 magnetics, and the rest is the 4-layer board and more placements.
 
 Adding 12 V output costs about **$0.20** per unit on either variant compared
@@ -43,8 +43,8 @@ with a 5 V-only design (see below).
 ## Output voltages: 5 V and 12 V
 
 The USB-C port is a USB-PD source with two fixed PDOs, **5 V and 12 V**.
-That covers the Pi 5 (5 V / 5 A) and 12 V devices such as SBCs, routers,
-cameras and small displays. 9/15/20 V and PPS are out of scope.
+That covers the Pi 5 (5 V at 5 A) and 12 V devices such as SBCs, routers,
+cameras and small displays. 9, 15 and 20 V and PPS are out of scope.
 
 ### What changes in hardware compared with 5 V only
 
@@ -89,7 +89,7 @@ class events, [`poe.md`](../research/poe.md) §4.2), at roughly 90 % efficiency:
 **Caveat:** a 5 V + 12 V source does not follow the PD "power rules", which
 expect 9 V on any source above 15 W. This only matters for certification.
 Functionally, a sink that wants 12 V will request it. Phones and laptops that
-only ask for 9/15/20 V will fall back to 5 V, which is safe but slow.
+only ask for 9, 15 and 20 V will fall back to 5 V, which is safe but slow.
 
 ## Block diagrams
 
@@ -142,7 +142,7 @@ Each block is tagged with its cost @1k; PCB and assembly are listed under each p
 | JLCPCB assembly | Extended-part fees |
 
 Not included: enclosure (~$0.30–0.80), captive 5 A USB-C cable instead of a
-receptacle (~$0.50–0.80), test/programming, shipping, duties.
+receptacle (~$0.50–0.80), test and programming, shipping, duties.
 
 ## What drives the cost and where the risk is
 
@@ -151,7 +151,7 @@ receptacle (~$0.50–0.80), test/programming, shipping, duties.
    properly is the first thing to firm up.
 2. **The 60 V buck is the second.** I assumed a cheap Chinese 60–100 V
    synchronous controller plus external FETs (~$1.09 total including the
-   12 V select). An integrated 60 V 5 A converter from TI/MPS would
+   12 V select). An integrated 60 V 5 A converter from TI and MPS would
    be $1.50–2.50.
 3. **CH32V307 is overkill as an MCU but cheap for what it brings.** It is the
    only cheap WCH part with a MAC that can talk RMII to the switch. Its price
@@ -163,12 +163,12 @@ receptacle (~$0.50–0.80), test/programming, shipping, duties.
    about $0.15 to the switch variant.
 5. **Discrete PoE front end vs a PD controller IC.** The discrete front end
    costs ~$0.53 here. Cheap PD controller ICs are roughly $0.30–1 but most only
-   handle af/at, and bt-capable ones cost more. The software PD looks like a
-   small cost win and the main way to get bt Class 5/6 cheaply, but this has
+   handle af and at, and bt-capable ones cost more. The software PD looks like a
+   small cost win and the main way to get bt Class 5 and 6 cheaply, but this has
    not been verified with real quotes.
 6. **Power budget.** The switch draws ~0.5–1 W (datasheet figure not found).
-   On an at/PoE+ port this lowers the USB-C budget by about 1 W. On a bt
-   Class 5/6 port it doesn't matter.
+   On an at (PoE+) port this lowers the USB-C budget by about 1 W. On a bt
+   Class 5 and 6 port it doesn't matter.
 7. **Output voltage safety.** With 12 V possible, a firmware bug that leaves
    VBUS at 12 V on a 5 V-only sink is the main new failure mode. Mitigations:
    the buck defaults to 5 V in hardware when the select GPIO is low or
@@ -177,7 +177,7 @@ receptacle (~$0.50–0.80), test/programming, shipping, duties.
 
 ## Suggested next steps
 
-* Get real LCSC prices for 3–4 candidate magjacks / splitter transformers and
+* Get real LCSC prices for 3–4 candidate magjacks and splitter transformers and
   2–3 60 V buck controllers, then update the CSV.
 * Bench-check CH32V307 supply current at low clock against the 4 mA mark-event
   limit, to decide whether the CH32V003 helper is needed.

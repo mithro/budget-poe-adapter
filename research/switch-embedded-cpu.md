@@ -15,11 +15,11 @@ Each statement is marked as one of:
 - **RTL8367S: the CPU is a Synopsys DesignWare DW8051, and it is far more reachable than the datasheet suggests.**
   - The GPL `rtl8367c` vendor driver documents how to load it: hold it in reset, open an 8 KB instruction-RAM window at switch registers 0xE000–0xFFFF, write the bytes, release reset. The same driver ships three ready-made 8051 programs. **[V]**
   - Disassembling one of those programs shows:
-    - the 8051 reads and writes every switch register through SFRs 0xA0–0xA7, the same mechanism the RTL8372/73 8051 uses, which the RTLPlayground project already drives from SDCC;
+    - the 8051 reads and writes every switch register through SFRs 0xA0–0xA7, the same mechanism the RTL8372 and RTL8373 8051 uses, which the RTLPlayground project already drives from SDCC;
     - the core clock is selectable between 20.8, 62.5, 100, 125 and 200 MHz. **[D]**
   - There is no signing, encryption or header: the code is raw 8051 machine code. **[V]/[D]**
   - It is technically capable of running management firmware with a small TCP/IP stack and LLDP, but there is no public memory map, NIC description or boot-image format. It has no USB.
-- **YT9215S: the CPU is a Nuclei N205** (RV32IMAC-class, 2-stage pipeline) according to a Nuclei/Motorcomm press piece. **[V]**
+- **YT9215S: the CPU is a Nuclei N205** (RV32IMAC-class, 2-stage pipeline) according to a Nuclei and Motorcomm press piece. **[V]**
   - The YT9215SC datasheet shows two JTAG pin groups, two UARTs, I²C and MDIO masters and an SPI flash port. **[V]**
   - Clock, memory sizes, boot format and SDK are all unpublished. No firmware dumps or community work exist. Linux only knows it as "MCU port 10". **[V]**
   - Using it would mean bring-up from scratch through JTAG.
@@ -178,7 +178,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 | 1 | 0 (must be) | – | EEPROM | Registers | – | – |
 | 1 | – | – | Nothing | – | – | – |
 
-- SPI flash pins: SPIF_CLK/D0/D1/CS on pins 48/49/53/54. UART_RX/TX are on pins 45/46.
+- SPI flash pins: SPIF_CLK, SPIF_D0, SPIF_D1 and SPIF_CS on pins 48, 49, 53 and 54. UART_RX and UART_TX are on pins 45 and 46.
 - **Host-loaded path, as the vendor API and the Linux v2 patch do it:**
   1. Set CHIP_RESET.DW8051_RST.
   2. Set MISC_CFG0.DW8051_EN.
@@ -189,7 +189,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 - **Image format.**
   - The SMI-loaded image is a flat 8051 binary with the reset vector at 0x0000. `Sgmii_Init` starts `02 03 81`, which is `LJMP 0x0381`, the Keil startup. No header, no checksum, no signature. **[V]/[D]**
   - What framing the EEPROM or SPI autoload expects (length prefix, checksum, banking) is **not documented anywhere public**.
-  - RTL837x images start with a 2-byte prefetch length. **[V]** The older RTL8367N/GS105E v2 flash holds a bootloader at 0x0 and firmware at 0x1D000 in a 1 MB 25Q80 ([libc0607 GS105Ev2 notes](https://github.com/libc0607/RTL8370N_switch_hacking/blob/master/RTL8367N-GS105Ev2.md)). So this family can run code larger than the IROM from flash, probably through a loader. **[I]**
+  - RTL837x images start with a 2-byte prefetch length. **[V]** The older RTL8367N and GS105E v2 flash holds a bootloader at 0x0 and firmware at 0x1D000 in a 1 MB 25Q80 ([libc0607 GS105Ev2 notes](https://github.com/libc0607/RTL8370N_switch_hacking/blob/master/RTL8367N-GS105Ev2.md)). So this family can run code larger than the IROM from flash, probably through a loader. **[I]**
   - Expect to work out the RTL8367S format by dumping a retail "easy smart" switch built on the RTL8367S, or by trial.
 
 ### What the 8051 can reach
@@ -202,10 +202,10 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 
   The blob also touches CKCON (0x8E), which is DW8051-specific, plus Timer 0 and the interrupt registers.
 - **Internal NIC [V].** Registers 0x1A04–0x1A5C (`nic_reg`, in the GPL [rtl8367c_reg.h](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c)) cover:
-  - RX/TX ring and buffer pointers;
-  - RX/TX command;
+  - RX and TX ring and buffer pointers;
+  - RX and TX command;
   - interrupt mask and status;
-  - RX filters (unicast/multicast/broadcast, ARP, CRC/L3/L4 checksum error);
+  - RX filters (unicast, multicast and broadcast, ARP, CRC, L3 and L4 checksum error);
   - TX loopback;
   - multicast hash.
 
@@ -223,7 +223,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
   - SA moving;
   - ACL action.
 
-  There are also per-port link-up/down indicators for the 8051 and a thermal interrupt. RLDP (Realtek loop detection) can be handed to the 8051 (`rtl8367c_setAsicRldpEnable8051`).
+  There are also per-port link-up and link-down indicators for the 8051 and a thermal interrupt. RLDP (Realtek loop detection) can be handed to the 8051 (`rtl8367c_setAsicRldpEnable8051`).
 - **GPIO, I²C, UART, LEDs [V].**
   - GPIO: `EN_GPIO`, `CTRL_GPIO`, `SEL_GPIO` and `STATUS_GPIO` at 0x1350 and 0x13C7–0x13C9.
   - I²C master: register-level, on GPIO pin groups, about 252 kHz by default (`rtk_i2c_init`, `I2C_CTRL` 0x1374, `I2C_CLOCK_DIV` 0x130A).
@@ -237,7 +237,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 - At 125 MHz the DW8051 runs about 31 M machine cycles per second, roughly 15–25 M 8-bit instructions per second.
 - For 16- and 32-bit work that is somewhere between a 16 MHz AVR and a slow Cortex-M0. Each switch-register access costs about 20+ cycles.
 - That is plenty for:
-  - LLDP / LLDP-MED power negotiation;
+  - LLDP and LLDP-MED power negotiation;
   - a uIP-class IPv4 stack with ping, DHCP, a tiny HTTP page or a UDP config protocol;
   - link and LED supervision;
   - polling an I²C PD controller.
@@ -249,30 +249,30 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 ### Software and docs
 
 - **Vendor API (GPL).**
-  - Realtek "rtl8367c" API, in OpenWrt/ImmortalWrt trees, for example [hanwckf/immortalwrt-mt798x …/rtk/rtl8367c](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c).
+  - Realtek "rtl8367c" API, in OpenWrt and ImmortalWrt trees, for example [hanwckf/immortalwrt-mt798x …/rtk/rtl8367c](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c).
   - The full register header has about 22,800 lines.
   - [`rtl8367c_asicdrv_port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/rtl8367c_asicdrv_port.c) and [`port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/port.c) contain the 8051 programs `Sgmii_Init` (1,183 B), `Fiber2_Auto`/`Fiber2_1G`/`Fiber2_100M` (about 2 KB each) and `Fiber` (1,507 B), with their loader.
   - The [Mercusys MR80X v2 GPL drop](https://ratatoskr.run/linux-firmware/2026/06/17116216/t) is cited as the source of the 1,233-byte variant.
 - **Linux.**
-  - Upstream `rtl8365mb` gained RTL8367S SGMII/HSGMII support in commit fcaf2221b970 (2026-07-22) ([cover letter thread](https://ratatoskr.run/lkml/2026/07/17247411/t)).
+  - Upstream `rtl8365mb` gained RTL8367S SGMII or HSGMII support in commit fcaf2221b970 (2026-07-22) ([cover letter thread](https://ratatoskr.run/lkml/2026/07/17247411/t)).
   - v2 of the series loaded the DW8051 firmware ([v2 patch](https://lkml.rescloud.iu.edu/hypermail/linux/kernel/2606.1/05986.html)). v3 and later keep the DW8051 **in reset**, because the firmware "only duplicates the link management phylink already performs".
   - The [linux-firmware MR 1092](https://ratatoskr.run/linux-firmware/2026/06/17116216/t) for `realtek/rtl8367s-sgmii.bin` is blocked on licensing: Realtek never published the 8051 source.
   - Practical lesson: Realtek's own 8051 code for this chip is tiny Keil-compiled polling loops.
-- **Register docs.** There is a leaked [RTL8367RB/RTL8367MB Register Table V1.0.0](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf), linked from [libc0607/Realtek_switch_hacking](https://github.com/libc0607/Realtek_switch_hacking). That repo also holds `Realtek_Unmanaged_Switch_API_V1.3.12_20171124`.
+- **Register docs.** There is a leaked [RTL8367RB and RTL8367MB Register Table V1.0.0](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf), linked from [libc0607/Realtek_switch_hacking](https://github.com/libc0607/Realtek_switch_hacking). That repo also holds `Realtek_Unmanaged_Switch_API_V1.3.12_20171124`.
   - A "Realtek Unmanaged Switch Programming Guide" exists on [Scribd](https://www.scribd.com/document/866635652/Realtek-Unmanaged-Switch-ProgrammingGuide-2). I couldn't read it, so its 8051 coverage is unknown.
   - No public document describes the 8051 memory map, SFRs, NIC data path or flash image format. The RTL8367S datasheet lists §9.17 "Embedded 8051", but the public copy has no body for it.
 - **Community.**
-  - [RTLPlayground](https://github.com/logicog/RTLPlayground) is GPL firmware for the RTL8372/73 DW8051, built with SDCC 4.5. Its docs cover clock dividers, timers, UART and flash via SFRs, bank switching, the NIC data path and the RTL tag format ([doc/hardware.md, doc/CpuPort.md](https://github.com/logicog/RTLPlayground/tree/main/doc)).
+  - [RTLPlayground](https://github.com/logicog/RTLPlayground) is GPL firmware for the RTL8372 and RTL8373 DW8051, built with SDCC 4.5. Its docs cover clock dividers, timers, UART and flash via SFRs, bank switching, the NIC data path and the RTL tag format ([doc/hardware.md, doc/CpuPort.md](https://github.com/logicog/RTLPlayground/tree/main/doc)).
   - [Yakigani](https://github.com/libc0607/Yakigani) is an RTL8370 IROM loader over bit-banged SMI using the same 0x1322/0x130C/0x1336/0xE000 sequence.
-  - The RTL8367N/RTL8370N GS105E/GS308E conversions prove that the family's 8051 runs vendor web-managed firmware from SPI flash ([OpenWrt forum](https://forum.openwrt.org/t/netgear-gs308e-v4-adding-support-for-rtl8370n-based-switches/221816)).
-  - Nobody has published custom firmware for the RTL8367S/RTL8367C 8051 specifically.
+  - The RTL8367N and RTL8370N GS105E and GS308E conversions prove that the family's 8051 runs vendor web-managed firmware from SPI flash ([OpenWrt forum](https://forum.openwrt.org/t/netgear-gs308e-v4-adding-support-for-rtl8370n-based-switches/221816)).
+  - Nobody has published custom firmware for the RTL8367S and RTL8367C 8051 specifically.
 - **Toolchain.** SDCC (`-mmcs51`) works. Keil C51 is what Realtek uses. Debugging is by UART printf or the SMI-loaded RAM image; no JTAG pins are known.
 
 ### Feasibility [I]
 
 - **Fastest path to running code:**
   1. The external MCU or a USB-SMI dongle loads a ≤8–16 KB SDCC image into IROM over MDIO and releases reset, exactly as the vendor driver does.
-  2. A UART "hello" plus register read/write through SFRs 0xA0–0xA7 should work in days.
+  2. A UART "hello" plus register read and write through SFRs 0xA0–0xA7 should work in days.
 - **The NIC data path, autoloading from EEPROM or SPI flash, and the real XDATA size all need reverse engineering**, by dumping a commercial RTL8367S smart switch's flash, or by porting RTLPlayground's NIC code and probing. Estimate weeks, with no guarantee.
 - **No secure boot.** None was seen for SMI-loaded code.
 
@@ -281,7 +281,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 ### Identity [V]/[I]
 
 - **Core.** A Nuclei (芯来) press release says Motorcomm's YT9215 series embeds the **Nuclei RISC-V N205** core, used for "lightweight remote management and cloud management" ([riscv-mcu.com, 2022-10-18](https://www.riscv-mcu.com/article-show-id-929.html); Motorcomm's own [launch news](https://en.motor-comm.com/news/26.html) just says "built-in RISC-V processor").
-  - N200 series: 32-bit, 2-stage variable-length pipeline, RV32IEMACB-configurable, configurable ILM/DLM SRAM and I-cache, Nuclei ECLIC interrupt controller.
+  - N200 series: 32-bit, 2-stage variable-length pipeline, RV32IEMACB-configurable, configurable ILM and DLM SRAM and I-cache, Nuclei ECLIC interrupt controller.
   - The same N205 ("Bumblebee") core in the GD32VF103 gives 153 DMIPS and 360 CoreMark at 108 MHz, about 1.4 DMIPS/MHz and 3.3 CoreMark/MHz ([GigaDevice](https://www.gigadevice.com/about/news-and-event/news/gigadevice-unveils-the-gd32v-series-with-risc-v-core)).
   - Which extensions Motorcomm configured is unknown.
 - **Clock, memory, boot ROM: unknown.**
@@ -295,20 +295,20 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 From the [YT9215SC datasheet Draft 0.7](https://cdn.promelec.ru/upload/grab/datasheet.lcsc.com/lcsc/2512311716_Motorcomm-YT9215SC_C51037433.pdf); the YT9215S comes in the same LQFP-128 package with a different pinout ([YT9215S draft](https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf)).
 
 - **SPI flash.**
-  - One flash interface placed on either of two pin sets by `SPF_MUX_SEL`: SPF0 on pins 49/50/54/55, SPF1 on pins 78/79/81/83.
-  - Enabled by `EN_SPIF` (pin 75).
-  - "Dual mode/Single mode" means SPI I/O width, not two flash chips. [`switch-detail-comparison.md`](switch-detail-comparison.md) lists the two I/O modes in separate rows.
-- **MCU disable.** `DIS_MCU` on pin 76, shared with GPIO38/UART1_TX/P2LED2. Pull-up disables the MCU.
+  - One flash interface placed on either of two pin sets by `SPF_MUX_SEL`: SPF0 on pins [49](motorcomm-debug-pins.md#sch-pin-49), [50](motorcomm-debug-pins.md#sch-pin-50), [54](motorcomm-debug-pins.md#sch-pin-54) and [55](motorcomm-debug-pins.md#sch-pin-55), SPF1 on pins [78](motorcomm-debug-pins.md#sch-pin-78), [79](motorcomm-debug-pins.md#sch-pin-79), [81](motorcomm-debug-pins.md#sch-pin-81) and [83](motorcomm-debug-pins.md#sch-pin-83).
+  - Enabled by `EN_SPIF` (pin [75](motorcomm-debug-pins.md#sch-pin-75)).
+  - "Dual mode" and "Single mode" mean SPI I/O width, not two flash chips. [`switch-detail-comparison.md`](switch-detail-comparison.md) lists the two I/O modes in separate rows.
+- **MCU disable.** `DIS_MCU` on pin [76](motorcomm-debug-pins.md#sch-pin-76), shared with GPIO38, UART1_TX and P2LED2. Pull-up disables the MCU.
 - **Peripherals.**
-  - UART0 on pins 46/47, UART1 on pins 70/76.
+  - UART0 on pins [46](motorcomm-debug-pins.md#sch-pin-46) and [47](motorcomm-debug-pins.md#sch-pin-47), UART1 on pins [70](motorcomm-debug-pins.md#sch-pin-70) and [76](motorcomm-debug-pins.md#sch-pin-76).
   - I²C master and MDIO master ("Group1").
   - GPIO5–GPIO50.
   - Parallel or serial LEDs.
   - One interrupt output.
   - 16 KB EEPROM autoload, which is for configuration, not code.
 - **JTAG.** Two JTAG pin groups:
-  - JTAG0: TCK GPIO35/pin 73, TMS GPIO34/72, TDI GPIO36/74, TDO GPIO47/90;
-  - JTAG1: TCK GPIO44/83, TMS GPIO43/81, TDI GPIO45/84, TDO GPIO31/67.
+  - JTAG0: TCK on GPIO35 (pin [73](motorcomm-debug-pins.md#sch-pin-73)), TMS on GPIO34 (pin [72](motorcomm-debug-pins.md#sch-pin-72)), TDI on GPIO36 (pin [74](motorcomm-debug-pins.md#sch-pin-74)), TDO on GPIO47 (pin [90](motorcomm-debug-pins.md#sch-pin-90));
+  - JTAG1: TCK on GPIO44 (pin [83](motorcomm-debug-pins.md#sch-pin-83)), TMS on GPIO43 (pin [81](motorcomm-debug-pins.md#sch-pin-81)), TDI on GPIO45 (pin [84](motorcomm-debug-pins.md#sch-pin-84)), TDO on GPIO31 (pin [67](motorcomm-debug-pins.md#sch-pin-67)).
 
   If the MCU's debug module sits on one of them, standard RISC-V debug with OpenOCD would give halt, memory dump and load. That would be the only realistic way in. **[I]**
 - **Image format, size limit, checksum or signing: not published.** No firmware dump of a YT9215-based web-smart switch was found.
@@ -327,7 +327,7 @@ The upstream [yt921x DSA driver](https://github.com/torvalds/linux/blob/20eef29b
 
 - No public Motorcomm SDK or programming guide for the switch or its MCU was found. The yt921x author notes the "lack of document".
 - There is a FreeBSD port ([if_yt921x_freebsd](https://github.com/am910021/if_yt921x_freebsd)).
-- New yt922x DSA patches (2026-08/09) cover a newer family.
+- yt922x DSA patches posted in August and September 2026 cover a newer family.
 - Toolchain would be upstream `riscv*-gcc -march=rv32imac` or the Nuclei SDK, plus OpenOCD. Getting the memory map and boot format would need JTAG exploration.
 
 ### Feasibility [I]
@@ -355,9 +355,9 @@ The upstream [yt921x DSA driver](https://github.com/torvalds/linux/blob/20eef29b
    - RTL8367S: DIS_8051 pulled up.
    - YT9215S: DIS_MCU pulled up.
 
-   Configure the switch from the MCU over SMI/MDIO, as planned. The RTL8363NB pick is unaffected because it has no CPU.
+   Configure the switch from the MCU over SMI or MDIO, as planned. The RTL8363NB pick is unaffected because it has no CPU.
 3. **Optional later experiment, RTL8367S only.**
-   - If a cost-down ever lets USB-PD be handled by a fixed-function controller, the MCU's remaining jobs would be LLDP-MED power requests, switch configuration, LEDs, and I²C to the PD controller. The RTL8367S 8051 could take those over, saving the MCU and its MII/RMII link.
+   - If a cost-down ever lets USB-PD be handled by a fixed-function controller, the MCU's remaining jobs would be LLDP-MED power requests, switch configuration, LEDs, and I²C to the PD controller. The RTL8367S 8051 could take those over, saving the MCU and its MII or RMII link.
    - Cost: a 24C256 EEPROM (≤32 KB code) or a small SPI flash, plus significant reverse engineering of the NIC path and boot format.
    - Start by SMI-loading SDCC code from a dev board and reusing RTLPlayground's SFR, timer, UART and uIP layers.
    - It would tie the design to the larger LQFP-128 part with three idle PHYs. Not recommended for v1.
@@ -401,11 +401,11 @@ The upstream [yt921x DSA driver](https://github.com/torvalds/linux/blob/20eef29b
 - libc0607 Realtek_switch_hacking: https://github.com/libc0607/Realtek_switch_hacking
 - Yakigani RTL8370 IROM loader: https://github.com/libc0607/Yakigani
 - RTL8367N GS105E v2 conversion: https://github.com/libc0607/RTL8370N_switch_hacking/blob/master/RTL8367N-GS105Ev2.md
-- RTL8367RB/MB register table (leaked): https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf
+- RTL8367RB and RTL8367MB register table (leaked): https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf
 - Realtek Unmanaged Switch Programming Guide (Scribd, not read): https://www.scribd.com/document/866635652/Realtek-Unmanaged-Switch-ProgrammingGuide-2
-- OpenWrt forum, GS308E v4 / RTL8370N: https://forum.openwrt.org/t/netgear-gs308e-v4-adding-support-for-rtl8370n-based-switches/221816
+- OpenWrt forum, GS308E v4 and RTL8370N: https://forum.openwrt.org/t/netgear-gs308e-v4-adding-support-for-rtl8370n-based-switches/221816
 - OpenWrt forum, IPQ5018 + YT9215S: https://forum.openwrt.org/t/ipq5018-and-motorcomm-yt9215s/239942
-- Nuclei / Motorcomm N205 article: https://www.riscv-mcu.com/article-show-id-929.html
+- Nuclei and Motorcomm N205 article: https://www.riscv-mcu.com/article-show-id-929.html
 - Motorcomm YT9215 launch news: https://en.motor-comm.com/news/26.html
-- GigaDevice GD32VF103 (N205/Bumblebee performance): https://www.gigadevice.com/about/news-and-event/news/gigadevice-unveils-the-gd32v-series-with-risc-v-core
+- GigaDevice GD32VF103 (N205 (Bumblebee) performance): https://www.gigadevice.com/about/news-and-event/news/gigadevice-unveils-the-gd32v-series-with-risc-v-core
 - FreeBSD yt921x port: https://github.com/am910021/if_yt921x_freebsd

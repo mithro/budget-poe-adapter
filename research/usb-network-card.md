@@ -1,4 +1,4 @@
-# The adapter as a USB network card (CDC-ECM / NCM / RNDIS)
+# The adapter as a USB network card (CDC-ECM, NCM or RNDIS)
 
 Researched 2026-10-22. Presenting as a USB network card is a project goal, and
 10 Mbit/s is fully acceptable. Price cap: RP2040,
@@ -15,16 +15,16 @@ $0.786 @100. Prices are LCSC, read live where marked **[live]**; others come fro
 1. **A virtual NIC whose far end is the adapter's own MCU** (no Ethernet
    hardware). The host sees a `usb0`/"USB Ethernet" interface, gets an address
    from the MCU's DHCP server, and talks to the adapter over IP: a status web
-   page, a REST/MQTT endpoint, firmware upload. **$0 extra** on the current
-   CH32X035 (TinyUSB supports it; NCM/ECM class drivers are in TinyUSB).
-   It replaces the HID/serial host relay with something standard and
+   page, a REST or MQTT endpoint, firmware upload. **$0 extra** on the current
+   CH32X035 (TinyUSB supports it; NCM or ECM class drivers are in TinyUSB).
+   It replaces the HID or serial host relay with something standard and
    driverless. RAM is the constraint (20 KB), so use a small IP stack.
 2. **A real USB NIC that bridges an RJ45 to USB**, so a USB-C-only device
    (phone, tablet, laptop, Pi Zero-class board) gets both power and wired
    network from one PoE cable.
-   * **Best part: WCH CH397A, $0.672 @100 / $0.596 @1k [live], 10.5k in
+   * **Best part: WCH CH397A, $0.672 @100 and $0.596 @1k [live], 10.5k in
      stock.** One chip: USB 2.0 **high speed** device + 10/100 MAC + PHY, built-in
-     config flash, driverless CDC-ECM by default with NCM/RNDIS listed. Needs a
+     config flash, driverless CDC-ECM by default with NCM or RNDIS listed. Needs a
      25 MHz crystal and magnetics. Under the RP2040 cap and gives 100 Mbit/s,
      not just 10.
    * In the **switch SKU** it is firmware only: the MCU already sits on the
@@ -157,13 +157,13 @@ rejects low-speed network devices ([`bitbang-usb.md`](bitbang-usb.md) §3).
 The "not recommended" quote is pico_eth_doc's own ([pico_eth_doc]). The CH32V307 in the switch SKU is the MCU chosen in [`ethernet-switch.md`](ethernet-switch.md). Prices at 1k for the other MCUs are in [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md).
 
 **USB-NIC SKU sketch (no passthrough):** PoE RJ45 + magnetics → CH397A → USB-C
-D+/D−; the CH32X035 does PoE, the buck and USB-PD. Extra BOM over the
+D+ and D−; the CH32X035 does PoE, the buck and USB-PD. Extra BOM over the
 passthrough SKU: CH397A $0.60 + crystal ~$0.03 + 10/100 magnetics (the
 passthrough already needs a PoE magjack; the 10/100 version is usually cheaper
 than gigabit). CH397A draws 42–80 mA in 10BASE-T and ~70–75 mA at 100M
 (datasheet), about 0.25–0.4 W, which fits even a Class 3 budget.
 
-One wrinkle: with the CH397A on D+/D−, the CH32X035 is not on USB, so
+One wrinkle: with the CH397A on D+ and D−, the CH32X035 is not on USB, so
 the adapter's own telemetry needs either a USB 2.0 hub chip (e.g. WCH CH334/
 CH335, not priced here) or the CH397A alone (power info then only via PD).
 
@@ -189,7 +189,7 @@ be devices and nothing enumerates, but power is unaffected.
 ## 6. Recommendation
 
 * **Passthrough SKU:** add the virtual NIC to the CH32X035 firmware as the
-  standard host relay (NCM + small DHCP + HTTP/JSON). $0 BOM. Keep HID as a
+  standard host relay (NCM + small DHCP + HTTP and JSON). $0 BOM. Keep HID as a
   fallback if RAM proves too tight. Prototype on a CH32X035 board first to
   measure RAM.
 * **Switch SKU:** expose the MCU's switch port as an NCM NIC (bridge). Same
@@ -200,8 +200,8 @@ be devices and nothing enumerates, but power is unaffected.
 
 ## Sources
 
-* [C7465328] CH397A at LCSC (price/stock read 2026-10-22): https://www.lcsc.com/product-detail/C7465328.html
-* CH397 datasheet (USB HS/FS, 10/100 PHY, ECM default, NCM/RNDIS, 25 MHz crystal, currents): https://atta.szlcsc.com/upload/public/pdf/source/20240813/7579B736A93AD62F1FA2079FDA525BA1.pdf
+* [C7465328] CH397A at LCSC (price and stock read 2026-10-22): https://www.lcsc.com/product-detail/C7465328.html
+* CH397 datasheet (USB HS or FS, 10/100 PHY, ECM default, NCM or RNDIS, 25 MHz crystal, currents): https://atta.szlcsc.com/upload/public/pdf/source/20240813/7579B736A93AD62F1FA2079FDA525BA1.pdf
 * CH390H at LCSC: https://www.lcsc.com/product-detail/C7498452.html
 * [pico-usb-wifi] CNX Software, 2026-07-16 (NCM, L2 bridge, 4.75 Mbit/s): https://www.cnx-software.com/2026/07/16/pico-usb-wifi-converts-the-raspberry-pi-pico-w-into-a-driverless-usb-wifi-adapter/ ; code https://gitlab.com/baiyibai/pico-usb-wifi
 * [pmOS] postmarketOS switch to NCM (Windows 10 lacks NCM): https://postmarketos.org/edge/2023/10/29/rndis-ncm

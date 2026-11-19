@@ -22,7 +22,7 @@ Sean "xobs" Cross did with grainuum?
   low speed. Linux rewrites them to 8-byte interrupt endpoints ([LS bulk patch]),
   and the Linux network class drivers (cdc_ether, cdc_ncm, rndis_host) reject the
   device. cnlohr's RNDIS demo on the CH32V003 "works with Windows, but not Linux"
-  and is "VERY SLOW". So CDC-ECM/NCM/RNDIS is off the table. CDC-ACM serial on low
+  and is "VERY SLOW". So CDC-ECM, NCM or RNDIS is off the table. CDC-ACM serial on low
   speed is also out of spec and only half works.
 * **It saves almost no money here.** Hardware USB FS device is nearly free in the
   WCH range: the CH570Q ($0.233 @50) has USB FS and costs about the same as the
@@ -33,7 +33,7 @@ Sean "xobs" Cross did with grainuum?
 * **Recommendation: don't bit-bang USB on the main MCU.** Keep the CH32X035
   (hardware USB FS + PD). Bit-banged low-speed HID is worth keeping in mind only
   when the MCU is chosen for some other reason and has no USB, for example a
-  CH32V003 cold-start helper that needs a debug/DFU port, or a Wi-Fi part such as
+  CH32V003 cold-start helper that needs a debug or DFU port, or a Wi-Fi part such as
   the BK7238. The RP2040's PIO USB is only useful as a *second* port, since the
   RP2040 already has hardware USB.
 
@@ -164,13 +164,13 @@ All of them share the same structure:
    decode and bit-unstuffing on the fly, and stores bytes. At LS, 48 MHz gives
    32 cycles per bit, which is enough for two GPIO writes plus stuffing and a
    running CRC.
-2. **The handshake reply** (ACK/NAK/DATA) has to start within the USB
+2. **The handshake reply** (ACK, NAK and DATA) has to start within the USB
    turnaround time (≈ 2–7.5 bit times, i.e. 1.3–5 µs at LS). That is why the
    ISR cannot be pre-empted and why descriptors and replies are prepared ahead.
 3. **TX** drives both lines from precomputed, bit-stuffed NRZI data, ending in
    SE0 + J (end of packet).
 4. **Clock**: no crystal. The internal RC is trimmed by timing the host's 1 ms
-   keep-alive (LS) pulses. V-USB at 12.8/16.5 MHz and rv003usb both do this.
+   keep-alive (LS) pulses. V-USB at 12.8 MHz or 16.5 MHz and rv003usb both do this.
 5. **Pull-up**: 1.5 kΩ on D− marks a low-speed device; a GPIO can drive it to
    force re-enumeration.
 
@@ -195,7 +195,7 @@ bit-level work in hardware state machines and the CPU only handles bytes.
 
 The edge-rate tests should use the Pi 5 and a laptop.
 
-HID is driverless everywhere and also reachable from a browser (WebHID/WebUSB),
+HID is driverless everywhere and also reachable from a browser (WebHID or WebUSB),
 so a config page for the adapter could be a static web page.
 
 ## 4. Fit with the rest of the design
@@ -231,14 +231,14 @@ against a CH570Q, which has hardware USB for the same money.
 
 ### Where software USB still earns a place
 
-* A **CH32V003 cold-start/PoE helper** (as considered in [`usb-c-pd.md`](usb-c-pd.md)) could
-  expose a HID debug and DFU port for free if two GPIOs reach D+/D−. Not needed
+* A **CH32V003 cold-start and PoE helper** (as considered in [`usb-c-pd.md`](usb-c-pd.md)) could
+  expose a HID debug and DFU port for free if two GPIOs reach D+ and D−. Not needed
   with the CH32X035, which already meets the 4 mA PoE mark-event limit
   ([`cost-reduction.md`](cost-reduction.md)).
 * An MCU picked for its **network** and lacking USB (e.g. BK7238 Wi-Fi, which
   runs at 160 MHz) could in principle bit-bang LS HID, but no port exists, and
   pairing it with a CH32X035 over UART (~$0.98 total) is the documented path.
-* **RP2040 / RP2350 designs**: PIO-USB gives a second FS device or host port, for
+* **RP2040 and RP2350 designs**: PIO-USB gives a second FS device or host port, for
   example to be a device to the Pi and a host to something else. Not needed for
   this adapter.
 

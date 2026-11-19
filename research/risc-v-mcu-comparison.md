@@ -1,6 +1,6 @@
 # MCU comparison for the PoE → USB-C adapter
 
-Researched 2026-10-21/22. Prices and stock were read live from LCSC product pages
+Prices and stock were read live from LCSC product pages on 2026-10-21 and 2026-10-22
 (JLCPCB assembly uses the same C-numbers and LCSC stock). Baseline: RP2040
 at **$0.786 @100**. Anything dearer than that is marked **Over RP2040** (ruled out).
 Non-RISC-V parts are included where the price is competitive.
@@ -12,7 +12,7 @@ https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas
 
 * **CH32X035 is the pick for USB + PD** ($0.31 @100, QFN-28 or QFN-20, both in stock).
   It is the only cheap, in-stock part with a **hardware USB-PD PHY**, and it also has
-  crystal-less USB FS, a 5 V supply, op-amps/comparators for PoE sensing, and TIM1
+  crystal-less USB FS, a 5 V supply, op-amps or comparators for PoE sensing, and TIM1
   complementary PWM with dead time for an MCU-driven buck. It needs no external
   support parts. Prefer the **G8U6 (QFN-28)**: same price, 27 GPIO, and it has a
   comparator (the datasheet lists none on the QFN-20 F8U6). Its network path is the
@@ -22,35 +22,35 @@ https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas
   "No network".
 * **BK7238 is the only network-capable part under the RP2040.** Beken BK7238QH321:
   RISC-V, Wi-Fi 4 + BLE 5.2, 2 MB flash in package, $0.67 @100. It has no USB, so it
-  pairs with a CH32X035 over UART/SPI (~$0.98 together). Caveat: only 514 in stock.
+  pairs with a CH32X035 over UART or SPI (~$0.98 together). Caveat: only 514 in stock.
 * **Every Espressif part is over the RP2040 or out of stock.** ESP32-C3 is $1.29 and
   needs external flash, a crystal and RF matching. ESP8684 (~$0.84) and ESP8266EX
   ($0.99) are out of stock at LCSC; BL602 likewise (~$1.04). Espressif USB is a
-  fixed Serial/JTAG function: it enumerates as a serial port, which is enough for the
+  fixed Serial and JTAG function: it enumerates as a serial port, which is enough for the
   adapter-as-device host relay, but it can't present other USB classes.
 * **No Ethernet route comes in under the RP2040.** The cheapest built-in MDI PHY is
   the CH579M (Cortex-M0, 10BASE-T) at $1.21, then the CH32V208WBU6 (RISC-V, 10M) at
   $1.42. The CH390H SPI 10/100 chip is $0.94 on its own (~$1.25 with a CH32X035).
-  Only the CH32V307 exposes a MAC (RGMII/RMII) for an external PHY or switch port;
+  Only the CH32V307 exposes a MAC (RGMII or RMII) for an external PHY or switch port;
   nothing here offers SGMII. An Ethernet port of the adapter's own only makes sense in
   the switch design, since the passthrough has no spare port.
 * **USB high speed**: the cheapest is CH585M (~$0.91 qty-1 price), then CH32V305
   ($1.27). Not needed for this adapter; FS is plenty. USB host mode isn't needed
   either, so it isn't tracked.
 * **No MCU here has PoE PD hardware.** PoE signature, classification and UVLO stay
-  discrete (or a TMI7303B-class PD IC), using the MCU's ADC/comparators.
+  discrete (or a TMI7303B-class PD IC), using the MCU's ADC or comparators.
 * **"In-built power supplies"**: the parts that run directly from 5 V (CH32V003,
-  CH32X033/X035, CH572D) save the 3.3 V regulator. The on-chip DC-DCs (RP2350,
-  CH58x/CH59x) only power the chip itself; none can run the 57 V input buck. For
+  CH32X033 and CH32X035, CH572D) save the 3.3 V regulator. The on-chip DC-DCs (RP2350,
+  CH58x and CH59x) only power the chip itself; none can run the 57 V input buck. For
   driving an external buck, look at the "Adv PWM" column (complementary outputs +
   dead time).
 
 ## Table
 
-Columns: Flash/SRAM KB = on-chip memory (None for flash = needs external flash); USB = speed of the on-chip controller; Gen = general-purpose USB (any device
-class; Espressif's fixed Serial/JTAG port is No); PD = hardware USB-PD PHY; MDI PHY =
+Columns: Flash and SRAM KB = on-chip memory (None for flash = needs external flash); USB = speed of the on-chip controller; Gen = general-purpose USB (any device
+class; Espressif's fixed Serial and JTAG port is No); PD = hardware USB-PD PHY; MDI PHY =
 built-in Ethernet PHY driving the magnetics directly; MAC if. = how an Ethernet MAC is
-exposed (RGMII/RMII to an external PHY, internal PHY only, or an SPI chip driven by a
+exposed (RGMII or RMII to an external PHY, internal PHY only, or an SPI chip driven by a
 host MCU); 5 V = runs directly from 5 V; DC-DC = on-chip switching regulator for the
 chip itself; Xtal = needs an external crystal; Adv PWM = complementary PWM with dead
 time; Price tier = the LCSC quantity break the @100 price comes from; vs RP2040 = the @1k price minus the RP2040's;
@@ -97,9 +97,9 @@ way the MAC is exposed; Ext flash = needs an external flash chip. ? = not confir
 
 * **CH32X035G8U6 (Pick, USB + PD)**: the only cheap, in-stock part with hardware USB-PD. No crystal or 3.3 V regulator, built-in analog for PoE sensing, dead-time PWM for the buck. Preferred over the F8U6: same price, plus a comparator and more GPIO.
 * **CH32X035F8U6 (Pick, USB + PD)**: same chip in a smaller QFN-20, with no comparator listed and fewer GPIO. Use it if board space matters more.
-* **BK7238QH321 (Pick, Wi-Fi)**: the only Wi-Fi part under the RP2040 price, with flash in package. Pairs with a CH32X035 over UART/SPI for about $0.98. Risk: only 514 in stock.
+* **BK7238QH321 (Pick, Wi-Fi)**: the only Wi-Fi part under the RP2040 price, with flash in package. Pairs with a CH32X035 over UART or SPI for about $0.98. Risk: only 514 in stock.
 * **CH32X033F8P6 (Candidate)**: cheapest part with crystal-less USB and a 5 V supply, but no PD PHY. The CH32X035 adds hardware PD for about $0.05 more.
-* **CH32V203F6P6 / G6U6 (Candidate)**: the current BOM's family, so firmware carries over, but no PD PHY and a crystal is needed, so they lose to the CH32X035.
+* **CH32V203F6P6 and CH32V203G6U6 (Candidate)**: the current BOM's family, so firmware carries over, but no PD PHY and a crystal is needed, so they lose to the CH32X035.
 * **CH570Q (Helper)**: too few pins and no ADC or BLE to be the main MCU; could be a low-power cold-start or watchdog helper.
 * **CH32V003F4P6 (Helper)**: no USB, but at $0.24 with a 5 V supply and dead-time PWM it suits a PoE cold-start helper or an MCU-run buck controller.
 
@@ -110,30 +110,30 @@ way the MAC is exposed; Ext flash = needs an external flash chip. ? = not confir
 * **RP2354A**: RP2350A with 2 MB flash stacked in the package, so no external flash.
 * **CH570Q**: Only 5 GPIO and no ADC (one comparator with a 16-step reference). 5 V input range is specified for the QFN20 'D' parts; unclear for Q. CH570 has the 2.4 GHz radio but no BLE. Needs a 32 MHz crystal.
 * **CH32V003F4P6**: No USB hardware. Low-speed USB can be bit-banged (rv003usb), but USB-PD BMC would also be bit-banged. Good as a PoE cold-start helper (low current, 5 V tolerant supply, TIM1 complementary PWM with dead time).
-* **CH572D**: Cheapest part here with both USB FS (host + device) and BLE 5.0. No ADC: PoE voltage/class sensing would need the comparator plus its 16-step reference. Only 230 in stock at LCSC today. Needs 32 MHz crystal and antenna matching. Bluetooth only, so no Ethernet/Wi-Fi network on its own.
-* **CH32X033F8P6**: Same die family as CH32X035 but no USB-PD/Type-C block (no CC pins). Crystal-less USB.
+* **CH572D**: Cheapest part here with both USB FS (host + device) and BLE 5.0. No ADC: PoE voltage and class sensing would need the comparator plus its 16-step reference. Only 230 in stock at LCSC today. Needs 32 MHz crystal and antenna matching. Bluetooth only, so no Ethernet or Wi-Fi network on its own.
+* **CH32X033F8P6**: Same die family as CH32X035 but no USB-PD and Type-C block (no CC pins). Crystal-less USB.
 * **CH32X035G8U6**: Hardware USB-PD PHY (BMC + CRC), Rp current sources, crystal-less USB, 5 V supply, op-amps and comparator for PoE sensing, TIM1 complementary PWM with dead time for an MCU-driven buck. 27 GPIO. Network: via the USB host relay (the Pi speaks for it on Ethernet), or pair with a BK7238 for Wi-Fi (~$0.98 together @100).
 * **CH32X035F8U6**: The part [`cost-reduction.md`](cost-reduction.md) chose. 19 GPIO. The datasheet ordering table lists no comparator for this package (the QFN28 has 1, LQFP48 has 3); check before relying on comparator-based current limit. Network: as CH32X035G8U6.
 * **CH32L103K8U6**: USB FS device + USB-PD PHY, low-power. Out of stock at LCSC today (reference price only). 3.3 V supply; whether USB runs crystal-less is not confirmed.
 * **CH32V203F6P6**: Current BOM's MCU family. No PD PHY (PD must be bit-banged). USB normally uses an 8 MHz crystal.
 * **CH32V203G6U6**: As CH32V203F6P6 in QFN-28.
-* **CH592F**: BLE 5.4 + USB FS, internal DC-DC (needs an inductor), 32 MHz crystal. Good stock. Cheapest well-stocked BLE option. Bluetooth only, so no Ethernet/Wi-Fi network on its own.
+* **CH592F**: BLE 5.4 + USB FS, internal DC-DC (needs an inductor), 32 MHz crystal. Good stock. Cheapest well-stocked BLE option. Bluetooth only, so no Ethernet or Wi-Fi network on its own.
 * **CH584F**: BLE 5.4 + NFC. Out of stock at LCSC (reference price). The CH585 is the high-speed-USB sibling.
-* **BK7238QH321**: Cheapest network-capable part found, and under the RP2040: Wi-Fi 4 + BLE 5.2, 2 MB flash in package, 160 MHz RISC-V core (per SoCXin). Needs a 26 MHz crystal, RF matching and antenna; 2.7–3.6 V. No USB, so it would talk to the CH32X035 over UART/SPI. Open firmware exists (OpenBeken supports BK7238). LCSC also shows a 5 % discounted price ($0.637 @100). Only 514 in stock.
-* **CH582F**: BLE 5.3, two USB FS controllers, internal DC-DC. Bluetooth only, so no Ethernet/Wi-Fi network on its own.
+* **BK7238QH321**: Cheapest network-capable part found, and under the RP2040: Wi-Fi 4 + BLE 5.2, 2 MB flash in package, 160 MHz RISC-V core (per SoCXin). Needs a 26 MHz crystal, RF matching and antenna; 2.7–3.6 V. No USB, so it would talk to the CH32X035 over UART or SPI. Open firmware exists (OpenBeken supports BK7238). LCSC also shows a 5 % discounted price ($0.637 @100). Only 514 in stock.
+* **CH582F**: BLE 5.3, two USB FS controllers, internal DC-DC. Bluetooth only, so no Ethernet or Wi-Fi network on its own.
 * **CH585M**: Cheapest RISC-V part with USB 2.0 high speed (plus BLE 5.4 + NFC). LCSC only lists a qty-1 price; 162 in stock.
 * **CH390H**: Not an MCU: SPI 10/100 Ethernet MAC + PHY to pair with an MCU. CH32X035 + CH390H is about $1.25 @100, above the RP2040. An Ethernet port of the adapter's own only makes sense in the switch design, since the passthrough has no spare port.
 * **ESP8266EX**: Not RISC-V. Out of stock at LCSC (reference price). Needs external flash, crystal and RF matching.
 * **CH32V208GBU6**: BLE 5.3 + USB FS. The QFN-28 package has no Ethernet PHY (use WBU6).
 * **CH579M**: Not RISC-V. Cheapest MCU found with a built-in Ethernet PHY (10BASE-T), plus BLE 4.2 and USB FS, but still above the RP2040. The QFN-28 CH579F has no Ethernet.
 * **CH32V305FBP6**: USB 2.0 high speed with built-in PHY plus a USB FS OTG port.
-* **ESP32-C3**: USB is a fixed-function Serial/JTAG device: it shows up as a serial port (enough for the adapter-as-device host relay) but can't present other classes. Needs external flash, 40 MHz crystal, RF matching and an antenna.
+* **ESP32-C3**: USB is a fixed-function Serial and JTAG device: it shows up as a serial port (enough for the adapter-as-device host relay) but can't present other classes. Needs external flash, 40 MHz crystal, RF matching and an antenna.
 * **CH32V208WBU6**: Cheapest RISC-V MCU with a built-in Ethernet PHY (10BASE-T) plus BLE 5.3 and USB FS. 10BASE-T needs its own magnetics and cannot join the gigabit passthrough without a switch.
 * **ESP32-C3FH4**: ESP32-C3 with 4 MB flash in package.
-* **ESP32-H2FH4**: No Wi-Fi: BLE 5 + 802.15.4 only. Marked 'not recommended for new designs' at LCSC. USB Serial/JTAG only.
+* **ESP32-H2FH4**: No Wi-Fi: BLE 5 + 802.15.4 only. Marked 'not recommended for new designs' at LCSC. USB Serial and JTAG only.
 * **CH32V317WCU6**: Built-in 10/100 Ethernet PHY and USB HS + FS.
 * **GD32VF103RBT6**: USB FS OTG. Out of stock at LCSC (reference price).
-* **ESP32-C6FH4**: Wi-Fi 6 + BLE 5 + 802.15.4. Out of stock at LCSC (reference price, lowest tier 200). USB Serial/JTAG only.
+* **ESP32-C6FH4**: Wi-Fi 6 + BLE 5 + 802.15.4. Out of stock at LCSC (reference price, lowest tier 200). USB Serial and JTAG only.
 * **CH32V307RCT6**: Built-in 10M PHY plus a gigabit MAC (RGMII). The switch design in [`ethernet-switch.md`](ethernet-switch.md) uses this part.
 * **ESP32-C5-WROOM-1**: Dual-band Wi-Fi 6. LCSC has the module only, no bare chip; out of stock (reference price).
 * **ESP8684H2**: ESP32-C2 with 2 MB flash in package. No USB at all. Out of stock at LCSC; $0.8365 is LCSC's 'from' price, tier not shown.
@@ -141,16 +141,16 @@ way the MAC is exposed; Ext flash = needs an external flash chip. ? = not confir
 
 ## Not included
 
-* **Bouffalo BL616/BL618** (Wi-Fi 6 + BLE + USB HS OTG + Ethernet MAC): only appears
+* **Bouffalo BL616 and BL618** (Wi-Fi 6 + BLE + USB HS OTG + Ethernet MAC): only appears
   at JLCPCB as a consigned part with no price or stock, so it can't be ordered for
   JLC assembly in the normal way.
 * **ESP32-C61, ESP32-P4**: no LCSC listing found. P4 has no radio and is far above the
   RP2040 price anyway.
-* **W800/W801** (Winner Micro Wi-Fi): LCSC pages wouldn't load, so no price here.
+* **W800 and W801** (Winner Micro Wi-Fi): LCSC pages wouldn't load, so no price here.
 * **CH641** (RISC-V, USB-PD PHY, 5–12 V supply): looks interesting for running
   straight off the 12 V rail, but its LCSC page wouldn't load so it has no price here.
   Worth a manual check.
-* **CH32V002/004/005/006, CH570D**: newer CH32V003-class or CH57x parts; no LCSC price
+* **CH32V002, CH32V004, CH32V005, CH32V006 and CH570D**: newer CH32V003-class or CH57x parts; no LCSC price
   could be read. They lack USB-PD hardware.
 
 ## Method and caveats

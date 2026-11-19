@@ -1,6 +1,6 @@
 # Bit-banging 10 Mbit/s Ethernet
 
-Question: can the adapter's MCU get onto Ethernet with no MAC/PHY silicon of
+Question: can the adapter's MCU get onto Ethernet with no MAC or PHY silicon of
 its own, either by driving 10BASE-T on the wire straight from GPIO, or by
 running the MAC in software (RP2040 PIO) against an external PHY or a switch
 port? Context: price cap is the RP2040 (~$0.79 @100); see
@@ -29,7 +29,7 @@ remember them, not re-read for this note.
   A bit-banged port needs something on the board to talk to, and that means
   the 3-port switch from [`ethernet-switch.md`](ethernet-switch.md).
 * **Best fit: PIO MAC to the switch's extension MAC port, with no PHY at all.**
-  The RTL8363NB's extension port speaks RMII/MII in PHY mode, so an RP2040
+  The RTL8363NB's extension port speaks RMII or MII in PHY mode, so an RP2040
   can run the existing PIO RMII code (or a simpler MII variant at 10 Mbit/s)
   straight into it. That replaces the CH32V307 in the switch design for
   $0 of extra silicon, which is the "RP2040 on RMII" trim already costed in
@@ -40,14 +40,14 @@ remember them, not re-read for this note.
   more than it saves. It also lands in half duplex unless the MCU sends FLP
   autonegotiation bursts (§3.3).
 * **A separate, standalone 10/100 port via a cheap PHY** is possible:
-  CoreChips SR8201F RMII PHY is **$0.27 @100 / $0.23 @1k [live]**, plus a
+  CoreChips SR8201F RMII PHY is **$0.27 @100 and $0.23 @1k [live]**, plus a
   25 MHz crystal and a magjack. It only makes sense as a second cable
   (management port), which the passthrough product doesn't have. If you did
   want that, the WCH CH390H SPI MAC+PHY at ~$0.94 (from
   [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md)) is simpler and frees the PIO.
 * **Without PIO (CH32X035, CH32V003), MII at 10 Mbit/s is the only plausible
   bit-bang target.** MII at 10M is a 2.5 MHz nibble clock supplied by the
-  PHY/switch, slow enough for timer-triggered DMA to and from a GPIO port on
+  PHY or switch, slow enough for timer-triggered DMA to and from a GPIO port on
   a 48 MHz part. I found no one who has done this; it is a research item, not
   a plan (§4.3).
 
@@ -217,7 +217,7 @@ remember them, not re-read for this note.
 * **MII at 10 Mbit/s** is 4-bit nibbles at 2.5 MHz, with TX_CLK and RX_CLK
   supplied by the PHY (or by the switch in MII PHY mode). Even slower than
   RMII, at the cost of ~5 more pins (TXD0-3, TX_EN, TX_CLK, RXD0-3, RX_DV,
-  RX_CLK, plus MDC/MDIO).
+  RX_CLK, plus MDC and MDIO).
 
 ### 4.3 Without PIO: DMA-driven MII on a WCH part (untested idea)
 
@@ -248,7 +248,7 @@ relay, it would need a MAC. A software one is conceivable over MII at 10M:
 
 All need a 25 MHz crystal (or 50 MHz RMII clock) and magnetics. The PIO
 drivers use a few LAN87xx-specific MDIO registers to force 10M; for SR8201F
-that would be a small port, using the standard BMCR/ANAR registers.
+that would be a small port, using the standard BMCR and ANAR registers.
 
 ## 5. Recommendation
 
@@ -258,7 +258,7 @@ that would be a small port, using the standard BMCR/ANAR registers.
    switch's extension port** (MAC-to-MAC, no PHY, no magnetics, no analog
    front end). Start from the Mongoose pico-rmii driver; change the MDIO
    part to talk to the switch's SMI instead of a PHY; use the DMA sniffer for
-   CRC-32. 10 Mbit/s is plenty for LLDP, DHCP and a small web/management page.
+   CRC-32. 10 Mbit/s is plenty for LLDP, DHCP and a small web and management page.
 3. **Bench tests needed before committing:**
    * RTL8363NB ext port in RMII PHY mode at 10 Mbit/s against PIO RMII:
      who sources the 50 MHz clock (the PIO driver expects to be clocked by it).

@@ -11,16 +11,16 @@ Spreadsheet copy: the *Dev boards* tab of the [comparison sheet](https://docs.go
 - **Neither vendor sells a public evaluation board.** I found no Realtek RTL8367S EVB or Motorcomm YT9215 EVB listed at any distributor, AliExpress, eBay or Amazon. Both exist only through distributors under NDA. **[V: absence in searches]**
 - **RTL8367S: the cheapest and best dev platform is a A$15–30 unmanaged 5-port TP-Link switch.**
   - TP-Link TL-SG105 **V6**, LS1005G **V1** and TL-SG1005D **rev 7** use the RTL8367S with only a 24Cxx EEPROM next to it. **[V]**
-  - Pull the EEPROM and its footprint gives you the chip's SMI bus (SDA/SCK), 3.3 V and GND. McMCCRU drove a TL-SG1005D rev 7 from an Arduino Nano and an STM32 Blue Pill this way. **[V]**
-  - From there an RP2040 can load 8051 code into the IROM window over SMI, exactly as the GPL `rtl8367c` driver does. UART (pins 45/46) and the SPI-flash pins would need fine-pitch wires to the LQFP. **[I]**
-  - For a cleaner board with a real CPU link, the routers MERCUSYS MR85X (MT7981B, RTL8367S over 2500base-X) and TP-Link Archer C5 v4 (MT7620A) run OpenWrt with the switch already on DSA/swconfig. **[V]**
+  - Pull the EEPROM and its footprint gives you the chip's SMI bus (SDA and SCK), 3.3 V and GND. McMCCRU drove a TL-SG1005D rev 7 from an Arduino Nano and an STM32 Blue Pill this way. **[V]**
+  - From there an RP2040 can load 8051 code into the IROM window over SMI, exactly as the GPL `rtl8367c` driver does. UART (pins 45 and 46) and the SPI-flash pins would need fine-pitch wires to the LQFP. **[I]**
+  - For a cleaner board with a real CPU link, the routers MERCUSYS MR85X (MT7981B, RTL8367S over 2500base-X) and TP-Link Archer C5 v4 (MT7620A) run OpenWrt with the switch already on DSA and swconfig. **[V]**
   - Open-hardware designs to copy or order from JLCPCB: AlbrechtL's `rpi-managed-switch-4-port` (GPL-3.0, KiCad) and the PCBWay "RTL8367S-4GE+SFP" project. **[V]**
 - **YT9215: much thinner.**
   - Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU. **[V]**
   - The YT9215S draft datasheet on LCSC says "Integrated RISC-V microprocessor" and has a `STRAP_DIS_MCU` pin, so the core is probably on the die but not supported on the S. **[V]/[I]** For CPU work, buy the **YT9215SC**.
-  - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII/2500base-X) and the BDY-G98 / 彼度云 G98 RK3588 box (two YT9215S over RGMII). **[V]** Both are mostly sold in China.
+  - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII or 2500base-X) and the BDY-G98 / 彼度云 G98 RK3588 box (two YT9215S over RGMII). **[V]** Both are mostly sold in China.
   - The practical dev board is to **build our own**: one LQFP-128 chip (YT9215S about US$1.92 at LCSC), plus the open-hardware 5-port YT9215S switch on OSHWHub as a reference layout. **[V]/[I]**
-- **Recommendation:** buy two or three TP-Link TL-SG105 V6 / LS1005G V1 units now for RTL8367S 8051 experiments, and treat any YT9215 work as "spin our own breakout with a YT9215SC" if it is ever needed.
+- **Recommendation:** buy two or three TP-Link TL-SG105 V6 and LS1005G V1 units now for RTL8367S 8051 experiments, and treat any YT9215 work as "spin our own breakout with a YT9215SC" if it is ever needed.
 
 ## 1. Official evaluation boards
 
@@ -98,9 +98,9 @@ On Amazon AU the TL-SG105 and the LS1005G have replaced the TL-SG1005D.
 How to use one as a dev board: **[I]**, building on the [V] items above.
 
 1. Desolder the EEPROM and solder a 6-pin header to its pads (SDA, SCK, 3.3 V, GND).
-2. Wire an RP2040 (Pico) to SDA/SCK. Port the GPL `rtl8367c` SMI routines, or start from McMCCRU's Arduino sketch.
+2. Wire an RP2040 (Pico) to SDA and SCK. Port the GPL `rtl8367c` SMI routines, or start from McMCCRU's Arduino sketch.
 3. Load test code into the 8051 IROM: assert `DW8051_RST`, enable `ACS_IROM_EN`, write bytes to 0xE000+, release reset (see [`switch-embedded-cpu.md`](switch-embedded-cpu.md) boot flow).
-4. For printf debug, tack a wire to the chip's UART TX (pin 46). For flash boot experiments, add a SOIC-8 SPI flash on SPIF pins 48/49/53/54 and set the EN_SPIF strap.
+4. For printf debug, tack a wire to the chip's UART TX (pin 46). For flash boot experiments, add a SOIC-8 SPI flash on SPIF pins 48, 49, 53 and 54 and set the EN_SPIF strap.
 
 Variants to avoid: newer hardware versions of these models may move to RTL8367S-VB, RTL8367RB-VB or a different vendor. Older TL-SG1005D v5 uses "RTL8367" (no S, per [shaddack's notes](https://shaddack.mauriceward.com/notes/ethernet.webt)). AliExpress "5-port gigabit switch module" PCBAs are almost all **RTL8367RB** (older RTL8367B family), not the S (e.g. [eBay 135146159571](https://www.ebay.com/itm/135146159571)). **[V]**
 
@@ -138,7 +138,7 @@ Indicative prices and where to buy:
 | TOTOLINK A8000RU | **eBay** | – | 50 | 80 | US$ | – |
 | Buffalo WSR-2533DHP2 | **eBay** | Japanese sellers | – | – | – | – |
 
-Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII/HSGMII patches for RTL8367S posted June 2026), plus OpenWrt's `rtl8367b`/`rtk-gsw` drivers. **[V]**
+Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches for RTL8367S posted June 2026), plus OpenWrt's `rtl8367b`/`rtk-gsw` drivers. **[V]**
 
 ### 2c. Open hardware RTL8367S boards
 
@@ -275,7 +275,7 @@ I found **no cheap unmanaged retail switch** confirmed to use a YT9215. Motorcom
 
 ### 3c. Open hardware and self-build
 
-- **OSHWHub "基于裕太微YT9215S的五口千兆交换机" v2.0** by pankanwen ([oshwhub.com](https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0)) is an open 5-port gigabit switch on the YT9215S. It can be ordered through JLCPCB. I could not read the page (robots block), so I don't know whether JTAG/UART are broken out. **[V: exists] / [I]**
+- **OSHWHub "基于裕太微YT9215S的五口千兆交换机" v2.0** by pankanwen ([oshwhub.com](https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0)) is an open 5-port gigabit switch on the YT9215S. It can be ordered through JLCPCB. I could not read the page (robots block), so I don't know whether JTAG or UART are broken out. **[V: exists] / [I]**
 - **Chip cost:** YT9215S about US$1.92 at LCSC (C5899183, 57 in stock). The YT9215SC is LCSC C51037433. **[V]**
 - **Our own breakout** (recommended if we ever pursue the RISC-V core): YT9215SC + SPI flash socket + both JTAG groups on a 2.54 mm header + UART0 + strap jumpers (`STRAP_DIS_MCU`, `STRAP_EN_SPIF`, `STRAP_SMI_SEL`) + one RJ45 + SGMII to an SFP cage. **[I]**
 
@@ -292,6 +292,6 @@ Note: the prices in this file come from search snippets and deal pages, not from
 
 ## Open questions
 
-- Which current TL-SG105 / LS1005G hardware versions are still RTL8367S? The V6 and V1 data points are from 2022.
+- Which current TL-SG105 and LS1005G hardware versions are still RTL8367S? The V6 and V1 data points are from 2022.
 - Does the CR881x's YT9215S have its MCU strapped off (pin 75)? A photo of the board around the switch would answer it.
-- Contents of the OSHWHub YT9215S design (JTAG/UART breakout).
+- Contents of the OSHWHub YT9215S design (JTAG or UART breakout).

@@ -194,7 +194,6 @@ bit-level work in hardware state machines and the CPU only handles bytes.
 | Limit | Value | Verdict | Reference |
 | --- | --- | --- | --- |
 | Max packet | 8 bytes | Fine | USB 2.0 §5.7–5.8 |
-| Max packet | 8 bytes | Fine | USB 2.0 §5.7–5.8 |
 | Control endpoints | Allowed | Fine | USB 2.0 §5.7–5.8 |
 | Interrupt endpoints | Allowed | Fine | USB 2.0 §5.7–5.8 |
 | Interrupt `bInterval` | ≥ 10 ms by spec | Fine either way | – |

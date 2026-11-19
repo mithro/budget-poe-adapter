@@ -43,7 +43,7 @@ Unmarked prices are estimates carried over from [`bom-rough.csv`](../design/bom-
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | A | **Host relay over USB-C** | – | – | USB 2.0 to the host | Via the host | No | ≈ $0.00 | ≈ $0.05 | – | **Best cheap option** |
 | B | **3-port switch, trimmed** | RTL8363NB | RP2040 | RMII | Yes | Yes | ≈ +$3.3 | ≈ +$3.6 | Estimate | Best standalone option |
-| C | 3-port switch as designed | RTL8363NB | CH32V307 | – | Yes | Yes | ≈ +$4.50 | ≈ +$4.50 | – | Baseline |
+| C | 3-port switch as designed | RTL8363NB | CH32V307 | RMII | Yes | Yes | ≈ +$4.50 | ≈ +$4.50 | – | Baseline |
 | D | Switch with embedded CPU | YT9215S | Its RISC-V core | – | Yes | Yes | ≈ +$3.5 | ≈ +$4 | Estimate | Only if Motorcomm gives an SDK |
 | E | PoE-layer signalling | – | – | – | Not really | Yes | $0 | $0 | Already in design | Already used |
 | F | Analog link sensing | – | – | – | No | Yes | ≈ $0.05 | ≈ $0.10 | – | Status only |
@@ -71,7 +71,7 @@ The Δ BOM columns are against the passive variant @1k.
 Approach G covers the passive tap, spare pairs, 10BASE-T1S, PoE-DC powerline,
 autoneg next pages and PHY-PHY + FPGA ideas.
 
-A and B and C are not exclusive: a "basic" SKU can ship A, and a "managed" SKU
+A can be combined with B or C: a "basic" SKU can ship A, and a "managed" SKU
 can add the switch. A's firmware (USB protocol, state model) is reusable in
 the managed SKU as the local config interface.
 
@@ -83,8 +83,8 @@ The adapter is the USB‑C power source, so by Type‑C default it is also the
 **DFP (USB host)** and the sink (Pi) is the **UFP (USB device)**. That
 matches the Pi's default: the Pi 4 and 5 USB‑C port is a DWC2 OTG controller that
 acts as a USB 2.0 *gadget* with `dtoverlay=dwc2` and `libcomposite` (Pi 5
-needed a firmware and kernel update shortly after launch; now in the normal
-images). **[Pi5 gadget]**
+needs a firmware and kernel update that the normal Raspberry Pi OS images
+include). **[Pi5 gadget]**
 
 Two ways to wire it:
 
@@ -124,7 +124,7 @@ CH32V203 is kept. **Δ ≈ $0.00–0.05.**
 Drawbacks:
 
 * Needs host software. Without it the adapter still works as a dumb
-  PoE→USB‑C adapter with class‑event based power limits (as designed now).
+  PoE→USB‑C adapter with class‑event based power limits.
 * The host sees the adapter's power state only while it is running; the
   adapter cannot be managed if the host is down. For "is my Pi alive"
   monitoring this is a real limitation.
@@ -227,8 +227,7 @@ Notes on the rows of this table:
 - **Data over PoE DC (powerline-style)**, why it fails here: Nothing at the PSE end listens.
 - **Autoneg next pages**, would work if: The adapter terminates the link (has PHYs)
 - **Autoneg next pages**, why it fails here: Only the two link endpoints exchange them.
-- **Two PHYs back-to-back + glue logic**, would work if: It does work.
-- **Two PHYs back-to-back + glue logic**, why it fails here: Costs more than the switch.
+- **Two PHYs back-to-back + glue logic**, why it fails here: It works, but costs more than the switch.
 - **"MAC-in-PHY" SPI Ethernet parts**, why it fails here: They all terminate their *own* link.
 - **USB-Ethernet bridge (RTL8153)**, would work if: The host has USB 3.
 - **USB-Ethernet bridge (RTL8153)**, why it fails here: The Pi's USB-C port is USB 2.0.

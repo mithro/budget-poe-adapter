@@ -137,7 +137,7 @@ There are two JTAG groups, both shared with LEDs and straps [**V**](#evidence-co
 
 ### How the mirrored board wires these pins
 
-All of this table is from the netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) [**V**](#evidence-codes). Blank cells mean the board has nothing there.
+All of this table is from the netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) [**V**](#evidence-codes). Blank cells mean the board has nothing there, and `?` means the netlist gives no value.
 
 | Pin | First signal | Second signal | Third signal | Board net | Strap resistor | Strap value | Pulls to | LED resistor | Test point | Strap level | Effect |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -145,16 +145,16 @@ All of this table is from the netlist [`schematic/netlist-schematic.enet`](https
 | [46](#s-pin-46) | UART0 TX |  |  | None |  |  |  |  | None |  |  |
 | [19](#s-pin-19) | UART1 RX |  |  | None |  |  |  |  |  |  |  |
 | [48](#s-pin-48) | SPF_MUX_SEL |  |  | None | Internal |  | GND |  |  | 0 | SPF1 selected |
-| [74](#s-pin-74) | EN_SPIF |  |  | P3_LED0 | R27 | 4.7 kΩ | GND | R31 |  | 0 | Flash off |
-| [75](#s-pin-75) | DIS_MCU | UART1 TX | UART2 TX | P2_LED0 | R19 | 4.7 kΩ | GND | R25 |  | 0 | MCU enabled |
-| [76](#s-pin-76) | DISAUTOLOAD | SPF1 CS# |  | DISAUTOLOAD | R11 | 4.7 kΩ | 3V3 |  | TP14 | 1 | No autoload |
-| [73](#s-pin-73) | JTAG0 TCK | UART2 RX |  | EN_PWRLIGHT | R12 | 4.7 kΩ | 3V3 |  |  | 1 |  |
-| [79](#s-pin-79) | JTAG1 TCK | JTAG0 TMS |  | P1_LED0 | R17 |  | 3V3 | R23 |  | 1 |  |
-| [80](#s-pin-80) | JTAG0 TDO |  |  | P0_LED1 | R16 |  | 3V3 | R22 |  | 1 |  |
-| [81](#s-pin-81) | JTAG0 TDI |  |  | P0_LED0 | R15 |  | 3V3 | R21 |  | 1 |  |
-| [71](#s-pin-71) | JTAG1 TMS | SPF1 SI |  | P4_LED1 | R30 |  | 3V3 | R34 |  | 1 |  |
-| [72](#s-pin-72) | JTAG1 TDI | SPF1 SO |  | P3_LED1 | R28 |  | GND | R32 |  | 0 |  |
-| [77](#s-pin-77) | JTAG1 TDO | SPF1 SCK |  | P2_LED1 | R20 |  | GND | R26 |  | 0 |  |
+| [74](#s-pin-74) | EN_SPIF |  |  | P3_LED0 | <a id="ob-r27"></a>R27 | 4.7 kΩ | GND | <a id="ob-r31"></a>R31 |  | 0 | Flash off |
+| [75](#s-pin-75) | DIS_MCU | UART1 TX | UART2 TX | P2_LED0 | <a id="ob-r19"></a>R19 | 4.7 kΩ | GND | <a id="ob-r25"></a>R25 |  | 0 | MCU enabled |
+| [76](#s-pin-76) | DISAUTOLOAD | SPF1 CS# |  | DISAUTOLOAD | <a id="ob-r11"></a>R11 | 4.7 kΩ | 3V3 |  | TP14 | 1 | No autoload |
+| [73](#s-pin-73) | JTAG0 TCK | UART2 RX |  | EN_PWRLIGHT | <a id="ob-r12"></a>R12 | 4.7 kΩ | 3V3 |  |  | 1 |  |
+| [79](#s-pin-79) | JTAG1 TCK | JTAG0 TMS |  | P1_LED0 | <a id="ob-r17"></a>R17 | ? | 3V3 | <a id="ob-r23"></a>R23 |  | 1 |  |
+| [80](#s-pin-80) | JTAG0 TDO |  |  | P0_LED1 | <a id="ob-r16"></a>R16 | ? | 3V3 | <a id="ob-r22"></a>R22 |  | 1 |  |
+| [81](#s-pin-81) | JTAG0 TDI |  |  | P0_LED0 | <a id="ob-r15"></a>R15 | ? | 3V3 | <a id="ob-r21"></a>R21 |  | 1 |  |
+| [71](#s-pin-71) | JTAG1 TMS | SPF1 SI |  | P4_LED1 | <a id="ob-r30"></a>R30 | ? | 3V3 | <a id="ob-r34"></a>R34 |  | 1 |  |
+| [72](#s-pin-72) | JTAG1 TDI | SPF1 SO |  | P3_LED1 | <a id="ob-r28"></a>R28 | ? | GND | <a id="ob-r32"></a>R32 |  | 0 |  |
+| [77](#s-pin-77) | JTAG1 TDO | SPF1 SCK |  | P2_LED1 | <a id="ob-r20"></a>R20 | ? | GND | <a id="ob-r26"></a>R26 |  | 0 |  |
 | [87](#s-pin-87) | EEPROM SCL |  |  | None |  |  |  |  |  |  |  |
 | [88](#s-pin-88) | EEPROM SDA |  |  | None |  |  |  |  |  |  |  |
 
@@ -300,17 +300,17 @@ A debug option stays open cheaply with one 0402 pad on each of these YT9215S pin
 A first bench experiment on the mirrored board needs no new PCB:
 
 1. Leave `DIS_MCU` low, as the board has it.
-2. Lift the LED resistors R21, R22 and R23, then scan JTAG0 for an IDCODE at the strap resistors in [the probe table](#jtag0-probe-points).
+2. Lift the LED resistors [R21](#ob-r21), [R22](#ob-r22) and [R23](#ob-r23), then scan JTAG0 for an IDCODE at the strap resistors in [the probe table](#jtag0-probe-points).
 3. Listen for boot-ROM output on UART0 (pins [45](#s-pin-45) and [46](#s-pin-46)) and on UART2 (pins [73](#s-pin-73) and [75](#s-pin-75)).
 
 <a id="jtag0-probe-points"></a>
 
 | JTAG0 signal | Pin | Probe at |
 |---|---|---|
-| TCK | [73](#s-pin-73) | R12 |
-| TMS | [79](#s-pin-79) | R17 |
-| TDO | [80](#s-pin-80) | R16 |
-| TDI | [81](#s-pin-81) | R15 |
+| TCK | [73](#s-pin-73) | [R12](#ob-r12) |
+| TMS | [79](#s-pin-79) | [R17](#ob-r17) |
+| TDO | [80](#s-pin-80) | [R16](#ob-r16) |
+| TDI | [81](#s-pin-81) | [R15](#ob-r15) |
 
 ## LX-IS601F V2.0 boards
 

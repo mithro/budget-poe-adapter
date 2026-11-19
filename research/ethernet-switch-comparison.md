@@ -55,5 +55,5 @@ The sheet is the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsW
 ## Caveats
 
 * "@100" is the LCSC break that applies to an order of 100 (e.g. 90+ or 30+ where there's no 100+ break). Out-of-stock parts show LCSC's 'from' price in the @1k column.
-* ? = not confirmed. RTL8364NB port configuration, several supply rails, and the JLCPCB library status of the non-Realtek parts were not checked.
+* ? = not confirmed. Not listed = the public datasheet does not list it. RTL8364NB port configuration, several supply rails, and the JLCPCB library status of the non-Realtek parts were not checked.
 * Power draw for the RTL8363NB and RTL8367S wasn't in the public datasheets; it matters for the PoE budget and is the main open item.

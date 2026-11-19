@@ -1,12 +1,13 @@
 # PoE → USB-C adapter: block diagram and rough BOM cost
 
+<a id="block-diagram"></a>
+
 ![Block diagram](block-diagram.svg)
 
 Rough first-pass design for a 5 V and 12 V output, with prices as of 2026-10-21. Built
 from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
 [`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
-[`bom-rough.csv`](bom-rough.csv). The diagram is [`block-diagram.svg`](block-diagram.svg);
-[`block-diagram.png`](block-diagram.png) is the same figure as a bitmap.
+[`bom-rough.csv`](bom-rough.csv). The diagram is [`block-diagram.svg`](block-diagram.svg).
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
 RTL8363NB price ($1.43 @1k) was checked live (in [`research/ethernet-switch.md`](../research/ethernet-switch.md)). Every
@@ -108,9 +109,7 @@ only ask for 9, 15 and 20 V will fall back to 5 V, which is safe but slow.
 
 ## Block diagrams
 
-![Block diagram](block-diagram.svg)
-
-Each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
+In [the block diagram](#block-diagram), each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
 
 * **A (with switch):** RJ45 IN (PoE magjack) → RTL8363NB → RJ45 OUT. The
   CH32V307 sits on the switch's RMII port. Power path: PoE front end → 60 V
@@ -183,7 +182,7 @@ receptacle (~$0.50–0.80), test and programming, shipping, duties.
    not been verified with real quotes.
 6. **Power budget.** The switch draws ~0.5–1 W (datasheet figure not found).
    On an at (PoE+) port this lowers the USB-C budget by about 1 W. On a bt
-   Class 5 and 6 port it doesn't matter.
+   Class 5 or Class 6 port it doesn't matter.
 7. **Output voltage safety.** With 12 V possible, a firmware bug that leaves
    VBUS at 12 V on a 5 V-only sink is the main added failure mode. Mitigations:
    the buck defaults to 5 V in hardware when the select GPIO is low or

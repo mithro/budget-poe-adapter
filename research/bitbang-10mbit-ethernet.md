@@ -79,7 +79,7 @@ Notes on the rows of this table:
 - **A**, not yet proven: A switch port.
 - **B**, proven against: Real switches over a cable.
 - **C**, proven against: LAN8720.
-- **D**, proven against: TCP at 5–7 Mbit/s.
+- **D**, measured: TCP at 5–7 Mbit/s.
 - **E**, not yet proven: Not done by anyone I found.
 
 | # | Verdict |
@@ -263,7 +263,7 @@ relay, it would need a MAC. A software one is conceivable over MII at 10M:
 
 ### 4.4 Cheap PHYs if a standalone port is wanted
 
-| Vendor | Part | LCSC | MII | RMII | Speed | Pkg | $ @100 | $ @1k | Stock | Stock evidence | Core supply | Auto-MDIX |
+| Vendor | Part | LCSC | MII | RMII | Speed | Pkg | $ @100 | $ @1k | Stock | Price and stock evidence | Core supply | Auto-MDIX |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | CoreChips | SR8201F | [C378491] | Yes | Yes | 10/100 | QFN-32 | **$0.266** | **$0.229** | 6,895 | [**live**](#evidence-codes) | Internal 1.1 V | Yes |
 | WCH | CH182H | [C22370607] | Yes | Yes | 10/100 | QFN-32 | $0.452 | $0.390 | **Out of stock** | [**live**](#evidence-codes) | – | – |

@@ -40,7 +40,7 @@ $0.786 @100. Prices are LCSC prices; unmarked ones come from
    to be tested with each class of device.
 4. **The passthrough SKU can't also be a bridging NIC.** Gigabit uses all
    four pairs ([`gigabit-piggyback.md`](gigabit-piggyback.md)), so there is no second link for a NIC
-   chip. Option 1 works on it; option 2 needs either the switch or a separate
+   chip. The virtual NIC works on it; the bridging NIC needs either the switch or a separate
    "USB NIC" SKU where the RJ45 ends at the CH397A instead of passing through.
 
 ## 1. Two meanings of "USB network card"
@@ -75,7 +75,7 @@ $0.786 @100. Prices are LCSC prices; unmarked ones come from
 |---|---|---|---|---|---|
 | CDC-ECM | Simplest | 64-byte packets | One frame per transfer | – | – |
 | CDC-NCM | Best for throughput | – | Batches frames | pico-usb-wifi | [pico-usb-wifi] |
-| CDC-NCM | Missing from Windows 10 | – | – | Reported by postmarketOS | [pmOS] |
+| CDC-NCM | Missing from Windows 10 | – | – | – | [pmOS] |
 | RNDIS | Fallback for older Windows only | – | – | – | – |
 | RNDIS | Linux removal proposed | – | – | – | [RNDIS removal] |
 

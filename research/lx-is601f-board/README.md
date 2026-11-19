@@ -1,6 +1,6 @@
 # LX-IS601F V2.0 switch board: debug pins
 
-Photos of a bought 5-port switch board (silkscreen `LX-IS601F V2.0`) and an annotated
+Photos of two bought 5-port switch boards (silkscreen `LX-IS601F V2.0`) and an annotated
 image showing where the UART, SPI flash and JTAG pins of its switch IC come out.
 
 The switch IC, [U4](../motorcomm-debug-pins.md#lx-u4), is a **YT9215SCH**. Its pinout differs from that of the YT9215S on the
@@ -14,9 +14,10 @@ The pin tables of both parts, and the route of each debug pin on this board, are
 | File | Kind | Shows |
 | --- | --- | --- |
 | [`lx-is601f-debug-pins-annotated.png`](lx-is601f-debug-pins-annotated.png) | Annotated image | Debug pins of [U4](../motorcomm-debug-pins.md#lx-u4) |
-| [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4), no heatsink fitted |
+| [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) with the heatsink removed |
 | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of a second board with the same layout |
 | [`annotate.py`](annotate.py) | Script | Draws the annotations |
+| [`photos/`](photos/README.md) | Photo catalogue | 34 photos of the two boards |
 
 [`annotate.py`](annotate.py) needs Pillow and runs as `python3 annotate.py`. It draws on
 [`photo-u4-macro.jpg`](photo-u4-macro.jpg).
@@ -30,9 +31,11 @@ The pin table for this image, and the confidence of each pin, are in
 
 ## Source photos
 
-![Close-up of U4 with no heatsink fitted](photo-u4-macro.jpg)
+![Close-up of U4 with the heatsink removed](photo-u4-macro.jpg)
 
 ![Wider view of a second board with the same layout](photo-u4-wide.jpg)
+
+All 34 photos of the two boards are catalogued in [`photos/README.md`](photos/README.md).
 
 ## How the pins were found
 

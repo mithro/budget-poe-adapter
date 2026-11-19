@@ -33,7 +33,7 @@ anything a design depends on should be re-checked against IEEE 802.3-2022
   (14.5–20.5 V) and must survive mark events (6.9–10 V) on ≤ 4 mA total.
 * **Raspberry Pi 5 at full power (5 V at 5 A = 25 W out) needs ~28–29 W at the
   PD input**, which is more than 802.3at Class 4 (25.5 W). Full power needs an
-  **802.3bt Class 5 (40 W) PD on a 4-pair Type 3 and 4 PSE**. On an 802.3at switch
+  **802.3bt Class 5 (40 W) PD on a 4-pair Type 3 or Type 4 PSE**. On an 802.3at switch
   the adapter should fall back to ~4.5 A at 5 V (≈ 22 W).
 * Physical-layer classification alone is sufficient for all classes up to 8.
   LLDP is not required, which matters because a passthrough adapter has no
@@ -216,8 +216,8 @@ Event timing [**EA**](#evidence-codes):
 | Mark events | Any | ~6 ms | ~12 ms | – |
 | Detection → power on | Any | – | 400 ms | – |
 
-The PD can tell a Type 3 and 4 PSE from the long first event (≤ 75 ms ⇒ Type 1 and 2,
-≥ 88 ms ⇒ Type 3 and 4).
+The PD can tell a Type 3 or 4 PSE from the long first event (≤ 75 ms ⇒ Type 1 or 2,
+≥ 88 ms ⇒ Type 3 or 4).
 
 **Multi-event classification.** The PSE grants power by how many class events
 it runs; the PD learns its granted power by *counting* events. Single-signature
@@ -273,7 +273,7 @@ to allocate just that much plus margin. Not needed for this project.
   charge its bulk capacitance under that and keep its converter off (or in
   soft-start) until ≥ 80 ms after power appears, then may draw full class
   power.
-* Peak and average limits per class (table in [section 2](#2-the-standards)) apply from then on.
+* Peak and average limits per class (the [per-class power table](#per-class-power)) apply from then on.
 
 ### 4.4 Maintain Power Signature (MPS)
 
@@ -317,12 +317,12 @@ adapter does not need it. Physical classification alone gets up to Class 8.
 
 Notes on the rows of this table:
 
-- **Class 3**, pi 5 behaviour: Boots with USB current limited to 600 mA.
+- **Class 3**, Pi 5 behaviour: Boots with USB current limited to 600 mA.
 - **Class 3**, caveat: May brown out under load.
 - **Class 4**, comparable to: Official PoE+ HAT (5 V at 4 A)
-- **Class 5**, pi 5 behaviour: Full 5 V at 5 A.
+- **Class 5**, Pi 5 behaviour: Full 5 V at 5 A.
 - **Class 5**, caveat: Has margin.
-- **Class 6**, pi 5 behaviour: Full power.
+- **Class 6**, Pi 5 behaviour: Full power.
 - **Class 6**, caveat: Headroom for other loads.
 
 The 5 V output assumes ~90 % efficiency, including bridge losses.
@@ -346,8 +346,10 @@ custom limit). The 5 V at 5 A negotiation itself is covered in
 
 Notes on the rows of this table:
 
-- **Port voltage (after bridge)**, why: To place the voltage windows of [section 6.1](#61-measurement).
-- **Classification current**, why: The 36–44 mA window is ±10 %.
+- **Port voltage (after bridge)**, why: To place the [voltage window edges](#voltage-window-edges).
+- **Class and mark current**, why: The 36–44 mA window is ±10 %.
+
+<a id="voltage-window-edges"></a>
 
 | Voltage window edge to resolve |
 |---|
@@ -400,10 +402,10 @@ it could have been given. Fine for an af- and at-only product; loses bt.
   gating. This favours a CH32V003-class part as the PoE controller, possibly
   alongside a bigger MCU for USB-PD.
 * MCU must boot and enable its class current sink well inside the first class
-  event. For a Type 1 and 2 PSE that can be as short as 6 ms, so boot time must be
-  ~1–2 ms; Type 3 and 4 PSEs give 88 ms. A hardware default (class 4 sink enabled
+  event. For a Type 1 or 2 PSE that can be as short as 6 ms, so boot time must be
+  ~1–2 ms; Type 3 and Type 4 PSEs give 88 ms. A hardware default (class 4 sink enabled
   by default, MCU only modulates it) removes the boot-time risk: classes 5–8
-  present 4 in events 1–2 anyway, and the MCU switches to the 0, 1, 2 and 3 signature
+  present 4 in events 1–2 anyway, and the MCU switches to the 0, 1, 2 or 3 signature
   from event 3 onward.
 * MCU's own supply current counts toward the class current; the sink adds the
   difference, so the MCU must measure what it draws and trim.

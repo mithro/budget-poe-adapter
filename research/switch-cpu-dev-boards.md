@@ -7,6 +7,7 @@ Evidence codes:
 
 - **V**: read in a cited source.
 - **I**: inference.
+- **VI**: part read in a cited source, part inference.
 
 Prices are indicative from listings and deal sites seen on 2026-10-22, not quotes. Retail switches change chips between hardware versions, so **always check the hardware version (Vx.y) on the label** before buying.
 
@@ -30,7 +31,7 @@ Spreadsheet copy: the *Dev boards* tab of the [comparison sheet](https://docs.go
 
 ## 1. Official evaluation boards
 
-| Chip | Official EVB | Official EVB evidence | Who can get it | Evidence | Public availability | Public availability evidence |
+| Chip | Official EVB | Official EVB evidence | Who can get it | Who can get it evidence | Public availability | Public availability evidence |
 | --- | --- | --- | --- | --- | --- | --- |
 | RTL8367S-CG | Reference designs and EVBs | [**V**](#evidence-codes) | Partners only | Leaked programming guide | None found | [**V**](#evidence-codes) |
 | YT9215S | None mentioned | [**V**](#evidence-codes) | – | Motorcomm product page | None found | [**V**](#evidence-codes) |
@@ -99,7 +100,7 @@ Indicative prices and where to buy:
 | TL-SG1005D | **eBay** | – | 15 | 25 | A$ | – | – |
 | TL-SG1005D | Amazon AU | – | – | – | – | – | Less common |
 
-On Amazon AU the TL-SG105 and the LS1005G have replaced the TL-SG1005D.
+On Amazon AU the TL-SG105 and the LS1005G are common and the TL-SG1005D is rare.
 
 How to use one as a dev board: [**I**](#evidence-codes), building on the [**V**](#evidence-codes) items in this section.
 
@@ -281,7 +282,7 @@ So on retail YT9215S boards the core is probably present but unsupported and lik
 
 Longer entries for this table:
 
-- **Xiaomi CR881x, Known issue**: Switch probe still flaky on some boards.
+- **Xiaomi CR881x, Known issue**: Switch probe still flaky on some boards. [**V**](#evidence-codes)
 
 I found **no cheap unmanaged retail switch** confirmed to use a YT9215. Motorcomm targets "dumb switch" use, so some Chinese-brand 5-port switches likely use it, but none were identified in teardowns. [**I**](#evidence-codes)
 

@@ -35,7 +35,7 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 | USB PD Fixed (SPR) | CC | BMC | 9 V | – | 3 A | 5 A | – |
 | USB PD Fixed (SPR) | CC | BMC | 15 V | – | 3 A | 5 A | – |
 | USB PD Fixed (SPR) | CC | BMC | 20 V | – | 3 A | 5 A | 100 W |
-| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | 50 mA current-limit steps | – | ≤ 100 W |
+| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | – | – | ≤ 100 W |
 | USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 28 V | – | 5 A | – | 140 W |
 | USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 36 V | – | 5 A | – | 180 W |
 | USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W |
@@ -49,6 +49,8 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 | Samsung AFC | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
 | Huawei FCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
 | Huawei SCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
+
+PPS sets its current limit in 50 mA steps.
 
 Notes on the rows of this table:
 
@@ -148,7 +150,7 @@ Hardware this implies: a high-side load switch on VBUS (P-FET or N-FET with a ch
 
 ### 4.4 Protection on CC
 
-Pins on a USB-C receptacle can be shorted to VBUS by bad cables. If VBUS is only ever 5 V, a 3.3 V MCU pin still needs a series resistor (about 1 kΩ for the sense path) plus a clamp or the MCU's own 5 V-tolerant I/O. **The TX driver path cannot have 1 kΩ in series** (see [section 5.4](#54-cable-e-marker-for-advertising--3-a)), so use 5 V-tolerant pins or a small clamp and FET. Add ESD diodes on CC.
+Pins on a USB-C receptacle can be shorted to VBUS by bad cables. If VBUS is only ever 5 V, a 3.3 V MCU pin still needs a series resistor (about 1 kΩ for the sense path) plus a clamp or the MCU's own 5 V-tolerant I/O. **The TX driver path cannot have 1 kΩ in series** (see [section 6.1](#61-transmit)), so use 5 V-tolerant pins or a small clamp and FET. Add ESD diodes on CC.
 
 ---
 

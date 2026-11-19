@@ -38,7 +38,6 @@ The research notes cover these topics:
 | --- | --- |
 | [`block-diagram-and-bom.md`](design/block-diagram-and-bom.md) | Block diagram with rough BOM cost |
 | [`block-diagram.svg`](design/block-diagram.svg) | Figure as SVG |
-| [`block-diagram.png`](design/block-diagram.png) | Figure as PNG |
 | [`bom-rough.csv`](design/bom-rough.csv) | BOM table |
 
 ### Research: power

@@ -25,7 +25,7 @@ checked 2026‑10‑21. LCSC and JLCPCB links are in [Sources](#6-sources).
 * The MCU plugs into the extension port over **RMII or MII with no PHY and no
   magnetics on the MCU side**. Management is over slave **SMI (MDC and MDIO)** or
   a Realtek I²C‑like 2‑wire bus (strap‑selected), both trivial to bit‑bang
-  from a CH32V and RP2040, plus an interrupt pin for link changes.
+  from a CH32V or an RP2040, plus an interrupt pin for link changes.
 * Runner‑up and second source: **Motorcomm YT9215S** (5 GbE PHY + 2 MAC,
   LQFP‑128, $3.98 @1, $1.92 @900, in the JLCPCB library as C5899183). Bigger
   and more pins, but cheap at volume, has an on‑chip RISC‑V MCU, and has an

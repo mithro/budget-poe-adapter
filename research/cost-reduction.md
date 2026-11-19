@@ -28,7 +28,7 @@ Every other price is an estimate on the same basis as [`bom-rough.csv`](../desig
 * **Keep the discrete PoE front end** for 802.3bt. Every Chinese PD IC I
   found is af and at only. A cheap one exists (**TMI7303B, $0.27** [**live**](#evidence-codes), af and at,
   integrated 100 V pass switch) and is the right choice for an at-only SKU.
-  In the bt design, downsize the hot-swap FET (a 100 V SOT-23 and SOT-223 part is
+  In the bt design, downsize the hot-swap FET (a 100 V part in SOT-23 or SOT-223 is
   enough at ≤ 1 A): **≈ −$0.10.**
 * **Stay with the splitter transformer, not magjacks.** The PoE magjack
   in the BOM (HR911130C) is **$1.64** [**live**](#evidence-codes), not $1.10, so back-to-back
@@ -97,7 +97,7 @@ From the WCH datasheet (V1.7) and LCSC:
   without resistors.
 * **Analog:** 3 rail-to-rail comparators (15 ns, output straight into TIM2),
   2 OPA and PGA (×4–×32), 12-bit ADC with 14 channels. Enough for the Vport and
-  class-current loop in [`poe.md` section 6](poe.md#6-what-a-software-pd-needs-electrically), the 12 V at 5 V VBUS check and output current
+  class-current loop in [`poe.md` section 6](poe.md#6-what-a-software-pd-needs-electrically), the VBUS check at 5 V and at 12 V and output current
   sensing through a PGA.
 * **Supply:** 2.0–5.5 V (3.0–5.3 V with PD or USB on). **Run at 8 MHz HSI:
   2.2 mA**; sleep 1.3–1.5 mA. That fits the ≤ 4 mA mark-event budget with
@@ -126,7 +126,7 @@ surveys, LCSC):
 | Part | Vendor | af | at | Power | Switch rating | Switch Rds | DC-DC | Package | $ @1k | Note |
 |---|---|---|---|---|---|---|---|---|---|---|
 | **TMI7303B** | – | Yes | Yes | 25 W | 100 V | 0.48 Ω | – | DFN-10 | **$0.267** | In stock |
-| TMI7301 | – | Yes | – | 15 W | Yes | – | – | SOP-8 | – | JLCPCB extended part |
+| TMI7301 | – | Yes | – | 15 W | Integrated | – | – | SOP-8 | – | JLCPCB extended part |
 | SD4924S | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – | – |
 | SD4923E | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – | – |
 | AS7001EP | Ashare | – | Yes | – | 100 V | – | – | – | – | – |
@@ -164,7 +164,7 @@ classes, because it presents its own class current at every event. So:
 * **Option: let the CH32X035 run the buck.** TIM1 gives complementary PWM
   with dead time, a comparator can trip the timer break input for
   cycle-by-cycle current limit, and a 100 V half-bridge driver such as
-  **EG3013 (~$0.10, LCSC listing, currently out of stock)** drives two
+  **EG3013 (~$0.10, LCSC listing, out of stock on 2026-10-21)** drives two
   external FETs. Controller cost drops from $0.60–1.44 to ~$0.12.
   Problems to solve on the bench: at 48 MHz and ~150 kHz the duty resolution
   around 10 % duty is only ~30 counts (needs dithering); a firmware hang must

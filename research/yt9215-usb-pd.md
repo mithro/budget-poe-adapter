@@ -15,7 +15,7 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 - One documented block does clock out a bit stream under crystal timing: the MAC of extension port 8. A frame sent to port 8 at 10 Mbit/s puts a BMC waveform with valid bit timing, 312.5 kbit/s, on pin TXD1 [**S**](#evidence-codes). This is [option C](#option-c).
 - Option C is untested. Its transmit side depends on a frame-transmit function whose name is public and whose behaviour is not [**U**](#evidence-codes). Its receive side depends on a MAC behaviour that is not documented [**U**](#evidence-codes).
 - The transmit waveform of option C can be tried without any firmware: an external host sets up port 8 over the management interface and a PC sends the frame through a copper port ([next steps](#what-to-find-out-next)).
-- Everything else waits until code runs on the CPU. Motorcomm's SDK shows that firmware for it exists (FreeRTOS, built for RV32EC) [**V**](#evidence-codes). The boot image format and the CPU's peripheral registers are unpublished [**U**](#evidence-codes).
+- Every option that speaks PD waits until code runs on the CPU. Motorcomm's SDK shows that firmware for it exists (FreeRTOS, built for RV32EC) [**V**](#evidence-codes). The boot image format and the CPU's peripheral registers are unpublished [**U**](#evidence-codes).
 - The safe design is [option A](#option-a): a PD transceiver with an I²C interface, driven by the documented I²C master of the YT9215. It takes over every microsecond-scale task.
 - Options B and C are not clearly cheaper than option A once every part is counted ([cost](#cost)) [**I**](#evidence-codes).
 - The CH224K, HUSB238 and IP2721 are sink chips. They ask a charger for a voltage and cannot make this adapter a source ([fixed-function chips](#fixed-function-chips)).
@@ -23,7 +23,7 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 
 | Option | Firmware needed | PD signalling done by | Estimated cost, low | Estimated cost, high | Details |
 |---|---|---|---|---|---|
-| Resistor only | No | Nothing, no PD | $0.001 | $0.001 | [No PD](#option-0) |
+| Resistor only | No | Nothing, no PD | $0.03 | $0.03 | [No PD](#option-0) |
 | I²C PD transceiver | Yes | Transceiver chip | $0.44 | $0.51 | [Option A](#option-a) |
 | GPIO bit-bang | Yes | CPU timing loops | $0.32 | $0.52 | [Option B](#option-b) |
 | Port 8 MAC | Yes | Port 8 MAC | $0.32 | $0.52 | [Option C](#option-c) |
@@ -48,7 +48,7 @@ The datasheet is [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V
 | Term | Meaning |
 |---|---|
 | CC | Configuration channel, the USB-C wire that carries attach detection and PD messages |
-| Rp | Pull-up on CC at the source; its value advertises 0.9 A, 1.5 A or 3 A |
+| Rp | Pull-up on CC at the source; its value advertises the current on offer |
 | Rd | 5.1 kΩ pull-down on CC at the sink |
 | VCONN | 5 V supply for the marker chip inside a cable |
 | E-marker | Chip in a cable plug that reports the cable's current rating |
@@ -67,7 +67,7 @@ The datasheet is [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V
 | DMA | Hardware that moves data between memory and a peripheral without the CPU |
 | SMI | Serial management interface, the MDC and MDIO pair |
 | FCS | Frame check sequence, the CRC-32 that ends an Ethernet frame |
-| RV32EC | Smallest RISC-V profile: 16 registers, compressed instructions, no multiply |
+| RV32EC | Smallest 32-bit RISC-V instruction set, with 16 registers and no multiply instruction |
 
 ## What a PD source has to do
 
@@ -90,7 +90,7 @@ The jobs fall into three speed classes. Only the last class is hard for the YT92
 
 A PD 3 source tells the sink when it may start a message sequence by switching Rp between the 3 A and the 1.5 A value, so Rp needs two values under CPU control.
 
-A minimal source sends few message types: Source_Capabilities, GoodCRC, Accept, PS_RDY, Not_Supported or Reject, and Hard Reset. Each type has eight variants, one for each MessageID, and a second set of eight for a sink that speaks PD 2.0. Every waveform the source transmits can therefore be prepared in advance [**I**](#evidence-codes).
+A minimal source sends few message types: Source_Capabilities, GoodCRC, Accept, PS_RDY, Not_Supported or Reject, and Hard Reset. Each type has eight variants, one for each MessageID, and a second set of eight for a sink that speaks PD 2.0. Every waveform the source transmits can therefore be prepared in advance [**I**](#evidence-codes). The full set is about 100 waveforms of some 600 bytes each in the [option C](#option-c) coding, close to the whole 64 KB of RAM, so the set lives in flash or each waveform is built when its MessageID is known.
 
 VCONN, e-marker reading and DR_Swap are not needed with a [captive cable](#captive-cable) and a power-only port.
 
@@ -197,7 +197,7 @@ The values are for a 3.3 V pin supply. The port 8 pins have their own supply, DV
 Three consequences follow [**I**](#evidence-codes):
 
 - A BMC signal peaks at 1.2 V, below the 2.0 V input-high level. No pin can receive it directly, so a comparator is required.
-- An attached sink pulls CC to about 1.7 V against a 3 A Rp. That lies between the two input thresholds, so attach detection also needs a comparator. Only the weakest Rp (36 kΩ to 3.3 V) gives a level a plain input reads as low, about 0.4 V, and it advertises 0.9 A instead of 3 A.
+- An attached sink pulls CC to about 1.7 V against a 3 A Rp. That lies between the two input thresholds, so attach detection also needs a comparator. Only the weakest Rp (36 kΩ to 3.3 V) gives a level a plain input reads as low, about 0.4 V, and it advertises the default USB current instead of 3 A.
 - The pins are not 5 V tolerant. CC can touch VBUS through a faulty cable, so every pin that reaches CC needs a series resistor and a clamp.
 
 ### Interfaces that do not fit BMC
@@ -214,7 +214,7 @@ These look promising and do not work [**I**](#evidence-codes):
 
 ## No PD: resistor only
 
-A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is all that USB-C requires of a 5 V source. A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). This is the baseline every other option has to beat. It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted.
+A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is the only signalling part. USB-C also requires the source to keep VBUS off until a sink is attached and to remove it on detach ([attach detection](usb-c-pd.md#43-source-state-machine-and-timing)). A comparator that watches CC does this by driving the enable of the VBUS load switch directly, because a plain input pin cannot read the attach level ([electrical limits](#electrical-limits-of-the-pins)). A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). This is the baseline every other option has to beat. It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted.
 
 <a id="option-a"></a>
 
@@ -233,7 +233,14 @@ The interrupt line is optional: the firmware can poll the status registers inste
 
 Everything the firmware does is then slower than a millisecond. The tightest deadline is answering a Request within 15 ms. A FreeRTOS task with polled I²C meets that without any timer or interrupt knowledge [**I**](#evidence-codes). Using I²C master 1 gives up the LED1 outputs of ports 3 and 4 [**V**](#evidence-codes).
 
-The remaining risks are the ones common to options A, B and C: getting firmware onto the CPU, and the register write that switches pins 72 and 73 to I²C. The datasheet says the pins need "to enable the I2C function by software programming" and does not name the register [**U**](#evidence-codes).
+The remaining risks [**U**](#evidence-codes):
+
+- **Firmware on the CPU.** This is common to options A, B and C.
+- **Pin function.** The datasheet says pins 72 and 73 need "to enable the I2C function by software programming" and does not name the register.
+- **Master registers.** The registers of the I²C master are unpublished. The I²C code in the SDK is the host side of the management interface, not a driver for this master.
+- **Transaction format.** The datasheet shows the master reading an EEPROM and driving a PSE chip. Whether it can run the arbitrary reads and writes a transceiver needs is not stated.
+
+If the master does not fit, I²C at 100 kHz can be bit-banged on two GPIO pins, which then needs the GPIO registers of [option B](#option-b) and none of its timing.
 
 <a id="option-b"></a>
 
@@ -255,6 +262,7 @@ The YT9215 has no documented equivalent [**U**](#evidence-codes). Pure software 
 - GPIO data registers that the CPU can write and read in a few cycles.
 - A clock fast enough to sample at 2.4 MHz or more, with interrupts off and the loop in RAM or in the 2 KB cache.
 - A free-running counter to time edges.
+- A way to notice the start of a message: a GPIO edge interrupt, or a polling loop that leaves no time for other firmware.
 
 If the CPU runs from the 125 MHz switch clock ([clock](yt9215-embedded-cpu.md#clock)), there are about 200 cycles per half bit, which is enough [**I**](#evidence-codes). This option stays open until the registers are known.
 
@@ -272,7 +280,7 @@ The MAC of extension port 8 shifts bytes out on pins under crystal timing. Run a
 - Pin TXD1 carries bit 1 and then bit 5 of each byte. Two bytes of `0x22` hold it high for four nibbles, 1.6 µs, and two bytes of `0x00` hold it low.
 - A half bit of 1.6 µs gives 312.5 kbit/s, inside the 270 to 330 kbit/s that PD allows [**S**](#evidence-codes).
 - TXD1 is low during the Ethernet preamble and start-of-frame delimiter, because bit 1 of the nibbles `0x5` and `0xD` is 0. TXD0 would be high there, which is why TXD1 is the pin to use.
-- TX_CTL is high for the whole frame, preamble included. It enables an external buffer, so that the driver is off the CC line between frames ([strap pins](#pins-used) complicate this at reset). The buffer pulls CC low for 6.4 µs before the first PD bit, which is expected to be harmless [**I**](#evidence-codes).
+- TX_CTL is high for the whole frame, preamble included. It enables an external buffer, so that the driver is off the CC line between frames ([strap pins](#pins-used) complicate this at reset). The buffer then pulls CC low for 6.4 µs before the first PD bit. PD allows the driver to start at most 1 µs before the first bit, so this breaks the specification, and whether sinks tolerate it is a bench question [**I**](#evidence-codes). [Enable from TXD3](#enable-from-txd3) is a way around it.
 - PD wants the last bit closed by an edge and the line then held low before release. The frame ends with the closing edge and four extra bytes.
 - The MAC appends a 4-byte FCS, which would put uncontrolled levels on TXD1. The four extra bytes are chosen so that TXD1 is low in them and in the FCS that results. The line is then low for 6.4 µs and released [**S**](#evidence-codes).
 
@@ -312,12 +320,13 @@ The same MAC can sample the line.
 - While a partner transmits, its driver swings CC between 0 V and 1.1 V, so the fixed 0.55 V threshold sits in the middle of the signal.
 - RX_CTL tells the MAC that data is valid. A GPIO holds it high while the port waits and pulses it low when the line has been idle for some microseconds, which ends the frame.
 
-Four things have to hold, and none is documented [**U**](#evidence-codes):
+Five things have to hold, and none is documented [**U**](#evidence-codes):
 
 - **Frames with a bad FCS must reach the CPU.** A captured PD message is not a valid Ethernet frame. The SDK counts such frames ([`RX_FCS_ERR`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_stat.h#L37)), and the register tables hold no field that forwards them. If the MAC always drops them, this receive path is dead.
 - **The MAC must accept a preamble of any length**, because the line can idle for seconds.
 - **The firmware must see the end of a message** to pulse RX_CTL, which needs a readable GPIO and a time base, as in [option B](#option-b), though with looser timing.
 - **The receive clock must run.** In RGMII mode the chip expects RXC from outside, so TXC is looped back to it.
+- **The switch must not act on the addresses.** With RXD0 tied high, bit 0 of every captured byte is 1, so both the destination and the source address of the captured frame have the group bit set. Port 8 has to be isolated so that the frame goes to the CPU port only, and the switch must not discard a frame whose source is a group address.
 
 The frame reaches the CPU only after RX_CTL falls. The 195 µs budget is then spent on end-of-message detection, frame delivery, decoding about 800 bytes and queueing the reply.
 
@@ -343,6 +352,24 @@ The datasheet asks for an external 4.7 kΩ pull-up on each of pins 47, 48 and 50
 - **The buffer is enabled from power-on.** With pins 48 and 50 pulled high, the buffer drives CC to 1.15 V until firmware puts port 8 into its 10 Mbit/s mode, and Rp does not work during that time. The enable therefore has to be gated by a second signal that is low at reset, such as a GPIO with a pull-down through an AND gate. The [front end](#front-end) includes that gate.
 - **The clock loop joins two pins with opposite pulls.** Pin 51 has an internal pull-down and is a strap; pin 52 has an internal pull-up. An external strap resistor on pin 51 has to set the level. The REVMII mode needs no loop.
 
+Three more wiring rules apply [**I**](#evidence-codes):
+
+- Pins 54 to 56 are tied to their fixed levels through resistors, because they are also GPIO and flash pins and can be driven.
+- Port 8 must have flow control off, so that the MAC never sends a pause frame onto CC.
+- The firmware starts a transmit only when no receive is in progress.
+
+<a id="enable-from-txd3"></a>
+
+### Enable from TXD3
+
+A variant takes the buffer enable from TXD3, pin 46, in place of TX_CTL [**I**](#evidence-codes). The script does not cover it.
+
+- TXD3 is 0 in every preamble nibble and 1 in the last nibble of the start-of-frame delimiter, so the buffer turns on 400 ns before the first PD bit, inside the 1 µs that PD allows.
+- The data bytes become `0xAA` for high and `0x88` for low, which hold TXD3 high through the message.
+- The tail has to keep TXD3 high and TXD1 low through the FCS. That is 16 conditions in place of 8, so the tail is longer than four bytes.
+- Pin 46 has an internal pull-down as a strap, so the buffer is off at reset and the AND gate goes away, provided the board strap for `SWITCH_ID_1` is low.
+- The level of TXD3 between frames is not documented [**U**](#evidence-codes).
+
 <a id="front-end"></a>
 
 ## Front end for options B and C
@@ -355,7 +382,7 @@ The figure shows the option C wiring with a [captive cable](#captive-cable). Opt
 |---|---|---|---|
 | Buffer with enable | 74AUP1G126 | 1 | BMC driver |
 | AND gate | 74AUP1G08 | 1 | Keeps the buffer off at reset |
-| Capacitor | Not chosen | 1 | Edge shaping |
+| Capacitor | 200 to 600 pF | 1 | Receiver capacitance of the port |
 | Series resistor | 47 Ω | 1 | Driver impedance |
 | Dual comparator | Not chosen | 1 | Slicer and attach detector |
 | Divider resistors | – | 4 | Two thresholds |
@@ -370,14 +397,15 @@ Notes on the parts [**I**](#evidence-codes):
 
 - The buffer is powered from the 1.15 V core rail of the switch, DVDDL, so its output swings 0 to 1.15 V with no divider that would load CC.
 - Pins 48 and 50 are also strap pins. The buffer inputs are high impedance, so they do not disturb the straps.
+- With no sink attached, Rp holds CC at 3.3 V while the buffer is off and powered from 1.15 V. The buffer must be a type whose disabled output accepts a voltage above its supply. Otherwise it clamps CC and the attach detector never sees an open line.
 - The switched Rp hangs on a GPIO that is either driven high or left floating. Both resistors together make about 4.6 kΩ.
-- The slicer needs a propagation delay well under 400 ns and matched rising and falling delays. An LM393-class part is too slow.
+- The slicer needs a propagation delay of about 200 ns or less and matched rising and falling delays. An LM393-class part is too slow.
 - A load switch with a built-in discharge path covers VBUS discharge. Confirming that VBUS has reached 0 V needs a third comparator, because the chip has no ADC. The figure leaves it out, with the AND gate and the capacitor.
 
 Open points of the transmit driver [**U**](#evidence-codes):
 
 - The output resistance of a 74AUP1G126 at a 1.15 V supply may be far above 47 Ω, so the 33 to 75 Ω driver impedance is not assured.
-- PD wants rise and fall times of at least 300 ns. The capacitor that sets them has no value yet, and it counts toward the capacitance limit of the CC line.
+- PD wants rise and fall times of at least 300 ns. The capacitance on CC is limited to 600 pF, which with a 75 Ω driver gives about 100 ns. A plain buffer therefore makes edges that are too fast, and meeting the limit needs a driver with a controlled slew rate ([BMC electrical](usb-c-pd.md#51-signalling)).
 - The buffer output is not protected against VBUS on CC. A 1 kΩ series resistor is not possible in the transmit path, so it needs a clamp of its own or a switch ([CC protection](usb-c-pd.md#44-protection-on-cc)).
 - DVDDL may be anywhere from 1.08 to 1.32 V [**V**](#evidence-codes). Above 1.20 V the swing is out of the PD range.
 
@@ -390,7 +418,9 @@ All figures are estimates for quantities of about 1,000 [**I**](#evidence-codes)
 | Option | Part | Quantity | Cost, low | Cost, high |
 |---|---|---|---|---|
 | [No PD](#option-0) | Rp resistor | 1 | $0.001 | $0.001 |
-| [No PD](#option-0) | **Total** | | **$0.001** | **$0.001** |
+| [No PD](#option-0) | Slow comparator | 1 | $0.03 | $0.03 |
+| [No PD](#option-0) | Divider resistors | 2 | $0.002 | $0.002 |
+| [No PD](#option-0) | **Total** | | **$0.03** | **$0.03** |
 | [A](#option-a) | FUSB302B | 1 | $0.34 | $0.41 |
 | [A](#option-a) | I²C pull-up resistors | 2 | $0.002 | $0.002 |
 | [A](#option-a) | SPI flash for firmware | 1 | $0.10 | $0.10 |
@@ -439,19 +469,19 @@ Options B and C both use the front end, so its total is the cost of either. That
 | [What does the MAC do with a bad FCS?](#q-fcs) | No | [Option C](#option-c) receive |
 | [Which comparator is fast and cheap enough?](#q-comparator) | No | [Front end](#front-end) |
 | [Can code run on the CPU?](#q-code) | – | Every option with firmware |
-| [Which register enables I²C on pins 72 and 73?](#q-i2c) | Yes | [Option A](#option-a) |
+| [How is the I²C master enabled and driven?](#q-i2c) | Yes | [Option A](#option-a) |
 | [Where are the GPIO registers and timers?](#q-gpio) | Yes | [Option B](#option-b) |
 | [How long from frame hand-over to the first nibble?](#q-latency) | Yes | [Option C](#option-c) transmit |
 | [Do captured frames reach the CPU?](#q-capture) | Yes | [Option C](#option-c) receive |
 
 How to answer each:
 
-- <a id="q-waveform"></a>**Waveform on TXD1.** On a board with the port 8 pins exposed, an external host sets port 8 to RGMII at 10 Mbit/s over the management interface, as the [register guide](yt9215-registers/README.md) describes. A PC on a copper port sends a frame from [`mac_bmc_frame.py`](yt9215-usb-pd/mac_bmc_frame.py), the switch forwards it to port 8, and an oscilloscope on pin 48 shows the result.
+- <a id="q-waveform"></a>**Waveform on TXD1.** On a board with the port 8 pins exposed, an external host sets port 8 to RGMII at 10 Mbit/s over the management interface, as the [register guide](yt9215-registers/README.md) describes. A PC on a copper port sends a frame from [`mac_bmc_frame.py`](yt9215-usb-pd/mac_bmc_frame.py), the switch forwards it to port 8, and an oscilloscope on pin 48 shows the result. `mac_bmc_frame.py --hex` prints such a frame. Its destination address is an unknown unicast address, so the switch floods it to port 8.
 - <a id="q-pi"></a>**Pi 5.** Add the transmit half of the [front end](#front-end), send Source_Capabilities the same way, and look for the GoodCRC of the Pi on CC.
-- <a id="q-fcs"></a>**Bad FCS.** Feed a frame with a wrong FCS into port 8 and see whether the switch forwards it to another port or only raises the error counter.
+- <a id="q-fcs"></a>**Bad FCS.** Feed a frame with a wrong FCS into port 8 and see whether the switch forwards it to another port or only raises the error counter. Looping the port back needs no equipment: TX_CTL to RX_CTL, TXD3 to RXD3, and RXD0 to RXD2 tied as in the [receive scheme](#option-c). A forwarded frame then returns as `0x5` and `0xD` nibbles with a wrong FCS.
 - <a id="q-comparator"></a>**Comparator.** Bench test candidates against a real PD sink.
 - <a id="q-code"></a>**Code on the CPU.** Obtain the firmware tree, or read the flash image of a managed switch that uses a YT9215 and work out the image format from it. The [boot modes](yt9215-embedded-cpu.md#boot) say where the chip loads code from.
-- <a id="q-i2c"></a>**I²C enable.** From the firmware tree, or by tracing a vendor image.
+- <a id="q-i2c"></a>**I²C master.** The pin function register, the master's own registers and its transaction format come from the firmware tree, or from tracing a vendor image.
 - <a id="q-gpio"></a>**GPIO and timers.** From the firmware tree.
 - <a id="q-latency"></a>**Transmit latency.** Send a frame from the CPU to port 8 and time TX_CTL against a GPIO edge.
 - <a id="q-capture"></a>**Captured frames.** Repeat the bad-FCS test with the CPU as the destination.

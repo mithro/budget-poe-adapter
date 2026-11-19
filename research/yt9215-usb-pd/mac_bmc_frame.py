@@ -17,7 +17,11 @@ one BMC half bit at 312.5 kbit/s. The script
 Run it without arguments to print a table of frame sizes for the messages a minimal
 source sends, for every MessageID. The decoder uses the same symbol tables as the encoder,
 so the check covers the frame arithmetic, not the tables.
+
+Run it with --hex to print one frame, a Source_Capabilities message with MessageID 0, as
+hexadecimal bytes without the frame check sequence, ready to send from a network card.
 """
+import sys
 import zlib
 
 NIBBLE_NS = 400                 # one nibble at 10 Mbit/s
@@ -212,4 +216,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if sys.argv[1:] == ["--hex"]:
+        print(frame_for(pd_bits(header(SOURCE_CAP, 0, 1), (PDO_5V_5A,)))[0].hex())
+    else:
+        main()

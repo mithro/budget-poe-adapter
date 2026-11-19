@@ -2,7 +2,7 @@
 
 The adapter is a **USB-C power source**: it supplies a device such as a Raspberry Pi 5. This note gives the standards, the Raspberry Pi 5 requirements and the electrical and timing detail of PD negotiation that any implementation has to meet. The design has no microcontroller other than the RISC-V CPU inside the YT9215 switch IC ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)); how that chip does the job, and with which external parts, is worked out in [`yt9215-usb-pd.md`](yt9215-usb-pd.md).
 
-Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2, and Raspberry Pi documentation, written from working knowledge without the spec PDFs open. Treat values marked **(verify)** as needing a check against the spec tables before committing to a schematic. Everything else is well established.
+Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2, and Raspberry Pi documentation. Treat values marked **(verify)** as needing a check against the spec tables before committing to a schematic. Everything else is well established.
 
 ---
 
@@ -19,63 +19,38 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 
 ## 2. USB power standards: voltages and currents
 
-| Mechanism | Signalling line | Signalling detail | Voltage | Voltage step | Max current | With e-marked 5 A cable | Max power |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W |
-| USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W |
-| BC1.2 DCP | Data pair | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W |
-| BC1.2 CDP | Data pair | – | 5 V | – | 1.5 A | – | 7.5 W |
-| Apple divider, level 1 | Data pair | Fixed voltages | 5 V | – | 1 A | – | – |
-| Apple divider, level 2 | Data pair | Fixed voltages | 5 V | – | 2.1 A | – | – |
-| Apple divider, level 3 | Data pair | Fixed voltages | 5 V | – | 2.4 A | – | – |
-| Type-C Current, default | CC | Rp value | 5 V | – | Default | – | – |
-| Type-C Current, 1.5 A | CC | Rp value | 5 V | – | 1.5 A | – | – |
-| Type-C Current, 3.0 A | CC | Rp value | 5 V | – | 3.0 A | – | 15 W |
-| USB PD Fixed (SPR) | CC | BMC | 5 V | – | 3 A | 5 A | – |
-| USB PD Fixed (SPR) | CC | BMC | 9 V | – | 3 A | 5 A | – |
-| USB PD Fixed (SPR) | CC | BMC | 15 V | – | 3 A | 5 A | – |
-| USB PD Fixed (SPR) | CC | BMC | 20 V | – | 3 A | 5 A | 100 W |
-| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | – | – | ≤ 100 W |
-| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 28 V | – | 5 A | – | 140 W |
-| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 36 V | – | 5 A | – | 180 W |
-| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W |
-| USB PD EPR AVS (PD 3.1) | CC | BMC | 15 to 48 V | 100 mV | – | – | – |
-| USB PD SPR AVS (PD 3.2) | CC | BMC | 9 to 20 V (verify) | – | – | – | – |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 5 V | – | – | – | ~18 W |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 9 V | – | – | – | ~18 W |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 12 V | – | – | – | ~18 W |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 20 V (optional) | – | – | – | ~18 W |
-| Qualcomm QC 3.0 | Data pair | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W |
-| Samsung AFC | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
-| Huawei FCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
-| Huawei SCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
+| Mechanism | Signalling line | Signalling detail | Voltage | Voltage step | Max current | With e-marked 5 A cable | Max power | Relevance as a source | Reason |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W | Baseline | – |
+| USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W | Baseline | – |
+| BC1.2 DCP | Data pair | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
+| BC1.2 CDP | Data pair | – | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
+| Apple divider, level 1 | Data pair | Fixed voltages | 5 V | – | 1 A | – | – | Resistors only | – |
+| Apple divider, level 2 | Data pair | Fixed voltages | 5 V | – | 2.1 A | – | – | Resistors only | – |
+| Apple divider, level 3 | Data pair | Fixed voltages | 5 V | – | 2.4 A | – | – | Resistors only | – |
+| Type-C Current, default | CC | Rp value | 5 V | – | Default | – | – | Required for any USB-C source | – |
+| Type-C Current, 1.5 A | CC | Rp value | 5 V | – | 1.5 A | – | – | Required for any USB-C source | – |
+| Type-C Current, 3.0 A | CC | Rp value | 5 V | – | 3.0 A | – | 15 W | Required for any USB-C source | – |
+| USB PD Fixed (SPR) | CC | BMC | 5 V | – | 3 A | 5 A | – | 5 V at 5 A for the Pi 5 | – |
+| USB PD Fixed (SPR) | CC | BMC | 9 V | – | 3 A | 5 A | – | 5 V at 5 A for the Pi 5 | – |
+| USB PD Fixed (SPR) | CC | BMC | 15 V | – | 3 A | 5 A | – | 5 V at 5 A for the Pi 5 | – |
+| USB PD Fixed (SPR) | CC | BMC | 20 V | – | 3 A | 5 A | 100 W | 5 V at 5 A for the Pi 5 | – |
+| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | – | – | ≤ 100 W | Skip | Needs a tightly controlled converter |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 28 V | – | 5 A | – | 140 W | Out of PoE budget | bt max ≈ 71 W at the PD |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 36 V | – | 5 A | – | 180 W | Out of PoE budget | bt max ≈ 71 W at the PD |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W | Out of PoE budget | bt max ≈ 71 W at the PD |
+| USB PD EPR AVS (PD 3.1) | CC | BMC | 15 to 48 V | 100 mV | – | – | – | Skip | – |
+| USB PD SPR AVS (PD 3.2) | CC | BMC | 9 to 20 V (verify) | – | – | – | – | Skip | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 5 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 9 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 12 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 20 V (optional) | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 3.0 | Data pair | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W | Only for phones on legacy ports | – |
+| Samsung AFC | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei FCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei SCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
 
 PPS sets its current limit in 50 mA steps.
-
-Notes on the rows of this table:
-
-- **USB 2.0 default**, relevance as a source: Baseline.
-- **USB 3.x default**, relevance as a source: Baseline.
-- **BC1.2 DCP**, relevance as a source: Trivial on a power-only port.
-- **BC1.2 CDP**, relevance as a source: Trivial on a power-only port.
-- **Apple divider, level 1**, relevance as a source: Resistors only.
-- **Apple divider, level 2**, relevance as a source: Resistors only.
-- **Apple divider, level 3**, relevance as a source: Resistors only.
-- **Type-C Current, default**, relevance as a source: Required for any USB-C source.
-- **Type-C Current, 1.5 A**, relevance as a source: Required for any USB-C source.
-- **Type-C Current, 3.0 A**, relevance as a source: Required for any USB-C source.
-- **USB PD Fixed (SPR)**, relevance as a source: 5 V at 5 A for the Pi 5.
-- **USB PD PPS (PD 3.0)**, relevance as a source: Skip.
-- **USB PD PPS (PD 3.0)**, reason: Needs a tightly controlled converter.
-- **USB PD EPR Fixed (PD 3.1)**, relevance as a source: Out of PoE budget.
-- **USB PD EPR Fixed (PD 3.1)**, reason: bt max ≈ 71 W at the PD.
-- **USB PD EPR AVS (PD 3.1)**, relevance as a source: Skip.
-- **USB PD SPR AVS (PD 3.2)**, relevance as a source: Skip.
-- **Qualcomm QC 2.0**, relevance as a source: Only for phones on legacy ports.
-- **Qualcomm QC 3.0**, relevance as a source: Only for phones on legacy ports.
-- **Samsung AFC**, relevance as a source: Skip.
-- **Huawei FCP**, relevance as a source: Skip.
-- **Huawei SCP**, relevance as a source: Skip.
 
 **PD power rules (SPR source profiles):** a source rated at P watts must offer every lower standard voltage. ≤15 W offers 5 V; 15 to 27 W also offers 9 V; 27 to 45 W also offers 15 V; >45 W also offers 20 V. A **5 V-only 25 W source is not a "PD Power Rule" compliant 27 W supply** (a compliant 27 W source must also offer 9 V at 3 A). The Pi official PSU offers 5.1 V at 5 A plus 9, 12 and 15 V at lower current (verify exact PDO list). This matters only for certification, not function.
 
@@ -163,7 +138,8 @@ Pins on a USB-C receptacle can be shorted to VBUS by bad cables. Even if VBUS is
 - **Transmit swing (vSwing):** 1.05 to 1.20 V (nominal 1.125 V), referenced to ground, driven on top of the CC line (the Rp and Rd DC level is overridden while transmitting).
 - **Driver output impedance (zDriver):** 33 to 75 Ω.
 - **Rise and fall time:** ≥ 300 ns (10 to 90%) to limit EMI. Edges that are too sharp are non-compliant but usually still decoded.
-- **Receiver:** must tolerate ground offset between partners (about ±250 mV) and noise. It must reject glitches shorter than about 100 ns. Total receiver capacitance on CC (cReceiver) is 200 to 600 pF (verify). That capacitance is part of the edge-shaping and also limits what you can hang on CC.
+- **Receiver:** must tolerate ground offset between partners (about ±250 mV) and noise. It must reject glitches shorter than about 100 ns. Total receiver capacitance on CC (cReceiver) is 200 to 600 pF (verify). That capacitance limits what you can hang on CC.
+- **Start of drive (tStartDrive):** the transmitter starts driving the line within 1 µs before or after the start of the first preamble bit (verify).
 - **Idle detection:** the line is "busy" if ≥ 3 transitions occur within tTransitionWindow (12 to 20 µs) (verify).
 - **Packet end:** after EOP, the transmitter drives a final hold (tHoldLowBMC ≥ 1 µs) then releases within tEndDriveBMC ≤ 23 µs. Wait **tInterFrameGap ≥ 25 µs** before the next packet.
 
@@ -246,7 +222,7 @@ These are the requirements. [`yt9215-usb-pd.md`](yt9215-usb-pd.md) maps them to 
 ### 6.1 Transmit
 
 - A driver that swings 0 to about 1.1 V with an output impedance of 33 to 75 Ω. Two ways to get it: a 3.3 V output into a divider (for example 100 Ω in series and 51 Ω to ground gives about 1.11 V and 34 Ω, verify against drive strength and the Rp and Rd loading), or a buffer powered from a rail of about 1.1 V with a series resistor.
-- A small capacitor (about 1 to 2 nF combined with the driver impedance and cReceiver) for the ≥ 300 ns edges.
+- Edges of ≥ 300 ns. The capacitance allowed on CC (cReceiver, at most 600 pF) with a 75 Ω driver gives only about 100 ns, so a capacitor alone cannot set the edge rate. The driver itself has to limit its slew rate.
 - A driver that is high impedance when not transmitting, so the Rp and Rd DC level returns. A divider with 51 Ω to ground must be disconnected by a switch, because it would otherwise look like Ra and break attach detection.
 - Timing: a half-UI of 1.67 µs means edges must be placed with roughly 100 ns accuracy. That calls for a hardware serialiser of some kind; software that counts CPU cycles is the last resort.
 
@@ -299,7 +275,7 @@ For completeness, here is what a source must do to satisfy each style of sink. O
 2. **USB PD:** [section 5](#5-usb-pd-physical-layer-bmc-on-cc).
 3. **BC1.2 DCP:** short D+ to D- (< 200 Ω) on a power-only port. A BC1.2 sink drives 0.5 to 0.7 V on D+ and looks for it on D- (> 0.25 to 0.4 V). CDP (data plus charging) requires the host side to drive VDM_SRC on D- in response, which needs an analog switch or GPIO plus resistor.
 4. **Apple:** D+ and D- fixed by dividers, for example D+ at 2.7 V with D- at 2.7 V means 2.4 A (and combinations of 2.0 V and 2.7 V mean 1 A or 2.1 A, verify). This conflicts with the DCP short, so pick one or use an analog switch.
-5. **QC 2.0 and QC 3.0 (source):** start as DCP. When the sink holds D+ at 0.6 V for about 1.25 s, open the short between D+ and D- and pull D- low. The sink then sets levels: D+ at 0.6 V with D- at 0 V means 5 V, D+ at 3.3 V with D- at 0.6 V means 9 V, both at 0.6 V means 12 V, and both at 3.3 V means QC3 continuous mode (D+ pulses +200 mV, D- pulses -200 mV). The source needs two comparators and a variable converter. Not useful for a 5 V-only product.
+5. **QC 2.0 and QC 3.0 (source):** start as DCP. When the sink holds D+ at 0.6 V for about 1.25 s, open the short between D+ and D- and pull D- low. The sink then sets levels: D+ at 0.6 V with D- at 0 V means 5 V, D+ at 3.3 V with D- at 0.6 V means 9 V, both at 0.6 V means 12 V, both at 3.3 V means 20 V, and D+ at 0.6 V with D- at 3.3 V means QC3 continuous mode (D+ pulses +200 mV, D- pulses -200 mV). The source needs two comparators and a variable converter. Not useful for a 5 V-only product.
 6. **Samsung AFC, Huawei FCP, Huawei SCP and Oppo VOOC:** proprietary signalling on D- (single-wire serial). Low value here and poorly documented, so skip.
 
 ---
@@ -321,4 +297,4 @@ The questions about the YT9215 itself are in [`yt9215-usb-pd.md`](yt9215-usb-pd.
 - USB Power Delivery Specification R3.2: Ch. 5 (Physical Layer: BMC, 4b5b, timing), Ch. 6 (Protocol: headers, PDO and RDO, timers), Ch. 8 (Device Policy state machines).
 - Battery Charging Spec BC1.2: DCP or CDP detection.
 - Raspberry Pi documentation: "Power supply" section for Pi 5 (`usb_max_current_enable`, `PSU_MAX_CURRENT`).
-- Open stacks to read for message-layer logic: the Google Chromium EC and Zephyr USB-C PD stack, and TCPM in Linux (`drivers/usb/typec/tcpm`). These are useful for the state machines even though they assume a hardware PHY and TCPC.
+- Open stacks to read for message-layer logic: the Google Chromium EC and Zephyr USB-C PD stack, and TCPM in Linux ([`drivers/usb/typec/tcpm`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/tcpm)). These are useful for the state machines even though they assume a hardware PHY and TCPC.

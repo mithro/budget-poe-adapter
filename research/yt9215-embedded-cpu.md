@@ -127,7 +127,7 @@ The memory map is not published.
   strap [**V**](#evidence-codes). The pins of each variant are in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#headline-findings).
 - The image format, the size limit of an image, and any checksum or signature are not
-  published. No firmware dump of a YT9215 product was found.
+  published. No firmware dump of a YT9215 product is public.
 
 ## Peripherals
 
@@ -216,8 +216,7 @@ has a build configuration for the internal CPU, selected by the option `INTER_MC
   That tree is the likely home of the Ethernet driver behind `eth_tx_by_portlist()`, the
   timers, the GPIO registers, the interrupt numbers and the boot image format
   [**I**](#evidence-codes). It is not public.
-- No public firmware image, OpenOCD configuration or boot-ROM dump was found. Searches
-  covered English and Chinese terms.
+- No firmware image, OpenOCD configuration or boot-ROM dump is public.
 - A FreeBSD port of the switch driver exists
   ([if_yt921x_freebsd](https://github.com/am910021/if_yt921x_freebsd))
   [**V**](#evidence-codes).

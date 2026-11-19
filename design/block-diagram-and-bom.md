@@ -165,7 +165,7 @@ receptacle (~$0.50–0.80), test and programming, shipping, duties.
    properly is the first thing to firm up.
 2. **The 60 V buck is the second.** I assumed a cheap Chinese 60–100 V
    synchronous controller plus external FETs (~$1.09 total including the
-   12 V select). An integrated 60 V 5 A converter from TI and MPS would
+   12 V select). An integrated 60 V 5 A converter from TI or MPS would
    be $1.50–2.50.
 3. **CH32V307 is overkill as an MCU but cheap for what it brings.** It is the
    only cheap WCH part with a MAC that can talk RMII to the switch. Its price

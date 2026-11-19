@@ -374,7 +374,7 @@ Everything is millisecond-scale. Hard deadlines:
   (PSE samples after the first ~6 ms; Type 2 events are as short as 6 ms).
 * Distinguish class (≥ 14.5 V) vs mark (≤ 10 V) vs reset (< 2.8 V) and count
   transitions.
-* Time the first class event (75 ms vs 88 ms boundary) to know Type 1 and 2 vs 3 and 4.
+* Time the first class event (75 ms vs 88 ms boundary) to know Type 1 or 2 from Type 3 or 4.
 
 A 1 kHz control loop is the minimum; 10 kHz polling or a comparator interrupt
 is comfortable.

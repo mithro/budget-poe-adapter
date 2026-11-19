@@ -183,7 +183,7 @@ RTL8367S has an embedded 8051 in the same role, also undocumented.
 ### E. PoE‑layer signalling (what we already get for free)
 
 * PSE → PD: number of class events (power grant), first‑class‑event length
-  (PSE type 1 and 2 vs 3 and 4), and Autoclass on bt. Already in [`poe.md` section 4](poe.md#4-the-negotiation-sequence-end-to-end).
+  (PSE Type 1 or 2 versus Type 3 or 4), and Autoclass on bt. Already in [`poe.md` section 4](poe.md#4-the-negotiation-sequence-end-to-end).
 * PD → PSE: the class signature only. A PD can also drop its MPS to get
   power removed and re‑detected, which is a crude one‑bit "reset me" signal.
 * No standard PSE carries data over the PoE DC. Any data‑over‑DC scheme would
@@ -247,7 +247,7 @@ The reasoning behind each row:
   PSE's MPS and current monitoring.
 * **Autoneg next pages.** 802.3 autoneg can carry arbitrary next-page
   messages. The adapter is not an endpoint unless it terminates the link.
-* **Two PHYs back-to-back + FPGA and MCU muxing frames in.** RGMII or SGMII runs
+* **Two PHYs back-to-back + FPGA or MCU muxing frames in.** RGMII or SGMII runs
   between the two PHYs, with everything clocked from the upstream link. On
   top of the PHYs it needs an FPGA or fast MCU that can handle 125 MHz DDR
   RGMII and buffer a frame. No MCU in this price range can do that. A

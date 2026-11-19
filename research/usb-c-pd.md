@@ -85,7 +85,7 @@ Notes on the rows of this table:
 
 ## 3. Raspberry Pi 5 specifics
 
-- Official supply: **27 W USB-C PD, 5.1 V @ 5 A**. The Pi 5 is a PD **sink** that only requests 5 V. It does not use 9 and 15 V.
+- Official supply: **27 W USB-C PD, 5.1 V @ 5 A**. The Pi 5 is a PD **sink** that only requests 5 V. It does not use 9 V or 15 V.
 - Behaviour by supply:
   - PD source offering **5 V ≥ 5 A** → USB ports allowed **1.6 A** total, no warning.
   - 5 V 3 A (Type-C Rp 3 A, or PD without a 5 A PDO) → USB ports limited to **600 mA**, boot warning about the power supply.

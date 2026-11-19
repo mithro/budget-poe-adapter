@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+  Motorcomm YT921x Gigabit Ethernet switch (YT9215S, YT9215SC, YT9215RB,
+  YT9214NB, YT9213NB, YT9218N, YT9218MB) managed over MDIO.
+
+  The node is a child of an MDIO controller. Its reg property is the MDIO
+  address the switch answers on, which the board sets with a pin strap:
+
+    &mdio0 {
+        switch0: switch@1d {
+            compatible = "motorcomm,yt921x";
+            reg = <0x1d>;
+            reset-gpios = <&gpio0 4 GPIO_ACTIVE_LOW>;
+        };
+    };
+
+compatible: "motorcomm,yt921x"
+
+include: base.yaml
+
+on-bus: mdio
+
+properties:
+  reg:
+    required: true
+    description: MDIO address of the switch, 0x1d or 0x00.
+
+  switch-id:
+    type: int
+    default: 0
+    enum: [0, 1, 2, 3]
+    description: |
+      Switch ID. Up to four switches can share one MDIO address and are told
+      apart by this number, which is part of every MDIO frame. The default of
+      0 is what a board with a single switch uses.
+
+  reset-gpios:
+    type: phandle-array
+    description: |
+      GPIO wired to the reset pin of the switch. When present the pin is
+      pulsed before the register reset.
+
+  skip-reset:
+    type: boolean
+    description: |
+      Do not reset the switch at init. Use it when a boot loader has already
+      configured the switch and its state must be kept.

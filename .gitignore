@@ -42,6 +42,9 @@ fp-info-cache
 # Local project settings
 *.kicad_prl
 
+# Sphinx build output
+_build/
+
 # Generated pin list of the LX-IS601F schematic is kept
 !research/lx-is601f-board/schematic/lx-is601f-nets.csv
 

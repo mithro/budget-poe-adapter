@@ -1,0 +1,10 @@
+[package]
+name = "yt921x"
+version = "0.1.0"
+edition = "2021"
+description = "Register definitions and a small no_std access layer for Motorcomm YT921x Ethernet switches"
+license = "Apache-2.0"
+categories = ["embedded", "no-std", "hardware-support"]
+keywords = ["ethernet", "switch", "mdio", "yt9215"]
+
+[dependencies]

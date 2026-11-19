@@ -80,6 +80,8 @@ The research notes cover these topics:
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | JTAG pins of the YT9215 variants |
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | SPI flash pins of the YT9215 variants |
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | UART pins of the YT9215 variants |
+| [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x switch programmer's guide with register reference |
+| [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x register bindings for C, Rust, MicroPython and Zephyr |
 | [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Annotated photos of a bought LX-IS601F V2.0 board |
 | [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Where the debug pins of its YT9215SCH come out |
 | [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking a small device on a gigabit Ethernet link |
@@ -102,7 +104,7 @@ The research notes cover these topics:
   (EasyEDA source, schematic, PCB, Gerbers, BOM). It is the reference design for the
   YT9215S notes here. The [`attachments/...`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/tree/main/attachments) paths quoted in
   [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) refer to that repository;
-  the same two files are also in [`datasheets/motorcomm/`](datasheets/motorcomm/).
+  the same two files are also in [`datasheets/motorcomm/`](https://github.com/mithro/budget-poe-adapter/tree/main/datasheets/motorcomm).
 
 ## Licence
 

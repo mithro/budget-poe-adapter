@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config YT921X
+	bool "Motorcomm YT921x Ethernet switch register access"
+	default y
+	depends on DT_HAS_MOTORCOMM_YT921X_ENABLED
+	select MDIO
+	help
+	  Register access, reset and identification for Motorcomm YT921x
+	  Ethernet switches (YT9215, YT9218 and relatives) that are managed
+	  over MDIO.
+
+if YT921X
+
+config YT921X_INIT_PRIORITY
+	int "YT921x init priority"
+	default 85
+	help
+	  Device init priority. It must be higher than the priority of the
+	  MDIO controller the switch is attached to.
+
+module = YT921X
+module-str = yt921x
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # YT921X

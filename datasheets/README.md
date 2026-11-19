@@ -1,6 +1,6 @@
 # Switch IC documentation
 
-Vendor documents for the switch ICs studied in [`../research/`](../research/).
+Vendor documents for the switch ICs studied in [`../research/`](https://github.com/mithro/budget-poe-adapter/tree/main/research).
 Downloaded 2026-11-17 unless noted. Copyright stays with the vendors; the files are
 kept here unmodified (only renamed) so the notes can cite a fixed copy.
 

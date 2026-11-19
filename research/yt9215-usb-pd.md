@@ -601,7 +601,7 @@ A variant takes the buffer enable from TXD3, pin 46, in place of TX_CTL ([inferr
 
 ## Option D: a spare PHY port at 10 Mbit/s
 
-Each of the five copper ports has its own PHY ([verified](#evidence-codes)). A board that fits fewer than five sockets has PHYs with nothing attached. A PHY forced to 10 Mbit/s sends every frame its MAC is given as a 10BASE-Te signal on two pairs. This option uses that signal as the PD transmitter. It does not receive ([receive](#option-d-receive)).
+Each of the five copper ports has its own PHY ([verified](#evidence-codes)). A board that fits fewer than five sockets has PHYs with nothing attached. A PHY forced to 10 Mbit/s sends every frame its MAC is given as a 10BASE-Te signal on one of its pairs, MDIA or MDIB. This option uses that signal as the PD transmitter. It does not receive ([receive](#option-d-receive)).
 
 ### What the PHY puts on its pins
 
@@ -660,10 +660,10 @@ Two circuits do this ([inferred](#evidence-codes)). Neither has been built.
 - **Preamble.** The 62 alternating bits are a 5 MHz section, so the discriminator output stays low for 6.2 µs. The two closing 1 bits make one pulse of 150 to 250 ns, which the filter has to remove. The Manchester decoder toggles for the whole preamble.
 - **Buffer enable.** A PHY port has no signal like TX_CTL. An activity detector on the pair can enable the buffer, which then drives CC low 6.4 µs before the first PD bit, the same break of the 1 µs rule as in [option C](#option-c). A GPIO is the other source of the enable.
 - **FCS.** All 32 bits of the FCS show at the output, where option C shows 8 of them. Three ways exist to keep them off CC ([inferred](#evidence-codes)):
-  - A tail built only from the bytes `0x55` and `0xAA` is low after the filter, which removes the short pulse at each change between the two values. About 28 such bytes give enough freedom to make the FCS a low pattern too. The line is then driven low for about 26 µs after the last PD edge, and PD allows 23 µs ([packet end](usb-c-pd.md#51-signalling)).
+  - A tail built only from the bytes `0x55` and `0xAA` is low after the filter, which removes the short pulse at each change between the two values. About 29 such bytes give enough freedom to make the FCS a low pattern that also ends in 0 and 1, as the end pulse requires. The line is then driven low for about 26 µs after the last PD edge, and PD allows 23 µs ([packet end](usb-c-pd.md#51-signalling)).
   - A GPIO switches the buffer off during a low tail. The firmware has to hit a window of about 20 µs after the last PD edge.
   - A latch switches the buffer off after the first low period longer than a BMC bit and keeps it off until the frame ends. That adds parts.
-- **End pulse and link pulses.** A frame ends with two edges 50 ns apart unless its last two FCS bits are 0 and then 1. The flip-flop then stores a high level and keeps it until the next edge, which may be a link pulse 16 ms later. A link pulse that the receiver sees as narrower than 75 ns has the same effect. The buffer therefore has to be off before the frame ends and stay off between frames, or the tail has to be chosen so that the FCS ends in 0 and 1 ([inferred](#evidence-codes)).
+- **End pulse and link pulses.** A frame ends with two edges 50 ns apart unless its last two FCS bits are 0 and then 1. The flip-flop then stores a high level and keeps it until the next edge. How long that lasts depends on the idle level of the line receiver: from the length of the end pulse, 250 ns or more, up to the next link pulse 16 ms later. A link pulse that the receiver sees as narrower than 75 ns has the same effect. The buffer therefore has to be off before the frame ends and stay off between frames, or the tail has to be chosen so that the FCS ends in 0 and 1 ([inferred](#evidence-codes)).
 
 ### Making the PHY transmit
 
@@ -687,7 +687,7 @@ Two circuits do this ([inferred](#evidence-codes)). Neither has been built.
 
 ### Analog parts
 
-- **Line receiver.** A fast comparator or a logic gate turns the pair into a logic signal with a delay of a few nanoseconds.
+- **Line receiver.** A fast comparator or a logic gate turns the pair into a logic signal with a delay of a few nanoseconds. Between frames the pair carries no voltage, so the receiver needs hysteresis or a threshold offset that gives it a defined idle level. Without one, noise makes edges that clock the flip-flop.
 - **Coupling.** The datasheet does not give the common-mode voltage of the pairs, or say whether the driver works without a transformer ([unknown](#evidence-codes)). Two coupling capacitors make the receiver independent of the first point.
 - **Termination.** The pin table of the datasheet gives each pair a built-in 100 Ω termination ([verified](#evidence-codes)). With the two pairs joined, each end is terminated and no resistor is added.
 

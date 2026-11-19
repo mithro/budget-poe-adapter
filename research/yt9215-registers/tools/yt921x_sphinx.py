@@ -16,7 +16,8 @@ Roles, each a link to the generated reference:
 
 Directives:
 
-  .. yt-bitfield:: REGISTER   bit diagram (options ``family``, ``layout``)
+  .. yt-bitfield:: REGISTER   WaveDrom diagram of a register (options ``family``, ``layout``)
+  .. wavedrom::               WaveDrom diagram of the JSON source in the content (option ``caption``)
   .. yt-diagram:: name        a diagram of ``guide_diagrams.py`` (option ``caption``)
 
 The reference pages are written into the source tree when the build starts,
@@ -36,9 +37,12 @@ from sphinx.util.nodes import make_refnode, split_explicit_title
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
+import json  # noqa: E402
+
 import gen_docs  # noqa: E402
 import guide_diagrams  # noqa: E402
 import model as M  # noqa: E402
+import wavedrom_diagrams  # noqa: E402
 
 _state = {}
 
@@ -192,8 +196,8 @@ class Links:
         return self.label(gen_docs.field_label(state()["fields"][name]))
 
 
-def figure(svg, caption, link=None):
-    html = '<div class="yt-scroll">%s</div>' % svg.render()
+def figure(svg, caption, link=None, classes=()):
+    html = '<div class="%s">%s</div>' % (" ".join(("yt-scroll",) + tuple(classes)), svg)
     fig = nodes.figure("", nodes.raw("", html, format="html"), classes=["yt-figure"])
     if caption:
         cap = nodes.caption(caption, "")
@@ -227,8 +231,32 @@ class Bitfield(SphinxDirective):
         family = self.options.get("family")
         if family:
             caption += " on the " + gen_docs.FAMILY[family]
-        svg = gen_docs.bitfield_svg(s["model"], reg, family, layout, Links(self).label)
-        return [figure(svg, caption, (reg["id"], Links(self).reg(reg["id"])))]
+        source, names = gen_docs.register_diagram(s["model"], reg, family, layout)
+        ln = Links(self)
+        links = {name: (ln.label(label), tip) for name, (label, tip) in names.items()}
+        try:
+            svg = wavedrom_diagrams.render(source, "Bit fields of " + reg["id"], links)
+        except wavedrom_diagrams.RenderError as err:
+            raise self.error(str(err))
+        return [figure(svg, caption, (reg["id"], ln.reg(reg["id"])), ["yt-wavedrom"])]
+
+
+class Wavedrom(SphinxDirective):
+    """``.. wavedrom::`` draws the WaveDrom JSON source in its content."""
+    has_content = True
+    option_spec = {"caption": directives.unchanged}
+
+    def run(self):
+        try:
+            source = json.loads("\n".join(self.content))
+        except ValueError as err:
+            raise self.error("the WaveDrom source is not JSON: %s" % err)
+        caption = self.options.get("caption")
+        try:
+            svg = wavedrom_diagrams.render(source, caption or "WaveDrom diagram")
+        except wavedrom_diagrams.RenderError as err:
+            raise self.error(str(err))
+        return [figure(svg, caption, classes=["yt-wavedrom"])]
 
 
 class Diagram(SphinxDirective):
@@ -239,7 +267,7 @@ class Diagram(SphinxDirective):
         fn = guide_diagrams.DIAGRAMS.get(self.arguments[0])
         if fn is None:
             raise self.error("unknown diagram " + self.arguments[0])
-        return [figure(fn(Links(self)), self.options.get("caption"))]
+        return [figure(fn(Links(self)).render(), self.options.get("caption"))]
 
 
 def config_inited(app, config):
@@ -273,6 +301,7 @@ def setup(app):
     app.add_role("lx", LinuxRole())
     app.add_role("ev", EvidenceRole())
     app.add_directive("yt-bitfield", Bitfield)
+    app.add_directive("wavedrom", Wavedrom)
     app.add_directive("yt-diagram", Diagram)
     app.add_css_file("yt921x.css")
     app.connect("config-inited", config_inited)

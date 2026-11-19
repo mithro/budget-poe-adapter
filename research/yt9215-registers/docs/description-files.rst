@@ -161,10 +161,16 @@ Regenerating
      - Writes the `SystemRDL <https://www.accellera.org/downloads/standards/systemrdl>`__ files
    * - :download:`gen_docs.py <../tools/gen_docs.py>`
      - Writes the reference pages of this manual during the Sphinx build
+   * - :download:`wavedrom_diagrams.py <../tools/wavedrom_diagrams.py>`
+     - Builds the `WaveDrom <https://wavedrom.com/>`__ source of each register diagram
+   * - :download:`render.js <../tools/wavedrom/render.js>`
+     - Draws register and timing diagrams with WaveDrom
+   * - :download:`package.json <../tools/wavedrom/package.json>`
+     - Names the WaveDrom version for ``npm ci``
    * - :download:`diagrams.py <../tools/diagrams.py>`
-     - Draws diagrams as SVG
+     - Draws block, sequence and layout diagrams as SVG
    * - :download:`guide_diagrams.py <../tools/guide_diagrams.py>`
-     - Holds the content of the guide's diagrams
+     - Holds the content of the guide's block, sequence and layout diagrams
    * - :download:`yt921x_sphinx.py <../tools/yt921x_sphinx.py>`
      - Sphinx extension of this manual
    * - :download:`test_generated.py <../tests/test_generated.py>`

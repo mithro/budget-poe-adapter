@@ -6,6 +6,11 @@ build:
   os: ubuntu-24.04
   tools:
     python: "3.13"
+    nodejs: "22"
+  jobs:
+    post_install:
+      # WaveDrom draws the register and timing diagrams of the YT921x manual.
+      - npm ci --prefix research/yt9215-registers/tools/wavedrom
 
 sphinx:
   configuration: conf.py

@@ -13,7 +13,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - run: python -m pip install -r docs/requirements.txt
+      - run: npm ci --prefix research/yt9215-registers/tools/wavedrom
       - run: python -m sphinx -b html -W --keep-going -n . _build/html
       - uses: actions/upload-artifact@v4
         with:

@@ -5,11 +5,8 @@ body {
   --yt-line: #4b5563;
   --yt-thin: #9aa3af;
   --yt-box: #eef4fb;
-  --yt-ro: #e6f5e9;
   --yt-sp: #fdf1dc;
   --yt-rsv: #eceef1;
-  --yt-alt: #f3ecfa;
-  --yt-sig: #1d4ed8;
   --yt-hover: #cfe3fb;
 }
 @media (prefers-color-scheme: dark) {
@@ -19,11 +16,8 @@ body {
     --yt-line: #9aa3af;
     --yt-thin: #6b7280;
     --yt-box: #1f2a3a;
-    --yt-ro: #1d3324;
     --yt-sp: #3a2f17;
     --yt-rsv: #26292e;
-    --yt-alt: #2e2440;
-    --yt-sig: #7fb0ff;
     --yt-hover: #2c4466;
   }
 }
@@ -33,11 +27,8 @@ body[data-theme="dark"] {
   --yt-line: #9aa3af;
   --yt-thin: #6b7280;
   --yt-box: #1f2a3a;
-  --yt-ro: #1d3324;
   --yt-sp: #3a2f17;
   --yt-rsv: #26292e;
-  --yt-alt: #2e2440;
-  --yt-sig: #7fb0ff;
   --yt-hover: #2c4466;
 }
 
@@ -49,14 +40,10 @@ svg.yt-d text { font-family: var(--font-stack, system-ui, sans-serif); font-size
 svg.yt-d .yt-s { font-size: 13px; fill: var(--yt-dim); }
 svg.yt-d .yt-b { font-weight: 600; }
 svg.yt-d .yt-box { fill: var(--yt-box); stroke: var(--yt-line); stroke-width: 1; }
-svg.yt-d .yt-ro { fill: var(--yt-ro); }
 svg.yt-d .yt-sp { fill: var(--yt-sp); }
 svg.yt-d .yt-rsv { fill: var(--yt-rsv); }
-svg.yt-d .yt-alt { fill: var(--yt-alt); }
 svg.yt-d .yt-ln { stroke: var(--yt-line); stroke-width: 1; fill: none; }
-svg.yt-d .yt-thin { stroke: var(--yt-thin); stroke-width: 1; fill: none; }
 svg.yt-d .yt-dash { stroke: var(--yt-thin); stroke-width: 1; stroke-dasharray: 4 3; fill: none; }
-svg.yt-d .yt-sig { stroke: var(--yt-sig); stroke-width: 1.6; fill: none; }
 svg.yt-d .yt-fill { fill: var(--yt-line); }
 svg.yt-d a:hover .yt-box { fill: var(--yt-hover); }
 svg.yt-d a text { text-decoration: none; }
@@ -80,3 +67,10 @@ table.docutils td code,
 table.docutils td .pre {
   white-space: normal;
 }
+
+/* WaveDrom diagrams carry their own colours, for a white background. */
+.yt-wavedrom { background: #fff; border-radius: 4px; padding: 6px 0; }
+svg.WaveDrom { display: block; max-width: 100%; height: auto; }
+svg.WaveDrom a, svg.WaveDrom a:hover { text-decoration: none; }
+svg.WaveDrom a text { fill: #0b57d0; }
+svg.WaveDrom a:hover text { text-decoration: underline; }

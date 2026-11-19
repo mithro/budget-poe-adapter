@@ -1,7 +1,9 @@
-"""The diagrams of the guide pages, by the name the yt-diagram directive uses.
+"""The block, sequence and layout diagrams of the guide pages, by the name the
+yt-diagram directive uses.
 
 Each function takes a link builder (``yt921x_sphinx.Links``) and returns a
-``diagrams.Svg``.
+``diagrams.Svg``. The register and timing diagrams are WaveDrom sources in
+the pages themselves.
 """
 import diagrams
 import model as M
@@ -94,67 +96,6 @@ def frame_path(ln):
     ])
 
 
-def _mdio_cells(read):
-    drive = "yt-ro" if read else ""
-    return [
-        {"units": 5, "title": "PRE", "sub": "32 ones", "top": "32 bits"},
-        {"units": 3, "title": "ST", "sub": "01", "top": "2"},
-        {"units": 5, "title": "OP", "sub": "10 read" if read else "01 write", "top": "2"},
-        {"units": 7, "title": "PHYAD", "sub": "0x1d or 0x00", "top": "5"},
-        {"units": 8, "title": "REGAD", "sub": "switch ID, phase", "top": "5", "cls": "yt-sp"},
-        {"units": 3, "title": "TA", "sub": "Z0" if read else "10", "top": "2", "cls": drive},
-        {"units": 11, "title": "DATA", "sub": "driven by the switch" if read else "driven by the host",
-         "top": "16 bits, highest first", "cls": drive},
-    ]
-
-
-@diagram("mdio-frame")
-def mdio_frame(ln):
-    return diagrams.strip("Clause 22 MDIO write and read frames",
-                          [("Write", _mdio_cells(False)), ("Read", _mdio_cells(True))])
-
-
-@diagram("smi-regad")
-def smi_regad(ln):
-    return diagrams.bitfield("REGAD field of a frame to the switch", 1, [
-        {"name": "0", "lsb": 4, "width": 1, "cls": "yt-rsv"},
-        {"name": "switch ID", "lsb": 2, "width": 2},
-        {"name": "DATA", "lsb": 1, "width": 1, "cls": "yt-sp"},
-        {"name": "READ", "lsb": 0, "width": 1, "cls": "yt-ro"},
-    ], bits=5)
-
-
-def _smi(read):
-    op = "MDIO read" if read else "MDIO write"
-    rw = "1" if read else "0"
-    cls = "yt-ro" if read else ""
-    word = "value" if read else "value"
-    return [
-        ("MDIO frame", [{"units": 1, "title": "MDIO write"}, {"units": 1, "title": "MDIO write"},
-                        {"units": 1, "title": op, "cls": cls}, {"units": 1, "title": op, "cls": cls}]),
-        ("REGAD", [{"units": 1, "title": "ID, DATA=0, READ=" + rw}] * 2
-                  + [{"units": 1, "title": "ID, DATA=1, READ=" + rw, "cls": cls}] * 2),
-        ("DATA", [{"units": 1, "title": "address[31:16]"}, {"units": 1, "title": "address[15:0]"},
-                  {"units": 1, "title": word + "[31:16]", "cls": cls},
-                  {"units": 1, "title": word + "[15:0]", "cls": cls}]),
-    ]
-
-
-@diagram("smi-read")
-def smi_read(ln):
-    return diagrams.strip("The four MDIO frames of a register read", _smi(True))
-
-
-@diagram("smi-write")
-def smi_write(ln):
-    return diagrams.strip("The four MDIO frames of a register write", _smi(False))
-
-
-@diagram("smi-timing")
-def smi_timing(ln):
-    return diagrams.smi_timing()
-
-
 @diagram("reset-sequence")
 def reset_sequence(ln):
     return diagrams.sequence("Reset and identification", ["Host", "YT921x"], [
@@ -240,25 +181,6 @@ def tagged_frame(ln):
         {"units": 2, "title": "word 3", "sub": "destination ports", "top": "bytes 6, 7", "cls": "yt-sp"},
     ]
     return diagrams.strip("Position and content of the CPU tag", [("Frame", frame), ("Tag", tag)])
-
-
-@diagram("tag-word2")
-def tag_word2(ln):
-    return diagrams.bitfield("Tag word 2", 1, [
-        {"name": "PORT_EN", "lsb": 15, "width": 1, "cls": "yt-ro"},
-        {"name": "RX_PORT", "lsb": 11, "width": 4, "cls": "yt-ro"},
-        {"name": "PRIO", "lsb": 8, "width": 3},
-        {"name": "CODE_EN", "lsb": 7, "width": 1},
-        {"name": "CODE", "lsb": 1, "width": 6},
-    ], bits=16)
-
-
-@diagram("tag-word3")
-def tag_word3(ln):
-    return diagrams.bitfield("Tag word 3", 1, [
-        {"name": "PORT_EN", "lsb": 15, "width": 1},
-        {"name": "TX_PORTS", "lsb": 0, "width": 11, "ticks": list(range(11))},
-    ], bits=16)
 
 
 @diagram("token-bucket")

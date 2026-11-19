@@ -43,7 +43,8 @@ check-python:
 	fi
 
 docs:
+	npm ci --prefix tools/wavedrom
 	$(PYTHON) -m sphinx -b html -W --keep-going -n $(ROOT) $(BUILD)/html
 
 clean:
-	rm -rf $(BUILD) docs/reference bindings/rust/target
+	rm -rf $(BUILD) docs/reference bindings/rust/target tools/wavedrom/node_modules

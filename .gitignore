@@ -51,3 +51,6 @@ _build/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# WaveDrom renderer of the register manual, installed by npm ci
+node_modules/

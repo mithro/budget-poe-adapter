@@ -73,8 +73,17 @@ Frames from the switch to the host
 
 Word 2 tells the host where the frame came from and why it was sent to the CPU.
 
-.. yt-diagram:: tag-word2
+.. wavedrom::
    :caption: Tag word 2 (bytes 4 and 5).
+
+   {"reg": [
+     {"bits": 1},
+     {"name": "CODE", "bits": 6},
+     {"name": "CODE_EN", "bits": 1, "rotate": -90},
+     {"name": "PRIO", "bits": 3},
+     {"name": "RX_PORT", "bits": 4},
+     {"name": "PORT_EN", "bits": 1, "rotate": -90}
+   ], "config": {"bits": 16, "vspace": 100}}
 
 .. list-table::
    :header-rows: 1
@@ -214,8 +223,14 @@ wanted priority in :ref:`PRIO <tag-prio>`, and puts the destination ports in wor
 :lx:`yt921x_tag_xmit` builds the tag in this way. It is :ev:`inferred` from that use that the
 switch sends the frame to exactly the ports of word 3 and removes the tag.
 
-.. yt-diagram:: tag-word3
+.. wavedrom::
    :caption: Tag word 3 (bytes 6 and 7).
+
+   {"reg": [
+     {"name": "TX_PORTS", "bits": 11},
+     {"bits": 4},
+     {"name": "PORT_EN", "bits": 1, "rotate": -90}
+   ], "config": {"bits": 16, "vspace": 100}}
 
 .. list-table::
    :header-rows: 1

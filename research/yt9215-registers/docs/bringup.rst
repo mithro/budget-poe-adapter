@@ -40,15 +40,16 @@ Reset
 
 .. wavedrom::
    :caption: Reset followed by identification. Time runs from left to right, and the switch
-             supplies the green values.
+             supplies the green values. The last read stands for the read of byte 0xfb of the
+             configuration byte store.
 
    {"signal": [
-     {"name": "Host", "period": 0.5, "wave": "=..=..=..=......=...=....",
-      "data": ["write", "wait", "read", "read", "read", "read"]},
-     {"name": "Register", "period": 0.5, "wave": "=..x..=..=......=...=....",
-      "data": ["RST", "RST", "CPU_TAG_TPID", "CHIP_ID", "CHIP_MODE"]},
-     {"name": "Value", "period": 0.5, "wave": "=..=..7..7......7...7....",
-      "data": ["HW = 1", "10 ms", "until 0", "0x9988", "family", "mode"]}
+     {"name": "Host", "period": 0.5, "wave": "=...=...=...=......=....=.....=......",
+      "data": ["write", "wait", "read", "read", "read", "read", "read"]},
+     {"name": "Register", "period": 0.5, "wave": "=...x...=...=......=....=.....=......",
+      "data": ["RST", "RST", "CPU_TAG_TPID", "CHIP_ID", "CHIP_MODE", "EDATA_DATA"]},
+     {"name": "Value", "period": 0.5, "wave": "=...=...7...7......7....7.....7......",
+      "data": ["HW = 1", "10 ms", "until 0", "0x9988", "family", "mode", "extended mode"]}
    ]}
 
 1. Write :reg:`RST` with only :field:`RST.HW` set.
@@ -91,15 +92,15 @@ bytes inside the chip. The extended mode is the byte at address ``0xfb``
 and no source describes a write.
 
 .. wavedrom::
-   :caption: Reading one byte of the configuration byte store. Time runs from left to right,
-             and the switch supplies the green values.
+   :caption: Reading one byte of the configuration byte store. Time runs from left to right, and
+             the switch supplies the green values.
 
    {"signal": [
-     {"name": "Host", "period": 0.5, "wave": "=.......=......=.......=.....",
-      "data": ["read", "write", "read", "read"]},
-     {"name": "Register", "period": 0.5, "wave": "=.......=......=.......=.....",
-      "data": ["EDATA_DATA", "EDATA_CTRL", "EDATA_DATA", "EDATA_DATA"]},
-     {"name": "Value", "period": 0.5, "wave": "7.......=......7.......7.....",
+     {"name": "Host", "period": 0.5, "wave": "=........=.......=............",
+      "data": ["read", "write", "read"]},
+     {"name": "Register", "period": 0.5, "wave": "=........=.......=............",
+      "data": ["EDATA_DATA", "EDATA_CTRL", "EDATA_DATA"]},
+     {"name": "Value", "period": 0.5, "wave": "7........=.......7........7...",
       "data": ["until STATUS = IDLE", "ADDR, OP = READ", "until STATUS = IDLE", "DATA"]}
    ]}
 

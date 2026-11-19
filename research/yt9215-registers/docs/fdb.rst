@@ -14,14 +14,14 @@ Running a command
 
 .. wavedrom::
    :caption: One forwarding database command. Time runs from left to right, and the switch
-             supplies the green values.
+             supplies the green values. The last read is for lookups only.
 
    {"signal": [
-     {"name": "Host", "period": 0.5, "wave": "=.......=.....=.....=.....=.........",
-      "data": ["write", "write", "read", "read", "read"]},
-     {"name": "Register", "period": 0.5, "wave": "=.......=.....=.....=.....=.........",
-      "data": ["FDB_IN0 to FDB_IN2", "FDB_OP", "FDB_RESULT", "FDB_RESULT", "FDB_OUT0 to FDB_OUT2"]},
-     {"name": "Value", "period": 0.5, "wave": "=.......=.....7.....7.....7.........",
+     {"name": "Host", "period": 0.5, "wave": "=.....=......=............=......",
+      "data": ["write", "write", "read", "read"]},
+     {"name": "Register", "period": 0.5, "wave": "=.....=......=............=......",
+      "data": ["FDB_IN0 to 2", "FDB_OP", "FDB_RESULT", "FDB_OUT0 to 2"]},
+     {"name": "Value", "period": 0.5, "wave": "=.....=......7......7.....7......",
       "data": ["entry or key", "OP, START = 1", "until DONE = 1", "NOTFOUND", "entry"]}
    ]}
 

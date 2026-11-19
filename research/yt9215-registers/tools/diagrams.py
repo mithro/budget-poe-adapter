@@ -8,11 +8,6 @@ frame diagrams, through ``wavedrom_diagrams.py``.
 """
 from html import escape
 
-FONT = 15          # px, the sans-serif font of the page
-CHAR = FONT * 0.58  # upper estimate of the mean advance of one character
-SMALL = 13
-CHAR_S = SMALL * 0.58
-
 #: Colours for an SVG saved as a file. Inline SVGs use the page style sheet.
 STYLE = """
 .yt-d text{font-family:system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;fill:#1c1e21}
@@ -24,11 +19,6 @@ STYLE = """
 .yt-d .yt-ln{stroke:#4b5563;stroke-width:1;fill:none}
 .yt-d .yt-fill{fill:#4b5563}
 """
-
-
-def tw(text, small=False):
-    """Width of a text in pixels."""
-    return len(text) * (CHAR_S if small else CHAR)
 
 
 class Svg:

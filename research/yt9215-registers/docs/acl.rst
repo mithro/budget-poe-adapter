@@ -180,17 +180,29 @@ A block is changed as a whole: open it, write the new content, and commit. It is
 until the commit.
 
 .. wavedrom::
-   :caption: Writing one rule into a block. Time runs from left to right, and the host writes
-             every register.
+   :caption: Opening a block and writing one rule. Time runs from left to right, and the host
+             writes every register.
 
    {"signal": [
-     {"name": "Register", "period": 0.5, "wave": "=...=.....=...=....=......=....=.....",
-      "data": ["ACL_ACT", "ACL_BLK_CMD", "ACL_KEY", "ACL_MASK", "ACL_BLK_KEEP", "ACL_ENTRY",
-               "ACL_BLK_CMD"]},
-     {"name": "Value", "period": 0.5, "wave": "=...=.....=...=....=......=....=.....",
-      "data": ["action", "MODIFY = 1", "keys", "masks", "KEEP", "EN, GRPID", "MODIFY = 0"]},
-     {"name": "Block", "period": 0.5, "wave": "=.........4....................=.....",
-      "data": ["closed", "open", "commit"]}
+     {"name": "Register", "period": 0.5, "wave": "=....=......=....=.....",
+      "data": ["ACL_ACT", "ACL_BLK_CMD", "ACL_KEY", "ACL_MASK"]},
+     {"name": "Value", "period": 0.5, "wave": "=....=......=....=.....",
+      "data": ["action", "MODIFY = 1", "keys", "masks"]},
+     {"name": "Block", "period": 0.5, "wave": "=...........4..........",
+      "data": ["in use", "open"]}
+   ]}
+
+.. wavedrom::
+   :caption: Keeping the other rules and committing the block. Time runs from left to right, and
+             the host writes every register.
+
+   {"signal": [
+     {"name": "Register", "period": 0.5, "wave": "=......=.....=......",
+      "data": ["ACL_BLK_KEEP", "ACL_ENTRY", "ACL_BLK_CMD"]},
+     {"name": "Value", "period": 0.5, "wave": "=......=.....=......",
+      "data": ["KEEP", "EN, GRPID", "MODIFY = 0"]},
+     {"name": "Block", "period": 0.5, "wave": "4............=......",
+      "data": ["open", "commit"]}
    ]}
 
 1. Write the three words of the rule's :reg:`ACL_ACT` entry.

@@ -64,12 +64,13 @@ frame from the host, send 0. The layout of the four words is the header comment 
 VLAN tag is unrelated on transmit.
 
 .. wavedrom::
-   :caption: A frame on the CPU port. Bytes are sent from left to right.
+   :caption: A frame on the CPU port. Bytes are sent from left to right, and the CPU tag is
+             orange.
 
    {"signal": [
-     {"name": "Field", "period": 0.5, "wave": "=....=...4...=..=...=..",
+     {"name": "Field", "period": 0.5, "wave": "=....=...4....=..=...=..",
       "data": ["Destination", "Source", "CPU tag", "Type", "Payload", "FCS"]},
-     {"name": "Bytes", "period": 0.5, "wave": "=....=...4...=..=...=..",
+     {"name": "Bytes", "period": 0.5, "wave": "=....=...4....=..=...=..",
       "data": ["6", "6", "8", "2", "variable", "4"]}
    ]}
 
@@ -77,12 +78,12 @@ VLAN tag is unrelated on transmit.
    :caption: The four 16-bit words of the CPU tag.
 
    {"signal": [
-     {"name": "Tag bytes", "period": 0.5, "wave": "=....=...=......=......",
+     {"name": "Tag bytes", "period": 0.5, "wave": "=......=....=.......=......",
       "data": ["0 and 1", "2 and 3", "4 and 5", "6 and 7"]},
-     {"name": "Word", "period": 0.5, "wave": "=....=...=......=......",
+     {"name": "Word", "period": 0.5, "wave": "=......=....=.......=......",
       "data": ["EtherType", "word 1", "word 2", "word 3"]},
-     {"name": "Content", "period": 0.5, "wave": "=....=...=......=......",
-      "data": ["0x9988", "VLAN tag", "port, priority, code", "destination ports"]}
+     {"name": "Content", "period": 0.5, "wave": "=......=....=.......=......",
+      "data": ["CPU_TAG_TPID", "VLAN tag", "port, priority, code", "destination ports"]}
    ]}
 
 .. _cpu-tag-rx:

@@ -24,6 +24,7 @@ FONT_FAMILY = "Helvetica, Arial, sans-serif"   # the fonts of the WaveDrom wavef
 CHAR = FONT * 0.66   # px, upper estimate of the mean advance of one character
 PAD = 8              # px between a name and its box
 ARC_FONT = 13        # px, labels on the arrows of a waveform
+MIN_WIDTH = 560    # px, below which a diagram scrolls instead of shrinking
 ROW = 70             # px, height of one row of a register diagram
 ROW_EXTRA = 1.5 * FONT + 4   # px that WaveDrom keeps of a row for the bit numbers
 
@@ -206,6 +207,11 @@ def render(source, label, links=None):
     if source.get("signal"):
         key = json.dumps(source, sort_keys=True).encode("utf-8")
         svg = unique_ids(scope_style(svg), "w" + hashlib.sha1(key).hexdigest()[:8])
+        # A waveform keeps its text readable on a narrow screen, where the figure scrolls.
+        width = re.search(r'<svg[^>]*\bwidth="([0-9.]+)"', svg)
+        if width:
+            svg = svg.replace("<svg", '<svg style="min-width:%dpx"'
+                              % min(float(width.group(1)), MIN_WIDTH), 1)
     elif links:
         svg = add_links(svg, source["reg"], links)
     return svg.replace("<svg", '<svg role="img" aria-label="%s"' % escape(label, quote=True), 1)

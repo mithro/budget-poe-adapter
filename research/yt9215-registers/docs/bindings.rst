@@ -187,7 +187,7 @@ C
 -
 
 Portable C99 without dependencies. The caller supplies three functions in the structure
-:download:`struct yt921x_bus <../bindings/c/yt921x.h>`: clause 22 MDIO read,
+:download:`struct yt921x_bus <../bindings/c/yt921x.h>`: `clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ MDIO read,
 MDIO write and a delay.
 
 .. list-table::

@@ -134,8 +134,8 @@ Core clock
 need it, because their time slots count core clock periods. :ref:`rate-tokens` uses the
 period of the :ref:`clock table <bringup-clock-table>`. The periods are those that
 :lx:`yt921x_chip_detect` assigns for each value. The frequencies are the names of the values
-in :lx:`chip.h:179`. A comment in :lx:`chip.h:178` adds "unknown: 167M", so a part may run from a
-fourth clock that has no value name.
+in :lx:`chip.h:179`. A comment in :lx:`chip.h:178` reads "unknown: 167M"; what it refers to is
+:ev:`not known`.
 
 .. _bringup-clock-table:
 
@@ -164,16 +164,17 @@ fourth clock that has no value name.
      - 143 MHz
      - 7 ns
 
-For the values 2 and 3 the function assumes 8 ns. No source names a clock for them.
+For the values 2 and 3 :lx:`yt921x_chip_detect` assumes 8 ns. No source names a clock for them.
 
 .. _bringup-features:
 
 Turn on function blocks
 -----------------------
 
-Three function blocks work only while their bit in :reg:`FUNC` is set.
+Three function blocks have an enable bit in :reg:`FUNC`.
 :lx:`yt921x_chip_setup` of the :ref:`Linux driver <sources-list>` sets the three bits before
-it uses the blocks. It is :ev:`inferred` from that code that the bits are clear after reset.
+it uses the blocks. It is :ev:`inferred` from that code that a block works only while its bit is
+set and that the bits are clear after reset.
 
 .. list-table::
    :header-rows: 1

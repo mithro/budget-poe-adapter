@@ -167,7 +167,7 @@ The six codes of the :ref:`reason code table <cpu-tag-codes>` are the list
 calls the list incomplete and adds "Some are configurable via RMA_CTRL_CPU_CODE". No header of the
 :ref:`Linux driver <sources-list>` defines a register of that name, and the
 :ref:`vendor SDK <sources-list>` has the table :sdk:`RMA_CTRLN`. The column
-"Register that causes it" of the same table is :ev:`inferred` from the names of the codes and of the registers; no
+"Register that causes it" of the :ref:`reason code table <cpu-tag-codes>` is :ev:`inferred` from the names of the codes and of the registers; no
 function of the :ref:`Linux driver <sources-list>` connects a code with a register. The reasons of :ref:`PORT_COPY <tag-code-port-copy>` and
 :ref:`FDB_COPY <tag-code-fdb-copy>` are :ev:`inferred` from the two names.
 
@@ -200,7 +200,8 @@ function of the :ref:`Linux driver <sources-list>` connects a code with a regist
      - yes
 
 The codes :ref:`UNK_UCAST <tag-code-unk-ucast>` and :ref:`UNK_MCAST <tag-code-unk-mcast>` do
-not tell a trapped frame from a copied one, so do not combine the copy action of
+not tell a trapped frame from a copied one, as a comment in :lx:`yt921x_tag_rcv` states, so do
+not combine the copy action of
 :ref:`forwarding-flood` with forwarding in the host. Discard a received frame whose
 :ref:`PORT_EN <tag-rx-port-en>` bit is clear, as :lx:`yt921x_tag_rcv` does.
 

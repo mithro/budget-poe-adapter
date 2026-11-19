@@ -15,13 +15,13 @@ The MDIO bus
 
 MDC is a clock driven by the host. MDIO is a data line driven by either side. Table 18, "Management Interface Pins", of the
 |ds| gives the MDIO pin of the switch the type open drain, and the note under table 38 gives the
-timing with a pull-up resistor of 1 kΩ. The same table gives the pin an internal pull-up
+timing with a pull-up resistor of 1 kΩ. Table 18 also gives the pin an internal pull-up
 resistor. A board that wants the timing of table 38 adds an external one on MDIO. A
 frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit PHY address, a
 5-bit register number and 16 bits of data.
 
 .. yt-diagram:: mdio-frame
-   :caption: Clause 22 MDIO frames. Bits are sent from left to right; green parts are driven
+   :caption: MDIO frames. Bits are sent from left to right; green parts are driven
              by the switch.
 
 The switch answers on one PHY address, ``0x1d`` or ``0x00``, selected by a
@@ -336,7 +336,7 @@ loop.
 Checking that access works
 --------------------------
 
-:reg:`CPU_TAG_TPID` reads ``0x9988`` after reset, which is one of the three
+:reg:`CPU_TAG_TPID` reads ``0x9988`` after reset, which is one of the
 :ref:`reset values <sources-reset>` that the :ref:`Linux driver <sources-list>` states. A driver
 that reads anything
 else is not talking to a YT921x, has the wrong PHY address, or has a wiring fault. A read from

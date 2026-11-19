@@ -692,9 +692,9 @@ def index_page(m):
     out += ["   enums", "   counters", "   constants", "   parts", "   regions/index", ""]
     out += target("legend-access")
     out += heading("Access types", "-")
-    out += table(["Access", "Who sets the value", "Use by a driver"],
-                 [["read-write", "driver", "read, write"],
-                  ["read-only", "switch", "read"]], [30, 35, 35])
+    out += table(["Access", "Who sets the value", "Driver reads", "Driver writes"],
+                 [["read-write", "driver", "yes", "yes"],
+                  ["read-only", "switch", "yes", "no"]], [28, 28, 22, 22])
     out += target("legend-array")
     out += heading("Array fields", "-")
     out += ["An array field holds several elements of the same width. Under its heading \"Array "
@@ -943,7 +943,7 @@ def sdk_pages(m):
                         for f in sorted(t["fields"], key=lambda f: -f["lsb"])]
                 out += table(["Bits", "SDK field", "Source"], rows, [16, 54, 30])
             else:
-                out += ["The SDK lists no fields for this table.", ""]
+                out += ["The :ref:`vendor SDK <sources-list>` lists no fields for %s." % lit(t["name"]), ""]
         pages[region_page(x)] = out
     return pages
 

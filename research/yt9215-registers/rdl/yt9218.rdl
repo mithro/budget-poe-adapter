@@ -964,13 +964,13 @@ addrmap yt9218 {
 
     reg {
         name = "Forwarding database result data 0";
-        desc = "First word of the entry read by a GET_ONE or GET_NEXT command.";
+        desc = "First word of the entry read by a FDB_OP.OP.GET_ONE or FDB_OP.OP.GET_NEXT command.";
         field { desc = "MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24."; sw = r; hw = w; } ADDR_HI4[31:0];
     } FDB_OUT0 @ 0x1804B0;
 
     reg {
         name = "Forwarding database result data 1";
-        desc = "Second word of the entry read by a GET_ONE or GET_NEXT command.";
+        desc = "Second word of the entry read by a FDB_OP.OP.GET_ONE or FDB_OP.OP.GET_NEXT command.";
         enum fdb_out1_status_e {
             INVALID = 0 { desc = "Entry is empty"; };
             MIN_TIME = 1 { desc = "Dynamic entry about to age out"; };
@@ -987,7 +987,7 @@ addrmap yt9218 {
 
     reg {
         name = "Forwarding database result data 2";
-        desc = "Third word of the entry read by a GET_ONE or GET_NEXT command.";
+        desc = "Third word of the entry read by a FDB_OP.OP.GET_ONE or FDB_OP.OP.GET_NEXT command.";
         field { desc = "Ageing state of an entry that moved between ports."; sw = r; hw = w; } MOVE_AGING_STATUS[31:30];
         field { desc = "Drop frames received from this address."; sw = r; hw = w; } IGR_DROP[29:29];
         field { desc = "Ports that frames to this address are sent to. Each port has one bit."; sw = r; hw = w; } EGR_PORTS[28:18];
@@ -1450,7 +1450,7 @@ addrmap yt9218 {
     reg {
         name = "Port rate accounting";
         desc = "Per-frame overhead that rate limiting adds to the frame length. Index: port = 0 to 10.";
-        field { desc = "Bytes added per frame for preamble and inter-frame gap. A meter adds them when BYTE_MODE_INCLUDE_GAP is set."; sw = rw; hw = r; } GAP_VALUE[4:0];
+        field { desc = "Bytes added per frame for preamble and inter-frame gap. A meter adds them when METER_CTRL.BYTE_MODE_INCLUDE_GAP is set."; sw = rw; hw = r; } GAP_VALUE[4:0];
     } PORT_RATE[11] @ 0x220000 += 0x4;
 
     reg {

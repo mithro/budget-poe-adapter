@@ -46,9 +46,11 @@ table of 4096 entries. The registers are in the :blk:`vlan` block. The :ref:`reg
      - :reg:`VLAN_EGR_FILTER`
      - :ref:`vlan-egress`
 
-The switch knows two kinds of tag. The customer tag is the ordinary tag of IEEE 802.1Q. The
+The switch knows two kinds of tag. The customer tag is the ordinary tag of
+`IEEE 802.1Q <https://en.wikipedia.org/wiki/IEEE_802.1Q>`__. The
 service tag is the outer tag of `IEEE 802.1ad <https://en.wikipedia.org/wiki/IEEE_802.1ad>`__. A
-plain IEEE 802.1Q set-up uses customer tags only.
+plain
+`IEEE 802.1Q <https://en.wikipedia.org/wiki/IEEE_802.1Q>`__ set-up uses customer tags only.
 
 .. _vlan-aware:
 
@@ -93,8 +95,8 @@ Port VLAN ID
 ------------
 
 A frame without a customer tag joins the VLAN in :field:`PORT_VLAN_CTRL.CVID`, the port VLAN
-ID. :lx:`yt921x_port_set_pvid` writes the field. The switch looks up a frame tagged with VLAN
-ID 0 in entry 0 of the table, as :ref:`vlan-zero` describes.
+ID. :lx:`yt921x_port_set_pvid` writes the field. :ref:`vlan-zero` describes the handling of a frame
+tagged with VLAN ID 0.
 
 .. yt-bitfield:: PORT_VLAN_CTRL
 
@@ -202,7 +204,7 @@ VLAN 0
 ~~~~~~
 
 It is :ev:`inferred` that the switch looks up a tag with VLAN ID 0 in entry 0 of
-:reg:`VLAN_CTRL`, because the driver writes that entry. Write entry 0 once
+:reg:`VLAN_CTRL`, because the :ref:`Linux driver <sources-list>` writes that entry. Write entry 0 once
 at start-up with all ports in :field:`VLAN_CTRL.PORTS` and with :field:`VLAN_CTRL.LEARN_DIS`
 set, and use VLAN 0 for nothing else. :lx:`yt921x_chip_setup_dsa` writes this entry. Its
 :lx:`comment <chip.c:2334>` says that a frame tagged with VLAN ID 0 should be treated as

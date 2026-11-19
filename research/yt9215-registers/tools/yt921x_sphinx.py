@@ -192,11 +192,19 @@ class Links:
         return self.label(gen_docs.field_label(state()["fields"][name]))
 
 
-def figure(svg, caption):
+def figure(svg, caption, link=None):
     html = '<div class="yt-scroll">%s</div>' % svg.render()
     fig = nodes.figure("", nodes.raw("", html, format="html"), classes=["yt-figure"])
     if caption:
-        fig += nodes.caption(caption, caption)
+        cap = nodes.caption(caption, "")
+        if link:
+            head, name, tail = caption.partition(link[0])
+            cap += nodes.Text(head)
+            cap += nodes.reference("", name, refuri=link[1], classes=["internal"])
+            cap += nodes.Text(tail)
+        else:
+            cap += nodes.Text(caption)
+        fig += cap
     return fig
 
 
@@ -220,7 +228,7 @@ class Bitfield(SphinxDirective):
         if family:
             caption += " on the " + gen_docs.FAMILY[family]
         svg = gen_docs.bitfield_svg(s["model"], reg, family, layout, Links(self).label)
-        return [figure(svg, caption)]
+        return [figure(svg, caption, (reg["id"], Links(self).reg(reg["id"])))]
 
 
 class Diagram(SphinxDirective):

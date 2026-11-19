@@ -155,7 +155,8 @@ SerDes
 2. Write the protocol to :field:`SERDES.MODE`.
 3. For a link with in-band status (SGMII to a PHY), set :field:`PORT_CTRL.LINK_AN`, write
    :field:`PORT_CTRL.PAUSE_AN` and leave :field:`SERDES.LINK` clear. The PCS of the SerDes negotiates; its registers are standard
-   clause 22 registers on the :ref:`internal MDIO master <phy-mbus>` at the address of the
+   `clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ registers
+   on the :ref:`internal MDIO master <phy-mbus>` at the address of the
    port number.
 4. For a fixed link (to another MAC, or 1000BASE-X or 2500BASE-X without negotiation), write
    :field:`SERDES.SPEED`, :field:`SERDES.DUPLEX_FULL`, :field:`SERDES.RX_PAUSE` and
@@ -191,7 +192,7 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
      - :field:`SERDES.LINK` clear
      - :lx:`yt921x_serdes_config`
    * - 3
-     - Clause 22 registers of the PCS
+     - PCS registers
      - :lx:`yt921x_serdes_config`
    * - 4
      - Fields of :reg:`SERDES`

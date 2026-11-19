@@ -2038,7 +2038,7 @@ pub const fn port_rate(port: u32) -> u32 {
 pub const PORT_RATE_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_rate`].
 pub const PORT_RATE_PORT_COUNT: u32 = 11;
-/// Bytes added per frame for preamble and inter-frame gap. A meter adds them when BYTE_MODE_INCLUDE_GAP is set.
+/// Bytes added per frame for preamble and inter-frame gap. A meter adds them when METER_CTRL.BYTE_MODE_INCLUDE_GAP is set.
 pub const PORT_RATE_GAP_VALUE: Field = Field { lsb: 0, width: 5 };
 /// Reset value of PORT_RATE_GAP_VALUE.
 pub const PORT_RATE_GAP_VALUE_RESET: u32 = 20;

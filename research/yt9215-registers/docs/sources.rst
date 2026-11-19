@@ -110,8 +110,8 @@ use the words of its column "Word in the guide"; each use of such a word is a li
 
 A statement with the level driver follows what the code does. A header definition that no
 code uses carries a name and often a list of values, which is taken at face value. An
-:ev:`inferred` statement is a reading of names in the Linux driver or the vendor SDK and can be
-wrong. A :ev:`datasheet` statement names the table, figure or section of the |ds| that it rests
+:ev:`inferred` statement is a reading of names in the :ref:`Linux driver <sources-list>` or the
+:ref:`vendor SDK <sources-list>` and can be wrong. A :ev:`datasheet` statement names the table, figure or section of the |ds| that it rests
 on. The reference does not use this level; the notes on the two reset bits of :reg:`RST` cite a
 section of the |ds| in addition to their own level.
 
@@ -169,7 +169,7 @@ array field whose elements are separated by other bits, the comparison is that o
      - none
 
 A field that spans several SDK fields has one row per SDK field. The row "SDK table" of a
-register names the table. Where the SDK has no table at the address but its code uses the
+register names the table. Where the :ref:`vendor SDK <sources-list>` has no table at the address but its code uses the
 address as a number, the row reads "address constant" and links to that line of the SDK.
 
 .. _sources-open:
@@ -205,11 +205,11 @@ against the :ref:`software model <bindings-tests>` only. No source settles the t
      - :ref:`ports-xmii`
    * - Effect of the filtering ID
      - :field:`VLAN_CTRL.FID`
-   * - Meaning of the SVLAN_EN bit
+   * - Meaning of a service VLAN bit
      - :field:`VLAN_CTRL.SVLAN_EN`
    * - Scale of the temperature reading
      - :reg:`TEMP`
-   * - Clause 45 MDIO
+   * - MDIO `clause 45 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__
      - :ref:`phy-mbus`
    * - SPI host interface
      - :ref:`access-straps`

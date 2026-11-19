@@ -1088,19 +1088,19 @@ registers:
     block: fdb
     title: Forwarding database result data 0
     access: ro
-    desc: First word of the entry read by a GET_ONE or GET_NEXT command.
+    desc: "First word of the entry read by a :val:`FDB_OP.OP.GET_ONE` or :val:`FDB_OP.OP.GET_NEXT` command."
     fields: *fdb0
   FDB_OUT1:
     block: fdb
     title: Forwarding database result data 1
     access: ro
-    desc: Second word of the entry read by a GET_ONE or GET_NEXT command.
+    desc: "Second word of the entry read by a :val:`FDB_OP.OP.GET_ONE` or :val:`FDB_OP.OP.GET_NEXT` command."
     fields: *fdb1
   FDB_OUT2:
     block: fdb
     title: Forwarding database result data 2
     access: ro
-    desc: Third word of the entry read by a GET_ONE or GET_NEXT command.
+    desc: "Third word of the entry read by a :val:`FDB_OP.OP.GET_ONE` or :val:`FDB_OP.OP.GET_NEXT` command."
     fields: *fdb2
   FDB_HW_FLUSH:
     block: fdb
@@ -1352,7 +1352,7 @@ registers:
       Per-frame overhead that rate limiting adds to the frame length.
     inferred: true
     fields:
-      GAP_VALUE: {desc: "Bytes added per frame for preamble and inter-frame gap. A meter adds them when BYTE_MODE_INCLUDE_GAP is set.", reset: 20, unit: bytes, inferred: true}
+      GAP_VALUE: {desc: "Bytes added per frame for preamble and inter-frame gap. A meter adds them when :field:`METER_CTRL.BYTE_MODE_INCLUDE_GAP` is set.", reset: 20, unit: bytes, inferred: true}
   METER_SLOT:
     block: meter
     title: Meter time slot

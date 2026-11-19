@@ -131,7 +131,9 @@ Address learning
 ----------------
 
 The switch learns the source address of received frames into the forwarding database by
-itself. :reg:`PORT_LEARN` controls this per port.
+itself, and :reg:`PORT_LEARN` controls this per port. :lx:`yt921x_userport_standalone`
+sets :field:`PORT_LEARN.DIS` and :lx:`yt921x_userport_bridge` clears it, which
+:ev:`confirms <confirmed>` the field.
 
 .. list-table::
    :header-rows: 1

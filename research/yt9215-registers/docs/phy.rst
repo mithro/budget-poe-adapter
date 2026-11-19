@@ -70,9 +70,11 @@ external master.
 
 The comments on the definitions of :field:`EXT_MBUS_CTRL.TYPE` in :lx:`mdio_bus.h:22` and of
 :field:`INT_MBUS_CTRL.OP` in :lx:`mdio_bus.h:25` read "wild guess", so the widths of the two
-fields are uncertain. The four functions use the values of the fields for clause 22 transfers. A
+fields are :ev:`inferred`. The four functions use the values of the fields for
+`clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ transfers. A
 :lx:`comment <mdio_bus.c:287>` in :lx:`yt921x_mbus_ext_init` reads "TODO: c45?", and no source
-describes a clause 45 transfer.
+describes a
+`clause 45 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ transfer.
 
 .. tab-set::
 
@@ -137,14 +139,15 @@ A generic PHY driver of another system, such as Zephyr, needs the
 :ref:`transfer <phy-mbus>` as its bus. Vendor specific PHY registers are outside the scope of
 this manual.
 
-The SerDes PCS at address 8 or 9 uses bits of register 0 with their clause 22 meaning.
+The SerDes PCS at address 8 or 9 uses bits of register 0 with their
+`clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ meaning.
 
 .. list-table::
    :header-rows: 1
    :widths: 14 36 50
 
    * - Bit
-     - Clause 22 name
+     - Name in `clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__
      - Function of the :ref:`Linux driver <sources-list>` that writes it
    * - 12
      - Auto-negotiation enable

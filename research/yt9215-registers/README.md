@@ -50,10 +50,10 @@ sources) is generated during the build by [`tools/gen_docs.py`](tools/gen_docs.p
 | --- | --- | --- |
 | [`yt921x.yaml`](yt921x.yaml) | YAML | 101 registers with 467 fields |
 | [`sdk-tables.yaml`](sdk-tables.yaml) | YAML | 237 register tables of the [vendor SDK](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk) |
-| [`svd/yt9215.svd`](svd/yt9215.svd) | CMSIS-SVD | YT9215 family |
-| [`svd/yt9218.svd`](svd/yt9218.svd) | CMSIS-SVD | YT9218 family |
-| [`rdl/yt9215.rdl`](rdl/yt9215.rdl) | SystemRDL | YT9215 family |
-| [`rdl/yt9218.rdl`](rdl/yt9218.rdl) | SystemRDL | YT9218 family |
+| [`svd/yt9215.svd`](svd/yt9215.svd) | [CMSIS-SVD](https://open-cmsis-pack.github.io/svd-spec/main/index.html) | YT9215 family |
+| [`svd/yt9218.svd`](svd/yt9218.svd) | [CMSIS-SVD](https://open-cmsis-pack.github.io/svd-spec/main/index.html) | YT9218 family |
+| [`rdl/yt9215.rdl`](rdl/yt9215.rdl) | [SystemRDL](https://www.accellera.org/downloads/standards/systemrdl) | YT9215 family |
+| [`rdl/yt9218.rdl`](rdl/yt9218.rdl) | [SystemRDL](https://www.accellera.org/downloads/standards/systemrdl) | YT9218 family |
 
 [`yt921x.yaml`](yt921x.yaml) is the source that every other file is generated from.
 [`sdk-tables.yaml`](sdk-tables.yaml) holds names and bit positions only.

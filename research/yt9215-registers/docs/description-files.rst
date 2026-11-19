@@ -25,25 +25,25 @@ from it for tools that read those formats.
      - both
      - Tables of the :ref:`vendor SDK <sources-list>`
    * - :download:`yt9215.svd <../svd/yt9215.svd>`
-     - CMSIS-SVD 1.3
+     - `CMSIS-SVD <https://open-cmsis-pack.github.io/svd-spec/main/index.html>`__ 1.3
      - :ref:`YT9215 <reference-parts>`
      - Registers of this manual
    * - :download:`yt9218.svd <../svd/yt9218.svd>`
-     - CMSIS-SVD 1.3
+     - `CMSIS-SVD <https://open-cmsis-pack.github.io/svd-spec/main/index.html>`__ 1.3
      - :ref:`YT9218 <reference-parts>`
      - Registers of this manual
    * - :download:`yt9215.rdl <../rdl/yt9215.rdl>`
-     - SystemRDL 2.0
+     - `SystemRDL <https://www.accellera.org/downloads/standards/systemrdl>`__ 2.0
      - :ref:`YT9215 <reference-parts>`
      - Registers of this manual
    * - :download:`yt9218.rdl <../rdl/yt9218.rdl>`
-     - SystemRDL 2.0
+     - `SystemRDL <https://www.accellera.org/downloads/standards/systemrdl>`__ 2.0
      - :ref:`YT9218 <reference-parts>`
      - Registers of this manual
 
 Every other file is generated from :download:`yt921x.yaml <../yt921x.yaml>`.
 :download:`sdk-tables.yaml <../sdk-tables.yaml>` holds table names and bit positions only.
-There is one SVD and one SystemRDL file per family because :reg:`IO_LEVEL` has a different
+There is one `CMSIS-SVD <https://open-cmsis-pack.github.io/svd-spec/main/index.html>`__ and one `SystemRDL <https://www.accellera.org/downloads/standards/systemrdl>`__ file per family because :reg:`IO_LEVEL` has a different
 layout in each.
 
 .. _description-files-svd:
@@ -51,7 +51,8 @@ layout in each.
 How the SVD files represent the registers
 -----------------------------------------
 
-CMSIS-SVD was made for memory-mapped peripherals of a microcontroller. The
+`CMSIS-SVD <https://open-cmsis-pack.github.io/svd-spec/main/index.html>`__ describes memory-mapped peripherals of a microcontroller. The
+suffixes of a field that crosses a word boundary are ``_LO`` and ``_HI``. The
 :ref:`mapping table <description-files-svd-map>` shows which SVD element stands for each item
 of this manual.
 
@@ -80,7 +81,7 @@ of this manual.
    * - Field that crosses a word boundary
      - :field:`VLAN_CTRL.FID`
      - two fields
-     - suffixes ``_LO``, ``_HI``
+     - field name with a suffix
    * - Layout of :reg:`ACL_KEY`
      - :reg:`ACL_KEY`
      - alternate register
@@ -152,9 +153,9 @@ Regenerating
    * - :download:`gen_py.py <../tools/gen_py.py>`
      - Writes the MicroPython module
    * - :download:`gen_svd.py <../tools/gen_svd.py>`
-     - Writes the SVD files
+     - Writes the `CMSIS-SVD <https://open-cmsis-pack.github.io/svd-spec/main/index.html>`__ files
    * - :download:`gen_rdl.py <../tools/gen_rdl.py>`
-     - Writes the SystemRDL files
+     - Writes the `SystemRDL <https://www.accellera.org/downloads/standards/systemrdl>`__ files
    * - :download:`gen_docs.py <../tools/gen_docs.py>`
      - Writes the reference pages of this manual during the Sphinx build
    * - :download:`diagrams.py <../tools/diagrams.py>`

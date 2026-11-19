@@ -3284,7 +3284,7 @@
         </register>
         <register>
           <name>FDB_OUT0</name>
-          <description>First word of the entry read by a GET_ONE or GET_NEXT command.</description>
+          <description>First word of the entry read by a FDB_OP.OP.GET_ONE or FDB_OP.OP.GET_NEXT command.</description>
           <addressOffset>0x4B0</addressOffset>
           <size>32</size>
           <access>read-only</access>
@@ -3300,7 +3300,7 @@
         </register>
         <register>
           <name>FDB_OUT1</name>
-          <description>Second word of the entry read by a GET_ONE or GET_NEXT command.</description>
+          <description>Second word of the entry read by a FDB_OP.OP.GET_ONE or FDB_OP.OP.GET_NEXT command.</description>
           <addressOffset>0x4B4</addressOffset>
           <size>32</size>
           <access>read-only</access>
@@ -3369,7 +3369,7 @@
         </register>
         <register>
           <name>FDB_OUT2</name>
-          <description>Third word of the entry read by a GET_ONE or GET_NEXT command.</description>
+          <description>Third word of the entry read by a FDB_OP.OP.GET_ONE or FDB_OP.OP.GET_NEXT command.</description>
           <addressOffset>0x4B8</addressOffset>
           <size>32</size>
           <access>read-only</access>
@@ -9088,7 +9088,7 @@
           <fields>
             <field>
               <name>GAP_VALUE</name>
-              <description>Bytes added per frame for preamble and inter-frame gap. A meter adds them when BYTE_MODE_INCLUDE_GAP is set.</description>
+              <description>Bytes added per frame for preamble and inter-frame gap. A meter adds them when METER_CTRL.BYTE_MODE_INCLUDE_GAP is set.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>5</bitWidth>
               <access>read-write</access>

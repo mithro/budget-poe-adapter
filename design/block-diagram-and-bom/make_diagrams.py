@@ -150,7 +150,7 @@ def power_tree(name):
     d.text(430, 262, "Switch supply: 1.2 to 1.5 W", anchor="start")
     d.text(430, 280, "taken from the 5 V rail", anchor="start")
     d.text(15, 300, "Power values are for a 25.5 W grant.", anchor="start")
-    d.text(15, 318, "Loss before the converter: 1.2 W.", anchor="start")
+    d.text(15, 318, "Loss before the converter: 1.17 W.", anchor="start")
     d.save(name)
 
 

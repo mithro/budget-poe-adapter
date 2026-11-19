@@ -214,8 +214,8 @@ output voltage, which adds about one [5 V converter](#block-5v) block per output
 
 | Granted at the PoE input | Loss before the converter | 5 V rail | Switch supply in option A | USB-C budget in option A | USB-C current in option A | Switch supply in option B | USB-C budget in option B | USB-C current in option B |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 12.95 W | 0.7 W | 10.6 W | 1.2 W | 9.4 W | 1.9 A | 1.5 W | 9.1 W | 1.8 A |
-| 25.5 W | 1.2 W | 21.2 W | 1.2 W | 20.0 W | 4.0 A | 1.5 W | 19.7 W | 3.9 A |
+| 12.95 W | 0.71 W | 10.6 W | 1.2 W | 9.4 W | 1.9 A | 1.5 W | 9.1 W | 1.8 A |
+| 25.5 W | 1.17 W | 21.2 W | 1.2 W | 20.0 W | 4.0 A | 1.5 W | 19.7 W | 3.9 A |
 
 Every column except "Granted at the PoE input" is an estimate [**I**](#evidence-codes):
 
@@ -411,9 +411,10 @@ variant in turn. The standards background is in [PoE powered device](../research
 - A variant with two-event detection reports the grant on a signal named T2P, which takes one
   GPIO input of the YT9215. The pin is not assigned [**U**](#evidence-codes).
 - The discrete T2P is high for a 25.5 W grant and stays valid for 1.3 s in the shortest
-  simulated case, so the firmware has to read it within 1 s of power-up. The T2P of the PD
-  controller IC is low for a 25.5 W grant. The T2P output stage runs from the 3.3 V rail
-  ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)).
+  simulated case, so the firmware has to read it within 1 s of power-up. Its output stage runs
+  from the 3.3 V rail ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)).
+- The T2P of the PD controller IC is low for a 25.5 W grant
+  ([discrete parts or a PD controller IC](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#discrete-parts-or-a-pd-controller-ic)).
 - The front end has no undervoltage lockout of its own in the discrete variants. It relies on
   the enable threshold of the [5 V converter](#block-5v)
   ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)).
@@ -912,7 +913,7 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | The converter enable threshold holds 4 % | Datasheet check | Reference with a comparator |
 | A GPIO input is free for T2P | CPU study | LLDP only |
 | A non-isolated design is acceptable | Safety review | Isolated converter |
-| Loss before the converter is 1.2 W at 25.5 W | Bench | USB-C budget changes |
+| Loss before the converter is 1.17 W at 25.5 W | Bench | USB-C budget changes |
 | The 5 V converter reaches 87 % | Bench | USB-C budget changes |
 | The catch diode can shed its loss | Schematic work | Larger diode |
 | The G2415S carries the PoE current | Datasheet check | Other transformer |

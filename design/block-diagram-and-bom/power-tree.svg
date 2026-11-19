@@ -42,5 +42,5 @@
 <text x="430" y="262" text-anchor="start" dominant-baseline="middle">Switch supply: 1.2 to 1.5 W</text>
 <text x="430" y="280" text-anchor="start" dominant-baseline="middle">taken from the 5 V rail</text>
 <text x="15" y="300" text-anchor="start" dominant-baseline="middle">Power values are for a 25.5 W grant.</text>
-<text x="15" y="318" text-anchor="start" dominant-baseline="middle">Loss before the converter: 1.2 W.</text>
+<text x="15" y="318" text-anchor="start" dominant-baseline="middle">Loss before the converter: 1.17 W.</text>
 </svg>

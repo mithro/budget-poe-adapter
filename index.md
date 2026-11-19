@@ -8,6 +8,13 @@
 
 ```{toctree}
 :hidden:
+:caption: Design
+
+design/block-diagram-and-bom
+```
+
+```{toctree}
+:hidden:
 :caption: YT9215 switch IC
 
 research/yt9215-embedded-cpu

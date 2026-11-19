@@ -1,0 +1,16 @@
+{
+ "signal": [
+  {"name": "PoE input", "wave": "0=.=.=.........", "data": ["detect", "class", "37 to 57 V"]},
+  {"name": "5 V rail", "wave": "0....1........."},
+  {"name": "3.3 V and 1.15 V", "wave": "0.....1........"},
+  {"name": "CPU", "wave": "x.....=.=..=...", "data": ["boot", "LLDP request", "power granted"]},
+  {"name": "Upstream port", "wave": "0......1......."},
+  {"name": "Downstream ports", "wave": "0..........1..."},
+  {"name": "Rp on CC", "wave": "0..........1..."},
+  {"name": "Sink attached", "wave": "0...........1.."},
+  {"name": "VBUS", "wave": "0............1."},
+  {"name": "PD messages", "wave": "x............=.", "data": ["offer"]},
+  {"name": "PoE power limit", "wave": "x....=.....=...", "data": ["12.95 W", "25.5 W"]}
+ ],
+ "head": {"text": "Start-up order: nothing downstream of the switch turns on before the PoE grant"}
+}

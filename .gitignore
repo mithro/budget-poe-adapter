@@ -51,3 +51,6 @@ _build/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Bills of materials of the design options are kept
+!design/block-diagram-and-bom/*.csv

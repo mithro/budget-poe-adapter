@@ -6,7 +6,7 @@ flexible PoE to USB-C adapter with a built-in Ethernet switch that runs at 1 Gbi
 The design uses only the Motorcomm YT9215 switch IC and its internal RISC-V CPU. The
 adapter's firmware runs on that CPU, and there is no external MCU and no other switch IC.
 
-The project is at the research stage. It has no schematic or PCB of the adapter.
+The project is at the research stage. It has block diagrams and BOMs of the adapter, and no schematic or PCB.
 
 | Resource | Location |
 | --- | --- |
@@ -20,12 +20,19 @@ The [Archive](#archive) group comes last and holds the notes that are not part o
 
 | Group | Question it answers |
 | --- | --- |
+| [Design](#design) | What is the adapter built from, and what does it cost? |
 | [YT9215 switch IC](#yt9215-switch-ic) | What is known about the YT9215 and the CPU inside it? |
 | [Switch boards](#switch-boards) | How are the two YT9215 switch boards built? |
 | [YT921x switch programming](#yt921x-switch-programming) | How is a YT921x switch programmed? |
 | [Power](#power) | How does the adapter take PoE power and hand it on over USB-C? |
 | [Datasheets](#datasheets) | Where are the vendor documents? |
 | [Archive](#archive) | Which notes assume a design other than the current one? |
+
+### Design
+
+| Document | Covers |
+| --- | --- |
+| [Block diagram and BOM options](design/block-diagram-and-bom.md) | Two layouts of the adapter with block diagrams, power tree and priced BOMs |
 
 ### YT9215 switch IC
 
@@ -93,6 +100,7 @@ Each one opens with a statement of the design it assumes.
 
 | Folder | Contents |
 | --- | --- |
+| [`design/`](https://github.com/mithro/budget-poe-adapter/tree/main/design) | Block diagrams and BOMs of the current design |
 | [`research/`](https://github.com/mithro/budget-poe-adapter/tree/main/research) | Research notes of the current design |
 | [`research/lx-is601f-board/`](https://github.com/mithro/budget-poe-adapter/tree/main/research/lx-is601f-board) | Photos and schematic of the LX-IS601F switch board |
 | [`research/yt9215-registers/`](https://github.com/mithro/budget-poe-adapter/tree/main/research/yt9215-registers) | YT921x manual with register description and bindings |

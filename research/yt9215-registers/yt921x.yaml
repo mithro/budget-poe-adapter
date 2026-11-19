@@ -718,8 +718,7 @@ enums:
       src:
       - chip.h
       - 117
-      used: true
-      use: [chip.c, yt921x_port_up, 1696]
+      used: false
   - name: V100
     value: 1
     desc: 100 Mbit/s
@@ -728,8 +727,7 @@ enums:
       src:
       - chip.h
       - 118
-      used: true
-      use: [chip.c, yt921x_port_up, 1696]
+      used: false
   - name: V1000
     value: 2
     desc: 1000 Mbit/s
@@ -738,8 +736,7 @@ enums:
       src:
       - chip.h
       - 119
-      used: true
-      use: [chip.c, yt921x_port_up, 1696]
+      used: false
   - name: V10000
     value: 3
     desc: 10 Gbit/s
@@ -748,8 +745,7 @@ enums:
       src:
       - chip.h
       - 120
-      used: true
-      use: [chip.c, yt921x_port_up, 1696]
+      used: false
   - name: V2500
     value: 4
     desc: 2500 Mbit/s
@@ -758,8 +754,7 @@ enums:
       src:
       - chip.h
       - 121
-      used: true
-      use: [chip.c, yt921x_port_up, 1696]
+      used: false
 - name: app_selector
   title: Priority sources
   desc: Index of a priority source in :reg:`PORT_PRIO_ORD`.
@@ -1834,7 +1829,9 @@ registers:
   - name: ADDR
     lsb: 0
     width: 16
-    desc: MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8.
+    desc: Two bytes of the MAC address. The register name reads as the first two bytes of the address,
+      which is :ev:`inferred`. The :ref:`vendor SDK <sources-list>` reads the field as the last two bytes,
+      with byte 4 in bits 15 to 8. It is :ev:`not known` which is right.
     access: rw
     inferred: true
     sdk:
@@ -1842,11 +1839,11 @@ registers:
       fields: [MAC_ADDR_BYTE5, MAC_ADDR_BYTE4]
   block: system
   title: Switch MAC address, high part
-  desc: 'Upper two bytes of the MAC address of the switch. It is :ev:`inferred` from the name that
+  desc: 'Two bytes of the MAC address of the switch. It is :ev:`inferred` from the name that
 
     the switch uses the address as the source address of frames it sends itself, such as
 
-    pause frames.'
+    pause frames. :ref:`bringup-mac` gives the two readings of the byte order.'
   access: rw
   words: 1
   inferred: true
@@ -1870,7 +1867,9 @@ registers:
   - name: ADDR
     lsb: 0
     width: 32
-    desc: MAC address bytes 2 to 5. Byte 2 is in bits 31 to 24.
+    desc: Four bytes of the MAC address. The register name reads as the last four bytes of the address,
+      which is :ev:`inferred`. The :ref:`vendor SDK <sources-list>` reads the field as the first four
+      bytes, with byte 0 in bits 31 to 24. It is :ev:`not known` which is right.
     access: rw
     inferred: true
     sdk:
@@ -1878,7 +1877,7 @@ registers:
       fields: [MAC_ADDR_BYTE3, MAC_ADDR_BYTE2, MAC_ADDR_BYTE1, MAC_ADDR_BYTE0]
   block: system
   title: Switch MAC address, low part
-  desc: Lower four bytes of the switch MAC address; see :reg:`MAC_ADDR_HI2`.
+  desc: Four bytes of the MAC address of the switch; see :reg:`MAC_ADDR_HI2`.
   access: rw
   words: 1
   inferred: true
@@ -1969,9 +1968,8 @@ registers:
       use: [chip.c, yt921x_set_eee, 205]
     lsb: 16
     width: 1
-    desc: 1 turns Energy Efficient Ethernet on for the built-in PHYs. :lx:`yt921x_set_eee` sets this bit
-      together with :field:`PON_STRAP_FUNC.EEE`; the role of each bit alone is :ev:`inferred` from the
-      register names.
+    desc: 1 turns Energy Efficient Ethernet on. :lx:`yt921x_set_eee` sets this bit together with :field:`PON_STRAP_FUNC.EEE`;
+      the role of each bit alone is :ev:`inferred` from the register names.
     access: rw
     sdk:
       status: SDK lists no fields
@@ -2579,7 +2577,8 @@ registers:
       status: no SDK table
   block: port
   title: SerDes enable
-  desc: 'Powers the SGMII SerDes of ports 8 and 9. A port uses either its SerDes or its xMII pins;
+  desc: 'Enables the SGMII SerDes of ports 8 and 9, as :lx:`yt921x_port_config` does. A port uses either
+    its SerDes or its xMII pins;
 
     clear the matching bit in :reg:`XMII_CTRL` when setting one here.'
   access: rw
@@ -3119,11 +3118,11 @@ registers:
       fields: [SPEED]
   block: port
   title: External port link override
-  desc: 'Link state of port 8 or 9 as the switch would otherwise learn it by polling a PHY on the
+  desc: 'Link state of port 8 or 9. :lx:`yt921x_port_up` writes the link state here for a port
 
-    external MDIO bus. Write the real link state here when the port is wired straight to
+    that is wired straight to another MAC. It is :ev:`inferred` from the name that the switch
 
-    another MAC.'
+    otherwise learns the state by polling a PHY on the external MDIO bus.'
   access: rw
   words: 1
   sdk:

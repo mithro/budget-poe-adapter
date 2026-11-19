@@ -70,7 +70,8 @@ Identify the part
 Three values together name the part: the family code :field:`CHIP_ID.MAJOR`, the mode
 :field:`CHIP_MODE.MODE`, and one byte of the configuration byte store, called the extended
 mode. :ref:`reference-parts` has the value of each for every part and
-:ref:`reference-parts-ports` the ports each part has. A driver needs the part to know which
+:ref:`reference-parts-ports` the ports of each part that the
+:ref:`Linux driver <sources-list>` identifies. A driver needs the part to know which
 of ports 8 and 9 exist and whether they have a SerDes or xMII pins.
 
 The configuration byte store is this manual's name for what the
@@ -262,6 +263,15 @@ Switch MAC address
 frames it generates, such as pause frames. No function of the :ref:`Linux driver <sources-list>`
 writes the two
 registers.
+
+The sources disagree on the byte order. The names in :lx:`chip.h` read as the first two bytes
+of the address in :reg:`MAC_ADDR_HI2` and the last four in :reg:`MAC_ADDR_LO4`, which is
+:ev:`inferred`. The :ref:`vendor SDK <sources-list>` names the two bytes of
+:reg:`MAC_ADDR_HI2` ``MAC_ADDR_BYTE4`` and ``MAC_ADDR_BYTE5`` and the four bytes of
+:reg:`MAC_ADDR_LO4` ``MAC_ADDR_BYTE0`` to ``MAC_ADDR_BYTE3``, and its function
+`fal_tiger_sys_mac_get() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_sys.c#L17>`__
+returns them in that order as bytes 0 to 5 of the address. It is :ev:`not known` which is
+right.
 
 .. _bringup-next:
 

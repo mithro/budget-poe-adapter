@@ -284,7 +284,7 @@
         </register>
         <register>
           <name>SERDES_CTRL</name>
-          <description>Powers the SGMII SerDes of ports 8 and 9. A port uses either its SerDes or its xMII pins; clear the matching bit in XMII_CTRL when setting one here.</description>
+          <description>Enables the SGMII SerDes of ports 8 and 9, as yt921x_port_config does. A port uses either its SerDes or its xMII pins; clear the matching bit in XMII_CTRL when setting one here.</description>
           <addressOffset>0x28</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -386,14 +386,14 @@
         </register>
         <register>
           <name>MAC_ADDR_HI2</name>
-          <description>Upper two bytes of the MAC address of the switch. It is inferred from the name that the switch uses the address as the source address of frames it sends itself, such as pause frames.</description>
+          <description>Two bytes of the MAC address of the switch. It is inferred from the name that the switch uses the address as the source address of frames it sends itself, such as pause frames. :ref:`bringup-mac` gives the two readings of the byte order.</description>
           <addressOffset>0x80</addressOffset>
           <size>32</size>
           <access>read-write</access>
           <fields>
             <field>
               <name>ADDR</name>
-              <description>MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8.</description>
+              <description>Two bytes of the MAC address. The register name reads as the first two bytes of the address, which is inferred. The vendor SDK reads the field as the last two bytes, with byte 4 in bits 15 to 8. It is not known which is right.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>16</bitWidth>
               <access>read-write</access>
@@ -402,14 +402,14 @@
         </register>
         <register>
           <name>MAC_ADDR_LO4</name>
-          <description>Lower four bytes of the switch MAC address; see MAC_ADDR_HI2.</description>
+          <description>Four bytes of the MAC address of the switch; see MAC_ADDR_HI2.</description>
           <addressOffset>0x84</addressOffset>
           <size>32</size>
           <access>read-write</access>
           <fields>
             <field>
               <name>ADDR</name>
-              <description>MAC address bytes 2 to 5. Byte 2 is in bits 31 to 24.</description>
+              <description>Four bytes of the MAC address. The register name reads as the last four bytes of the address, which is inferred. The vendor SDK reads the field as the first four bytes, with byte 0 in bits 31 to 24. It is not known which is right.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>32</bitWidth>
               <access>read-write</access>
@@ -751,7 +751,7 @@
             </field>
             <field>
               <name>EEE</name>
-              <description>1 turns Energy Efficient Ethernet on for the built-in PHYs. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names.</description>
+              <description>1 turns Energy Efficient Ethernet on. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -786,7 +786,7 @@
           <dimIncrement>0x4</dimIncrement>
           <dimIndex>8-9</dimIndex>
           <name>MDIO_POLLING_%s</name>
-          <description>Link state of port 8 or 9 as the switch would otherwise learn it by polling a PHY on the external MDIO bus. Write the real link state here when the port is wired straight to another MAC. Index: port = 8 to 9.</description>
+          <description>Link state of port 8 or 9. yt921x_port_up writes the link state here for a port that is wired straight to another MAC. It is inferred from the name that the switch otherwise learns the state by polling a PHY on the external MDIO bus. Index: port = 8 to 9.</description>
           <addressOffset>0x364</addressOffset>
           <size>32</size>
           <access>read-write</access>

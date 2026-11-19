@@ -27,7 +27,7 @@ on the part each has an SGMII-class SerDes, parallel MAC pins or both. This manu
 parallel MAC pins xMII; they carry MII, RMII or RGMII. Port 10 leads to the built-in
 microcontroller, which a host driver leaves alone. The comment in :lx:`chip.h:448` gives this
 layout as "8 internal + 2 external + 1 mcu". :ref:`reference-parts-ports` lists the
-ports of every part.
+ports of every part that the :ref:`Linux driver <sources-list>` identifies.
 
 A host that wants to send and receive frames through the switch connects its own Ethernet MAC
 to one of the external ports. That port is then the CPU port, and frames on it can carry the

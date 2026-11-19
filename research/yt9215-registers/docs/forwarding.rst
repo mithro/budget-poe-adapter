@@ -160,7 +160,7 @@ sets :field:`PORT_LEARN.DIS` and :lx:`yt921x_userport_bridge` clears it, which
      - :field:`VLAN_CTRL.LEARN_DIS`
      - :ev:`confirmed`
 
-:lx:`yt921x_bridge_flags` sets :field:`PORT_LEARN.DIS` and :lx:`yt921x_chip_setup_dsa` sets
+:lx:`yt921x_bridge_flags` sets or clears :field:`PORT_LEARN.DIS` and :lx:`yt921x_chip_setup_dsa` sets
 :field:`VLAN_CTRL.LEARN_DIS`. The :ev:`inferred` rows follow the field names in :lx:`chip.h`.
 Learned entries age out after the time in :reg:`AGEING`, which :ref:`fdb-ageing` describes.
 
@@ -246,10 +246,8 @@ trapping every unknown frame, is consistent with it.
 
 .. yt-bitfield:: ACT_UNK_UCAST
 
-The :ref:`configuration table <forwarding-flood-config>` gives the register values for a
+The :ref:`flood table <forwarding-flood-table>` gives the register values for a
 switch that floods by itself and for a host that forwards unknown frames in software.
-
-.. _forwarding-flood-config:
 
 .. _forwarding-flood-table:
 

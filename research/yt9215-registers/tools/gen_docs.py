@@ -850,7 +850,8 @@ def parts_page(m):
     out += heading("Port interfaces", "-")
     out += ["Ports 0 to 7 can have a built-in copper PHY, ports 8 and 9 an external interface, and "
             "port 10 is the built-in microcontroller. A port that a part does not have is not "
-            "listed.", ""]
+            "listed. The rows are those of the part table of the :ref:`Linux driver <sources-list>`; "
+            "a part of :ref:`reference-parts-assumed` has no rows.", ""]
     rows = []
     for c in m.chips:
         for p in range(11):

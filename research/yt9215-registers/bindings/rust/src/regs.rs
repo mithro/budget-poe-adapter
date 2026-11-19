@@ -338,12 +338,12 @@ pub const IO_LEVEL_YT9218_NORMAL_V1V8: u32 = 3;
 
 /// Switch MAC address, high part.
 pub const MAC_ADDR_HI2: u32 = 0x80080;
-/// MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8.
+/// Two bytes of the MAC address. The register name reads as the first two bytes of the address, which is inferred. The vendor SDK reads the field as the last two bytes, with byte 4 in bits 15 to 8. It is not known which is right.
 pub const MAC_ADDR_HI2_ADDR: Field = Field { lsb: 0, width: 16 };
 
 /// Switch MAC address, low part.
 pub const MAC_ADDR_LO4: u32 = 0x80084;
-/// MAC address bytes 2 to 5. Byte 2 is in bits 31 to 24.
+/// Four bytes of the MAC address. The register name reads as the last four bytes of the address, which is inferred. The vendor SDK reads the field as the first four bytes, with byte 0 in bits 31 to 24. It is not known which is right.
 pub const MAC_ADDR_LO4_ADDR: Field = Field { lsb: 0, width: 32 };
 
 /// Pin strap override enable.
@@ -355,7 +355,7 @@ pub const PON_STRAP_FUNC_LOOP_DETECT: Field = Field { lsb: 7, width: 1 };
 
 /// Pin strap override value.
 pub const PON_STRAP_VAL: u32 = 0x80324;
-/// 1 turns Energy Efficient Ethernet on for the built-in PHYs. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names.
+/// 1 turns Energy Efficient Ethernet on. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names.
 pub const PON_STRAP_VAL_EEE: Field = Field { lsb: 16, width: 1 };
 /// 1 turns loop detection on.
 pub const PON_STRAP_VAL_LOOP_DETECT: Field = Field { lsb: 7, width: 1 };

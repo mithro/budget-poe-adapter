@@ -250,7 +250,8 @@ and from the names of the :ref:`vendor SDK <sources-list>` tables at the same ad
      - Ports that classify by the service tag
      - :sdk:`LOOK_UP_VLAN_SEL`
 
-:field:`PORT_EGR.TPID_CTAG` chooses the identifier of the customer tag.
+It is :ev:`inferred` from the name of :field:`PORT_EGR.TPID_CTAG` that the field chooses the
+identifier of the customer tag.
 
 .. _vlan-port-based:
 

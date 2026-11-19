@@ -138,9 +138,11 @@ For MDIO, leave :ref:`DIS_SPIS <strap-dis-spis>` high and pull
 :ref:`SMI_SEL <strap-smi-sel>` low. A chip with neither pin strapped selects the I2C host
 interface.
 
-The levels of :ref:`SMI_SEL <strap-smi-sel>` are those of table 20 and of section 5.5.1 of
-the |ds|, "Slave I2C Interface for External CPU". Section 5.5.2, "Slave SMI Interface for
-External CPU", says that the pin may be "low or high" for MDIO, which contradicts both.
+The levels of :ref:`SMI_SEL <strap-smi-sel>` are those of section 5.5.1 of the |ds|, "Slave
+I2C Interface for External CPU". Table 20 of the |ds| gives the pull-up as "EEPROM SMI
+interface" and the pull-down as "MII Management interface" and does not name I2C. Section
+5.5.2, "Slave SMI Interface for External CPU", says that the pin may be "low or high" for
+MDIO, which contradicts both.
 The SPI and I2C host interfaces reach the same registers. This manual does not cover them.
 
 .. _access-smi:

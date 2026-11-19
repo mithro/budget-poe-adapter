@@ -281,6 +281,13 @@ def register_of(use, regs):
 def enum_linux(member, use=None, table_use=None):
     lx = dict(macro=member["cname"], src=member["src"])
     lx["used"] = first_use(lx, ())
+    if isinstance(use, dict):
+        # A use in an inline function of a header: file, line and function per value.
+        use = use.get(member["name"])
+        if use:
+            lx["used"] = True
+            lx["use"] = Flow([use[0], use[2], use[1]])
+            return lx
     if lx["used"] and not lx["use"][1]:
         use = table_use or use
     if use and (not lx["used"] or not lx["use"][1]):

@@ -19,9 +19,10 @@ comment in :lx:`chip.h:92` states.
 
 .. yt-bitfield:: PORT_CTRL
 
-There are two ways to run a MAC. With :field:`PORT_CTRL.LINK_AN` set, the MAC takes speed
-and duplex from the in-band status of the SerDes. With it clear, the MAC is forced and uses the
-fields of the :ref:`forced-mode table <ports-forced>`. :field:`PORT_CTRL.PAUSE_AN` does the same
+There are two ways to run a MAC. It is :ev:`inferred` from the name of
+:field:`PORT_CTRL.LINK_AN` that with the bit set, the MAC takes speed and duplex from the
+in-band status of the SerDes, and that with it clear, the MAC is forced and uses the fields
+of the :ref:`forced-mode table <ports-forced>`. :field:`PORT_CTRL.PAUSE_AN` does the same
 for pause alone: :lx:`yt921x_serdes_config` sets it only for a link other than SGMII with
 in-band negotiation enabled whose pause result the MAC may take.
 
@@ -267,7 +268,9 @@ xMII
 5. Force :reg:`PORT_CTRL` to the same speed and duplex, with the fields of the
    :ref:`forced-mode table <ports-forced>`.
 
-Steps 4 and 5 are :ev:`confirmed` by :lx:`yt921x_port_up`. The :ref:`Linux driver <sources-list>`
+Steps 4 and 5 are :ev:`confirmed` by :lx:`yt921x_port_up`, which writes :reg:`PORT_CTRL`
+first, then :field:`XMII.LINK` and then :reg:`MDIO_POLLING`. It is :ev:`not known` whether the
+order matters. The :ref:`Linux driver <sources-list>`
 configures no xMII mode: :lx:`yt921x_port_config` accepts SerDes modes only. Steps 1 to 3 for
 RGMII follow the function
 `yt9215rb_init() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__

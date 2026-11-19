@@ -269,7 +269,13 @@ enums:
 # field. Each entry is the file and line of the first such use; ``null`` states that no
 # function uses the field although a shared macro suggests it.
 enum_uses:
-  speed: [chip.c, 1696]
+  speed:
+    V10: [chip.h, 544, ethtool_speed_to_yt921x]
+    V100: [chip.h, 546, ethtool_speed_to_yt921x]
+    V1000: [chip.h, 548, ethtool_speed_to_yt921x]
+    V2500: [chip.h, 550, ethtool_speed_to_yt921x]
+    V10000: [chip.h, 552, ethtool_speed_to_yt921x]
+    INVALID: [chip.h, 554, ethtool_speed_to_yt921x]
 # The same for a list whose values the driver keeps in a table; only the values in the
 # table take the use.
 enum_table_uses:
@@ -458,20 +464,20 @@ registers:
     block: system
     title: Switch MAC address, high part
     desc: |
-      Upper two bytes of the MAC address of the switch. It is :ev:`inferred` from the name that
+      Two bytes of the MAC address of the switch. It is :ev:`inferred` from the name that
       the switch uses the address as the source address of frames it sends itself, such as
-      pause frames.
+      pause frames. :ref:`bringup-mac` gives the two readings of the byte order.
     inferred: true
     add_fields:
-      ADDR: {lsb: 0, width: 16, desc: "MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8.", inferred: true}
+      ADDR: {lsb: 0, width: 16, desc: "Two bytes of the MAC address. The register name reads as the first two bytes of the address, which is :ev:`inferred`. The :ref:`vendor SDK <sources-list>` reads the field as the last two bytes, with byte 4 in bits 15 to 8. It is :ev:`not known` which is right.", inferred: true}
   MAC_ADDR_LO4:
     block: system
     title: Switch MAC address, low part
     desc: |
-      Lower four bytes of the switch MAC address; see :reg:`MAC_ADDR_HI2`.
+      Four bytes of the MAC address of the switch; see :reg:`MAC_ADDR_HI2`.
     inferred: true
     add_fields:
-      ADDR: {lsb: 0, width: 32, desc: "MAC address bytes 2 to 5. Byte 2 is in bits 31 to 24.", inferred: true}
+      ADDR: {lsb: 0, width: 32, desc: "Four bytes of the MAC address. The register name reads as the last four bytes of the address, which is :ev:`inferred`. The :ref:`vendor SDK <sources-list>` reads the field as the first four bytes, with byte 0 in bits 31 to 24. It is :ev:`not known` which is right.", inferred: true}
   PON_STRAP_FUNC:
     block: system
     title: Pin strap override enable
@@ -490,7 +496,7 @@ registers:
       Values used in place of the power-on straps for every function whose bit is set in
       :reg:`PON_STRAP_FUNC`.
     fields:
-      EEE: {desc: "1 turns Energy Efficient Ethernet on for the built-in PHYs. :lx:`yt921x_set_eee` sets this bit together with :field:`PON_STRAP_FUNC.EEE`; the role of each bit alone is :ev:`inferred` from the register names."}
+      EEE: {desc: "1 turns Energy Efficient Ethernet on. :lx:`yt921x_set_eee` sets this bit together with :field:`PON_STRAP_FUNC.EEE`; the role of each bit alone is :ev:`inferred` from the register names."}
       LOOP_DETECT: {desc: "1 turns loop detection on.", inferred: true}
   PON_STRAP_CAP:
     block: system
@@ -612,7 +618,7 @@ registers:
     block: port
     title: SerDes enable
     desc: |
-      Powers the SGMII SerDes of ports 8 and 9. A port uses either its SerDes or its xMII pins;
+      Enables the SGMII SerDes of ports 8 and 9, as :lx:`yt921x_port_config` does. A port uses either its SerDes or its xMII pins;
       clear the matching bit in :reg:`XMII_CTRL` when setting one here.
     fields:
       TEST: {desc: "SerDes test mode. Clear it before use."}
@@ -666,9 +672,9 @@ registers:
     block: port
     title: External port link override
     desc: |
-      Link state of port 8 or 9 as the switch would otherwise learn it by polling a PHY on the
-      external MDIO bus. Write the real link state here when the port is wired straight to
-      another MAC.
+      Link state of port 8 or 9. :lx:`yt921x_port_up` writes the link state here for a port
+      that is wired straight to another MAC. It is :ev:`inferred` from the name that the switch
+      otherwise learns the state by polling a PHY on the external MDIO bus.
     fields:
       DUPLEX_FULL: {desc: "1 for full duplex."}
       LINK: {desc: "1 for link up."}

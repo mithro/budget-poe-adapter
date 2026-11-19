@@ -100,7 +100,7 @@ addrmap yt9218 {
 
     reg {
         name = "SerDes enable";
-        desc = "Powers the SGMII SerDes of ports 8 and 9. A port uses either its SerDes or its xMII pins; clear the matching bit in XMII_CTRL when setting one here.";
+        desc = "Enables the SGMII SerDes of ports 8 and 9, as yt921x_port_config does. A port uses either its SerDes or its xMII pins; clear the matching bit in XMII_CTRL when setting one here.";
         field { desc = "SerDes test mode. Clear it before use."; sw = rw; hw = r; } TEST[6:6];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_9[1:1];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_8[0:0];
@@ -130,14 +130,14 @@ addrmap yt9218 {
 
     reg {
         name = "Switch MAC address, high part";
-        desc = "Upper two bytes of the MAC address of the switch. It is inferred from the name that the switch uses the address as the source address of frames it sends itself, such as pause frames.";
-        field { desc = "MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8."; sw = rw; hw = r; } ADDR[15:0];
+        desc = "Two bytes of the MAC address of the switch. It is inferred from the name that the switch uses the address as the source address of frames it sends itself, such as pause frames. :ref:`bringup-mac` gives the two readings of the byte order.";
+        field { desc = "Two bytes of the MAC address. The register name reads as the first two bytes of the address, which is inferred. The vendor SDK reads the field as the last two bytes, with byte 4 in bits 15 to 8. It is not known which is right."; sw = rw; hw = r; } ADDR[15:0];
     } MAC_ADDR_HI2 @ 0x80080;
 
     reg {
         name = "Switch MAC address, low part";
-        desc = "Lower four bytes of the switch MAC address; see MAC_ADDR_HI2.";
-        field { desc = "MAC address bytes 2 to 5. Byte 2 is in bits 31 to 24."; sw = rw; hw = r; } ADDR[31:0];
+        desc = "Four bytes of the MAC address of the switch; see MAC_ADDR_HI2.";
+        field { desc = "Four bytes of the MAC address. The register name reads as the last four bytes of the address, which is inferred. The vendor SDK reads the field as the first four bytes, with byte 0 in bits 31 to 24. It is not known which is right."; sw = rw; hw = r; } ADDR[31:0];
     } MAC_ADDR_LO4 @ 0x80084;
 
     reg {
@@ -215,7 +215,7 @@ addrmap yt9218 {
     reg {
         name = "Pin strap override value";
         desc = "Values used in place of the power-on straps for every function whose bit is set in PON_STRAP_FUNC.";
-        field { desc = "1 turns Energy Efficient Ethernet on for the built-in PHYs. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names."; sw = rw; hw = r; } EEE[16:16];
+        field { desc = "1 turns Energy Efficient Ethernet on. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names."; sw = rw; hw = r; } EEE[16:16];
         field { desc = "1 turns loop detection on."; sw = rw; hw = r; } LOOP_DETECT[7:7];
     } PON_STRAP_VAL @ 0x80324;
 
@@ -228,7 +228,7 @@ addrmap yt9218 {
 
     reg {
         name = "External port link override";
-        desc = "Link state of port 8 or 9 as the switch would otherwise learn it by polling a PHY on the external MDIO bus. Write the real link state here when the port is wired straight to another MAC. Index: port = 8 to 9.";
+        desc = "Link state of port 8 or 9. yt921x_port_up writes the link state here for a port that is wired straight to another MAC. It is inferred from the name that the switch otherwise learns the state by polling a PHY on the external MDIO bus. Index: port = 8 to 9.";
         enum mdio_polling_speed_e {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };

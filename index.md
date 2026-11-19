@@ -38,6 +38,7 @@ research/yt9215-registers/README
 :caption: Power
 
 research/poe
+design/poe-front-end/README
 research/usb-c-pd
 ```
 
@@ -65,5 +66,6 @@ archive/research/bitbang-10mbit-ethernet
 archive/research/bitbang-usb
 archive/research/usb-network-card
 archive/research/cost-reduction
+archive/research/poe-software-pd
 ```
 

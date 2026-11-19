@@ -1,0 +1,1399 @@
+{
+ "C105579": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/b426be3ce22c6de3e0c3a2248e49159e.pdf?productCode=C105579",
+  "maker": "YAGEO",
+  "package": "0603",
+  "part": "RC0603FR-0747KL",
+  "prices": [
+   [
+    100,
+    0.0031
+   ],
+   [
+    1000,
+    0.0025
+   ],
+   [
+    5000,
+    0.0021
+   ],
+   [
+    10000,
+    0.002
+   ],
+   [
+    50000,
+    0.0018
+   ]
+  ],
+  "stock": 798600
+ },
+ "C127592": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/d6005e7aae2dd989e798a496e750cd34.pdf?productCode=C127592",
+  "maker": "onsemi",
+  "package": "SOT-23",
+  "part": "TLV431ASN1T1G",
+  "prices": [
+   [
+    5,
+    0.1846
+   ],
+   [
+    50,
+    0.1471
+   ],
+   [
+    150,
+    0.131
+   ],
+   [
+    500,
+    0.111
+   ],
+   [
+    3000,
+    0.1021
+   ],
+   [
+    6000,
+    0.0967
+   ]
+  ],
+  "stock": 11300
+ },
+ "C158925": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/f561434f78d3b0bc4bb578492d55b729.pdf?productCode=C158925",
+  "maker": "RALEC",
+  "package": "0603",
+  "part": "RTT0335R7FTP",
+  "prices": [
+   [
+    100,
+    0.0012
+   ],
+   [
+    1000,
+    0.0009
+   ],
+   [
+    5000,
+    0.0007
+   ],
+   [
+    50000,
+    0.0006
+   ]
+  ],
+  "stock": 2300
+ },
+ "C1615": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/09fe2daf22580a99fa7fea93ccb20fb7.pdf?productCode=C1615",
+  "maker": "FH",
+  "package": "0603",
+  "part": "0603B334K250NT",
+  "prices": [
+   [
+    50,
+    0.0158
+   ],
+   [
+    500,
+    0.0126
+   ],
+   [
+    1500,
+    0.0108
+   ],
+   [
+    4000,
+    0.0097
+   ],
+   [
+    24000,
+    0.0088
+   ],
+   [
+    48000,
+    0.0083
+   ]
+  ],
+  "stock": 53450
+ },
+ "C17514": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C17514",
+  "maker": "UNI-ROYAL",
+  "package": "0805",
+  "part": "0805W8F1004T5E",
+  "prices": [
+   [
+    100,
+    0.0044
+   ],
+   [
+    1000,
+    0.0035
+   ],
+   [
+    5000,
+    0.0029
+   ],
+   [
+    10000,
+    0.0026
+   ],
+   [
+    50000,
+    0.0023
+   ],
+   [
+    100000,
+    0.0022
+   ]
+  ],
+  "stock": 339900
+ },
+ "C17817": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C17817",
+  "maker": "UNI-ROYAL",
+  "package": "0805",
+  "part": "0805W8F7503T5E",
+  "prices": [
+   [
+    100,
+    0.0031
+   ],
+   [
+    1000,
+    0.0024
+   ],
+   [
+    5000,
+    0.0019
+   ],
+   [
+    10000,
+    0.0017
+   ],
+   [
+    50000,
+    0.0015
+   ]
+  ],
+  "stock": 36600
+ },
+ "C19077410": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/02a7f2c734d5d8407bcaa05ee2a504ab.pdf?productCode=C19077410",
+  "maker": "R+O",
+  "package": "SOD-123",
+  "part": "BZT52C12",
+  "prices": [
+   [
+    5,
+    0.0171
+   ],
+   [
+    50,
+    0.0134
+   ],
+   [
+    150,
+    0.0114
+   ],
+   [
+    500,
+    0.0102
+   ],
+   [
+    3000,
+    0.0085
+   ],
+   [
+    6000,
+    0.0079
+   ]
+  ],
+  "stock": 309570
+ },
+ "C19077416": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/02a7f2c734d5d8407bcaa05ee2a504ab.pdf?productCode=C19077416",
+  "maker": "R+O",
+  "package": "SOD-123",
+  "part": "BZT52C24",
+  "prices": [
+   [
+    50,
+    0.0182
+   ],
+   [
+    500,
+    0.0145
+   ],
+   [
+    3000,
+    0.0124
+   ],
+   [
+    6000,
+    0.0112
+   ],
+   [
+    24000,
+    0.0101
+   ],
+   [
+    51000,
+    0.0096
+   ]
+  ],
+  "stock": 188600
+ },
+ "C21120": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/02336ea48ea44ca18c72517dd3cb7b47.pdf?productCode=C21120",
+  "maker": "Samsung Electro-Mechanics",
+  "package": "0603",
+  "part": "CL10B224KA8NNNC",
+  "prices": [
+   [
+    50,
+    0.009
+   ],
+   [
+    500,
+    0.0072
+   ],
+   [
+    1500,
+    0.0062
+   ],
+   [
+    4000,
+    0.0049
+   ],
+   [
+    24000,
+    0.0044
+   ],
+   [
+    48000,
+    0.0041
+   ]
+  ],
+  "stock": 220150
+ },
+ "C21190": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C21190",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF1001T5E",
+  "prices": [
+   [
+    100,
+    0.0017
+   ],
+   [
+    1000,
+    0.0014
+   ],
+   [
+    5000,
+    0.0012
+   ],
+   [
+    10000,
+    0.001
+   ],
+   [
+    50000,
+    0.0009
+   ]
+  ],
+  "stock": 4708400
+ },
+ "C218138": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/ec3e308e963624b453a77b63220f4bbf.pdf?productCode=C218138",
+  "maker": "Viking",
+  "package": "0603",
+  "part": "ARG03FTC73R2",
+  "prices": [
+   [
+    50,
+    0.0074
+   ],
+   [
+    500,
+    0.0058
+   ],
+   [
+    1500,
+    0.0049
+   ],
+   [
+    5000,
+    0.004
+   ],
+   [
+    25000,
+    0.0035
+   ],
+   [
+    50000,
+    0.0033
+   ]
+  ],
+  "stock": 4100
+ },
+ "C22375295": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/02a7f2c734d5d8407bcaa05ee2a504ab.pdf?productCode=C22375295",
+  "maker": "R+O",
+  "package": "SOD-123",
+  "part": "BZT52C22",
+  "prices": [
+   [
+    50,
+    0.0177
+   ],
+   [
+    500,
+    0.014
+   ],
+   [
+    3000,
+    0.0115
+   ],
+   [
+    6000,
+    0.0103
+   ],
+   [
+    24000,
+    0.0092
+   ],
+   [
+    51000,
+    0.0086
+   ]
+  ],
+  "stock": 722750
+ },
+ "C22395568": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/f40846d466181559619b2b5842287d4a.pdf?productCode=C22395568",
+  "maker": "R+O",
+  "package": "SOD-123",
+  "part": "BZT52B10",
+  "prices": [
+   [
+    50,
+    0.0182
+   ],
+   [
+    500,
+    0.0141
+   ],
+   [
+    3000,
+    0.0118
+   ],
+   [
+    6000,
+    0.0104
+   ],
+   [
+    24000,
+    0.0092
+   ],
+   [
+    51000,
+    0.0086
+   ]
+  ],
+  "stock": 18500
+ },
+ "C22775": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C22775",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF1000T5E",
+  "prices": [
+   [
+    100,
+    0.0019
+   ],
+   [
+    1000,
+    0.0015
+   ],
+   [
+    5000,
+    0.0013
+   ],
+   [
+    10000,
+    0.0011
+   ],
+   [
+    50000,
+    0.001
+   ]
+  ],
+  "stock": 1619800
+ },
+ "C22876": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C22876",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF1400T5E",
+  "prices": [
+   [
+    100,
+    0.002
+   ],
+   [
+    1000,
+    0.0015
+   ],
+   [
+    5000,
+    0.0013
+   ],
+   [
+    10000,
+    0.0012
+   ],
+   [
+    50000,
+    0.0011
+   ]
+  ],
+  "stock": 9200
+ },
+ "C22935": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C22935",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF1004T5E",
+  "prices": [
+   [
+    100,
+    0.0018
+   ],
+   [
+    1000,
+    0.0014
+   ],
+   [
+    5000,
+    0.0012
+   ],
+   [
+    10000,
+    0.001
+   ],
+   [
+    50000,
+    0.0009
+   ]
+  ],
+  "stock": 2047900
+ },
+ "C22961": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C22961",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF2203T5E",
+  "prices": [
+   [
+    100,
+    0.0015
+   ],
+   [
+    1000,
+    0.0012
+   ],
+   [
+    5000,
+    0.001
+   ],
+   [
+    10000,
+    0.0009
+   ],
+   [
+    50000,
+    0.0008
+   ]
+  ],
+  "stock": 545000
+ },
+ "C22965": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C22965",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF2703T5E",
+  "prices": [
+   [
+    100,
+    0.0018
+   ],
+   [
+    1000,
+    0.0014
+   ],
+   [
+    5000,
+    0.0012
+   ],
+   [
+    10000,
+    0.0011
+   ],
+   [
+    50000,
+    0.001
+   ]
+  ],
+  "stock": 99700
+ },
+ "C22976": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C22976",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF2004T5E",
+  "prices": [
+   [
+    100,
+    0.0026
+   ],
+   [
+    1000,
+    0.002
+   ],
+   [
+    5000,
+    0.0017
+   ],
+   [
+    10000,
+    0.0015
+   ],
+   [
+    50000,
+    0.0014
+   ]
+  ],
+  "stock": 364600
+ },
+ "C23062": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C23062",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF475JT5E",
+  "prices": [
+   [
+    100,
+    0.0028
+   ],
+   [
+    1000,
+    0.0022
+   ],
+   [
+    5000,
+    0.0018
+   ],
+   [
+    10000,
+    0.0014
+   ],
+   [
+    50000,
+    0.0012
+   ]
+  ],
+  "stock": 2800
+ },
+ "C23162": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C23162",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF4701T5E",
+  "prices": [
+   [
+    100,
+    0.0028
+   ],
+   [
+    1000,
+    0.0023
+   ],
+   [
+    5000,
+    0.002
+   ],
+   [
+    10000,
+    0.0016
+   ],
+   [
+    50000,
+    0.0015
+   ]
+  ],
+  "stock": 3687800
+ },
+ "C23178": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C23178",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF4703T5E",
+  "prices": [
+   [
+    100,
+    0.003
+   ],
+   [
+    1000,
+    0.0024
+   ],
+   [
+    5000,
+    0.002
+   ],
+   [
+    10000,
+    0.0017
+   ],
+   [
+    50000,
+    0.0014
+   ]
+  ],
+  "stock": 385200
+ },
+ "C23231": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C23231",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF6802T5E",
+  "prices": [
+   [
+    100,
+    0.0016
+   ],
+   [
+    1000,
+    0.0012
+   ],
+   [
+    5000,
+    0.001
+   ],
+   [
+    50000,
+    0.0008
+   ]
+  ],
+  "stock": 330000
+ },
+ "C25803": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25803",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF1003T5E",
+  "prices": [
+   [
+    100,
+    0.003
+   ],
+   [
+    1000,
+    0.0023
+   ],
+   [
+    5000,
+    0.002
+   ],
+   [
+    10000,
+    0.0017
+   ],
+   [
+    50000,
+    0.0015
+   ]
+  ],
+  "stock": 4315600
+ },
+ "C25804": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C25804",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF1002T5E",
+  "prices": [
+   [
+    100,
+    0.002
+   ],
+   [
+    1000,
+    0.0016
+   ],
+   [
+    5000,
+    0.0015
+   ],
+   [
+    10000,
+    0.0014
+   ],
+   [
+    50000,
+    0.0013
+   ]
+  ],
+  "stock": 1162600
+ },
+ "C273790": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/b426be3ce22c6de3e0c3a2248e49159e.pdf?productCode=C273790",
+  "maker": "YAGEO",
+  "package": "0603",
+  "part": "RC0603FR-0731R6L",
+  "prices": [
+   [
+    100,
+    0.002
+   ],
+   [
+    1000,
+    0.0016
+   ],
+   [
+    5000,
+    0.0014
+   ],
+   [
+    10000,
+    0.0013
+   ],
+   [
+    50000,
+    0.0011
+   ]
+  ],
+  "stock": 4500
+ },
+ "C28233": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/02336ea48ea44ca18c72517dd3cb7b47.pdf?productCode=C28233",
+  "maker": "Samsung Electro-Mechanics",
+  "package": "0805",
+  "part": "CL21B104KCFNNNE",
+  "prices": [
+   [
+    10,
+    0.0162
+   ],
+   [
+    100,
+    0.0121
+   ],
+   [
+    300,
+    0.0103
+   ],
+   [
+    2000,
+    0.009
+   ],
+   [
+    4000,
+    0.0084
+   ],
+   [
+    10000,
+    0.0081
+   ]
+  ],
+  "stock": 307640
+ },
+ "C2892567": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/9f2b5f22a5f51bc2d2f14a512b01c1d3.pdf?productCode=C2892567",
+  "maker": "YONGYUTAI",
+  "package": "ABS",
+  "part": "ABS210",
+  "prices": [
+   [
+    20,
+    0.0272
+   ],
+   [
+    200,
+    0.0219
+   ],
+   [
+    600,
+    0.0189
+   ],
+   [
+    5000,
+    0.0148
+   ],
+   [
+    10000,
+    0.0132
+   ],
+   [
+    20000,
+    0.0124
+   ]
+  ],
+  "stock": 72560
+ },
+ "C2930420": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/106fb934f95f063b695dad1b31b1eab8.pdf?productCode=C2930420",
+  "maker": "FOJAN",
+  "package": "1206",
+  "part": "FRC1206F2492TS",
+  "prices": [
+   [
+    100,
+    0.0047
+   ],
+   [
+    1000,
+    0.0037
+   ],
+   [
+    5000,
+    0.0027
+   ],
+   [
+    10000,
+    0.0025
+   ],
+   [
+    50000,
+    0.0022
+   ]
+  ],
+  "stock": 47400
+ },
+ "C29779845": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/3b60190a51bae35c694ab9f6f37e667a.pdf?productCode=C29779845",
+  "maker": "TMI",
+  "package": "DFN-10(3x3)",
+  "part": "TMI7303B",
+  "prices": [
+   [
+    1,
+    0.4818
+   ],
+   [
+    10,
+    0.3831
+   ],
+   [
+    30,
+    0.3404
+   ],
+   [
+    100,
+    0.2878
+   ],
+   [
+    500,
+    0.2631
+   ],
+   [
+    1000,
+    0.25
+   ]
+  ],
+  "stock": 4259
+ },
+ "C2980408": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/a80e1e10308b613a2995351971a1558c.pdf?productCode=C2980408",
+  "maker": "GOODWORK",
+  "package": "DO-214AC(SMA)",
+  "part": "SMAJ58A",
+  "prices": [
+   [
+    20,
+    0.0329
+   ],
+   [
+    200,
+    0.0263
+   ],
+   [
+    600,
+    0.0226
+   ],
+   [
+    2000,
+    0.0186
+   ],
+   [
+    8000,
+    0.0167
+   ],
+   [
+    16000,
+    0.0157
+   ]
+  ],
+  "stock": 24100
+ },
+ "C31850": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C31850",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF2202T5E",
+  "prices": [
+   [
+    100,
+    0.0042
+   ],
+   [
+    1000,
+    0.0032
+   ],
+   [
+    5000,
+    0.0027
+   ],
+   [
+    10000,
+    0.0023
+   ],
+   [
+    50000,
+    0.002
+   ]
+  ],
+  "stock": 904600
+ },
+ "C337500": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0463a3fd3b7ef7f9eb3194601f6d461e.pdf?productCode=C337500",
+  "maker": "TI",
+  "package": "SO-8-EP",
+  "part": "TPS2378DDAR",
+  "prices": [
+   [
+    1,
+    1.2626
+   ],
+   [
+    10,
+    1.0511
+   ],
+   [
+    30,
+    0.9354
+   ],
+   [
+    100,
+    0.8032
+   ],
+   [
+    500,
+    0.7454
+   ],
+   [
+    1000,
+    0.7189
+   ]
+  ],
+  "stock": 985
+ },
+ "C359106": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/df7875d246cd08726b7efab74a433f8e.pdf?productCode=C359106",
+  "maker": "UMW",
+  "package": "TO-252",
+  "part": "15N10",
+  "prices": [
+   [
+    5,
+    0.1855
+   ],
+   [
+    50,
+    0.1397
+   ],
+   [
+    150,
+    0.1174
+   ],
+   [
+    500,
+    0.0974
+   ],
+   [
+    2500,
+    0.0923
+   ],
+   [
+    5000,
+    0.089
+   ]
+  ],
+  "stock": 61320
+ },
+ "C411185": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/fc86a2ebeb4d27e6331f49f14497fba3.pdf?productCode=C411185",
+  "maker": "LRC",
+  "package": "SOT-23",
+  "part": "LR432BTLT1G",
+  "prices": [
+   [
+    10,
+    0.1007
+   ],
+   [
+    100,
+    0.08
+   ],
+   [
+    300,
+    0.0697
+   ],
+   [
+    3000,
+    0.0549
+   ],
+   [
+    6000,
+    0.0487
+   ],
+   [
+    9000,
+    0.0456
+   ]
+  ],
+  "stock": 31830
+ },
+ "C41375135": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/95e1bdde1755465f8f6e327fd2e931b8.pdf?productCode=C41375135",
+  "maker": "R+O",
+  "package": "SOT-89",
+  "part": "BCX53-16",
+  "prices": [
+   [
+    10,
+    0.0659
+   ],
+   [
+    100,
+    0.0529
+   ],
+   [
+    300,
+    0.0464
+   ],
+   [
+    1000,
+    0.0384
+   ],
+   [
+    5000,
+    0.0345
+   ],
+   [
+    10000,
+    0.0326
+   ]
+  ],
+  "stock": 365230
+ },
+ "C427379": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/22ede24fe75f8cde039a1776ade326c1.pdf?productCode=C427379",
+  "maker": "MDD(Microdiode Semiconductor)",
+  "package": "SOT-23",
+  "part": "BSS123",
+  "prices": [
+   [
+    50,
+    0.0201
+   ],
+   [
+    500,
+    0.0166
+   ],
+   [
+    3000,
+    0.0123
+   ],
+   [
+    6000,
+    0.0111
+   ],
+   [
+    24000,
+    0.0101
+   ],
+   [
+    51000,
+    0.0095
+   ]
+  ],
+  "stock": 185800
+ },
+ "C48935391": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/b7800103cafdc59f32407d3d2b751309.pdf?productCode=C48935391",
+  "maker": "JIERR",
+  "package": "SMD,D8xL10.5mm",
+  "part": "RV100V47M8X10",
+  "prices": [
+   [
+    5,
+    0.1208
+   ],
+   [
+    50,
+    0.0973
+   ],
+   [
+    150,
+    0.0856
+   ],
+   [
+    500,
+    0.0768
+   ],
+   [
+    2500,
+    0.0623
+   ],
+   [
+    5000,
+    0.0588
+   ]
+  ],
+  "stock": 162915
+ },
+ "C52023840": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/57ed9336320ec5943fdd455ea9d15810.pdf?productCode=C52023840",
+  "maker": "HANGYU MICROELECTRONICS",
+  "package": "MBF",
+  "part": "MB10F",
+  "prices": [
+   [
+    50,
+    0.0141
+   ],
+   [
+    500,
+    0.0111
+   ],
+   [
+    1500,
+    0.0094
+   ],
+   [
+    5000,
+    0.0084
+   ],
+   [
+    25000,
+    0.0075
+   ],
+   [
+    50000,
+    0.007
+   ]
+  ],
+  "stock": 198950
+ },
+ "C53987": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/09fe2daf22580a99fa7fea93ccb20fb7.pdf?productCode=C53987",
+  "maker": "FH",
+  "package": "0603",
+  "part": "0603B472K500NT",
+  "prices": [
+   [
+    50,
+    0.0044
+   ],
+   [
+    500,
+    0.0036
+   ],
+   [
+    1500,
+    0.0031
+   ],
+   [
+    4000,
+    0.0026
+   ],
+   [
+    24000,
+    0.0023
+   ],
+   [
+    48000,
+    0.0022
+   ]
+  ],
+  "stock": 154400
+ },
+ "C7250": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/0a975aaa49b7c97f38a963127be4a823.pdf?productCode=C7250",
+  "maker": "UNI-ROYAL",
+  "package": "0603",
+  "part": "0603WAF1005T5E",
+  "prices": [
+   [
+    100,
+    0.0022
+   ],
+   [
+    1000,
+    0.0017
+   ],
+   [
+    5000,
+    0.0014
+   ],
+   [
+    10000,
+    0.0011
+   ],
+   [
+    50000,
+    0.001
+   ]
+  ],
+  "stock": 446400
+ },
+ "C7502705": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/ff1378297995998b12f7103bcafc2a22.pdf?productCode=C7502705",
+  "maker": "R+O",
+  "package": "SOD-123",
+  "part": "BAT54W",
+  "prices": [
+   [
+    50,
+    0.0083
+   ],
+   [
+    500,
+    0.0074
+   ],
+   [
+    3000,
+    0.0067
+   ],
+   [
+    6000,
+    0.0064
+   ],
+   [
+    24000,
+    0.0062
+   ],
+   [
+    51000,
+    0.006
+   ]
+  ],
+  "stock": 112550
+ },
+ "C81355": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/09fe2daf22580a99fa7fea93ccb20fb7.pdf?productCode=C81355",
+  "maker": "FH",
+  "package": "0603",
+  "part": "0603B682K101NT",
+  "prices": [
+   [
+    100,
+    0.0081
+   ],
+   [
+    1000,
+    0.0065
+   ],
+   [
+    4000,
+    0.0052
+   ],
+   [
+    8000,
+    0.0047
+   ],
+   [
+    48000,
+    0.0043
+   ],
+   [
+    100000,
+    0.004
+   ]
+  ],
+  "stock": 2500
+ },
+ "C84104": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/f3b7bb9026204cd488713822059436ed.pdf?productCode=C84104",
+  "maker": "ST(Semtech)",
+  "package": "SOT-23",
+  "part": "MMBT3904",
+  "prices": [
+   [
+    50,
+    0.0115
+   ],
+   [
+    500,
+    0.0092
+   ],
+   [
+    3000,
+    0.0074
+   ],
+   [
+    6000,
+    0.0066
+   ],
+   [
+    24000,
+    0.0059
+   ],
+   [
+    51000,
+    0.0056
+   ]
+  ],
+  "stock": 66950
+ },
+ "C8669": {
+  "datasheet": "https://datasheet.lcsc.com/datasheet/pdf/ca2272c7e8d9425dcfbb7953eaa1ab7d.pdf?productCode=C8669",
+  "maker": "Nexperia",
+  "package": "SOT-23",
+  "part": "PMBS3906,215",
+  "prices": [
+   [
+    20,
+    0.0237
+   ],
+   [
+    200,
+    0.0176
+   ],
+   [
+    600,
+    0.0142
+   ],
+   [
+    3000,
+    0.0122
+   ],
+   [
+    9000,
+    0.0104
+   ],
+   [
+    21000,
+    0.0095
+   ]
+  ],
+  "stock": 38020
+ }
+}

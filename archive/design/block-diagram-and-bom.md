@@ -211,7 +211,7 @@ receptacle (~$0.50–0.80), test and programming, shipping, duties.
 3. **CH32V307 is overkill as an MCU but cheap for what it brings.** It is the
    only cheap WCH part with a MAC that can talk RMII to the switch. Its price
    is an estimate ($1.10–1.60 depending on package).
-4. **MCU power during PoE mark events.** [`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem) requires ≤ 4 mA total
+4. **MCU power during PoE mark events.** [`poe-software-pd.md` section 1.3](../research/poe-software-pd.md#13-the-bootstrap-problem) requires ≤ 4 mA total
    during mark events. A CH32V307 running from its internal oscillator at low
    clock may or may not fit that. If it doesn't, add a CH32V003 (~$0.12) as a
    cold-start PoE controller that wakes the CH32V307 after power-on. That adds

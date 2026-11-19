@@ -59,14 +59,15 @@ over to firmware on the YT9215 CPU is an open question in
 
 | Document | Covers |
 | --- | --- |
-| [PoE powered device](research/poe.md) | PoE standards and negotiation for a software-driven powered device |
+| [PoE powered device](research/poe.md) | PoE standards with the negotiation sequence and the limits a powered device has to meet |
+| [Discrete PoE front end](design/poe-front-end/README.md) | Schematic, simulation and bill of materials of the PoE front end built from discrete parts |
 | [USB-C power](research/usb-c-pd.md) | USB-C power standards with PD negotiation for a source that feeds a Raspberry Pi 5 |
 
 ### Datasheets
 
 | Document | Covers |
 | --- | --- |
-| [Datasheets](datasheets/README.md) | Vendor documents of the switch ICs and of the parts on the two switch boards |
+| [Datasheets](datasheets/README.md) | Vendor documents of the switch ICs, of the parts on the two switch boards and of the PoE front end parts |
 
 ### Archive
 

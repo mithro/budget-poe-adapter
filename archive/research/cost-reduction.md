@@ -99,7 +99,7 @@ From the WCH datasheet (V1.7) and LCSC:
   without resistors.
 * **Analog:** 3 rail-to-rail comparators (15 ns, output straight into TIM2),
   2 OPA and PGA (×4–×32), 12-bit ADC with 14 channels. Enough for the Vport and
-  class-current loop in [`poe.md` section 6](../../research/poe.md#6-what-a-software-pd-needs-electrically), the VBUS check at 5 V and at 12 V and output current
+  class-current loop in [`poe-software-pd.md` section 1](poe-software-pd.md#1-what-a-software-pd-needs-electrically), the VBUS check at 5 V and at 12 V and output current
   sensing through a PGA.
 * **Supply:** 2.0–5.5 V (3.0–5.3 V with PD or USB on). **Run at 8 MHz HSI:
   2.2 mA**; sleep 1.3–1.5 mA. That fits the ≤ 4 mA mark-event budget with
@@ -151,7 +151,7 @@ small for a Pi 5.
 **None supports 802.3bt.** A PD IC also can't be combined with MCU-driven bt
 classes, because it presents its own class current at every event. So:
 
-* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from [`poe.md` section 6.4](../../research/poe.md#64-minimal-external-parts-architecture-b).
+* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from [`poe-software-pd.md` section 1.4](poe-software-pd.md#14-minimal-external-parts-architecture-b).
 * **at-only SKU (≤ ~22 W):** TMI7303B replaces the signature, class sink,
   hot-swap FET and most of the UVLO and bootstrap. Roughly cost-neutral
   (~+$0.05) but ~6 fewer parts and much less compliance risk. The MCU then

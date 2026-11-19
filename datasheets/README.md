@@ -2,7 +2,8 @@
 
 Vendor documents for the switch ICs studied in the research notes (indexed in [`../README.md`](../README.md)) and for
 the parts found on the two switch boards described in
-[`../research/switch-board-strapping.md`](../research/switch-board-strapping.md).
+[`../research/switch-board-strapping.md`](../research/switch-board-strapping.md), and for the parts of the
+[Discrete PoE front end](../design/poe-front-end/README.md).
 Copyright stays with the vendors; the files are kept here unmodified apart from their names so
 the notes can cite a fixed copy.
 
@@ -10,6 +11,7 @@ the notes can cite a fixed copy.
 | --- | --- |
 | [Motorcomm (included)](#motorcomm-included) | Switch IC datasheets. |
 | [Board components (included)](#board-components-included) | Datasheets of the other board parts. |
+| [PoE front end components (included)](#poe-front-end-components-included) | Datasheets of the PoE front end parts. |
 | [Board components (not found)](#board-components-not-found) | Parts with no datasheet in this folder. |
 | [Realtek (linked, not included)](#realtek-linked-not-included) | Links to confidential datasheets. |
 | [Other references](#other-references) | Related links. |
@@ -101,6 +103,38 @@ same kind but is not confirmed to be the same part.
 The LX-IS601F V2.0 rows are catalogue parts matched from the markings on the board, not known purchases.
 [`Hangshun_HK24C08.pdf`](components/Hangshun_HK24C08.pdf) is one of several pin-compatible 24C08 parts; the maker of the
 `24C08` fitted as [U10](../research/switch-board-strapping.md#lx-u10) is not identified.
+
+## PoE front end components (included)
+
+Datasheets of the parts of the [Discrete PoE front end](../design/poe-front-end/README.md) that
+are not already listed under [Board components (included)](#board-components-included). One row
+per LCSC part.
+
+| File | Part | Maker | Used in | LCSC | Pages | Source | MD5 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [`Fojan_FRC_Chip_Resistor_Series.pdf`](components/Fojan_FRC_Chip_Resistor_Series.pdf) | FRC1206F2492TS | Fojan | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C2930420](https://www.lcsc.com/product-detail/C2930420.html) | 14 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/106fb934f95f063b695dad1b31b1eab8.pdf?productCode=C2930420) | `ebdc21a64f56ecbdcdd42dcc5eb05b1a` |
+| [`Hangyu_MB10F.pdf`](components/Hangyu_MB10F.pdf) | MB10F | Hangyu | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C52023840](https://www.lcsc.com/product-detail/C52023840.html) | 3 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/57ed9336320ec5943fdd455ea9d15810.pdf?productCode=C52023840) | `014eba30123c318f855a046c69785f75` |
+| [`Jierr_RV_Series.pdf`](components/Jierr_RV_Series.pdf) | RV100V47M8X10 | Jierr | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C48935391](https://www.lcsc.com/product-detail/C48935391.html) | 5 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/b7800103cafdc59f32407d3d2b751309.pdf?productCode=C48935391) | `e69061bb2bfcfb656e596943f2170078` |
+| [`LRC_LR432B.pdf`](components/LRC_LR432B.pdf) | LR432BTLT1G | LRC | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C411185](https://www.lcsc.com/product-detail/C411185.html) | 8 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/fc86a2ebeb4d27e6331f49f14497fba3.pdf?productCode=C411185) | `bc23a7f0f83560a41c6dd46f676c508f` |
+| [`MDD_BSS123.pdf`](components/MDD_BSS123.pdf) | BSS123 | MDD | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C427379](https://www.lcsc.com/product-detail/C427379.html) | 5 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/22ede24fe75f8cde039a1776ade326c1.pdf?productCode=C427379) | `f40071addb389b9e827861a409d90554` |
+| [`Nexperia_PMBS3906.pdf`](components/Nexperia_PMBS3906.pdf) | PMBS3906,215 | Nexperia | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C8669](https://www.lcsc.com/product-detail/C8669.html) | 10 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/ca2272c7e8d9425dcfbb7953eaa1ab7d.pdf?productCode=C8669) | `9550dd1b6fec76056136821b444518b2` |
+| [`RO_BAT54W.pdf`](components/RO_BAT54W.pdf) | BAT54W | R+O | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C7502705](https://www.lcsc.com/product-detail/C7502705.html) | 3 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/ff1378297995998b12f7103bcafc2a22.pdf?productCode=C7502705) | `0342bbb7b491e85e3313f73e6ebfa45b` |
+| [`RO_BCX53_Series.pdf`](components/RO_BCX53_Series.pdf) | BCX53-16 | R+O | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C41375135](https://www.lcsc.com/product-detail/C41375135.html) | 4 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/95e1bdde1755465f8f6e327fd2e931b8.pdf?productCode=C41375135) | `073864c6061f41228151ddbe2f9bc4e2` |
+| [`RO_BZT52B_Series.pdf`](components/RO_BZT52B_Series.pdf) | BZT52B10 | R+O | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C22395568](https://www.lcsc.com/product-detail/C22395568.html) | 4 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/f40846d466181559619b2b5842287d4a.pdf?productCode=C22395568) | `89685e968979f2122ff39991a6ee8643` |
+| [`RO_BZT52C_Series.pdf`](components/RO_BZT52C_Series.pdf) | BZT52C12 | R+O | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C19077410](https://www.lcsc.com/product-detail/C19077410.html) | 4 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/02a7f2c734d5d8407bcaa05ee2a504ab.pdf?productCode=C19077410) | `91d2d5e59ff7ce4f3d58335d9d0e1ee7` |
+| [`RO_BZT52C_Series.pdf`](components/RO_BZT52C_Series.pdf) | BZT52C24 | R+O | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C19077416](https://www.lcsc.com/product-detail/C19077416.html) | 4 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/02a7f2c734d5d8407bcaa05ee2a504ab.pdf?productCode=C19077416) | `91d2d5e59ff7ce4f3d58335d9d0e1ee7` |
+| [`RO_BZT52C_Series.pdf`](components/RO_BZT52C_Series.pdf) | BZT52C22 | R+O | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C22375295](https://www.lcsc.com/product-detail/C22375295.html) | 4 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/02a7f2c734d5d8407bcaa05ee2a504ab.pdf?productCode=C22375295) | `91d2d5e59ff7ce4f3d58335d9d0e1ee7` |
+| [`Ralec_RTT_Chip_Resistor_Series.pdf`](components/Ralec_RTT_Chip_Resistor_Series.pdf) | RTT0335R7FTP | Ralec | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C158925](https://www.lcsc.com/product-detail/C158925.html) | 14 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/f561434f78d3b0bc4bb578492d55b729.pdf?productCode=C158925) | `8aa3c4c901a469de860d6f8ee8dbcc4a` |
+| [`Semtech_MMBT3904.pdf`](components/Semtech_MMBT3904.pdf) | MMBT3904 | Semtech | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C84104](https://www.lcsc.com/product-detail/C84104.html) | 3 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/f3b7bb9026204cd488713822059436ed.pdf?productCode=C84104) | `d74827e373274ed4732e87d42fb1df9e` |
+| [`TI_TPS2378.pdf`](components/TI_TPS2378.pdf) | TPS2378DDAR | TI | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C337500](https://www.lcsc.com/product-detail/C337500.html) | 34 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/0463a3fd3b7ef7f9eb3194601f6d461e.pdf?productCode=C337500) | `fd0817d4c4c3982ba9b9c0c34c434dec` |
+| [`TMI_TMI7303B.pdf`](components/TMI_TMI7303B.pdf) | TMI7303B | TMI | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C29779845](https://www.lcsc.com/product-detail/C29779845.html) | 15 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/3b60190a51bae35c694ab9f6f37e667a.pdf?productCode=C29779845) | `fa1c06de4c3ec3909bfbef2bbb5efecd` |
+| [`UMW_15N10.pdf`](components/UMW_15N10.pdf) | 15N10 | UMW | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C359106](https://www.lcsc.com/product-detail/C359106.html) | 10 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/df7875d246cd08726b7efab74a433f8e.pdf?productCode=C359106) | `60ea4bb703abe3da60169274c8addf5f` |
+| [`Viking_AR_Chip_Resistor_Series.pdf`](components/Viking_AR_Chip_Resistor_Series.pdf) | ARG03FTC73R2 | Viking | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C218138](https://www.lcsc.com/product-detail/C218138.html) | 8 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/ec3e308e963624b453a77b63220f4bbf.pdf?productCode=C218138) | `b63a926094cc5de8cbd18f2d6b1e1854` |
+| [`Yongyutai_ABS2-ABS210_Series.pdf`](components/Yongyutai_ABS2-ABS210_Series.pdf) | ABS210 | Yongyutai | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C2892567](https://www.lcsc.com/product-detail/C2892567.html) | 3 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/9f2b5f22a5f51bc2d2f14a512b01c1d3.pdf?productCode=C2892567) | `cd5bf8ad26425000065e0971a107124b` |
+| [`onsemi_TLV431A.pdf`](components/onsemi_TLV431A.pdf) | TLV431ASN1T1G | onsemi | [Discrete PoE front end](../design/poe-front-end/README.md#bill-of-materials) | [C127592](https://www.lcsc.com/product-detail/C127592.html) | 20 | [LCSC](https://datasheet.lcsc.com/datasheet/pdf/d6005e7aae2dd989e798a496e750cd34.pdf?productCode=C127592) | `9b0e4f97a4e3efb2b06e20038e7c431d` |
+
+The SMAJ58A clamp diode ([C2980408](https://www.lcsc.com/product-detail/C2980408.html)) has no
+file here because its datasheet is a 23 MB scan; the bill of materials links to the copy at LCSC.
 
 ## Board components (not found)
 

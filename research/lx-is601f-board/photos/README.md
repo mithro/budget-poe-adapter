@@ -31,7 +31,7 @@ and a numbered badge beside the box or in the margin refers to the legend.
 ## The two boards
 
 Both boards carry the same `LX-IS601F V2.0` PCB and a Motorcomm **YT9215SCH** as U4.
-They differ in what is fitted:
+They differ in what is fitted and in the markings read from the photos:
 
 | Feature | Board A | Board B |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ They differ in what is fitted:
 | TC1 marking | `YX 220 16V` | `220 16V MB` |
 | PU1 marking line 2 | `SCT 6DC` | `SCT 5DC` |
 | PU1 marking line 3 | `2U650` | `29580` |
-| D40 marking | `SS310` | Not visible |
+| D40 marking line 2 | `SS310` | Not visible |
 
 Board A is the non-PoE build: the 8-hole header for the PoE module is empty and U12
 has only the SFP host connector, without its cage. Board B is the PoE build, with the
@@ -71,7 +71,7 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 | PU1 | SCT2622 buck regulator | Top | ESOP-8 | `2622` |  |  | 3.3 V out |
 | PL3 | Buck inductor | Top | SMD | `100` |  |  | 10 µH |
 | L3 | Inductor | Top | SMD | `4R7` |  |  | 4.7 µH |
-| D40 | Buck diode | Top | SMA | `LGE` | `SS310` |  |  |
+| D40 | Buck diode | Top | SMA | `LGE` |  |  |  |
 | D4 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
 | D5 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
 | L2 | Input inductor | Top | SMD | `701` |  |  |  |
@@ -112,10 +112,11 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 | R92 | SPF0 SI resistor | Top | SMD |  |  |  |  |
 | R93 | SPF0 SCK resistor | Top | SMD |  |  |  |  |
 
-U4 carries five marking lines; lines 3 to 5 differ between the boards and are in
-[the first table](#the-two-boards), as are lines 2 and 3 of PU1. The last line of PU1 on board B is at the limit of the photo's resolution. The SFP cage over U12 is fitted on board B only. The
-marking of C4 and TC1, and the value of C4, differ between the boards and are in
-[the first table](#the-two-boards). RV1-RV3 are varistors or Y-capacitors; their
+Markings that differ between the boards, or are visible on one board only, are in
+[the first table](#the-two-boards): lines 3 to 5 of U4, lines 2 and 3 of PU1, line 2
+of D40, and the marking of C4 and TC1 with the value of C4. The board B reading of PU1
+comes from [photo 08](#photo-08), and its last line is at the limit of that photo's
+resolution. The SFP cage over U12 is fitted on board B only. RV1-RV3 are varistors or Y-capacitors; their
 marking is not readable in any photo.
 
 ### Parts on the PoE PSE module
@@ -207,6 +208,7 @@ local time.
 | [07](#photo-07) | PoE module U1 |
 | [08](#photo-08) | PoE module |
 | [08](#photo-08) | SFP cage |
+| [08](#photo-08) | PU1 marking |
 | [09](#photo-09) | U4 in glare |
 | [10](#photo-10) | Y6 |
 | [10](#photo-10) | R250 sense resistors |
@@ -227,6 +229,7 @@ local time.
 | [15](#photo-15) | PU1 |
 | [15](#photo-15) | PL3 |
 | [15](#photo-15) | C4 |
+| [15](#photo-15) | D40 |
 | [16](#photo-16) | U4 |
 | [16](#photo-16) | Magnetics |
 | [16](#photo-16) | TC1 |
@@ -465,7 +468,7 @@ Board A, the RJ45 block end: LED7, LED8, R68 and the empty LED6 footprint.
 
 ![Photo 23](web/23.jpg)
 
-Board A, U4 area: Y6, L2 `701`, D5 `SS510` and the blue disc parts RV1-RV3.
+Board A, U4 area: Y6, L2 `701`, D4 and D5 (both `SS510`) and the blue disc parts RV1-RV3.
 
 ### Photo 24
 

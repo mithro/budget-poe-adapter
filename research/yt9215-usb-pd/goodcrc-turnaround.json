@@ -4,7 +4,7 @@
    "name": "sink drives CC",
    "wave": "=....=.z...........",
    "data": [
-    "Request, 189 bits",
+    "Request",
     "EOP"
    ]
   },

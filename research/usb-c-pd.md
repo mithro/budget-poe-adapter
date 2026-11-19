@@ -79,7 +79,7 @@ Notes on the rows of this table:
 
 **PD power rules (SPR source profiles):** a source rated at P watts must offer every lower standard voltage. ≤15 W offers 5 V; 15 to 27 W also offers 9 V; 27 to 45 W also offers 15 V; >45 W also offers 20 V. A **5 V-only 25 W source is not a "PD Power Rule" compliant 27 W supply** (a compliant 27 W source must also offer 9 V at 3 A). The Pi official PSU offers 5.1 V at 5 A plus 9, 12 and 15 V at lower current (verify exact PDO list). This matters only for certification, not function.
 
-**Pass-through and data:** if the adapter also carries data to the device over USB (for example Ethernet via a USB NIC), D+ and D- are used for data, so the DCP short is not an option. You would advertise CDP behaviour or rely on Type-C Rp and PD only. For a Pi 5, Type-C Rp + PD is all that matters.
+**USB data:** if the adapter also carries data to the device over USB (for example Ethernet via a USB NIC), D+ and D- are used for data, so the DCP short is not an option. You would advertise CDP behaviour or rely on Type-C Rp and PD only. For a Pi 5, Type-C Rp + PD is all that matters.
 
 ---
 
@@ -227,7 +227,7 @@ Message types needed for a minimal source:
 
 **Spec revision:** start with PD3.0 in the header. If the sink replies with PD2.0, use 2.0 for the rest of the connection.
 
-**PD3 collision avoidance:** the source signals with its Rp: **3.0 A Rp = SinkTxOK** (sink may start an AMS), **1.5 A Rp = SinkTxNG**. The source switches Rp to 1.5 A before it initiates a message. This requires two switchable Rp values per CC (two outputs plus resistors).
+**PD3 collision avoidance:** the source signals with its Rp: **3.0 A Rp = SinkTxOK** (sink may start an AMS), **1.5 A Rp = SinkTxNG**. The source switches Rp to 1.5 A before it initiates a message. This requires two Rp values per CC; one output and two resistors are enough ([front end](yt9215-usb-pd.md#front-end)).
 
 **PPS and EPR (if ever needed):** a PPS sink must re-request at least every 10 s, and the source hard-resets after tPPSTimeout (about 15 s) without one. EPR requires EPR_Mode entry via an e-marked 5 A, 50 V cable check and a sink keep-alive every ≤ 500 ms (verify). Both need a programmable converter with current limiting. Not recommended within a PoE budget.
 
@@ -268,8 +268,8 @@ These are the requirements. [`yt9215-usb-pd.md`](yt9215-usb-pd.md) maps them to 
 | CC attach detect | Implementation | Comparator |
 | Rp switching (3 A vs 1.5 A) | Scope | Per CC |
 | Rp switching (3 A vs 1.5 A) | Pull-up values | 2 |
-| Rp switching (3 A vs 1.5 A) | Implementation | 2 outputs |
-| Rp switching (3 A vs 1.5 A) | Pull-up for 3 A | 4.7 k to 3.3 V |
+| Rp switching (3 A vs 1.5 A) | Implementation | 1 output |
+| Rp switching (3 A vs 1.5 A) | Pull-up for 3 A | 12 k and 7.5 k in parallel |
 | Rp switching (3 A vs 1.5 A) | Pull-up for 1.5 A | 12 k to 3.3 V |
 | VBUS monitor | Range | 0 to 5.5 V |
 | VBUS monitor | Must detect | vSafe0V |

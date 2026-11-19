@@ -18,7 +18,6 @@ Run it without arguments to print a table of frame sizes for the messages a mini
 source sends, for every MessageID. The decoder uses the same symbol tables as the encoder,
 so the check covers the frame arithmetic, not the tables.
 """
-import sys
 import zlib
 
 NIBBLE_NS = 400                 # one nibble at 10 Mbit/s
@@ -185,10 +184,14 @@ def check(bits):
     return len(wire), got
 
 
+def wire_time(size):
+    return "%.0f us" % ((size + 8) * 2 * NIBBLE_NS / 1000)
+
+
 def main():
     print("BMC bit rate %.1f kbit/s, one nibble every %d ns"
           % (1e6 / (2 * NIBBLES_PER_HALF_BIT * NIBBLE_NS), NIBBLE_NS))
-    print("%-22s %8s %s" % ("Message", "PD bits", "Frame bytes with FCS, MessageID 0 to 7"))
+    print("%-22s %8s %8s  %s" % ("Message", "PD bits", "Longest", "Frame bytes with FCS, MessageID 0 to 7"))
     kinds = [("GoodCRC", GOODCRC, ()), ("Accept", ACCEPT, ()), ("PS_RDY", PS_RDY, ()),
              ("Source_Capabilities", SOURCE_CAP, (PDO_5V_5A,))]
     for name, msg_type, objects in kinds:
@@ -200,13 +203,11 @@ def main():
             payload = h.to_bytes(2, "little") + b"".join(o.to_bytes(4, "little") for o in objects)
             assert decode_payload(got) == payload
             sizes.append(size)
-        print("%-22s %8d %s" % (name, len(bits), " ".join(map(str, sizes))))
+        print("%-22s %8d %8s  %s" % (name, len(bits), wire_time(max(sizes)), " ".join(map(str, sizes))))
     bits = hard_reset_bits()
     size, _ = check(bits)
-    print("%-22s %8d %d" % ("Hard Reset", len(bits), size))
-    longest = max(sizes)
-    print("Longest frame on the wire with preamble: %.1f us"
-          % ((longest + 8) * 2 * NIBBLE_NS / 1000))
+    print("%-22s %8d %8s  %d" % ("Hard Reset", len(bits), wire_time(size), size))
+    print("Longest is the time on the wire of the longest frame, with its Ethernet preamble.")
     print("All checks passed.")
 
 

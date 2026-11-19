@@ -207,15 +207,15 @@ has a build configuration for the internal CPU, selected by the option `INTER_MC
 | Register access | Memory read and write at the register address | [`mem.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/drv/sw_ctrl/mem/mem.c) |
 | Frame transmit | `eth_tx_by_portlist()` | [`fal_tiger_nic.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_nic.c) |
 | Frame receive | `eth_rx_register()` | [`fal_tiger_nic.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_nic.c) |
-| CPU port | 10 | [`bprofile_YT9215SC_default_demo.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/common/boardprofile/bprofile_YT9215SC_default_demo.c#L48) |
+| CPU port | 10 | [`bprofile_YT9215SC_default_demo.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/common/boardprofile/bprofile_YT9215SC_default_demo.c#L50) |
 
 - RV32EC has 16 registers and no multiply instruction. The core may have more than the
   vendor build uses [**I**](#evidence-codes).
-- The SDK build refers to a firmware tree named `switch_sw_lite_mgmt`, which holds
-  FreeRTOS, the `SoC/yt921x` support code and the Ethernet driver behind
-  `eth_tx_by_portlist()`. That tree is not in the public copy and searches found no
-  other copy [**I**](#evidence-codes). It is where the timers, the GPIO registers, the
-  interrupt numbers and the boot image format are defined.
+- The SDK build adds include paths into a firmware tree named `switch_sw_lite_mgmt`,
+  with folders for FreeRTOS and for `SoC/yt921x` support code [**V**](#evidence-codes).
+  That tree is the likely home of the Ethernet driver behind `eth_tx_by_portlist()`, the
+  timers, the GPIO registers, the interrupt numbers and the boot image format
+  [**I**](#evidence-codes). It is not public.
 - No public firmware image, OpenOCD configuration or boot-ROM dump was found. Searches
   covered English and Chinese terms.
 - A FreeBSD port of the switch driver exists

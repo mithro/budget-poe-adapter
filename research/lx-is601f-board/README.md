@@ -27,6 +27,7 @@ the pin tables of both parts, and the route of each debug pin on this board, are
 | <a href="#photo-board-a-power-input">Board A power input</a> | [`crop-board-a-power-input.jpg`](crop-board-a-power-input.jpg) | Area crop | A | Top | Power input parts |
 | <a href="#photo-board-a-led-esd">Board A LED and ESD arrays</a> | [`crop-board-a-led-esd.jpg`](crop-board-a-led-esd.jpg) | Area crop | A | Top | LED array with two ESD arrays |
 | <a href="#photo-bottom-eeprom-flash">Bottom EEPROM and flash</a> | [`crop-bottom-eeprom-flash.jpg`](crop-bottom-eeprom-flash.jpg) | Area crop | Not known | Bottom | EEPROM with the flash footprint |
+| <a href="#photo-u4-right-edge">U4 right edge</a> | [`crop-u4-right-edge.jpg`](crop-u4-right-edge.jpg) | Area crop | B | Top | Leads 33 to 64 of [U4](../switch-board-strapping.md#major-components) with their traces |
 | None | [`photos/README.md`](photos/README.md) | Photo catalogue | Both | Both | 34 photos of the two boards |
 | None | [`strap-resistors-source.jpg`](strap-resistors-source.jpg) | Source photo | Not known | Bottom | Strap resistor array without labels |
 | None | [`annotate.py`](annotate.py) | Script | None | None | Draws the debug pin annotations |
@@ -129,6 +130,12 @@ strap resistors are explained in [`../switch-board-strapping.md`](../switch-boar
 **Bottom EEPROM and flash**
 
 ![EEPROM and flash footprint area on the bottom side](crop-bottom-eeprom-flash.jpg)
+
+<a id="photo-u4-right-edge"></a>
+
+**U4 right edge**
+
+![Right edge of U4 on board B, pins 33 to 64](crop-u4-right-edge.jpg)
 
 ## How the debug pins are identified
 

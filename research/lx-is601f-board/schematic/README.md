@@ -1,6 +1,6 @@
 # LX-IS601F V2.0 board: reverse-engineered schematic
 
-Traced from 34 photos of two boards. No net has been probed with a meter.
+Traced from the 34 photos of two boards in the [photo catalogue](../photos/README.md). No net has been probed with a meter.
 
 ## Files
 
@@ -43,7 +43,7 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | 6 | PoE PSE daughterboard with U201 `2184A` |
 | 7 | FX LED line |
 | 7 | POW LED line |
-| 7 | LED6 header |
+| 7 | LED6 footprint |
 | 7 | LED7 |
 | 7 | LED8 |
 
@@ -114,8 +114,8 @@ Each image links to the full-size render.
 | **C** | Green | Solid | 0 |
 | **V** | Blue | Solid | 107 |
 | **I** | Orange | Dashed | 237 |
-| **U** | Red | Dotted | 204 |
-| All | | | 548 |
+| **U** | Red | Dotted | 202 |
+| All | | | 546 |
 
 Buses, and the links between sheet symbols on the root sheet, are drawn grey and carry no confidence code; the code is on the wires they join.
 
@@ -125,17 +125,17 @@ Buses, and the links between sheet symbols on the root sheet, are drawn grey and
 
 A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered device:
 
-- **U4** Motorcomm **YT9215SCH** (LQFP-128 with EPAD). Two boards seen: `VKTP18287 3200111C 3AU2612M0` and `VKJC09324 2500211C 3AW4849M0`. One board has a heatsink on top. A tinned pad with a solder blob sits under the EPAD on the bottom side.
+- **U4** Motorcomm **YT9215SCH** (LQFP-128 with EPAD). Two boards seen: `VKTP18287 3200111C 3AU2612M0` and `VKJC09324 2500211C 3AW4849M0`. One board has a heatsink on top. A tinned pad with a solder blob on the bottom side is probably under the EPAD.
 - **5 copper ports**: J1 is a 1×4 RJ45 block (ports 1–4, PoE). J3 is a single RJ45 uplink (no PoE) on the opposite edge. Each port has a United-tek **G2401PR** single-port GbE transformer (DXFRM2–6; there is no DXFRM1 part, only its silkscreen).
 - **1 SFP**: U12 is a 20-pin SFP host connector. One board has the cage fitted; the other has the connector only.
 - **PoE module**: a daughterboard on the 8-pin **PIN1** header beside J1. It carries the part with silkscreen name U1 (drawn as U201), a QFN-48 marked **`2184A 533AQ1H`** (4-port PSE controller, maker not identified; IP804AR is the closest public match in package and function). It also has four `R250` 0.25 Ω sense resistors (silkscreen names R8, R12, R13 and R14), four `330` 33 Ω resistors (R3, R9, R10 and R11), five SMB TVS diodes marked `RGS` (D1, D3, D5, D7 and one more) and 1206 capacitors.
-- **Power**: 2-pin `POWER2` input (48–57 V assumed), L1, three `SS510` Schottkys (D1, D4, D5), three blue disc parts RV1–RV3 (varistors or Y-caps), L2 `701` inductor, C4 47 µF 63 V. **PU1 SCT2622** (marking `2622 SCT 6DC`, 4.2–60 V 2 A non-synchronous buck, ESOP-8) with PL3 10 µH, D40 catch diode and TC1 220 µF 16 V makes **3.3 V**. **1.15 V** core comes from U4's internal switching regulator (LX pins 63 and 64) through **L3 4.7 µH**.
+- **Power**: 2-pin `POWER2` input (48–57 V assumed), L1, three `SS510` Schottkys (D1, D4, D5), three blue disc parts RV1–RV3 (varistors or Y-caps), L2 `701` inductor, C4 (47 µF 63 V on board A, 22 µF 63 V on board B). **PU1 SCT2622** (marking `2622` with `SCT 6DC` on board A and `SCT 5DC` on board B, 4.2–60 V 2 A non-synchronous buck, ESOP-8) with PL3 10 µH, D40 catch diode and TC1 220 µF 16 V makes **3.3 V**. **1.15 V** core comes from U4's internal switching regulator (LX pins 63 and 64) through **L3 4.7 µH**.
 - **25 MHz crystal Y6** with C43 and C44, beside U4 XTAL pins 87 and 88.
-- **Config EEPROM U10** `HK24C08` (Hangshun 24C08, 1 KB I²C) on the bottom. It is presumably on U4 pin 91 (SCL) and pin 92 (SDA). The OSHWHub YT9215S board has no EEPROM; this board does.
+- **Config EEPROM U10** `HK 24C08` (Hangshun 24C08, 1 KB I²C) on the bottom. It is presumably on U4 pin 91 (SCL) and pin 92 (SDA). The OSHWHub YT9215S board has no EEPROM; this board does.
 - **Empty SPI-flash footprint U6** (SOP-8 or WSON-8) on the bottom, with R40, R94, R96, R98, R100, R102 and R109 next to it. Together with R44, R89, R92 and R93 on the SPF0 pins, the board looks designed to take a flash chip.
 - **ESD**: ED1–ED10, SOT-23-6 marked `05U`, two per copper port between U4 and the magnetics.
-- **LEDs**: a 6×2 array of 0603 LEDs with the silkscreen names RJ7–RJ18, in two lines labelled `POW` and `FX`. The silkscreen labels five positions P1 to P5 and leaves the sixth unlabelled. No resistors sit inside the array; R2–R5, R103 and R110–R114 beside it may be the LED resistors (not traced). LED7 and LED8 sit next to an unpopulated 2×3 header `LED6` (with R68).
-- **Bottom edge under the RJ45s**: twelve SMB parts marked `CP06C` (D6, D8–D18, maybe bidirectional TVS), and 1206 capacitors (C16, C38, C55, C56, C60, C61, C62, C65, C71, C75 and C98 are readable) with 0603 resistors R15, R32, R67, R71 to R76 and R82 to R84. These are probably per-pair Bob-Smith terminations or PoE centre-tap filtering (inferred).
+- **LEDs**: a 6×2 array of 0603 LEDs with the silkscreen names RJ7–RJ18, in two lines labelled `POW` and `FX`. The silkscreen labels five positions P1 to P5 and leaves the sixth unlabelled. No resistors sit inside the array; R2–R5, R103 and R110–R114 beside it may be the LED resistors (not traced). LED7 and LED8 sit next to an unpopulated 2×2 through-hole footprint `LED6` (with R68).
+- **Bottom edge under the RJ45s**: fourteen SMB parts marked `CP06C` (D6, D8–D19 and D21, maybe bidirectional TVS), and 1206 capacitors (C16, C38, C55, C56, C60, C61, C62, C65, C71, C75 and C98 are readable) with 0603 resistors R15, R32, R67, R71 to R76 and R82 to R84. These are probably per-pair Bob-Smith terminations or PoE centre-tap filtering (inferred).
 
 ## Port mapping (inferred from placement)
 

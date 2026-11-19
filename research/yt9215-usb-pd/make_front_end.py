@@ -2,7 +2,7 @@
 """Draw front-end.svg: the parts between the YT9215 pins and the USB-C connector."""
 import pathlib
 
-W, H = 850, 470
+W, H = 850, 640
 out = []
 
 
@@ -32,10 +32,10 @@ out.append('<defs><marker id="a" markerWidth="9" markerHeight="8" refX="8" refY=
            '<path d="M9,0 L0,4 L9,8 z" fill="#222"/></marker></defs>')
 out.append('<rect width="%d" height="%d" fill="#ffffff"/>' % (W, H))
 
-box(20, 20, 150, 430, ["YT9215SCH"], fill="#e8eefc")
-box(680, 20, 150, 430, ["USB-C port"], fill="#e8f6e8")
-out.append('<text x="95" y="60" text-anchor="middle">port 8 pins</text>')
-out.append('<text x="95" y="330" text-anchor="middle">GPIO pins</text>')
+box(20, 20, 150, 600, ["YT9215SCH"], fill="#e8eefc")
+box(680, 20, 150, 600, ["USB-C cable"], fill="#e8f6e8")
+out.append('<text x="95" y="48" text-anchor="middle">port 8 pins</text>')
+out.append('<text x="95" y="400" text-anchor="middle">GPIO pins</text>')
 
 # Transmit path
 box(300, 40, 190, 70, ["Buffer with enable", "74AUP1G126", "supply 1.15 V"])
@@ -45,24 +45,35 @@ box(540, 50, 90, 50, ["47 Ω"])
 arrow(490, 75, 540, 75)
 arrow(630, 75, 680, 75, "CC")
 
+# Protection shared by both comparators
+box(540, 150, 90, 170, ["1 kΩ", "and", "clamp"])
+arrow(680, 235, 630, 235, "CC")
+
 # Receive path
-box(300, 150, 190, 70, ["Comparator 1", "threshold 0.55 V", "BMC slicer"])
-arrow(680, 185, 490, 185, "CC")
+box(300, 150, 190, 70, ["Comparator 1", "threshold 0.55 V", "output inverted"])
+arrow(540, 185, 490, 185)
 arrow(300, 185, 170, 185, "RXD3, pin 57")
 
 # Attach detection
 box(300, 250, 190, 70, ["Comparator 2", "threshold 2.6 V", "attach detect"])
-arrow(680, 285, 490, 285, "CC")
+arrow(540, 285, 490, 285)
 arrow(300, 285, 170, 285, "GPIO input")
 
+# Fixed wiring of the receive side
+box(300, 345, 330, 80, ["Fixed wiring for receive", "RXD0 and RXD2 to 3.3 V, RXD1 to ground",
+                        "TXC, pin 51, looped to RXC, pin 52"], fill="#fbf7e6")
+arrow(170, 385, 300, 385, "RX_CTL, pin 53")
+out.append('<text x="235" y="403" text-anchor="middle">from a GPIO</text>')
+
 # Rp
-box(540, 345, 90, 50, ["Rp 4.7 kΩ", "to 3.3 V"])
-arrow(630, 370, 680, 370, "CC")
+box(300, 450, 190, 70, ["Rp", "12 kΩ to 3.3 V", "7.5 kΩ to a GPIO"])
+arrow(170, 485, 300, 485, "GPIO output")
+arrow(490, 485, 680, 485, "CC")
 
 # VBUS switch
-box(300, 380, 190, 60, ["Load switch", "5 V to VBUS"])
-arrow(170, 410, 300, 410, "GPIO output")
-arrow(490, 425, 680, 425, "VBUS", above=False)
+box(300, 545, 190, 60, ["Load switch", "with discharge"])
+arrow(170, 575, 300, 575, "GPIO output")
+arrow(490, 575, 680, 575, "VBUS, 5 V")
 
 out.append("</svg>")
 pathlib.Path(__file__).with_name("front-end.svg").write_text("\n".join(out), encoding="utf-8")

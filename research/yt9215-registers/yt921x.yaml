@@ -962,7 +962,8 @@ enums:
       - 118
   - name: MISC
     value: 16
-    desc: IP protocol, type of service, TCP flags and frame class
+    desc: IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP
+      flags and the frame class
     linux:
       macro: YT921X_ACL_TYPE_MISC
       src:
@@ -1075,7 +1076,7 @@ enums:
       - 231
   - name: ETHSAP
     value: 2
-    desc: IEEE 802.3 with LLC
+    desc: '`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC'
     linux:
       macro: YT921X_L2_TYPE_ETHSAP
       src:
@@ -1083,7 +1084,7 @@ enums:
       - 232
   - name: ETHSNAP
     value: 3
-    desc: IEEE 802.3 with LLC and SNAP
+    desc: '`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC and SNAP'
     linux:
       macro: YT921X_L2_TYPE_ETHSNAP
       src:
@@ -1140,7 +1141,7 @@ enums:
       - 241
   - name: PAE
     value: 5
-    desc: IEEE 802.1X port access entity
+    desc: '`IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ port access entity'
     linux:
       macro: YT921X_L3_TYPE_PAE
       src:
@@ -1156,7 +1157,7 @@ enums:
       - 243
   - name: SLOW_PROTOCOL
     value: 7
-    desc: IEEE 802.3 slow protocols such as LACP
+    desc: '`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ slow protocols such as LACP'
     linux:
       macro: YT921X_L3_TYPE_SLOW_PROTOCOL
       src:
@@ -1346,7 +1347,7 @@ registers:
       use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 4
     width: 1
-    desc: Enables the meters (:reg:`METER_CTRL`, :reg:`PORT_METER`).
+    desc: Enables the meters. The meter registers are :reg:`METER_CTRL` and :reg:`PORT_METER`.
     access: rw
     sdk:
       status: same bits
@@ -1361,7 +1362,7 @@ registers:
       use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 2
     width: 1
-    desc: Enables the access control list (:reg:`ACL_KEY`, :reg:`ACL_ACT`).
+    desc: Enables the access control list. Its registers include :reg:`ACL_KEY` and :reg:`ACL_ACT`.
     access: rw
     sdk:
       status: same bits
@@ -1376,7 +1377,7 @@ registers:
       use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 1
     width: 1
-    desc: Enables the port counters (:reg:`MIB_DATA`).
+    desc: Enables the port counters of :reg:`MIB_DATA`.
     access: rw
     sdk:
       status: same bits
@@ -1731,9 +1732,11 @@ registers:
       fields: [MAC_ADDR_BYTE5, MAC_ADDR_BYTE4]
   block: system
   title: Switch MAC address, high part
-  desc: 'Upper two bytes of the MAC address the switch itself uses as a source address, for example
+  desc: 'Upper two bytes of the MAC address of the switch. It is :ev:`inferred` from the name that
 
-    in the pause frames it sends.'
+    the switch uses the address as the source address of frames it sends itself, such as
+
+    pause frames.'
   access: rw
   words: 1
   inferred: true
@@ -1981,7 +1984,7 @@ registers:
   - name: VALUE
     lsb: 0
     width: 32
-    desc: Raw sensor value. Its scale and offset are not known.
+    desc: Raw sensor value. Its scale and offset are :ev:`not known`.
     access: ro
     inferred: true
     sdk:
@@ -2085,7 +2088,7 @@ registers:
       status: no SDK table
   block: system
   title: Configuration byte store command
-  desc: 'Command register of the 256-byte factory configuration store. Writing it starts the
+  desc: 'Command register of the configuration byte store of 256 bytes. Writing it starts the
 
     command; :ref:`Identify the part <bringup-identify>` shows the read sequence.'
   access: rw
@@ -2205,16 +2208,18 @@ registers:
       desc: 143 MHz core clock
     lsb: 0
     width: 2
-    desc: Core clock selection. Value 0 selects 125 MHz in the YT9215 family and 167 MHz in the YT9218
+    desc: Core clock in use. Value 0 stands for 125 MHz in the YT9215 family and 167 MHz in the YT9218
       family. The :ref:`core clock table <bringup-clock-table>` lists the clock periods.
     access: rw
     sdk:
       status: no SDK table
   block: system
   title: System clock select
-  desc: 'Shows which core clock the switch runs from. The meter and shaper time slots
+  desc: 'Shows which core clock the switch runs from. :lx:`yt921x_chip_detect` reads it. The time
 
-    (:reg:`METER_SLOT`, :reg:`PORT_SHAPE_SLOT`) count in units of eight core clock periods.'
+    slots of :reg:`METER_SLOT` and :reg:`PORT_SHAPE_SLOT` count in units of eight core clock
+
+    periods.'
   access: rw
   words: 1
   sdk:
@@ -2653,7 +2658,9 @@ registers:
       use: [pcs-921x.c, yt921x_serdes_config, 48]
     lsb: 10
     width: 1
-    desc: Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE.
+    desc: Take the pause settings from in-band negotiation. :lx:`yt921x_serdes_config` sets the bit for
+      a SerDes link with in-band negotiation other than SGMII. It is :ev:`inferred` from the name that
+      RX_PAUSE and TX_PAUSE are then ignored.
     access: rw
     sdk:
       status: same bits
@@ -2668,7 +2675,9 @@ registers:
       use: [chip.c, yt921x_port_down, 1667]
     lsb: 9
     width: 1
-    desc: Take speed and duplex from the attached PHY or in-band status. The forced bits are ignored.
+    desc: Take speed and duplex from the in-band status. :lx:`yt921x_serdes_config` sets the bit for a
+      SerDes link with in-band status. It is :ev:`inferred` from the name that the bit also follows a
+      built-in PHY and that the forced bits are then ignored.
     access: rw
     sdk:
       status: same bits
@@ -3452,7 +3461,7 @@ registers:
         - mdio_bus.h
         - 24
         used: true
-      desc: IEEE 802.3 clause 22 frame
+      desc: '`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame'
     lsb: 8
     width: 4
     desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess".
@@ -3656,7 +3665,7 @@ registers:
         - mdio_bus.h
         - 24
         used: true
-      desc: IEEE 802.3 clause 22 frame
+      desc: '`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame'
     lsb: 8
     width: 4
     desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess".
@@ -3979,7 +3988,7 @@ registers:
       used: false
     lsb: 21
     width: 1
-    desc: Function not known.
+    desc: Function :ev:`not known`.
     access: rw
     inferred: true
     sdk:
@@ -4080,7 +4089,7 @@ registers:
       used: false
     lsb: 17
     width: 1
-    desc: Function not known. Only LED 0 has the field.
+    desc: Function :ev:`not known`. Only LED 0 has the field.
     access: rw
     inferred: true
     sdk:
@@ -4094,7 +4103,7 @@ registers:
       used: false
     lsb: 16
     width: 1
-    desc: Function not known. Only LED 0 has the field.
+    desc: Function :ev:`not known`. Only LED 0 has the field.
     access: rw
     inferred: true
     sdk:
@@ -4813,7 +4822,7 @@ registers:
         step: 4
       lsb: 16
       width: 2
-    desc: Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field
+    desc: Blink cycle of an LED that is forced to blink. The cycle is 512 ms shifted left by the field
       value.
     access: rw
     sdk:
@@ -5088,7 +5097,7 @@ registers:
       used: false
     lsb: 24
     width: 2
-    desc: Function not known. The :lx:`comment on the field <leds.h:68>` reads "delay?".
+    desc: Function :ev:`not known`. The :lx:`comment on the field <leds.h:68>` reads "delay?".
     access: rw
     inferred: true
     sdk:
@@ -5215,14 +5224,14 @@ registers:
   - name: VALUE
     lsb: 0
     width: 32
-    desc: Layout not known.
+    desc: Layout :ev:`not known`.
     access: rw
     inferred: true
     sdk:
       status: no SDK table
   block: led
   title: Parallel LED port enable
-  desc: Parallel LED outputs in use. The bit layout is not known.
+  desc: Parallel LED outputs in use. The bit layout is :ev:`not known`.
   access: rw
   words: 1
   inferred: true
@@ -5271,7 +5280,7 @@ registers:
   block: led
   title: Parallel LED polarity
   desc: Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on,
-    which suits a LED wired active low; set the bit for a LED wired active high.
+    which suits an LED wired active low; set the bit for an LED wired active high.
   access: rw
   words: 1
   sdk:
@@ -5674,7 +5683,7 @@ registers:
       used: false
     lsb: 35
     width: 1
-    desc: 'Meaning not known. No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set`
+    desc: 'Meaning :ev:`not known`. No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set`
       states. The Linux name suggests a service VLAN enable. The :ref:`vendor SDK <sources-list>` names
       the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the
       VLAN ID.'
@@ -5694,8 +5703,8 @@ registers:
     width: 12
     desc: Filtering ID for address learning and lookup. No function of the Linux driver writes it. :lx:`yt921x_fdb_in01`
       writes the VLAN ID to :field:`FDB_IN1.FID`, so the Linux driver addresses the forwarding database
-      by VLAN ID. It is not known when the field takes effect. :field:`VLAN_CTRL.SVLAN_EN` is a candidate.
-      The field crosses the boundary between the two words.
+      by VLAN ID. It is :ev:`not known` when the field takes effect. :field:`VLAN_CTRL.SVLAN_EN` is a
+      candidate. The field crosses the boundary between the two words.
     access: rw
     inferred: true
     sdk:
@@ -5782,7 +5791,8 @@ registers:
       used: false
     lsb: 6
     width: 1
-    desc: Frames of this VLAN skip IEEE 802.1X access control.
+    desc: Frames of this VLAN skip `IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ access
+      control.
     access: rw
     inferred: true
     sdk:
@@ -6620,7 +6630,8 @@ registers:
         - chip.h
         - 233
         used: true
-      desc: Port neither forwards nor learns. It still receives bridge protocol frames
+      desc: Port neither forwards nor learns. It is :ev:`inferred` from `IEEE 802.1D <https://en.wikipedia.org/wiki/IEEE_802.1D>`__
+        that the port receives bridge protocol frames
     - name: FORWARD
       value: 3
       linux:
@@ -6683,7 +6694,7 @@ registers:
       used: false
     lsb: 22
     width: 1
-    desc: Function not known.
+    desc: Function :ev:`not known`.
     access: rw
     inferred: true
     sdk:
@@ -6698,7 +6709,7 @@ registers:
       used: false
     lsb: 21
     width: 1
-    desc: Function not known.
+    desc: Function :ev:`not known`.
     access: rw
     inferred: true
     sdk:
@@ -6713,7 +6724,7 @@ registers:
       used: false
     lsb: 20
     width: 1
-    desc: Function not known.
+    desc: Function :ev:`not known`.
     access: rw
     inferred: true
     sdk:
@@ -7539,7 +7550,7 @@ registers:
       used: false
     lsb: 13
     width: 1
-    desc: An existing entry was replaced to make room.
+    desc: The command overwrote an existing entry.
     access: ro
     inferred: true
     sdk:
@@ -8613,7 +8624,7 @@ registers:
       fields: [ENABLE]
   block: acl
   title: ACL unmatched frame permit
-  desc: Ports on which a frame that matches no ACL rule is still forwarded.
+  desc: Ports on which a frame that matches no ACL rule is forwarded.
   access: rw
   words: 1
   sdk:
@@ -9464,7 +9475,7 @@ registers:
         step: 4
       lsb: 1
       width: 3
-    desc: Group number of slot ``bin``. It is the slot number that names the rule.
+    desc: Group number of slot ``bin``. The slots of one rule share a group number.
     access: rw
     sdk:
       status: same bits
@@ -11394,8 +11405,8 @@ registers:
       use: [tc.c, yt921x_chip_setup_tc, 1679]
     lsb: 0
     width: 12
-    desc: Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed
-      value is 80.
+    desc: Slot length in units of eight core clock periods. :reg:`SYS_CLK` shows the core clock. The smallest
+      allowed value is 80.
     access: rw
     sdk:
       status: same bits
@@ -11734,14 +11745,14 @@ registers:
   - name: VALUE
     lsb: 0
     width: 64
-    desc: Layout not known.
+    desc: Layout :ev:`not known`.
     access: ro
     inferred: true
     sdk:
       status: SDK lists no fields
   block: meter
   title: Meter token state
-  desc: Current token counts of one meter. The bit layout is not known.
+  desc: Current token counts of one meter. The bit layout is :ev:`not known`.
   access: ro
   words: 2
   inferred: true
@@ -11773,8 +11784,8 @@ registers:
       use: [tc.c, yt921x_chip_setup_tc, 1686]
     lsb: 0
     width: 12
-    desc: Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed
-      value is 80.
+    desc: Slot length in units of eight core clock periods. :reg:`SYS_CLK` shows the core clock. The smallest
+      allowed value is 80.
     access: rw
     sdk:
       status: same bits
@@ -11911,14 +11922,14 @@ registers:
   - name: VALUE
     lsb: 0
     width: 32
-    desc: Layout not known.
+    desc: Layout :ev:`not known`.
     access: ro
     inferred: true
     sdk:
       status: no SDK table
   block: shape
   title: Port shaper token state
-  desc: Current token count of one port shaper. The bit layout is not known.
+  desc: Current token count of one port shaper. The bit layout is :ev:`not known`.
   access: ro
   words: 1
   inferred: true

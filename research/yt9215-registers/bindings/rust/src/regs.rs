@@ -195,7 +195,7 @@ pub const ACL_TYPE_IPV6_SA1: u32 = 13;
 pub const ACL_TYPE_IPV6_SA2: u32 = 14;
 /// ACL key types: IPv6 source address bits 31 to 0.
 pub const ACL_TYPE_IPV6_SA3: u32 = 15;
-/// ACL key types: IP protocol, type of service, TCP flags and frame class.
+/// ACL key types: IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class.
 pub const ACL_TYPE_MISC: u32 = 16;
 /// ACL key types: TCP or UDP source and destination ports.
 pub const ACL_TYPE_L4: u32 = 17;
@@ -275,11 +275,11 @@ pub const RST_SW: Field = Field { lsb: 1, width: 1 };
 
 /// Function enables.
 pub const FUNC: u32 = 0x80004;
-/// Enables the meters (METER_CTRL, PORT_METER).
+/// Enables the meters. The meter registers are METER_CTRL and PORT_METER.
 pub const FUNC_METER: Field = Field { lsb: 4, width: 1 };
-/// Enables the access control list (ACL_KEY, ACL_ACT).
+/// Enables the access control list. Its registers include ACL_KEY and ACL_ACT.
 pub const FUNC_ACL: Field = Field { lsb: 2, width: 1 };
-/// Enables the port counters (MIB_DATA).
+/// Enables the port counters of MIB_DATA.
 pub const FUNC_MIB: Field = Field { lsb: 1, width: 1 };
 
 /// Chip identification.
@@ -402,7 +402,7 @@ pub const EDATA_DATA_STATUS_IDLE: u32 = 3;
 
 /// System clock select.
 pub const SYS_CLK: u32 = 0xe0040;
-/// Core clock selection. Value 0 selects 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The core clock table lists the clock periods.
+/// Core clock in use. Value 0 stands for 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The core clock table lists the clock periods.
 pub const SYS_CLK_SEL: Field = Field { lsb: 0, width: 2 };
 /// 125 MHz core clock
 pub const SYS_CLK_SEL_V125M: u32 = 0;
@@ -492,9 +492,9 @@ pub const fn port_ctrl(port: u32) -> u32 {
 pub const PORT_CTRL_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_ctrl`].
 pub const PORT_CTRL_PORT_COUNT: u32 = 11;
-/// Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE.
+/// Take the pause settings from in-band negotiation. yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that RX_PAUSE and TX_PAUSE are then ignored.
 pub const PORT_CTRL_PAUSE_AN: Field = Field { lsb: 10, width: 1 };
-/// Take speed and duplex from the attached PHY or in-band status. The forced bits are ignored.
+/// Take speed and duplex from the in-band status. yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the bit also follows a built-in PHY and that the forced bits are then ignored.
 pub const PORT_CTRL_LINK_AN: Field = Field { lsb: 9, width: 1 };
 /// Use back pressure for flow control in half duplex.
 pub const PORT_CTRL_HALF_PAUSE: Field = Field { lsb: 8, width: 1 };
@@ -871,7 +871,7 @@ pub const LED2_PORT_FORCE_BLINK: u32 = 1;
 pub const LED2_PORT_FORCE_ON: u32 = 2;
 /// Off
 pub const LED2_PORT_FORCE_OFF: u32 = 3;
-/// Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field value.
+/// Blink cycle of an LED that is forced to blink. The cycle is 512 ms shifted left by the field value.
 pub const fn led2_port_force_blink(grp: u32) -> Field {
     Field { lsb: (16 + 4 * grp) as u8, width: 2 }
 }
@@ -1262,7 +1262,7 @@ pub const STP_PORT_ALL: Field = Field { lsb: 0, width: 22 };
 pub const STP_PORT_DISABLED: u32 = 0;
 /// Port learns addresses but does not forward
 pub const STP_PORT_LEARNING: u32 = 1;
-/// Port neither forwards nor learns. It still receives bridge protocol frames
+/// Port neither forwards nor learns. It is inferred from IEEE 802.1D that the port receives bridge protocol frames
 pub const STP_PORT_BLOCKING: u32 = 2;
 /// Port forwards and learns
 pub const STP_PORT_FORWARD: u32 = 3;
@@ -1407,7 +1407,7 @@ pub const FDB_RESULT: u32 = 0x180464;
 pub const FDB_RESULT_DONE: Field = Field { lsb: 15, width: 1 };
 /// No entry matched.
 pub const FDB_RESULT_NOTFOUND: Field = Field { lsb: 14, width: 1 };
-/// An existing entry was replaced to make room.
+/// The command overwrote an existing entry.
 pub const FDB_RESULT_OVERWRITED: Field = Field { lsb: 13, width: 1 };
 /// Index of the entry the command acted on.
 pub const FDB_RESULT_INDEX: Field = Field { lsb: 0, width: 12 };
@@ -1742,7 +1742,7 @@ pub const fn acl_entry(blk: u32) -> u32 {
 pub const ACL_ENTRY_BLK_FIRST: u32 = 0;
 /// Number of valid `blk` values of [`acl_entry`].
 pub const ACL_ENTRY_BLK_COUNT: u32 = 48;
-/// Group number of slot bin. It is the slot number that names the rule.
+/// Group number of slot bin. The slots of one rule share a group number.
 pub const fn acl_entry_grpid(bin: u32) -> Field {
     Field { lsb: (1 + 4 * bin) as u8, width: 3 }
 }
@@ -2045,7 +2045,7 @@ pub const PORT_RATE_GAP_VALUE_RESET: u32 = 20;
 
 /// Meter time slot.
 pub const METER_SLOT: u32 = 0x220104;
-/// Slot length in units of eight core clock periods (see SYS_CLK). The smallest allowed value is 80.
+/// Slot length in units of eight core clock periods. SYS_CLK shows the core clock. The smallest allowed value is 80.
 pub const METER_SLOT_SLOT: Field = Field { lsb: 0, width: 12 };
 
 /// Port ingress meter. `port` = 0..=10.
@@ -2121,7 +2121,7 @@ pub const METER_STAT_VALUE: Field = Field { lsb: 0, width: 64 };
 
 /// Shaper time slot.
 pub const PORT_SHAPE_SLOT: u32 = 0x34000c;
-/// Slot length in units of eight core clock periods (see SYS_CLK). The smallest allowed value is 80.
+/// Slot length in units of eight core clock periods. SYS_CLK shows the core clock. The smallest allowed value is 80.
 pub const PORT_SHAPE_SLOT_SLOT: Field = Field { lsb: 0, width: 12 };
 
 /// Port egress shaper. `port` = 0..=10.

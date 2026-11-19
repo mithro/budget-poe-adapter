@@ -109,7 +109,7 @@ Structure of the YAML source
    * - ``sources``
      - Repository and commit of each source
    * - ``linux_functions``
-     - File and line of each function of the Linux driver
+     - File and line of each function of the :ref:`Linux driver <sources-list>`
    * - ``chips``
      - Parts with their identification values
    * - ``regions``
@@ -143,7 +143,7 @@ Regenerating
    * - :download:`model.py <../tools/model.py>`
      - Loads the YAML source for the other tools
    * - :download:`generate.py <../tools/generate.py>`
-     - Runs the five ``gen_`` writers of the next rows
+     - Runs the five writers of generated files
    * - :download:`gen_c.py <../tools/gen_c.py>`
      - Writes the C header
    * - :download:`gen_rust.py <../tools/gen_rust.py>`

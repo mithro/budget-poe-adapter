@@ -11,10 +11,11 @@ This page takes the switch from power-on to a known state. The registers are in 
 Find the switch
 ---------------
 
-Read :reg:`CHIP_ID` at PHY address ``0x1d`` and, if the family code is not one of the two
-known values, at ``0x00``. On a board that straps a switch ID other than 0, use that ID in
-every access. :ref:`access-straps` lists the pins. :lx:`yt921x_chip_detect` of the
-:ref:`Linux driver <sources-list>` reads :reg:`CHIP_ID` in the same way before the reset.
+Read :reg:`CHIP_ID` at PHY address ``0x1d`` and, if the family code is not one of the two known
+values, at ``0x00``. On a board that straps a switch ID other than 0, use that ID in every access.
+:ref:`access-straps` lists the pins. :lx:`yt921x_chip_detect` of the
+:ref:`Linux driver <sources-list>` reads :reg:`CHIP_ID` before the reset, at the one PHY address
+that its device tree node gives.
 
 .. list-table::
    :header-rows: 1
@@ -54,7 +55,7 @@ a configuration is loaded again from an EEPROM or from flash where the strap pin
 and the PHYs restart auto-negotiation. The bit clears itself.
 
 Section 4.1.2.2 calls :field:`RST.SW` SW_RESET and states that it does the same except that
-the analog circuits of the PHYs are not reset. The Linux driver does not use
+the analog circuits of the PHYs are not reset. The :ref:`Linux driver <sources-list>` does not use
 :field:`RST.SW`.
 
 The reset pin is nRESET, pin 89 of the YT9215SCH in table 23 of the |ds|. Section 4.1.1
@@ -117,12 +118,11 @@ The functions ``yt921x_reset()`` and ``yt921x_identify()`` are in
 
 .. _bringup-sch:
 
-The part table of the Linux driver, which :lx:`yt921x_chip_detect` searches, has no entry
-for the :chip:`YT9215SCH`. No source gives the identification values of that part. This
-manual assumes the values of the :chip:`YT9215SC`, because the |ds| gives the YT9215SCH the
-package and pin numbers that the
-:doc:`debug pin note </research/motorcomm-debug-pins>` records for the YT9215SC. The
-assumption is :ev:`inferred`.
+The part table of the :ref:`Linux driver <sources-list>`, which :lx:`yt921x_chip_detect` searches,
+has no entry for the :chip:`YT9215SCH`. No source gives the identification values of that part.
+This manual assumes the values of the :chip:`YT9215SC`, because the |ds| gives the YT9215SCH the
+package and pin numbers that the :doc:`debug pin note </research/motorcomm-debug-pins>` records
+for the YT9215SC. The assumption is :ev:`inferred`.
 
 .. _bringup-clock:
 
@@ -236,7 +236,7 @@ I/O voltage
 :reg:`IO_LEVEL` sets the signalling voltage of the digital pins and of each xMII interface.
 Its field positions differ between the two families, so a driver has to identify the part
 first. The fields have the level :ev:`header`: :lx:`chip.h` defines them and no function of
-the Linux driver writes them. :ref:`ports-xmii` shows the one use, in the
+the :ref:`Linux driver <sources-list>` writes them. :ref:`ports-xmii` shows the one use, in the
 :ref:`YT9215RB vendor driver <sources-list>`.
 
 .. _bringup-temp:
@@ -254,7 +254,8 @@ Switch MAC address
 
 :reg:`MAC_ADDR_HI2` and :reg:`MAC_ADDR_LO4` hold a MAC address of the switch itself. It is
 :ev:`inferred` from the register names that the switch uses it as the source address of
-frames it generates, such as pause frames. No function of the Linux driver writes the two
+frames it generates, such as pause frames. No function of the :ref:`Linux driver <sources-list>`
+writes the two
 registers.
 
 .. _bringup-next:

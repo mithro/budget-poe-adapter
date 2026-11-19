@@ -373,6 +373,6 @@ None of the code has been run against a YT921x. The software model is
 :download:`mock.rs <../bindings/rust/tests/mock.rs>` for Rust and
 :download:`mock_switch.py <../bindings/micropython/tests/mock_switch.py>` for MicroPython.
 Each implements the behaviour that this manual describes, so the tests show that code and
-manual agree with each other, not that both are right. The description file of the last row
+manual agree with each other, not that both are right. The description file
 is :download:`yt921x.yaml <../yt921x.yaml>`. :download:`Makefile <../Makefile>` runs all
 checks with the command ``make check``.

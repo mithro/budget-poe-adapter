@@ -3,19 +3,21 @@
 Register access
 ===============
 
-Every register has a 32-bit address and holds 32 bits. The host reaches the registers through
-the MDIO management pins of the switch (MDC and MDIO), using ordinary IEEE 802.3 clause 22
-frames in an unusual way: one register access takes four MDIO frames.
+Every register has a 32-bit address and holds 32 bits. The host reaches the registers through the
+MDIO management pins of the switch (MDC and MDIO), using ordinary
+`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frames in an
+unusual way: one register access takes four MDIO frames.
 
 .. _access-mdio:
 
 The MDIO bus
 ------------
 
-MDC is a clock driven by the host. MDIO is a data line driven by either side; it is open
-drain on the switch, so the board needs a pull-up resistor on it. A frame is 64 clock cycles:
-a preamble of 32 ones, then 32 bits that carry a 5-bit PHY address, a 5-bit register number
-and 16 bits of data.
+MDC is a clock driven by the host. MDIO is a data line driven by either side. The pin list of the
+|ds| gives the MDIO pin of the switch the type open drain, and the note under table 38 gives the
+timing with a pull-up resistor of 1 kΩ. The board therefore needs a pull-up resistor on MDIO. A
+frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit PHY address, a
+5-bit register number and 16 bits of data.
 
 .. yt-diagram:: mdio-frame
    :caption: Clause 22 MDIO frames. Bits are sent from left to right; green parts are driven
@@ -315,8 +317,8 @@ sets a done bit, when it has finished.
      - :ref:`bringup-identify`
 
 :lx:`yt921x_reg_wait` of the :ref:`Linux driver <sources-list>` polls such a bit every 10 ms
-and gives up after 100 ms; :lx:`smi.c:11` defines both times. It is :ev:`not known` how long
-a command takes. The function
+and gives up after 100 ms; :lx:`smi.c:11` and :lx:`smi.c:12` define the two times. It is
+:ev:`not known` how long a command takes. The function
 ``yt921x_reg_wait()`` of :download:`yt921x.c <../bindings/c/yt921x.c>` implements the same
 loop.
 
@@ -326,7 +328,8 @@ Checking that access works
 --------------------------
 
 :reg:`CPU_TAG_TPID` reads ``0x9988`` after reset, which is one of the three
-:ref:`reset values <sources-reset>` that the Linux driver states. A driver that reads anything
+:ref:`reset values <sources-reset>` that the :ref:`Linux driver <sources-list>` states. A driver
+that reads anything
 else is not talking to a YT921x, has the wrong PHY address, or has a wiring fault. A read from
 an address nobody answers returns ``0xffff`` in each half, because the pull-up keeps the line
 high.

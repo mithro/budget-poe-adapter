@@ -18,7 +18,7 @@ Sources
 
    * - Source
      - Repository
-     - Commit
+     - Revision
      - Provides
    * - `Linux driver <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__
      - `torvalds/linux <https://github.com/torvalds/linux>`__
@@ -37,14 +37,16 @@ Sources
      - V1.03
      - Pins with interface timing
 
-The Linux driver is the directory
+The :ref:`Linux driver <sources-list>` is the directory
 `drivers/net/dsa/motorcomm <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__
 of the mainline kernel together with the tag format in :lx:`tag_yt921x.c`. Its headers
 (:lx:`chip.h`, :lx:`tc.h`, :lx:`mdio_bus.h`, :lx:`mib.h`, :lx:`leds.h`) define the register
 and field names with their addresses. Every function of the driver that this manual names is
 a link to its definition at the commit of the :ref:`source list <sources-list>`.
 
-The vendor SDK is the directory ``switch_sdk`` of a public copy of the Motorcomm SDK. It
+The :ref:`vendor SDK <sources-list>` is the directory
+`switch_sdk <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk>`__
+of a public copy of the Motorcomm SDK. It
 holds a list of all register tables with field positions, and driver code that uses them,
 but no register descriptions. :ref:`reference-sdk` lists every table.
 
@@ -107,19 +109,19 @@ code uses carries a name and often a list of values, which is taken at face valu
 statement is a reading of names and can be wrong. The level datasheet applies to pins and
 timing only, so it does not occur in the reference.
 
-The driver level of a field means that some function of the Linux driver reads or writes the
-field. The reference names the first such function in the column "First used in", as a link
-to the line of code. A field that is the only field of its register shares the level of the
-register.
+The driver level of a field means that some function of the :ref:`Linux driver <sources-list>`
+reads or writes the field. The reference names the first such function in the column "First used
+in", as a link to the line of code. A field that is the only field of its register shares the
+level of the register.
 
 .. _sources-sdk:
 
 Comparison with the vendor SDK
 ------------------------------
 
-The reference compares every field with the vendor SDK table at the same address, in the
-second table under the heading "Sources of the fields" of each register. For an array field
-whose elements are separated by other bits, the comparison is that of element 0.
+The reference compares every field with the :ref:`vendor SDK <sources-list>` table at the same
+address, in the second table under the heading "Sources of the fields" of each register. For an
+array field whose elements are separated by other bits, the comparison is that of element 0.
 
 .. list-table::
    :header-rows: 1
@@ -205,15 +207,16 @@ table.
    * - I2C host interface
      - :ref:`access-straps`
 
-The vendor SDK lists 237 tables and the reference describes 101 registers. The other tables
-are known by name only. :ref:`reference-sdk` lists them by address region.
+The :ref:`vendor SDK <sources-list>` lists 237 tables and the reference describes 101 registers.
+The other tables are known by name only. :ref:`reference-sdk` lists them by address region.
 
 .. _sources-reset:
 
 Reset values
 ------------
 
-The Linux driver states the reset values of three fields. A driver writes every other
+The :ref:`Linux driver <sources-list>` states the reset values of two fields and the reset
+state of a third. A driver writes every other
 register that a function depends on before it uses the function.
 
 .. list-table::
@@ -233,5 +236,6 @@ register that a function depends on before it uses the function.
      - 9216
      - :lx:`Comment in yt921x_dsa_port_change_mtu() <chip.c:241>`
 
-The comment on :field:`MAC_FRAME.SIZE` says that the frame size is at its maximum after
-reset. The maximum is :const:`FRAME_SIZE_MAX`.
+The comment on :field:`MAC_FRAME.SIZE` reads "always set to maximum after reset". The value
+9216 is :const:`FRAME_SIZE_MAX`, the largest size that :lx:`yt921x_dsa_port_change_mtu`
+allows for, so the reset value of the field is :ev:`inferred`.

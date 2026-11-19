@@ -82,8 +82,8 @@ Read :reg:`PORT_STATUS` to learn what a MAC runs with: :field:`PORT_STATUS.LINK`
 state, :field:`PORT_STATUS.SPEED` a code of the :enum:`speed` list and
 :field:`PORT_STATUS.DUPLEX_FULL` the duplex. The register has the level :ev:`header`:
 :lx:`chip.h:96` defines it with the field layout of :reg:`PORT_CTRL`, and no function of the
-Linux driver reads it. It is :ev:`inferred` that on a forced port the register repeats what
-the driver wrote to :reg:`PORT_CTRL`.
+:ref:`Linux driver <sources-list>` reads it. It is :ev:`inferred` that on a forced port the
+register repeats what the driver wrote to :reg:`PORT_CTRL`.
 
 .. yt-bitfield:: PORT_STATUS
 
@@ -158,8 +158,46 @@ SerDes
    :field:`SERDES.LINK`, then force :reg:`PORT_CTRL` to the same values.
 5. Enable the MAC with the fields of :ref:`ports-up`.
 
-Step 1 is :ev:`confirmed` by :lx:`yt921x_port_config`, step 2 by :lx:`yt921x_serdes_config`
-and steps 3 to 5 by :lx:`yt921x_port_up`.
+The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sources-list>`.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 14 50 36
+
+   * - Step
+     - Part of the step
+     - Function
+   * - 1
+     - Two port bits
+     - :lx:`yt921x_port_config`
+   * - 1
+     - :field:`SERDES_CTRL.TEST` clear
+     - :lx:`yt921x_chip_setup`
+   * - 2
+     - :field:`SERDES.MODE`
+     - :lx:`yt921x_serdes_config`
+   * - 3
+     - :field:`PORT_CTRL.LINK_AN` set
+     - :lx:`yt921x_serdes_config`
+   * - 3
+     - :field:`SERDES.LINK` clear
+     - :lx:`yt921x_serdes_config`
+   * - 3
+     - Clause 22 registers of the PCS
+     - :lx:`yt921x_serdes_config`
+   * - 4
+     - Fields of :reg:`SERDES`
+     - :lx:`yt921x_port_up`
+   * - 4
+     - Fields of :reg:`PORT_CTRL`
+     - :lx:`yt921x_port_up`
+   * - 5
+     - MAC enable fields
+     - :lx:`yt921x_port_up`
+
+:lx:`yt921x_port_up` writes :reg:`PORT_CTRL` before :reg:`SERDES`. It writes
+:field:`SERDES.SPEED`, :field:`SERDES.DUPLEX_FULL`, :field:`SERDES.RX_PAUSE` and
+:field:`SERDES.TX_PAUSE` for a link with in-band status too.
 
 .. list-table::
    :header-rows: 1
@@ -196,8 +234,8 @@ and steps 3 to 5 by :lx:`yt921x_port_up`.
      - none
      - :ev:`confirmed`
 
-The Linux driver names value 3 100BASEX and the |ds| lists the fibre mode of the extension
-ports as 100BASE-FX in the section "Extension Ports Fiber Mode".
+The :ref:`Linux driver <sources-list>` names value 3 100BASEX and the |ds| lists the fibre mode of
+the extension ports as 100BASE-FX in the section "Extension Ports Fiber Mode".
 
 .. _ports-xmii:
 
@@ -216,14 +254,15 @@ xMII
 5. Force :reg:`PORT_CTRL` to the same speed and duplex, with the fields of the
    :ref:`forced-mode table <ports-forced>`.
 
-Steps 4 and 5 are :ev:`confirmed` by :lx:`yt921x_port_up`. The Linux driver configures no
-xMII mode: :lx:`yt921x_port_config` accepts SerDes modes only. Steps 1 to 3 for RGMII follow
-the function
+Steps 4 and 5 are :ev:`confirmed` by :lx:`yt921x_port_up`. The :ref:`Linux driver <sources-list>`
+configures no xMII mode: :lx:`yt921x_port_config` accepts SerDes modes only. Steps 1 to 3 for
+RGMII follow the function
 `yt9215rb_init() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__
 of the :ref:`YT9215RB vendor driver <sources-list>`, which brings up RGMII on port 8 with the
-writes of the :ref:`RGMII table <ports-rgmii-table>`. The modes MII and RMII are
-:ev:`inferred` from the field definitions in :lx:`chip.h`. The three delay fields of the
-table depend on the board, and the vendor driver takes them from its configuration.
+writes of the :ref:`RGMII table <ports-rgmii-table>`. The modes MII and RMII are :ev:`inferred`
+from the field definitions in :lx:`chip.h`. The three delay fields of the
+:ref:`RGMII table <ports-rgmii-table>` depend on the board, and the vendor driver takes them from
+its configuration.
 
 .. _ports-rgmii-table:
 
@@ -336,5 +375,4 @@ Energy Efficient Ethernet has one enable for the whole chip and one per port.
 2. Port: set the port's :field:`EEE_CTRL.EN` bit and :field:`EEE_VAL.DATA` of the port.
 
 The sequence is :ev:`confirmed` by :lx:`yt921x_set_eee`. A comment in that function calls the
-datasheet poor on this function, and no source explains what the four bits do
-individually.
+datasheet of the vendor poor on EEE, and no source explains what the four bits do individually.

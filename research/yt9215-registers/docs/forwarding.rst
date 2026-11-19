@@ -46,9 +46,10 @@ Isolation separates ports into groups without VLANs. The table gives the bits to
      - set
 
 :lx:`yt921x_userport_standalone` of the :ref:`Linux driver <sources-list>` writes the second
-row, :lx:`yt921x_bridge` the third and :lx:`yt921x_port_setup` the fourth. It is
-:ev:`inferred` that a port's own bit makes no difference, because a switch does not send a
-frame back to the port it arrived on.
+row, :lx:`yt921x_bridge` the third and :lx:`yt921x_port_setup` the fourth. The own bit of a port
+blocks hairpin forwarding, the sending of a frame back to the port it
+arrived on. :lx:`yt921x_bridge` sets the own bit of a port unless the port is in hairpin
+mode.
 
 .. tab-set::
 
@@ -98,7 +99,7 @@ a switch with a single spanning tree uses instance 0 only. The
    :header-rows: 1
    :widths: 30 20 50
 
-   * - IEEE 802.1D state
+   * - `IEEE 802.1D <https://en.wikipedia.org/wiki/IEEE_802.1D>`__ state
      - Value
      - Name
    * - Disabled
@@ -149,7 +150,7 @@ itself. :reg:`PORT_LEARN` controls this per port.
      - :ev:`confirmed`
 
 :lx:`yt921x_bridge_flags` sets :field:`PORT_LEARN.DIS` and :lx:`yt921x_chip_setup_dsa` sets
-:field:`VLAN_CTRL.LEARN_DIS`. The inferred rows follow the field names in :lx:`chip.h`.
+:field:`VLAN_CTRL.LEARN_DIS`. The :ev:`inferred` rows follow the field names in :lx:`chip.h`.
 Learned entries age out after the time in :reg:`AGEING`, which :ref:`fdb-ageing` describes.
 
 .. _forwarding-flood:
@@ -223,10 +224,10 @@ A flooded frame goes to the ports that the flood filter register of its kind all
    :val:`ACT_UNK_UCAST.ACT.COPY` or :val:`ACT_UNK_MCAST.ACT.COPY`, or those frames are sent
    twice. A comment in :lx:`yt921x_tag_rcv` states this.
 
-A set bit in a filter register keeps flooded frames of that kind away from the port. This
-polarity is :ev:`inferred` from the word "filter" in the register names. The only value that
-the Linux driver writes, ``0x7ff`` in :lx:`yt921x_chip_setup_dsa` together with trapping every
-unknown frame, is consistent with it.
+A set bit in a filter register keeps flooded frames of that kind away from the port. This polarity
+is :ev:`inferred` from the word "filter" in the register names. The only value that the
+:ref:`Linux driver <sources-list>` writes, ``0x7ff`` in :lx:`yt921x_chip_setup_dsa` together with
+trapping every unknown frame, is consistent with it.
 
 .. yt-bitfield:: ACT_UNK_UCAST
 

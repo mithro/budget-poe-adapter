@@ -57,12 +57,14 @@ accept that reads the low word again and repeats if it is smaller than before.
 Reading all 39 counters of one port takes 42 register reads, about 11 ms at an MDC clock of
 1 MHz.
 
-The counter names follow :lx:`mib.h` of the Linux driver. The counter table of the
+The counter names follow :lx:`mib.h` of the :ref:`Linux driver <sources-list>`. The counter table
+of the
 `YT9215RB vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L171>`__
-names three offsets differently. The header
+names the offset ``0x4c`` "RxOverFlow", where the Linux name is :counter:`RX_OVERSIZE_ERR`. The
+header
 `yt_stat.h <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_stat.h>`__
-of the :ref:`vendor SDK <sources-list>` agrees with the Linux names at all three offsets, so
-this manual uses the Linux names.
+of the :ref:`vendor SDK <sources-list>` agrees with the Linux name, so this manual uses the Linux
+names.
 
 .. list-table::
    :header-rows: 1
@@ -119,12 +121,15 @@ Clearing
      - port number
 
 A clear takes two writes to :reg:`MIB_CTRL`. The first selects the ports with
-:field:`MIB_CTRL.CLEAN` at 0 and the second sets :field:`MIB_CTRL.CLEAN`. The sequence is
-that of the function
+:field:`MIB_CTRL.CLEAN` at 0 and the second sets :field:`MIB_CTRL.CLEAN`. The sequence for one
+port is that of the function
 `fal_tiger_stat_mib_clear() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L52>`__
-of the :ref:`vendor SDK <sources-list>`. The fields of :reg:`MIB_CTRL` have the level
-:ev:`header`: :lx:`mib.h` defines them and no function of the Linux driver uses them.
+of the :ref:`vendor SDK <sources-list>`, and the sequence for every port is that of
+`fal_tiger_stat_mib_clear_all() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L69>`__.
+The fields of :reg:`MIB_CTRL` have the level :ev:`header`: :lx:`mib.h` defines them and no
+function of the :ref:`Linux driver <sources-list>` uses them.
 
-It is :ev:`not known` whether :field:`MIB_CTRL.CLEAN` clears itself, which is why the first
-write puts it back to 0. The SDK function leaves :field:`MIB_CTRL.ALL_PORT` at 0 for a clear
-of every port, and the effect of that bit is :ev:`not known`.
+It is :ev:`not known` whether :field:`MIB_CTRL.CLEAN` clears itself, which is why the first write
+puts it back to 0. The function ``fal_tiger_stat_mib_clear_all()`` leaves
+:field:`MIB_CTRL.ALL_PORT` at 0 for a clear of every port, and the effect of that bit is
+:ev:`not known`.

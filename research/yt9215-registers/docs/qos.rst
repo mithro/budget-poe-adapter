@@ -76,8 +76,8 @@ separately.
      - :ev:`inferred`
 
 To trust DSCP first and the tag priority second, give :val:`app_selector.DSCP` weight 7 and
-both :val:`app_selector.CVLAN_PCP` and :val:`app_selector.SVLAN_PCP` weight 6. The confirmed
-rows are the three sources that :lx:`yt921x_dsa_port_set_apptrust` writes. The inferred rows
+both :val:`app_selector.CVLAN_PCP` and :val:`app_selector.SVLAN_PCP` weight 6. The :ev:`confirmed`
+rows are the three sources that :lx:`yt921x_dsa_port_set_apptrust` writes. The :ev:`inferred` rows
 follow the names of the list ``enum yt921x_app_selector`` in :lx:`chip.h`.
 
 .. _qos-maps:
@@ -96,7 +96,8 @@ There are two :reg:`IPM_PCP` maps. :field:`PORT_QOS.CVLAN_PRIO_MAP_ID` and
 reference entry of :reg:`IPM_PCP` gives the address of each map entry.
 
 Fill the tables once at start-up, as :lx:`yt921x_chip_setup_qos` does. That function gives
-every DSCP value the priority that the kernel function ``ietf_dscp_to_ieee8021q_tt()``
+every DSCP value the priority that the kernel function
+`ietf_dscp_to_ieee8021q_tt() <https://github.com/torvalds/linux/blob/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/net/core/ieee8021q_helpers.c>`__
 assigns to it, which follows `RFC 8325 <https://www.rfc-editor.org/rfc/rfc8325>`__. It maps
 every tag priority to itself, with the colour :val:`IPM_PCP.COLOR.YELLOW` when the drop
 eligible bit is set, and it writes both :reg:`IPM_PCP` maps alike. It is therefore

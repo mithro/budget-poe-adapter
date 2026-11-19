@@ -46,10 +46,10 @@ of the diagram is a link to the page that describes the stage.
 .. yt-diagram:: frame-path
    :caption: Stages a frame passes through, from the receiving to the sending port.
 
-The order of the stages is :ev:`inferred` from the order in which IEEE 802.1Q describes the
-forwarding process, with one exception. A comment in :lx:`yt921x_chip_setup_dsa` states
-that port isolation is applied after the destination lookup: a frame whose known destination
-is blocked is dropped, not flooded.
+The order of the stages is :ev:`inferred` from the order in which
+`IEEE 802.1Q <https://en.wikipedia.org/wiki/IEEE_802.1Q>`__ describes the forwarding process, with
+one exception. A comment in :lx:`yt921x_chip_setup_dsa` states that port isolation is applied
+after the destination lookup: a frame whose known destination is blocked is dropped, not flooded.
 
 .. _overview-driver:
 
@@ -67,7 +67,7 @@ What a driver has to do
      - Implement register read and write on top of an MDIO bus
      - :ref:`access-smi`
    * - 2
-     - Find the switch, reset it and identify the part
+     - Reset and identify the switch
      - :ref:`bringup-reset`
    * - 3
      - Turn on the optional function blocks

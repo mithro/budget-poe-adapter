@@ -171,21 +171,21 @@
           <fields>
             <field>
               <name>MIB</name>
-              <description>Enables the port counters (MIB_DATA).</description>
+              <description>Enables the port counters of MIB_DATA.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>ACL</name>
-              <description>Enables the access control list (ACL_KEY, ACL_ACT).</description>
+              <description>Enables the access control list. Its registers include ACL_KEY and ACL_ACT.</description>
               <bitOffset>2</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>METER</name>
-              <description>Enables the meters (METER_CTRL, PORT_METER).</description>
+              <description>Enables the meters. The meter registers are METER_CTRL and PORT_METER.</description>
               <bitOffset>4</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -386,7 +386,7 @@
         </register>
         <register>
           <name>MAC_ADDR_HI2</name>
-          <description>Upper two bytes of the MAC address the switch itself uses as a source address, for example in the pause frames it sends.</description>
+          <description>Upper two bytes of the MAC address of the switch. It is inferred from the name that the switch uses the address as the source address of frames it sends itself, such as pause frames.</description>
           <addressOffset>0x80</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -611,14 +611,14 @@
             </field>
             <field>
               <name>LINK_AN</name>
-              <description>Take speed and duplex from the attached PHY or in-band status. The forced bits are ignored.</description>
+              <description>Take speed and duplex from the in-band status. yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the bit also follows a built-in PHY and that the forced bits are then ignored.</description>
               <bitOffset>9</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>PAUSE_AN</name>
-              <description>Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE.</description>
+              <description>Take the pause settings from in-band negotiation. yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that RX_PAUSE and TX_PAUSE are then ignored.</description>
               <bitOffset>10</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -1952,7 +1952,7 @@
               <dimIncrement>4</dimIncrement>
               <dimIndex>0-2</dimIndex>
               <name>FORCE_BLINK%s</name>
-              <description>Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field value.</description>
+              <description>Blink cycle of an LED that is forced to blink. The cycle is 512 ms shifted left by the field value.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
@@ -2077,7 +2077,7 @@
         </register>
         <register>
           <name>LED_PAR_INV</name>
-          <description>Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits a LED wired active low; set the bit for a LED wired active high.</description>
+          <description>Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits an LED wired active low; set the bit for an LED wired active high.</description>
           <addressOffset>0x1C8</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -2339,7 +2339,7 @@
       <registers>
         <register>
           <name>EDATA_CTRL</name>
-          <description>Command register of the 256-byte factory configuration store. Writing it starts the command; Identify the part shows the read sequence.</description>
+          <description>Command register of the configuration byte store of 256 bytes. Writing it starts the command; Identify the part shows the read sequence.</description>
           <addressOffset>0x0</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -2399,14 +2399,14 @@
         </register>
         <register>
           <name>SYS_CLK</name>
-          <description>Shows which core clock the switch runs from. The meter and shaper time slots (METER_SLOT, PORT_SHAPE_SLOT) count in units of eight core clock periods.</description>
+          <description>Shows which core clock the switch runs from. yt921x_chip_detect reads it. The time slots of METER_SLOT and PORT_SHAPE_SLOT count in units of eight core clock periods.</description>
           <addressOffset>0x40</addressOffset>
           <size>32</size>
           <access>read-write</access>
           <fields>
             <field>
               <name>SEL</name>
-              <description>Core clock selection. Value 0 selects 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The core clock table lists the clock periods.</description>
+              <description>Core clock in use. Value 0 stands for 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The core clock table lists the clock periods.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
@@ -2833,7 +2833,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>BLOCKING</name>
-                  <description>Port neither forwards nor learns. It still receives bridge protocol frames</description>
+                  <description>Port neither forwards nor learns. It is inferred from IEEE 802.1D that the port receives bridge protocol frames</description>
                   <value>2</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -3261,7 +3261,7 @@
             </field>
             <field>
               <name>OVERWRITED</name>
-              <description>An existing entry was replaced to make room.</description>
+              <description>The command overwrote an existing entry.</description>
               <bitOffset>13</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-only</access>
@@ -3602,7 +3602,7 @@
         </register>
         <register>
           <name>ACL_PERMIT_UNMATCH</name>
-          <description>Ports on which a frame that matches no ACL rule is still forwarded.</description>
+          <description>Ports on which a frame that matches no ACL rule is forwarded.</description>
           <addressOffset>0x6A0</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -4309,7 +4309,7 @@
               <dimIncrement>4</dimIncrement>
               <dimIndex>0-7</dimIndex>
               <name>GRPID%s</name>
-              <description>Group number of slot bin. It is the slot number that names the rule.</description>
+              <description>Group number of slot bin. The slots of one rule share a group number.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>3</bitWidth>
               <access>read-write</access>
@@ -4827,7 +4827,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -5054,7 +5054,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -5261,7 +5261,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -5453,7 +5453,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -5645,7 +5645,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -5893,7 +5893,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -6127,7 +6127,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -6361,7 +6361,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -6595,7 +6595,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -6829,7 +6829,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -7070,7 +7070,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -7304,7 +7304,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -7503,7 +7503,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -7730,7 +7730,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>MISC</name>
-                      <description>IP protocol, type of service, TCP flags and frame class</description>
+                      <description>IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class</description>
                       <value>16</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -9104,7 +9104,7 @@
           <fields>
             <field>
               <name>SLOT</name>
-              <description>Slot length in units of eight core clock periods (see SYS_CLK). The smallest allowed value is 80.</description>
+              <description>Slot length in units of eight core clock periods. SYS_CLK shows the core clock. The smallest allowed value is 80.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>12</bitWidth>
               <access>read-write</access>
@@ -9516,7 +9516,7 @@
           <fields>
             <field>
               <name>SLOT</name>
-              <description>Slot length in units of eight core clock periods (see SYS_CLK). The smallest allowed value is 80.</description>
+              <description>Slot length in units of eight core clock periods. SYS_CLK shows the core clock. The smallest allowed value is 80.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>12</bitWidth>
               <access>read-write</access>

@@ -146,10 +146,10 @@ A mirrored frame goes to the monitor port in :field:`MIRROR.PORT`, which :doc:`m
 describes. :ref:`rate-meter` shows how to set the meter up. A priority from the ACL counts
 only if the ACL source is ranked in :ref:`qos-sources`.
 
-The drop, redirect and trap rows of the :ref:`action table <acl-action-table>` are
-:ev:`confirmed` by :lx:`yt921x_acl_rule_ext_parse_flow_action`, which writes
-:val:`ACL_ACT.FWD.REDIR` with no destination port for a drop. The Evidence column of
-:reg:`ACL_ACT` gives the level of every other field.
+The drop, redirect and trap rows of the :ref:`action table <acl-action-table>` are :ev:`confirmed`
+by :lx:`yt921x_acl_rule_ext_parse_flow_action`, which writes :val:`ACL_ACT.FWD.REDIR` with no
+destination port for a drop. The :ref:`Evidence <evidence>` column of :reg:`ACL_ACT` gives the
+level of every other field.
 
 .. _acl-setup:
 
@@ -193,6 +193,8 @@ until the commit.
 To delete a rule, run the same sequence with zeros for its action, keys and masks and without
 its slots in :reg:`ACL_ENTRY`.
 
-The sequence is :ev:`confirmed` by :lx:`yt921x_acl_commit`, which performs the six steps in
-this order. The :ref:`one-time setup <acl-setup>` is :ev:`confirmed` by
-:lx:`yt921x_chip_setup_acl`. The :ref:`bindings <bindings>` have no example code for the ACL.
+The sequence is :ev:`confirmed` by :lx:`yt921x_acl_commit`, which performs the six steps in this
+order. Of the :ref:`one-time setup <acl-setup>`, step 1 is :ev:`confirmed` by
+:lx:`yt921x_chip_setup` and steps 2 and 4 by :lx:`yt921x_chip_setup_acl`, which also writes the 0
+of step 3. :lx:`yt921x_acl_add` and :lx:`yt921x_acl_del` write the port bits of step 3. The
+:ref:`bindings <bindings>` have no example code for the ACL.

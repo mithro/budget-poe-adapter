@@ -15,6 +15,7 @@ def plain(text):
     """Description text without documentation roles or inline markup."""
     text = ROLE_RE.sub(r"\1", text)
     text = REF_RE.sub(r"\1", text)
+    text = re.sub(r"`([^`<]+) <[^`]+>`__", r"\1", text)
     text = text.replace("``", "").replace("|ds|", "YT9215SCH datasheet")
     return " ".join(text.split())
 

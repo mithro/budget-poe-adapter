@@ -8,9 +8,9 @@ ports of a group act as one logical link. The registers are in the :blk:`lag` bl
 
 The :ref:`set-up sequence <lag-group>` is :ev:`confirmed` by :lx:`yt921x_lag_set` of the
 :ref:`Linux driver <sources-list>` and the :ref:`hash bits <lag-hash>` by
-:lx:`yt921x_lag_hash`. It is :ev:`not known` how a group interacts with
-:ref:`port isolation <forwarding-isolation>` and with learned addresses. Give all members of
-a group the same isolation mask, VLAN membership and spanning tree state.
+:lx:`yt921x_dsa_port_lag_join`, which chooses the bits. It is :ev:`not known` how a group
+interacts with :ref:`port isolation <forwarding-isolation>` and with learned addresses. Give all
+members of a group the same isolation mask, VLAN membership and spanning tree state.
 
 .. _lag-group:
 

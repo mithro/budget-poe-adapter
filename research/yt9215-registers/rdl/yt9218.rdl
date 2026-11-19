@@ -56,9 +56,9 @@ addrmap yt9218 {
     reg {
         name = "Function enables";
         desc = "Switches optional function blocks on. A block that is off ignores its own registers.";
-        field { desc = "Enables the meters (METER_CTRL, PORT_METER)."; sw = rw; hw = r; } METER[4:4];
-        field { desc = "Enables the access control list (ACL_KEY, ACL_ACT)."; sw = rw; hw = r; } ACL[2:2];
-        field { desc = "Enables the port counters (MIB_DATA)."; sw = rw; hw = r; } MIB[1:1];
+        field { desc = "Enables the meters. The meter registers are METER_CTRL and PORT_METER."; sw = rw; hw = r; } METER[4:4];
+        field { desc = "Enables the access control list. Its registers include ACL_KEY and ACL_ACT."; sw = rw; hw = r; } ACL[2:2];
+        field { desc = "Enables the port counters of MIB_DATA."; sw = rw; hw = r; } MIB[1:1];
     } FUNC @ 0x80004;
 
     reg {
@@ -130,7 +130,7 @@ addrmap yt9218 {
 
     reg {
         name = "Switch MAC address, high part";
-        desc = "Upper two bytes of the MAC address the switch itself uses as a source address, for example in the pause frames it sends.";
+        desc = "Upper two bytes of the MAC address of the switch. It is inferred from the name that the switch uses the address as the source address of frames it sends itself, such as pause frames.";
         field { desc = "MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8."; sw = rw; hw = r; } ADDR[15:0];
     } MAC_ADDR_HI2 @ 0x80080;
 
@@ -175,8 +175,8 @@ addrmap yt9218 {
             V10000 = 3 { desc = "10 Gbit/s code. No YT921x port runs at this speed"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
-        field { desc = "Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE."; sw = rw; hw = r; } PAUSE_AN[10:10];
-        field { desc = "Take speed and duplex from the attached PHY or in-band status. The forced bits are ignored."; sw = rw; hw = r; } LINK_AN[9:9];
+        field { desc = "Take the pause settings from in-band negotiation. yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that RX_PAUSE and TX_PAUSE are then ignored."; sw = rw; hw = r; } PAUSE_AN[10:10];
+        field { desc = "Take speed and duplex from the in-band status. yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the bit also follows a built-in PHY and that the forced bits are then ignored."; sw = rw; hw = r; } LINK_AN[9:9];
         field { desc = "Use back pressure for flow control in half duplex."; sw = rw; hw = r; } HALF_PAUSE[8:8];
         field { desc = "Forced full duplex."; sw = rw; hw = r; } DUPLEX_FULL[7:7];
         field { desc = "Honour received pause frames."; sw = rw; hw = r; } RX_PAUSE[6:6];
@@ -575,9 +575,9 @@ addrmap yt9218 {
         field { desc = "Forced state of LED group grp of this port."; sw = rw; hw = r; encode = led2_port_force_e; } FORCE_2[27:26];
         field { desc = "Forced state of LED group grp of this port."; sw = rw; hw = r; encode = led2_port_force_e; } FORCE_1[23:22];
         field { desc = "Forced state of LED group grp of this port."; sw = rw; hw = r; encode = led2_port_force_e; } FORCE_0[19:18];
-        field { desc = "Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field value."; sw = rw; hw = r; encode = led2_port_force_blink_e; } FORCE_BLINK_2[25:24];
-        field { desc = "Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field value."; sw = rw; hw = r; encode = led2_port_force_blink_e; } FORCE_BLINK_1[21:20];
-        field { desc = "Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field value."; sw = rw; hw = r; encode = led2_port_force_blink_e; } FORCE_BLINK_0[17:16];
+        field { desc = "Blink cycle of an LED that is forced to blink. The cycle is 512 ms shifted left by the field value."; sw = rw; hw = r; encode = led2_port_force_blink_e; } FORCE_BLINK_2[25:24];
+        field { desc = "Blink cycle of an LED that is forced to blink. The cycle is 512 ms shifted left by the field value."; sw = rw; hw = r; encode = led2_port_force_blink_e; } FORCE_BLINK_1[21:20];
+        field { desc = "Blink cycle of an LED that is forced to blink. The cycle is 512 ms shifted left by the field value."; sw = rw; hw = r; encode = led2_port_force_blink_e; } FORCE_BLINK_0[17:16];
         field { desc = "Blink while the port is in low power idle."; sw = rw; hw = r; } ACT_EEE_BLINK[15:15];
         field { desc = "Blink when a loop is detected on the port."; sw = rw; hw = r; } ACT_LOOPDETECT_BLINK[14:14];
         field { desc = "Blink on any activity."; sw = rw; hw = r; } ACT_ACTIVE_BLINK[13:13];
@@ -627,7 +627,7 @@ addrmap yt9218 {
 
     reg {
         name = "Parallel LED polarity";
-        desc = "Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits a LED wired active low; set the bit for a LED wired active high.";
+        desc = "Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits an LED wired active low; set the bit for an LED wired active high.";
         field { desc = "Inverts the output of one LED group of one port. The bit number is 10 × grp + port."; sw = rw; hw = r; } INV_2_9[29:29];
         field { desc = "Inverts the output of one LED group of one port. The bit number is 10 × grp + port."; sw = rw; hw = r; } INV_2_8[28:28];
         field { desc = "Inverts the output of one LED group of one port. The bit number is 10 × grp + port."; sw = rw; hw = r; } INV_2_7[27:27];
@@ -673,7 +673,7 @@ addrmap yt9218 {
 
     reg {
         name = "Configuration byte store command";
-        desc = "Command register of the 256-byte factory configuration store. Writing it starts the command; Identify the part shows the read sequence.";
+        desc = "Command register of the configuration byte store of 256 bytes. Writing it starts the command; Identify the part shows the read sequence.";
         enum edata_ctrl_op_e {
             READ = 5 { desc = "Read the byte at ADDR into EDATA_DATA.DATA"; };
         };
@@ -693,12 +693,12 @@ addrmap yt9218 {
 
     reg {
         name = "System clock select";
-        desc = "Shows which core clock the switch runs from. The meter and shaper time slots (METER_SLOT, PORT_SHAPE_SLOT) count in units of eight core clock periods.";
+        desc = "Shows which core clock the switch runs from. yt921x_chip_detect reads it. The time slots of METER_SLOT and PORT_SHAPE_SLOT count in units of eight core clock periods.";
         enum sys_clk_sel_e {
             V167M = 0 { desc = "167 MHz core clock"; };
             V143M = 1 { desc = "143 MHz core clock"; };
         };
-        field { desc = "Core clock selection. Value 0 selects 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The core clock table lists the clock periods."; sw = rw; hw = r; encode = sys_clk_sel_e; } SEL[1:0];
+        field { desc = "Core clock in use. Value 0 stands for 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The core clock table lists the clock periods."; sw = rw; hw = r; encode = sys_clk_sel_e; } SEL[1:0];
     } SYS_CLK @ 0xE0040;
 
     reg {
@@ -843,7 +843,7 @@ addrmap yt9218 {
         enum stp_port_e {
             DISABLED = 0 { desc = "Port neither forwards nor learns"; };
             LEARNING = 1 { desc = "Port learns addresses but does not forward"; };
-            BLOCKING = 2 { desc = "Port neither forwards nor learns. It still receives bridge protocol frames"; };
+            BLOCKING = 2 { desc = "Port neither forwards nor learns. It is inferred from IEEE 802.1D that the port receives bridge protocol frames"; };
             FORWARD = 3 { desc = "Port forwards and learns"; };
         };
         field { desc = "State of port port in this instance."; sw = rw; hw = r; encode = stp_port_e; } PORT_10[21:20];
@@ -958,7 +958,7 @@ addrmap yt9218 {
         desc = "Completion flag and outcome of the last FDB_OP command.";
         field { desc = "1 when the command has finished."; sw = r; hw = w; } DONE[15:15];
         field { desc = "No entry matched."; sw = r; hw = w; } NOTFOUND[14:14];
-        field { desc = "An existing entry was replaced to make room."; sw = r; hw = w; } OVERWRITED[13:13];
+        field { desc = "The command overwrote an existing entry."; sw = r; hw = w; } OVERWRITED[13:13];
         field { desc = "Index of the entry the command acted on."; sw = r; hw = w; } INDEX[11:0];
     } FDB_RESULT @ 0x180464;
 
@@ -1101,7 +1101,7 @@ addrmap yt9218 {
 
     reg {
         name = "ACL unmatched frame permit";
-        desc = "Ports on which a frame that matches no ACL rule is still forwarded.";
+        desc = "Ports on which a frame that matches no ACL rule is forwarded.";
         field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_10[10:10];
         field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_9[9:9];
         field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_8[8:8];
@@ -1321,14 +1321,14 @@ addrmap yt9218 {
     reg {
         name = "ACL block slot enables";
         desc = "Enables the eight key slots of one block and groups slots into rules. Slots with the same group number must all match for the rule to hit; the group number is also the slot whose ACL_ACT entry holds the action. Index: blk = 0 to 47.";
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_7[31:29];
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_6[27:25];
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_5[23:21];
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_4[19:17];
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_3[15:13];
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_2[11:9];
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_1[7:5];
-        field { desc = "Group number of slot bin. It is the slot number that names the rule."; sw = rw; hw = r; } GRPID_0[3:1];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_7[31:29];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_6[27:25];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_5[23:21];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_4[19:17];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_3[15:13];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_2[11:9];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_1[7:5];
+        field { desc = "Group number of slot bin. The slots of one rule share a group number."; sw = rw; hw = r; } GRPID_0[3:1];
         field { desc = "Slot bin is in use."; sw = rw; hw = r; } EN_7[28:28];
         field { desc = "Slot bin is in use."; sw = rw; hw = r; } EN_6[24:24];
         field { desc = "Slot bin is in use."; sw = rw; hw = r; } EN_5[20:20];
@@ -1362,7 +1362,7 @@ addrmap yt9218 {
                 IPV6_SA1 = 13 { desc = "IPv6 source address bits 95 to 64"; };
                 IPV6_SA2 = 14 { desc = "IPv6 source address bits 63 to 32"; };
                 IPV6_SA3 = 15 { desc = "IPv6 source address bits 31 to 0"; };
-                MISC = 16 { desc = "IP protocol, type of service, TCP flags and frame class"; };
+                MISC = 16 { desc = "IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class"; };
                 L4 = 17 { desc = "TCP or UDP source and destination ports"; };
                 UDF0 = 18 { desc = "User-defined field windows 0 and 1"; };
                 UDF1 = 19 { desc = "User-defined field windows 2 and 3"; };
@@ -1456,7 +1456,7 @@ addrmap yt9218 {
     reg {
         name = "Meter time slot";
         desc = "Period at which every meter adds tokens to its buckets.";
-        field { desc = "Slot length in units of eight core clock periods (see SYS_CLK). The smallest allowed value is 80."; sw = rw; hw = r; } SLOT[11:0];
+        field { desc = "Slot length in units of eight core clock periods. SYS_CLK shows the core clock. The smallest allowed value is 80."; sw = rw; hw = r; } SLOT[11:0];
     } METER_SLOT @ 0x220104;
 
     reg {
@@ -1550,7 +1550,7 @@ addrmap yt9218 {
     reg {
         name = "Shaper time slot";
         desc = "Period at which every port shaper adds tokens to its bucket.";
-        field { desc = "Slot length in units of eight core clock periods (see SYS_CLK). The smallest allowed value is 80."; sw = rw; hw = r; } SLOT[11:0];
+        field { desc = "Slot length in units of eight core clock periods. SYS_CLK shows the core clock. The smallest allowed value is 80."; sw = rw; hw = r; } SLOT[11:0];
     } PORT_SHAPE_SLOT @ 0x34000C;
 
     reg {

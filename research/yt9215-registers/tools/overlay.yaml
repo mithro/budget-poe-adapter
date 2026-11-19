@@ -235,7 +235,7 @@ enums:
       IPV6_SA1: IPv6 source address bits 95 to 64
       IPV6_SA2: IPv6 source address bits 63 to 32
       IPV6_SA3: IPv6 source address bits 31 to 0
-      MISC: IP protocol, type of service, TCP flags and frame class
+      MISC: IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP flags and the frame class
       L4: TCP or UDP source and destination ports
       UDF0: User-defined field windows 0 and 1
       UDF1: User-defined field windows 2 and 3
@@ -249,11 +249,11 @@ enums:
   l2_type:
     title: Layer 2 frame formats
     desc: Frame encapsulation code matched by the L2_TYPE field of an ACL key.
-    values: {ETH: Other Ethernet framing, ETHV2: Ethernet II, ETHSAP: IEEE 802.3 with LLC, ETHSNAP: IEEE 802.3 with LLC and SNAP}
+    values: {ETH: Other Ethernet framing, ETHV2: Ethernet II, ETHSAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC", ETHSNAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC and SNAP"}
   l3_type:
     title: Layer 3 protocol classes
     desc: Protocol class matched by the L3_TYPE field of an ACL key.
-    values: {OTHER: Any other protocol, IPV4: IPv4, IPV6: IPv6, ARP: ARP, LLDP: LLDP, PAE: IEEE 802.1X port access entity, ERP: Ethernet ring protection, SLOW_PROTOCOL: IEEE 802.3 slow protocols such as LACP}
+    values: {OTHER: Any other protocol, IPV4: IPv4, IPV6: IPv6, ARP: ARP, LLDP: LLDP, PAE: "`IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ port access entity", ERP: Ethernet ring protection, SLOW_PROTOCOL: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ slow protocols such as LACP"}
   l4_type:
     title: Layer 4 protocol classes
     desc: Protocol class matched by the L4_TYPE field of an ACL key.
@@ -352,9 +352,9 @@ registers:
     desc: |
       Switches optional function blocks on. A block that is off ignores its own registers.
     fields:
-      METER: {desc: "Enables the meters (:reg:`METER_CTRL`, :reg:`PORT_METER`)."}
-      ACL: {desc: "Enables the access control list (:reg:`ACL_KEY`, :reg:`ACL_ACT`)."}
-      MIB: {desc: "Enables the port counters (:reg:`MIB_DATA`)."}
+      METER: {desc: "Enables the meters. The meter registers are :reg:`METER_CTRL` and :reg:`PORT_METER`."}
+      ACL: {desc: "Enables the access control list. Its registers include :reg:`ACL_KEY` and :reg:`ACL_ACT`."}
+      MIB: {desc: "Enables the port counters of :reg:`MIB_DATA`."}
   CHIP_ID:
     block: system
     title: Chip identification
@@ -379,11 +379,12 @@ registers:
     block: system
     title: System clock select
     desc: |
-      Shows which core clock the switch runs from. The meter and shaper time slots
-      (:reg:`METER_SLOT`, :reg:`PORT_SHAPE_SLOT`) count in units of eight core clock periods.
+      Shows which core clock the switch runs from. :lx:`yt921x_chip_detect` reads it. The time
+      slots of :reg:`METER_SLOT` and :reg:`PORT_SHAPE_SLOT` count in units of eight core clock
+      periods.
     fields:
       SEL:
-        desc: "Core clock selection. Value 0 selects 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The :ref:`core clock table <bringup-clock-table>` lists the clock periods."
+        desc: "Core clock in use. Value 0 stands for 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The :ref:`core clock table <bringup-clock-table>` lists the clock periods."
         values: {125M: "125 MHz core clock", 167M: "167 MHz core clock", 143M: "143 MHz core clock"}
   IO_LEVEL:
     block: system
@@ -405,8 +406,9 @@ registers:
     block: system
     title: Switch MAC address, high part
     desc: |
-      Upper two bytes of the MAC address the switch itself uses as a source address, for example
-      in the pause frames it sends.
+      Upper two bytes of the MAC address of the switch. It is :ev:`inferred` from the name that
+      the switch uses the address as the source address of frames it sends itself, such as
+      pause frames.
     inferred: true
     add_fields:
       ADDR: {lsb: 0, width: 16, desc: "MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8.", inferred: true}
@@ -461,12 +463,12 @@ registers:
       Raw reading of the die temperature sensor. No source gives the conversion to degrees.
     inferred: true
     add_fields:
-      VALUE: {lsb: 0, width: 32, desc: "Raw sensor value. Its scale and offset are not known.", inferred: true}
+      VALUE: {lsb: 0, width: 32, desc: "Raw sensor value. Its scale and offset are :ev:`not known`.", inferred: true}
   EDATA_CTRL:
     block: system
     title: Configuration byte store command
     desc: |
-      Command register of the 256-byte factory configuration store. Writing it starts the
+      Command register of the configuration byte store of 256 bytes. Writing it starts the
       command; :ref:`Identify the part <bringup-identify>` shows the read sequence.
     fields:
       ADDR: {desc: "Byte address from 0 to 255."}
@@ -522,8 +524,8 @@ registers:
       :reg:`PORT_STATUS`; with :field:`PORT_CTRL.LINK_AN` clear the MAC uses the values written
       here. :ref:`Bring a port up <ports-up>` gives the order of writes.
     fields:
-      PAUSE_AN: {desc: "Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE."}
-      LINK_AN: {desc: "Take speed and duplex from the attached PHY or in-band status. The forced bits are ignored."}
+      PAUSE_AN: {desc: "Take the pause settings from in-band negotiation. :lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band negotiation other than SGMII. It is :ev:`inferred` from the name that RX_PAUSE and TX_PAUSE are then ignored."}
+      LINK_AN: {desc: "Take speed and duplex from the in-band status. :lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band status. It is :ev:`inferred` from the name that the bit also follows a built-in PHY and that the forced bits are then ignored."}
       HALF_PAUSE: {desc: "Use back pressure for flow control in half duplex."}
       DUPLEX_FULL: {desc: "Forced full duplex."}
       RX_PAUSE: {desc: "Honour received pause frames."}
@@ -645,7 +647,7 @@ registers:
       TYPE:
         desc: "Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads \"wild guess\"."
         inferred: true
-        values: {C22: "IEEE 802.3 clause 22 frame"}
+        values: {C22: "`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame"}
       OP:
         desc: "Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads \"wild guess\"."
         inferred: true
@@ -723,7 +725,7 @@ registers:
       Chooses between parallel and serial LED outputs and sets the loop detection blink rate.
     inferred: true
     fields:
-      UNK: {desc: "Function not known.", inferred: true}
+      UNK: {desc: "Function :ev:`not known`.", inferred: true}
       LOOPDETECT_BLINK: {desc: "Blink cycle that signals a detected loop. The cycle is 512 ms times the field value.", inferred: true}
       PORT_NUM: {desc: "Number of ports shifted out in serial mode.", inferred: true}
       MODE:
@@ -738,8 +740,8 @@ registers:
       shows the combination. :ref:`LEDs <leds>` explains the three LED groups.
     fields:
       ACT: {desc: "All behaviour bits of this LED as one mask.", group: true}
-      ACT_LINK_TRY_DIS: {desc: "Function not known. Only LED 0 has the field.", inferred: true}
-      ACT_COLLISION_BLINK_INDI: {desc: "Function not known. Only LED 0 has the field.", inferred: true}
+      ACT_LINK_TRY_DIS: {desc: "Function :ev:`not known`. Only LED 0 has the field.", inferred: true}
+      ACT_COLLISION_BLINK_INDI: {desc: "Function :ev:`not known`. Only LED 0 has the field.", inferred: true}
       <<: &ledact
         ACT_EEE_BLINK: {desc: "Blink while the port is in low power idle.", inferred: true}
         ACT_LOOPDETECT_BLINK: {desc: "Blink when a loop is detected on the port.", inferred: true}
@@ -783,7 +785,7 @@ registers:
         desc: "Forced state of LED group ``grp`` of this port."
         values: {DONTCARE: "Not forced. The LED follows its behaviour bits", BLINK: "Blink at the rate in FORCE_BLINK", "ON": "On", "OFF": "Off"}
       FORCE_BLINKn:
-        desc: "Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field value."
+        desc: "Blink cycle of an LED that is forced to blink. The cycle is 512 ms shifted left by the field value."
         values: {OTHER: "Use the cycle in :field:`LED1_PORT.OTHER_BLINK`"}
       ACT: {desc: "All behaviour bits of this LED as one mask.", group: true}
       <<: *ledact
@@ -794,7 +796,7 @@ registers:
       Settings of the serial LED output.
     inferred: true
     fields:
-      UNK: {desc: "Function not known. The :lx:`comment on the field <leds.h:68>` reads \"delay?\".", inferred: true}
+      UNK: {desc: "Function :ev:`not known`. The :lx:`comment on the field <leds.h:68>` reads \"delay?\".", inferred: true}
       ACTIVE_LOW: {desc: "Serial LED data is active low.", inferred: true}
       GRP_NUM: {desc: "Number of LED groups shifted out per port minus one.", inferred: true}
   LED_SER_MAP:
@@ -811,15 +813,15 @@ registers:
     block: led
     title: Parallel LED port enable
     desc: |
-      Parallel LED outputs in use. The bit layout is not known.
+      Parallel LED outputs in use. The bit layout is :ev:`not known`.
     inferred: true
     add_fields:
-      VALUE: {lsb: 0, width: 32, desc: "Layout not known.", inferred: true}
+      VALUE: {lsb: 0, width: 32, desc: "Layout :ev:`not known`.", inferred: true}
   LED_PAR_INV:
     block: led
     title: Parallel LED polarity
     desc: |
-      Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits a LED wired active low; set the bit for a LED wired active high.
+      Inverts individual parallel LED outputs. With the bit clear the pin is low while the LED is on, which suits an LED wired active low; set the bit for an LED wired active high.
     fields:
       INVnm: {desc: "Inverts the output of one LED group of one port. The bit number is 10 × grp + port."}
   LED_PAR_MAP:
@@ -901,13 +903,13 @@ registers:
     fields:
       UNTAG_PORTS: {desc: "Ports that send frames of this VLAN without a tag. Each port has one bit."}
       STP_ID: {desc: "Spanning tree instance of this VLAN. It selects the :reg:`STP` register."}
-      SVLAN_EN: {desc: "Meaning not known. No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set` states. The Linux name suggests a service VLAN enable. The :ref:`vendor SDK <sources-list>` names the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the VLAN ID.", inferred: true}
-      FID: {desc: "Filtering ID for address learning and lookup. No function of the Linux driver writes it. :lx:`yt921x_fdb_in01` writes the VLAN ID to :field:`FDB_IN1.FID`, so the Linux driver addresses the forwarding database by VLAN ID. It is not known when the field takes effect. :field:`VLAN_CTRL.SVLAN_EN` is a candidate. The field crosses the boundary between the two words.", inferred: true}
+      SVLAN_EN: {desc: "Meaning :ev:`not known`. No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set` states. The Linux name suggests a service VLAN enable. The :ref:`vendor SDK <sources-list>` names the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the VLAN ID.", inferred: true}
+      FID: {desc: "Filtering ID for address learning and lookup. No function of the Linux driver writes it. :lx:`yt921x_fdb_in01` writes the VLAN ID to :field:`FDB_IN1.FID`, so the Linux driver addresses the forwarding database by VLAN ID. It is :ev:`not known` when the field takes effect. :field:`VLAN_CTRL.SVLAN_EN` is a candidate. The field crosses the boundary between the two words.", inferred: true}
       LEARN_DIS: {desc: "Source addresses of frames in this VLAN are not learned."}
       PRIO_EN: {desc: "Frames of this VLAN get the priority in PRIO.", inferred: true}
       PRIO: {desc: "VLAN priority. It is a source for :reg:`PORT_PRIO_ORD`.", inferred: true}
       PORTS: {desc: "Member ports. Each port has one bit."}
-      BYPASS_1X_AC: {desc: "Frames of this VLAN skip IEEE 802.1X access control.", inferred: true}
+      BYPASS_1X_AC: {desc: "Frames of this VLAN skip `IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ access control.", inferred: true}
       METER_EN: {desc: "Frames of this VLAN are rate limited by the meter in METER_ID.", inferred: true}
       METER_ID: {desc: "Meter number. It is an index of :reg:`METER_CTRL`.", inferred: true}
   PORT_VLAN_CTRL:
@@ -990,16 +992,16 @@ registers:
     fields:
       PORTn:
         desc: "State of port ``port`` in this instance."
-        values: {DISABLED: "Port neither forwards nor learns", LEARNING: "Port learns addresses but does not forward", BLOCKING: "Port neither forwards nor learns. It still receives bridge protocol frames", FORWARD: "Port forwards and learns"}
+        values: {DISABLED: "Port neither forwards nor learns", LEARNING: "Port learns addresses but does not forward", BLOCKING: "Port neither forwards nor learns. It is :ev:`inferred` from `IEEE 802.1D <https://en.wikipedia.org/wiki/IEEE_802.1D>`__ that the port receives bridge protocol frames", FORWARD: "Port forwards and learns"}
   PORT_LEARN:
     block: l2
     title: Port address learning
     desc: |
       Controls learning of source addresses on one port.
     fields:
-      VID_LEARN_MULTI_EN: {desc: "Function not known.", inferred: true}
-      VID_LEARN_MODE: {desc: "Function not known.", inferred: true}
-      VID_LEARN_EN: {desc: "Function not known.", inferred: true}
+      VID_LEARN_MULTI_EN: {desc: "Function :ev:`not known`.", inferred: true}
+      VID_LEARN_MODE: {desc: "Function :ev:`not known`.", inferred: true}
+      VID_LEARN_EN: {desc: "Function :ev:`not known`.", inferred: true}
       SUSPEND_COPY_EN: {desc: "Copy frames with a not yet learned source address to the CPU.", inferred: true}
       SUSPEND_DROP_EN: {desc: "Drop frames with a not yet learned source address.", inferred: true}
       DIS: {desc: "Disables address learning on the port."}
@@ -1080,7 +1082,7 @@ registers:
     fields:
       DONE: {desc: "1 when the command has finished."}
       NOTFOUND: {desc: "No entry matched."}
-      OVERWRITED: {desc: "An existing entry was replaced to make room.", inferred: true}
+      OVERWRITED: {desc: "The command overwrote an existing entry.", inferred: true}
       INDEX: {desc: "Index of the entry the command acted on."}
   FDB_OUT0:
     block: fdb
@@ -1188,7 +1190,7 @@ registers:
     block: acl
     title: ACL unmatched frame permit
     desc: |
-      Ports on which a frame that matches no ACL rule is still forwarded.
+      Ports on which a frame that matches no ACL rule is forwarded.
     fields:
       PORTS: {desc: "Port ``port`` forwards received frames that match no rule."}
   ACL_PORT:
@@ -1223,7 +1225,7 @@ registers:
       same group number must all match for the rule to hit; the group number is also the slot
       whose :reg:`ACL_ACT` entry holds the action.
     fields:
-      GRPIDm: {desc: "Group number of slot ``bin``. It is the slot number that names the rule."}
+      GRPIDm: {desc: "Group number of slot ``bin``. The slots of one rule share a group number."}
       ENm: {desc: "Slot ``bin`` is in use."}
   ACL_KEY:
     block: acl
@@ -1357,7 +1359,7 @@ registers:
     desc: |
       Period at which every meter adds tokens to its buckets.
     fields:
-      SLOT: {desc: "Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed value is 80."}
+      SLOT: {desc: "Slot length in units of eight core clock periods. :reg:`SYS_CLK` shows the core clock. The smallest allowed value is 80."}
   PORT_METER:
     block: meter
     title: Port ingress meter
@@ -1395,10 +1397,10 @@ registers:
     access: ro
     title: Meter token state
     desc: |
-      Current token counts of one meter. The bit layout is not known.
+      Current token counts of one meter. The bit layout is :ev:`not known`.
     inferred: true
     add_fields:
-      VALUE: {lsb: 0, width: 64, desc: "Layout not known.", inferred: true}
+      VALUE: {lsb: 0, width: 64, desc: "Layout :ev:`not known`.", inferred: true}
 
   PORT_SHAPE_SLOT:
     block: shape
@@ -1406,7 +1408,7 @@ registers:
     desc: |
       Period at which every port shaper adds tokens to its bucket.
     fields:
-      SLOT: {desc: "Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed value is 80."}
+      SLOT: {desc: "Slot length in units of eight core clock periods. :reg:`SYS_CLK` shows the core clock. The smallest allowed value is 80."}
   PORT_SHAPE_CTRL:
     block: shape
     words: 2
@@ -1425,10 +1427,10 @@ registers:
     access: ro
     title: Port shaper token state
     desc: |
-      Current token count of one port shaper. The bit layout is not known.
+      Current token count of one port shaper. The bit layout is :ev:`not known`.
     inferred: true
     add_fields:
-      VALUE: {lsb: 0, width: 32, desc: "Layout not known.", inferred: true}
+      VALUE: {lsb: 0, width: 32, desc: "Layout :ev:`not known`.", inferred: true}
 
   MIRROR:
     block: mirror

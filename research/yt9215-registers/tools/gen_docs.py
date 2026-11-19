@@ -221,6 +221,26 @@ def linux_link(m, lx):
     return "`%s:%d <%s>`__" % (lx["src"][0], lx["src"][1], linux_url(m, lx["src"]))
 
 
+def linux_name(m, lx):
+    """The Linux name of an item as a link to its definition."""
+    if not lx or not lx.get("macro"):
+        return "none"
+    if not lx.get("src"):
+        return lit(lx["macro"])
+    return "`%s <%s>`__" % (lx["macro"].replace("<", "\\<"), linux_url(m, lx["src"]))
+
+
+def sdk_field_link(m, reg, name):
+    """A field of the SDK table of a register as a link to its definition."""
+    tname = (reg.get("sdk") or {}).get("table")
+    for t in m.sdk["tables"]:
+        if t["name"] == tname:
+            for f in t.get("fields") or []:
+                if f["name"] == name:
+                    return "`%s <%s>`__" % (name, sdk_url(m, m.sdk["source"]["struct"], f["line"]))
+    return lit(name)
+
+
 def use_link(m, lx):
     """The driver function that first uses an item."""
     use = (lx or {}).get("use")
@@ -389,12 +409,13 @@ def split_sentence(text):
 
 
 def short_cell(text, label, notes, name):
-    """The first sentence of a meaning for a table cell; the rest goes to the notes."""
-    first, rest = split_sentence(text.strip())
-    if rest:
-        notes.append((label, name, rest))
-        first += " :ref:`Details <%s>`." % label
-    return first
+    """The first sentence of a meaning and the link to a note that holds all of it."""
+    text = text.strip()
+    first, rest = split_sentence(text)
+    if not rest:
+        return first, "none"
+    notes.append((label, name, text if text.endswith(".") else text + "."))
+    return first, note_link(label)
 
 
 def note_lines(notes):
@@ -409,29 +430,39 @@ def note_label(sym):
     return "note-" + sym.lower()
 
 
+def note_link(label):
+    return ":ref:`note <%s>`" % label
+
+
 def field_rows(m, reg, fields, lay, show_parts, show_unit, show_reset, notes):
     rows = []
     for f in sorted(fields, key=lambda f: -f["lsb"]):
         sym = M.fsym(reg, f, lay)
-        first, rest = split_sentence(f["desc"].strip())
-        desc = autolink(reg, first, f["name"])
+        text = f["desc"].strip()
+        first, rest = split_sentence(text)
+        note = "none"
         if rest:
-            desc += " :ref:`Details <%s>`." % note_label(sym)
-            notes.append((sym, f, autolink(reg, rest, f["name"])))
+            note = note_link(note_label(sym))
+            notes.append((sym, f, autolink(reg, text, f["name"])))
         if f.get("enum"):
-            desc += " Values: :enum:`%s`." % f["enum"]
+            values = ":enum:`%s`" % f["enum"]
         elif f.get("values"):
-            desc += " :ref:`Value list <%s>`." % vals_label(sym)
+            values = ":ref:`list <%s>`" % vals_label(sym)
+        else:
+            values = "none"
         name = ".. _%s:\n\n.. index:: single: %s (field of %s)\n\n%s" % (
             field_label(sym), f["name"], reg["id"], lit(M.fdisplay(f)))
-        row = [M.bits_text(f["lsb"], f["width"]), name, ACCESS[f["access"]]]
+        bits = M.bits_text(f["lsb"], f["width"])
+        if f.get("array") and not M.packed(f):
+            bits = ":ref:`array <legend-array>`"
+        row = [bits, name, ACCESS[f["access"]]]
         if show_parts:
             row.append(FAMILY.get(f.get("chip"), "all"))
         if show_unit:
-            row.append(f.get("unit", ""))
+            row.append(f.get("unit") or "none")
         if show_reset:
-            row.append(lit("0x%x" % f["reset"]) if f.get("reset") is not None else "")
-        row += [evidence_link(f), desc]
+            row.append(lit("0x%x" % f["reset"]) if f.get("reset") is not None else "none")
+        row += [evidence_link(f), autolink(reg, first, f["name"]), values, note]
         rows.append(row)
     return rows
 
@@ -440,11 +471,12 @@ def field_table(m, reg, fields, lay=None):
     show_parts = any(f.get("chip") for f in fields)
     show_unit = any(f.get("unit") for f in fields)
     show_reset = any(f.get("reset") is not None for f in fields)
-    extra = [(show_parts, "Parts", 14), (show_unit, "Unit", 10), (show_reset, "Reset value", 10)]
+    extra = [(show_parts, "Parts", 12), (show_unit, "Unit", 8), (show_reset, "Reset value", 8)]
     extra = [(h, w) for on, h, w in extra if on]
     head = ["Bits", "Field", "Access"] + [h for h, _ in extra] + \
-        [":ref:`Evidence <evidence>`", "Description"]
-    widths = [8, 24, 12] + [w for _, w in extra] + [10, 46 - sum(w for _, w in extra) // 2]
+        [":ref:`Evidence <evidence>`", "Description", "Values", "Notes"]
+    widths = [7, 20, 10] + [w for _, w in extra] + \
+        [9, 38 - sum(w for _, w in extra) // 2, 9, 7]
     notes = []
     out = table(head, field_rows(m, reg, fields, lay, show_parts, show_unit, show_reset, notes),
                 widths, "yt-fields")
@@ -469,10 +501,20 @@ def array_table(reg, fields, lay):
     if not rows:
         return []
     out = [".. rubric:: Array fields", "",
-           "The lowest bit of an element is the first bit plus the step times the distance of "
-           "the index from its first value.", ""]
+           ":ref:`legend-array` explains the columns.", ""]
     return out + table(["Field", "Index", "First index", "Last index", "Bits per element",
                         "First bit", "Step in bits"], rows, [28, 12, 12, 12, 12, 12, 12])
+
+
+def value_evidence(f, v):
+    """Evidence level of the meaning of one value of a field."""
+    if f.get("inferred") or v.get("inferred") or not v.get("linux"):
+        return "inferred"
+    return "driver" if v["linux"].get("used") else "header"
+
+
+def ev_link(level):
+    return ":ref:`%s <evidence-%s>`" % (level, level)
 
 
 def value_tables(m, reg, fields, lay=None):
@@ -487,24 +529,28 @@ def value_tables(m, reg, fields, lay=None):
         rows, notes = [], []
         parts = any(v.get("chip") for v in f["values"])
         for v in f["values"]:
-            first, rest = split_sentence(v.get("desc", "").strip())
-            desc = autolink(reg, first, values_too=False)
+            text = v.get("desc", "").strip()
+            first, rest = split_sentence(text)
+            note = "none"
             if rest:
                 label = note_label(sym + "." + v["name"])
-                desc += " :ref:`Details <%s>`." % label
-                notes.append((label, v["name"], autolink(reg, rest, values_too=False)))
+                note = note_link(label)
+                notes.append((label, v["name"], autolink(reg, text, values_too=False)))
             row = [lit(str(v["value"])),
                    ".. _%s:\n\n%s" % (val_label(sym, v["name"]), lit(v["name"]))]
             if parts:
                 row.append(FAMILY.get(v.get("chip"), "all"))
-            rows.append(row + [desc])
+            rows.append(row + [ev_link(value_evidence(f, v)),
+                               autolink(reg, first, values_too=False), note])
         if parts:
-            out += table(["Value", "Name", "Parts", "Meaning"], rows, [12, 24, 20, 44])
+            out += table(["Value", "Name", "Parts", ":ref:`Evidence <evidence>`", "Meaning",
+                          "Notes"], rows, [10, 22, 16, 12, 32, 8])
         else:
-            out += table(["Value", "Name", "Meaning"], rows, [12, 28, 60])
+            out += table(["Value", "Name", ":ref:`Evidence <evidence>`", "Meaning", "Notes"],
+                         rows, [10, 26, 12, 44, 8])
         for label, name, text in notes:
             out += target(label)
-            out += ["**%s.** %s" % (name, text), ""]
+            out += ["**%s.** %s" % (name, text if text.endswith(".") else text + "."), ""]
     return out
 
 
@@ -525,18 +571,20 @@ def source_tables(m, reg):
         short = sym[len(reg["id"]) + 1:]
         item = ":field:`%s <%s.%s>`" % (short, reg["id"], short)
         lx = f.get("linux") or {}
-        linux.append([item, lit(lx["macro"]) if lx.get("macro") else "none",
-                      linux_link(m, lx), use_link(m, lx)])
+        linux.append([item, linux_name(m, lx), use_link(m, lx)])
         fs = f.get("sdk") or {}
         status = fs.get("status", "")
         status = ":ref:`%s <%s>`" % (status, SDK_STATUS[status]) if status else "none"
         for n in fs.get("fields") or [""]:
-            sdk.append([item, lit(n) if n else "none", status])
+            sdk.append([item, sdk_field_link(m, reg, n) if n else "none", status])
     if not linux:
         return []
     out = [".. rubric:: Sources of the fields", ""]
-    out += table(["Field", "Linux name", "Defined at", "First used in"], linux,
-                 [24, 40, 14, 22], "yt-sources")
+    out += ["The Linux name of a field is a link to its definition in the "
+            ":ref:`Linux driver <sources-list>`, and the SDK field is a link to its definition "
+            "in the :ref:`vendor SDK <sources-list>`.", ""]
+    out += table(["Field", "Linux name", "First used in"], linux,
+                 [26, 46, 28], "yt-sources")
     out += table(["Field", "SDK field", ":ref:`SDK comparison <sources-sdk>`"], sdk,
                  [34, 40, 26], "yt-sources")
     return out
@@ -557,13 +605,12 @@ def register_section(m, reg, guide_refs, mentions):
     if reg["words"] > 1:
         size += " in %d words; :ref:`word order <access-wide>`" % reg["words"]
     rows.append(("Size", size))
-    rows.append(("Access", ACCESS[reg["access"]]))
+    rows.append((":ref:`Access <legend-access>`", ACCESS[reg["access"]]))
     if reg.get("reset") is not None:
         rows.append(("Reset value", lit("0x%08x" % reg["reset"])))
     rows.append((":ref:`Evidence <evidence>`", evidence_link(reg)))
     lx = reg["linux"]
-    rows.append(("Linux name", lit(lx["macro"])))
-    rows.append(("Defined at", linux_link(m, lx)))
+    rows.append(("Linux name", linux_name(m, lx)))
     rows.append(("First used in", use_link(m, lx)))
     rows.append((":ref:`SDK table <reference-sdk>`", sdk_cell(m, reg)))
     c = "YT921X_%s%s" % (reg["id"], "(%s)" % ", ".join(d["var"] for d in reg["dims"]) if reg["dims"] else "")
@@ -617,7 +664,7 @@ def block_page(m, block, guide_refs, mentions):
             "The guide page :doc:`/%s/%s` explains how to use these registers." % (DOCROOT, block["guide"]),
             ""]
     rows = [[lit(hexaddr(r["address"])), ":reg:`%s`" % r["id"],
-             "".join("[%s]" % d["var"] for d in r["dims"]) and lit(M.index_text(r)), r["title"]]
+             lit(M.index_text(r)) if r["dims"] else "none", r["title"]]
             for r in regs]
     out += table(["Address", "Register", "Index", "Purpose"], rows, [14, 28, 16, 42])
     for r in regs:
@@ -631,8 +678,8 @@ def index_page(m):
     out = target("reference")
     out += heading("Register reference", "=")
     out += [
-        "Every register this manual describes, grouped by function. Each register has its "
-        "address, a bit diagram, a field table and the sources it was taken from. The fields in "
+        "The reference describes every register of this manual, grouped by function. Each "
+        "register has its address, a bit diagram, a field table and its sources. The fields in "
         "a diagram are links to their descriptions.",
         "",
         "Three columns of the register pages use fixed words. Each word in a table is a link to "
@@ -648,6 +695,13 @@ def index_page(m):
     out += table(["Access", "Who sets the value", "Use by a driver"],
                  [["read-write", "driver", "read and write"],
                   ["read-only", "switch", "read"]], [30, 35, 35])
+    out += target("legend-array")
+    out += heading("Array fields", "-")
+    out += ["An array field holds several elements of the same width. The table \"Array "
+            "fields\" of a register gives the index, the first bit and the step of each array "
+            "field. The lowest bit of an element is the first bit plus the step times the "
+            "distance of the index from its first value. The Bits column of a field table shows "
+            "\"array\" for an array field whose elements have other bits between them.", ""]
     out += target("reference-map")
     out += heading("Address map", "-")
     out += ["Registers sit at 32-bit addresses that are multiples of four. The diagram shows the "
@@ -672,7 +726,7 @@ def index_page(m):
     rows = []
     for r in sorted(m.regs, key=lambda r: r["address"]):
         rows.append([lit(hexaddr(r["address"])), ":reg:`%s`" % r["id"],
-                     lit(M.index_text(r)) if r["dims"] else "", 32 * r["words"],
+                     lit(M.index_text(r)) if r["dims"] else "none", 32 * r["words"],
                      ACCESS[r["access"]], ":blk:`%s`" % r["block"], r["title"]])
     out += table(["Address", "Register", "Index", "Bits", "Access", "Block", "Purpose"], rows,
                  [11, 20, 12, 6, 11, 18, 22])
@@ -683,7 +737,8 @@ def enums_page(m):
     out = target("reference-enums")
     out += heading("Shared value lists", "=")
     out += ["Each list of this page gives the values of several fields. The values of a field "
-            "that has its own list are with its register.", ""]
+            "that has its own list are with its register. The Linux name of a value is a link "
+            "to its definition in the :ref:`Linux driver <sources-list>`.", ""]
     users = {}
     for r in m.regs:
         for lay, f in M.all_fields(r):
@@ -700,12 +755,15 @@ def enums_page(m):
         notes = []
         rows = [[lit(str(v["value"])),
                  ".. _%s:\n\n%s" % (enum_val_label(e["name"], v["name"]), lit(v["name"])),
-                 lit("YT921X_%s_%s" % (prefix, v["name"])),
-                 linux_link(m, v.get("linux")),
-                 short_cell(v.get("desc", ""), "note-enum-%s-%s" % (e["name"].lower(), v["name"].lower()),
-                            notes, v["name"])] for v in e["values"]]
-        out += table(["Value", "Name", ":ref:`C name <bindings-c>`", "Defined at", "Meaning"],
-                     rows, [8, 18, 30, 14, 30])
+                 linux_name(m, v.get("linux")),
+                 ev_link("driver" if (v.get("linux") or {}).get("used") else
+                         "header" if v.get("linux") else "inferred"),
+                 *short_cell(v.get("desc", ""), "note-enum-%s-%s" % (e["name"].lower(), v["name"].lower()),
+                             notes, v["name"])] for v in e["values"]]
+        out += ["The :ref:`C binding <bindings-c>` names each value ``YT921X_%s_`` followed by "
+                "the name in the table." % prefix, ""]
+        out += table(["Value", "Name", "Linux name", ":ref:`Evidence <evidence>`", "Meaning",
+                      "Notes"], rows, [9, 16, 27, 12, 28, 8])
         out += note_lines(notes)
         if users.get(e["name"]):
             out += [".. rubric:: Used by", ""]
@@ -729,9 +787,11 @@ def counters_page(m, guide_refs):
         name = ".. _%s:\n\n.. index:: single: %s (counter)\n\n%s" % (
             counter_label(c["name"]), c["name"], lit(c["name"]))
         rows.append([lit("0x%02x" % c["offset"]), name, 32 * c["words"],
-                     linux_link(m, c.get("linux")), c["desc"]])
-    out += table(["Offset", "Counter", "Bits", "Defined at", "Counts"], rows,
-                 [10, 30, 8, 16, 36])
+                     linux_name(m, c.get("linux")), c["desc"]])
+    out += ["The Linux name of a counter is a link to its definition in :lx:`mib.h`. The column "
+            "\"Counts\" is read from that name, which is the evidence level :ev:`header`.", ""]
+    out += table(["Offset", "Counter", "Bits", "Linux name", "Counts"], rows,
+                 [8, 24, 6, 34, 28])
     return out
 
 
@@ -741,17 +801,20 @@ def constants_page(m):
     out += ["The table lists the sizes and fixed values that the register descriptions use. The "
             ":ref:`C binding <bindings-c>` names each constant ``YT921X_`` followed by the name "
             "in the table. The :ref:`Rust <bindings-rust>` and "
-            ":ref:`MicroPython <bindings-micropython>` bindings use the name in the table.", ""]
+            ":ref:`MicroPython <bindings-micropython>` bindings use the name in the table. The "
+            "Linux name is a link to the definition of the value in the "
+            ":ref:`Linux driver <sources-list>`. The meaning is read from that name, which is "
+            "the evidence level :ev:`header`.", ""]
     rows, notes = [], []
     for c in m.constants:
         name = ".. _%s:\n\n.. index:: single: %s (constant)\n\n%s" % (
             const_label(c["name"]), c["name"], lit(c["name"]))
         v = c["value"]
         rows.append([name, lit(str(v)), lit("%s0x%x" % ("-" if v < 0 else "", abs(v))),
-                     linux_link(m, c.get("linux")),
-                     short_cell(c["desc"], "note-const-" + c["name"].lower(), notes, c["name"])])
-    out += table(["Name", "Value", "Hexadecimal", "Defined at", "Meaning"], rows,
-                 [26, 12, 14, 16, 32])
+                     linux_name(m, c.get("linux")),
+                     *short_cell(c["desc"], "note-const-" + c["name"].lower(), notes, c["name"])])
+    out += table(["Name", "Value", "Hexadecimal", "Linux name", "Meaning", "Notes"], rows,
+                 [20, 9, 11, 24, 29, 7])
     out += note_lines(notes)
     return out
 

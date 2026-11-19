@@ -56,7 +56,9 @@ The sequence is :ev:`confirmed` by :lx:`yt921x_fdb_add`, :lx:`yt921x_fdb_wait` a
      - remove many entries
      - :field:`FDB_OP.FLUSH`
 
-:val:`FDB_OP.OP.ADD` replaces an entry that has the same key.
+It is :ev:`not known` whether :val:`FDB_OP.OP.ADD` by key replaces an entry that has the same
+key. :lx:`yt921x_fdb_join` looks the entry up first and writes an existing entry back by its
+index.
 :field:`FDB_OP.MODE_INDEX` decides whether :val:`FDB_OP.OP.GET_ONE` uses the key or the
 index.
 
@@ -134,9 +136,10 @@ Add a static entry
            :start-after: # [fdb-add]
            :end-before: # [fdb-add end]
 
-To add a port to a multicast group, :ref:`look the entry up <fdb-lookup>`, set the port's
-bit in the port mask that comes back and add the entry again. To remove the last port, delete
-the entry. :lx:`yt921x_fdb_join` and :lx:`yt921x_fdb_leave` work in this way.
+To add a port to a multicast group, :ref:`look the entry up <fdb-lookup>`, set the port's bit in
+the port mask that comes back and write the entry back at its index: run :val:`FDB_OP.OP.ADD` with
+:field:`FDB_OP.MODE_INDEX` set. To remove the last port, delete the entry. :lx:`yt921x_fdb_join`
+and :lx:`yt921x_fdb_leave` work in this way through :lx:`yt921x_fdb_add_index_in12`.
 
 .. _fdb-lookup:
 
@@ -174,10 +177,12 @@ To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put t
 :field:`FDB_OP.INDEX`.
 
 1. Run :val:`FDB_OP.OP.GET_ONE` with index 0 and handle the entry if its status is not
-   :val:`FDB_IN1.STATUS.INVALID`. 2. Run :val:`FDB_OP.OP.GET_NEXT` with the index of the last
+   :val:`FDB_IN1.STATUS.INVALID`.
+2. Run :val:`FDB_OP.OP.GET_NEXT` with the index of the last
    entry seen. :field:`FDB_OP.NEXT_TYPE` selects what counts as next; for
    :val:`FDB_OP.NEXT_TYPE.UCAST_PORT` put the ports of interest in :field:`FDB_IN2.EGR_PORTS`
-   first. 3. Take the new index from :field:`FDB_RESULT.INDEX` and repeat until the result is
+   first.
+3. Take the new index from :field:`FDB_RESULT.INDEX` and repeat until the result is
    :field:`NOTFOUND <FDB_RESULT.NOTFOUND>` or the index reaches 4095 (:const:`FDB_NUM` − 1).
 
 The three steps are :ev:`confirmed` by :lx:`yt921x_fdb_dump`.
@@ -202,7 +207,7 @@ removes static ones as well. The command and the rows :val:`FDB_OP.FLUSH.PORT` a
 The command works on unicast entries, or on multicast entries when
 :field:`FDB_OP.FLUSH_MCAST` is set, so emptying the table takes one flush of each kind. The
 field has the level :ev:`header`: the comment on its definition in :lx:`chip.h:260` reads
-"ucast / mcast", and no function of the Linux driver sets it.
+"ucast / mcast", and no function of the :ref:`Linux driver <sources-list>` sets it.
 
 .. _fdb-flush-table:
 
@@ -245,6 +250,6 @@ Ageing
 ------
 
 :field:`AGEING.INTERVAL` is the ageing time of learned entries in units of 5 seconds, so 60
-stands for 300 seconds, the default ageing time of IEEE 802.1Q. The unit is
+stands for 300 seconds, the default ageing time of `IEEE 802.1Q <https://en.wikipedia.org/wiki/IEEE_802.1Q>`__. The unit is
 :ev:`confirmed` by :lx:`yt921x_dsa_set_ageing_time`, whose comment reads "AGEING reg is set in
 5s step".

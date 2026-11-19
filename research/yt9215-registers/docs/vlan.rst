@@ -3,8 +3,9 @@
 VLANs
 =====
 
-The switch implements IEEE 802.1Q VLANs with a table of 4096 entries. The registers are in
-the :blk:`vlan` block. The table names the register that answers each question about a frame.
+The switch implements `IEEE 802.1Q <https://en.wikipedia.org/wiki/IEEE_802.1Q>`__ VLANs with a
+table of 4096 entries. The registers are in the :blk:`vlan` block. The table names the register
+that answers each question about a frame.
 
 .. list-table::
    :header-rows: 1
@@ -44,8 +45,9 @@ the :blk:`vlan` block. The table names the register that answers each question a
      - :reg:`VLAN_EGR_FILTER`
      - :ref:`vlan-egress`
 
-The switch knows two kinds of tag. The customer tag is the ordinary 802.1Q tag. The service
-tag is the outer tag of 802.1ad. A plain 802.1Q set-up uses customer tags only.
+The switch knows two kinds of tag. The customer tag is the ordinary tag of IEEE 802.1Q. The
+service tag is the outer tag of `IEEE 802.1ad <https://en.wikipedia.org/wiki/IEEE_802.1ad>`__. A
+plain IEEE 802.1Q set-up uses customer tags only.
 
 .. _vlan-aware:
 
@@ -96,7 +98,7 @@ ID 0 in entry 0 of the table, as :ref:`vlan-zero` describes.
 .. yt-bitfield:: PORT_VLAN_CTRL
 
 Give a VLAN-unaware port a port VLAN ID that no tagged traffic uses.
-:lx:`yt921x_vlan_filtering` uses :lx:`4095 <chip.h:82>` for such a port.
+:lx:`yt921x_vlan_filtering` uses :lx:`4095 <chip.c:82>` for such a port.
 
 .. _vlan-filter:
 
@@ -111,7 +113,7 @@ Ingress filtering
 
    * - Frames to drop
      - Field to set
-     - Evidence
+     - :ref:`Evidence <evidence>`
    * - VLAN does not include the receiving port
      - :field:`VLAN_IGR_FILTER.PORT`
      - :ev:`confirmed`
@@ -165,7 +167,8 @@ two words. Write the low word first, as :ref:`access-wide` explains.
            :start-after: # [vlan]
            :end-before: # [vlan end]
 
-The table lists the other fields of the entry that the guide uses.
+The :ref:`field table <vlan-table-fields>` lists the other fields of the entry that the guide
+uses.
 
 .. _vlan-table-fields:
 
@@ -208,11 +211,11 @@ untagged and that this "confuses the hardware a lot".
 Egress
 ------
 
-A frame leaves with a customer tag unless the sending port is in
-:field:`VLAN_CTRL.UNTAG_PORTS` of its VLAN. :lx:`yt921x_vlan_add` :ev:`confirms <confirmed>`
-this field. No function of the :ref:`Linux driver <sources-list>` uses the registers of the
-table, so their functions are :ev:`inferred` from their names and from the names of the
-:ref:`vendor SDK <sources-list>` tables at the same addresses.
+A frame leaves with a customer tag unless the sending port is in :field:`VLAN_CTRL.UNTAG_PORTS` of
+its VLAN. :lx:`yt921x_vlan_add` :ev:`confirms <confirmed>` this field. No function of the
+:ref:`Linux driver <sources-list>` uses the registers of the
+:ref:`egress table <vlan-egress-table>`, so their functions are :ev:`inferred` from their names
+and from the names of the :ref:`vendor SDK <sources-list>` tables at the same addresses.
 
 .. _vlan-egress-table:
 

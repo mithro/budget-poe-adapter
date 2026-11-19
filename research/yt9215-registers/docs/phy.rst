@@ -68,11 +68,11 @@ external master.
 
 .. yt-bitfield:: INT_MBUS_CTRL
 
-The comments on the definitions of :field:`INT_MBUS_CTRL.OP` and
-:field:`EXT_MBUS_CTRL.TYPE` in :lx:`mdio_bus.h:22` and :lx:`mdio_bus.h:25` read "wild guess",
-so the widths of the two fields are uncertain. The four functions use the values of the
-fields for clause 22 transfers. A comment in :lx:`yt921x_mbus_ext_init` marks clause 45 as
-not implemented, and no source describes a clause 45 transfer.
+The comments on the definitions of :field:`EXT_MBUS_CTRL.TYPE` in :lx:`mdio_bus.h:22` and of
+:field:`INT_MBUS_CTRL.OP` in :lx:`mdio_bus.h:25` read "wild guess", so the widths of the two
+fields are uncertain. The four functions use the values of the fields for clause 22 transfers. A
+:lx:`comment <mdio_bus.c:287>` in :lx:`yt921x_mbus_ext_init` reads "TODO: c45?", and no source
+describes a clause 45 transfer.
 
 .. tab-set::
 
@@ -104,16 +104,17 @@ The functions ``yt921x_phy_read()`` and ``yt921x_phy_write()`` of
 PHY registers
 -------------
 
-The Linux driver registers the internal master as an ordinary MDIO bus in
-:lx:`yt921x_mbus_int_init` and leaves the built-in PHYs to the generic PHY code of the
-kernel, which uses the registers that IEEE 802.3 clause 22 defines.
+The :ref:`Linux driver <sources-list>` registers the internal master as an ordinary MDIO bus in
+:lx:`yt921x_mbus_int_init` and leaves the built-in PHYs to the generic PHY code of the kernel,
+which uses the registers that
+`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ defines.
 
 .. list-table::
    :header-rows: 1
    :widths: 20 80
 
    * - PHY register
-     - Content in IEEE 802.3 clause 22
+     - Content in `IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__
    * - 0
      - Basic control
    * - 1
@@ -143,7 +144,7 @@ The SerDes PCS at address 8 or 9 uses bits of register 0 with their clause 22 me
 
    * - Bit
      - Clause 22 name
-     - Function of the Linux driver that writes it
+     - Function of the :ref:`Linux driver <sources-list>` that writes it
    * - 12
      - Auto-negotiation enable
      - :lx:`yt921x_serdes_config`
@@ -162,8 +163,8 @@ The SerDes PCS at address 8 or 9 uses bits of register 0 with their clause 22 me
 External PHYs and link polling
 ------------------------------
 
-It is :ev:`inferred` from the name of :reg:`MDIO_POLLING` that the switch can learn the link
-state of an external port by polling a PHY on the external master. It is :ev:`not known` how
-that polling is set up. The :ev:`confirmed` use of the register is a port without a PHY:
-:lx:`yt921x_port_up` writes the link state into :reg:`MDIO_POLLING` itself, which is step 5
-of :ref:`ports-xmii`.
+It is :ev:`inferred` from the name of :reg:`MDIO_POLLING` that the switch can learn the link state
+of an external port by polling a PHY on the external master. It is :ev:`not known` how that
+polling is set up. The :ev:`confirmed` use of the register is a port without a PHY:
+:lx:`yt921x_port_up` writes the link state into :reg:`MDIO_POLLING` itself, which is step 4 of
+:ref:`ports-xmii`.

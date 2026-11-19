@@ -74,3 +74,11 @@ table.docutils td { vertical-align: top; }
 
 /* Code examples: fit 92 columns in the content width. */
 div.highlight pre { font-size: 0.74rem; }
+
+/* Long register and macro names break inside a cell, so no table is wider than the text. */
+table.docutils td code,
+table.docutils td .pre,
+table.docutils td a.external {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}

@@ -8,10 +8,10 @@ standard parts, power ports instead of rail labels, signal flow left to right,
 framed functional groups, notes in text boxes, and a title block on every sheet.
 
 Confidence levels (also the wire style):
-  C  confirmed: traced on both sides, or measured        green solid
-  V  seen on one side of the board in photos             blue solid
-  I  inferred from datasheet, marking or usual practice  orange dashed
-  U  unknown: pin exists, destination not traced          red dotted
+  confirmed  traced on both sides, or measured            green solid   (code 'C')
+  seen       on one side of the board in photos           blue solid    (code 'V')
+  inferred   from datasheet, marking or usual practice    orange dashed (code 'I')
+  unknown    pin exists, destination not traced           red dotted    (code 'U')
 
 Run:  python3 gen_schematic.py
 Writes lx-is601f.kicad_sch and its child sheets, then uses kicad-cli and pdftoppm
@@ -180,12 +180,12 @@ upl.loose_titles = ['Note on the uplink']
 switch.cut_hints = {'U4C: clock, reset, regulator, management, GPIO and LEDs': [112.0]}
 
 LEGEND = ('Wire style = confidence of each connection\n'
-          'green solid      C  confirmed (traced on both sides, or measured)\n'
-          'blue solid       V  seen on one side of the board in the photos\n'
-          'orange dashed    I  inferred from datasheet, marking or usual practice\n'
-          'red dotted       U  unknown: pin exists, destination not traced\n\n'
-          'grey solid       buses and the links between sheets; confidence is on the wires they join\n\n'
-          'No connection is C. Every connection needs a continuity check.')
+          'green solid = confirmed: traced on both sides, or measured\n'
+          'blue solid = seen on one side of the board in the photos\n'
+          'orange dashed = inferred from datasheet, marking or usual practice\n'
+          'red dotted = unknown: pin exists, destination not traced\n\n'
+          'grey solid = buses and the links between sheets; confidence is on the wires they join\n\n'
+          'No connection is confirmed. Every connection needs a continuity check.')
 
 
 NEUTRAL = ['stroke', ['width', 0.254], ['type', 'solid'], ['color', 110, 110, 110, 1]]   # buses and sheet links

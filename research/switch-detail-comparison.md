@@ -20,7 +20,9 @@ Side-by-side tables holding the data of the *Switch detail* tab in the [comparis
 | Verdict | Pick | Candidate | Candidate |
 | Vendor | Realtek | Realtek | Motorcomm |
 
-## Price & stock (LCSC, 2026-10-22)
+## Price and stock
+
+Prices and stock were read from LCSC product pages on 2026-10-22.
 
 | Feature | RTL8363NB-VB-CG | RTL8367S-CG | YT9215S |
 |---|---|---|---|

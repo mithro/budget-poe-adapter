@@ -44,3 +44,10 @@ fp-info-cache
 
 # Sphinx build output
 _build/
+
+# Generated pin list of the LX-IS601F schematic is kept
+!research/lx-is601f-board/schematic/lx-is601f-nets.csv
+
+# Python bytecode
+__pycache__/
+*.pyc

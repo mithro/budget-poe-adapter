@@ -31,3 +31,28 @@ myst_heading_anchors = 4
 html_theme = "furo"
 html_title = project
 html_static_path = []
+
+
+REPO_URL = "https://github.com/mithro/budget-poe-adapter/tree/main/"
+
+
+def link_directories(app, docname, source):
+    """A Markdown link to a directory has no page to point at; link it on GitHub."""
+    import re
+
+    path = os.fspath(app.env.doc2path(docname))
+    if not path.endswith(".md"):
+        return
+    base = os.path.dirname(path)
+
+    def fix(m):
+        target = os.path.normpath(os.path.join(base, m.group(1)))
+        if not os.path.isdir(target):
+            return m.group(0)
+        return "](%s%s)" % (REPO_URL, os.path.relpath(target, os.fspath(app.srcdir)).replace(os.sep, "/"))
+
+    source[0] = re.sub(r"\]\((?!https?:)([^)#\s]+/)\)", fix, source[0])
+
+
+def setup(app):
+    app.connect("source-read", link_directories)

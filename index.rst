@@ -18,6 +18,7 @@ Notes, research and design material for an open source PoE to USB-C adapter. The
 
    research/*
    research/lx-is601f-board/README
+   research/*/*/README
    datasheets/README
 
 .. toctree::

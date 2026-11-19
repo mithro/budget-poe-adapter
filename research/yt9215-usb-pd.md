@@ -18,7 +18,7 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 - Every option that speaks PD waits until code runs on the CPU. Motorcomm's SDK shows that firmware for it exists (FreeRTOS, built for RV32EC) ([verified](#evidence-codes)). The boot image format and the CPU's peripheral registers are unpublished ([unknown](#evidence-codes)).
 - Rp, VBUS and all PD signalling stay off until the PoE side has secured its power ([start-up order](#start-up-order)).
 - [Option A](#option-a) is a PD transceiver with an I²C interface on the I²C master of the YT9215. The transceiver takes over every microsecond-scale task. Two such chips cost $0.26 to $0.42 at LCSC, and others list for less in other currencies ([transceiver chips](#transceiver-chips)).
-- [Option B](#option-b) times the BMC signal in software on GPIO pins. A published design transmits this way on a 48 MHz RV32EC microcontroller; its receive side is untested. Options B, C and D need an analog front end that costs $0.19 to $0.50 for B and C ([cost](#cost)) ([inferred](#evidence-codes)).
+- [Option B](#option-b) times the BMC signal in software on GPIO pins. A published design transmits this way on a 48 MHz RV32EC microcontroller; its receive side is untested. Options B, C and D need an analog front end that costs $0.19 to $0.50 for B and C, and $0.42 to $1.01 for D with its decoder ([cost](#cost)) ([inferred](#evidence-codes)).
 - [Option D](#option-d) sends the message as a 10 Mbit/s frame out of a copper port that has no socket. The line signal is Manchester coded and cannot be put on CC as it is, so an external circuit of a line receiver and about four logic parts turns it into BMC levels ([inferred](#evidence-codes)). It transmits only; receive uses the parts of option B or C.
 - The CH224K, HUSB238 and IP2721 are sink chips. They ask a charger for a voltage and cannot make this adapter a source. Source chips that need no host exist ([chips that need no host](#fixed-function-chips)).
 - A Raspberry Pi 5 needs PD for one thing only: a 5 V, 5 A offer lifts its USB current limit. A PD source limited to 3 A gives the Pi nothing that a bare resistor does not ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)).
@@ -652,6 +652,7 @@ Two circuits do this ([inferred](#evidence-codes)). Neither has been built.
 - Two equal bytes last 16 bit times, 1.6 µs, so the bit rate is 312.5 kbit/s and each PD bit takes four bytes. The frames have the lengths of the [option C frames](#frame-layout). [`mac_bmc_frame.py`](yt9215-usb-pd/mac_bmc_frame.py) does not build them.
 - Level changes fall on the 100 ns bit grid of the PHY, which is crystal timed. In the discriminator a high section comes out about 1.65 µs long and a low section about 1.55 µs, both inside the 1.52 to 1.85 µs that PD allows.
 - A low-pass filter and a Schmitt-trigger gate after the flip-flop remove pulses of up to about three bit times. The gate and the buffer square the edges again, so the edge-rate problem of the [front end](#front-end) is unchanged.
+- The one-shot has to end between 50 and 100 ns after its start, gate delays included. Whether a part such as the 74LVC1G123 makes a 75 ns pulse that accurately is not checked ([unknown](#evidence-codes)).
 - The output feeds the buffer of the [front end](#front-end) in place of TXD1.
 
 ### Start and end of the frame
@@ -662,7 +663,7 @@ Two circuits do this ([inferred](#evidence-codes)). Neither has been built.
   - A tail built only from the bytes `0x55` and `0xAA` is low after the filter, which removes the short pulse at each change between the two values. About 28 such bytes give enough freedom to make the FCS a low pattern too. The line is then driven low for about 26 µs after the last PD edge, and PD allows 23 µs ([packet end](usb-c-pd.md#51-signalling)).
   - A GPIO switches the buffer off during a low tail. The firmware has to hit a window of about 20 µs after the last PD edge.
   - A latch switches the buffer off after the first low period longer than a BMC bit and keeps it off until the frame ends. That adds parts.
-- **End pulse and link pulses.** A frame whose last FCS bit is 0 ends with two edges 50 ns apart, where the end pulse begins. The flip-flop then stores a high level and keeps it until the next edge, which may be a link pulse 16 ms later. A link pulse that the receiver sees as narrower than 75 ns has the same effect. The buffer therefore has to be off before the frame ends and stay off between frames, or the tail has to be chosen so that the last FCS bit is 1 ([inferred](#evidence-codes)).
+- **End pulse and link pulses.** A frame ends with two edges 50 ns apart unless its last two FCS bits are 0 and then 1. The flip-flop then stores a high level and keeps it until the next edge, which may be a link pulse 16 ms later. A link pulse that the receiver sees as narrower than 75 ns has the same effect. The buffer therefore has to be off before the frame ends and stay off between frames, or the tail has to be chosen so that the FCS ends in 0 and 1 ([inferred](#evidence-codes)).
 
 ### Making the PHY transmit
 
@@ -670,15 +671,14 @@ Two circuits do this ([inferred](#evidence-codes)). Neither has been built.
 |---|---|---|
 | Speed of 10 Mbit/s | PHY register 0 | [Inferred](#evidence-codes) |
 | Full duplex | PHY register 0 | [Inferred](#evidence-codes) |
-| Auto-negotiation off | PHY register 0 | [Verified](#evidence-codes) |
+| Auto-negotiation off | PHY register 0 | [Inferred](#evidence-codes) |
 | Link up with no partner | Pairs MDIA and MDIB joined on the board | [Inferred](#evidence-codes) |
-| Auto crossover off | Vendor register | [Unknown](#evidence-codes) |
 | Looped frames discarded | Port isolation | [Inferred](#evidence-codes) |
 | Frame sent to the port | `eth_tx_by_portlist()` | [Unknown](#evidence-codes) |
 
-- PHY register 0 is the basic control register, reached over the internal management bus ([PHY access](yt9215-registers/docs/phy.rst)). Its speed and duplex bits are taken from the IEEE 802.3 layout and are not confirmed for this PHY. The datasheet says that auto-negotiation can be switched off by software.
+- PHY register 0 is the basic control register, reached over the internal management bus ([PHY access](yt9215-registers/docs/phy.rst)). Its speed, duplex and auto-negotiation bits are taken from the IEEE 802.3 layout and are not confirmed for this PHY. The datasheet says only that auto-negotiation can be switched off by software.
 - A 10BASE-T transmitter is held off while the link test fails. The link test passes when the receiver sees link pulses or frames. With the transmit pair wired to the receive pair, the PHY hears its own link pulses ([inferred](#evidence-codes)).
-- With auto crossover on, the PHY may swap the two pairs at any time, and the loop then has no fixed transmit pair. The register that fixes the pair assignment is a vendor register, which the [register guide](yt9215-registers/docs/phy.rst) does not cover.
+- The joined pairs are one net, so the pair that auto crossover selects for transmit does not matter ([inferred](#evidence-codes)).
 - A vendor bit that forces the link up would remove the loop. No public document shows one ([unknown](#evidence-codes)).
 - The port has to be full duplex. In half duplex a PHY that hears its own frame reports a collision.
 - Every frame the port sends comes back into the switch through the loop. Its first bytes are PD data, so the address fields are meaningless. The port is isolated and address learning on it is off.
@@ -719,7 +719,6 @@ Receive therefore uses the slicer on a GPIO ([option B receive](#b-receive)) or 
 | Item | State | Evidence |
 |---|---|---|
 | Link with looped pairs | Not tried | [Unknown](#evidence-codes) |
-| Register that switches auto crossover off | Unpublished | [Unknown](#evidence-codes) |
 | Forced-link bit | Unpublished | [Unknown](#evidence-codes) |
 | Driver without a transformer | Not given | [Unknown](#evidence-codes) |
 | Common-mode voltage | Not given | [Unknown](#evidence-codes) |
@@ -733,7 +732,7 @@ Receive therefore uses the slicer on a GPIO ([option B receive](#b-receive)) or 
 
 ![Front end: buffer and resistor for transmit, protection, two comparators for receive and attach detection, switchable Rp and a load switch](yt9215-usb-pd/front-end.svg)
 
-The figure shows the option C wiring with a [captive cable](#captive-cable). Option D uses the option B parts and feeds the buffer from its [decoder](#option-d). Option B uses the same parts on GPIO pins and has no fixed receive wiring. The AND gate and the last three rows of the table apply to option C only. Option B needs a pull-down on the GPIO that enables the buffer.
+The figure shows the option C wiring with a [captive cable](#captive-cable). Option D with receive on a GPIO uses the option B parts and feeds the buffer from its [decoder](#option-d). Option B uses the same parts on GPIO pins and has no fixed receive wiring. The AND gate and the last three rows of the table apply to option C only. Option B needs a pull-down on the GPIO that enables the buffer.
 
 | Part | Example | Quantity | Job |
 |---|---|---|---|

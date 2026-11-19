@@ -45,6 +45,9 @@ They differ in what is fitted:
 | C4 marking | `YX 47 63V` | `22 63V MB` |
 | C4 value | 47 µF | 22 µF |
 | TC1 marking | `YX 220 16V` | `220 16V MB` |
+| PU1 marking line 2 | `SCT 6DC` | `SCT 5DC` |
+| PU1 marking line 3 | `2U650` | `29580` |
+| D40 marking | `SS310` | Not visible |
 
 Board A is the non-PoE build: the 8-hole header for the PoE module is empty and U12
 has only the SFP host connector, without its cage. Board B is the PoE build, with the
@@ -65,10 +68,10 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 | PIN1 | PoE module header | Top | THT 8-hole |  |  |  |  |
 | ED1-ED10 | ESD array | Top | SOT-23-6 | `05U` |  |  |  |
 | Y6 | Crystal | Top | SMD 4-pad | `25.000` | `MHZ` |  | 25 MHz |
-| PU1 | SCT2622 buck regulator | Top | ESOP-8 | `2622` | `SCT 6DC` | `2U650` | 3.3 V out |
+| PU1 | SCT2622 buck regulator | Top | ESOP-8 | `2622` |  |  | 3.3 V out |
 | PL3 | Buck inductor | Top | SMD | `100` |  |  | 10 µH |
 | L3 | Inductor | Top | SMD | `4R7` |  |  | 4.7 µH |
-| D40 | Buck diode | Top | SMA | `LGE` | `SS510` |  |  |
+| D40 | Buck diode | Top | SMA | `LGE` | `SS310` |  |  |
 | D4 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
 | D5 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
 | L2 | Input inductor | Top | SMD | `701` |  |  |  |
@@ -110,7 +113,7 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 | R93 | SPF0 SCK resistor | Top | SMD |  |  |  |  |
 
 U4 carries five marking lines; lines 3 to 5 differ between the boards and are in
-[the first table](#the-two-boards). The SFP cage over U12 is fitted on board B only. The
+[the first table](#the-two-boards), as are lines 2 and 3 of PU1. The last line of PU1 on board B is at the limit of the photo's resolution. The SFP cage over U12 is fitted on board B only. The
 marking of C4 and TC1, and the value of C4, differ between the boards and are in
 [the first table](#the-two-boards). RV1-RV3 are varistors or Y-capacitors; their
 marking is not readable in any photo.
@@ -258,6 +261,7 @@ local time.
 | [23](#photo-23) | Y6 |
 | [23](#photo-23) | L2 |
 | [23](#photo-23) | D5 |
+| [23](#photo-23) | D4 |
 | [23](#photo-23) | RV1-RV3 |
 | [24](#photo-24) | D19 |
 | [24](#photo-24) | D21 |
@@ -374,7 +378,7 @@ Board B, U4 close-up with heavy glare; the marking cannot be read.
 ![Photo 10](web/10.jpg)
 
 Board B, macro of U4's left edge and the module's lower edge: Y6, the R250 sense
-resistors R8 and R12, and the ESD arrays ED3-ED5. The left 40 % of U4 is in shot. Slightly soft.
+resistors R8 and R12, and the ESD arrays ED3-ED5. About the left 60 % of U4 is in shot. Slightly soft.
 
 ### Photo 11
 
@@ -400,7 +404,7 @@ R110-R114 near the crystal are clear.
 
 ![Photo 14](web/14.jpg)
 
-Board A, U4 and the power section at an angle. PU1 (an SCT2622 buck marked `2622`, `SCT 6DC`, `2U650`), PL3 `100`, D40 `SS510` and C4 (`YX 47 63V`) are in frame.
+Board A, U4 and the power section at an angle. PU1 (an SCT2622 buck marked `2622`, `SCT 6DC`, `2U650`), PL3 `100`, D40 `SS310` and C4 (`YX 47 63V`) are in frame.
 
 ### Photo 15
 

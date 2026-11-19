@@ -123,14 +123,11 @@ c.text(2430, 1232, '65', fs, WHITE, 'mm'); c.text(1240, 1232, '96', fs, WHITE, '
 VIAS = [(80, 1925, 1030, OTHER, -8, -40), (77, 2022, 1065, STRAP, 0, 42), (76, 2087, 1005, UART, 0, -40),
         (75, 2142, 1047, STRAP, 0, 42), (74, 2197, 1002, JTAG, 0, -40), (70, 2380, 1067, UART, 46, 0),
         (78, 2102, 702, SPI, 46, 0), (81, 2025, 630, SPI, -46, 0),
-        (85, 1644, 1136, OTHER, -44, 8), (84, 1718, 1024, JTAG, -44, -14),
+        (85, 1644, 1136, OTHER, -44, 8), (84, 1664, 1064, JTAG, -46, -10), (83, 1720, 1022, SPI, 46, -6),
         (92, 1430, 1057, I2C, -6, -42), (91, 1410, 1112, I2C, -46, 6)]
 for n, x, y, col, dx, dy in VIAS:
     c.ring(x, y, col)
     c.text(x + dx, y + dy, str(n), fs, col, 'mm')
-c.ring(1752, 1010, SPI, r=22, width=4)                    # pin 83: via hidden under the silkscreen
-c.line(1768, 994, 1822, 868, SPI)
-c.text(1800, 842, '83: via under silkscreen (approx.)', font(30), SPI, 'lm')
 c.save('u4-pins-top-edge-annotated.png')
 
 # ---------- right edge: pins 46 to 55 and the SPF0 resistors ----------

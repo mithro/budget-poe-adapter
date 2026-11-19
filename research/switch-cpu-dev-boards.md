@@ -100,7 +100,7 @@ Indicative prices and where to buy:
 | TL-SG1005D | **eBay** | – | 15 | 25 | A$ | – | – |
 | TL-SG1005D | Amazon AU | – | – | – | – | – | Less common |
 
-On Amazon AU the TL-SG105 and the LS1005G are common and the TL-SG1005D is rare.
+On Amazon AU the TL-SG105 and the LS1005G are common and the TL-SG1005D is less common.
 
 How to use one as a dev board: [**I**](#evidence-codes), building on the [**V**](#evidence-codes) items in this section.
 

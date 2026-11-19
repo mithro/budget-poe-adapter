@@ -137,7 +137,7 @@ There are two JTAG groups, both shared with LEDs and straps [**V**](#evidence-co
 
 ### How the mirrored board wires these pins
 
-All of this table is from the netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) [**V**](#evidence-codes). Blank cells mean the board has nothing there, and `?` means the netlist gives no value.
+All of this table is from the netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) [**V**](#evidence-codes). Blank cells mean nothing applies to that pin, and `?` means the netlist gives no value.
 
 | Pin | First signal | Second signal | Third signal | Board net | Strap resistor | Strap value | Pulls to | LED resistor | Test point | Strap level | Effect |
 |---|---|---|---|---|---|---|---|---|---|---|---|

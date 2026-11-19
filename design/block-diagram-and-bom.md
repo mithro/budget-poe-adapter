@@ -109,6 +109,10 @@ only ask for 9, 15 and 20 V will fall back to 5 V, which is safe but slow.
 
 ## Block diagrams
 
+[`block-diagram.png`](block-diagram.png) is the same figure as [the block diagram](#block-diagram), as a bitmap:
+
+![Block diagram as a bitmap](block-diagram.png)
+
 In [the block diagram](#block-diagram), each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
 
 * **A (with switch):** RJ45 IN (PoE magjack) → RTL8363NB → RJ45 OUT. The

@@ -126,7 +126,7 @@ surveys, LCSC):
 | Part | Vendor | af | at | Power | Switch rating | Switch Rds | DC-DC | Package | $ @1k | Note |
 |---|---|---|---|---|---|---|---|---|---|---|
 | **TMI7303B** | – | Yes | Yes | 25 W | 100 V | 0.48 Ω | – | DFN-10 | **$0.267** | In stock |
-| TMI7301 | – | Yes | – | 15 W | Integrated | – | – | SOP-8 | – | JLCPCB extended part |
+| TMI7301 | – | Yes | – | 15 W | ? | – | – | SOP-8 | – | JLCPCB extended part |
 | SD4924S | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – | – |
 | SD4923E | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – | – |
 | AS7001EP | Ashare | – | Yes | – | 100 V | – | – | – | – | – |
@@ -137,6 +137,8 @@ surveys, LCSC):
 | JWH7232 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
 | TME7350 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
 | TMI7321 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
+
+The TMI7301 has an integrated pass switch; its rating is not known (`?`).
 
 All of these integrate the PD interface. The TMI7303B price is [**live**](#evidence-codes).
 The isolated flyback parts are not useful here.

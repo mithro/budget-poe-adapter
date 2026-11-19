@@ -191,11 +191,11 @@ not a network presence.
 |---|---|---|---|
 | **Passive tap (Throwing-Star style)** | The link is 10/100 | Gigabit sends both ways on all four pairs | – |
 | **Use the spare pairs** | The link drops to 100 Mbit | 1000BASE-T uses all four pairs | Needs ≥1 Gbit/s |
-| **10BASE-T1S / SPE overlay** | A custom injector is at the other end | The PSE switch has no receiver for it | – |
+| **10BASE-T1S overlay** | A custom injector is at the other end | The PSE switch has no receiver for it | – |
 | **Data over PoE DC (powerline-style)** | – | Nothing at the PSE end listens | – |
 | **Autoneg next pages** | The adapter terminates the link (has PHYs) | Only the two link endpoints exchange them | – |
-| **Two PHYs back-to-back + FPGA/MCU** | It does work | Costs more than the switch | 2 × YT8531C at **$0.79 @1k [live]** |
-| **"MAC-in-PHY" / SPI Ethernet parts** | – | They all terminate their *own* link | – |
+| **Two PHYs back-to-back + glue logic** | It does work | Costs more than the switch | 2 × YT8531C at **$0.79 @1k [live]** |
+| **"MAC-in-PHY" SPI Ethernet parts** | – | They all terminate their *own* link | – |
 | **USB-Ethernet bridge (RTL8153)** | The host has USB 3 | The Pi's USB-C port is USB 2.0 | 480 Mbit/s |
 
 The reasoning behind each row:

@@ -42,7 +42,8 @@ They are therefore linked, not copied into this repository.
 | RTL8364NB-VB-CG | Datasheet | – | – | [LCSC C3013610](https://www.lcsc.com/datasheet/C3013610.pdf) | – | – |
 | RTL8305NB-CG | Datasheet | – | – | [LCSC C52146](https://www.lcsc.com/datasheet/C52146.pdf) | – | 10/100 part (for comparison) |
 | RTL8305NBI-VB-CG | Datasheet | – | – | [LCSC C42451794](https://www.lcsc.com/datasheet/C42451794.pdf) | – | 10/100 part (for comparison) |
-| RTL8367RB / RTL8367MB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
+| RTL8367RB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
+| RTL8367MB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
 
 ## Other references
 

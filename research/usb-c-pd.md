@@ -23,11 +23,11 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 |---|---|---|---|---|---|---|---|---|---|
 | USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W | Baseline | – |
 | USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W | Baseline | – |
-| BC1.2 DCP | D+/D- | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
-| BC1.2 CDP | D+/D- | – | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
-| Apple divider, level 1 | D+/D- | Fixed voltages | 5 V | – | 1 A | – | – | Resistors only | – |
-| Apple divider, level 2 | D+/D- | Fixed voltages | 5 V | – | 2.1 A | – | – | Resistors only | – |
-| Apple divider, level 3 | D+/D- | Fixed voltages | 5 V | – | 2.4 A | – | – | Resistors only | – |
+| BC1.2 DCP | Data pair | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
+| BC1.2 CDP | Data pair | – | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
+| Apple divider, level 1 | Data pair | Fixed voltages | 5 V | – | 1 A | – | – | Resistors only | – |
+| Apple divider, level 2 | Data pair | Fixed voltages | 5 V | – | 2.1 A | – | – | Resistors only | – |
+| Apple divider, level 3 | Data pair | Fixed voltages | 5 V | – | 2.4 A | – | – | Resistors only | – |
 | Type-C Current, default | CC | Rp value | 5 V | – | Default | – | – | **Required for any USB-C source** | – |
 | Type-C Current, 1.5 A | CC | Rp value | 5 V | – | 1.5 A | – | – | **Required for any USB-C source** | – |
 | Type-C Current, 3.0 A | CC | Rp value | 5 V | – | 3.0 A | – | 15 W | **Required for any USB-C source** | – |
@@ -41,14 +41,14 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 | USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W | Out of PoE budget | bt max ≈ 71 W at the PD |
 | USB PD EPR AVS (PD 3.1) | CC | BMC | 15 to 48 V | 100 mV | – | – | – | Skip | – |
 | USB PD SPR AVS (PD 3.2) | CC | BMC | 9 to 20 V (verify) | – | – | – | – | Skip | – |
-| Qualcomm QC 2.0 | D+/D- | Voltage levels | 5 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 2.0 | D+/D- | Voltage levels | 9 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 2.0 | D+/D- | Voltage levels | 12 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 2.0 | D+/D- | Voltage levels | 20 V (optional) | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 3.0 | D+/D- | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W | Only for phones on legacy ports | – |
-| Samsung AFC | D+/D- | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
-| Huawei FCP | D+/D- | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
-| Huawei SCP | D+/D- | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 5 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 9 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 12 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 20 V (optional) | – | – | – | ~18 W | Only for phones on legacy ports | – |
+| Qualcomm QC 3.0 | Data pair | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W | Only for phones on legacy ports | – |
+| Samsung AFC | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei FCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei SCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
 
 **PD power rules (SPR source profiles):** a source rated at P watts must offer every lower standard voltage. ≤15 W offers 5 V; 15 to 27 W also offers 9 V; 27 to 45 W also offers 15 V; >45 W also offers 20 V. A **5 V-only 25 W source is not a "PD Power Rule" compliant 27 W supply** (a compliant 27 W source must also offer 9 V at 3 A). The Pi official PSU offers 5.1 V at 5 A plus 9, 12 and 15 V at lower current (verify exact PDO list). This matters only for certification, not function.
 
@@ -236,12 +236,12 @@ Message types needed for a minimal source:
 
 | Function | Property | Value |
 |---|---|---|
-| CC attach / orientation | Channels | 2 |
-| CC attach / orientation | Window 1 | 0.8 V |
-| CC attach / orientation | Window 2 | 2.6 V |
-| CC attach / orientation | Speed | ms |
-| CC attach / orientation | Implementation option 1 | ADC |
-| CC attach / orientation | Implementation option 2 | Comparator with threshold |
+| CC attach detect | Channels | 2 |
+| CC attach detect | Window 1 | 0.8 V |
+| CC attach detect | Window 2 | 2.6 V |
+| CC attach detect | Speed | ms |
+| CC attach detect | Implementation option 1 | ADC |
+| CC attach detect | Implementation option 2 | Comparator with threshold |
 | Rp switching (3 A vs 1.5 A) | Scope | Per CC |
 | Rp switching (3 A vs 1.5 A) | Pull-up values | 2 |
 | Rp switching (3 A vs 1.5 A) | Implementation | 2 GPIOs |
@@ -255,7 +255,7 @@ Message types needed for a minimal source:
 | VBUS current | Required | Optional |
 | VBUS current | Implementation option 1 | Sense resistor with ADC |
 | VBUS current | Implementation option 2 | Sense resistor with comparator |
-| VBUS current | Implementation option 3 | eFuse/load switch with ILIM |
+| VBUS current | Implementation option 3 | Load switch with ILIM |
 | Variable VBUS | Voltage 1 | 9 V |
 | Variable VBUS | Voltage 2 | 15 V |
 | Variable VBUS | Voltage 3 | 20 V |
@@ -267,25 +267,25 @@ Message types needed for a minimal source:
 | VCONN | Power | ≤ 1 W |
 | VCONN | Where | The unused CC |
 | VCONN | Implementation | 2 small P-FETs |
-| D+/D- legacy (optional): BC1.2 | Signature | DCP short |
-| D+/D- legacy (optional): BC1.2 | Implementation | Resistors |
-| D+/D- legacy (optional): Apple | Divider voltage 1 | 2.7 V |
-| D+/D- legacy (optional): Apple | Divider voltage 2 | 2.0 V |
-| D+/D- legacy (optional): Apple | Implementation | Resistors |
-| D+/D- legacy (optional): QC | Needs | QC detection |
-| D+/D- legacy (optional): QC | Comparator/ADC channels | 2 |
-| D+/D- legacy (optional): QC | Threshold 1 | ≈0.325 V |
-| D+/D- legacy (optional): QC | Threshold 2 | ≈2 V |
+| Data-pair legacy (optional): BC1.2 | Signature | DCP short |
+| Data-pair legacy (optional): BC1.2 | Implementation | Resistors |
+| Data-pair legacy (optional): Apple | Divider voltage 1 | 2.7 V |
+| Data-pair legacy (optional): Apple | Divider voltage 2 | 2.0 V |
+| Data-pair legacy (optional): Apple | Implementation | Resistors |
+| Data-pair legacy (optional): QC | Needs | QC detection |
+| Data-pair legacy (optional): QC | Sense channels | 2 |
+| Data-pair legacy (optional): QC | Threshold 1 | ≈0.325 V |
+| Data-pair legacy (optional): QC | Threshold 2 | ≈2 V |
 
 ### 6.4 MCU candidates (rough)
 
 | MCU | Clock | OPA | Comparator | Timer capture + DMA | Price low | Price high | RAM | PD stack fits | PD PHY | Note |
 |---|---|---|---|---|---|---|---|---|---|---|
-| CH32V003 | 48 MHz | 1 | Via the OPA | yes | about $0.10 | about $0.10 | 2 KB (tight) | Yes (sink/source) | – | – |
+| CH32V003 | 48 MHz | 1 | Via the OPA | yes | about $0.10 | about $0.10 | 2 KB (tight) | Sink and source | – | – |
 | CH32V203 | 144 MHz | ×2–4 | – | yes | about $0.30 | about $0.50 | – | – | – | – |
 | CH32X035 | 48 MHz | yes | yes | yes | about $0.25 | about $0.25 | – | – | **Native USB PD PHY** | Fallback if bit-bang fails |
-| RP2040 | 133 MHz | **None** | **None** (external one needed) | PIO | – | – | – | – | – | PIO makes BMC TX/RX easy |
-| RP2350 | 150 MHz | **None** | **None** (external one needed) | PIO | – | – | – | – | – | PIO makes BMC TX/RX easy |
+| RP2040 | 133 MHz | **None** | **None** (external one needed) | PIO | – | – | – | – | – | PIO makes BMC easy |
+| RP2350 | 150 MHz | **None** | **None** (external one needed) | PIO | – | – | – | – | – | PIO makes BMC easy |
 
 Prices are approximate LCSC single-reel figures (verify).
 

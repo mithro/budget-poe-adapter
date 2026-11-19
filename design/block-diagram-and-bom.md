@@ -54,7 +54,7 @@ cameras and small displays. 9, 15 and 20 V and PPS are out of scope.
 | 2 | Output caps | Rated 16–25 V | – | 12 V rail | +$0.02 |
 | 3 | VBUS PMOS drive | Gate zener with an NPN driver | – | Keeps Vgs within limits when switching 12 V | +$0.02 |
 | 4 | VBUS TVS | 15 V part | – | Clamp level for a 12 V rail | +$0.01 |
-| 5 | CC1/CC2 protection against a 12 V short | Series NMOS clamps | A CC OVP IC | VBUS on CC would kill 3.3 V MCU pins | +$0.10 |
+| 5 | CC-pin protection against a 12 V short | Series NMOS clamps | A CC OVP IC | VBUS on CC would kill 3.3 V MCU pins | +$0.10 |
 | 6 | 3.3 V rail fed from a 5–12 V rail | 18 V-rated buck | 16 V LDO | Its source rail varies from 5 V to 12 V | +$0.01–0.05 |
 | | **Total** | | | | **≈ +$0.20** |
 

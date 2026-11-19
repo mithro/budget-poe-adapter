@@ -55,7 +55,7 @@ remember them, not re-read for this note.
 
 | # | MCU | Alt MCU | Method | Via | Ends at | Switch | Alt switch | Link partner on the board |
 |---|---|---|---|---|---|---|---|---|
-| A | **RP2040** | – | **PIO RMII/MII MAC** | – | **Switch ext port (MAC-to-MAC)** | RTL8363NB | – | Switch ext MAC port in PHY mode |
+| A | **RP2040** | – | **PIO RMII MAC** | – | **Switch ext port (MAC-to-MAC)** | RTL8363NB | – | Switch ext MAC port in PHY mode |
 | B | RP2040 | – | PIO direct 10BASE-T | – | Spare copper port | RTL8367S | YT9215S | Copper PHY (cap-coupled) |
 | C | RP2040 | – | PIO RMII | SR8201F PHY | Own magjack | – | – | Whatever the user plugs into the second port |
 | D | RP2040 | – | PIO direct 10BASE-T | – | Own magjack | – | – | Same as C |

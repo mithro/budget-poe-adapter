@@ -100,7 +100,8 @@ Side-by-side tables holding the data of the *Switch detail* tab in the [comparis
 | Link aggregation | None | 2 groups | 2 groups |
 | Port-based mirroring | Yes | Yes | Yes |
 | Flow-based mirroring | Not listed | Not listed | Yes |
-| IGMP/MLD snooping | Yes | Yes | Yes |
+| IGMP snooping | Yes | Yes | Yes |
+| MLD snooping | Yes | Yes | Yes |
 | LLDP | ? | Yes | Yes |
 | OAM | ? | Yes | Yes |
 

@@ -321,7 +321,7 @@ research thread.
 | Quantity | Range min | Range max | Needed resolution | Why | Rate |
 |---|---|---|---|---|---|
 | Port voltage (after bridge) | 0 V | 60 V | ~0.1 V | To place the voltage windows below | ≥ 1 kHz |
-| Class/mark current | 0 mA | 50 mA | ≤ 0.5 mA | The 36–44 mA window is ±10 % | ≥ 1 kHz |
+| Classification current | 0 mA | 50 mA | ≤ 0.5 mA | The 36–44 mA window is ±10 % | ≥ 1 kHz |
 | Load current (optional) | 0 A | 2 A | ~10 mA | – | ~1 kHz |
 
 | Voltage window edge to resolve |
@@ -387,12 +387,12 @@ it could have been given. Fine for an af- and at-only product; loses bt.
 
 | Function | Property | Value |
 |---|---|---|
-| Polarity / mode | Part | 2 bridges |
-| Polarity / mode | Diodes | 8 × 100 V |
-| Polarity / mode | Placement | One bridge per pairset |
-| Polarity / mode | Current | 0.6–1 A |
-| Polarity / mode | Diode option 1 | Schottky |
-| Polarity / mode | Diode option 2 | Ideal-diode MOSFET bridge (for efficiency) |
+| Input rectifier | Part | 2 bridges |
+| Input rectifier | Diodes | 8 × 100 V |
+| Input rectifier | Placement | One bridge per pairset |
+| Input rectifier | Current | 0.6–1 A |
+| Input rectifier | Diode option 1 | Schottky |
+| Input rectifier | Diode option 2 | Ideal-diode MOSFET bridge (for efficiency) |
 | Surge | Part | SMAJ58A TVS |
 | Surge | Placement | Across bridge output |
 | Signature | Resistor | 24.9 kΩ 1 % |
@@ -402,14 +402,14 @@ it could have been given. Fine for an af- and at-only product; loses bt.
 | Signature | Disconnect when | After power-on |
 | Signature | Disconnect saving | ~2 mW |
 | Signature | Why bt wants it | The signature must look invalid in some states |
-| Class/mark sink | Transistor option 1 | NPN |
-| Class/mark sink | Transistor option 2 | NMOS |
-| Class/mark sink | Sense resistor | Yes |
-| Class/mark sink | Reference | MCU PWM-RC |
-| Class/mark sink | Current range | 0–45 mA |
-| Class/mark sink | Duration | ≤ 105 ms |
-| Class/mark sink | Dissipation during class | ~1 W |
-| Class/mark sink | Worst case | 20 V × 44 mA |
+| Classification sink | Transistor option 1 | NPN |
+| Classification sink | Transistor option 2 | NMOS |
+| Classification sink | Sense resistor | Yes |
+| Classification sink | Reference | MCU PWM-RC |
+| Classification sink | Current range | 0–45 mA |
+| Classification sink | Duration | ≤ 105 ms |
+| Classification sink | Dissipation during class | ~1 W |
+| Classification sink | Worst case | 20 V × 44 mA |
 | MCU bootstrap supply | Pass element option 1 | Depletion NMOS |
 | MCU bootstrap supply | Pass element option 2 | Zener |
 | MCU bootstrap supply | Pass element option 3 | HV LDO |

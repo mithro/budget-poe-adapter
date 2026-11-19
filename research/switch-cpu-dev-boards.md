@@ -211,7 +211,7 @@ Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches f
 |---|---|---|
 | YT9215S | [Product page](https://www.motor-comm.com/product/switching-chip) | No CPU listed |
 | YT9215S | [Draft datasheet](https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf) | "Integrated RISC-V microprocessor" |
-| YT9215S | Draft datasheet | JTAG0/1 |
+| YT9215S | Draft datasheet | 2 JTAG groups |
 | YT9215S | Draft datasheet | UART0–2 |
 | YT9215S | Draft datasheet | SPI flash |
 | YT9215S | Draft datasheet | `STRAP_DIS_MCU` on pin 75 |
@@ -250,8 +250,8 @@ So on retail YT9215S boards the core is probably present but unsupported and lik
 | Xiaomi CR881x | OpenWrt | [hzyitc/openwrt-redmi-ax3000](https://github.com/hzyitc/openwrt-redmi-ax3000) |
 | Xiaomi CR881x | Known issue | Switch probe still flaky on some boards [V] |
 | Xiaomi CR881x | Where sold | Mostly second-hand in China (Xianyu) |
-| Xiaomi CR881x | **AliExpress** | Occasional CR880x/CR881x listings |
-| Xiaomi CR881x | **eBay** | Occasional CR880x/CR881x listings |
+| Xiaomi CR881x | **AliExpress** | Occasional listings |
+| Xiaomi CR881x | **eBay** | Occasional listings |
 | Xiaomi CR881x | Typical price | US$25–50 |
 | Xiaomi CR881x | Check before buying | The model must be **CR881x** |
 | Xiaomi CR881x | Not confirmed YT9215 **[I]** | CR8806 |
@@ -288,7 +288,7 @@ Search links (results change daily; check hardware version in the listing photos
 - AliExpress: [RTL8367S chips](https://www.aliexpress.com/w/wholesale-rtl8367s.html) (US$1–3 each, bare chips only, no boards), [TL-SG1005D](https://www.aliexpress.com/w/wholesale-TL-SG1005D.html), [TOTOLINK A8000RU](https://www.aliexpress.com/w/wholesale-A8000RU.html), [Xiaomi CR881x](https://www.aliexpress.com/w/wholesale-xiaomi-CR8818.html)
 - LCSC: [YT9215S C5899183](https://www.lcsc.com/product-detail/Ethernet-ICs_Motorcomm-YT9215S_C5899183.html), RTL8367S-CG C2760849
 
-Note: the prices in this file come from search snippets and deal pages, not from opening live Amazon/eBay/AliExpress product pages (those block automated fetches).
+Note: the prices in this file come from search snippets and deal pages, not from opening live Amazon, eBay or AliExpress product pages (those block automated fetches).
 
 ## Open questions
 

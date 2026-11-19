@@ -41,10 +41,10 @@ Sean "xobs" Cross did with grainuum?
 
 From [`gigabit-piggyback.md`](gigabit-piggyback.md) §A ("host relay"):
 
-| Job | Size | Rate | Needs bulk/high throughput? | In scope | Note |
+| Job | Size | Rate | Needs high throughput? | In scope | Note |
 |---|---|---|---|---|---|
 | Status reports | tens of bytes | ~1/s | No | Yes | Fields are listed below |
-| LLDP power request/grant | a few bytes | per change | No | Yes | Relayed by a host daemon (`lldpd`) |
+| LLDP power negotiation | a few bytes | per change | No | Yes | Relayed by a host daemon (`lldpd`) |
 | Firmware update from the host | 8–32 KB | rare | No (slow is fine) | Yes | – |
 | Act as a USB NIC for the host | Mbit/s | – | **Yes** | No | Host already has gigabit via the passthrough |
 
@@ -82,8 +82,8 @@ the same for hardware and software USB; see [`gigabit-piggyback.md`](gigabit-pig
 | grainuum | MCU requirement | Cortex-M0+ with single-cycle IO |
 | grainuum | HID bootloader drivers | "Driver-free" |
 | grainuum | Bootloader works on Windows | Yes |
-| grainuum | D+ / D− GPIO banks | May be **different GPIO banks** |
-| grainuum | D+ / D− pin adjacency | Not required |
+| grainuum | Data-pin GPIO banks | May be **different GPIO banks** |
+| grainuum | Data-pin adjacency | Not required |
 | grainuum | CPU cost | 32 CPU cycles per bit |
 | grainuum | Talk venue | 33C3 |
 | grainuum | Talk title | "No USB? No problem." |
@@ -105,7 +105,7 @@ the same for hardware and software USB; see [`gigabit-piggyback.md`](gigabit-pig
 | V-USB | CDC-ACM transport | Out-of-spec LS bulk |
 | V-USB | Reference | [V-USB] |
 | rv003usb | Clock source | HSI |
-| rv003usb | HSI trim source | 1 ms SOF/keep-alive |
+| rv003usb | HSI trim source | 1 ms keep-alive |
 | rv003usb | HID type 1 | Keyboard |
 | rv003usb | HID type 2 | Mouse |
 | rv003usb | HID type 3 | Gamepad |
@@ -117,7 +117,7 @@ the same for hardware and software USB; see [`gigabit-piggyback.md`](gigabit-pig
 | rv003usb | RNDIS speed | "VERY SLOW" |
 | rv003usb | RNDIS hosts | Windows only |
 | rv003usb | Receiver | Pin-change interrupt in assembly |
-| rv003usb | D+ / D− / pull-up placement | All on one port |
+| rv003usb | USB pin placement | All on one port |
 | rv003usb | Allowed pins | 0–4 only |
 | rv003usb | USB IRQ priority | Must be top |
 | rv003usb | USB IRQ pre-emption | Never allowed |
@@ -187,11 +187,11 @@ bit-level work in hardware state machines and the CPU only handles bytes.
 | Control endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
 | Interrupt endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
 | Interrupt `bInterval` | ≥ 10 ms by spec | ~800 B/s per interrupt endpoint | Control-transfer DFU is quicker | – | Fine either way | Hosts often poll faster | – |
-| Bulk endpoints | Not allowed | No CDC-ECM/NCM/RNDIS on Linux | – | – | Can't be a network interface | – | – |
+| Bulk endpoints | Not allowed | No USB network class on Linux | – | – | Can't be a network interface | – | – |
 | Linux usbnet drivers | Reject LS devices | – | – | – | – | – | [rv003usb test_ethernet] |
 | Linux USB core | Converts LS bulk to interrupt | – | – | – | – | – | [LS bulk patch] |
-| CDC-ACM | Needs bulk | Out of spec | HID | WebUSB/vendor control | Avoid | Works by luck on some hosts | – |
-| LS edge rates from plain GPIOs | – | Some hubs/hosts are less tolerant | 33–47 Ω series resistors | – | Needs testing | Long cables are less tolerant too | – |
+| CDC-ACM | Needs bulk | Out of spec | HID | Vendor control transfers | Avoid | Works by luck on some hosts | – |
+| LS edge rates from plain GPIOs | – | Some hosts are less tolerant | 33–47 Ω series resistors | – | Needs testing | Long cables are less tolerant too | – |
 
 The edge-rate tests should use the Pi 5 and a laptop.
 

@@ -14,7 +14,7 @@ Google Sheet: https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_i
 
 ## Table
 
-| Part | Vendor | LCSC | Datasheet | Pkg | Body size | $ @100 | Price tier | $ @1k | Stock | vs RTL8363NB | Speed | PHYs | Ext MACs | RGMII | MII | RMII | TMII | SerDes lanes | SerDes rate | Spare PHY | SMI / MDIO | I²C | SPI | UART | CPU | Strap boot | Linux driver | Driver type | JLC | Supply | Core rail | Verdict |
+| Part | Vendor | LCSC | Datasheet | Pkg | Body size | $ @100 | Price tier | $ @1k | Stock | vs RTL8363NB | Speed | PHYs | Ext MACs | RGMII | MII | RMII | TMII | SerDes lanes | SerDes rate | Spare PHY | SMI | I²C | SPI | UART | CPU | Strap boot | Linux driver | Driver type | JLC | Supply | Core rail | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | IP175G | IC Plus | [C80220](https://www.lcsc.com/product-detail/C80220.html) | [PDF](https://www.lcsc.com/datasheet/C80220.pdf) | QFN-48 | 6×6 mm | $0.853 | 100+ | $0.671 | 3,241 | -$1.109 | 100M | 5 | ? | ? | ? | ? | ? | 0 | None | Yes | ? | ? | ? | ? | None | Yes | ? | ? | ? | 3.3 V | Not listed | Too slow |
 | RTL8367S-CG | Realtek | [C2760849](https://www.lcsc.com/product-detail/C2760849.html) | [PDF](https://www.lcsc.com/datasheet/C2760849.pdf) | LQFP-128 | 14×14 mm | $1.665 | 90+ | $1.490 | 4,576 | -$0.297 | 1000M | 5 | 2 | Yes | Yes | No | No | 1 | 2.5 Gbit/s | Yes | SMI | Not listed | Yes | Not listed | 8051 | Yes | rtl8365mb | DSA | Extended | 3.3 V | int. 1.1 V buck | Candidate |

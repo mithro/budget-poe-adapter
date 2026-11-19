@@ -53,7 +53,7 @@ $0.786 @100. Prices are LCSC, read live where marked **[live]**; others come fro
 | Use 2 | Config | – |
 | Use 3 | Telemetry | – |
 | Use 4 | Firmware update | – |
-| Use 5 | PoE/PD info | – |
+| Use 5 | PoE PD info | – |
 | Ethernet silicon, option 1 | None | NIC chip |
 | Ethernet silicon, option 2 | – | MCU MAC with a switch port |
 | Works on the passthrough SKU | Yes | No (no free pair) |
@@ -126,7 +126,7 @@ rejects low-speed network devices ([`bitbang-usb.md`](bitbang-usb.md) §3).
 |---|---|---|---|---|---|---|---|---|---|---|
 | **CH397A** | – | CH397A | QFN-24 4×4 | [C7465328] | **HS** | 480 Mbit/s | 10/100 MAC + PHY | Yes | 50 Ω built in | None (fixed-function) |
 | Switch SKU with RP2040 | RP2040 | RTL8363NB ext port | – | – | FS | – | PIO RMII via the switch | – | – | TinyUSB NCM + L2 bridge |
-| Switch SKU with CH32V307 | CH32V307 | Switch | – | – | **HS** | – | RGMII/RMII MAC → switch | – | – | WCH/TinyUSB NCM + bridge |
+| Switch SKU with CH32V307 | CH32V307 | Switch | – | – | **HS** | – | MAC → switch | – | – | NCM + bridge |
 | CH32X035 with CH390H | CH32X035 | CH390H (SPI MAC+PHY) | – | – | FS | – | 10/100 | – | – | MCU bridges SPI ⇄ USB |
 | RP2040 with PIO 10BASE-T | RP2040 | None (direct on the wire) | – | – | FS | – | Bit-banged 10M | – | – | Two experimental stacks combined |
 | CH579M | CH579M | Built-in 10M PHY | – | – | FS | – | 10BASE-T | – | – | MCU bridge |
@@ -152,7 +152,8 @@ rejects low-speed network devices ([`bitbang-usb.md`](bitbang-usb.md) §3).
 |---|
 | Config |
 | MAC |
-| VID/PID |
+| VID |
+| PID |
 
 The "not recommended" quote is pico_eth_doc's own ([pico_eth_doc]). The CH32V307 in the switch SKU is the MCU chosen in [`ethernet-switch.md`](ethernet-switch.md). Prices at 1k for the other MCUs are in [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md).
 

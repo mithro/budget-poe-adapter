@@ -56,7 +56,7 @@ controller really costs ~$1.40, both numbers rise by ~$0.80.
 | 6 | Schottky bridges | ±0.00 | −6 | Low |
 | 7 | Plainer connectors | −0.15 | −2 (LEDs) | Low |
 | 8 | Leaner assembly | −0.08 | — | Low |
-| | **Subtotal, low/medium risk** | **≈ −0.65** | **≈ −20** | |
+| | **Subtotal, up to medium risk** | **≈ −0.65** | **≈ −20** | |
 | 9 | MCU-driven synchronous buck (§4.2) | −0.50 more | −1 | **High** |
 
 | # | Removed | Replaced by | Alternative |
@@ -228,7 +228,7 @@ body diode blocks (VBUS < Vin). So:
 
 ## 7. Revised estimate (no-switch variant, USD @1k)
 
-| Block | Current BOM | Low/medium-risk set | + MCU-driven buck |
+| Block | Current BOM | Up-to-medium-risk set | + MCU-driven buck |
 |---|---:|---:|---:|
 | PoE front end | 0.53 | 0.43 | 0.43 |
 | Output buck | 1.09 | 1.09 | 0.61 |

@@ -56,8 +56,8 @@ Management from an external MCU, and what else is on the chip:
 
 | Part | MDIO | I²C | SPI | UART | EEPROM | INT pin | On-chip CPU | SPI flash | Temp. range |
 |---|---|---|---|---|---|---|---|---|---|
-| **Realtek RTL8363NB-VB-CG** | SMI (MDC/MDIO) | I²C-like slave | – | – | I²C autoload | Yes | – | – | – |
-| Realtek RTL8367S-CG | SMI (MDC/MDIO) | – | Slave | – | Yes | – | 8051 (strap-disable) | – | – |
+| **Realtek RTL8363NB-VB-CG** | SMI | I²C-like slave | – | – | I²C autoload | Yes | – | – | – |
+| Realtek RTL8367S-CG | SMI | – | Slave | – | Yes | – | 8051 (strap-disable) | – | – |
 | Realtek RTL8364NB-VB-CG | As RTL8363NB | As RTL8363NB | – | – | – | – | – | – | – |
 | **Motorcomm YT9215S** | Slave | Slave | – | Yes | Yes | – | RISC-V | Yes | – |
 | Motorcomm YT9215SC | As YT9215S | As YT9215S | – | As YT9215S | Yes | – | RISC-V | Yes | – |
@@ -150,13 +150,13 @@ power is good), use the cable diagnostics, and drive LEDs.
 | RP2350 | Good for 1 | LLDP |
 | RP2350 | Good for 2 | A little management traffic |
 | RP2350 | Not for | Throughput |
-| CH32V003 / any MCU | Management bus 1 | SMI |
-| CH32V003 / any MCU | Management bus 2 | I²C |
-| CH32V003 / any MCU | Can read 1 | Link state |
-| CH32V003 / any MCU | Can read 2 | Counters |
-| CH32V003 / any MCU | Can set | Config |
-| CH32V003 / any MCU | Can send LLDP | No |
-| CH32V003 / any MCU | Reachable on the network | No |
+| Any MCU | Management bus 1 | SMI |
+| Any MCU | Management bus 2 | I²C |
+| Any MCU | Can read 1 | Link state |
+| Any MCU | Can read 2 | Counters |
+| Any MCU | Can set | Config |
+| Any MCU | Can send LLDP | No |
+| Any MCU | Reachable on the network | No |
 
 The CH32V307's MAC talks to the switch as if the switch were a PHY. The
 CH32V208's MAC is, as far as I know (not verified here), only wired to its
@@ -189,7 +189,7 @@ Short answer: **none of them is cheaper than the RTL8363NB at JLCPCB or LCSC.** 
 
 The YT9213NB is in the same family as the YT9215.
 
-| Vendor | Part | At LCSC/JLCPCB | LCSC part | $ @1 | $ @90 | $ @900 | Other source | Verdict | Note |
+| Vendor | Part | At LCSC | LCSC part | $ @1 | $ @90 | $ @900 | Other source | Verdict | Note |
 |---|---|---|---|---|---|---|---|---|---|
 | Motorcomm | YT9215S | Yes | C5899183 | $3.98 | $2.12 | $1.92 | – | Cheapest buyable Chinese option | ~35 % dearer than RTL8363NB at volume |
 | Motorcomm | YT9213NB | No (nor at szlcsc) | – | – | – | – | Motorcomm distributor quote | The exact RTL8363NB equivalent | Upstream Linux `yt921x` support |
@@ -212,7 +212,7 @@ Takeaways:
   second source if a single‑vendor Realtek BOM is a concern.
 * Unit price for YT9213NB or a JLSemi 3+1 part could come in below
   $1.4. That would need direct quotes (Motorcomm and VOOHU for JLSemi), and they
-  would have to be consigned to JLCPCB/NextPCB as customer‑supplied parts.
+  would have to be consigned to JLCPCB or NextPCB as customer‑supplied parts.
 * Keep the RMII or MDIO design vendor‑neutral (strap‑free management, RMII to
   the MCU). Then a YT9213NB swap later only changes the footprint and driver.
 
@@ -228,7 +228,7 @@ Sources for this section:
 * **Power draw.** I did not find a datasheet power figure for RTL8363NB in the
   pages reached. Expect a few hundred mW to ~1 W with two GbE links up; this
   comes out of the PoE budget and must be counted before MPS and inrush design.
-* **NextPCB / HQ Online availability** could not be checked automatically
+* **NextPCB (HQ Online) availability** could not be checked automatically
   (site blocks robots). Search RTL8363NB‑VB‑CG, RTL8367S‑CG, YT9215S there by
   hand. HQ Online does list other Realtek Ethernet parts (RTL8201F, RTL8309M).
 * **RTL8363NB vs RTL8363SB and RTL8363SC**: the SB and SC variants add SGMII or HSGMII on the

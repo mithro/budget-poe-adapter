@@ -59,7 +59,7 @@ Each statement is marked as one of:
 | Code memory size | 16–32 KB **[V]/[I]** | Unknown | None |
 | Code memory window | 8 KB | – | – |
 | Code memory page field | IROM_MSB (2 bits) | – | – |
-| Code memory options | – | N200: configurable ILM/DLM SRAM **[V]/[I]** | – |
+| Code memory options | – | N200: configurable local SRAM **[V]/[I]** | – |
 | Instruction cache | – | N200: optional **[V]/[I]** | – |
 | EEPROM autoload size | 32 KB (matches the code size) | – | – |
 | Internal RAM | 256 B (DW8051 standard) **[I]** | Unknown | None |
@@ -81,13 +81,14 @@ Each statement is marked as one of:
 | Header (SMI loading) | None **[V]/[D]** | Unknown | None |
 | Checksum (SMI loading) | None **[V]/[D]** | Unknown | None |
 | Signature (SMI loading) | None **[V]/[D]** | Unknown | None |
-| Flash/EEPROM image framing | Unknown | Unknown | None |
+| Boot image framing | Unknown | Unknown | None |
 | Switch register access | Whole space via SFR bus **[D]** | – | None |
 | Packet path to CPU | Internal NIC **[V]** | "MCU port 10" **[V]** | None |
 | Internal NIC registers | 0x1A00–0x1A5C **[V]** | – | – |
 | Trap to CPU | – | Trap-to-internal-CPU bit **[V]** | None |
 | Interrupt: link change | Yes **[V]** | – | None |
-| Interrupt: LLDP/EEE | Yes **[V]** | – | None |
+| Interrupt: LLDP | Yes **[V]** | – | None |
+| Interrupt: EEE | Yes **[V]** | – | None |
 | Interrupt: loop detect | Yes **[V]** | – | None |
 | Interrupt: cable diag | Yes **[V]** | – | None |
 | Interrupt: ACL | Yes **[V]** | – | None |
@@ -99,7 +100,7 @@ Each statement is marked as one of:
 | MDIO master | – | Yes **[V]** | None |
 | GPIO | Yes **[V]/[D]** | Yes **[V]** | None |
 | LEDs | – | Yes **[V]** | None |
-| Timers | 0/1/2 **[V]/[D]** | – | None |
+| Timers | 3 **[V]/[D]** | – | None |
 | JTAG | – | ×2 **[V]** | None |
 | Host mailbox registers | 0x13A0–0x13A7 **[V]** | – | None |
 | Datasheet | Section exists | Draft only | Rev 1.2 |
@@ -108,17 +109,19 @@ Each statement is marked as one of:
 | Open API | GPL rtl8367c | – | GPL rtl8367c |
 | Register header in the API | Full | – | – |
 | Linux driver as a reference | – | yt921x | – |
-| Leaked docs | RTL8367RB/MB register table | – | – |
+| Leaked docs | RTL8367RB register table | – | – |
 | Toolchain 1 | SDCC | GCC rv32imac **[I]** | None |
 | Toolchain 1 source | As used by RTLPlayground | Upstream | – |
 | Toolchain 2 | Keil C51 | GCC rv32imac (Nuclei SDK) **[I]** | None |
 | Toolchain 2 source | Realtek's own | Nuclei SDK | – |
 | Debugger | – | OpenOCD + JTAG **[I]** | – |
 | Community projects | 3 | None found | None |
-| Community: RTLPlayground target | RTL8372/73 | – | – |
+| Community: RTLPlayground target 1 | RTL8372 | – | – |
+| Community: RTLPlayground target 2 | RTL8373 | – | – |
 | Community: RTLPlayground relevance | Same SFR scheme | – | – |
 | Community: Yakigani | RTL8370 IROM loader | – | – |
-| Community: Netgear "Plus" models | GS105E/GS308E | – | – |
+| Community: Netgear "Plus" model 1 | GS105E | – | – |
+| Community: Netgear "Plus" model 2 | GS308E | – | – |
 | Community: Netgear "Plus" relevance | Firmware runs on this family's 8051 | – | – |
 | User firmware feasible? | **Yes in principle** | **Unknown** | **No** |
 | User firmware documented? | **No** | No | – |
@@ -196,9 +199,9 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 
 - **Switch registers via the SFR bus [D].** The blob's register-access routines are:
   - read: `CLR EA; MOV 0xA2,addrH; MOV 0xA3,addrL; MOV 0xA0,#1; NOP×11; wait until SFR 0xA1 == 0; data = 0xA6:0xA7; SETB EA`;
-  - write: address to 0xA2/0xA3, data to 0xA4/0xA5, `MOV 0xA0,#3`, poll 0xA1.
+  - write: address to 0xA2 and 0xA3, data to 0xA4 and 0xA5, `MOV 0xA0,#3`, poll 0xA1.
 
-  This is the same scheme RTLPlayground uses on the RTL837x (`SFR_EXEC_GO` 0xA0 with 1 = read and 3 = write, `SFR_EXEC_STATUS` 0xA1, address 0xA2/0xA3, data 0xA4–0xA7; see [rtl837x_sfr.h](https://github.com/logicog/RTLPlayground)). RTLPlayground's register-access layer should therefore port almost directly. **[I]**
+  This is the same scheme RTLPlayground uses on the RTL837x (`SFR_EXEC_GO` 0xA0 with 1 = read and 3 = write, `SFR_EXEC_STATUS` 0xA1, address 0xA2 and 0xA3, data 0xA4–0xA7; see [rtl837x_sfr.h](https://github.com/logicog/RTLPlayground)). RTLPlayground's register-access layer should therefore port almost directly. **[I]**
 
   The blob also touches CKCON (0x8E), which is DW8051-specific, plus Timer 0 and the interrupt registers.
 - **Internal NIC [V].** Registers 0x1A04–0x1A5C (`nic_reg`, in the GPL [rtl8367c_reg.h](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c)) cover:
@@ -263,7 +266,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
   - No public document describes the 8051 memory map, SFRs, NIC data path or flash image format. The RTL8367S datasheet lists §9.17 "Embedded 8051", but the public copy has no body for it.
 - **Community.**
   - [RTLPlayground](https://github.com/logicog/RTLPlayground) is GPL firmware for the RTL8372 and RTL8373 DW8051, built with SDCC 4.5. Its docs cover clock dividers, timers, UART and flash via SFRs, bank switching, the NIC data path and the RTL tag format ([doc/hardware.md, doc/CpuPort.md](https://github.com/logicog/RTLPlayground/tree/main/doc)).
-  - [Yakigani](https://github.com/libc0607/Yakigani) is an RTL8370 IROM loader over bit-banged SMI using the same 0x1322/0x130C/0x1336/0xE000 sequence.
+  - [Yakigani](https://github.com/libc0607/Yakigani) is an RTL8370 IROM loader over bit-banged SMI using the same 0x1322, 0x130C, 0x1336, 0xE000 sequence.
   - The RTL8367N and RTL8370N GS105E and GS308E conversions prove that the family's 8051 runs vendor web-managed firmware from SPI flash ([OpenWrt forum](https://forum.openwrt.org/t/netgear-gs308e-v4-adding-support-for-rtl8370n-based-switches/221816)).
   - Nobody has published custom firmware for the RTL8367S and RTL8367C 8051 specifically.
 - **Toolchain.** SDCC (`-mmcs51`) works. Keil C51 is what Realtek uses. Debugging is by UART printf or the SMI-loaded RAM image; no JTAG pins are known.
@@ -389,7 +392,7 @@ The upstream [yt921x DSA driver](https://github.com/torvalds/linux/blob/20eef29b
 - YT9215SC datasheet Draft 0.7: https://cdn.promelec.ru/upload/grab/datasheet.lcsc.com/lcsc/2512311716_Motorcomm-YT9215SC_C51037433.pdf
 - YT9215S datasheet (LCSC): https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf
 - GPL Realtek rtl8367c API (register header, 8051 loader, 8051 blobs): https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c
-- Linux rtl8365mb SGMII series v2 (DW8051 loader, IROM 0xE000/0x2000): https://lkml.rescloud.iu.edu/hypermail/linux/kernel/2606.1/05986.html
+- Linux rtl8365mb SGMII series v2 (DW8051 loader, IROM 0xE000, size 0x2000): https://lkml.rescloud.iu.edu/hypermail/linux/kernel/2606.1/05986.html
 - Linux rtl8365mb SGMII series v3 (DW8051 kept in reset): https://lkml.rescloud.iu.edu/hypermail/linux/kernel/2606.1/12978.html
 - Linux rtl8365mb SGMII series, final thread (merged as fcaf2221b970): https://ratatoskr.run/lkml/2026/07/17247411/t
 - linux-firmware rtl8367s-sgmii.bin licensing thread: https://ratatoskr.run/linux-firmware/2026/06/17116216/t

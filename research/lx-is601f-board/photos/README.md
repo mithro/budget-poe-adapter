@@ -57,52 +57,60 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 
 | Ref | Part | Side | Package | Marking line 1 | Marking line 2 | Marking line 3 | Value |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| DXFRM2-DXFRM6 | Magnetics | Top | SMD 24-pin | `United-tek` | `G2401PR` |  | |
-| ED1-ED10 | ESD array | Top | SOT-23-6 | `05U` | | | | 
-| Y6 | Crystal | Top | SMD 4-pad | `25.000` | `MHz` |  | 25 MHz |
+| U4 | YT9215SCH switch IC | Top | LQFP-128 | `MOTORCOMM` | `YT9215SCH` |  |  |
+| DXFRM2-DXFRM6 | Magnetics | Top | SMD 24-pin | `United-tek` | `G2401PR` |  |  |
+| J1 | RJ45 block | Top | THT 1 x 4 |  |  |  |  |
+| J3 | Single RJ45 | Top | THT |  |  |  |  |
+| U12 | SFP host connector | Top | SMD 20-pin |  |  |  |  |
+| PIN1 | PoE module header | Top | THT 8-hole |  |  |  |  |
+| ED1-ED10 | ESD array | Top | SOT-23-6 | `05U` |  |  |  |
+| Y6 | Crystal | Top | SMD 4-pad | `25.000` | `MHZ` |  | 25 MHz |
 | PU1 | SCT2622 buck regulator | Top | ESOP-8 | `2622` | `SCT 6DC` | `2U650` | 3.3 V out |
-| PL3 | Buck inductor | Top | SMD | `100` | | 10 µH | | 
-| L3 | Inductor | Top | SMD | `4R7` | | 4.7 µH | | 
-| D40 | Buck diode | Top | SMA | `LGE` | `SS510` |  | |
-| D4 | Diode | Top | SMA | `LGE` | `SS510` |  | |
-| D5 | Diode | Top | SMA | `LGE` | `SS510` |  | |
-| L2 | Input inductor | Top | SMD | `701` | | | | 
-| RV1-RV3 | Blue disc part | Top | THT radial | | | | | 
-| C4 | Input capacitor | Top | Polymer can | | | | | 
-| TC1 | 3.3 V output capacitor | Top | Polymer can | | | 220 µF | | 
-| PR1 | Resistor | Top | SMD | `86C` | | | | 
-| PR3 | Resistor | Top | SMD | `304` | | | | 
-| J2 | `POWER2` power input connector | Top | THT 2-pin | | | | | 
+| PL3 | Buck inductor | Top | SMD | `100` |  |  | 10 µH |
+| L3 | Inductor | Top | SMD | `4R7` |  |  | 4.7 µH |
+| D40 | Buck diode | Top | SMA | `LGE` | `SS510` |  |  |
+| D4 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
+| D5 | Diode | Top | SMA | `LGE` | `SS510` |  |  |
+| L2 | Input inductor | Top | SMD | `701` |  |  |  |
+| RV1-RV3 | Blue disc part | Top | THT radial |  |  |  |  |
+| C4 | Input capacitor | Top | Polymer can |  |  |  |  |
+| TC1 | 3.3 V output capacitor | Top | Polymer can |  |  |  | 220 µF |
+| PR1 | Resistor | Top | SMD | `86C` |  |  |  |
+| PR3 | Resistor | Top | SMD | `304` |  |  |  |
+| J2 | `POWER2` power input connector | Top | THT 2-pin |  |  |  |  |
 | U10 | I²C EEPROM | Bottom | SOIC-8 | `HK 24C08` | `2S3746HA` |  | 8 Kbit |
-| U6 | Unpopulated footprint | Bottom | 8-pin | | | | | 
-| D6 | Port diode | Bottom | SMB | `2529` | `CP06C` | | | 
-| D8-D19 | Port diode | Bottom | SMB | `2529` | `CP06C` | | | 
-| D21 | Port diode | Bottom | SMB | `2529` | `CP06C` | | |
-| PR2 | Resistor | Top | SMD | `300` | | | |
-| PC6 | Capacitor | Top | SMD | | | | |
-| C18 | Capacitor | Top | SMD | | | | |
-| C20 | Capacitor | Top | SMD | | | | |
-| R2-R5 | Resistor | Top | SMD | | | | |
-| R110-R114 | Resistor | Top | SMD | | | | |
-| R41 | Resistor | Top | SMD | | | | |
-| C37 | Capacitor | Top | SMD | | | | |
-| R68 | Resistor | Top | SMD | | | | |
-| LED6 | Unpopulated footprint | Top | THT 2 x 2 | | | | |
-| LED7 | LED | Top | SMD | | | | |
-| LED8 | LED | Top | SMD | | | | |
-| POW row | LED array | Top | 6 x SMD | | | | |
-| FX row | LED array | Top | 6 x SMD | | | | |
-| RJ7-RJ18 | LED resistor | Top | SMD | | | | |
-| R29 | Resistor | Bottom | SMD | | | | |
-| R30 | Resistor | Bottom | SMD | | | | |
-| C15 | Capacitor | Bottom | SMD | | | | |
-| R67 | Resistor | Bottom | SMD | | | | |
-| R71-R74 | Resistor | Bottom | SMD | | | | |
-| R76 | Resistor | Bottom | SMD | | | | |
-| C69 | Capacitor | Bottom | 1206 | | | | |
-| C73 | Capacitor | Bottom | 1206 | | | | |
+| U6 | Unpopulated footprint | Bottom | 8-pin |  |  |  |  |
+| D6 | Port diode | Bottom | SMB | `2529` | `CP06C` |  |  |
+| D8-D19 | Port diode | Bottom | SMB | `2529` | `CP06C` |  |  |
+| D21 | Port diode | Bottom | SMB | `2529` | `CP06C` |  |  |
+| PR2 | Resistor | Top | SMD | `300` |  |  |  |
+| PC6 | Capacitor | Top | SMD |  |  |  |  |
+| C18 | Capacitor | Top | SMD |  |  |  |  |
+| C20 | Capacitor | Top | SMD |  |  |  |  |
+| R2-R5 | Resistor | Top | SMD |  |  |  |  |
+| R110-R114 | Resistor | Top | SMD |  |  |  |  |
+| R41 | Resistor | Top | SMD |  |  |  |  |
+| C37 | Capacitor | Top | SMD |  |  |  |  |
+| R68 | Resistor | Top | SMD |  |  |  |  |
+| LED6 | Unpopulated footprint | Top | THT 2 x 2 |  |  |  |  |
+| LED7 | LED | Top | SMD |  |  |  |  |
+| LED8 | LED | Top | SMD |  |  |  |  |
+| RJ7-RJ18 | LED | Top | 0603 |  |  |  |  |
+| R29 | Resistor | Bottom | SMD |  |  |  |  |
+| R30 | Resistor | Bottom | SMD |  |  |  |  |
+| C15 | Capacitor | Bottom | SMD |  |  |  |  |
+| R67 | Resistor | Bottom | SMD |  |  |  |  |
+| R71-R74 | Resistor | Bottom | SMD |  |  |  |  |
+| R76 | Resistor | Bottom | SMD |  |  |  |  |
+| C69 | Capacitor | Bottom | 1206 |  |  |  |  |
+| C73 | Capacitor | Bottom | 1206 |  |  |  |  |
+| R44 | SPF0 CS resistor | Top | SMD |  |  |  |  |
+| R89 | SPF0 SO resistor | Top | SMD |  |  |  |  |
+| R92 | SPF0 SI resistor | Top | SMD |  |  |  |  |
+| R93 | SPF0 SCK resistor | Top | SMD |  |  |  |  |
 
-Every marking starts with the maker's logo where the part has one. The
+U4 carries five marking lines; lines 3 to 5 differ between the boards and are in
+[the first table](#the-two-boards). The SFP cage over U12 is fitted on board B only. The
 marking of C4 and TC1, and the value of C4, differ between the boards and are in
 [the first table](#the-two-boards). RV1-RV3 are varistors or Y-capacitors; their
 marking is not readable in any photo.
@@ -206,7 +214,7 @@ local time.
 | [12](#photo-12) | U4 marking |
 | [12](#photo-12) | PoE module U1 |
 | [13](#photo-13) | U4 marking |
-| [13](#photo-13) | ESD arrays ED1-ED9 |
+| [13](#photo-13) | ESD arrays ED1-ED10 |
 | [13](#photo-13) | R2-R5 |
 | [13](#photo-13) | R110-R114 |
 | [14](#photo-14) | PU1 |
@@ -238,8 +246,7 @@ local time.
 | [20](#photo-20) | U4 marking |
 | [20](#photo-20) | DXFRM6 |
 | [21](#photo-21) | Empty PoE module header |
-| [21](#photo-21) | POW and FX LED array |
-| [21](#photo-21) | RJ7-RJ18 |
+| [21](#photo-21) | RJ7-RJ18 LED array |
 | [21](#photo-21) | LED6 footprint |
 | [21](#photo-21) | LED7 |
 | [21](#photo-21) | LED8 |
@@ -386,7 +393,7 @@ Board B, U4 close-up with readable marking (same as 07) and the module's U1.
 
 ![Photo 13](web/13.jpg)
 
-Board A, U4 close-up from straight above. Marking is readable. ED1-ED9, R2-R5 and
+Board A, U4 close-up from straight above. Marking is readable. ED1-ED10, R2-R5 and
 R110-R114 near the crystal are clear.
 
 ### Photo 14
@@ -438,8 +445,8 @@ Board A, U4 (readable marking) and the DXFRM6 magnetics (`G2401PR`, date `2632`)
 ![Photo 21](web/21.jpg)
 
 Board A, the corner by the RJ45 block. The PoE module header (`PIN1`, 8 holes) is
-empty. A 6 x 2 array of fitted 0603 LEDs, in a row labelled POW and a row labelled FX,
-sits at the board edge with its resistors RJ7-RJ18 below it. LED7 and LED8 are fitted.
+empty. A 6 x 2 array of fitted LEDs with the silkscreen names RJ7-RJ18, in a row
+labelled POW and a row labelled FX, sits at the board edge. LED7 and LED8 are fitted.
 LED6 is an empty through-hole footprint.
 
 ![Photo 21 with callouts](annotated/21.jpg)

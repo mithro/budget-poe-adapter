@@ -80,10 +80,10 @@ BUCK_SW,Net-(D40-K),D40,1,I,Power input and 3.3 V buck
 BUCK_SW,Net-(D40-K),PC6,2,I,Power input and 3.3 V buck
 BUCK_SW,Net-(D40-K),PL3,1,V,Power input and 3.3 V buck
 BUCK_SW,Net-(D40-K),PU1,8,V,Power input and 3.3 V buck
-Earth_Protective,Earth_Protective,J1A,SH,U,Ports 1-4 with PoE
-Earth_Protective,Earth_Protective,J1B,SH,U,Ports 1-4 with PoE
-Earth_Protective,Earth_Protective,J1C,SH,U,Ports 1-4 with PoE
-Earth_Protective,Earth_Protective,J1D,SH,U,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J101,SH,U,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J102,SH,U,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J103,SH,U,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J104,SH,U,Ports 1-4 with PoE
 Earth_Protective,Earth_Protective,J3,SH,U,Port 5 uplink and SFP
 Earth_Protective,Earth_Protective,U12,CAGE,U,Port 5 uplink and SFP
 FL_CS,Net-(U6-~{CS}),R44,1,U,Switch IC YT9215SCH
@@ -189,21 +189,21 @@ NRESET,/Switch IC YT9215SCH/NRESET,U4,89,U,Switch IC YT9215SCH
 P0_CT45,/Ports 1-4 with PoE/P0_CT45,DXFRM4,18,U,Ports 1-4 with PoE
 P0_CT78,/Ports 1-4 with PoE/P0_CT78,DXFRM4,15,U,Ports 1-4 with PoE
 P0_L1,/Ports 1-4 with PoE/P0_L1,DXFRM4,23,V,Ports 1-4 with PoE
-P0_L1,/Ports 1-4 with PoE/P0_L1,J1A,1,V,Ports 1-4 with PoE
+P0_L1,/Ports 1-4 with PoE/P0_L1,J101,1,V,Ports 1-4 with PoE
 P0_L2,/Ports 1-4 with PoE/P0_L2,DXFRM4,22,V,Ports 1-4 with PoE
-P0_L2,/Ports 1-4 with PoE/P0_L2,J1A,2,V,Ports 1-4 with PoE
+P0_L2,/Ports 1-4 with PoE/P0_L2,J101,2,V,Ports 1-4 with PoE
 P0_L3,/Ports 1-4 with PoE/P0_L3,DXFRM4,20,V,Ports 1-4 with PoE
-P0_L3,/Ports 1-4 with PoE/P0_L3,J1A,3,V,Ports 1-4 with PoE
+P0_L3,/Ports 1-4 with PoE/P0_L3,J101,3,V,Ports 1-4 with PoE
 P0_L4,/Ports 1-4 with PoE/P0_L4,DXFRM4,17,V,Ports 1-4 with PoE
-P0_L4,/Ports 1-4 with PoE/P0_L4,J1A,4,V,Ports 1-4 with PoE
+P0_L4,/Ports 1-4 with PoE/P0_L4,J101,4,V,Ports 1-4 with PoE
 P0_L5,/Ports 1-4 with PoE/P0_L5,DXFRM4,16,V,Ports 1-4 with PoE
-P0_L5,/Ports 1-4 with PoE/P0_L5,J1A,5,V,Ports 1-4 with PoE
+P0_L5,/Ports 1-4 with PoE/P0_L5,J101,5,V,Ports 1-4 with PoE
 P0_L6,/Ports 1-4 with PoE/P0_L6,DXFRM4,19,V,Ports 1-4 with PoE
-P0_L6,/Ports 1-4 with PoE/P0_L6,J1A,6,V,Ports 1-4 with PoE
+P0_L6,/Ports 1-4 with PoE/P0_L6,J101,6,V,Ports 1-4 with PoE
 P0_L7,/Ports 1-4 with PoE/P0_L7,DXFRM4,14,V,Ports 1-4 with PoE
-P0_L7,/Ports 1-4 with PoE/P0_L7,J1A,7,V,Ports 1-4 with PoE
+P0_L7,/Ports 1-4 with PoE/P0_L7,J101,7,V,Ports 1-4 with PoE
 P0_L8,/Ports 1-4 with PoE/P0_L8,DXFRM4,13,V,Ports 1-4 with PoE
-P0_L8,/Ports 1-4 with PoE/P0_L8,J1A,8,V,Ports 1-4 with PoE
+P0_L8,/Ports 1-4 with PoE/P0_L8,J101,8,V,Ports 1-4 with PoE
 P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,DXFRM4,2,I,Ports 1-4 with PoE
 P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,ED1,1,I,Ports 1-4 with PoE
 P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,U4,95,I,Switch IC YT9215SCH
@@ -235,21 +235,21 @@ P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,7,U,Ports 1-4 with PoE
 P1_CT45,/Ports 1-4 with PoE/P1_CT45,DXFRM3,18,U,Ports 1-4 with PoE
 P1_CT78,/Ports 1-4 with PoE/P1_CT78,DXFRM3,15,U,Ports 1-4 with PoE
 P1_L1,/Ports 1-4 with PoE/P1_L1,DXFRM3,23,V,Ports 1-4 with PoE
-P1_L1,/Ports 1-4 with PoE/P1_L1,J1B,1,V,Ports 1-4 with PoE
+P1_L1,/Ports 1-4 with PoE/P1_L1,J102,1,V,Ports 1-4 with PoE
 P1_L2,/Ports 1-4 with PoE/P1_L2,DXFRM3,22,V,Ports 1-4 with PoE
-P1_L2,/Ports 1-4 with PoE/P1_L2,J1B,2,V,Ports 1-4 with PoE
+P1_L2,/Ports 1-4 with PoE/P1_L2,J102,2,V,Ports 1-4 with PoE
 P1_L3,/Ports 1-4 with PoE/P1_L3,DXFRM3,20,V,Ports 1-4 with PoE
-P1_L3,/Ports 1-4 with PoE/P1_L3,J1B,3,V,Ports 1-4 with PoE
+P1_L3,/Ports 1-4 with PoE/P1_L3,J102,3,V,Ports 1-4 with PoE
 P1_L4,/Ports 1-4 with PoE/P1_L4,DXFRM3,17,V,Ports 1-4 with PoE
-P1_L4,/Ports 1-4 with PoE/P1_L4,J1B,4,V,Ports 1-4 with PoE
+P1_L4,/Ports 1-4 with PoE/P1_L4,J102,4,V,Ports 1-4 with PoE
 P1_L5,/Ports 1-4 with PoE/P1_L5,DXFRM3,16,V,Ports 1-4 with PoE
-P1_L5,/Ports 1-4 with PoE/P1_L5,J1B,5,V,Ports 1-4 with PoE
+P1_L5,/Ports 1-4 with PoE/P1_L5,J102,5,V,Ports 1-4 with PoE
 P1_L6,/Ports 1-4 with PoE/P1_L6,DXFRM3,19,V,Ports 1-4 with PoE
-P1_L6,/Ports 1-4 with PoE/P1_L6,J1B,6,V,Ports 1-4 with PoE
+P1_L6,/Ports 1-4 with PoE/P1_L6,J102,6,V,Ports 1-4 with PoE
 P1_L7,/Ports 1-4 with PoE/P1_L7,DXFRM3,14,V,Ports 1-4 with PoE
-P1_L7,/Ports 1-4 with PoE/P1_L7,J1B,7,V,Ports 1-4 with PoE
+P1_L7,/Ports 1-4 with PoE/P1_L7,J102,7,V,Ports 1-4 with PoE
 P1_L8,/Ports 1-4 with PoE/P1_L8,DXFRM3,13,V,Ports 1-4 with PoE
-P1_L8,/Ports 1-4 with PoE/P1_L8,J1B,8,V,Ports 1-4 with PoE
+P1_L8,/Ports 1-4 with PoE/P1_L8,J102,8,V,Ports 1-4 with PoE
 P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,DXFRM3,2,I,Ports 1-4 with PoE
 P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,ED2,1,I,Ports 1-4 with PoE
 P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,U4,105,I,Switch IC YT9215SCH
@@ -281,21 +281,21 @@ P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,7,U,Ports 1-4 with PoE
 P2_CT45,/Ports 1-4 with PoE/P2_CT45,DXFRM2,18,U,Ports 1-4 with PoE
 P2_CT78,/Ports 1-4 with PoE/P2_CT78,DXFRM2,15,U,Ports 1-4 with PoE
 P2_L1,/Ports 1-4 with PoE/P2_L1,DXFRM2,23,V,Ports 1-4 with PoE
-P2_L1,/Ports 1-4 with PoE/P2_L1,J1C,1,V,Ports 1-4 with PoE
+P2_L1,/Ports 1-4 with PoE/P2_L1,J103,1,V,Ports 1-4 with PoE
 P2_L2,/Ports 1-4 with PoE/P2_L2,DXFRM2,22,V,Ports 1-4 with PoE
-P2_L2,/Ports 1-4 with PoE/P2_L2,J1C,2,V,Ports 1-4 with PoE
+P2_L2,/Ports 1-4 with PoE/P2_L2,J103,2,V,Ports 1-4 with PoE
 P2_L3,/Ports 1-4 with PoE/P2_L3,DXFRM2,20,V,Ports 1-4 with PoE
-P2_L3,/Ports 1-4 with PoE/P2_L3,J1C,3,V,Ports 1-4 with PoE
+P2_L3,/Ports 1-4 with PoE/P2_L3,J103,3,V,Ports 1-4 with PoE
 P2_L4,/Ports 1-4 with PoE/P2_L4,DXFRM2,17,V,Ports 1-4 with PoE
-P2_L4,/Ports 1-4 with PoE/P2_L4,J1C,4,V,Ports 1-4 with PoE
+P2_L4,/Ports 1-4 with PoE/P2_L4,J103,4,V,Ports 1-4 with PoE
 P2_L5,/Ports 1-4 with PoE/P2_L5,DXFRM2,16,V,Ports 1-4 with PoE
-P2_L5,/Ports 1-4 with PoE/P2_L5,J1C,5,V,Ports 1-4 with PoE
+P2_L5,/Ports 1-4 with PoE/P2_L5,J103,5,V,Ports 1-4 with PoE
 P2_L6,/Ports 1-4 with PoE/P2_L6,DXFRM2,19,V,Ports 1-4 with PoE
-P2_L6,/Ports 1-4 with PoE/P2_L6,J1C,6,V,Ports 1-4 with PoE
+P2_L6,/Ports 1-4 with PoE/P2_L6,J103,6,V,Ports 1-4 with PoE
 P2_L7,/Ports 1-4 with PoE/P2_L7,DXFRM2,14,V,Ports 1-4 with PoE
-P2_L7,/Ports 1-4 with PoE/P2_L7,J1C,7,V,Ports 1-4 with PoE
+P2_L7,/Ports 1-4 with PoE/P2_L7,J103,7,V,Ports 1-4 with PoE
 P2_L8,/Ports 1-4 with PoE/P2_L8,DXFRM2,13,V,Ports 1-4 with PoE
-P2_L8,/Ports 1-4 with PoE/P2_L8,J1C,8,V,Ports 1-4 with PoE
+P2_L8,/Ports 1-4 with PoE/P2_L8,J103,8,V,Ports 1-4 with PoE
 P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,DXFRM2,2,I,Ports 1-4 with PoE
 P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,ED4,1,I,Ports 1-4 with PoE
 P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,U4,119,I,Switch IC YT9215SCH
@@ -327,21 +327,21 @@ P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,7,U,Ports 1-4 with PoE
 P3_CT45,/Ports 1-4 with PoE/P3_CT45,DXFRM5,18,U,Ports 1-4 with PoE
 P3_CT78,/Ports 1-4 with PoE/P3_CT78,DXFRM5,15,U,Ports 1-4 with PoE
 P3_L1,/Ports 1-4 with PoE/P3_L1,DXFRM5,23,V,Ports 1-4 with PoE
-P3_L1,/Ports 1-4 with PoE/P3_L1,J1D,1,V,Ports 1-4 with PoE
+P3_L1,/Ports 1-4 with PoE/P3_L1,J104,1,V,Ports 1-4 with PoE
 P3_L2,/Ports 1-4 with PoE/P3_L2,DXFRM5,22,V,Ports 1-4 with PoE
-P3_L2,/Ports 1-4 with PoE/P3_L2,J1D,2,V,Ports 1-4 with PoE
+P3_L2,/Ports 1-4 with PoE/P3_L2,J104,2,V,Ports 1-4 with PoE
 P3_L3,/Ports 1-4 with PoE/P3_L3,DXFRM5,20,V,Ports 1-4 with PoE
-P3_L3,/Ports 1-4 with PoE/P3_L3,J1D,3,V,Ports 1-4 with PoE
+P3_L3,/Ports 1-4 with PoE/P3_L3,J104,3,V,Ports 1-4 with PoE
 P3_L4,/Ports 1-4 with PoE/P3_L4,DXFRM5,17,V,Ports 1-4 with PoE
-P3_L4,/Ports 1-4 with PoE/P3_L4,J1D,4,V,Ports 1-4 with PoE
+P3_L4,/Ports 1-4 with PoE/P3_L4,J104,4,V,Ports 1-4 with PoE
 P3_L5,/Ports 1-4 with PoE/P3_L5,DXFRM5,16,V,Ports 1-4 with PoE
-P3_L5,/Ports 1-4 with PoE/P3_L5,J1D,5,V,Ports 1-4 with PoE
+P3_L5,/Ports 1-4 with PoE/P3_L5,J104,5,V,Ports 1-4 with PoE
 P3_L6,/Ports 1-4 with PoE/P3_L6,DXFRM5,19,V,Ports 1-4 with PoE
-P3_L6,/Ports 1-4 with PoE/P3_L6,J1D,6,V,Ports 1-4 with PoE
+P3_L6,/Ports 1-4 with PoE/P3_L6,J104,6,V,Ports 1-4 with PoE
 P3_L7,/Ports 1-4 with PoE/P3_L7,DXFRM5,14,V,Ports 1-4 with PoE
-P3_L7,/Ports 1-4 with PoE/P3_L7,J1D,7,V,Ports 1-4 with PoE
+P3_L7,/Ports 1-4 with PoE/P3_L7,J104,7,V,Ports 1-4 with PoE
 P3_L8,/Ports 1-4 with PoE/P3_L8,DXFRM5,13,V,Ports 1-4 with PoE
-P3_L8,/Ports 1-4 with PoE/P3_L8,J1D,8,V,Ports 1-4 with PoE
+P3_L8,/Ports 1-4 with PoE/P3_L8,J104,8,V,Ports 1-4 with PoE
 P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,DXFRM5,2,I,Ports 1-4 with PoE
 P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,ED6,1,I,Ports 1-4 with PoE
 P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,U4,1,I,Switch IC YT9215SCH

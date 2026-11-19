@@ -34,7 +34,7 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | 3 | U4 unit D: supply pins |
 | 4 | G2401PR magnetics |
 | 4 | `05U` ESD arrays |
-| 4 | J1 as four connectors J1A-J1D |
+| 4 | J1 as four connectors J101-J104 |
 | 4 | PoE centre taps |
 | 5 | DXFRM6 magnetics |
 | 5 | J3 uplink connector |
@@ -54,7 +54,7 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | [`kisch.py`](kisch.py) | KiCad schematic file writer |
 | [`renders/`](renders/) | PNG of each sheet |
 
-Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. The two differ where the sheet draws a wire with no label, for example `VIN_P` is `Net-(D4-K)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF and the renders and checks that each render keeps a clear 10 mm margin. Edit the scripts, not the `.kicad_sch` files.
+Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` or `(no trace seen)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF and the renders and checks that each render keeps a clear 10 mm margin. Edit the scripts, not the `.kicad_sch` files.
 
 Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. The mainboard connectors whose silkscreen name is not a reference are drawn as follows:
 
@@ -125,10 +125,10 @@ Buses, and the links between sheet symbols on the root sheet, are drawn grey and
 
 A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered device:
 
-- **U4** Motorcomm **YT9215SCH** (LQFP-128 with EPAD). Two boards seen: `VKTP18287 3200111C 3AU2612M0` and `VKJC09324 2500211C 3AW4849M0`. Heatsink on top, and a screw through the EPAD from the bottom.
+- **U4** Motorcomm **YT9215SCH** (LQFP-128 with EPAD). Two boards seen: `VKTP18287 3200111C 3AU2612M0` and `VKJC09324 2500211C 3AW4849M0`. One board has a heatsink on top. A tinned pad with a solder blob sits under the EPAD on the bottom side.
 - **5 copper ports**: J1 is a 1×4 RJ45 block (ports 1–4, PoE). J3 is a single RJ45 uplink (no PoE) on the opposite edge. Each port has a United-tek **G2401PR** single-port GbE transformer (DXFRM2–6; there is no DXFRM1 part, only its silkscreen).
 - **1 SFP**: U12 is a 20-pin SFP host connector. One board has the cage fitted; the other has the connector only.
-- **PoE module**: a daughterboard on the 8-pin **PIN1** header beside J1. It carries U1, a QFN-48 marked **`2184A 533AQ1H`** (4-port PSE controller, maker not identified; IP804AR is the closest public match in package and function). It also has four `R250` 0.25 Ω sense resistors (R8, R12, R13 and R14), four `330` 33 Ω resistors (R3, R9, R10 and R11), five SMB TVS diodes marked `RGS` (D1, D3, D5, D7 and one more) and 1206 capacitors.
+- **PoE module**: a daughterboard on the 8-pin **PIN1** header beside J1. It carries the part with silkscreen name U1 (drawn as U201), a QFN-48 marked **`2184A 533AQ1H`** (4-port PSE controller, maker not identified; IP804AR is the closest public match in package and function). It also has four `R250` 0.25 Ω sense resistors (silkscreen names R8, R12, R13 and R14), four `330` 33 Ω resistors (R3, R9, R10 and R11), five SMB TVS diodes marked `RGS` (D1, D3, D5, D7 and one more) and 1206 capacitors.
 - **Power**: 2-pin `POWER2` input (48–57 V assumed), L1, three `SS510` Schottkys (D1, D4, D5), three blue disc parts RV1–RV3 (varistors or Y-caps), L2 `701` inductor, C4 47 µF 63 V. **PU1 SCT2622** (marking `2622 SCT 6DC`, 4.2–60 V 2 A non-synchronous buck, ESOP-8) with PL3 10 µH, D40 catch diode and TC1 220 µF 16 V makes **3.3 V**. **1.15 V** core comes from U4's internal switching regulator (LX pins 63 and 64) through **L3 4.7 µH**.
 - **25 MHz crystal Y6** with C43 and C44, beside U4 XTAL pins 87 and 88.
 - **Config EEPROM U10** `HK24C08` (Hangshun 24C08, 1 KB I²C) on the bottom. It is presumably on U4 pin 91 (SCL) and pin 92 (SDA). The OSHWHub YT9215S board has no EEPROM; this board does.

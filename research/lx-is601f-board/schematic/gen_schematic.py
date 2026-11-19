@@ -314,7 +314,7 @@ s.pin_power(u10, '8', '+3V3', 'I'); s.pin_power(u10, '4', 'GND', 'I')
 s.stub(u10, '7', 'TBD_U10_WP', 'U', length=m(5.08))
 s.textbox('U10 (bottom side). R14, R16, R19, R29, R30 and C15\nnext to it: probably pull-ups, WP and decoupling.', m(15), m(168), m(60), m(10))
 # SPI flash footprint
-u6 = s.place('Memory_Flash:W25Q32JVSS', 'U6', 'W25Q32 (DNP)', m(60), m(215), dnp=True, mirror='y', ref_at=(m(48), m(201)), val_at=(m(48), m(229)), center=set())
+u6 = s.place('Memory_Flash:W25Q32JVSS', 'U6', 'W25Q32 (DNP)', m(60), m(215), mirror='y', ref_at=(m(48), m(201)), val_at=(m(48), m(229)), center=set())
 fl = [('49', 'R93', 'SPF0_SCK', 'FL_SCK', '6'), ('50', 'R92', 'SPF0_SI', 'FL_SI', '5'), ('54', 'R89', 'SPF0_SO', 'FL_SO', '2'),
       ('55', 'R44', 'SPF0_CS', 'FL_CS', '1')]
 for i, (n, rr, n1, n2, fp) in enumerate(fl):
@@ -438,7 +438,7 @@ PORTS = [(0, 'DXFRM4', 'J1 port 1 (PoE)', ('ED1', 'ED10'), 1), (1, 'DXFRM3', 'J1
 for i, (p, xf, jv, eds, pb) in enumerate(PORTS):
     x0 = m(12.7 + (i % 2) * 187.96)
     y0 = m(12.7 + (i // 2) * 106.68)
-    port_block(s, p, xf, 'J1%s' % 'ABCD'[i], 'RJ45 ' + jv, eds, x0, y0, pb,
+    port_block(s, p, xf, 'J10%d' % (i + 1), 'RJ45 ' + jv, eds, x0, y0, pb,
                'Port %d: U4 P%d -> %s -> J1 port %d' % (i + 1, p, xf, i + 1))
 # PoE bus to the module sheet
 yb = m(236.22)
@@ -452,16 +452,19 @@ for k in range(8):
 s.textbox('Notes: PoE assumed on the centre taps of pairs 1-2 and 3-6 (odd and even POE nets) -> header PIN1 (PoE module sheet). '
           'The centre taps of pairs 4-5 and 7-8 (Pn_CT45 and Pn_CT78) are assumed to go to Bob-Smith terminations on the bottom. '
           'Bottom parts under J1 with no net assigned: 12x SMB "CP06C" (D6, D8-D18), 1206 caps C16, C38, C55, C56, C60-C62, C65, C71, C75, C98, ..., '
-          '0603 resistors R15, R32, R67, R71-R76, R82-R84. J1 is one 1x4 RJ45 block, drawn as J1A-J1D. G2401PR pinout assumed. '
+          '0603 resistors R15, R32, R67, R71-R76, R82-R84. J1 is one 1x4 RJ45 block, drawn as J101-J104. G2401PR pinout assumed. '
           '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(12.7), m(241.3), m(165), size=1.1)
 
 # ---------------------------------------------------------------- UPLINK + SFP
 s = upl
 port_block(s, 4, 'DXFRM6', 'J3', 'RJ45 uplink (no PoE)', ('ED8', 'ED9'), m(12.7), m(15), 9, 'Port 5 (uplink): U4 P4 -> DXFRM6 -> J3')
 s.frame(m(220), m(15), m(330), m(135), 'SFP: U12')
-# The library draws the CAGE pin number at 0.5 mm; enlarge it so it can be read.
+# The library draws the CAGE pin number at 0.5 mm and lets the bottom pin names run into
+# the side pin names; enlarge the number, lengthen the CAGE pin and make the body taller.
 from kisch import parse, dump, load_lib_symbol
-sfp_node = parse(dump(load_lib_symbol('Interface_Optical', 'SFP')).replace('(size 0.508 0.508)', '(size 1.016 1.016)'))[0]
+sfp_node = parse(dump(load_lib_symbol('Interface_Optical', 'SFP')).replace('(size 0.508 0.508)', '(size 1.016 1.016)')
+                 .replace('(at -5.08 -17.78 90) (length 2.54)', '(at -5.08 -27.94 90) (length 7.62)')
+                 .replace('-17.78 90)', '-22.86 90)').replace('(end 10.16 -15.24)', '(end 10.16 -20.32)'))[0]
 sfp = s.place('Interface_Optical:SFP', 'U12', 'SFP host connector', m(275), m(70), node=sfp_node)
 for n, net, sh in (('18', 'SDS0_TXP', 'input'), ('19', 'SDS0_TXN', 'input'), ('13', 'SDS0_RXP', 'output'), ('12', 'SDS0_RXN', 'output')):
     s.stub(sfp, n, net, 'U', length=m(12.7), kind='hier', shape=sh)
@@ -479,7 +482,7 @@ s.power('GND', max(b1[0], b10[0]), yg); s.mark(sfp, '1', 'GND', 'U'); s.mark(sfp
 s.mark(sfp, 'CAGE', 'Earth_Protective', 'U')
 c = sfp.p('CAGE'); ye = c[1] + m(7.62); xe = c[0] - m(7.62)
 s.wire([c, (c[0], ye), (xe, ye)], 'U'); s.power('Earth_Protective', xe, ye, lib_name='Earth_Protective')
-s.textbox('U12 is a 20-pin SFP edge connector; one board has the cage fitted.\nAC-coupling caps, I2C and status pins are not traced.', m(225), m(110), m(100))
+s.textbox('U12 is a 20-pin SFP edge connector; one board has the cage fitted.\nAC-coupling caps, I2C and status pins are not traced.', m(225), m(120), m(100))
 s.textbox('The uplink has no PoE: POE9 and POE10 are placeholders for the centre taps of its pairs 1-2 and 3-6 (not traced).', m(12.7), m(124), m(195))
 
 # ---------------------------------------------------------------- POE MODULE
@@ -496,8 +499,8 @@ for k in range(8):
 s.textbox('Silk "PIN1": 8-pin row along J1.\nAssumed to carry the 4 ports\' PoE\ncentre-tap feeds. Needs a\ncontinuity check to J1.', m(17.78), m(90), m(52))
 s.frame(m(80), m(15), m(284), m(155), 'PoE PSE module (separate PCB)')
 pse = s.place('lxr:PSE_2184A', 'U201', '2184A', m(115), m(70), node=pse_symbol(), fields={'Silk': 'U1 (module)'})
-s.pin_power(pse, '?1', '+48V', 'U'); s.stub(pse, '?2', 'TBD_PSE_VDD', 'U', length=m(7.62))
-s.stub(pse, '?3', 'TBD_PSE_IO1', 'U', length=m(7.62)); s.stub(pse, '?4', 'TBD_PSE_IO2', 'U', length=m(7.62)); s.pin_power(pse, '?5', 'GND', 'U')
+s.pin_power(pse, '?1', '+48V', 'U'); s.stub(pse, '?2', 'TBD_PSE_VDD', 'U', length=m(2.54))
+s.stub(pse, '?3', 'TBD_PSE_IO1', 'U', length=m(2.54)); s.stub(pse, '?4', 'TBD_PSE_IO2', 'U', length=m(2.54)); s.pin_power(pse, '?5', 'GND', 'U')
 chans = [('R208', 'R8', 'R203', 'R3', 'D201', 'D1'), ('R212', 'R12', 'R209', 'R9', 'D203', 'D3'),
          ('R213', 'R13', 'R210', 'R10', 'D205', 'D5'), ('R214', 'R14', 'R211', 'R11', 'D207', 'D7')]
 for ch, (rs, rss, rd, rds, dd, dds) in enumerate(chans, 1):
@@ -542,7 +545,7 @@ s.textbox('- The array LEDs have no visible reference designators: LED101-106 (F
           '- Active-low drive from U4 and the RJ-resistor pairing are inferred. Row 6 is\n  assumed to be the SFP (U4 P9LED0, pin 67).\n'
           '- The POW LEDs are probably driven by the PoE module (not traced).', m(17.78), m(140), m(110), m(25), size=1.1)
 s.frame(m(185), m(15), m(284), m(130), 'LED6 header (DNP), LED7, LED8')
-hd = s.place('Connector_Generic:Conn_02x03_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), dnp=True, fields={'Silk': 'LED6'})
+hd = s.place('Connector_Generic:Conn_02x03_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), fields={'Silk': 'LED6'})
 for n in '123456':
     s.stub(hd, n, 'TBD_LED6_%s' % n, 'U', length=m(5.08))
 for i, lr in enumerate(('LED7', 'LED8')):

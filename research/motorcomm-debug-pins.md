@@ -273,7 +273,7 @@ The driver identifies a YT9215 by the major number 0x9002 in the `CHIP_ID` regis
 | 2 | [YT9215S](#yt9215s) |
 | 3 | [YT9215RB](#yt9215rb) |
 
-The latched strap values can be read back over MDIO from the `PON_STRAP_VAL` register (0x80324). That gives a way to check the `DIS_MCU` and `EN_SPIF` levels on real hardware [**V**](#evidence-codes).
+The strap levels sampled at power-on can be read back over MDIO from the [`PON_STRAP_CAP`](yt9215-registers/docs/reference/system.rst) register (0x80328), which is taken from its name to hold those levels. The bit positions of `DIS_MCU` and `EN_SPIF` in it are not documented [**I**](#evidence-codes).
 
 ## Community and SDK status
 
@@ -282,7 +282,7 @@ The latched strap values can be read back over MDIO from the `PON_STRAP_VAL` reg
 
 ## Implications for the adapter
 
-The adapter runs its firmware on the switch's own MCU and has no external MCU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). On a YT9215S that means `DIS_MCU` (pin [75](#s-pin-75)) stays low, as on the [mirrored board](#how-the-mirrored-board-wires-these-pins). Running code from SPI flash also needs `EN_SPIF` (pin [74](#s-pin-74)) high and `DISAUTOLOAD` (pin [76](#s-pin-76)) low. The mirrored board pulls `EN_SPIF` low and `DISAUTOLOAD` high, and flash on SPF1 puts its CS# on the `DISAUTOLOAD` pin ([SPI flash on the YT9215S](#spi-flash-on-the-yt9215s)). This reading takes the strap combinations from the [YT9215SCH boot table](#boot-table), because the S datasheet has no boot-mode table [**I**](#evidence-codes).
+The adapter runs its firmware on the switch's own MCU and has no external MCU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). On a YT9215S, running code in place from flash means `DIS_MCU` (pin [75](#s-pin-75)) stays low, as on the [mirrored board](#how-the-mirrored-board-wires-these-pins). It also needs `EN_SPIF` (pin [74](#s-pin-74)) high and `DISAUTOLOAD` (pin [76](#s-pin-76)) low. The mirrored board pulls `EN_SPIF` low and `DISAUTOLOAD` high, and flash on SPF1 puts its CS# on the `DISAUTOLOAD` pin ([SPI flash on the YT9215S](#spi-flash-on-the-yt9215s)). This reading takes the strap combinations from the [YT9215SCH boot table](#boot-table), because the S datasheet has no boot-mode table [**I**](#evidence-codes). That table's flash-to-RAM row has `DIS_MCU` high [**C**](#evidence-codes).
 
 A debug option stays open cheaply with one 0402 pad on each of these YT9215S pins. Most already carry strap resistors, so a test pad per net costs almost nothing.
 
@@ -314,7 +314,7 @@ A first bench experiment on the mirrored board needs no new PCB:
 
 ## LX-IS601F V2.0 boards
 
-Two bought 5-port switch boards with the silkscreen `LX-IS601F V2.0` were photographed. This section records where the debug pins of their switch IC go on the top copper layer. The photos, the annotation script and the method are in the [board notes](lx-is601f-board/README.md).
+Two bought switch boards with five copper ports and one SFP port and the silkscreen `LX-IS601F V2.0` were photographed. This section records where the debug pins of their switch IC go on the top copper layer. The photos, the annotation script and the method are in the [board notes](lx-is601f-board/README.md).
 
 ### The switch IC is a YT9215SCH
 
@@ -350,10 +350,10 @@ Right edge, pins 46 to 55.
 | <a id="lx-u4"></a>U4 | Switch IC (YT9215SCH) | – | – |
 | <a id="lx-y6"></a>Y6 | 25 MHz crystal | <a id="sch-pin-87"></a>87 | XTALO |
 | [Y6](#lx-y6) | 25 MHz crystal | <a id="sch-pin-88"></a>88 | XTALI |
-| <a id="lx-r93"></a>R93 | Series resistor | [49](#sch-pin-49) | SPF0 SCK |
-| <a id="lx-r92"></a>R92 | Series resistor | [50](#sch-pin-50) | SPF0 SI |
-| <a id="lx-r89"></a>R89 | Series resistor | [54](#sch-pin-54) | SPF0 SO |
-| <a id="lx-r44"></a>R44 | Series resistor | [55](#sch-pin-55) | SPF0 CS |
+| <a id="lx-r93"></a>R93 | Resistor | [49](#sch-pin-49) | SPF0 SCK |
+| <a id="lx-r92"></a>R92 | Resistor | [50](#sch-pin-50) | SPF0 SI |
+| <a id="lx-r89"></a>R89 | Resistor | [54](#sch-pin-54) | SPF0 SO |
+| <a id="lx-r44"></a>R44 | Resistor | [55](#sch-pin-55) | SPF0 CS |
 | <a id="lx-r22"></a>R22 | Resistor | <a id="sch-pin-86"></a>86 | AVDDH |
 
 ### How the leads were numbered
@@ -413,8 +413,8 @@ The routes were read from photos of the top side only, and the lead numbers were
 ### Unknowns
 
 - Where the vias go on other layers.
-- The strap levels.
+- The strap levels are inferred from the bottom-side resistor array in [`switch-board-strapping.md`](switch-board-strapping.md#strap-resistor-array) and are not confirmed by a meter.
 - What the far pads of [R44](#lx-r44), [R89](#lx-r89), [R92](#lx-r92) and [R93](#lx-r93) connect to.
 - Pin [86](#sch-pin-86) is AVDDH in [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf), yet a trace appears to run from it to [R22](#lx-r22) beside the crystal [**I**](#evidence-codes).
 
-A photo of the bottom side and a continuity check would settle these.
+A continuity check would settle these.

@@ -25,7 +25,7 @@ Statements that rest on a source are marked with one of these evidence codes:
 | Item | Value | Evidence | Detail |
 | --- | --- | --- | --- |
 | Core | Nuclei N205 | [**V**](#evidence-codes) | [Identity](#identity) |
-| Instruction set | RV32IMAC-class | [**VI**](#evidence-codes) | [Identity](#identity) |
+| Instruction set | RV32IMAC-class | [**I**](#evidence-codes) | [Identity](#identity) |
 | SRAM (YT9215SCH) | 64 KB | [**V**](#evidence-codes) | [Memory](#memory) |
 | Boot ROM (YT9215SCH) | 16 KB | [**V**](#evidence-codes) | [Memory](#memory) |
 | I-cache (YT9215SCH) | 2 KB | [**V**](#evidence-codes) | [Memory](#memory) |
@@ -67,11 +67,11 @@ Statements that rest on a source are marked with one of these evidence codes:
 
 ## Memory
 
-Section 4 of the
-[YT9215SCH V1.03 datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)
-("Embedded RISC-V"), with its section 5 on the SPI flash interface, is the only public
-description of the CPU's memory [**V**](#evidence-codes). The YT9215S, YT9215SC and
-YT9215RB draft datasheets give no figures, so the values are confirmed for the YT9215SCH
+The "Embedded RISC-V" subsection of the
+[YT9215SCH V1.03 datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf),
+with its section on the SPI flash interface, is the only public
+description of the CPU's memory [**V**](#evidence-codes). The [YT9215S](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf), [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) and
+[YT9215RB](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) draft datasheets give no figures, so the values are confirmed for the YT9215SCH
 only. It says the CPU is there "to support software
 management/protocol functions" and that it "can transmit to or receive frames from the
 switch core". The two sections give these figures:
@@ -112,11 +112,11 @@ The memory map is not published.
   | 0 | 0 | 1 | 1 | EEPROM | RAM | [**V**](#evidence-codes) |
   | 1 | 1 | Any | Any | SPI flash | RAM | [**C**](#evidence-codes) |
 
-  XIP means the code is executed in place from the flash and nothing is copied. The row
-  marked [**C**](#evidence-codes) is as printed: it loads RAM from flash with the CPU
-  disabled, which makes no sense as written. The datasheet also has a figure named
-  "Load From Flash To RAM", so a flash-to-RAM mode exists, but its strap combination is
-  uncertain.
+  XIP means the code is executed in place from the flash and nothing is copied. The
+  datasheet's figure "Load From Flash To RAM" draws the same strap levels as the third
+  row, so the datasheet gives that combination twice. The row is marked
+  [**C**](#evidence-codes) because it has `DIS_MCU` high, and the description of the
+  `DIS_MCU` pin says a pull-up disables the CPU.
 - On the YT9215S, the chip-select pin of the second flash pin group is also the
   `DISAUTOLOAD` strap, so the usual pull-up on chip select would latch `DISAUTOLOAD`
   high and nothing would load. The detail is in
@@ -150,7 +150,7 @@ The word "USB" does not occur in the
 datasheets [**V**](#evidence-codes). Neither names an ADC other than the one inside
 the Ethernet PHY receiver [**V**](#evidence-codes).
 
-The datasheet describes the interrupt output as a signal to an external CPU. The pins of
+The [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) datasheet describes the interrupt output as a signal to an external CPU. The pins of
 the YT9215SC, YT9215SCH and YT9215RB are in the
 [YT9215SC and YT9215SCH](motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) and
 [YT9215RB](motorcomm-debug-pins.md#yt9215rb) tables. How the CPU itself reaches these
@@ -162,7 +162,7 @@ functions (register addresses, drivers) is not published.
   [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) and
   [YT9215RB](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) draft
   datasheets name two JTAG pin groups [**V**](#evidence-codes).
-- The YT9215SCH V1.03 datasheet has no JTAG pin names
+- The [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) datasheet has no JTAG pin names
   [**V**](#evidence-codes). The detail is in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#the-newest-datasheet-has-no-jtag).
 - If the CPU's debug module is on one of the JTAG groups, standard RISC-V debug with
@@ -177,8 +177,8 @@ gives these facts [**V**](#evidence-codes):
 
 - The switch has 11 ports: "8 internal + 2 external + 1 mcu". The CPU is port 10.
 - The driver's author notes that "Port 10 for MCU … is untested yet".
-- `YT921X_CPU_COPY` (0x180690) has `TO_INT_CPU` and `TO_EXT_CPU` bits, so frames can be
-  trapped or copied to the internal CPU.
+- `YT921X_CPU_COPY` (0x180690) has `TO_INT_CPU` and `TO_EXT_CPU` bits. From the names,
+  frames can be trapped or copied to the internal CPU [**I**](#evidence-codes).
 - The CPU tag TPID is 0x9988. [The register guide](yt9215-registers/docs/cpu-tag.rst)
   describes the tag as an external host sees it on an external CPU port.
 
@@ -194,7 +194,7 @@ so how much of the guide carries over to firmware on the CPU is unknown.
   [register guide](yt9215-registers/README.md) draws on it [**V**](#evidence-codes).
   Whether it holds any code for the internal CPU has not been checked.
 - No Motorcomm SDK or programming guide for firmware on the CPU was found in searches
-  [**I**](#evidence-codes). The `yt921x` author notes the "lack of document".
+  [**I**](#evidence-codes).
 - No public firmware, OpenOCD configuration or boot-ROM dump was found. Searches covered
   English and Chinese terms.
 - A FreeBSD port of the switch driver exists

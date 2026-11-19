@@ -18,10 +18,13 @@ block automated fetches.
 
 | Board | Switch IC | Kind | CPU strap | Notes |
 | --- | --- | --- | --- | --- |
-| <a id="board-lx"></a>LX-IS601F V2.0 | YT9215SCH | Bought switch board | [Unknown](motorcomm-debug-pins.md#unknowns) | [Board notes](lx-is601f-board/README.md) |
-| <a id="board-wu-kou"></a>Open-hardware 5-port switch V2.0 | YT9215S | Open-hardware design | [Enabled](motorcomm-debug-pins.md#how-the-mirrored-board-wires-these-pins) | [Design files](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0) |
+| <a id="board-lx"></a>LX-IS601F V2.0 | YT9215SCH | Bought switch board | [Disabled](switch-board-strapping.md#lx-is601f-v20) | [Board notes](lx-is601f-board/README.md) |
+| <a id="board-wu-kou"></a>Open-hardware 5-port switch V2.0 | YT9215S | Open-hardware design | [Enabled](switch-board-strapping.md#wu-kou-yt9215s-v20) | [Design files](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0) |
 
-- The [LX-IS601F V2.0](#board-lx) board has five copper ports and one SFP port. Where the
+- The [LX-IS601F V2.0](#board-lx) board has five copper ports and one SFP port. Its
+  strap levels are inferred from a photo [**I**](#evidence-codes); the strapping and
+  major components of both boards are in
+  [`switch-board-strapping.md`](switch-board-strapping.md). Where the
   debug pins of its switch IC come out is in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#lx-is601f-v20-boards), and a
   reverse-engineered schematic is in
@@ -45,19 +48,20 @@ distributors and marketplaces found none listed [**I**](#evidence-codes).
 | Part | GE ports | SerDes ports | RGMII ports | CPU on the product page | CPU in the datasheet |
 | --- | --- | --- | --- | --- | --- |
 | YT9215S | 5 | 1 | 1 | No | Yes |
-| YT9215SC | 5 | 1 | 1 | Yes | Yes |
+| YT9215SC | 5 | 2 | 1 | Yes | Yes |
 | YT9215RB | 5 | – | 2 | No | Yes |
 | YT9218N | 8 | – | – | Yes | Not checked |
 | YT9218MB | 8 | – | – | Yes | Not checked |
 
-- The port counts of the YT9215 parts are those of their datasheets. The
+- The [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) datasheet lists two SerDes
+  ports and one RGMII port for two extension ports: the second extension port is either
+  RGMII or SerDes. The
   [selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf)
-  also lists a YT9215SC configuration with two SerDes ports and no RGMII port
-  [**V**](#evidence-codes).
+  says the same [**V**](#evidence-codes).
 - The product page lists the CPU and simple network management for the YT9215SC, the
   YT9218N and the YT9218MB only. Its wording for the YT9215SC is "内置高性能RISC-V
   核心CPU" and "支持简单网管" [**V**](#evidence-codes).
-- The datasheets of the YT9215S, the YT9215SC and the YT9215RB all list an integrated
+- The [YT9215S](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf), [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) and [YT9215RB](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) datasheets all list an integrated
   RISC-V microprocessor [**V**](#evidence-codes). The evidence is in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#every-variant-has-the-risc-v-mcu).
 - The product page and the datasheets therefore disagree for the YT9215S and the
@@ -78,39 +82,42 @@ run firmware on the switch CPU.
 
 | Product | Property | Value | Evidence |
 | --- | --- | --- | --- |
-| [Xiaomi CR881x](#product-cr881x) | Model 1 | CR8816 |  |
-| [Xiaomi CR881x](#product-cr881x) | Model 2 | CR8818 |  |
-| [Xiaomi CR881x](#product-cr881x) | Type | China carrier AX3000 mesh units |  |
-| [Xiaomi CR881x](#product-cr881x) | Board | M79 |  |
+| [Xiaomi CR881x](#product-cr881x) | Model 1 | CR8816 | – |
+| [Xiaomi CR881x](#product-cr881x) | Model 2 | CR8818 | – |
+| [Xiaomi CR881x](#product-cr881x) | Type | China carrier AX3000 mesh units | – |
+| [Xiaomi CR881x](#product-cr881x) | Board | M79 | – |
 | [Xiaomi CR881x](#product-cr881x) | Switch CPU port | Port 8 | [**V**](#evidence-codes) |
 | [Xiaomi CR881x](#product-cr881x) | Switch reset | GPIO 35 | [**V**](#evidence-codes) |
-| [Xiaomi CR881x](#product-cr881x) | Source 1 | [OpenWrt forum](https://forum.openwrt.org/t/ipq5018-yt9215s-and-1000base-x-2500base-x/241325) |  |
-| [Xiaomi CR881x](#product-cr881x) | Source 2 | [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150) |  |
-| [Xiaomi CR881x](#product-cr881x) | Host UART header | J1 |  |
-| [Xiaomi CR881x](#product-cr881x) | Host UART pin order | VCC-RX-GND-TX |  |
-| [Xiaomi CR881x](#product-cr881x) | OpenWrt | [hzyitc/openwrt-redmi-ax3000](https://github.com/hzyitc/openwrt-redmi-ax3000) |  |
-| [Xiaomi CR881x](#product-cr881x) | Known issue | Switch probe flaky on some boards | [**V**](#evidence-codes) |
-| [Xiaomi CR881x](#product-cr881x) | Where sold | Second-hand in China |  |
-| [Xiaomi CR881x](#product-cr881x) | Marketplace | Xianyu |  |
-| [Xiaomi CR881x](#product-cr881x) | AliExpress | Occasional listings |  |
-| [Xiaomi CR881x](#product-cr881x) | eBay | Occasional listings |  |
-| [Xiaomi CR881x](#product-cr881x) | Typical price | US$25–50 |  |
+| [Xiaomi CR881x](#product-cr881x) | Source 1 | [OpenWrt forum](https://forum.openwrt.org/t/ipq5018-yt9215s-and-1000base-x-2500base-x/241325) | – |
+| [Xiaomi CR881x](#product-cr881x) | Source 2 | [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150) | – |
+| [Xiaomi CR881x](#product-cr881x) | Host UART header | J1 | – |
+| [Xiaomi CR881x](#product-cr881x) | Host UART pin 1 | VCC | – |
+| [Xiaomi CR881x](#product-cr881x) | Host UART pin 2 | RX | – |
+| [Xiaomi CR881x](#product-cr881x) | Host UART pin 3 | GND | – |
+| [Xiaomi CR881x](#product-cr881x) | Host UART pin 4 | TX | – |
+| [Xiaomi CR881x](#product-cr881x) | OpenWrt | [hzyitc/openwrt-redmi-ax3000](https://github.com/hzyitc/openwrt-redmi-ax3000) | – |
+| [Xiaomi CR881x](#product-cr881x) | Known issue | Flaky switch probe | [**V**](#evidence-codes) |
+| [Xiaomi CR881x](#product-cr881x) | Where sold | Second-hand in China | – |
+| [Xiaomi CR881x](#product-cr881x) | Marketplace | Xianyu | – |
+| [Xiaomi CR881x](#product-cr881x) | AliExpress | Occasional listings | – |
+| [Xiaomi CR881x](#product-cr881x) | eBay | Occasional listings | – |
+| [Xiaomi CR881x](#product-cr881x) | Typical price | US$25–50 | – |
 | [Xiaomi CR881x](#product-cr881x) | Not confirmed YT9215 | CR8806 | [**I**](#evidence-codes) |
 | [Xiaomi CR881x](#product-cr881x) | Not confirmed YT9215 | CR8808 | [**I**](#evidence-codes) |
 | [Xiaomi CR881x](#product-cr881x) | Not confirmed YT9215 | CR8809 | [**I**](#evidence-codes) |
 | [Xiaomi CR881x](#product-cr881x) | Not confirmed YT9215 | Redmi AX3000 | [**I**](#evidence-codes) |
-| [BDY-G98](#product-g98) | Type 1 | NAS |  |
-| [BDY-G98](#product-g98) | Type 2 | Router |  |
-| [BDY-G98](#product-g98) | LAN ports | 8 |  |
+| [BDY-G98](#product-g98) | Type 1 | NAS | – |
+| [BDY-G98](#product-g98) | Type 2 | Router | – |
+| [BDY-G98](#product-g98) | LAN ports | 8 | – |
 | [BDY-G98](#product-g98) | Switch attach | Each YT9215S on an RK3588 GMAC | [**V**](#evidence-codes) |
-| [BDY-G98](#product-g98) | Source | [GitHub issue](https://github.com/yifengyou/BDY_G98_RK3588/issues/6) |  |
-| [BDY-G98](#product-g98) | Known issue | Cross-chip forwarding lock-up bug reported | [**V**](#evidence-codes) |
-| [BDY-G98](#product-g98) | Where sold | China-market box |  |
-| [BDY-G98](#product-g98) | Amazon AU | Not found |  |
-| [BDY-G98](#product-g98) | eBay | Not found |  |
-| [BDY-G98](#product-g98) | AliExpress | Not found |  |
-| Unnamed industrial boards | Source | [CSDN write-up](https://blog.csdn.net/xuesong10210/article/details/135957672) |  |
-| Unnamed industrial boards | Product names | Not given |  |
+| [BDY-G98](#product-g98) | Source | [GitHub issue](https://github.com/yifengyou/BDY_G98_RK3588/issues/6) | – |
+| [BDY-G98](#product-g98) | Known issue | Cross-chip forwarding lock-up | [**V**](#evidence-codes) |
+| [BDY-G98](#product-g98) | Where sold | China-market box | – |
+| [BDY-G98](#product-g98) | Amazon AU | Not found | – |
+| [BDY-G98](#product-g98) | eBay | Not found | – |
+| [BDY-G98](#product-g98) | AliExpress | Not found | – |
+| Unnamed industrial boards | Source | [CSDN write-up](https://blog.csdn.net/xuesong10210/article/details/135957672) | – |
+| Unnamed industrial boards | Product names | Not given | – |
 
 Before buying a Xiaomi unit, check that the model is a CR881x: the other models in the
 table are not confirmed to carry a YT9215.
@@ -139,11 +146,11 @@ Results change daily.
 - Does the CR881x's YT9215S have its CPU strapped off (pin
   [75](motorcomm-debug-pins.md#s-pin-75))? A photo of the board around the switch would
   answer it.
-- Do the [LX-IS601F V2.0](#board-lx) boards run code on the CPU? The board carries a
-  24C08 EEPROM and a flash footprint beside its YT9215SCH
-  ([board schematic notes](lx-is601f-board/schematic/README.md)), and the
-  [boot table](motorcomm-debug-pins.md#boot-table) has a mode that loads CPU RAM from an
-  EEPROM. Reading the EEPROM and the strap levels would answer it.
+- Is the CPU of the [LX-IS601F V2.0](#board-lx) boards really disabled? The strap levels
+  are inferred from a photo of the resistor array, not measured
+  ([`switch-board-strapping.md`](switch-board-strapping.md#checks-that-would-confirm-the-strapping)).
+  With those levels the chip loads its registers from the 24C08 EEPROM on the board and
+  the CPU does not run.
 - Does any other retail product run firmware on the YT9215 CPU? None was identified. Motorcomm
   describes the CPU as being for simple network management, so a web-managed switch built
   on a YT9215SC or a YT9218 would be the place to look [**I**](#evidence-codes).

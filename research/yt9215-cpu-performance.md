@@ -314,7 +314,7 @@ workload model and the tools that measure it:
 | [`pd_lldp.c`](yt9215-cpu-performance/pd_lldp.c) | Workload in C |
 | [`rv32e_emu.py`](yt9215-cpu-performance/rv32e_emu.py) | RV32E emulator |
 | [`bench.py`](yt9215-cpu-performance/bench.py) | Benchmark driver |
-| [`results.txt`](yt9215-cpu-performance/results.txt) | Output of `bench.py` |
+| [`results.txt`](yt9215-cpu-performance/results.txt) | Output of [`bench.py`](yt9215-cpu-performance/bench.py) |
 | [`link.ld`](yt9215-cpu-performance/link.ld) | Linker script |
 
 How it works:
@@ -328,7 +328,7 @@ How it works:
   instructions.
 - The code reads time from the `mcycle` counter and reaches the PD signal through one
   GPIO input register and one GPIO output register.
-- `bench.py` generates the waveform of a PD message at 270, 300 and 330 kbit/s, feeds
+- [`bench.py`](yt9215-cpu-performance/bench.py) generates the waveform of a PD message at 270, 300 and 330 kbit/s, feeds
   it to the emulated GPIO input, and checks that the code decodes it. It decodes the
   waveform the code transmits in the same way.
 

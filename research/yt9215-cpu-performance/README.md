@@ -11,7 +11,7 @@ a YT9215.
 | [`pd_lldp.c`](pd_lldp.c) | Workload in C |
 | [`rv32e_emu.py`](rv32e_emu.py) | RV32E emulator |
 | [`bench.py`](bench.py) | Benchmark driver |
-| [`results.txt`](results.txt) | Output of `bench.py` |
+| [`results.txt`](results.txt) | Output of [`bench.py`](bench.py) |
 | [`link.ld`](link.ld) | Linker script |
 
 The workload is USB-PD transmit, receive and GoodCRC reply through GPIO registers, the
@@ -41,7 +41,7 @@ python3 bench.py --check        # fail if results.txt is out of date
 - **The pins.** One register at `0x40000000` reads the comparator output and one at
   `0x40000004` drives the CC line. These addresses are placeholders: the GPIO registers
   of the YT9215 are not published.
-- **The PD partner.** `bench.py` has its own line coder and decoder. It generates the
+- **The PD partner.** [`bench.py`](bench.py) has its own line coder and decoder. It generates the
   edges of a message at a chosen bit rate for the code to receive, and decodes the
   edges the code transmits.
 - **The messages.** Transmit is tested with the eight GoodCRC messages. Receive is

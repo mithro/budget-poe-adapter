@@ -150,7 +150,9 @@ The memory map is not published.
 ## Clock
 
 - The CPU clock is not published.
-- The chip takes a 25 MHz crystal or oscillator ([verified](#evidence-codes)).
+- The chip takes a 25 MHz crystal or oscillator
+  ([YT9215SCH datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf))
+  ([verified](#evidence-codes)).
 - The [`yt921x` Linux driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.h#L177) defines a `SYS_CLK` register at `0xE0040`. It names value 0 as 125 MHz for the
   YT9215 and value 1 as 143 MHz ([verified](#evidence-codes)).
   The vendor SDK reads the same register and turns value 0 into an 8 ns cycle time and value 1 into 7 ns

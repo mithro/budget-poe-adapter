@@ -1,4 +1,6 @@
-# Cost and part-count reduction for the PoE → USB-C adapter
+# Cost and part-count reduction
+
+> **Archived.** This note is not part of the current design. It trims a bill of materials built around an external CH32X035 MCU and a passive Ethernet passthrough. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 
 Scope: everything except the switch-vs-passthrough
 question (covered in [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md)). The
@@ -92,12 +94,12 @@ From the WCH datasheet (V1.7) and LCSC:
 
 * **USB PD controller + PHY** on PC14 and PC15 (CC1 and CC2): PD 2.0 or 3.0, Source,
   Sink and DRP, automatic BMC encode and decode and CRC. The GoodCRC 195 µs
-  deadline, the main bit-bang risk in [`usb-c-pd.md` section 5](usb-c-pd.md#5-usb-pd-physical-layer-bmc-on-cc), becomes a hardware job.
+  deadline, the main bit-bang risk in [`usb-c-pd.md` section 5](../../research/usb-c-pd.md#5-usb-pd-physical-layer-bmc-on-cc), becomes a hardware job.
 * **CC pull-up current sources** of 80 µA, 180 µA and 330 µA, which are the Default, 1.5 A and 3 A Rp
   without resistors.
 * **Analog:** 3 rail-to-rail comparators (15 ns, output straight into TIM2),
   2 OPA and PGA (×4–×32), 12-bit ADC with 14 channels. Enough for the Vport and
-  class-current loop in [`poe.md` section 6](poe.md#6-what-a-software-pd-needs-electrically), the VBUS check at 5 V and at 12 V and output current
+  class-current loop in [`poe.md` section 6](../../research/poe.md#6-what-a-software-pd-needs-electrically), the VBUS check at 5 V and at 12 V and output current
   sensing through a PGA.
 * **Supply:** 2.0–5.5 V (3.0–5.3 V with PD or USB on). **Run at 8 MHz HSI:
   2.2 mA**; sleep 1.3–1.5 mA. That fits the ≤ 4 mA mark-event budget with
@@ -149,7 +151,7 @@ small for a Pi 5.
 **None supports 802.3bt.** A PD IC also can't be combined with MCU-driven bt
 classes, because it presents its own class current at every event. So:
 
-* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from [`poe.md` section 6.4](poe.md#64-minimal-external-parts-architecture-b).
+* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from [`poe.md` section 6.4](../../research/poe.md#64-minimal-external-parts-architecture-b).
 * **at-only SKU (≤ ~22 W):** TMI7303B replaces the signature, class sink,
   hot-swap FET and most of the UVLO and bootstrap. Roughly cost-neutral
   (~+$0.05) but ~6 fewer parts and much less compliance risk. The MCU then

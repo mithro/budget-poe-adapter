@@ -1,10 +1,12 @@
-# PoE (Power over Ethernet) for a cheap, software-driven PD
+# PoE powered device
+
+> **Scope.** This note assumes a general-purpose MCU with an ADC, comparators and fast timers does the negotiation. The current design has no such MCU: it uses only the YT9215 switch IC and its internal RISC-V CPU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). The standards, timings and electrical limits here apply to any implementation. How the YT9215 does the job is not worked out in this note.
 
 Research notes for the open source PoE → USB-C adapter. Scope: the PoE
 standards, how a Powered Device (PD) negotiates power, and the electrical
 requirements for doing that negotiation with a budget MCU (WCH CH32V0xx,
 CH32V2xx, RP2040 and RP2350) plus a handful of discrete parts, non-isolated,
-with a 1000BASE-T data path passed through to the Raspberry Pi.
+with a 1000BASE-T link to the Raspberry Pi.
 
 <a id="evidence-codes"></a>
 Evidence codes:
@@ -36,8 +38,8 @@ anything a design depends on should be re-checked against IEEE 802.3-2022
   **802.3bt Class 5 (40 W) PD on a 4-pair Type 3 or Type 4 PSE**. On an 802.3at switch
   the adapter should fall back to ~4.5 A at 5 V (≈ 22 W).
 * Physical-layer classification alone is sufficient for all classes up to 8.
-  LLDP is not required, which matters because a passthrough adapter has no
-  Ethernet PHY of its own.
+  LLDP is not required, so the adapter gets its full power before its switch IC
+  forwards a frame.
 * Non-isolated is functionally fine but **not 802.3-compliant** (the standard
   requires 1500 Vrms isolation between the MDI and any user-accessible
   conductor, which includes the USB-C shell). See [section 8](#8-isolation-and-safety-non-isolated-design).
@@ -117,30 +119,20 @@ converter for **~36–57 V input** (and 60 V absolute with a TVS).
   mode of one pair, − is the common mode of the other. Data is differential,
   power is common-mode, so they coexist.
 
-### Implications for a gigabit passthrough adapter
+### Implications for an adapter with a switch IC
 
-The adapter sits between the switch and the Pi's own Ethernet jack. It must
-take common-mode DC off the four pairs without degrading the 125 MBd PAM-5
-signal (energy up to ~100 MHz; return loss and insertion loss limits apply from
-1 MHz). Options, cheapest last:
+The adapter sits between the PoE switch and the Pi's own Ethernet jack, and its switch IC
+terminates both links. The input jack connects to one PHY port of the switch IC and the
+output jack to another, each through its own magnetics. No signal runs from one jack to the
+other, so taking the power off has no effect on the link to the Pi.
 
-1. **Back-to-back magnetics.** Switch-side RJ45 with PoE-rated integrated
-   magnetics (centre taps brought out) wired to a second set of magnetics
-   driving the Pi-side jack. Easiest to get right; four transformer channels
-   per side. PoE-capable magjacks are cheap in volume.
-2. **Single 4-channel PoE splitter transformer**, wire side on the input jack,
-   centre taps to the bridges, other side to the output jack. Half the
-   magnetics of option 1. The Pi's own magnetics then see a normal
-   transformer-coupled link.
-3. **Inductive tap**: series DC-blocking capacitors on each of the 8 wires
-   towards the Pi and a matched pair of high-current inductors (or a
-   centre-tapped common-mode choke) from each pair to the bridge. Fewest
-   parts, but inductor matching, saturation at 0.6–1 A and return loss
-   become the design problem. Many cheap "gigabit PoE splitters" do this.
+The input port needs PoE-rated magnetics with the cable-side centre taps of all four pairs brought
+out to the bridges. A PoE-capable magjack is cheap in volume. The output port takes
+ordinary gigabit magnetics.
 
 Note: the Raspberry Pi 5 brings its own magnetics' centre taps out on the
-4-pin PoE header (VC1–VC4). A HAT-style design could use that and skip the
-passthrough entirely, but it does not give a USB-C adapter.
+4-pin PoE header (VC1–VC4). A HAT-style design could take its power there,
+but it does not give a USB-C adapter.
 
 For bt 4-pair power both pairsets must be connected to the PD, i.e. all four
 centre taps used.
@@ -300,9 +292,11 @@ deliberately stop to power-cycle the Pi from the switch.
 
 ### 4.5 LLDP (data-link layer classification)
 
-Optional for every class. Used to fine-tune allocation after power-up. A
-passthrough adapter has no PHY so it cannot speak LLDP; the Pi could, but the
-adapter does not need it. Physical classification alone gets up to Class 8.
+Optional for every class. Used to fine-tune allocation after power-up. The adapter's
+switch IC terminates the link from the PSE, so LLDP would have to come from the adapter's
+firmware. Whether the YT9215 CPU can send a frame is an open question in
+[The RISC-V CPU inside the YT9215](yt9215-embedded-cpu.md#packet-path). The adapter does
+not need LLDP: physical classification alone gets up to Class 8.
 
 ---
 
@@ -504,10 +498,11 @@ PASSIVE (Vport > 30 V with no class sequence seen):
   another network port. The PoE "−" rail then gets referenced to earth through
   the Pi's GND. This is usually harmless with one floating PSE, but surge and
   ESD events on the cable now couple into the Pi. Mitigations: robust TVS on
-  the 48 V rail, the Ethernet data path stays transformer-isolated (the Pi's
-  magnetics remain in circuit), and documenting the limitation.
-* The data path itself stays isolated in all options in [section 3](#3-wiring-mode-a-mode-b-polarity-and-1000base-t), because the Pi's
-  own magnetics are still in the link.
+  the 48 V rail, the Ethernet data path stays transformer-isolated (each port of the
+  switch IC has its own magnetics), and documenting the limitation.
+* The data path stays transformer-isolated on both links: the magnetics of the input port
+  stand between the PoE cable and the switch IC, and the magnetics of the output port stand
+  between the switch IC and the cable to the Pi ([section 3](#3-wiring-mode-a-mode-b-polarity-and-1000base-t)).
 
 ---
 
@@ -519,8 +514,8 @@ PASSIVE (Vport > 30 V with no class sequence seen):
 2. Pick the PoE controller MCU: needs ≤ 4 mA during mark events and ~1–2 ms
    boot. CH32V003 looks like the best fit; RP2040 and RP2350 likely too power
    hungry for this role alone.
-3. Choose the gigabit passthrough option ([section 3](#3-wiring-mode-a-mode-b-polarity-and-1000base-t)) and verify return loss with the
-   chosen magnetics and inductors.
+3. Choose the PoE-rated magnetics of the input port ([section 3](#3-wiring-mode-a-mode-b-polarity-and-1000base-t)) and verify that their
+   centre taps carry the full PoE current.
 4. Confirm the inrush, UVLO and offset figures (the unmarked numbers in this note)
    against IEEE 802.3-2022 clauses 33 and 145.
 

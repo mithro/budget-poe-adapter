@@ -1,4 +1,6 @@
-# Switch IC detail: RTL8363NB (pick) vs RTL8367S and YT9215S (candidates)
+# Switch ICs in detail
+
+> **Archived.** This note is not part of the current design. It compares the RTL8363NB and the RTL8367S with the YT9215S and picks the RTL8363NB. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 
 Side-by-side tables holding the data of the *Switch detail* tab in the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=2). Prices are LCSC on 2026-10-22. `?` means no public source gives the value; None means the chip doesn't have it; Not listed means the public datasheet does not list it.
 
@@ -307,7 +309,7 @@ Learned MAC entries.
 
 **Jumbo frames**  
 Maximum frame forwarded at wire speed.  
-The [YT9215S datasheet](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf) says 9 KB, which is the same 9,216 B.
+The [YT9215S datasheet](../../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf) says 9 KB, which is the same 9,216 B.
 
 **Priority queues**  
 Egress queues per port.
@@ -433,8 +435,8 @@ What to check before committing.
 
 - [RTL8363NB-VB-CG datasheet Rev. 1.2 (2018)](https://atta.szlcsc.com/upload/public/pdf/source/20240423/989DCAA6328F19215A910B22766A32D7.pdf), via LCSC.
 - [RTL8367S-CG preliminary datasheet (Rev. Pre-0.941, 2016)](https://www.framboise314.fr/wp-content/uploads/2021/06/RTL8367S-CG_Datasheet.pdf).
-- [YT9215S draft datasheet](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf).
-- [YT9215SC Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) for the second SerDes.
+- [YT9215S draft datasheet](../../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf).
+- [YT9215SC Draft_07](../../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) for the second SerDes.
 - [Linux yt921x DSA driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c) (MCU port 10).
 - [RTLPlayground](https://github.com/logicog/RTLPlayground) (community 8051 firmware for RTL8372 and RTL8373, SDCC).
 - CSDN design note on RK3568 + YT9215 (crystal, reset, AVDD filtering).

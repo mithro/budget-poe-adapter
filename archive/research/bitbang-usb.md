@@ -1,4 +1,6 @@
-# Bit-banged (software) USB device for the PoE → USB-C adapter
+# Bit-banged USB
+
+> **Archived.** This note is not part of the current design. It assumes an external MCU that provides the adapter's USB link. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 
 Sources were read on 2026-10-22. Scope: USB **device** mode only (host mode is out of
 scope). Price cap is the RP2040 (~$0.79 @100); MCU prices come from
@@ -252,7 +254,7 @@ against a CH570Q, which has hardware USB for the same money.
 * **Two hard real-time jobs.** rv003usb's USB ISR must never be pre-empted
   (an LS 8-byte data packet plus handshake holds it for roughly 80–100 µs), and
   a bit-banged PD receiver must answer with GoodCRC within 195 µs
-  ([`usb-c-pd.md`](usb-c-pd.md)). They can collide when a PD message arrives
+  ([`usb-c-pd.md`](../../research/usb-c-pd.md)). They can collide when a PD message arrives
   during a USB transaction. Timer-capture + DMA for PD RX could make it work, but
   it needs a bench test.
 * **Clock trim** from USB keep-alives only works while USB is attached. PD BMC
@@ -264,7 +266,7 @@ against a CH570Q, which has hardware USB for the same money.
 
 ### Where software USB still earns a place
 
-* A **CH32V003 cold-start and PoE helper** (as considered in [`usb-c-pd.md`](usb-c-pd.md)) could
+* A **CH32V003 cold-start and PoE helper** (as considered in [`usb-c-pd.md`](../../research/usb-c-pd.md)) could
   expose a HID debug and DFU port for free if two GPIOs reach D+ and D−. Not needed
   with the CH32X035, which already meets the 4 mA PoE mark-event limit
   ([`cost-reduction.md`](cost-reduction.md)).

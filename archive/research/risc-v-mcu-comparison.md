@@ -1,4 +1,6 @@
-# MCU comparison for the PoE → USB-C adapter
+# MCU comparison
+
+> **Archived.** This note is not part of the current design. It compares candidates for an external MCU. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 
 Prices and stock were read live from LCSC product pages on 2026-10-21 and 2026-10-22
 (JLCPCB assembly uses the same C-numbers and LCSC stock). Baseline: RP2040
@@ -157,7 +159,7 @@ way the MAC is exposed; Ext flash = needs an external flash chip. ? = not confir
 * "@100" is the LCSC price break that applies to an order of 100. Where LCSC has no
   100+ break, the break below it applies (e.g. 72+ or 50+). Out-of-stock parts show
   LCSC's reference price.
-* Feature flags come from datasheets, LCSC listings and the notes listed in the [repository README](../README.md).
+* Feature flags come from datasheets, LCSC listings and the notes listed in the [repository README](../../README.md).
   Where a feature was not confirmed it's marked ?, not guessed.
 * The "Ext" count in the sheet is a rough estimate of support parts beyond
   decoupling and a 3.3 V regulator.

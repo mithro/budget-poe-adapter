@@ -58,8 +58,8 @@ distributors and marketplaces found none listed [**I**](#evidence-codes).
   RGMII or SerDes. The
   [selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf)
   says the same [**V**](#evidence-codes).
-- The product page lists the CPU and simple network management for the YT9215SC, the
-  YT9218N and the YT9218MB only. Its wording for the YT9215SC is "内置高性能RISC-V
+- Of the parts in the table, the product page lists the CPU and simple network
+  management for the YT9215SC, the YT9218N and the YT9218MB only. Its wording for the YT9215SC is "内置高性能RISC-V
   核心CPU" and "支持简单网管" [**V**](#evidence-codes).
 - The [YT9215S](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf), [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) and [YT9215RB](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) datasheets all list an integrated
   RISC-V microprocessor [**V**](#evidence-codes).

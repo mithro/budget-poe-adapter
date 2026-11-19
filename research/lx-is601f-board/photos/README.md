@@ -1,7 +1,7 @@
 # LX-IS601F V2.0 photo catalogue
 
 Photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with a
-Pixel 7 Pro. The originals (3072 x 4080) are in the
+Pixel 7 Pro. The full-resolution originals are in the
 [Google Photos album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9), and photo numbers
 follow the album order. This folder holds three kinds of copy:
 
@@ -14,12 +14,14 @@ follow the album order. This folder holds three kinds of copy:
 Every copy is rotated to one orientation and cropped to the board, and carries no EXIF
 data (so no GPS position).
 
-| Side | Photos | RJ45 block | Other landmarks |
+| Side | Photos | RJ45 block | J2 pads |
 | --- | --- | --- | --- |
-| Top | 01-23 and 30-34 | On the left | `LX-IS601F V2.0` silkscreen readable at the bottom right |
-| Bottom | 24-29 | On the right | Top edge of the board at the top |
+| Top | 01-23 | Left edge | Top edge |
+| Top | 30-34 | Left edge | Top edge |
+| Bottom | 24-29 | Right edge | Top edge |
 
-On the top side J2 and the blue disc parts RV1-RV3 run along the top edge. The bottom
+On the top side J2 and the blue disc parts RV1-RV3 run along the top edge, and the
+`LX-IS601F V2.0` silkscreen reads upright at the bottom right. The bottom
 side is shown as if the board were flipped left-to-right; the RJ45 pin rows, the six
 pins of RV1-RV3 and the J2 pads fix that orientation.
 
@@ -33,9 +35,9 @@ They differ in what is fitted:
 
 | Feature | Board A | Board B |
 | --- | --- | --- |
-| U4 lot line 2 | `VKTP18287` | `VKJC09324` |
-| U4 lot line 3 | `3200111C` | `2500211C` |
-| U4 lot line 4 | `3AU2612M0` | `3AW4849M0` |
+| U4 marking line 3 | `VKTP18287` | `VKJC09324` |
+| U4 marking line 4 | `3200111C` | `2500211C` |
+| U4 marking line 5 | `3AU2612M0` | `3AW4849M0` |
 | Magnetics date | `2632` | `2523A` |
 | PoE PSE module | Not fitted | Fitted |
 | SFP cage | Not fitted | Fitted |
@@ -53,30 +55,54 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 
 ### Parts on both boards
 
-| Ref | Part | Side | Package | Marking line 1 | Marking line 2 | Value |
-| --- | --- | --- | --- | --- | --- | --- |
-| DXFRM2-DXFRM6 | Magnetics | Top | SMD 24-pin | `United-tek` | `G2401PR` | |
-| ED1-ED10 | ESD array | Top | SOT-23-6 | `05U` | | |
-| Y6 | Crystal | Top | SMD 4-pad | `25.000` | `MHz` | 25 MHz |
-| PU1 | SCT2622 buck regulator | Top | ESOP-8 | `2622` | `SCT 6DC` | 3.3 V out |
-| PL3 | Buck inductor | Top | SMD | `100` | | 10 µH |
-| L3 | Inductor | Top | SMD | `4R7` | | 4.7 µH |
-| D40 | Buck diode | Top | SMA | `LGE` | `SS510` | |
-| D4 | Diode | Top | SMA | `LGE` | `SS510` | |
-| D5 | Diode | Top | SMA | `LGE` | `SS510` | |
-| L2 | Input inductor | Top | SMD | `701` | | |
-| RV1-RV3 | Blue disc part | Top | THT radial | | | |
-| C4 | Input capacitor | Top | Polymer can | | | |
-| TC1 | 3.3 V output capacitor | Top | Polymer can | | | 220 µF |
-| PR1 | Resistor | Top | SMD | `86C` | | |
-| PR3 | Resistor | Top | SMD | `304` | | |
-| J2 | Power input connector | Top | THT 2-pin | | | |
-| U10 | I²C EEPROM | Bottom | SOIC-8 | `HK 24C08` | `2S3746HA` | 8 Kbit |
-| U6 | Unpopulated footprint | Bottom | 8-pin | | | |
-| D6 | Port diode | Bottom | SMB | `CP06C` | | |
-| D8-D18 | Port diode | Bottom | SMB | `CP06C` | | |
+| Ref | Part | Side | Package | Marking line 1 | Marking line 2 | Marking line 3 | Value |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| DXFRM2-DXFRM6 | Magnetics | Top | SMD 24-pin | `United-tek` | `G2401PR` |  | |
+| ED1-ED10 | ESD array | Top | SOT-23-6 | `05U` | | | | 
+| Y6 | Crystal | Top | SMD 4-pad | `25.000` | `MHz` |  | 25 MHz |
+| PU1 | SCT2622 buck regulator | Top | ESOP-8 | `2622` | `SCT 6DC` | `2U650` | 3.3 V out |
+| PL3 | Buck inductor | Top | SMD | `100` | | 10 µH | | 
+| L3 | Inductor | Top | SMD | `4R7` | | 4.7 µH | | 
+| D40 | Buck diode | Top | SMA | `LGE` | `SS510` |  | |
+| D4 | Diode | Top | SMA | `LGE` | `SS510` |  | |
+| D5 | Diode | Top | SMA | `LGE` | `SS510` |  | |
+| L2 | Input inductor | Top | SMD | `701` | | | | 
+| RV1-RV3 | Blue disc part | Top | THT radial | | | | | 
+| C4 | Input capacitor | Top | Polymer can | | | | | 
+| TC1 | 3.3 V output capacitor | Top | Polymer can | | | 220 µF | | 
+| PR1 | Resistor | Top | SMD | `86C` | | | | 
+| PR3 | Resistor | Top | SMD | `304` | | | | 
+| J2 | `POWER2` power input connector | Top | THT 2-pin | | | | | 
+| U10 | I²C EEPROM | Bottom | SOIC-8 | `HK 24C08` | `2S3746HA` |  | 8 Kbit |
+| U6 | Unpopulated footprint | Bottom | 8-pin | | | | | 
+| D6 | Port diode | Bottom | SMB | `2529` | `CP06C` | | | 
+| D8-D19 | Port diode | Bottom | SMB | `2529` | `CP06C` | | | 
+| D21 | Port diode | Bottom | SMB | `2529` | `CP06C` | | |
+| PR2 | Resistor | Top | SMD | `300` | | | |
+| PC6 | Capacitor | Top | SMD | | | | |
+| C18 | Capacitor | Top | SMD | | | | |
+| C20 | Capacitor | Top | SMD | | | | |
+| R2-R5 | Resistor | Top | SMD | | | | |
+| R110-R114 | Resistor | Top | SMD | | | | |
+| R41 | Resistor | Top | SMD | | | | |
+| C37 | Capacitor | Top | SMD | | | | |
+| R68 | Resistor | Top | SMD | | | | |
+| LED6 | Unpopulated footprint | Top | THT 2 x 2 | | | | |
+| LED7 | LED | Top | SMD | | | | |
+| LED8 | LED | Top | SMD | | | | |
+| POW row | LED array | Top | 6 x SMD | | | | |
+| FX row | LED array | Top | 6 x SMD | | | | |
+| RJ7-RJ18 | LED resistor | Top | SMD | | | | |
+| R29 | Resistor | Bottom | SMD | | | | |
+| R30 | Resistor | Bottom | SMD | | | | |
+| C15 | Capacitor | Bottom | SMD | | | | |
+| R67 | Resistor | Bottom | SMD | | | | |
+| R71-R74 | Resistor | Bottom | SMD | | | | |
+| R76 | Resistor | Bottom | SMD | | | | |
+| C69 | Capacitor | Bottom | 1206 | | | | |
+| C73 | Capacitor | Bottom | 1206 | | | | |
 
-PU1 carries a third marking line, `2U650`. J2's silkscreen name is `POWER2`. The
+Every marking starts with the maker's logo where the part has one. The
 marking of C4 and TC1, and the value of C4, differ between the boards and are in
 [the first table](#the-two-boards). RV1-RV3 are varistors or Y-capacitors; their
 marking is not readable in any photo.
@@ -87,7 +113,7 @@ The module is fitted on board B only.
 
 | Ref | Part | Package | Marking line 1 | Marking line 2 | Value |
 | --- | --- | --- | --- | --- | --- |
-| U1 | PSE controller, unidentified | QFN | `2184A` | `533AQ1H` | |
+| U1 | PSE controller | QFN | `2184A` | `533AQ1H` | |
 | D1 | Diode | SMB | `2616` | `RGS` | |
 | D3 | Diode | SMB | `2616` | `RGS` | |
 | D5 | Diode | SMB | `2616` | `RGS` | |
@@ -100,10 +126,11 @@ The module is fitted on board B only.
 | R9 | Resistor | SMD | `330` | | 33 Ω |
 | R10 | Resistor | SMD | `330` | | 33 Ω |
 | R11 | Resistor | SMD | `330` | | 33 Ω |
+| Not visible | Diode | SMB | `2616` | `RGS` | |
 | PIN1 | Header to the mainboard | THT 8-pin | | | |
 
-A fifth diode with the same marking sits at the top right of the module; its reference
-is not visible.
+U1 is an unidentified part. The diode whose reference is not visible sits at the top
+right of the module.
 
 ## Catalogue
 
@@ -117,14 +144,14 @@ local time.
 | [01](#photo-01) | <img src="thumbs/01.jpg" width="120"> | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:23 |
 | [02](#photo-02) | <img src="thumbs/02.jpg" width="120"> | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:24 |
 | [03](#photo-03) | <img src="thumbs/03.jpg" width="120"> | A | Top | Whole board | Wide | Angled | Heatsink |  | 09:24 |
-| [04](#photo-04) | <img src="thumbs/04.jpg" width="120"> | A | Top | Whole board | Wide | Straight | Too small | Yes | 09:48 |
+| [04](#photo-04) | <img src="thumbs/04.jpg" width="120"> | A | Top | Whole board | Wide | Straight | Smeared | Yes | 09:48 |
 | [05](#photo-05) | <img src="thumbs/05.jpg" width="120"> | A | Top | Whole board | Wide | Angled | Readable |  | 09:48 |
 | [06](#photo-06) | <img src="thumbs/06.jpg" width="120"> | A | Top | U4 | Close | Straight | Readable | Yes | 09:48 |
 | [07](#photo-07) | <img src="thumbs/07.jpg" width="120"> | B | Top | U4 | Close | Straight | Readable |  | 09:48 |
 | [08](#photo-08) | <img src="thumbs/08.jpg" width="120"> | B | Top | Whole board | Wide | Straight | Readable | Yes | 09:48 |
 | [09](#photo-09) | <img src="thumbs/09.jpg" width="120"> | B | Top | U4 | Close | Straight | Glare |  | 09:49 |
-| [10](#photo-10) | <img src="thumbs/10.jpg" width="120"> | B | Top | U4 left edge | Macro | Straight | Not in shot |  | 09:49 |
-| [11](#photo-11) | <img src="thumbs/11.jpg" width="120"> | B | Top | U4 left edge | Macro | Straight | Not in shot |  | 09:49 |
+| [10](#photo-10) | <img src="thumbs/10.jpg" width="120"> | B | Top | U4 left edge | Macro | Straight | Partly in shot |  | 09:49 |
+| [11](#photo-11) | <img src="thumbs/11.jpg" width="120"> | B | Top | U4 left side | Macro | Straight | Glare |  | 09:49 |
 | [12](#photo-12) | <img src="thumbs/12.jpg" width="120"> | B | Top | U4 | Close | Straight | Readable |  | 09:49 |
 | [13](#photo-13) | <img src="thumbs/13.jpg" width="120"> | A | Top | U4 | Close | Straight | Readable |  | 09:49 |
 | [14](#photo-14) | <img src="thumbs/14.jpg" width="120"> | A | Top | Power section | Close | Angled | Glare |  | 09:50 |
@@ -179,10 +206,13 @@ local time.
 | [12](#photo-12) | U4 marking |
 | [12](#photo-12) | PoE module U1 |
 | [13](#photo-13) | U4 marking |
-| [13](#photo-13) | ESD arrays |
+| [13](#photo-13) | ESD arrays ED1-ED9 |
+| [13](#photo-13) | R2-R5 |
+| [13](#photo-13) | R110-R114 |
 | [14](#photo-14) | PU1 |
 | [14](#photo-14) | PL3 |
 | [14](#photo-14) | C4 |
+| [14](#photo-14) | D40 |
 | [15](#photo-15) | PU1 |
 | [15](#photo-15) | PL3 |
 | [15](#photo-15) | C4 |
@@ -198,10 +228,21 @@ local time.
 | [19](#photo-19) | PU1 |
 | [19](#photo-19) | C4 |
 | [19](#photo-19) | L2 |
+| [19](#photo-19) | L3 |
+| [19](#photo-19) | PR1 |
+| [19](#photo-19) | PR2 |
+| [19](#photo-19) | PR3 |
+| [19](#photo-19) | PC6 |
+| [19](#photo-19) | C18 |
+| [19](#photo-19) | C20 |
 | [20](#photo-20) | U4 marking |
 | [20](#photo-20) | DXFRM6 |
 | [21](#photo-21) | Empty PoE module header |
-| [21](#photo-21) | LED resistor pads |
+| [21](#photo-21) | POW and FX LED array |
+| [21](#photo-21) | RJ7-RJ18 |
+| [21](#photo-21) | LED6 footprint |
+| [21](#photo-21) | LED7 |
+| [21](#photo-21) | LED8 |
 | [22](#photo-22) | LED6 footprint |
 | [22](#photo-22) | LED7 |
 | [22](#photo-22) | LED8 |
@@ -209,12 +250,17 @@ local time.
 | [23](#photo-23) | U4 |
 | [23](#photo-23) | Y6 |
 | [23](#photo-23) | L2 |
+| [23](#photo-23) | D5 |
+| [23](#photo-23) | RV1-RV3 |
 | [24](#photo-24) | D19 |
 | [24](#photo-24) | D21 |
 | [24](#photo-24) | C69 |
 | [24](#photo-24) | C73 |
 | [25](#photo-25) | Port diode D8 |
 | [25](#photo-25) | Port diodes D10-D14 |
+| [25](#photo-25) | R67 |
+| [25](#photo-25) | R71-R74 |
+| [25](#photo-25) | R76 |
 | [26](#photo-26) | U6 footprint |
 | [26](#photo-26) | U10 |
 | [27](#photo-27) | U10 |
@@ -222,16 +268,21 @@ local time.
 | [27](#photo-27) | Port diodes D16-D18 |
 | [28](#photo-28) | U10 |
 | [29](#photo-29) | U10 marking |
+| [29](#photo-29) | R29 |
+| [29](#photo-29) | R30 |
+| [29](#photo-29) | C15 |
 | [30](#photo-30) | PoE module U1 |
 | [30](#photo-30) | R250 sense resistors |
 | [30](#photo-30) | Diode D1 |
 | [30](#photo-30) | Diode D3 |
 | [30](#photo-30) | Diode D5 |
 | [30](#photo-30) | Diode D7 |
-| [31](#photo-31) | Diode marking `RGS 2616` |
+| [31](#photo-31) | Diode marking `2616` over `RGS` |
 | [32](#photo-32) | PoE module U1 marking |
 | [33](#photo-33) | `LX-IS601F V2.0` silkscreen |
 | [33](#photo-33) | DXFRM6 date `2632` |
+| [33](#photo-33) | R41 |
+| [33](#photo-33) | C37 |
 | [34](#photo-34) | `LX-IS601F V2.0` silkscreen |
 | [34](#photo-34) | DXFRM6 date `2523A` |
 
@@ -264,7 +315,8 @@ Board A, same view as 02 at a slight angle.
 
 ![Photo 04](web/04.jpg)
 
-Board A with the heatsink removed from U4.
+Board A, whole top side, U4 without its heatsink. The top of U4 is smeared and its
+marking cannot be read.
 
 ![Photo 04 with callouts](annotated/04.jpg)
 
@@ -315,13 +367,14 @@ Board B, U4 close-up with heavy glare; the marking cannot be read.
 ![Photo 10](web/10.jpg)
 
 Board B, macro of U4's left edge and the module's lower edge: Y6, the R250 sense
-resistors (R8, R12) and the ESD arrays ED3-ED5. Slightly soft.
+resistors R8 and R12, and the ESD arrays ED3-ED5. The left 40 % of U4 is in shot. Slightly soft.
 
 ### Photo 11
 
 ![Photo 11](web/11.jpg)
 
-Same framing as 10, a little sharper.
+Board B, the same area as 10 moved right and a little sharper. Almost all of U4 is in
+shot, with its marking faint under glare.
 
 ### Photo 12
 
@@ -333,7 +386,7 @@ Board B, U4 close-up with readable marking (same as 07) and the module's U1.
 
 ![Photo 13](web/13.jpg)
 
-Board A, U4 close-up from straight above. Marking is readable. ED1-ED9 and R2-R5,
+Board A, U4 close-up from straight above. Marking is readable. ED1-ED9, R2-R5 and
 R110-R114 near the crystal are clear.
 
 ### Photo 14
@@ -385,7 +438,8 @@ Board A, U4 (readable marking) and the DXFRM6 magnetics (`G2401PR`, date `2632`)
 ![Photo 21](web/21.jpg)
 
 Board A, the corner by the RJ45 block. The PoE module header (`PIN1`, 8 holes) is
-empty. The RJ7-RJ18 resistor pads for the POW and FX LEDs sit at the board edge.
+empty. A 6 x 2 array of fitted 0603 LEDs, in a row labelled POW and a row labelled FX,
+sits at the board edge with its resistors RJ7-RJ18 below it. LED7 and LED8 are fitted.
 LED6 is an empty through-hole footprint.
 
 ![Photo 21 with callouts](annotated/21.jpg)
@@ -406,15 +460,14 @@ Board A, U4 area: Y6, L2 `701`, D5 `SS510` and the blue disc parts RV1-RV3.
 
 ![Photo 24](web/24.jpg)
 
-Bottom side, under the RJ45 block. The jack pins are covered with white tape or
-residue. D19, D21, C69 and C73 are visible.
+Bottom side, under the RJ45 block. The jack pins are covered with a white residue. D19, D21, C69 and C73 are visible.
 
 ### Photo 25
 
 ![Photo 25](web/25.jpg)
 
 Bottom side, the other end of the RJ45 block. A row of SMB diodes (D8, D10-D14,
-marked `CP06C`) sits behind the jacks, with R76, R74, R73, R72, R71, R67 and 1206
+marked `2529` over `CP06C`) sits behind the jacks, with R67, R71-R74, R76 and 1206
 capacitors beside them.
 
 ### Photo 26
@@ -422,7 +475,7 @@ capacitors beside them.
 ![Photo 26](web/26.jpg)
 
 Bottom side under U4. U6 is an unpopulated 8-pin footprint (the size of an SPI flash);
-U10 is an `HK24C08` (1 KB I²C EEPROM). The tinned pad with a solder blob in the middle
+U10 is an `HK 24C08` (8 Kbit I²C EEPROM). The tinned pad with a solder blob in the middle
 is probably under U4's exposed pad.
 
 ![Photo 26 with callouts](annotated/26.jpg)

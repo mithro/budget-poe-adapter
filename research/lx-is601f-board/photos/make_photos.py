@@ -18,7 +18,7 @@ FONT_R = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
 # Rotation applied to each photo so all share one orientation (see README):
 # top side with the RJ45 block on the left and the LX-IS601F silkscreen readable;
 # bottom side as if the board were flipped left-to-right (RJ45 block on the right).
-# Values are degrees counter-clockwise; photos not listed are already upright.
+# Values are degrees counter-clockwise; photos not listed need no rotation.
 ROTATE = {'04': 180, '21': 90, '22': 180, '23': 180, '24': 270, '25': 270,
           '26': 90, '27': 180, '28': 180, '29': 180, '30': 90, '31': 90, '32': 90}
 
@@ -26,13 +26,13 @@ ROTATE = {'04': 180, '21': 90, '22': 180, '23': 180, '24': 270, '25': 270,
 # Crop box (x0, y0, x1, y1) in percent of the rotated photo: the bounding box of the
 # board. On angled shots some background stays in the corners of that box. Photos not
 # listed need no crop.
-CROP = {'01': (5, 22.2, 97, 88), '02': (11, 23.3, 92, 80), '03': (10, 26, 92, 81),
-        '04': (8, 16.8, 90, 78.3), '05': (1, 10, 100, 80), '08': (1, 17, 100, 79),
+CROP = {'01': (7.2, 22.2, 97, 88), '02': (11, 23.3, 90.1, 80), '03': (10, 26, 92, 81),
+        '04': (8, 16.8, 87.5, 78.3), '05': (1, 10, 100, 76), '08': (2.5, 17, 97.2, 77.4),
         '14': (0, 0, 98, 100), '15': (0, 0, 98, 100),
-        '17': (0, 6, 95, 100), '18': (0, 17, 92, 100), '19': (0, 0, 62, 100),
-        '21': (12, 9, 100, 100), '22': (15, 33, 100, 100), '24': (0, 0, 57, 79),
+        '17': (0, 6, 95, 100), '18': (0, 17, 92, 100), '19': (0, 0, 60.8, 100),
+        '21': (12, 9, 100, 100), '22': (15, 34.7, 100, 100), '24': (0, 0, 54.8, 76.8),
         '25': (0, 12, 63, 100), '26': (31.3, 0, 100, 100), '27': (0, 8, 98, 100),
-        '30': (0, 9, 100, 100), '33': (0, 0, 100, 74), '34': (0, 0, 100, 73)}
+        '30': (0, 9, 100, 100), '33': (0, 0, 100, 73), '34': (0, 0, 100, 73)}
 
 
 def crop(im, key):
@@ -47,32 +47,32 @@ def crop(im, key):
 # the width and height of the rotated, cropped photo. A target (x0, y0, x1, y1) is a box
 # drawn around a part, so the marking inside it stays readable; a target (x, y) is a
 # small ring for a spot with no marking. A numbered badge sits at `badge` with a leader
-# line to the first target; further targets of the same callout are only outlined. A badge position below 0 or above 100 puts the badge in the
-# plain margin that surrounds the photo.
+# line to the first target; further targets of the same callout are only outlined. A badge
+# position below 0 or above 100 puts the badge in the plain margin that surrounds the photo.
 CALLOUTS = {
-    '04': ('Board A, top, heatsink removed', [
-        ([(59.5, 36.5, 76, 53.5)], 'U4 YT9215SCH switch IC', (57.3, 42)),
-        ([(44, 80, 56, 95)], 'U12 SFP host connector, no cage', (50, 103)),
-        ([(79, 74, 98, 92)], 'Single RJ45', (88, 103)),
-        ([(1.5, 9.5, 22, 82)], 'RJ45 block', (-3, 40)),
-        ([(32, 59.5, 45, 76)], 'G2401PR magnetics (date 2632)', (37, 103)),
-        ([(85, 46.3, 91.3, 52.3)], 'PU1 SCT2622 3.3 V buck', (103, 49)),
-        ([(76, 22.5, 89, 30.5)], 'L2 "701" input inductor', (103, 23.5)),
-        ([(81.5, 5, 93.5, 15)], 'J2 POWER2 input connector', (103, 10)),
-        ([(64.5, 4.5, 79.5, 16.5)], 'RV1-RV3 blue disc parts', (72, -3)),
-        ([(23, 11, 26.5, 34)], 'PoE module header, empty', (27, -3)),
+    '04': ('Board A, top, U4 without heatsink', [
+        ([(61.4, 36.5, 78.4, 53.5)], 'U4 YT9215SCH switch IC', (59.1, 42.0)),
+        ([(45.4, 80.0, 57.8, 95.0)], 'U12 SFP host connector, no cage', (51.6, 103)),
+        ([(81.5, 74.0, 101.1, 92.0)], 'Single RJ45', (90.8, 103)),
+        ([(1.5, 9.5, 22.7, 82.0)], 'RJ45 block', (-3, 40.0)),
+        ([(33.0, 59.5, 46.4, 76.0)], 'G2401PR magnetics (date 2632)', (38.2, 103)),
+        ([(87.7, 46.3, 94.2, 52.3)], 'PU1 SCT2622 3.3 V buck', (103, 49.0)),
+        ([(78.4, 22.5, 91.8, 30.5)], 'L2 "701" input inductor', (103, 23.5)),
+        ([(84.1, 5.0, 96.4, 15.0)], 'J2 POWER2 input connector', (103, 10.0)),
+        ([(66.5, 4.5, 82.0, 16.5)], 'RV1-RV3 blue disc parts', (74.3, -3)),
+        ([(23.7, 11.0, 27.3, 34.0)], 'PoE module header, empty', (27.8, -3)),
     ]),
-    '08': ('Board B, top: PoE module + SFP', [
-        ([(58, 30.5, 73.3, 47.5)], 'U4 YT9215SCH switch IC', (54, 46.3)),
-        ([(28, 5, 57.5, 28.5)], 'PoE PSE module, U1 "2184A"', (40, -3)),
-        ([(2, 69, 55, 89)], 'SFP cage over U12', (29, 103)),
-        ([(6, 2.5, 29, 65)], 'RJ45 block', (-3, 30)),
-        ([(79.5, 59, 96, 80)], 'Single RJ45', (103, 70)),
-        ([(82, 41, 87.6, 46)], 'PU1 SCT2622 3.3 V buck', (103, 44)),
-        ([(74.5, 17, 85, 25)], 'L2 "701" input inductor', (103, 19)),
-        ([(75.5, 2, 84.5, 13.5)], 'J2 power input', (103, 7)),
-        ([(53, 59, 69, 71.5)], 'G2401PR magnetics (date 2523A)', (56.5, 103)),
-        ([(63.5, 88, 77, 98)], 'Silkscreen LX-IS601F V2.0', (70, 103)),
+    '08': ('Board B, top, with PoE module and SFP cage', [
+        ([(59.0, 31.3, 75.0, 48.8)], 'U4 YT9215SCH switch IC', (54.9, 47.5)),
+        ([(27.7, 5.1, 58.5, 29.3)], 'PoE PSE module, U1 "2184A"', (40.2, -3)),
+        ([(0.5, 70.8, 55.9, 91.4)], 'SFP cage over U12', (28.7, 103)),
+        ([(4.7, 2.6, 28.7, 66.7)], 'RJ45 block', (-3, 30.8)),
+        ([(81.5, 60.6, 98.8, 82.1)], 'Single RJ45', (103, 71.9)),
+        ([(84.1, 42.1, 90.0, 47.2)], 'PU1 SCT2622 3.3 V buck', (103, 45.2)),
+        ([(76.3, 17.5, 87.3, 25.7)], 'L2 "701" input inductor', (103, 19.5)),
+        ([(77.3, 2.1, 86.8, 13.9)], 'J2 POWER2 input connector', (103, 7.2)),
+        ([(53.8, 60.6, 70.5, 73.4)], 'G2401PR magnetics (date 2523A)', (57.5, 103)),
+        ([(64.8, 90.3, 78.9, 100.6)], 'Silkscreen LX-IS601F V2.0', (71.6, 103)),
     ]),
     '06': ('Board A, U4 close-up', [
         ([(29, 29.5, 77, 62)], 'U4 YT9215SCH, lot VKTP18287', (67, 64.7)),
@@ -86,15 +86,15 @@ CALLOUTS = {
     ]),
     '21': ('Board A, port edge, no PoE module', [
         ([(37.2, 24, 41.2, 68)], 'PoE module header, 8 holes, empty', (44.3, 47)),
-        ([(68.8, 3.5, 88, 21.5)], 'POW and FX LED resistor pads (RJ7-RJ18)', (79, -4)),
-        ([(20, 9, 32, 22.5)], 'LED6 through-hole footprint, empty', (14, 14)),
+        ([(68.8, 3.5, 88, 21.5)], 'POW and FX LED array, 6 x 2', (79, -4)),
+        ([(20, 9, 28.3, 22.5)], 'LED6 through-hole footprint, empty', (14, 14)),
         ([(32.8, 10, 38, 16.2)], 'LED7 (left), LED8 (right)', (42, -4)),
         ([(48.5, 17, 62.5, 51.5)], 'G2401PR magnetics (date 2632)', (53, -4)),
         ([(75, 48.5, 81.3, 56.3)], 'ED1, one of the SOT-23-6 ESD arrays', (79.3, 45.3)),
     ]),
     '26': ('Bottom side, under U4', [
         ([(10.5, 48, 20, 62.5)], 'U6 8-pin footprint, unpopulated', (-3, 55)),
-        ([(50.7, 20.5, 60.5, 33)], 'U10 HK24C08 I2C EEPROM', (55.5, -3)),
+        ([(50.7, 20.5, 60.5, 33)], 'U10 "HK 24C08" I2C EEPROM', (55.5, -3)),
         ([(35, 50, 44.5, 59.5)], 'Tinned pad with a solder blob, under U4', (48, 56.5)),
         ([(3.5, 59, 11, 64.5)], 'Small tinned via grid', (-3, 62)),
         ([(81, 2, 91, 50.5)], 'Port-side row of 1206 capacitors', (75.5, 26)),
@@ -104,16 +104,16 @@ CALLOUTS = {
         ([(47.5, 43.5, 55, 50.5), (48.5, 26.5, 54, 36), (59, 51.5, 64.5, 61), (59.5, 18, 64.5, 28)],
          'R12, R13, R8, R14: R250 (0.25 ohm) sense', (45, 47.5)),
         ([(30, 49.5, 39.5, 57.5), (30, 38.5, 39.5, 46.5), (30, 27.5, 39.5, 35.5), (30, 16.5, 39.5, 24.5),
-          (66, 10, 74.5, 17.5)], 'D1, D3, D5, D7 and one more diode: "RGS 2616"', (44.5, 58.5)),
+          (66, 10, 74.5, 17.5)], 'D1, D3, D5, D7 and one more diode: "2616" over "RGS"', (44.5, 58.5)),
         ([(23, 15.5, 27.5, 59)], 'PIN1: 8-pin module header', (14, 37)),
         ([(81.5, 68, 100, 100)], 'U4 YT9215SCH (lot VKJC09324)', (78, 88)),
-        ([(87, 42.3, 94, 48.5)], 'Y6 25 MHz crystal', (97.5, 39.5)),
+        ([(87, 42.3, 94, 48.5)], 'Y6 25.000 MHz crystal', (97.5, 39.5)),
     ]),
 }
 
 
 def strip(im, deg=0):
-    """Return an upright copy with no EXIF/GPS, rotated `deg` counter-clockwise."""
+    """Return an upright copy with no EXIF data, rotated `deg` counter-clockwise."""
     im = ImageOps.exif_transpose(im)
     if deg:
         im = im.transpose({90: Image.Transpose.ROTATE_90, 180: Image.Transpose.ROTATE_180,

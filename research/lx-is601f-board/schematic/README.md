@@ -1,4 +1,4 @@
-# LX-IS601F V2.0 board: reverse-engineered schematic
+# LX-IS601F schematic
 
 Traced from the 34 photos of two boards in the [photo catalogue](../photos/README.md). No net has been probed with a meter.
 

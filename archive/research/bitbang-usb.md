@@ -1,4 +1,4 @@
-# Bit-banged (software) USB device for the PoE → USB-C adapter
+# Bit-banged USB
 
 > **Archived.** This note is not part of the current design. It assumes an external MCU that provides the adapter's USB link. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

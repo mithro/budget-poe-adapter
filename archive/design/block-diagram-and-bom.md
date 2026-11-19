@@ -1,4 +1,4 @@
-# PoE → USB-C adapter: block diagram and rough BOM cost
+# Block diagram and rough BOM
 
 > **Archived.** This note is not part of the current design. It assumes an external MCU, with either an RTL8363NB switch IC or a passive Ethernet passthrough. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

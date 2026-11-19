@@ -1,4 +1,4 @@
-# Bit-banging 10 Mbit/s Ethernet
+# Bit-banged 10 Mbit/s Ethernet
 
 > **Archived.** This note is not part of the current design. It assumes an external MCU (an RP2040) that needs an Ethernet port of its own. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

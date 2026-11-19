@@ -1,4 +1,4 @@
-# MCU comparison for the PoE → USB-C adapter
+# MCU comparison
 
 > **Archived.** This note is not part of the current design. It compares candidates for an external MCU. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

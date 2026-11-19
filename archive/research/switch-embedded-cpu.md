@@ -1,4 +1,4 @@
-# Embedded CPUs in the candidate switch ICs: RTL8367S, YT9215S, RTL8363NB
+# Embedded CPUs in the switch ICs
 
 > **Archived.** This note is not part of the current design. It assumes an external MCU and recommends strapping the switch CPU off. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. What is known about the YT9215 CPU is in [`yt9215-embedded-cpu.md`](../../research/yt9215-embedded-cpu.md). The [archive index](../README.md) lists every archived note.
 

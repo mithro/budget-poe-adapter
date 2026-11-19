@@ -1,4 +1,4 @@
-# Switch IC detail: RTL8363NB (pick) vs RTL8367S and YT9215S (candidates)
+# Switch ICs in detail
 
 > **Archived.** This note is not part of the current design. It compares the RTL8363NB and the RTL8367S with the YT9215S and picks the RTL8363NB. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

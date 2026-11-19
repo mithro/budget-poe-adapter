@@ -293,7 +293,7 @@ that would be a small port, using the standard BMCR and ANAR registers.
    * RTL8363NB ext port in RMII PHY mode at 10 Mbit/s against PIO RMII:
      who sources the 50 MHz clock (the PIO driver expects to be clocked by it).
    * RP2040 idle current with the PIO MAC running vs. the PoE MPS budget
-     ([`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem)).
+     ([`poe-software-pd.md` section 1.3](poe-software-pd.md#13-the-bootstrap-problem)).
    * Optional: CH32X035 DMA-driven MII ([section 4.3](#43-without-pio-dma-driven-mii-on-a-wch-part-untested-idea)). If it works, the switch SKU
      doesn't need a second MCU at all.
 

@@ -161,7 +161,7 @@ Trims worth bench‑testing:
    enough for LLDP and management. The RP2040 also does USB host or device for
    option A, and has the PIO to bit‑bang USB‑PD BMC. Costs: no hardware MAC
    (CPU does CRC and framing), higher idle current, which matters for the ≤ 4 mA
-   PoE mark‑event budget ([`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem)), so a CH32V003 cold‑start helper is
+   PoE mark‑event budget ([`poe-software-pd.md` section 1.3](poe-software-pd.md#13-the-bootstrap-problem)), so a CH32V003 cold‑start helper is
    likely needed (+$0.15). Net ≈ −$0.30 to −$0.45.
 3. **Stay on 4 layers.** Two GbE ports plus a QFN‑76 switch really wants
    controlled impedance; I wouldn't try to save the $0.25 here.

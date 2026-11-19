@@ -1,48 +1,58 @@
 # PoE powered device
 
-> **Scope.** This note assumes a general-purpose MCU with an ADC, comparators and fast timers does the negotiation. The current design has no such MCU: it uses only the YT9215 switch IC and its internal RISC-V CPU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). The standards, timings and electrical limits here apply to any implementation. How the YT9215 does the job is not worked out in this note.
-
-Research notes for the open source PoE → USB-C adapter. Scope: the PoE
-standards, how a Powered Device (PD) negotiates power, and the electrical
-requirements for doing that negotiation with a budget MCU (WCH CH32V0xx,
-CH32V2xx, RP2040 and RP2350) plus a handful of discrete parts, non-isolated,
-with a 1000BASE-T link to the Raspberry Pi.
+Research note for the PoE to USB-C adapter. It covers the PoE standards, how a powered
+device (PD) negotiates power with the power sourcing equipment (PSE), and the electrical limits
+a PD has to meet. The adapter is non-isolated, carries a 1000BASE-T link to the Raspberry Pi and
+is built around the YT9215 switch IC and its internal RISC-V CPU
+([The RISC-V CPU inside the YT9215](yt9215-embedded-cpu.md)). The circuit that meets these
+limits is in [Discrete PoE front end](../design/poe-front-end/README.md).
 
 <a id="evidence-codes"></a>
-Evidence codes:
 
-- **EA**: checked against the Ethernet Alliance 802.3bt overview white paper.
-- **TI**: checked against TI's PD application note.
+## Evidence marks
 
-Unmarked numbers are from memory of IEEE 802.3 clause 33 and 145
-and widely published PD controller datasheets; they are believed correct but
-anything a design depends on should be re-checked against IEEE 802.3-2022
-(clauses 33 and 145) before layout.
+A mark after a number or at the head of a section says where the figures were checked. Each
+mark links to this table.
+
+| Mark | Meaning |
+| --- | --- |
+| Ethernet Alliance | Checked against the 802.3bt overview white paper of the Ethernet Alliance |
+| TI application note | Checked against the PD application note SLVAEE5 of Texas Instruments |
+| UNH-IOL test suite | Checked against the PD conformance test suite of the UNH InterOperability Laboratory |
+| IEEE draft | Checked against an IEEE 802.3 task force document that quotes the text of the standard |
+| Not checked | Recalled from IEEE 802.3 clauses 33 and 145 and from PD controller datasheets |
+
+A number with no mark has the mark "Not checked". Such a number is believed correct, but a
+design that depends on it has to check it against IEEE 802.3-2022 first. The documents are
+listed under [Sources](#sources).
+
+Abbreviations: MDI is the medium dependent interface, the cable connector. UVLO is the
+undervoltage lockout. MPS is the maintain power signature of
+[section 4.4](#44-maintain-power-signature-mps). LLDP is the Link Layer Discovery Protocol of
+[section 4.5](#45-lldp-data-link-layer-classification).
 
 ---
 
 ## 1. TL;DR for this project
 
-* PoE negotiation is **entirely DC and slow** (millisecond timings, no
-  modulation, no carrier). There is nothing to "bit-bang" in the RF sense: a
-  PD just has to look like a specific resistor, then a specific current sink,
-  at specific voltage windows, then switch the load on gracefully. A 10–12 bit
-  ADC sampling at ~1–10 kHz and a PWM-driven current sink are more than
-  enough.
-* The hard constraint is **power for the MCU before PoE is granted**: during
-  detection (2.7–10.1 V) the PD may leak no more than ~10 µA besides the
-  25 kΩ signature, so the MCU must be off. It can wake during classification
-  (14.5–20.5 V) and must survive mark events (6.9–10 V) on ≤ 4 mA total.
-* **Raspberry Pi 5 at full power (5 V at 5 A = 25 W out) needs ~28–29 W at the
-  PD input**, which is more than 802.3at Class 4 (25.5 W). Full power needs an
-  **802.3bt Class 5 (40 W) PD on a 4-pair Type 3 or Type 4 PSE**. On an 802.3at switch
-  the adapter should fall back to ~4.5 A at 5 V (≈ 22 W).
-* Physical-layer classification alone is sufficient for all classes up to 8.
-  LLDP is not required, so the adapter gets its full power before its switch IC
-  forwards a frame.
+* PoE negotiation is **entirely DC and slow** (millisecond timings, no modulation, no
+  carrier). A PD has to look like a specific resistor, then like a specific current sink, each
+  in its own voltage window, and then switch its load on gently.
+* The YT9215 is **unpowered during the whole negotiation**: during detection (2.7–10.1 V) a
+  PD may draw no more than about 10 µA besides the 25 kΩ signature. The negotiation is
+  therefore done by a front end that works without the switch, built from discrete parts or
+  around a PD controller IC, and the firmware only learns the result
+  ([section 6](#6-poe-front-end-of-the-yt9215-design)).
+* **A Raspberry Pi 5 at full power (5 V at 5 A = 25 W out) needs about 31 W at the PD
+  input**, which is more than 802.3at Class 4 (25.5 W). Full power needs an 802.3bt Class 5
+  (40 W) PD on a 4-pair Type 3 or Type 4 PSE. An 802.3at PSE leaves about 4 A at 5 V for the
+  USB-C output ([section 5](#5-raspberry-pi-5-power-budget-against-poe-classes)).
+* A PSE grants more than 13 W either by the number of class events or over LLDP. A Type 2 PSE
+  may use either, and a Type 2 PD is required to support both
+  ([section 4.5](#45-lldp-data-link-layer-classification)).
 * Non-isolated is functionally fine but **not 802.3-compliant** (the standard
   requires 1500 Vrms isolation between the MDI and any user-accessible
-  conductor, which includes the USB-C shell). See [section 8](#8-isolation-and-safety-non-isolated-design).
+  conductor, which includes the USB-C shell). See [section 7](#7-isolation-and-safety-non-isolated-design).
 
 ---
 
@@ -60,7 +70,7 @@ in clause 145. Cable model: 20 Ω loop (Type 1), 12.5 Ω (Type 2, 3 and 4, per p
 
 ### Per-class power
 
-Evidence code for this section: [**EA**](#evidence-codes).
+Evidence mark for this section: [Ethernet Alliance](#evidence-codes).
 
 | Class | PD max (W) | PSE min out (W) | PD peak (W) | Note |
 |---|---|---|---|---|
@@ -76,7 +86,7 @@ Evidence code for this section: [**EA**](#evidence-codes).
 
 ### Minimum PD-side voltage by assigned class and PSE type
 
-Evidence code for this section: [**EA**](#evidence-codes).
+Evidence mark for this section: [Ethernet Alliance](#evidence-codes).
 
 The PD never sees more than 57 V. The worst-case minimum depends on cable drop:
 
@@ -90,16 +100,17 @@ The PD never sees more than 57 V. The worst-case minimum depends on cable drop:
 | 8 | – | – | – | 43.0 |
 
 The classic "37–57 V" (af) figure is the PD's full operating window including
-the minimum PSE and a full 100 m cable at max current. Design the buck
-converter for **~36–57 V input** (and 60 V absolute with a TVS).
+the minimum PSE and a full 100 m cable at max current. The 5 V converter has to run over that
+window and has to survive the clamp voltage of the surge diode; its requirements are listed in
+[Interfaces](../design/poe-front-end/README.md#interfaces).
 
 ### Non-IEEE variants worth tolerating
 
 * **Passive PoE** (Ubiquiti, MikroTik, many cheap injectors): 24 V or 48 V,
   sometimes 12–56 V, applied permanently on pairs 4-5 (positive) and 7-8 (negative), no detection.
-  An MCU-based PD can recognise "voltage already present above 30 V without a
-  detection and classification sequence" and simply run. Worth supporting: it is
-  free in firmware.
+  The [discrete front end](../design/poe-front-end/README.md) starts on a passive 48 V supply,
+  because nothing in it waits for a detection. It does not start on 24 V. The firmware cannot know what a passive supply can
+  deliver.
 * **Cisco UPOE and UPOE+**, **LTPoE++** (Analog Devices): proprietary pre-bt
   4-pair schemes. bt-compliant PSEs supersede them; not worth targeting.
 * **802.3bu PoDL** (single-pair automotive and SPE): unrelated; ignore.
@@ -164,39 +175,42 @@ centre taps used.
 | Probe voltage, max | 10 V | 10.1 V | – |
 | Probe points | At least 2 | – | – |
 | Probe point spacing | ≥ 1 V | – | – |
-| Accept resistance (slope ΔV/ΔI), min | 19 kΩ | **23.75 kΩ** | 24.9 kΩ 1 % |
-| Accept resistance (slope ΔV/ΔI), max | 26.5 kΩ | **26.25 kΩ** | 24.9 kΩ 1 % |
+| Accept resistance (slope ΔV/ΔI), min | 19 kΩ | **23.75 kΩ** | 24.9 kΩ |
+| Accept resistance (slope ΔV/ΔI), max | 26.5 kΩ | **26.25 kΩ** | 24.9 kΩ |
 | Reject resistance, below | 15 kΩ | – | – |
 | Reject resistance, above | 33 kΩ | – | – |
-| Capacitance, min | – | 50 nF | 100 nF (typ.) |
-| Capacitance, max | 150 nF (must accept) | 120 nF | 100 nF (typ.) |
+| Capacitance, min | – | 50 nF | 100 nF |
+| Capacitance, max a PSE must accept | 150 nF | 120 nF | 100 nF |
 | Capacitor voltage rating | – | – | 100 V |
 | Voltage offset allowed (bridge drops) | – | ≤ 1.9 V | – |
 | Current offset allowed | – | ≤ 10 µA | – |
 
-The PSE measures *incremental* resistance, so diode drops are tolerated, but
-anything nonlinear or leaky in 2.7–10.1 V breaks detection. **This is why the
-MCU and its regulator must be completely off below ~11–12 V.**
+The PD columns are from the [UNH-IOL test suite](#evidence-codes). The PSE measures
+*incremental* resistance, so diode drops are tolerated, but anything nonlinear or leaky in
+2.7–10.1 V breaks detection. **Nothing but the signature may draw current below about 11 V**,
+which is why the class sink of the [discrete front end](../design/poe-front-end/README.md) sits
+behind a 10 V zener diode.
 
 ### 4.2 Classification (how much power do you want?)
 
-PSE drives 15.5–20.5 V (PD sees ≥ 14.5 V) and measures current. [**EA**](#evidence-codes)
+PSE drives 15.5–20.5 V (PD sees ≥ 14.5 V) and measures current. [Ethernet Alliance](#evidence-codes)
 
 | Class signature | PD current min | PD current max | PSE threshold min (roughly) | PSE threshold max (roughly) |
 |---|---|---|---|---|
-| 0 | 1 mA | 4 mA | 0 mA | 5 mA |
+| 0 | 0 mA | 4 mA | 0 mA | 5 mA |
 | 1 | 9 mA | 12 mA | 8 mA | 13 mA |
 | 2 | 17 mA | 20 mA | 16 mA | 21 mA |
 | 3 | 26 mA | 30 mA | 25 mA | 31 mA |
 | 4 | 36 mA | 44 mA | 35 mA | 45 mA |
 
-PSE thresholds are wider than the PD currents.
+PSE thresholds are wider than the PD currents. The PD currents are from the
+[UNH-IOL test suite](#evidence-codes).
 
 Between class events the PSE drops to a **mark event**: 7–10 V (PD sees
-6.9–10 V), PD must draw **0.25–4 mA** and must *not* reset. Below 2.8 V for
-≥ 15 ms resets the PD's classification state. [**EA**](#evidence-codes)
+6.9–10 V), PD must draw **0.25–4 mA** and must *not* reset. Below 2.81 V for
+≥ 15 ms resets the PD's classification state. [Ethernet Alliance](#evidence-codes)
 
-Event timing [**EA**](#evidence-codes):
+Event timing [Ethernet Alliance](#evidence-codes):
 
 | Event | PSE type | Min | Max | Note |
 |---|---|---|---|---|
@@ -204,7 +218,7 @@ Event timing [**EA**](#evidence-codes):
 | First class event | Type 2 | 6 ms | 30 ms | – |
 | First class event | Type 3 | **88 ms** | **105 ms** | "Long class event" |
 | First class event | Type 4 | **88 ms** | **105 ms** | "Long class event" |
-| 2nd–5th class events | Any | 6 ms | 20 ms | – |
+| Later class events | Any | 6 ms | 20 ms | – |
 | Mark events | Any | ~6 ms | ~12 ms | – |
 | Detection → power on | Any | – | 400 ms | – |
 
@@ -213,11 +227,11 @@ The PD can tell a Type 3 or 4 PSE from the long first event (≤ 75 ms ⇒ Type 
 
 **Multi-event classification.** The PSE grants power by how many class events
 it runs; the PD learns its granted power by *counting* events. Single-signature
-PD signatures for bt classes [**EA**](#evidence-codes):
+PD signatures for bt classes [Ethernet Alliance](#evidence-codes):
 
 | PD class | Event 1 | Event 2 | Event 3 | Event 4 | Event 5 |
 |---|---|---|---|---|---|
-| 0–4 | Own class | Own class | Own class | Own class | Own class |
+| Up to 4 | Own class | Own class | Own class | Own class | Own class |
 | 5 | 4 | 4 | 0 | 0 | – |
 | 6 | 4 | 4 | 1 | 1 | – |
 | 7 | 4 | 4 | 2 | 2 | 2 |
@@ -225,7 +239,7 @@ PD signatures for bt classes [**EA**](#evidence-codes):
 
 Max events: Type 1 PSE = 1, Type 2 = 2, Type 3 = 4, Type 4 = 5.
 
-Granted (assigned) class vs events seen, for a bt PD [**EA**](#evidence-codes):
+Granted (assigned) class vs events seen, for a bt PD [Ethernet Alliance](#evidence-codes):
 
 | PD class | 1 event | 2 events | 3 events | 4 events | 5 events |
 |---|---|---|---|---|---|
@@ -246,35 +260,37 @@ Granted (assigned) class vs events seen, for a bt PD [**EA**](#evidence-codes):
 "Power demotion": a PSE short of budget deliberately gives fewer events (e.g. 3
 events ⇒ Class 4) rather than refusing. **The PD must then limit itself to the
 demoted power.** For this project that is the key output of the PoE side:
-*events counted ⇒ power budget ⇒ which USB-PD PDOs the USB-C side offers.*
+*events counted ⇒ power budget ⇒ what the USB-C side offers.* The front ends compared in
+[section 6](#6-poe-front-end-of-the-yt9215-design) tell one event from more than one and do not
+count further, which is enough up to Class 4.
 
 A Type 1 (af) PSE never shows a second event, so a PD that sees one event must
 stay ≤ 13 W.
 
-**Autoclass (bt, optional)** [**EA**](#evidence-codes): PD presents class signature 0 starting
+**Autoclass (bt, optional)** [Ethernet Alliance](#evidence-codes): PD presents class signature 0 starting
 ~81 ms into the long first class event; after power-up it draws its real
 maximum between 1.35 s and 3.65 s, and the PSE measures it (1.4–3.5 s window)
 to allocate just that much plus margin. Not needed for this project.
 
 ### 4.3 Power-on, inrush, UVLO
 
-* PD must turn on by Vport ≤ 42 V and turn off below ~30–36 V (hysteresis
-  prevents oscillation on a long cable). The PD's own UVLO gates the hot-swap
-  switch.
-* PSE limits inrush to ~400–450 mA for 50–75 ms (Type 1 and 2). The PD should
-  charge its bulk capacitance under that and keep its converter off (or in
-  soft-start) until ≥ 80 ms after power appears, then may draw full class
-  power.
+* The PD must turn on by 42 V at its input and must turn off between 30 V and 36 V
+  ([UNH-IOL test suite](#evidence-codes)). The hysteresis prevents oscillation on a long cable.
+* The PSE limits the inrush current to 400–450 mA for up to 75 ms, provided the input
+  capacitance of the PD is below 180 µF ([IEEE draft](#evidence-codes)). A PD with more
+  capacitance has to limit the inrush current itself.
+* A PD that wants more than Class 3 has to stay within 13 W for the first 80 ms after power
+  appears, and after that until the PSE has granted more.
 * Peak and average limits per class (the [per-class power table](#per-class-power)) apply from then on.
 
 ### 4.4 Maintain Power Signature (MPS)
 
-Evidence code for this section: [**TI**](#evidence-codes).
+Evidence mark for this section: [TI application note](#evidence-codes).
 
 To keep power on, the PD must periodically draw enough current or the PSE
 disconnects:
 
-| | Class 1–4 | Class 5–8 |
+| Parameter | Up to Class 4 | From Class 5 |
 |---|---|---|
 | I_hold (min) | 10 mA | 16 mA |
 | Min on-time with a Type 1 PSE | 75 ms | – |
@@ -286,207 +302,72 @@ disconnects:
 | Max dropout with a Type 3 PSE | 310 ms | 310 ms |
 | Max dropout with a Type 4 PSE | 310 ms | 310 ms |
 
-A Pi running never comes near this. It matters if the Pi is shut down: the
-MCU can pulse a dummy load (or itself at full speed) to keep the port alive, or
-deliberately stop to power-cycle the Pi from the switch.
+The adapter never comes near this. The YT9215SCH alone draws 0.66 W with no link, which is
+more than 11 mA at 57 V, so the port stays powered when the Pi is shut down.
 
 ### 4.5 LLDP (data-link layer classification)
 
-Optional for every class. Used to fine-tune allocation after power-up. The adapter's
-switch IC terminates the link from the PSE, so LLDP would have to come from the adapter's
-firmware. Whether the YT9215 CPU can send a frame is an open question in
-[The RISC-V CPU inside the YT9215](yt9215-embedded-cpu.md#packet-path). The adapter does
-not need LLDP: physical classification alone gets up to Class 8.
+A PSE and a PD can also agree on power in LLDP frames after the link is up. For a Type 2
+PSE this is one of two ways to grant 25.5 W: it either runs two class events, or it runs one
+event, supplies 13 W and waits for the PD to ask for more over LLDP. A Type 2 PD is required
+to support both ([IEEE draft](#evidence-codes), item PD13 of the conformance statement). Type 3
+and Type 4 PSEs grant by class events and use LLDP to adjust the allocation afterwards.
+
+The adapter's switch IC terminates the link from the PSE, so LLDP has to come from the
+adapter's firmware. The switch can trap LLDP frames to its CPU; whether custom firmware can be
+loaded and can send a frame is an open question in
+[The RISC-V CPU inside the YT9215](yt9215-embedded-cpu.md#packet-path). Without LLDP the
+adapter gets 25.5 W only from a PSE that grants by class events; the options are compared in
+[Getting more than 13 W](../design/poe-front-end/README.md#getting-more-than-13-w).
 
 ---
 
 ## 5. Raspberry Pi 5 power budget against PoE classes
 
-| Granted | Standard | Events | PD input | PD peak | 5 V output | 5 V current |
-| --- | --- | --- | --- | --- | --- | --- |
-| Class 3 | af | 1 | 13 W | – | ~11.5 W | ≈ 2.3 A |
-| Class 4 | at | 2 | 25.5 W | 28.3 W | ~22.5 W | ≈ 4.5 A |
-| Class 5 | bt | 4 | 40 W | – | ~35 W | – |
-| Class 6 | bt | – | 51 W | – | ~45 W | – |
+| Granted | Standard | Events | PD input (W) | 5 V converter output (W) | Left for USB-C (W) | USB-C current at 5 V (A) | Pi 5 behaviour |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Class 3 | 802.3af | 1 | 12.95 | 11.0 | 9.0 | 1.8 | USB limited to 600 mA |
+| Class 4 | 802.3at | 2 | 25.5 | 21.9 | 19.9 | 4.0 | Like the official PoE+ HAT |
+| Class 5 | 802.3bt | 4 | 40 | 35 | 33 | 5.0 | Full 5 V at 5 A |
+| Class 6 | 802.3bt | 4 | 51 | 45 | 43 | 5.0 | Full 5 V at 5 A |
 
-Notes on the rows of this table:
+The Class 3 and Class 4 rows are worked out in
+[Power sequencing](../design/poe-front-end/README.md#power-sequencing): bridge and switch losses at
+the lowest PD voltage, 90 % converter efficiency and 2.0 W for the adapter's own switch. The
+Class 5 and Class 6 rows use about 88 % from PD input to the 5 V rail and the same 2.0 W. On
+Class 3 a Pi 5 under load may brown out.
 
-- **Class 3**, Pi 5 behaviour: Boots with USB current limited to 600 mA.
-- **Class 3**, caveat: May brown out under load.
-- **Class 4**, comparable to: Official PoE+ HAT (5 V at 4 A)
-- **Class 5**, Pi 5 behaviour: Full 5 V at 5 A.
-- **Class 5**, caveat: Has margin.
-- **Class 6**, Pi 5 behaviour: Full power.
-- **Class 6**, caveat: Headroom for other loads.
-
-The 5 V output assumes ~90 % efficiency, including bridge losses.
-
-So the adapter should request **Class 5 or 6**, count events, and tell the
-USB-PD side whether it may offer 5 V at 5 A or only 5 V at 3 A (or a ~4.5 A
-custom limit). The 5 V at 5 A negotiation itself is covered in
-[`usb-c-pd.md`](usb-c-pd.md).
+Both front ends of [section 6](#6-poe-front-end-of-the-yt9215-design) stop at Class 4. Class 5 and Class 6
+need the changing class signature of [section 4.2](#42-classification-how-much-power-do-you-want)
+and a count of four events. The firmware tells the USB-C side how much it may offer; that side is
+covered in [`usb-c-pd.md`](usb-c-pd.md).
 
 ---
 
-## 6. What a software PD needs electrically
+## 6. PoE front end of the YT9215 design
 
-### 6.1 Measurement
+The design has no MCU that could measure the port or set a class current. The YT9215 and
+its CPU are unpowered until the PSE has switched the port on, so detection, classification and
+inrush limiting are done by a front end that needs no firmware. Two ways to build it are set
+side by side in [Discrete PoE front end](../design/poe-front-end/README.md): from discrete parts,
+or around a PD controller IC. That note gives the discrete schematic, its simulation against
+the limits of [section 4](#4-the-negotiation-sequence-end-to-end), the bill of materials with
+prices, and the [comparison](../design/poe-front-end/README.md#discrete-parts-or-a-pd-controller-ic)
+of the two.
 
-| Quantity | Range min | Range max | Needed resolution | Rate |
-| --- | --- | --- | --- | --- |
-| Port voltage (after bridge) | 0 V | 60 V | ~0.1 V | ≥ 1 kHz |
-| Class and mark current | 0 mA | 50 mA | ≤ 0.5 mA | ≥ 1 kHz |
-| Load current (optional) | 0 A | 2 A | ~10 mA | ~1 kHz |
+What either front end passes to the firmware is one logic signal, T2P, which says whether the
+PSE ran one class event or more than one. The firmware turns that, or an LLDP answer
+([section 4.5](#45-lldp-data-link-layer-classification)), into a power budget for the downstream
+ports and the USB-C output.
 
-Notes on the rows of this table:
-
-- **Port voltage (after bridge)**, why: To place the [voltage window edges](#voltage-window-edges).
-- **Class and mark current**, why: The 36–44 mA window is ±10 %.
-
-<a id="voltage-window-edges"></a>
-
-| Voltage window edge to resolve |
-|---|
-| 2.7 V |
-| 10.1 V |
-| 14.5 V |
-| 20.5 V |
-| 42 V |
-
-A 60 V : 3.3 V divider (e.g. 330 kΩ over 18 kΩ) into a 12-bit ADC gives ~15 mV/LSB.
-The CH32V003 has a 10-bit ADC (~60 mV/LSB on that divider): still fine. The
-divider must be switched in only after the MCU is up, or be high enough
-(> 2 MΩ total) that it disappears into the 10 µA detection offset budget.
-RP2040's ADC is ~9 ENOB but adequate. No DAC is needed: a PWM + RC filter
-setting a reference for a transistor current sink is sufficient.
-
-### 6.2 Timing
-
-Everything is millisecond-scale. Hard deadlines:
-
-* Present the right class current within a few ms of the class event starting
-  (PSE samples after the first ~6 ms; Type 2 events are as short as 6 ms).
-* Distinguish class (≥ 14.5 V) vs mark (≤ 10 V) vs reset (< 2.8 V) and count
-  transitions.
-* Time the first class event (75 ms vs 88 ms boundary) to know Type 1 or 2 from Type 3 or 4.
-
-A 1 kHz control loop is the minimum; 10 kHz polling or a comparator interrupt
-is comfortable.
-
-### 6.3 The bootstrap problem
-
-The MCU cannot be powered during detection and must be powered (or the class
-current must be hardware-generated) by the first class event. Two workable
-architectures:
-
-**A. Hardware signature + hardware class, MCU only after power-on (simplest).**
-Discrete circuit does detection and a fixed class current (e.g. Class 4 for the
-first two events). The MCU boots from the 48 V rail after power-on and cannot
-count events, so it does not know the granted class and must assume the lowest
-it could have been given. Fine for an af- and at-only product; loses bt.
-
-**B. MCU wakes at the first class event (recommended).**
-* A small high-voltage regulator (depletion-mode MOSFET + zener, or a 60 V LDO
-  with an enable comparator) powers the MCU only when Vport > ~12 V, with
-  hysteresis down to ~6 V so it stays up through mark events.
-* Hold-up capacitor sized to ride through a ≤ 12 ms mark event.
-* **Total draw during mark must be ≤ 4 mA** (incl. the 25 kΩ, ~0.4 mA at 10 V).
-  CH32V003 at low clock is a few mA; RP2040 (~20 mA running) is too heavy
-  here, so it would need a separate tiny supervisor or very aggressive clock
-  gating. This favours a CH32V003-class part as the PoE controller, possibly
-  alongside a bigger MCU for USB-PD.
-* MCU must boot and enable its class current sink well inside the first class
-  event. For a Type 1 or 2 PSE that can be as short as 6 ms, so boot time must be
-  ~1–2 ms; Type 3 and Type 4 PSEs give 88 ms. A hardware default (class 4 sink enabled
-  by default, MCU only modulates it) removes the boot-time risk: classes 5–8
-  present 4 in events 1–2 anyway, and the MCU switches to the 0, 1, 2 or 3 signature
-  from event 3 onward.
-* MCU's own supply current counts toward the class current; the sink adds the
-  difference, so the MCU must measure what it draws and trim.
-
-### 6.4 Minimal external parts (architecture B)
-
-| Function | Property | Value |
-| --- | --- | --- |
-| Input rectifier | Part | 2 bridges |
-| Input rectifier | Diodes | 8 × 100 V |
-| Input rectifier | Placement | One bridge per pairset |
-| Input rectifier | Current | 0.6–1 A |
-| Input rectifier | Diode option 1 | Schottky |
-| Input rectifier | Diode option 2 | Ideal-diode MOSFET bridge (for efficiency) |
-| Surge | Part | SMAJ58A TVS |
-| Surge | Placement | Across bridge output |
-| Signature | Resistor | 24.9 kΩ 1 % |
-| Signature | Capacitor | 100 nF |
-| Signature | Capacitor rating | 100 V |
-| Signature | Optional disconnect | MOSFET |
-| Signature | Disconnect when | After power-on |
-| Signature | Disconnect saving | ~2 mW |
-| Class and mark sink | Transistor option 1 | NPN |
-| Class and mark sink | Transistor option 2 | NMOS |
-| Class and mark sink | Sense resistor | Yes |
-| Class and mark sink | Reference | MCU PWM-RC |
-| Class and mark sink | Current range | 0–45 mA |
-| Class and mark sink | Duration | ≤ 105 ms |
-| Class and mark sink | Dissipation during class | ~1 W |
-| Class and mark sink | Worst case | 20 V × 44 mA |
-| MCU bootstrap supply | Pass element option 1 | Depletion NMOS |
-| MCU bootstrap supply | Pass element option 2 | Zener |
-| MCU bootstrap supply | Pass element option 3 | HV LDO |
-| MCU bootstrap supply | UVLO comparator | Yes |
-| MCU bootstrap supply | Turns on | > 12 V |
-| MCU bootstrap supply | Turns off | < 6 V |
-| Hot-swap switch | Part | 100 V NMOS |
-| Hot-swap switch | Position | Low side |
-| Hot-swap switch | Gate drive | MCU |
-| Hot-swap switch | Slew limit | RC |
-| Hot-swap switch | Inrush | < 400 mA |
-| Sensing | Voltage | Divider |
-| Sensing | Current | Sense resistor |
-| Sensing | Op-amp | Optional |
-| Sensing | Destination | MCU ADC |
-| Power stage | Part | 60 V synchronous buck |
-| Power stage | Output | The USB-PD rail(s) |
-| Power stage | Scope | Outside PoE negotiation |
-
-Longer entries for this table:
-
-- **Signature, why bt requires it**: The signature must look invalid in some states.
-
-That is roughly 15–25 jellybean parts. For comparison, dedicated PD controller
-ICs (TI TPS2375 and TPS2378, TPS23730 for bt; ADI and Silvertel PD modules; Silicon
-Labs Si34xx) integrate the signature, class, UVLO and hot-swap FET, and cheap
-Chinese PD controllers exist too. Whether discrete + MCU actually beats a
-~$0.30–1 PD controller IC at volume is not established here and should be
-priced out before committing.
+A PoE powered device run by an external MCU, with its measurement needs, its bootstrap supply
+and a firmware state machine, is described in the archived note
+[PoE powered device run by an external MCU](../archive/research/poe-software-pd.md).
 
 ---
 
-## 7. Firmware state machine (sketch)
 
-```
-OFF (MCU unpowered; hardware signature present)
-  → first class event: MCU boots, hardware class-4 sink already on
-CLASSIFY:
-  count events; time event 1 (≥88 ms ⇒ Type 3/4 PSE)
-  events 1–2: present class 4
-  events 3+: present 0/1/2/3 for requested class 5/6/7/8
-  mark: drop sink, keep total draw 0.25–4 mA
-  V < 2.8 V for ≥15 ms: reset count (MCU may brown out; that is fine)
-POWER_ON (V rises past ~42 V):
-  ramp hot-swap gate (inrush < 400 mA), wait ≥ 80 ms
-  granted = f(events, PD class)   ← table in section 4.2
-  tell USB-PD side the budget; enable buck
-RUN:
-  monitor Vport/current, enforce budget, maintain MPS if Pi is idle
-  V < UVLO-off ⇒ shut down
-PASSIVE (Vport > 30 V with no class sequence seen):
-  assume ≤ 13 W unless configured otherwise
-```
-
----
-
-## 8. Isolation and safety (non-isolated design)
+## 7. Isolation and safety (non-isolated design)
 
 * 802.3 (clause 33.4.1 and 145.4.1) requires the PD to provide **1500 Vrms
   isolation** between the MDI (all PoE wiring) and all accessible external
@@ -506,18 +387,17 @@ PASSIVE (Vport > 30 V with no class sequence seen):
 
 ---
 
-## 9. Open questions for the next step
+## 8. Open questions
 
-1. Price discrete + MCU (architecture B) against the cheapest PD controller IC
-   at 1k units; this decides whether "software PD" is a cost win or a hobby
-   win.
-2. Pick the PoE controller MCU: needs ≤ 4 mA during mark events and ~1–2 ms
-   boot. CH32V003 looks like the best fit; RP2040 and RP2350 likely too power
-   hungry for this role alone.
+1. Build a front end ([section 6](#6-poe-front-end-of-the-yt9215-design)) and measure it on real
+   Type 1 and Type 2 PSEs. For the discrete one, the
+   [open points](../design/poe-front-end/README.md#limits-and-open-points) list what to measure.
+2. Find out whether custom firmware on the YT9215 CPU can send and receive LLDP frames
+   ([section 4.5](#45-lldp-data-link-layer-classification)).
 3. Choose the PoE-rated magnetics of the input port ([section 3](#3-wiring-mode-a-mode-b-polarity-and-1000base-t)) and verify that their
    centre taps carry the full PoE current.
-4. Confirm the inrush, UVLO and offset figures (the unmarked numbers in this note)
-   against IEEE 802.3-2022 clauses 33 and 145.
+4. Check the numbers with the mark [Not checked](#evidence-codes) against IEEE 802.3-2022
+   clauses 33 and 145.
 
 ## Sources
 
@@ -525,6 +405,12 @@ PASSIVE (Vport > 30 V with no class sequence seen):
   <https://ethernetalliance.org/wp-content/uploads/2019/12/WP_EA_Overview8023bt_V2p1_FINAL.pdf>
 * TI SLVAEE5, TPS23754 application note, Maintain Power Signature section:
   <https://www.ti.com/document-viewer/lit/html/SLVAEE5/maintain-power-signature-mps-t5982369-2>
+* UNH-IOL, *Clause 33 PD parametric test suite*, version 1.5:
+  <https://www.iol.unh.edu/sites/default/files/testsuites/ethernet/CL33_PD/PD_Test_Suite_v1.5.pdf>
+* IEEE 802.3at draft D3.0, conformance statement of clause 33:
+  <https://www.ieee802.org/3/at/comments/D3.0/attach/nadeau/802.3at%20Draft%20PICS%20v0.3.pdf>
+* Text of clause 33.3 as circulated in the 802.3bt task force:
+  <https://www.ieee802.org/3/4PPOE/email/pdfrCowflqhcH.pdf>
 * IEEE 802.3bt public classification baseline:
   <https://grouper.ieee.org/groups/802/3/bt/public/jul15/dual_sig_classification_baseline_v124.pdf>
 * IEEE 802.3-2022, clauses 33 (Type 1 and 2) and 145 (Type 3 and 4): the normative

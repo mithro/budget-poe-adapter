@@ -64,6 +64,7 @@ The current design runs its firmware on the YT9215 CPU.
 | [`bitbang-usb.md`](research/bitbang-usb.md) | Bit-banged USB | External MCU |
 | [`usb-network-card.md`](research/usb-network-card.md) | A virtual USB network card on the MCU | CH32X035 |
 | [`usb-network-card.md`](research/usb-network-card.md) | A USB network card that bridges Ethernet | CH397A |
+| [`poe-software-pd.md`](research/poe-software-pd.md) | A PoE powered device measured and controlled by an MCU | External MCU |
 
 ## Archived research: cost
 

@@ -165,7 +165,7 @@ CH32V208's MAC is, as far as I know (not verified here), only wired to its
 internal 10M PHY, which is why it needs a copper port. The RP2040 option is
 not for throughput.
 
-A practical split, matching [`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem): a tiny CH32V003‑class part does the
+A practical split, matching [`poe-software-pd.md` section 1.3](poe-software-pd.md#13-the-bootstrap-problem): a tiny CH32V003‑class part does the
 PoE signature and classification from cold start; the switch plus a CH32V307 (or
 RP2040) come up after the hot‑swap FET closes and handle networking, LLDP and
 USB‑PD reporting. With an Ethernet‑capable MCU the adapter can do **LLDP

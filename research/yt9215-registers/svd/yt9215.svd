@@ -973,7 +973,7 @@
             </field>
             <field>
               <name>TX_CLK_IN</name>
-              <description>The transmit clock pin is an input.</description>
+              <description>The Linux name reads as: the transmit clock pin is an input. The vendor SDK names the bit XMII_TXC_IN_SEL, and its function fal_tiger_port_extif_xmiiClk_invert_set() writes the bit as the enable of an inverted xMII clock. The two readings disagree, and it is not known which is right.</description>
               <bitOffset>11</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -1147,7 +1147,7 @@
           <fields>
             <field>
               <name>ALL_PORT</name>
-              <description>Clear the counters of every port.</description>
+              <description>It is inferred from the name that the bit clears the counters of every port. The vendor SDK function fal_tiger_stat_mib_clear_all() leaves the bit at 0 for a clear of every port.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -5534,14 +5534,14 @@
                 </field>
                 <field>
                   <name>CVID_RANGE_EN</name>
-                  <description>Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.</description>
+                  <description>Match the customer VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.</description>
                   <bitOffset>30</bitOffset>
                   <bitWidth>1</bitWidth>
                   <access>read-write</access>
                 </field>
                 <field>
                   <name>SVID_RANGE_EN</name>
-                  <description>Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.</description>
+                  <description>Match the service VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.</description>
                   <bitOffset>31</bitOffset>
                   <bitWidth>1</bitWidth>
                   <access>read-write</access>
@@ -5726,14 +5726,14 @@
                 </field>
                 <field>
                   <name>CVID_RANGE_EN</name>
-                  <description>Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.</description>
+                  <description>Match the customer VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.</description>
                   <bitOffset>30</bitOffset>
                   <bitWidth>1</bitWidth>
                   <access>read-write</access>
                 </field>
                 <field>
                   <name>SVID_RANGE_EN</name>
-                  <description>Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.</description>
+                  <description>Match the service VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.</description>
                   <bitOffset>31</bitOffset>
                   <bitWidth>1</bitWidth>
                   <access>read-write</access>
@@ -5974,7 +5974,7 @@
                 </field>
                 <field>
                   <name>ADDR_RANGE_EN</name>
-                  <description>Match the address as a range. The key holds the lowest and the mask the highest value.</description>
+                  <description>Match the address as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.</description>
                   <bitOffset>30</bitOffset>
                   <bitWidth>1</bitWidth>
                   <access>read-write</access>
@@ -6910,7 +6910,7 @@
                 </field>
                 <field>
                   <name>ADDR_RANGE_EN</name>
-                  <description>Match the address as a range. The key holds the lowest and the mask the highest value.</description>
+                  <description>Match the address as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.</description>
                   <bitOffset>30</bitOffset>
                   <bitWidth>1</bitWidth>
                   <access>read-write</access>
@@ -7811,7 +7811,7 @@
                 </field>
                 <field>
                   <name>ETHERTYPE_RANGE_EN</name>
-                  <description>Match the EtherType as a range. The key holds the lowest and the mask the highest value.</description>
+                  <description>Match the EtherType as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.</description>
                   <bitOffset>30</bitOffset>
                   <bitWidth>1</bitWidth>
                   <access>read-write</access>

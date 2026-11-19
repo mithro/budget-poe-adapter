@@ -662,7 +662,7 @@ registers:
       EN: {desc: "Enables the interface.", inferred: true}
       SOFT_RST: {desc: "Resets the interface logic.", inferred: true}
       RGMII_TX_DELAY_150PS: {desc: "Fine RGMII transmit clock delay in steps of 150 ps. A `comment in fal_tiger_port.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1010>`__ of the :ref:`vendor SDK <sources-list>` gives the transmit clock delay as 2 ns times :field:`XMII.RGMII_TX_DELAY_2NS` plus 0.15 ns times this field.", inferred: true}
-      TX_CLK_IN: {desc: "The transmit clock pin is an input.", inferred: true}
+      TX_CLK_IN: {desc: "The Linux name reads as: the transmit clock pin is an input. The :ref:`vendor SDK <sources-list>` names the bit XMII_TXC_IN_SEL, and its function `fal_tiger_port_extif_xmiiClk_invert_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1671>`__ writes the bit as the enable of an inverted xMII clock. The two readings disagree, and it is :ev:`not known` which is right.", inferred: true}
       RX_CLK_IN: {desc: "The receive clock pin is an input.", inferred: true}
       RGMII_TX_DELAY_2NS: {desc: "Adds 2 ns to the delay of the RGMII transmit clock, by the `comment in fal_tiger_port.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1010>`__ of the :ref:`vendor SDK <sources-list>`.", inferred: true}
       RGMII_TX_CLK_OUT: {desc: "Drives the RGMII transmit clock.", inferred: true}
@@ -768,7 +768,7 @@ registers:
       CLEAN: {desc: "Write 1 to clear the selected counters.", inferred: true}
       PORT: {desc: "Port whose counters are cleared when ONE_PORT is set.", inferred: true}
       ONE_PORT: {desc: "Clear the counters of the port in PORT.", inferred: true}
-      ALL_PORT: {desc: "Clear the counters of every port.", inferred: true}
+      ALL_PORT: {desc: "It is :ev:`inferred` from the name that the bit clears the counters of every port. The :ref:`vendor SDK <sources-list>` function `fal_tiger_stat_mib_clear_all() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L69>`__ leaves the bit at 0 for a clear of every port.", inferred: true}
   MIB_DATA:
     block: mib
     title: Port counter block
@@ -1310,8 +1310,8 @@ registers:
       MAC_xA0: {desc: "MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24."}
       MAC_DA1: {desc: "Destination MAC address bytes 4 and 5."}
       MAC_SA1: {desc: "Source MAC address bytes 4 and 5."}
-      SVID_RANGE_EN: {desc: "Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value."}
-      CVID_RANGE_EN: {desc: "Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value."}
+      SVID_RANGE_EN: {desc: "Match the service VLAN ID as a range. It is :ev:`inferred` from the two layer 4 port range flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest and the mask the highest value."}
+      CVID_RANGE_EN: {desc: "Match the customer VLAN ID as a range. It is :ev:`inferred` from the two layer 4 port range flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest and the mask the highest value."}
       CDEI: {desc: "Drop eligible bit of the customer tag."}
       CPRI: {desc: "Priority of the customer tag."}
       CTAG_FMT: {desc: "Customer tag format of the frame. The :ref:`Linux driver <sources-list>` gives no codes. The :ref:`vendor SDK <sources-list>` list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__ gives 0 for untagged, 1 for priority-tagged and 2 for tagged.", inferred: true}
@@ -1320,7 +1320,7 @@ registers:
       STAG_FMT: {desc: "Service tag format of the frame. The :ref:`Linux driver <sources-list>` gives no codes. The :ref:`vendor SDK <sources-list>` list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__ gives 0 for untagged, 1 for priority-tagged and 2 for tagged.", inferred: true}
       SVID: {desc: "Service VLAN ID."}
       CVID: {desc: "Customer VLAN ID."}
-      ADDR_RANGE_EN: {desc: "Match the address as a range. The key holds the lowest and the mask the highest value."}
+      ADDR_RANGE_EN: {desc: "Match the address as a range. It is :ev:`inferred` from the two layer 4 port range flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest and the mask the highest value."}
       FRAG: {desc: "The packet is an IP fragment."}
       ADDR: {desc: "IPv4 address. The first byte is in bits 31 to 24."}
       ADDRx: {desc: "32 bits of the IPv6 address. The most significant byte is in bits 31 to 24."}
@@ -1337,7 +1337,7 @@ registers:
       IS_IGMP: {desc: "The frame is an IGMP message."}
       UDF0: {desc: "Two bytes from the even-numbered user-defined field window of the pair."}
       UDF1: {desc: "Two bytes from the odd-numbered user-defined field window of the pair."}
-      ETHERTYPE_RANGE_EN: {desc: "Match the EtherType as a range. The key holds the lowest and the mask the highest value."}
+      ETHERTYPE_RANGE_EN: {desc: "Match the EtherType as a range. It is :ev:`inferred` from the two layer 4 port range flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest and the mask the highest value."}
       ETHERTYPE: {desc: "EtherType."}
   ACL_MASK:
     block: acl

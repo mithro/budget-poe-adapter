@@ -588,7 +588,7 @@ pub const XMII_EN: Field = Field { lsb: 18, width: 1 };
 pub const XMII_SOFT_RST: Field = Field { lsb: 17, width: 1 };
 /// Fine RGMII transmit clock delay in steps of 150 ps. A comment in fal_tiger_port.c of the vendor SDK gives the transmit clock delay as 2 ns times XMII.RGMII_TX_DELAY_2NS plus 0.15 ns times this field.
 pub const XMII_RGMII_TX_DELAY_150PS: Field = Field { lsb: 13, width: 4 };
-/// The transmit clock pin is an input.
+/// The Linux name reads as: the transmit clock pin is an input. The vendor SDK names the bit XMII_TXC_IN_SEL, and its function fal_tiger_port_extif_xmiiClk_invert_set() writes the bit as the enable of an inverted xMII clock. The two readings disagree, and it is not known which is right.
 pub const XMII_TX_CLK_IN: Field = Field { lsb: 11, width: 1 };
 /// The receive clock pin is an input.
 pub const XMII_RX_CLK_IN: Field = Field { lsb: 10, width: 1 };
@@ -714,7 +714,7 @@ pub const MIB_CTRL_CLEAN: Field = Field { lsb: 30, width: 1 };
 pub const MIB_CTRL_PORT: Field = Field { lsb: 3, width: 4 };
 /// Clear the counters of the port in PORT.
 pub const MIB_CTRL_ONE_PORT: Field = Field { lsb: 1, width: 1 };
-/// Clear the counters of every port.
+/// It is inferred from the name that the bit clears the counters of every port. The vendor SDK function fal_tiger_stat_mib_clear_all() leaves the bit at 0 for a clear of every port.
 pub const MIB_CTRL_ALL_PORT: Field = Field { lsb: 0, width: 1 };
 
 /// Port counter block. `port` = 0..=10.
@@ -1787,9 +1787,9 @@ pub const ACL_KEY_MAC_DA1_SA1_L2_TYPE: Field = Field { lsb: 32, width: 3 };
 pub const ACL_KEY_MAC_DA1_SA1_MAC_DA1: Field = Field { lsb: 16, width: 16 };
 /// Source MAC address bytes 4 and 5.
 pub const ACL_KEY_MAC_DA1_SA1_MAC_SA1: Field = Field { lsb: 0, width: 16 };
-/// Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
+/// Match the service VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VLAN_SVID_RANGE_EN: Field = Field { lsb: 63, width: 1 };
-/// Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
+/// Match the customer VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VLAN_CVID_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// Drop eligible bit of the customer tag.
 pub const ACL_KEY_VLAN_CDEI: Field = Field { lsb: 35, width: 1 };
@@ -1807,9 +1807,9 @@ pub const ACL_KEY_VLAN_STAG_FMT: Field = Field { lsb: 24, width: 2 };
 pub const ACL_KEY_VLAN_SVID: Field = Field { lsb: 12, width: 12 };
 /// Customer VLAN ID.
 pub const ACL_KEY_VLAN_CVID: Field = Field { lsb: 0, width: 12 };
-/// Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
+/// Match the service VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VTAG_SVID_RANGE_EN: Field = Field { lsb: 63, width: 1 };
-/// Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
+/// Match the customer VLAN ID as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VTAG_CVID_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// Drop eligible bit of the customer tag.
 pub const ACL_KEY_VTAG_CDEI: Field = Field { lsb: 31, width: 1 };
@@ -1823,7 +1823,7 @@ pub const ACL_KEY_VTAG_SPRI: Field = Field { lsb: 24, width: 3 };
 pub const ACL_KEY_VTAG_SVID: Field = Field { lsb: 12, width: 12 };
 /// Customer VLAN ID.
 pub const ACL_KEY_VTAG_CVID: Field = Field { lsb: 0, width: 12 };
-/// Match the address as a range. The key holds the lowest and the mask the highest value.
+/// Match the address as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.
 pub const ACL_KEY_IPV4_ADDR_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// The packet is an IP fragment.
 pub const ACL_KEY_IPV4_FRAG: Field = Field { lsb: 35, width: 1 };
@@ -1847,7 +1847,7 @@ pub const ACL_KEY_IPV6_ADDR2_FIRST_FRAG: Field = Field { lsb: 35, width: 1 };
 pub const ACL_KEY_IPV6_ADDR2_L4_TYPE: Field = Field { lsb: 32, width: 3 };
 /// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_KEY_IPV6_ADDR2_ADDR: Field = Field { lsb: 0, width: 32 };
-/// Match the address as a range. The key holds the lowest and the mask the highest value.
+/// Match the address as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.
 pub const ACL_KEY_IPV6_ADDR3_ADDR_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// The packet is an IP fragment.
 pub const ACL_KEY_IPV6_ADDR3_FRAG: Field = Field { lsb: 35, width: 1 };
@@ -1891,7 +1891,7 @@ pub const ACL_KEY_UDF_IS_IGMP: Field = Field { lsb: 32, width: 1 };
 pub const ACL_KEY_UDF_UDF0: Field = Field { lsb: 16, width: 16 };
 /// Two bytes from the odd-numbered user-defined field window of the pair.
 pub const ACL_KEY_UDF_UDF1: Field = Field { lsb: 0, width: 16 };
-/// Match the EtherType as a range. The key holds the lowest and the mask the highest value.
+/// Match the EtherType as a range. It is inferred from the two layer 4 port range flags, which yt921x_acl_rule_ext_parse_flow_entries uses, that the key holds the lowest and the mask the highest value.
 pub const ACL_KEY_ETHERTYPE_ETHERTYPE_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_KEY_ETHERTYPE_L4_TYPE: Field = Field { lsb: 32, width: 3 };

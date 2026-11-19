@@ -126,6 +126,16 @@ This manual assumes the values of the :chip:`YT9215SC`, because the |ds| gives t
 package and pin numbers that the :doc:`debug pin note </research/motorcomm-debug-pins>` records
 for the YT9215SC. Whether the assumption is right is :ev:`not known`.
 
+The :ref:`vendor SDK <sources-list>` function
+`fal_tiger_sys_chipInfo_get() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_sys.c#L79>`__
+identifies the parts in a different way from :lx:`yt921x_chip_detect`, which compares the
+whole extended mode byte. The SDK function compares each half of the byte on its own. For
+the mode of the :chip:`YT9215S` it reports a part YT9215SL when either half is 1; the
+:ref:`Linux driver <sources-list>` has no such part. For the mode of the :chip:`YT9215RB` it
+reports the :chip:`YT9214NB` when either half is 2 and the :chip:`YT9213NB` when either half
+is 3. It does not use the byte for the other parts, and it calls the :chip:`YT9218MB` YT9218M.
+It has no case for the YT9215SCH either.
+
 .. _bringup-clock:
 
 Core clock

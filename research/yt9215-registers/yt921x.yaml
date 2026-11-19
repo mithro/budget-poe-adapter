@@ -3352,7 +3352,10 @@ registers:
       used: false
     lsb: 11
     width: 1
-    desc: The transmit clock pin is an input.
+    desc: 'The Linux name reads as: the transmit clock pin is an input. The :ref:`vendor SDK <sources-list>`
+      names the bit XMII_TXC_IN_SEL, and its function `fal_tiger_port_extif_xmiiClk_invert_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1671>`__
+      writes the bit as the enable of an inverted xMII clock. The two readings disagree, and it is :ev:`not
+      known` which is right.'
     access: rw
     inferred: true
     sdk:
@@ -4101,7 +4104,9 @@ registers:
       used: false
     lsb: 0
     width: 1
-    desc: Clear the counters of every port.
+    desc: It is :ev:`inferred` from the name that the bit clears the counters of every port. The :ref:`vendor
+      SDK <sources-list>` function `fal_tiger_stat_mib_clear_all() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L69>`__
+      leaves the bit at 0 for a clear of every port.
     access: rw
     inferred: true
     sdk:
@@ -9984,7 +9989,9 @@ registers:
       lsb: 63
       width: 1
       key_only: true
-      desc: Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
+      desc: Match the service VLAN ID as a range. It is :ev:`inferred` from the two layer 4 port range
+        flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest
+        and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9998,7 +10005,9 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
+      desc: Match the customer VLAN ID as a range. It is :ev:`inferred` from the two layer 4 port range
+        flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest
+        and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10126,7 +10135,9 @@ registers:
       lsb: 63
       width: 1
       key_only: true
-      desc: Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
+      desc: Match the service VLAN ID as a range. It is :ev:`inferred` from the two layer 4 port range
+        flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest
+        and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10140,7 +10151,9 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
+      desc: Match the customer VLAN ID as a range. It is :ev:`inferred` from the two layer 4 port range
+        flags, which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest
+        and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10236,7 +10249,9 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: Match the address as a range. The key holds the lowest and the mask the highest value.
+      desc: Match the address as a range. It is :ev:`inferred` from the two layer 4 port range flags,
+        which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest and the
+        mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10423,7 +10438,9 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: Match the address as a range. The key holds the lowest and the mask the highest value.
+      desc: Match the address as a range. It is :ev:`inferred` from the two layer 4 port range flags,
+        which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest and the
+        mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10750,7 +10767,9 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: Match the EtherType as a range. The key holds the lowest and the mask the highest value.
+      desc: Match the EtherType as a range. It is :ev:`inferred` from the two layer 4 port range flags,
+        which :lx:`yt921x_acl_rule_ext_parse_flow_entries` uses, that the key holds the lowest and the
+        mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields

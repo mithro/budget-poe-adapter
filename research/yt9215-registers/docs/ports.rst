@@ -263,8 +263,9 @@ xMII
 
 1. Set the port's bit in :reg:`XMII_CTRL` and clear it in :reg:`SERDES_CTRL`.
 2. Set the pin voltage in :reg:`IO_LEVEL`.
-3. Write :reg:`XMII`: the interface type in :field:`XMII.MODE`, the clock directions
-   (:field:`XMII.TX_CLK_IN`, :field:`XMII.RX_CLK_IN`), for RGMII the delays
+3. Write :reg:`XMII`: the interface type in :field:`XMII.MODE`, the clock bits
+   :field:`XMII.TX_CLK_IN` and :field:`XMII.RX_CLK_IN`, whose function the sources read in two
+   ways that the description of :field:`XMII.TX_CLK_IN` gives, for RGMII the delays
    (:field:`XMII.RGMII_RX_DELAY_150PS`, :field:`XMII.RGMII_TX_DELAY_150PS`,
    :field:`XMII.RGMII_TX_DELAY_2NS`), and :field:`XMII.EN`.
 4. No PHY reports the link of a MAC-to-MAC connection, so tell the switch: write speed and

@@ -282,7 +282,7 @@ addrmap yt9215 {
         field { desc = "Enables the interface."; sw = rw; hw = r; } EN[18:18];
         field { desc = "Resets the interface logic."; sw = rw; hw = r; } SOFT_RST[17:17];
         field { desc = "Fine RGMII transmit clock delay in steps of 150 ps. A comment in fal_tiger_port.c of the vendor SDK gives the transmit clock delay as 2 ns times XMII.RGMII_TX_DELAY_2NS plus 0.15 ns times this field."; sw = rw; hw = r; } RGMII_TX_DELAY_150PS[16:13];
-        field { desc = "The transmit clock pin is an input."; sw = rw; hw = r; } TX_CLK_IN[11:11];
+        field { desc = "The Linux name reads as: the transmit clock pin is an input. The vendor SDK names the bit XMII_TXC_IN_SEL, and its function fal_tiger_port_extif_xmiiClk_invert_set() writes the bit as the enable of an inverted xMII clock. The two readings disagree, and it is not known which is right."; sw = rw; hw = r; } TX_CLK_IN[11:11];
         field { desc = "The receive clock pin is an input."; sw = rw; hw = r; } RX_CLK_IN[10:10];
         field { desc = "Adds 2 ns to the delay of the RGMII transmit clock, by the comment in fal_tiger_port.c of the vendor SDK."; sw = rw; hw = r; } RGMII_TX_DELAY_2NS[8:8];
         field { desc = "Drives the RGMII transmit clock."; sw = rw; hw = r; } RGMII_TX_CLK_OUT[7:7];
@@ -326,7 +326,7 @@ addrmap yt9215 {
         field { desc = "Write 1 to clear the selected counters."; sw = rw; hw = r; } CLEAN[30:30];
         field { desc = "Port whose counters are cleared when ONE_PORT is set."; sw = rw; hw = r; } PORT[6:3];
         field { desc = "Clear the counters of the port in PORT."; sw = rw; hw = r; } ONE_PORT[1:1];
-        field { desc = "Clear the counters of every port."; sw = rw; hw = r; } ALL_PORT[0:0];
+        field { desc = "It is inferred from the name that the bit clears the counters of every port. The vendor SDK function fal_tiger_stat_mib_clear_all() leaves the bit at 0 for a clear of every port."; sw = rw; hw = r; } ALL_PORT[0:0];
     } MIB_CTRL @ 0xC0004;
 
     regfile {

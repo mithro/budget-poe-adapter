@@ -37,7 +37,7 @@ The design is simulated and drawn. It is not built and not measured. The section
 | [Discrete parts or a PD controller IC](#discrete-parts-or-a-pd-controller-ic) | Cost and function side by side |
 | [Simulation](#simulation) | Method and results |
 | [Interfaces](#interfaces) | Signals to the converter and the firmware |
-| [Limits and open points](#limits-and-open-points) | Non-isolated design, untested points |
+| [Limits and open points](#limits-and-open-points) | What a first board has to prove |
 | [Bill of materials](#bill-of-materials) | Every part with LCSC number and price |
 | [Files](#files) | Files of this folder |
 | [Sources](#sources) | Documents the numbers come from |
@@ -108,7 +108,7 @@ All voltages are at the cable connector of the PD, in front of the bridges.
 | <a id="req-2"></a>REQ-2 | Detection voltage offset | – | 1.9 | V | [UNH-IOL test suite](#evidence-marks) | 0.91 | 0.92 | [Simulated](#evidence-marks) |
 | <a id="req-3"></a>REQ-3 | Detection capacitance | 50 | 120 | nF | [TI datasheet](#evidence-marks) | 97 | 118 | [Calculated](#evidence-marks) |
 | <a id="req-4"></a>REQ-4 | Non-valid signature slope, low side | – | 12 | kΩ | [UNH-IOL test suite](#evidence-marks) | 7.1 | 7.1 | [Calculated](#evidence-marks) |
-| <a id="req-5"></a>REQ-5 | Class 0 current between 14.5 V and 20.5 V | 0 | 4 | mA | [UNH-IOL test suite](#evidence-marks) | 0.54 | 0.80 | [Simulated](#evidence-marks) |
+| <a id="req-5"></a>REQ-5 | Class 0 current between 14.5 V and 20.5 V | 0 | 4 | mA | [UNH-IOL test suite](#evidence-marks) | 0.54 | 0.79 | [Simulated](#evidence-marks) |
 | <a id="req-6"></a>REQ-6 | Class 1 current between 14.5 V and 20.5 V | 9 | 12 | mA | [UNH-IOL test suite](#evidence-marks) | 9.59 | 11.56 | [Simulated](#evidence-marks) |
 | <a id="req-7"></a>REQ-7 | Class 2 current between 14.5 V and 20.5 V | 17 | 20 | mA | [UNH-IOL test suite](#evidence-marks) | 17.53 | 19.75 | [Simulated](#evidence-marks) |
 | <a id="req-8"></a>REQ-8 | Class 3 current between 14.5 V and 20.5 V | 26 | 30 | mA | [UNH-IOL test suite](#evidence-marks) | 26.53 | 29.04 | [Simulated](#evidence-marks) |
@@ -164,11 +164,11 @@ Net names used in the text:
 | VDD | Positive rail after the bridges |
 | VSS | Negative rail after the bridges |
 | GND | System ground of the adapter |
-| CSS | Return of the class sink, the mark latch and the two-event detector |
+| CSS | Return of every block that [Q3](#q3) switches |
 | NG | Gate of [Q3](#q3) and of [Q10](#q10) |
 | NA | Anode of [D2](#d2) |
 | VM | Output of the mark latch |
-| ARM | Voltage on [C2](#c2) |
+| ARM | Voltage on [C2](#c2), measured to CSS |
 | EVENT2 | Pulse during a second class event |
 | T2P | Logic output to the firmware |
 
@@ -226,7 +226,7 @@ This is the mark event. The PD has to draw between 0.25 mA and 4 mA there and mu
 like a valid detection signature.
 
 [Q5](#q5) and [Q6](#q6) form a latch. The first class event sets it through [R9](#r9). [R14](#r14) holds it while the
-voltage is in the mark range, where [D2](#d2) no longer conducts. While the latch is set, [R13](#r13) loads the
+voltage is in the mark range, where [D2](#d2) does not conduct. While the latch is set, [R13](#r13) loads the
 port: that is the mark current, and [R13](#r13) in parallel with [R1](#r1) gives the non-valid signature of
 [REQ-4](#req-4). The latch releases at about 4 V, so a PSE that returns to detection finds the plain
 signature again.
@@ -285,8 +285,8 @@ the 5 V converter; see [Interfaces](#interfaces).
 ![Simulated start-up on a Type 2 PSE with two class events](sim/two-event-sequence.png)
 
 The plot shows one complete start: detection at 4 V and 8 V, two class events with a mark event
-after each, then power. The class current is 41 mA. [C6](#c6) charges with a peak current of 210 mA,
-after which the converter draws a 3 W load. T2P rises as soon as the 3.3 V rail is present. The
+after each, then power. The class current is 41 mA. [C6](#c6) charges at about 160 mA; the peak of
+210 mA occurs when the converter starts with its 3 W load before [C6](#c6) is full. T2P rises as soon as the 3.3 V rail is present. The
 short current spikes at the voltage steps are the charging current of [C1](#c1).
 
 ## Behaviour with each kind of PSE
@@ -397,15 +397,15 @@ A PD controller IC replaces the [Class sink](#class-block), the [Mark latch](#ma
 | Two-event detection with T2P output | Yes | Yes |
 | T2P held for as long as the port is powered | No | Yes |
 | T2P level for a 25.5 W grant | High | Low |
-| Inrush current, lowest (mA) | 174 | 180 |
-| Inrush current, highest (mA) | 309 | 180 |
+| Inrush current, lowest (mA) | 155 | 180 |
+| Inrush current, highest (mA) | 326 | 180 |
 | Current limit in operation | No | Yes |
 | Thermal shutdown | No | Yes |
 | Power-good output for the converter | No | Yes |
 | Undervoltage lockout | In the converter | Built in |
 | Resistance of the pass switch (Ω) | 0.1 | 0.48 |
 | Loss in the pass switch at 0.6 A (W) | 0.04 | 0.17 |
-| Second source | Every part is generic | One maker |
+| Second source | Generic parts | One maker |
 | Evidence | [Simulated](#evidence-marks) | [Part datasheet](#evidence-marks) |
 
 The TMI7303B column counts the input block, the IC, its class resistor and a pull-up resistor
@@ -606,7 +606,7 @@ not meant to rest in the mark range, and the six simulated Type 1 sequences give
 result. In the failing case the adapter draws 25.5 W from a 15.4 W port and the PSE switches it
 off.
 
-**T2P expires.** T2P is valid for 1.3 s in the shortest simulated case ([C3](#c3) at −10 %, the
+**T2P expires.** T2P is valid for 1.3 s in the shortest simulated case ([C3](#c3) at −10 %, [R23](#r23) at −1 %, the
 highest gate threshold, the shortest class events, 27 °C), counted from the port reaching its operating
 voltage. Firmware that boots more slowly needs a latch on the 3.3 V side.
 
@@ -759,7 +759,7 @@ for [U1](#u1) and a smaller bridge.
 | --- | --- |
 | [`parts.py`](parts.py) | Part list with the LCSC number of every part |
 | [`bom.py`](bom.py) | Reads prices from lcsc.com and writes the tables of this note |
-| [`bom.json`](bom.json) | Price, stock and datasheet link of every part as read from lcsc.com |
+| [`bom.json`](bom.json) | Data of every part as read from lcsc.com |
 | [`datasheets.json`](datasheets.json) | Datasheet file in [`datasheets/components/`](../../datasheets/components/) for every LCSC number |
 | [`schematic/gen_schematic.py`](schematic/gen_schematic.py) | Draws the schematic and compares its netlist with the simulated circuit |
 | [`schematic/poe-front-end.kicad_sch`](schematic/poe-front-end.kicad_sch) | KiCad schematic |

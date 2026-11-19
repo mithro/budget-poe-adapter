@@ -113,7 +113,7 @@ def check_static():
             row(name, "Class sink turns off", f"{off[0]:.1f} V to {off[1]:.1f} V", "20.5 V to 30 V", 20.5 < off[0] and off[1] < 30)
 
 
-COLS = ["v(pip,pin)", "i(Vvss)", "v(vdd)", "v(vm)", "v(narm)", "v(nh)", "v(t2p,rtn)", "v(vdd,rtn)", "v(rtn)", "v(nhg)"]
+COLS = ["v(pip,pin)", "i(Vvss)", "v(vdd)", "v(vm)", "v(narm)", "v(nh)", "v(t2p,rtn)", "v(vdd,rtn)", "v(rtn)", "v(nhg)", "v(vm,css)", "v(narm,css)"]
 DET = [(4, 0.02), (8, 0.02)]
 
 

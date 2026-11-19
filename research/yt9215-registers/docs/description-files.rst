@@ -166,7 +166,9 @@ Regenerating
    * - :download:`render.js <../tools/wavedrom/render.js>`
      - Draws register and timing diagrams with WaveDrom
    * - :download:`package.json <../tools/wavedrom/package.json>`
-     - Names the WaveDrom version for ``npm ci``
+     - Names the WaveDrom version
+   * - :download:`package-lock.json <../tools/wavedrom/package-lock.json>`
+     - Pins every package that ``npm ci`` installs
    * - :download:`diagrams.py <../tools/diagrams.py>`
      - Draws block, sequence and frame diagrams as SVG
    * - :download:`guide_diagrams.py <../tools/guide_diagrams.py>`

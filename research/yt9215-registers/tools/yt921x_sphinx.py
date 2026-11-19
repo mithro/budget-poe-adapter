@@ -231,9 +231,9 @@ class Bitfield(SphinxDirective):
         if family:
             caption += " on the " + gen_docs.FAMILY[family]
         ln = Links(self)
-        words = gen_docs.register_diagram(s["model"], reg, family, layout)
         svg = ""
         try:
+            words = gen_docs.register_diagram(s["model"], reg, family, layout)
             for i, (source, names) in enumerate(words):
                 label = caption
                 if len(words) > 1:
@@ -241,7 +241,7 @@ class Bitfield(SphinxDirective):
                     label += ", bits %d to %d" % (top, top - 31)
                 links = [(ln.label(target), tip) for target, tip in names]
                 svg += wavedrom_diagrams.render(source, label, links)
-        except wavedrom_diagrams.RenderError as err:
+        except (wavedrom_diagrams.RenderError, ValueError) as err:
             raise self.error(str(err))
         return [figure(svg, caption, (reg["id"], ln.reg(reg["id"])), ["yt-wavedrom"])]
 

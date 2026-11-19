@@ -2,8 +2,8 @@
 yt-diagram directive uses.
 
 Each function takes a link builder (``yt921x_sphinx.Links``) and returns a
-``diagrams.Svg``. The timing diagrams are WaveDrom sources in the pages
-themselves, and ``gen_docs.py`` builds the WaveDrom sources of the register
+``diagrams.Svg``. The MDIO, timing and tag-word diagrams are WaveDrom sources
+in the pages themselves, and ``gen_docs.py`` builds the WaveDrom sources of the register
 diagrams.
 """
 import diagrams

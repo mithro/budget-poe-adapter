@@ -55,8 +55,8 @@ Timing
      {"node": "...A.....B"},
      {"node": "......C..D..E"},
      {"name": "MDC", "wave": "0..1..0..1..0.", "node": "...J.....K"},
-     {"name": "MDIO, host drives", "wave": "x=...x........", "data": ["valid"]},
      {"node": ".F.G.H"},
+     {"name": "MDIO, host drives", "wave": "x=...x........", "data": ["valid"]},
      {"name": "MDIO, switch drives", "wave": "7..........7..", "data": ["bit n", "bit n − 1"]},
      {"node": ".........L.M"}
    ],

@@ -121,12 +121,12 @@ def draw(source):
     key = json.dumps(source, sort_keys=True)
     if key not in _cache:
         proc = _node()
-        proc.stdin.write(key + "\n")
-        proc.stdin.flush()
-        line = proc.stdout.readline()
-        if not line:
-            raise RenderError("the WaveDrom renderer stopped")
-        out = json.loads(line)
+        try:
+            proc.stdin.write(key + "\n")
+            proc.stdin.flush()
+            out = json.loads(proc.stdout.readline())
+        except (OSError, ValueError) as err:
+            raise RenderError("the WaveDrom renderer stopped: %s" % err)
         if "error" in out:
             raise RenderError("WaveDrom cannot draw the source: " + out["error"])
         _cache[key] = out["svg"]

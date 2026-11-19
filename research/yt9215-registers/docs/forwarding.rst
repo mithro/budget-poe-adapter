@@ -93,8 +93,9 @@ Spanning tree states
 --------------------
 
 :reg:`STP` holds a 2-bit state for every port. There are :const:`MSTI_NUM` such registers,
-one per spanning tree instance. A VLAN picks its instance with :field:`VLAN_CTRL.STP_ID`, and
-a switch with a single spanning tree uses instance 0 only. The
+one per spanning tree instance. A VLAN picks its instance with :field:`VLAN_CTRL.STP_ID`, which
+:lx:`yt921x_dsa_vlan_msti_set` writes. A switch with a single spanning tree uses instance 0
+only, as :lx:`yt921x_dsa_port_stp_state_set` does. The
 :ref:`state table <forwarding-stp-table>` is the mapping that
 :lx:`yt921x_dsa_port_mst_state_set` applies.
 

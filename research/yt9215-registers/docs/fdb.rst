@@ -178,8 +178,8 @@ Look an address up
 
 .. _fdb-walk:
 
-Walk the table
---------------
+Walk the database
+-----------------
 
 To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put the index in
 :field:`FDB_OP.INDEX`.
@@ -214,7 +214,7 @@ removes static ones as well. The command and the rows :val:`FDB_OP.FLUSH.PORT` a
 :ev:`header`.
 
 It is :ev:`inferred` that the command works on unicast entries, or on multicast entries when
-:field:`FDB_OP.FLUSH_MCAST` is set, so that emptying the table takes one flush of each kind. The
+:field:`FDB_OP.FLUSH_MCAST` is set, so that emptying the database takes one flush of each kind. The
 only source is the comment on the definition of the field in :lx:`chip.h:260`, which reads
 "ucast / mcast". No function of the :ref:`Linux driver <sources-list>` sets the field.
 

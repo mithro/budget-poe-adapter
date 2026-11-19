@@ -1051,7 +1051,8 @@ enums:
       - 132
 - name: l2_type
   title: Layer 2 frame formats
-  desc: Frame encapsulation code matched by the L2_TYPE field of an ACL key.
+  desc: Frame encapsulation code matched by the :field:`L2_TYPE <ACL_KEY.MAC_DA1_SA1_L2_TYPE>` field of
+    an ACL key.
   linux:
     macro: enum yt921x_l2_type
     src:
@@ -1092,7 +1093,7 @@ enums:
       - 233
 - name: l3_type
   title: Layer 3 protocol classes
-  desc: Protocol class matched by the L3_TYPE field of an ACL key.
+  desc: Protocol class matched by the :field:`L3_TYPE <ACL_KEY.MAC_ADDR0_L3_TYPE>` field of an ACL key.
   linux:
     macro: enum yt921x_l3_type
     src:
@@ -1165,7 +1166,7 @@ enums:
       - 244
 - name: l4_type
   title: Layer 4 protocol classes
-  desc: Protocol class matched by the L4_TYPE field of an ACL key.
+  desc: Protocol class matched by the :field:`L4_TYPE <ACL_KEY.IPV4_L4_TYPE>` field of an ACL key.
   linux:
     macro: enum yt921x_l4_type
     src:
@@ -1431,7 +1432,7 @@ registers:
   title: Chip identification
   desc: 'Identifies the chip family. Read it before the reset, as described in
 
-    :ref:`Identify the part <bringup-identify>`.'
+    :ref:`Find the switch <bringup-probe>`.'
   access: ro
   words: 1
   sdk:
@@ -1800,7 +1801,9 @@ registers:
       use: [chip.c, yt921x_set_eee, 201]
     lsb: 16
     width: 1
-    desc: Take the Energy Efficient Ethernet setting from :field:`PON_STRAP_VAL.EEE`.
+    desc: Take the Energy Efficient Ethernet setting from :field:`PON_STRAP_VAL.EEE`. :lx:`yt921x_set_eee`
+      sets this bit together with :field:`PON_STRAP_VAL.EEE` to turn the function on; the role of each
+      bit alone is :ev:`inferred` from the register names.
     access: rw
     sdk:
       status: SDK lists no fields
@@ -1822,7 +1825,11 @@ registers:
   title: Pin strap override enable
   desc: 'Selects, per function, whether the switch uses the level sampled on the strap pin at
 
-    power-on (bit clear) or the value in :reg:`PON_STRAP_VAL` (bit set).'
+    power-on (bit clear) or the value in :reg:`PON_STRAP_VAL` (bit set). This split between the
+
+    two registers is :ev:`inferred` from their names. :lx:`yt921x_set_eee` writes the same value
+
+    to the EEE bit of both.'
   access: rw
   words: 1
   sdk:
@@ -1853,7 +1860,9 @@ registers:
       use: [chip.c, yt921x_set_eee, 201]
     lsb: 16
     width: 1
-    desc: 1 turns Energy Efficient Ethernet on for the built-in PHYs.
+    desc: 1 turns Energy Efficient Ethernet on for the built-in PHYs. :lx:`yt921x_set_eee` sets this bit
+      together with :field:`PON_STRAP_FUNC.EEE`; the role of each bit alone is :ev:`inferred` from the
+      register names.
     access: rw
     sdk:
       status: SDK lists no fields
@@ -7427,7 +7436,7 @@ registers:
         - chip.h
         - 276
         used: true
-      desc: Add or replace an entry
+      desc: Write an entry
     - name: DEL
       value: 1
       linux:

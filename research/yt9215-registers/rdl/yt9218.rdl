@@ -63,7 +63,7 @@ addrmap yt9218 {
 
     reg {
         name = "Chip identification";
-        desc = "Identifies the chip family. Read it before the reset, as described in Identify the part.";
+        desc = "Identifies the chip family. Read it before the reset, as described in Find the switch.";
         field { desc = "Family code. 0x9002 is the YT9215 family and 0x9001 the YT9218 family."; sw = r; hw = w; } MAJOR[31:16];
         field { desc = "Lower half of the chip ID. Its values are not catalogued."; sw = r; hw = w; } MINOR[15:0];
     } CHIP_ID @ 0x80008;
@@ -207,15 +207,15 @@ addrmap yt9218 {
 
     reg {
         name = "Pin strap override enable";
-        desc = "Selects, per function, whether the switch uses the level sampled on the strap pin at power-on (bit clear) or the value in PON_STRAP_VAL (bit set).";
-        field { desc = "Take the Energy Efficient Ethernet setting from PON_STRAP_VAL.EEE."; sw = rw; hw = r; } EEE[16:16];
+        desc = "Selects, per function, whether the switch uses the level sampled on the strap pin at power-on (bit clear) or the value in PON_STRAP_VAL (bit set). This split between the two registers is inferred from their names. yt921x_set_eee writes the same value to the EEE bit of both.";
+        field { desc = "Take the Energy Efficient Ethernet setting from PON_STRAP_VAL.EEE. yt921x_set_eee sets this bit together with PON_STRAP_VAL.EEE to turn the function on; the role of each bit alone is inferred from the register names."; sw = rw; hw = r; } EEE[16:16];
         field { desc = "Take the loop detection setting from PON_STRAP_VAL.LOOP_DETECT."; sw = rw; hw = r; } LOOP_DETECT[7:7];
     } PON_STRAP_FUNC @ 0x80320;
 
     reg {
         name = "Pin strap override value";
         desc = "Values used in place of the power-on straps for every function whose bit is set in PON_STRAP_FUNC.";
-        field { desc = "1 turns Energy Efficient Ethernet on for the built-in PHYs."; sw = rw; hw = r; } EEE[16:16];
+        field { desc = "1 turns Energy Efficient Ethernet on for the built-in PHYs. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names."; sw = rw; hw = r; } EEE[16:16];
         field { desc = "1 turns loop detection on."; sw = rw; hw = r; } LOOP_DETECT[7:7];
     } PON_STRAP_VAL @ 0x80324;
 
@@ -937,7 +937,7 @@ addrmap yt9218 {
             MCAST = 3 { desc = "Multicast entries"; };
         };
         enum fdb_op_op_e {
-            ADD = 0 { desc = "Add or replace an entry"; };
+            ADD = 0 { desc = "Write an entry"; };
             DEL = 1 { desc = "Delete an entry"; };
             GET_ONE = 2 { desc = "Read one entry"; };
             GET_NEXT = 3 { desc = "Read the next used entry after INDEX"; };

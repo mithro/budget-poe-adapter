@@ -348,14 +348,14 @@ pub const MAC_ADDR_LO4_ADDR: Field = Field { lsb: 0, width: 32 };
 
 /// Pin strap override enable.
 pub const PON_STRAP_FUNC: u32 = 0x80320;
-/// Take the Energy Efficient Ethernet setting from PON_STRAP_VAL.EEE.
+/// Take the Energy Efficient Ethernet setting from PON_STRAP_VAL.EEE. yt921x_set_eee sets this bit together with PON_STRAP_VAL.EEE to turn the function on; the role of each bit alone is inferred from the register names.
 pub const PON_STRAP_FUNC_EEE: Field = Field { lsb: 16, width: 1 };
 /// Take the loop detection setting from PON_STRAP_VAL.LOOP_DETECT.
 pub const PON_STRAP_FUNC_LOOP_DETECT: Field = Field { lsb: 7, width: 1 };
 
 /// Pin strap override value.
 pub const PON_STRAP_VAL: u32 = 0x80324;
-/// 1 turns Energy Efficient Ethernet on for the built-in PHYs.
+/// 1 turns Energy Efficient Ethernet on for the built-in PHYs. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names.
 pub const PON_STRAP_VAL_EEE: Field = Field { lsb: 16, width: 1 };
 /// 1 turns loop detection on.
 pub const PON_STRAP_VAL_LOOP_DETECT: Field = Field { lsb: 7, width: 1 };
@@ -1388,7 +1388,7 @@ pub const FDB_OP_NEXT_TYPE_UCAST: u32 = 2;
 pub const FDB_OP_NEXT_TYPE_MCAST: u32 = 3;
 /// Command.
 pub const FDB_OP_OP: Field = Field { lsb: 1, width: 3 };
-/// Add or replace an entry
+/// Write an entry
 pub const FDB_OP_OP_ADD: u32 = 0;
 /// Delete an entry
 pub const FDB_OP_OP_DEL: u32 = 1;

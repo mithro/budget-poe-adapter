@@ -91,7 +91,8 @@ Strap pins
 
 Five strap pins, read at power-on or reset, decide how a host reaches the switch. The pin
 names, the levels and the internal resistors are those of table 20 of the |ds|,
-"Configuration Pins".
+"Configuration Pins". Table 20 does not give the level of a switch ID pin that stands for 1; it
+is :ev:`inferred` that a high pin is a 1 bit.
 
 .. list-table::
    :header-rows: 1

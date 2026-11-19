@@ -96,8 +96,9 @@ Names
 
 A register or field has one name in this manual, and every binding derives its symbols from
 that name in a fixed way. The examples are for :reg:`PORT_CTRL`, its field
-:field:`PORT_CTRL.SPEED`, the array field :field:`STP.PORT` and the wide field
-:field:`VLAN_CTRL.FID`.
+:field:`PORT_CTRL.SPEED`, the array field :field:`STP.PORT`, the wide field
+:field:`VLAN_CTRL.FID`, the register :reg:`RST`, the value :val:`FDB_OP.OP.ADD`, the shared value
+:val:`speed.V1000`, the counter :counter:`RX_BROADCAST` and the constant :const:`PORT_NUM`.
 
 .. list-table::
    :header-rows: 1

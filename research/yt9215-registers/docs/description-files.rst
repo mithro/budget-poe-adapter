@@ -106,6 +106,8 @@ Structure of the YAML source
 
    * - Key
      - Contents
+   * - ``schema``
+     - Version of the file format
    * - ``device``
      - Name of the device
    * - ``sources``

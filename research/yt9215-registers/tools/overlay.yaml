@@ -248,15 +248,15 @@ enums:
       ETHERTYPE: EtherType
   l2_type:
     title: Layer 2 frame formats
-    desc: Frame encapsulation code matched by the L2_TYPE field of an ACL key.
+    desc: "Frame encapsulation code matched by the :field:`L2_TYPE <ACL_KEY.MAC_DA1_SA1_L2_TYPE>` field of an ACL key."
     values: {ETH: Other Ethernet framing, ETHV2: Ethernet II, ETHSAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC", ETHSNAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC and SNAP"}
   l3_type:
     title: Layer 3 protocol classes
-    desc: Protocol class matched by the L3_TYPE field of an ACL key.
+    desc: "Protocol class matched by the :field:`L3_TYPE <ACL_KEY.MAC_ADDR0_L3_TYPE>` field of an ACL key."
     values: {OTHER: Any other protocol, IPV4: IPv4, IPV6: IPv6, ARP: ARP, LLDP: LLDP, PAE: "`IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ port access entity", ERP: Ethernet ring protection, SLOW_PROTOCOL: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ slow protocols such as LACP"}
   l4_type:
     title: Layer 4 protocol classes
-    desc: Protocol class matched by the L4_TYPE field of an ACL key.
+    desc: "Protocol class matched by the :field:`L4_TYPE <ACL_KEY.IPV4_L4_TYPE>` field of an ACL key."
     values: {OTHER: Any other protocol, TCP: TCP, UDP: UDP, UDPLITE: UDP-Lite, ICMP: ICMP, IGMP: IGMP, MLD: Multicast Listener Discovery, ND: IPv6 Neighbour Discovery}
   udf_type:
     title: User-defined field bases
@@ -361,7 +361,7 @@ registers:
     access: ro
     desc: |
       Identifies the chip family. Read it before the reset, as described in
-      :ref:`Identify the part <bringup-identify>`.
+      :ref:`Find the switch <bringup-probe>`.
     add_fields:
       MINOR: {lsb: 0, width: 16, desc: "Lower half of the chip ID. Its values are not catalogued.", inferred: true}
     fields:
@@ -425,9 +425,11 @@ registers:
     title: Pin strap override enable
     desc: |
       Selects, per function, whether the switch uses the level sampled on the strap pin at
-      power-on (bit clear) or the value in :reg:`PON_STRAP_VAL` (bit set).
+      power-on (bit clear) or the value in :reg:`PON_STRAP_VAL` (bit set). This split between the
+      two registers is :ev:`inferred` from their names. :lx:`yt921x_set_eee` writes the same value
+      to the EEE bit of both.
     fields:
-      EEE: {desc: "Take the Energy Efficient Ethernet setting from :field:`PON_STRAP_VAL.EEE`."}
+      EEE: {desc: "Take the Energy Efficient Ethernet setting from :field:`PON_STRAP_VAL.EEE`. :lx:`yt921x_set_eee` sets this bit together with :field:`PON_STRAP_VAL.EEE` to turn the function on; the role of each bit alone is :ev:`inferred` from the register names."}
       LOOP_DETECT: {desc: "Take the loop detection setting from :field:`PON_STRAP_VAL.LOOP_DETECT`.", inferred: true}
   PON_STRAP_VAL:
     block: system
@@ -436,7 +438,7 @@ registers:
       Values used in place of the power-on straps for every function whose bit is set in
       :reg:`PON_STRAP_FUNC`.
     fields:
-      EEE: {desc: "1 turns Energy Efficient Ethernet on for the built-in PHYs."}
+      EEE: {desc: "1 turns Energy Efficient Ethernet on for the built-in PHYs. :lx:`yt921x_set_eee` sets this bit together with :field:`PON_STRAP_FUNC.EEE`; the role of each bit alone is :ev:`inferred` from the register names."}
       LOOP_DETECT: {desc: "1 turns loop detection on.", inferred: true}
   PON_STRAP_CAP:
     block: system
@@ -1071,7 +1073,7 @@ registers:
         values: {UCAST_PORT: "Unicast entries of one port", UCAST_VID: "Unicast entries of one filtering ID", UCAST: "All unicast entries", MCAST: "Multicast entries"}
       OP:
         desc: "Command."
-        values: {ADD: "Add or replace an entry", DEL: "Delete an entry", GET_ONE: "Read one entry", GET_NEXT: "Read the next used entry after INDEX", FLUSH: "Delete many entries"}
+        values: {ADD: "Write an entry", DEL: "Delete an entry", GET_ONE: "Read one entry", GET_NEXT: "Read the next used entry after INDEX", FLUSH: "Delete many entries"}
       START: {desc: "Write 1 to start the command."}
   FDB_RESULT:
     block: fdb

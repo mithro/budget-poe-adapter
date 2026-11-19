@@ -16,8 +16,8 @@ Priority sources
 ----------------
 
 Up to eight sources can supply the priority of a frame. :reg:`PORT_PRIO_ORD` ranks them per
-port: each source has a 3-bit weight, and of the sources that apply to a frame the one with
-the highest weight wins. :lx:`yt921x_dsa_port_set_apptrust` of the
+port: each source has a 3-bit weight, and it is :ev:`inferred` that of the sources that apply to a
+frame the one with the highest weight wins. :lx:`yt921x_dsa_port_set_apptrust` of the
 :ref:`Linux driver <sources-list>` gives the most trusted source weight 7 and each next one a
 weight that is 1 lower. :lx:`yt921x_port_setup` writes 0 to the register to turn all sources
 off. The comment in :lx:`chip.h:208` reads "0: disabled, except PORT_QOS_PRIO", so the port default
@@ -97,7 +97,7 @@ eligible bit. Each entry gives the internal priority in :field:`IPM_PCP.PRIO` an
 .. yt-bitfield:: IPM_PCP
 
 There are two :reg:`IPM_PCP` maps. :field:`PORT_QOS.CVLAN_PRIO_MAP_ID` and
-:field:`PORT_QOS.SVLAN_PRIO_MAP_ID` choose the one a port uses for each tag kind. The
+:field:`PORT_QOS.SVLAN_PRIO_MAP_ID` choose the one a port uses for each tag kind, which is :ev:`inferred` from the two field names. The
 reference entry of :reg:`IPM_PCP` gives the address of each map entry.
 
 Fill the tables once at start-up, as :lx:`yt921x_chip_setup_qos` does. That function gives

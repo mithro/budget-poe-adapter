@@ -70,7 +70,7 @@ external master.
 
 The comments on the definitions of :field:`EXT_MBUS_CTRL.TYPE` in :lx:`mdio_bus.h:22` and of
 :field:`INT_MBUS_CTRL.OP` in :lx:`mdio_bus.h:25` read "wild guess", so the widths of the two
-fields are :ev:`inferred`. The four functions use the values of the fields for
+fields are :ev:`inferred`. The two functions for the external master write :val:`EXT_MBUS_CTRL.TYPE.C22` for
 `clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ transfers. A
 :lx:`comment <mdio_bus.c:287>` in :lx:`yt921x_mbus_ext_init` reads "TODO: c45?", and no source
 describes a
@@ -155,6 +155,12 @@ The SerDes PCS at address 8 or 9 uses bits of register 0 with their
    * - 11
      - Power down
      - :lx:`yt921x_phylink_pcs_disable`
+   * - 11
+     - Power down
+     - :lx:`yt921x_phylink_pcs_enable`
+   * - 9
+     - Restart auto-negotiation
+     - :lx:`yt921x_phylink_pcs_enable`
    * - 10
      - Isolate
      - :lx:`yt921x_serdes_config`

@@ -108,14 +108,15 @@ use the words of its column "Word in the guide"; each use of such a word is a li
      - No source
      - :ref:`sources-open`
 
-A statement with the level driver follows what the code does. A header definition that no
+A statement with the level :ref:`driver <evidence-driver>` follows what the code does. A
+:ev:`header` definition that no
 code uses carries a name and often a list of values, which is taken at face value. An
 :ev:`inferred` statement is a reading of names in the :ref:`Linux driver <sources-list>` or the
 :ref:`vendor SDK <sources-list>` and can be wrong. A :ev:`datasheet` statement names the table, figure or section of the |ds| that it rests
 on. The reference does not use this level; the notes on the two reset bits of :reg:`RST` cite a
 section of the |ds| in addition to their own level.
 
-The driver level of a field means that some function of the :ref:`Linux driver <sources-list>`
+The level :ref:`driver <evidence-driver>` of a field means that some function of the :ref:`Linux driver <sources-list>`
 reads or writes the field. The reference names the first such function in the row or column "First used
 in", as a link to the line of code. A field that is the only field of its register shares the
 level of the register.

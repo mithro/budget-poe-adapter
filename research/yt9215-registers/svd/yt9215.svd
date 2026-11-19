@@ -194,7 +194,7 @@
         </register>
         <register>
           <name>CHIP_ID</name>
-          <description>Identifies the chip family. Read it before the reset, as described in Identify the part.</description>
+          <description>Identifies the chip family. Read it before the reset, as described in Find the switch.</description>
           <addressOffset>0x8</addressOffset>
           <size>32</size>
           <access>read-only</access>
@@ -714,7 +714,7 @@
         </register>
         <register>
           <name>PON_STRAP_FUNC</name>
-          <description>Selects, per function, whether the switch uses the level sampled on the strap pin at power-on (bit clear) or the value in PON_STRAP_VAL (bit set).</description>
+          <description>Selects, per function, whether the switch uses the level sampled on the strap pin at power-on (bit clear) or the value in PON_STRAP_VAL (bit set). This split between the two registers is inferred from their names. yt921x_set_eee writes the same value to the EEE bit of both.</description>
           <addressOffset>0x320</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -728,7 +728,7 @@
             </field>
             <field>
               <name>EEE</name>
-              <description>Take the Energy Efficient Ethernet setting from PON_STRAP_VAL.EEE.</description>
+              <description>Take the Energy Efficient Ethernet setting from PON_STRAP_VAL.EEE. yt921x_set_eee sets this bit together with PON_STRAP_VAL.EEE to turn the function on; the role of each bit alone is inferred from the register names.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -751,7 +751,7 @@
             </field>
             <field>
               <name>EEE</name>
-              <description>1 turns Energy Efficient Ethernet on for the built-in PHYs.</description>
+              <description>1 turns Energy Efficient Ethernet on for the built-in PHYs. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3132,7 +3132,7 @@
               <enumeratedValues>
                 <enumeratedValue>
                   <name>ADD</name>
-                  <description>Add or replace an entry</description>
+                  <description>Write an entry</description>
                   <value>0</value>
                 </enumeratedValue>
                 <enumeratedValue>

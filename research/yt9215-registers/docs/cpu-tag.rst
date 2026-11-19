@@ -168,8 +168,7 @@ calls the list incomplete and adds "Some are configurable via RMA_CTRL_CPU_CODE"
 :ref:`Linux driver <sources-list>` defines a register of that name, and the
 :ref:`vendor SDK <sources-list>` has the table :sdk:`RMA_CTRLN`. The column
 "Register that causes it" of the :ref:`reason code table <cpu-tag-codes>` is :ev:`inferred` from the names of the codes and of the registers; no
-function of the :ref:`Linux driver <sources-list>` connects a code with a register. The reasons of :ref:`PORT_COPY <tag-code-port-copy>` and
-:ref:`FDB_COPY <tag-code-fdb-copy>` are :ev:`inferred` from the two names.
+function of the :ref:`Linux driver <sources-list>` connects a code with a register. The column "Reason" is :ev:`inferred` from the names of the codes.
 
 :lx:`yt921x_tag_rcv` treats the codes in two groups.
 

@@ -101,7 +101,7 @@ def block_diagram(name, downstream, usb, cc_label, cable_label):
         d.line([(720, y + 114), (745, y + 114)], power=True)
 
     # Power path along the bottom
-    d.box(15, power_y, 150, 100, ["PoE front end", "2 bridges", "signature", "class sink", "hot-swap switch"],
+    d.box(15, power_y, 150, 100, ["PoE front end", "2 bridges", "signature", "hot-swap switch", "one of 4 variants"],
           fill=RED)
     d.line([(190, 90), (190, 108), (75, 108), (75, power_y)], power=True)
     d.text(85, 240, "centre taps", anchor="start")
@@ -132,13 +132,13 @@ def power_tree(name):
     d.line([(135, 190), (160, 190)], power=True)
     d.box(305, 150, 120, 80, ["5 V converter", "87 % assumed"], fill=RED)
     d.line([(270, 190), (305, 190)], power=True)
-    d.text(288, 140, "24.2 W")
+    d.text(288, 140, "24.3 W")
     # 5 V branches
     d.box(480, 20, 140, 60, ["VBUS switch", "per output"], fill=RED)
-    d.box(680, 20, 155, 60, ["USB-C outputs", "5 V", "19.5 to 19.8 W"], fill=GREEN)
+    d.box(680, 20, 155, 60, ["USB-C outputs", "5 V", "19.7 to 20.0 W"], fill=GREEN)
     d.line([(425, 170), (450, 170), (450, 50), (480, 50)], power=True)
     d.line([(620, 50), (680, 50)], power=True)
-    d.text(455, 120, "5 V rail, 21.0 W", anchor="start")
+    d.text(455, 120, "5 V rail, 21.2 W", anchor="start")
     d.box(480, 160, 140, 60, ["3.3 V converter"], fill=RED)
     d.line([(425, 190), (480, 190)], power=True)
     d.box(680, 120, 155, 60, ["YT9215 3.3 V pins", "logic and analogue"], fill=BLUE)
@@ -150,7 +150,7 @@ def power_tree(name):
     d.text(430, 262, "Switch supply: 1.2 to 1.5 W", anchor="start")
     d.text(430, 280, "taken from the 5 V rail", anchor="start")
     d.text(15, 300, "Power values are for a 25.5 W grant.", anchor="start")
-    d.text(15, 318, "Bridge loss assumed: 1.3 W.", anchor="start")
+    d.text(15, 318, "Loss before the converter: 1.2 W.", anchor="start")
     d.save(name)
 
 

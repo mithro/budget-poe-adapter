@@ -31,8 +31,10 @@ signalling has three priced builds, each with its own BOM table: a
 | [B](#option-b) | [Port 9 MAC](#block-cc-mac) | – | – | – |
 <!-- END totals -->
 
-- Parts cost is the sum of the BOM rows at the [price tiers](#prices) the BOM names. It leaves
-  out the [PoE front end](#block-poe), which has four variants with their own BOM.
+- Parts cost is the sum of the BOM rows at the [price tiers](#prices) the BOM names.
+- Parts cost, placements and line items in this table leave out the
+  [PoE front end](#block-poe), which has four variants with their own BOM. The front end note
+  gives no line item count.
 - A placement is one part put on the board. A line item is one distinct part number. Parts
   whose value is not yet set share one line item, so the line item count is a lower bound.
 - The PCB and assembly estimates add $1.50 in option A and $1.80 in option B
@@ -40,7 +42,8 @@ signalling has three priced builds, each with its own BOM table: a
 - The port 9 MAC serves one CC line, so it has no figures for option B
   ([port 9 MAC](#block-cc-mac)).
 
-Parts cost with each PoE front end variant added:
+Parts cost with each PoE front end variant added. Each cell adds the variant cost of the
+front end note, which is rounded to a cent:
 
 <a id="totals-poe"></a>
 
@@ -68,12 +71,12 @@ Placements with each PoE front end variant added:
 | [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | 181 | 198 | 230 | 176 |
 <!-- END placements-poe -->
 
-- With a 25.5 W PoE grant the USB-C side gets about 19.8 W in option A and about 19.5 W in
+- With a 25.5 W PoE grant the USB-C side gets about 20.0 W in option A and about 19.7 W in
   option B, where the two outputs share it ([power budget](#power-budget)).
 - A 25.5 W grant is too small for a 5 V, 5 A offer, and a 12.95 W grant is under the 3 A of a
   standard PD offer ([power budget](#power-budget)).
 - The PoE front end asks for a 5 V converter with a 100 V input rating. The counted converter
-  is a 60 V part, and no 100 V part with a 5 A output is found ([5 V converter](#block-5v)).
+  is a 60 V part, and no 100 V converter with built-in switches and a 5 A output is found ([5 V converter](#block-5v)).
 - The open points are in [Assumptions not yet verified](#assumptions).
 
 <a id="evidence-codes"></a>
@@ -103,7 +106,7 @@ their pin numbers, and this note uses those numbers.
 
 | Job | Hardware not fitted | Runs on | Detail |
 | --- | --- | --- | --- |
-| Ask the PoE switch for more than 12.95 W by LLDP | Two-event detector | CPU | [PoE front end](#block-poe) |
+| Ask the PoE switch for more than 12.95 W by LLDP | – | CPU | [PoE front end](#block-poe) |
 | Hold downstream ports off until the grant | Supervisor chip | CPU | [Start-up order](#start-up) |
 | Hold the USB-C outputs off until the grant | Supervisor chip | CPU | [Start-up order](#start-up) |
 | Work out the USB-C offer from the grant | Fixed offer resistors | CPU | [Power budget](#power-budget) |
@@ -209,16 +212,16 @@ output voltage, which adds about one [5 V converter](#block-5v) block per output
 
 ### Power budget
 
-| Granted at the PoE input | Bridge loss | 5 V rail | Switch supply in option A | USB-C budget in option A | USB-C current in option A | Switch supply in option B | USB-C budget in option B | USB-C current in option B |
+| Granted at the PoE input | Loss before the converter | 5 V rail | Switch supply in option A | USB-C budget in option A | USB-C current in option A | Switch supply in option B | USB-C budget in option B | USB-C current in option B |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 12.95 W | 0.8 W | 10.6 W | 1.2 W | 9.4 W | 1.9 A | 1.5 W | 9.1 W | 1.8 A |
-| 25.5 W | 1.3 W | 21.0 W | 1.2 W | 19.8 W | 4.0 A | 1.5 W | 19.5 W | 3.9 A |
+| 12.95 W | 0.7 W | 10.6 W | 1.2 W | 9.4 W | 1.9 A | 1.5 W | 9.1 W | 1.8 A |
+| 25.5 W | 1.2 W | 21.2 W | 1.2 W | 20.0 W | 4.0 A | 1.5 W | 19.7 W | 3.9 A |
 
 Every column except "Granted at the PoE input" is an estimate [**I**](#evidence-codes):
 
-- Bridge loss is two diode drops of 1.1 V at the lowest input voltage of each grant. LCSC lists
-  1.1 V at 0.4 A for the MB10S, a 1 A bridge [**P**](#evidence-codes). The 0.6 A of a 25.5 W grant is past
-  that listed point.
+- Loss before the converter is the bridge loss plus the loss of the front end itself, both
+  from the [power table of the PoE front end note](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#power-sequencing): 0.60 W with
+  0.11 W at 12.95 W, and 1.02 W with 0.15 W at 25.5 W.
 - The 5 V rail is the remainder times an assumed converter efficiency of 87 %.
 - Switch supply starts from Table 28 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)
   [**V**](#evidence-codes): 663 mW with no link and 1613 mW with five gigabit links, so 190 mW
@@ -374,7 +377,7 @@ reset threshold not published [**I**](#evidence-codes). The discharge diode of t
 ### PoE front end
 
 The front end is designed in [Discrete PoE front end](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md), which holds its circuit, its
-simulation and its BOM. This note carries its variants with their totals [**P**](#evidence-codes). The BOM
+simulation and its BOM. This note carries its variants with the part counts and costs that note states. The BOM
 tables of this note leave the front end out, and [parts cost by variant](#totals-poe) adds each
 variant in turn. The standards background is in [PoE powered device](../research/poe.md).
 
@@ -384,6 +387,7 @@ variant in turn. The standards background is in [PoE powered device](../research
 | Surge clamp | Cable surges |
 | Detection signature | Detection by the PoE switch |
 | Class current sink | Tells the PoE switch the power class |
+| Mark latch | Behaviour in the mark event |
 | Two-event detector | Sees a 25.5 W grant made by class events |
 | Hot-swap switch | Inrush limit |
 
@@ -406,6 +410,10 @@ variant in turn. The standards background is in [PoE powered device](../research
   ([getting more than 13 W](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#getting-more-than-13-w)).
 - A variant with two-event detection reports the grant on a signal named T2P, which takes one
   GPIO input of the YT9215. The pin is not assigned [**U**](#evidence-codes).
+- The discrete T2P is high for a 25.5 W grant and stays valid for 1.3 s in the shortest
+  simulated case, so the firmware has to read it within 1 s of power-up. The T2P of the PD
+  controller IC is low for a 25.5 W grant. The T2P output stage runs from the 3.3 V rail
+  ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)).
 - The front end has no undervoltage lockout of its own in the discrete variants. It relies on
   the enable threshold of the [5 V converter](#block-5v)
   ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)).
@@ -416,14 +424,17 @@ variant in turn. The standards background is in [PoE powered device](../research
   ([maintain power signature](../research/poe.md#44-maintain-power-signature-mps)).
 - The front end note estimates 19.9 W for USB-C at a 25.5 W grant, with a 90 % converter and a
   2.0 W switch supply ([power sequencing](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#power-sequencing)). The
-  [power budget](#power-budget) of this note uses 87 % and a smaller switch supply.
+  [power budget](#power-budget) of this note starts from the same converter input and uses
+  87 % with a switch supply of 1.2 W in option A and 1.5 W in option B.
+- The block diagrams do not draw T2P, and the [start-up figure](#start-up) shows the LLDP route
+  to the grant only.
 
 <a id="block-5v"></a>
 
 ### 5 V converter
 
 One converter makes 5 V for the USB-C outputs and for the 3.3 V converter. It is sized for the
-25.5 W grant: 21.0 W is 4.2 A at 5 V.
+25.5 W grant: 21.2 W is 4.2 A at 5 V.
 
 | Converter | Maker | Input limit | Meets the 100 V input rating | Output current | Rectifier | Catalogue number | Price | Counted in the BOM |
 | --- | --- | ---: | --- | ---: | --- | --- | ---: | --- |
@@ -436,8 +447,8 @@ One converter makes 5 V for the USB-C outputs and for the 3.3 V converter. It is
 
 - The PoE front end asks the converter for a 100 V input rating, because its surge clamp lets
   the input rise to 93.6 V ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)). The counted converter and the
-  counted SS56 catch diode are 60 V parts, so the counted set does not meet that request
-  [**U**](#evidence-codes).
+  counted SS56 catch diode are 60 V parts, under that request. Whether 60 V parts survive
+  is not checked [**U**](#evidence-codes).
 - The front end also asks for an enable threshold of 38 V rising and 32.5 V falling within
   4 %, a 47 µF input capacitor, and a start into about 3 W
   ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)). The BOM counts that capacitor and two enable divider
@@ -608,7 +619,8 @@ The parts of the two software builds are untested candidates [**U**](#evidence-c
 | Polarity bridges | [PoE front end](#block-poe) | Needed before the chip has power |
 | Surge clamp | [PoE front end](#block-poe) | Acts in nanoseconds |
 | Detection signature | [PoE front end](#block-poe) | Measured before power is applied |
-| Class sink | [PoE front end](#block-poe) | Works before the chip has power |
+| Class current sink | [PoE front end](#block-poe) | Works before the chip has power |
+| Mark latch | [PoE front end](#block-poe) | Works before the chip has power |
 | Two-event detector | [PoE front end](#block-poe) | Works before the chip has power |
 | Hot-swap switch | [PoE front end](#block-poe) | Limits inrush before the CPU runs |
 | 5 V converter | [5 V converter](#block-5v) | Power conversion |
@@ -886,7 +898,7 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | Assumption | Waits on | If it is wrong |
 | --- | --- | --- |
 | Firmware runs on the CPU | CPU study | No option works as drawn |
-| The CPU can exchange LLDP frames | CPU study | No grant above 12.95 W |
+| The CPU can exchange LLDP frames | CPU study | No 25.5 W by LLDP |
 | A 4 Mbit flash holds the firmware | CPU study | Larger flash |
 | GPIO registers are usable by firmware | CPU study | No VBUS control |
 | The VBUS switch pins stay low until firmware drives them | CPU study | Hardware gate on VBUS |
@@ -900,7 +912,7 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | The converter enable threshold holds 4 % | Datasheet check | Reference with a comparator |
 | A GPIO input is free for T2P | CPU study | LLDP only |
 | A non-isolated design is acceptable | Safety review | Isolated converter |
-| Bridge loss is 1.3 W at 25.5 W | Bench | USB-C budget changes |
+| Loss before the converter is 1.2 W at 25.5 W | Bench | USB-C budget changes |
 | The 5 V converter reaches 87 % | Bench | USB-C budget changes |
 | The catch diode can shed its loss | Schematic work | Larger diode |
 | The G2415S carries the PoE current | Datasheet check | Other transformer |

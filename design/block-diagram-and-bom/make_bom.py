@@ -65,11 +65,11 @@ PARTS = {
 # Parts whose catalogue number is a JLCPCB number with no LCSC product page.
 JLC_ONLY = {"C17700185", "C193025", "C50543"}
 
-ETH, SW, POE, B5, B33, USB, CCC, CCB, CCM = (
-    "Ethernet", "Switch", "PoE front end", "5 V converter", "3.3 V converter",
+ETH, SW, B5, B33, USB, CCC, CCB, CCM = (
+    "Ethernet", "Switch", "5 V converter", "3.3 V converter",
     "USB-C power", "CC interface: PD transceiver", "CC interface: GPIO bit-bang", "CC interface: port 9 MAC")
 BLOCKS = (ETH, SW, B5, B33, USB, CCC, CCB, CCM)
-ANCHOR = {ETH: "block-ethernet", SW: "block-switch", POE: "block-poe", B5: "block-5v", B33: "block-3v3",
+ANCHOR = {ETH: "block-ethernet", SW: "block-switch", B5: "block-5v", B33: "block-3v3",
           USB: "block-usb", CCC: "block-cc-transceiver", CCB: "block-cc-bit-bang", CCM: "block-cc-mac"}
 BASE, CHIP, BANG, MAC = "Always", "PD transceiver", "GPIO bit-bang", "Port 9 MAC"
 BUILD_BLOCK = {CHIP: CCC, BANG: CCB, MAC: CCM}

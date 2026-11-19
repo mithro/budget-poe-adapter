@@ -88,8 +88,8 @@
 <text x="90" y="599" text-anchor="middle" dominant-baseline="middle" font-weight="bold">PoE front end</text>
 <text x="90" y="617" text-anchor="middle" dominant-baseline="middle">2 bridges</text>
 <text x="90" y="635" text-anchor="middle" dominant-baseline="middle">signature</text>
-<text x="90" y="653" text-anchor="middle" dominant-baseline="middle">class sink</text>
-<text x="90" y="671" text-anchor="middle" dominant-baseline="middle">hot-swap switch</text>
+<text x="90" y="653" text-anchor="middle" dominant-baseline="middle">hot-swap switch</text>
+<text x="90" y="671" text-anchor="middle" dominant-baseline="middle">one of 4 variants</text>
 <path d="M190,90 L190,108 L75,108 L75,585" fill="none" stroke="#b3261e" stroke-width="2.5" marker-end="url(#pa)"/>
 <text x="85" y="240" text-anchor="start" dominant-baseline="middle">centre taps</text>
 <text x="85" y="258" text-anchor="start" dominant-baseline="middle">up to 57 V</text>

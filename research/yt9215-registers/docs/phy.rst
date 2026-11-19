@@ -47,9 +47,22 @@ names.
 MDIO master transfer
 --------------------
 
-.. yt-diagram:: mbus-sequence
-   :caption: Reading a PHY register. A write puts the value in the data-out register before
-             the start and does not read the data-in register.
+.. wavedrom::
+   :caption: Reading a PHY register. Time runs from left to right, and the switch supplies the
+             green values. The PHY bus lane shows the frame that the switch sends to the PHY. A
+             write puts the value in the data-out register before the start and does not read the
+             data-in register.
+
+   {"signal": [
+     {"name": "Host", "period": 0.5, "wave": "=......=.......=......=......=......",
+      "data": ["read", "write", "write", "read", "read"]},
+     {"name": "Register", "period": 0.5, "wave": "=......=.......=......=......=......",
+      "data": ["INT_MBUS_OP", "INT_MBUS_CTRL", "INT_MBUS_OP", "INT_MBUS_OP", "INT_MBUS_DIN"]},
+     {"name": "Value", "period": 0.5, "wave": "7......=.......=......7......7......",
+      "data": ["until START = 0", "PORT, REG, OP", "START = 1", "until START = 0", "DATA"]},
+     {"name": "PHY bus", "period": 0.5, "wave": "x.....................=......x......",
+      "data": ["clause 22 read"]}
+   ]}
 
 The steps name the registers of the internal master. For the external master, use the
 register in the same row of the :ref:`register table <phy-registers-table>`.

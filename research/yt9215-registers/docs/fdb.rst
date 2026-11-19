@@ -12,8 +12,18 @@ it through a command interface, the registers of the :blk:`fdb` block.
 Running a command
 -----------------
 
-.. yt-diagram:: fdb-sequence
-   :caption: One forwarding database command.
+.. wavedrom::
+   :caption: One forwarding database command. Time runs from left to right, and the switch
+             supplies the green values. The last read is for lookups only.
+
+   {"signal": [
+     {"name": "Host", "period": 0.5, "wave": "=.....=......=............=......",
+      "data": ["write", "write", "read", "read"]},
+     {"name": "Register", "period": 0.5, "wave": "=.....=......=............=......",
+      "data": ["FDB_IN0 to 2", "FDB_OP", "FDB_RESULT", "FDB_OUT0 to 2"]},
+     {"name": "Value", "period": 0.5, "wave": "=.....=......7......7.....7......",
+      "data": ["entry or key", "OP, START = 1", "until DONE = 1", "NOTFOUND", "entry"]}
+   ]}
 
 1. Write the input registers :reg:`FDB_IN0`, :reg:`FDB_IN1` and :reg:`FDB_IN2`.
 2. Write :reg:`FDB_OP` with the command in :field:`FDB_OP.OP` and :field:`FDB_OP.START` set.

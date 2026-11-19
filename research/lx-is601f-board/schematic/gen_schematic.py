@@ -339,22 +339,20 @@ s.stub(u6, '3', 'TBD_U6_WP', 'U', length=m(5.08)); s.stub(u6, '7', 'TBD_U6_HOLD'
 s.textbox('U6: empty SOP-8 footprint on the bottom, assumed SPI NOR\nflash (25-series pinout). R40, R94, R96, R98, R100, R102,\nR109 sit next to it. '
           'R44, R89, R92 and R93 run to U4 pins\n55, 54, 50 and 49 on the top side.', m(15), m(240), m(70))
 for n in ('46', '47', '90'):
-    s.nc(uC.p(n)); s.mark(uC, n, '(no trace seen)', 'V')
+    s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
 for n in ('93', '44', '48', '51', '52', '53', '56', '57'):
     s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
-s.text('X on pins 46, 47, 90 and 79: no trace leaves\nthe pad in the photos.', m(143), m(195), size=1.27, italic=True)
-LEDMAP = {'85': 'LED_P0', '80': 'LED_P1', '77': 'LED_P2', '75': 'LED_P3', '71': 'LED_P4', '67': 'LED_P9'}
+s.text('Pins 46, 47, 67, 79 and 90: no trace leaves the pad outward in the\ntop-side photos. A route under the package is not ruled out.', m(143), m(195), size=1.27, italic=True)
+LEDMAP = {'85': 'LED_P0', '80': 'LED_P1', '77': 'LED_P2', '75': 'LED_P3', '71': 'LED_P4'}
 for n in ('85', '84', '83', '80', '81', '79', '77', '78', '76', '75', '73', '74', '71', '72', '70', '67'):
     if n in LEDMAP:
         s.stub(uC, n, LEDMAP[n], 'I', length=m(25.4), kind='hier', shape='output')
-    elif n == '79':
-        s.nc(uC.p('79')); s.mark(uC, '79', '(no trace seen)', 'V')
     else:
         s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
 for n in ('14', '15', '116'):
     s.nc(uC.p(n)); s.mark(uC, n, '(NC)', 'I')
-s.textbox('Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 goes to the LED\n'
-          'sheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced).', m(146), m(215), m(80), m(16))
+s.textbox('Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 of ports 0 to 4 goes\n'
+          'to the LED sheet (inferred). The other LED and strap pins have pull\nresistors R2-R5, R103, R110-R114 nearby (not traced).', m(146), m(215), m(80), m(16))
 # U4A MDI
 s.frame(m(290), m(15), m(450), m(270), 'U4A: copper ports (MDI)')
 uA = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(330), m(130), unit=1, node=u4node)
@@ -533,23 +531,23 @@ s.textbox('- U201 (silk U1, QFN-48) marked "2184A 533AQ1H": maker not identified
 s = leds
 s.frame(m(12.7), m(15), m(175), m(170), 'Port LED array (silk lines FX and POW, positions P1-P5 and one unlabelled)')
 rws = [('LED_P0', 'RJ17', 'RJ18', 'P1'), ('LED_P1', 'RJ15', 'RJ16', 'P2'), ('LED_P2', 'RJ13', 'RJ14', 'P3'),
-       ('LED_P3', 'RJ11', 'RJ12', 'P4'), ('LED_P4', 'RJ9', 'RJ10', 'P5'), ('LED_P9', 'RJ7', 'RJ8', 'no label')]
+       ('LED_P3', 'RJ11', 'RJ12', 'P4'), ('LED_P4', 'RJ9', 'RJ10', 'P5'), ('TBD_FX6', 'RJ7', 'RJ8', 'no label')]
 s.text('FX line', m(30), m(22), size=1.6, bold=True); s.text('POW line', m(110), m(22), size=1.6, bold=True)
 for i, (net, rf, rp, pos) in enumerate(rws):
     y = m(35.56 + 17.78 * i)
-    for col, (xr, ref, val, onet, conf2) in enumerate([(m(30), rf, 'FX, %s' % pos, net, 'I'),
+    for col, (xr, ref, val, onet, conf2) in enumerate([(m(30), rf, 'FX, %s' % pos, net, 'U' if net.startswith('TBD') else 'I'),
                                                        (m(110), rp, 'POW, %s' % pos, 'TBD_POW%d' % (i + 1), 'U')]):
         s.power('+3V3', xr - m(7.62), y - m(5.08))
         d = two(s, 'Device:LED', ref, val, xr + m(7.62), y, True, flip=True)
         s.wire([(xr - m(7.62), y - m(5.08)), (xr - m(7.62), y), d.p('2')], 'U'); s.mark(d, '2', '+3V3', 'U')
         e = (d.p('1')[0] + m(10.16), y)
         s.wire([d.p('1'), e], conf2); s.mark(d, '1', onet, conf2)
-        if col == 0:
+        if col == 0 and not net.startswith('TBD'):
             s.label(net, e, (1, 0), kind='hier', shape='input')
         else:
             s.label(onet, e, (1, 0))
 s.textbox('- The 12 array LEDs carry the silk names RJ7-RJ18, one pair of names per position.\n  Which name of a pair is the FX LED and which the POW LED is assumed; the pair\n  at P5 is printed in the order RJ10, RJ9.\n'
-          '- The silk labels the positions P1 to P5; the unlabelled position (RJ7, RJ8) is\n  assumed to be the SFP (U4 P9LED0, pin 67).\n'
+          '- The silk labels the positions P1 to P5; what drives the unlabelled position\n  (RJ7, RJ8) is unknown: no trace leaves U4 pin 67 (P9LED0) outward on the top layer.\n'
           '- No resistors sit inside the array. R2-R5, R103 and R110-R114 beside it may be\n  the LED resistors (not traced); the anode supply and the active-low drive from\n  U4 are inferred.\n'
           '- The POW LEDs are probably driven by the PoE module (not traced).', m(17.78), m(140), m(125), m(34), size=1.1)
 s.frame(m(185), m(15), m(284), m(130), 'LED6 footprint (DNP), LED7 and LED8 with R68')
@@ -566,13 +564,13 @@ s.stub(r68, '1', 'TBD_R68_1', 'U', length=m(5.08)); s.stub(r68, '2', 'TBD_R68_2'
 s = root
 s.text('LX-IS601F V2.0 switch board: reverse-engineered schematic', m(15), m(15), size=2.8, bold=True)
 s.text('Two boards photographed 2026-11-17.\nYT9215SCH 5-port GbE switch + SFP, with a 4-port PoE PSE plug-in module.', m(15), m(22), size=1.8)
-pp = s.subsheet(power, m(20), m(115), m(38), m(20), [])
+pp = s.subsheet(power, m(20), m(108), m(38), m(20), [])
 sw = s.subsheet(switch, m(20), m(45), m(38), m(55),
                 [('P0_MDI[0..7]', 'R', 'bidirectional'), ('P1_MDI[0..7]', 'R', 'bidirectional'), ('P2_MDI[0..7]', 'R', 'bidirectional'),
                  ('P3_MDI[0..7]', 'R', 'bidirectional'), ('P4_MDI[0..7]', 'R', 'bidirectional'), ('SDS0_TXP', 'R', 'output'),
                  ('SDS0_TXN', 'R', 'output'), ('SDS0_RXP', 'R', 'input'), ('SDS0_RXN', 'R', 'input'),
                  ('LED_P0', 'R', 'output'), ('LED_P1', 'R', 'output'), ('LED_P2', 'R', 'output'), ('LED_P3', 'R', 'output'),
-                 ('LED_P4', 'R', 'output'), ('LED_P9', 'R', 'output')])
+                 ('LED_P4', 'R', 'output')])
 ep = s.subsheet(eth, m(104.14), m(45), m(45), m(22),
                 [('P0_MDI[0..7]', 'L', 'bidirectional'), ('P1_MDI[0..7]', 'L', 'bidirectional'), ('P2_MDI[0..7]', 'L', 'bidirectional'),
                  ('P3_MDI[0..7]', 'L', 'bidirectional'), ('POE[1..8]', 'L', 'bidirectional')])
@@ -581,9 +579,9 @@ up = s.subsheet(upl, m(104.14), m(77), m(45), m(22),
                  ('SDS0_RXP', 'L', 'output'), ('SDS0_RXN', 'L', 'output')])
 ld = s.subsheet(leds, m(104.14), m(111), m(45), m(24),
                 [('LED_P0', 'L', 'input'), ('LED_P1', 'L', 'input'), ('LED_P2', 'L', 'input'), ('LED_P3', 'L', 'input'),
-                 ('LED_P4', 'L', 'input'), ('LED_P9', 'L', 'input')])
+                 ('LED_P4', 'L', 'input')])
 pm = s.subsheet(poe, m(104.14), m(147), m(45), m(12), [('POE[1..8]', 'L', 'bidirectional')])
-for (x, y, t) in [(m(22), m(120), 'J2 input, protection,\nSCT2622 buck to +3V3'),
+for (x, y, t) in [(m(22), m(113), 'J2 input, protection,\nSCT2622 buck to +3V3'),
                   (m(22), m(88), 'YT9215SCH (4 units),\n25 MHz crystal,\nEEPROM U10,\nempty flash footprint U6'),
                   (m(106.68), m(63.5), 'DXFRM2-5, J1, ED1-ED7, ED10'),
                   (m(106.68), m(95), 'DXFRM6, J3, ED8-ED9, SFP U12'),
@@ -604,7 +602,7 @@ for k in range(4):
 rw(sw['P4_MDI[0..7]'], up['P4_MDI[0..7]'], m(99.06), 'bus')
 for k, n in enumerate(('SDS0_TXP', 'SDS0_TXN', 'SDS0_RXP', 'SDS0_RXN')):
     rw(sw[n], up[n], m(96.52 - 2.54 * k), 'wire')
-for k, n in enumerate(['LED_P0', 'LED_P1', 'LED_P2', 'LED_P3', 'LED_P4', 'LED_P9']):
+for k, n in enumerate(['LED_P0', 'LED_P1', 'LED_P2', 'LED_P3', 'LED_P4']):
     rw(sw[n], ld[n], m(63.5 + 2.54 * (5 - k)), 'wire')
 a, b = ep['POE[1..8]'], pm['POE[1..8]']
 rw(a, b, m(101.6), 'bus')

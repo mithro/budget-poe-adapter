@@ -20,9 +20,22 @@ resistor. A board that wants the timing of table 38 adds an external one on MDIO
 frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit PHY address, a
 5-bit register number and 16 bits of data.
 
-.. yt-diagram:: mdio-frame
-   :caption: MDIO frames. Bits are sent from left to right; green parts are driven
-             by the switch.
+.. wavedrom::
+   :caption: MDIO frames. Bits are sent from left to right. In a read, nobody drives the first
+             TA bit, and the switch drives the second TA bit low and then the green DATA bits.
+             The host drives all other bits.
+
+   {"signal": [
+     {"name": "Field", "period": 0.5, "wave": "=....=...=...=...=...=...=......",
+      "data": ["PRE", "ST", "OP", "PHYAD", "REGAD", "TA", "DATA"]},
+     {"name": "Bits", "period": 0.5, "wave": "=....=...=...=...=...=...=......",
+      "data": ["32", "2", "2", "5", "5", "2", "16"]},
+     {},
+     {"name": "Write", "period": 0.5, "wave": "=....=...=...=...=...=...=......",
+      "data": ["all 1", "01", "01", "address", "number", "10", "highest first"]},
+     {"name": "Read", "period": 0.5, "wave": "=....=...=...=...=...z.0.7......",
+      "data": ["all 1", "01", "10", "address", "number", "highest first"]}
+   ]}
 
 The switch answers on one PHY address, ``0x1d`` or ``0x00``, selected by a
 :ref:`strap pin <access-straps>` at power-on. Any MDIO master will do: a hardware MDIO controller,
@@ -34,9 +47,21 @@ or two GPIO pins as in the class
 Timing
 ~~~~~~
 
-.. yt-diagram:: smi-timing
+.. wavedrom::
    :caption: MDC and MDIO timing. The switch samples MDIO on the rising edge of MDC and
              changes it after a rising edge.
+
+   {"signal": [
+     {"node": "...A.....B"},
+     {"node": "......C..D..E"},
+     {"name": "MDC", "wave": "0..1..0..1..0.", "node": "...J.....K"},
+     {"node": ".F.G.H"},
+     {"name": "MDIO, host drives", "wave": "x=...x........", "data": ["valid"]},
+     {"name": "MDIO, switch drives", "wave": "7..........7..", "data": ["bit n", "bit n − 1"]},
+     {"node": ".........L.M"}
+   ],
+   "edge": ["A<->B t1", "C<->D t3", "D<->E t2", "F<->G t4", "G<->H t5", "L<->M t6",
+            "J-G", "K-L"]}
 
 .. list-table::
    :header-rows: 1
@@ -153,8 +178,15 @@ Reading and writing a register
 The 5-bit register number of each MDIO frame does not name a register. It tells the switch
 what the 16 data bits of the frame are:
 
-.. yt-diagram:: smi-regad
+.. wavedrom::
    :caption: The register number (REGAD) of an MDIO frame to the switch.
+
+   {"reg": [
+     {"name": "READ", "bits": 1},
+     {"name": "DATA", "bits": 1},
+     {"name": "switch ID", "bits": 2},
+     {"bits": 1}
+   ], "config": {"bits": 5}}
 
 .. list-table::
    :header-rows: 1
@@ -194,11 +226,30 @@ bits match its strap pins. No source names bit 4, and the
 An access is two frames that set the address, high half first, and two frames that move the
 value, high half first. The READ bit has the same value in all four frames.
 
-.. yt-diagram:: smi-read
-   :caption: Register read. The address frames are MDIO writes; the value frames are MDIO reads.
+.. wavedrom::
+   :caption: Register read. The address frames are MDIO writes and the value frames are MDIO
+             reads; the switch drives the green parts.
 
-.. yt-diagram:: smi-write
+   {"signal": [
+     {"name": "MDIO frame", "wave": "=..=..=..=..", "data": ["write", "write", "read", "read"]},
+     {"name": "REGAD switch ID", "wave": "=..=..=..=..", "data": ["ID", "ID", "ID", "ID"]},
+     {"name": "REGAD bit DATA", "wave": "=..=..=..=..", "data": ["0", "0", "1", "1"]},
+     {"name": "REGAD bit READ", "wave": "=..=..=..=..", "data": ["1", "1", "1", "1"]},
+     {"name": "Frame data", "wave": "=..=..7..7..",
+      "data": ["address[31:16]", "address[15:0]", "value[31:16]", "value[15:0]"]}
+   ]}
+
+.. wavedrom::
    :caption: Register write. All four frames are MDIO writes.
+
+   {"signal": [
+     {"name": "MDIO frame", "wave": "=..=..=..=..", "data": ["write", "write", "write", "write"]},
+     {"name": "REGAD switch ID", "wave": "=..=..=..=..", "data": ["ID", "ID", "ID", "ID"]},
+     {"name": "REGAD bit DATA", "wave": "=..=..=..=..", "data": ["0", "0", "1", "1"]},
+     {"name": "REGAD bit READ", "wave": "=..=..=..=..", "data": ["0", "0", "0", "0"]},
+     {"name": "Frame data", "wave": "=..=..=..=..",
+      "data": ["address[31:16]", "address[15:0]", "value[31:16]", "value[15:0]"]}
+   ]}
 
 With switch ID 0 the four register numbers are 1, 1, 3, 3 for a read and 0, 0, 2, 2 for a
 write. The bits of the register number are defined in :lx:`chip.h:11`, and their use in the

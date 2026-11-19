@@ -68,7 +68,7 @@ PPS sets its current limit in 50 mA steps.
 - Input tolerance: nominal 5 V, roughly ±5%. Design the converter for 5.1 V at the connector to cover cable drop at 5 A (a 0.1 Ω round trip costs 0.5 V, so keep the cable short or captive).
 - Real consumption: idle about 3 W, full CPU load about 8 to 12 W, the rest is USB, NVMe and HAT budget.
 
-**Smallest offer that serves a Pi 5:** a fixed 5.1 V buck from the PoE rail, a single PDO `Fixed 5 V / 5 A` (optionally 3 A when the cable is not e-marked), and a captive cable or a documented "5 A cable only" receptacle.
+**Smallest design that serves a Pi 5:** a fixed 5.1 V buck from the PoE rail, a single PDO `Fixed 5 V / 5 A` (optionally 3 A when the cable is not e-marked), and a captive cable or a documented "5 A cable only" receptacle.
 
 ---
 
@@ -205,7 +205,7 @@ Message types needed for a minimal source:
 
 **PD3 collision avoidance:** the source signals with its Rp: **3.0 A Rp = SinkTxOK** (sink may start an AMS), **1.5 A Rp = SinkTxNG**. The source switches Rp to 1.5 A before it initiates a message. This requires two Rp values per CC; two outputs and two resistors are enough, and they also let Rp be switched off ([front end](yt9215-usb-pd.md#front-end)).
 
-**PPS and EPR (if ever needed):** a PPS sink must re-request at least every 10 s, and the source hard-resets after tPPSTimeout (about 15 s) without one. EPR requires EPR_Mode entry via an e-marked 5 A, 50 V cable check and a sink keep-alive every ≤ 500 ms (verify). Both need a programmable converter with current limiting. Not recommended within a PoE budget.
+**PPS and EPR (if ever needed):** a PPS sink must re-request at least every 10 s, and the source hard-resets after tPPSTimeout (about 15 s) without one. EPR requires EPR_Mode entry via an e-marked 5 A, 50 V cable check and a sink keep-alive every ≤ 500 ms (verify). Both need a programmable converter with current limiting.
 
 ### 5.4 Cable e-marker (for advertising > 3 A)
 

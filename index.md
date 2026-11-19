@@ -11,6 +11,8 @@
 :caption: YT9215 switch IC
 
 research/yt9215-embedded-cpu
+research/yt9215-cpu-performance
+research/yt9215-cpu-performance/README
 research/motorcomm-debug-pins
 research/yt9215-boards
 ```

@@ -2,12 +2,15 @@
 
 The adapter has no external MCU. Its firmware runs on the RISC-V CPU that Motorcomm
 builds into the YT9215 switch IC. This note collects what is publicly known about that
-CPU and lists what is unknown.
+CPU and lists what is unknown. How fast the CPU is likely to be, and whether that is
+enough for the adapter firmware, is worked out in
+[`yt9215-cpu-performance.md`](yt9215-cpu-performance.md).
 
 Related notes:
 
 | Topic | Note |
 | --- | --- |
+| Speed and resources of the CPU | [`yt9215-cpu-performance.md`](yt9215-cpu-performance.md) |
 | Pins of the CPU's debug and boot interfaces | [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md) |
 | Switch registers | [`yt9215-registers/`](yt9215-registers/README.md) |
 | Boards that carry a YT9215 | [`yt9215-boards.md`](yt9215-boards.md) |
@@ -25,7 +28,9 @@ Statements that rest on a source are marked with one of these evidence codes:
 | Item | Value | Evidence | Detail |
 | --- | --- | --- | --- |
 | Core | Nuclei N205 | [**V**](#evidence-codes) | [Identity](#identity) |
-| Instruction set | RV32IMAC-class | [**I**](#evidence-codes) | [Identity](#identity) |
+| Instruction set of vendor builds | RV32EC | [**V**](#evidence-codes) | [Instruction set](#instruction-set) |
+| Hardware multiplier | Unknown | – | [Instruction set](#instruction-set) |
+| Pipeline | 2 stages | [**V**](#evidence-codes) | [Identity](#identity) |
 | SRAM (YT9215SCH) | 64 KB | [**V**](#evidence-codes) | [Memory](#memory) |
 | Boot ROM (YT9215SCH) | 16 KB | [**V**](#evidence-codes) | [Memory](#memory) |
 | I-cache (YT9215SCH) | 2 KB | [**V**](#evidence-codes) | [Memory](#memory) |
@@ -35,14 +40,22 @@ Statements that rest on a source are marked with one of these evidence codes:
 | Boot source | SPI flash | [**V**](#evidence-codes) | [Boot](#boot) |
 | Boot source | EEPROM | [**V**](#evidence-codes) | [Boot](#boot) |
 | Enable strap | `DIS_MCU` low | [**V**](#evidence-codes) | [Boot](#boot) |
+| Boot image format | Unknown | – | [Getting code onto the CPU](#getting-code-onto-the-cpu) |
 | Switch port of the CPU | 10 | [**V**](#evidence-codes) | [Packet path](#packet-path) |
+| Switch register access from the CPU | Memory mapped | [**V**](#evidence-codes) | [Register access](#register-access) |
+| Frame transmit from the CPU | `eth_tx_by_portlist()` | [**V**](#evidence-codes) | [Packet path](#packet-path) |
+| Interrupt controller | Nuclei ECLIC | [**VI**](#evidence-codes) | [Interrupts and timers](#interrupts-and-timers) |
+| Timer of the core | 64-bit `mtime` | [**VI**](#evidence-codes) | [Interrupts and timers](#interrupts-and-timers) |
+| DMA | Not in any source | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
 | UART pins on the chip | Yes | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
 | I²C master pins on the chip | Yes | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
 | MDIO master pins on the chip | Yes | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
 | GPIO pins on the chip | Yes | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
 | JTAG | Unconfirmed | [**VI**](#evidence-codes) | [Debug](#debug) |
 | USB | Not in the datasheets | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
-| Vendor SDK for CPU firmware | None found | [**I**](#evidence-codes) | [Software](#software) |
+| Vendor operating system | FreeRTOS | [**V**](#evidence-codes) | [Software](#software) |
+| Vendor compiler | `riscv-nuclei-elf-gcc` | [**V**](#evidence-codes) | [Software](#software) |
+| Vendor firmware tree | Not public | [**VI**](#evidence-codes) | [Software](#software) |
 
 ## Identity
 
@@ -52,18 +65,56 @@ Statements that rest on a source are marked with one of these evidence codes:
   [**V**](#evidence-codes). Motorcomm's own
   [launch news](https://en.motor-comm.com/news/26.html) says only "built-in RISC-V
   processor" [**V**](#evidence-codes).
-- The Nuclei N200 series is 32-bit with a 2-stage variable-length pipeline. Its
-  instruction set is configurable up to RV32IEMACB, its local instruction and data SRAM
-  and its I-cache are configurable, and it uses the Nuclei ECLIC interrupt controller.
-  These series facts are from general knowledge of the Nuclei product line, with no
-  source cited [**I**](#evidence-codes). Which options Motorcomm configured is unknown, so RV32IMAC is
-  an assumption [**I**](#evidence-codes).
-- The same N205 ("Bumblebee") core in the GD32VF103 gives 153 DMIPS and 360 CoreMark at
-  108 MHz, about 1.4 DMIPS/MHz and 3.3 CoreMark/MHz
+- Nuclei's [N200 series page](https://www.nucleisys.com/product/200.php) describes the
+  series as a 32-bit core with a 2-stage pipeline and an instruction set that is
+  configurable as "RV32I/EMACB/Zc". Its table gives the N205 a configurable hardware
+  multiplier, hardware divider, instruction cache, instruction local memory (ILM), data
+  local memory (DLM) and private peripheral interface, and no data cache and no
+  floating-point unit. It lists the ECLIC interrupt controller, a timer, and debug over
+  4-wire JTAG or 2-wire cJTAG as parts of the core [**V**](#evidence-codes). The page
+  names Motorcomm among Nuclei's partners [**V**](#evidence-codes).
+- Which of those options Motorcomm chose is in no public document. The
+  [instruction set](#instruction-set) section gives the evidence from the vendor's own
+  build.
+- The N205-equivalent "Bumblebee" core in the GD32VF103 is configured as RV32IMAC and
+  gives 153 DMIPS and 360 CoreMark at 108 MHz, about 1.4 DMIPS/MHz and 3.3 CoreMark/MHz
   ([GigaDevice](https://www.gigadevice.com/about/news-and-event/news/gigadevice-unveils-the-gd32v-series-with-risc-v-core))
-  [**V**](#evidence-codes).
+  [**V**](#evidence-codes). What those figures mean for an RV32EC configuration is
+  estimated in
+  [`yt9215-cpu-performance.md`](yt9215-cpu-performance.md#instruction-throughput).
 - Every YT9215 variant has the CPU. The evidence is in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#every-variant-has-the-risc-v-mcu).
+
+## Instruction set
+
+The public [vendor SDK](#software) has a build configuration for the internal CPU. It
+sets these facts [**V**](#evidence-codes):
+
+| Item | Value | Source |
+| --- | --- | --- |
+| Architecture flag | `-march=rv32ec` | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
+| ABI flag | `-mabi=ilp32e` | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
+| Code model flag | `-mcmodel=medany` | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
+| Condition for these flags | `INTER_MCU` set | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L27) |
+
+What follows from the flags [**I**](#evidence-codes):
+
+- **RV32E base.** The `ilp32e` ABI uses only the 16 registers `x0` to `x15`. Code built
+  for it cannot be linked with code built for the 32-register `ilp32` ABI, so the whole
+  vendor firmware is RV32E code. A core with 32 registers would run it, but a vendor
+  that had 32 registers would not give half of them up. The core is therefore taken to
+  be an N205 configured with the RV32E base, which the N200 series offers.
+- **Compressed instructions.** The `c` in the flag means the vendor build emits 16-bit
+  instructions, so the core decodes them.
+- **No multiplier and no atomics in vendor code.** The flag has no `m` and no `a`, so
+  the SDK library never uses a multiply, divide or atomic instruction. Objects with
+  and without `m` link together, so the rest of the vendor firmware could still use a
+  multiplier. Whether the core has one is unknown.
+- **The chip can settle it.** The `misa` register of a RISC-V core reports its
+  extensions. Reading it is the first thing to do with running code or a working
+  debug port.
+
+Firmware for the adapter should be built as RV32EC until `misa` says otherwise.
 
 ## Memory
 
@@ -91,12 +142,17 @@ The memory map is not published.
 ## Clock
 
 - The CPU clock is not published.
-- The [`yt921x` Linux driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c) reads a `SYS_CLK` register. Its value 0 gives an 8 ns
-  (125 MHz) switch core cycle on the YT9215, and 143 MHz and other values are selectable
-  [**V**](#evidence-codes).
-- The CPU probably runs from this clock or from a divider of it [**I**](#evidence-codes).
-- At 70 to 125 MHz the GD32VF103 figures in [Identity](#identity) scale to about 100 to
-  180 DMIPS [**I**](#evidence-codes).
+- The chip takes a 25 MHz crystal or oscillator [**V**](#evidence-codes).
+- The [`yt921x` Linux driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.h#L177) defines a `SYS_CLK` register at `0xE0040`. Its value 0 means a 125 MHz
+  switch core clock on the YT9215, and value 1 means 143 MHz [**V**](#evidence-codes).
+  The vendor SDK reads the same register and turns value 0 into an 8 ns cycle time
+  ([`fal_tiger_rate.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_rate.c#L105)) [**V**](#evidence-codes).
+- The SPI flash clock is 31.25 MHz (Table 33 of the
+  [YT9215SCH datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)) [**V**](#evidence-codes). That is 125 MHz divided by 4, so the
+  flash controller is clocked from the 125 MHz domain [**I**](#evidence-codes).
+- The CPU probably runs from the 125 MHz clock or from a divider of it
+  [**I**](#evidence-codes). The candidates and what each one would mean are in
+  [`yt9215-cpu-performance.md`](yt9215-cpu-performance.md#clock-scenarios).
 
 ## Boot
 
@@ -125,24 +181,150 @@ The memory map is not published.
   strap [**V**](#evidence-codes). The pins of each variant are in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#headline-findings).
 - The image format, the size limit of an image, and any checksum or signature are not
-  published. No firmware dump of a YT9215 product was found.
+  published. [Getting code onto the CPU](#getting-code-onto-the-cpu) lists ways to
+  find them.
+
+## Getting code onto the CPU
+
+No public source says how to make an image the CPU will run. This is the question that
+blocks all firmware work, so this section collects what is known and then lists
+experiments that can answer it.
+
+### What is known
+
+- **The boot ROM does the loading.** The reset description in the
+  [YT9215SCH datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) has the step "Autoload from the EEPROM, or boot from
+  Flash or EEPROM by internal CPU if needed" [**V**](#evidence-codes). The CPU
+  therefore starts in its 16 KB boot ROM, and the ROM decides from the straps where
+  the code comes from [**I**](#evidence-codes).
+- **Three routes are named** in the [boot table](#boot): run in place from SPI flash,
+  copy from SPI flash to RAM, and copy from an I²C EEPROM to RAM
+  [**V**](#evidence-codes).
+- **The EEPROM route fits the SRAM exactly.** The datasheet supports EEPROMs of 2 Kbit
+  to 512 Kbit, and 512 Kbit is 64 KB, the size of the SRAM [**V**](#evidence-codes).
+  The `EEPROM_MOD` strap selects 1-byte or 2-byte addressing.
+- **The same EEPROM interface also loads registers.** With `DIS_MCU` high the chip
+  copies EEPROM contents into registers without the CPU [**V**](#evidence-codes). The
+  [LX-IS601F board](switch-board-strapping.md) is strapped this way and carries a
+  24C08.
+- **The vendor build names match Nuclei's.** The Nuclei SDK builds a program in one of
+  the download modes `ilm`, `flash` and `flashxip`: run from RAM, copy from flash to
+  RAM, and run in place from flash
+  ([Nuclei SDK build system](https://doc.nucleisys.com/nuclei_sdk/develop/buildsystem.html))
+  [**V**](#evidence-codes). The two flash routes of the YT9215 are the last two
+  [**I**](#evidence-codes).
+- **The public SDK has nothing on images.** It holds no linker script, no start-up
+  code, no image tool and no binary [**V**](#evidence-codes). The words "flash",
+  "boot" and "XIP" do not occur in its source files [**V**](#evidence-codes).
+- **No firmware image was found.** Searches for a download, a flash dump or a
+  teardown of a YT9215 product with flash found none [**I**](#evidence-codes).
+- **JTAG is named only in the draft datasheets** ([debug](#debug)).
+
+Unknown, in the order they matter:
+
+| Unknown | Why it matters |
+| --- | --- |
+| Header and layout of a flash image | Without it the ROM will not start the code |
+| Header and layout of an EEPROM image | Same for the EEPROM route |
+| Checksum or signature | A signature would close the flash and EEPROM routes |
+| Address the code runs at | Needed to link the firmware |
+| Whether JTAG is alive | It would bypass the ROM altogether |
+
+### Experiments
+
+Each experiment needs only an existing YT9215 board and bench tools. They are in order
+of cost. The first three need no code on the CPU and no knowledge of the image format.
+
+| Experiment | Needs | Answers |
+| --- | --- | --- |
+| [Read the CPU's memory from outside](#exp-read-memory) | Management interface | Boot ROM contents |
+| [Read the register-load EEPROM](#exp-read-eeprom) | EEPROM clip | Register image format |
+| [Watch the ROM read an empty memory](#exp-watch-rom) | Logic analyser | Header size and position |
+| [Raw code in XIP mode](#exp-raw-xip) | SPI flash | Whether XIP needs a header |
+| [Probe JTAG](#exp-jtag) | JTAG adapter | Whether the debug port is alive |
+| [Listen on the UARTs](#exp-uart) | USB serial adapter | Whether the ROM prints or listens |
+| [Get a vendor image](#exp-vendor-image) | A managed YT9215 product | The format by example |
+
+- <a id="exp-read-memory"></a>**Read the CPU's memory from outside.** For the CPU the
+  switch registers are memory at their register addresses
+  ([register access](#register-access)). An external host reaches the same registers
+  with a 32-bit address over SMI, I²C or SPI
+  ([access guide](yt9215-registers/docs/access.rst)). If both sit on one bus, the host
+  may also be able to read the addresses of the boot ROM and the SRAM
+  [**I**](#evidence-codes). The test is to read addresses outside the known register
+  blocks, starting at 0, and look for RISC-V code. A readable boot ROM would answer
+  every question in the table above, because it can be disassembled. A writable SRAM
+  would be a way to load code with no image at all.
+- <a id="exp-read-eeprom"></a>**Read the register-load EEPROM.** The 24C08 of the
+  LX-IS601F holds a register image that the chip loads at reset
+  ([board checks](switch-board-strapping.md)). Its layout shows how Motorcomm frames
+  EEPROM data: a marker, a length, address and value pairs, a checksum. The code image
+  for the EEPROM route is read by the same ROM and is likely to be framed the same way
+  [**I**](#evidence-codes).
+- <a id="exp-watch-rom"></a>**Watch the ROM read an empty memory.** Strap the chip for
+  a code-loading route, fit an erased flash or EEPROM, and record the bus with a logic
+  analyser. The read command, the first address and the number of bytes the ROM reads
+  before it gives up show where the header is and how long it is. Filling the memory
+  with a pattern and changing one field at a time then shows which bytes the ROM
+  checks. On the EEPROM route the two-wire bus is slow enough for any analyser.
+- <a id="exp-raw-xip"></a>**Raw code in XIP mode.** In XIP mode nothing is copied, so
+  the ROM may simply jump to the start of the flash [**I**](#evidence-codes). The test
+  program needs no GPIO: it stores a recognisable value in a switch register whose
+  value is harmless, such as the switch's MAC address register, and the host reads that register back
+  over the management interface. If the value appears, code is running. The same
+  program is the probe for every later attempt at a header.
+- <a id="exp-jtag"></a>**Probe JTAG.** Scan the JTAG pins of the draft datasheets for
+  an IDCODE, with the CPU enabled. The
+  [mirrored board](motorcomm-debug-pins.md#implications-for-the-adapter) has the pins
+  on resistor pads. A live debug port allows halting the CPU, dumping the boot ROM and
+  loading code into SRAM with OpenOCD.
+- <a id="exp-uart"></a>**Listen on the UARTs.** Record both UART transmit pins at
+  reset with the CPU enabled and no memory fitted, at 115200 baud and at other common
+  rates. The SDK has a host-side driver that reads and writes switch registers with
+  10-byte frames over a serial port at 115200 baud
+  ([`uart.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/drv/sw_ctrl/uart/uart.c)) [**V**](#evidence-codes). Whether
+  the chip's own UART answers those frames, or whether they are for a separate bridge,
+  is unknown. Sending one read frame for the chip ID register is a quick test.
+- <a id="exp-vendor-image"></a>**Get a vendor image.** A web-managed switch built on a
+  YT9215 has an SPI flash with a working image. [`yt9215-boards.md`](yt9215-boards.md)
+  lists products that carry the chip. The vendor's firmware tree, with its image tool,
+  is the other source; a distributor may supply it with the chip.
+
+The first experiment is the cheapest and could settle everything, so it comes before
+any board is modified.
 
 ## Peripherals
 
-The YT9215 datasheets list these functions of the chip beside the switch ports
-[**V**](#evidence-codes). They are pins of the chip. Which of them the CPU controls is
-not documented:
+The [YT9215SCH datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) lists these functions of the chip beside the switch ports
+[**V**](#evidence-codes). They are pins of the chip. Which of them the CPU controls,
+and through which registers, is not documented:
 
-| Function | Detail |
-| --- | --- |
-| UART | [Pins of the YT9215S](motorcomm-debug-pins.md#uart-on-the-yt9215s) |
-| SPI flash | [Pins of the YT9215S](motorcomm-debug-pins.md#spi-flash-on-the-yt9215s) |
-| I²C master | – |
-| MDIO master | – |
-| GPIO | Shared with LED and strap pins |
-| LEDs | Parallel mode |
-| LEDs | Serial mode |
-| Interrupt output | One pin |
+| Function | Count | Speed | Detail |
+| --- | --- | --- | --- |
+| GPIO pins | 33 | Not given | Table 19 of the datasheet |
+| UART | 2 | Not given | [Pins](motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) |
+| I²C master | 2 | 100 kHz to 1 MHz | Table 34 of the datasheet |
+| SMI (MDIO) master | 2 | Up to 4 MHz | Table 35 of the datasheet |
+| SPI flash master | 1 | 31.25 MHz | Table 33 of the datasheet |
+| Buzzer output | 1 | Not given | Pin 67 |
+| Serial LED output | 1 | Not given | [LED guide](yt9215-registers/docs/leds.rst) |
+| Interrupt output | 1 | – | Pin 44 |
+| Temperature sensor | 1 | – | [`fal_tiger_sensor.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_sensor.c) |
+
+Notes on the table:
+
+- Every GPIO pin shares its pin with another function: port 9, an LED, a strap or the
+  management interface [**V**](#evidence-codes).
+- The two SMI masters use the pins of the two I²C masters, and the flash interface can
+  sit on either of two pin groups [**V**](#evidence-codes).
+- The SMI figure is the 250 ns minimum clock period with a 1 kΩ pull-up
+  [**V**](#evidence-codes).
+- The datasheet's block diagram draws "GPIO", "SMI", "I2C", "SPI" and "LED" beside the
+  CPU and nothing else. No source names a DMA controller, a PWM, a timer with capture
+  inputs, a comparator or a general-purpose SPI master [**V**](#evidence-codes).
+- The public SDK has no function that reads or writes a GPIO pin, a UART or an I²C
+  master [**V**](#evidence-codes). Their registers are in the
+  [firmware tree that is not public](#software) [**I**](#evidence-codes).
 
 The word "USB" does not occur in the
 [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) or
@@ -153,8 +335,42 @@ the Ethernet PHY receiver [**V**](#evidence-codes).
 The [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) datasheet describes the interrupt output as a signal to an external CPU. The pins of
 the YT9215SC, YT9215SCH and YT9215RB are in the
 [YT9215SC and YT9215SCH](motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) and
-[YT9215RB](motorcomm-debug-pins.md#yt9215rb) tables. How the CPU itself reaches these
-functions (register addresses, drivers) is not published.
+[YT9215RB](motorcomm-debug-pins.md#yt9215rb) tables, and the pins of the YT9215S are in
+the [UART](motorcomm-debug-pins.md#uart-on-the-yt9215s) and
+[SPI flash](motorcomm-debug-pins.md#spi-flash-on-the-yt9215s) sections.
+
+## Interrupts and timers
+
+Nothing about the CPU's interrupts or timers is in a Motorcomm document. The N200
+series core brings both with it, and the vendor build uses Nuclei's support code, so
+the Nuclei documents are the best available description [**VI**](#evidence-codes):
+
+- **Interrupt controller.** The N200 series uses Nuclei's ECLIC
+  ([N200 series page](https://www.nucleisys.com/product/200.php)). Each interrupt source
+  has a level and a priority, and can be vectored or non-vectored
+  ([Nuclei ISA specification, interrupts](https://doc.nucleisys.com/nuclei_spec/isa/interrupt.html))
+  [**V**](#evidence-codes).
+- **Interrupt latency.** For a vectored interrupt the specification gives 6 cycles from
+  the request to the first instruction of the handler. For a non-vectored interrupt on
+  RV32E it gives about 4 cycles to enter the common handler, 3 to save three control
+  registers, 8 to save eight general registers and 5 to jump to the handler, 20 in all
+  ([feature and latency sections](https://doc.nucleisys.com/nuclei_spec/isa/interrupt.html#feature-and-latency-of-vectored-processing-mode))
+  [**V**](#evidence-codes). These are Nuclei's ideal figures for the core, not a
+  measurement of the YT9215.
+- **Timer.** The core's timer unit has a 64-bit counter `mtime`, a compare register
+  `mtimecmp` that raises the timer interrupt, and a software interrupt register `msip`
+  ([Nuclei ISA specification, timer](https://doc.nucleisys.com/nuclei_spec/isa/timer.html))
+  [**V**](#evidence-codes). Nuclei's FreeRTOS port takes its tick from this timer
+  [**I**](#evidence-codes). The clock that `mtime` counts on the YT9215 is unknown.
+- **Cycle counter.** The Nuclei cores have the standard `mcycle` counter register
+  ([Nuclei ISA specification, registers](https://doc.nucleisys.com/nuclei_spec/isa/core_csr.html))
+  [**V**](#evidence-codes). It counts CPU clock cycles and is read with one instruction,
+  which makes it the finest time base firmware can have [**I**](#evidence-codes).
+- **Interrupt sources.** Which chip events reach the ECLIC is unknown: no source says
+  whether a GPIO edge, a received frame, a UART or the switch's own
+  [interrupt status register](yt9215-registers/README.md) can interrupt the CPU. The
+  SDK's receive call is polled from a task ([packet path](#packet-path)), which needs
+  no interrupt.
 
 ## Debug
 
@@ -165,9 +381,33 @@ functions (register addresses, drivers) is not published.
 - The [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) datasheet has no JTAG pin names
   [**V**](#evidence-codes). The detail is in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#the-newest-datasheet-has-no-jtag).
+- The N200 series has a standard RISC-V debug module with a 4-wire JTAG or a 2-wire
+  cJTAG port ([N200 series page](https://www.nucleisys.com/product/200.php))
+  [**V**](#evidence-codes).
 - If the CPU's debug module is on one of the JTAG groups, standard RISC-V debug with
   OpenOCD would give halt, memory dump and load [**I**](#evidence-codes). That has not
   been probed.
+
+## Register access
+
+From outside, the register space is reached over MDIO, I²C or SPI, and the
+[register guide and its bindings](yt9215-registers/README.md) describe that access.
+From the CPU the same registers are ordinary memory:
+
+- The SDK's internal-CPU build selects the access driver
+  [`mem.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/drv/sw_ctrl/mem/mem.c), whose read and write are one 32-bit load
+  or store through a pointer made from the register address [**V**](#evidence-codes).
+- [`hal_mem.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/hal/hal_mem.c#L99) passes the address to that driver unchanged.
+  It is the address the external host uses, such as `0x80008` for the chip ID
+  [**V**](#evidence-codes).
+- The driver takes a FreeRTOS mutex around every access [**V**](#evidence-codes).
+  Firmware that owns the registers from one task does not need it
+  [**I**](#evidence-codes).
+
+The register addresses, fields and table procedures of the
+[register guide](yt9215-registers/docs/index.rst) therefore apply to firmware on the
+CPU, with a load or a store in place of the bus transaction [**I**](#evidence-codes).
+This has not been run on hardware.
 
 ## Packet path
 
@@ -178,41 +418,94 @@ gives these facts [**V**](#evidence-codes):
 
 - The switch has 11 ports: "8 internal + 2 external + 1 mcu". The CPU is port 10.
 - The driver's author notes that "Port 10 for MCU … is untested yet".
-- `YT921X_CPU_COPY` (0x180690) has `TO_INT_CPU` and `TO_EXT_CPU` bits. From the names,
-  frames can be trapped or copied to the internal CPU [**I**](#evidence-codes).
+- `YT921X_CPU_COPY` (0x180690) has `TO_INT_CPU` and `TO_EXT_CPU` bits.
 - The CPU tag TPID is 0x9988. [The register guide](yt9215-registers/docs/cpu-tag.rst)
   describes the tag as an external host sees it on an external CPU port.
 
-From outside, the register space is reached over MDIO, I²C or SPI. The
-[register guide and its bindings](yt9215-registers/README.md) describe that access from
-an external host. How the CPU itself reaches the registers and port 10 is not published,
-so how much of the guide carries over to firmware on the CPU is unknown.
+The vendor SDK shows how firmware on the CPU is meant to use port 10
+[**V**](#evidence-codes):
+
+| Step | SDK function | Source |
+| --- | --- | --- |
+| Send trapped frames to the internal CPU | `fal_tiger_nic_cpuport_mode_set()` | [`fal_tiger_nic.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_nic.c#L32) |
+| Turn off address learning on port 10 | `fal_tiger_nic_init()` | [`fal_tiger_nic.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_nic.c#L19) |
+| Trap LLDP frames per port | `fal_tiger_ctrlpkt_lldp_act_set()` | [`fal_tiger_ctrlpkt.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_ctrlpkt.c#L368) |
+| Set number and size of frame buffers | `yt_nic_eth_buf_cnt_len_set()` | [`yt_nic.h`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_nic.h#L120) |
+| Register a receive callback | `yt_nic_rx_register()` | [`yt_nic.h`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_nic.h#L71) |
+| Poll for received frames | `yt_nic_rx_handler()` | [`yt_nic.h`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_nic.h#L84) |
+| Send a frame to a list of ports | `yt_nic_tx()` | [`yt_nic.h`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_nic.h#L104) |
+
+- **Receive.** The callback gets the frame with the port it arrived on, a CPU code that
+  says why it was trapped, its length and its VLAN
+  ([`yt_types.h`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/common/include/yt_types.h#L220)). The header calls
+  `yt_nic_rx_handler()` the "rx handler API used in user's main task", so reception is
+  polled from a task.
+- **Transmit.** `yt_nic_tx()` sends a frame out of a given list of ports, or looks the
+  destination up in a VLAN. For the port list it calls `eth_tx_by_portlist()`.
+- **Buffers.** The header sets minimums of 56 buffers, 6 of them for transmit, and
+  256 bytes per buffer ([`yt_nic.h`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_nic.h#L27)). The receive structure
+  holds a frame of up to 1530 bytes ([`yt_types.h`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/common/include/yt_types.h#L42)).
+- **LLDP.** The per-port LLDP action can be forward, trap, drop or copy. Trap sets the
+  port's bit in both the copy-to-CPU and the drop mask of `L2_LLDP_PER_PORT_CTRL`
+  (`0x180290`), so the frame goes to the CPU and nowhere else.
+
+The functions `eth_init()`, `eth_rx_register()`, `eth_rx_handler()` and
+`eth_tx_by_portlist()`, with their header `eth_export.h`, are called by the SDK and
+are not in it. How a frame moves between the CPU's memory and the switch core, and
+whether an interrupt announces a received frame, is therefore not published.
 
 ## Software
 
 - A [vendor SDK](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e)
-  for driving the switch from an external host is public, and the
+  for driving the switch is public, and the
   [register guide](yt9215-registers/README.md) draws on it [**V**](#evidence-codes).
-  Whether it holds any code for the internal CPU has not been checked.
-- No Motorcomm SDK or programming guide for firmware on the CPU was found in searches
-  [**I**](#evidence-codes).
-- No public firmware, OpenOCD configuration or boot-ROM dump was found. Searches covered
-  English and Chinese terms.
+  It builds for an external Linux host and, with its `INTER_MCU` option, as a static
+  library for firmware on the internal CPU
+  ([`config/freeRTOS/.config`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/config/freeRTOS/.config)) [**V**](#evidence-codes).
+- The internal-CPU configuration gives these facts [**V**](#evidence-codes):
+
+  | Item | Value | Source |
+  | --- | --- | --- |
+  | Operating system | FreeRTOS | [`.config`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/config/freeRTOS/.config) |
+  | Compiler prefix | `riscv-nuclei-elf-` | [`.config`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/config/freeRTOS/.config) |
+  | Architecture | [RV32EC](#instruction-set) | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
+  | Register access | [Memory mapped](#register-access) | [`.config`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/config/freeRTOS/.config) |
+  | Name of the firmware tree | `switch_sw_lite_mgmt` | [`freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) |
+  | Chip support folder | `SoC/yt921x` | [`freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) |
+  | Core support folder | `NMSIS/Core` | [`freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) |
+  | Application folder | `application/freertos/demo_http` | [`freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) |
+
+- [NMSIS](https://doc.nucleisys.com/nmsis/) is Nuclei's software interface standard
+  for its cores, so the build confirms a Nuclei core independently of the
+  [press release](#identity) [**VI**](#evidence-codes).
+- The application folder name says the vendor firmware includes an HTTP demonstration,
+  which needs a TCP/IP stack [**I**](#evidence-codes).
+- The firmware tree `switch_sw_lite_mgmt` is not in the public SDK
+  [**V**](#evidence-codes) and was not found anywhere else in searches
+  [**I**](#evidence-codes). It is the likely home of the frame driver, the
+  GPIO, UART and I²C drivers, the interrupt numbers, the linker script with the memory
+  map, and the tool that makes a boot image [**I**](#evidence-codes).
+- No public firmware image, OpenOCD configuration or boot-ROM dump was found. Searches
+  covered English and Chinese terms.
 - A FreeBSD port of the switch driver exists
   ([if_yt921x_freebsd](https://github.com/am910021/if_yt921x_freebsd))
   [**V**](#evidence-codes).
-- The toolchain would be upstream `riscv*-gcc -march=rv32imac` or the Nuclei SDK, with
-  OpenOCD as the debugger [**I**](#evidence-codes).
+- Upstream compilers also build RV32EC code. The
+  [benchmark](yt9215-cpu-performance/README.md) of the performance note is built with
+  clang 18 [**V**](#evidence-codes).
 
 ## Unknowns
 
 - CPU clock.
-- Memory map.
+- Whether the core has a hardware multiplier.
+- Memory map, apart from the switch registers.
 - Boot ROM behaviour.
 - Boot image format.
 - Whether JTAG reaches the CPU.
-- How the CPU reaches the switch registers.
-- How the CPU sends and receives frames on port 10.
+- Registers of the GPIO pins, the UARTs and the I²C masters.
+- Interrupt sources and their numbers.
+- Clock of the `mtime` timer.
+- How the frame driver moves frames to and from port 10.
 
 ## Sources
 
@@ -225,3 +518,6 @@ so how much of the guide carries over to firmware on the CPU is unknown.
 - Motorcomm launch news: <https://en.motor-comm.com/news/26.html>
 - GigaDevice GD32VF103 announcement: <https://www.gigadevice.com/about/news-and-event/news/gigadevice-unveils-the-gd32v-series-with-risc-v-core>
 - Linux `yt921x` driver: <https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c>
+- Nuclei N200 series page: <https://www.nucleisys.com/product/200.php>
+- Nuclei ISA specification: <https://doc.nucleisys.com/nuclei_spec/>
+- Nuclei NMSIS: <https://doc.nucleisys.com/nmsis/>

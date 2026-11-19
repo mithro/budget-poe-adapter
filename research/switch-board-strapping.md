@@ -181,7 +181,7 @@ Three rows are not in Table 20: pins <a href="#lx-pin-54">54</a> and <a href="#l
   (pin <a href="#lx-pin-75">75</a>) is high, which it is not.
 - EN_SWR (pin <a href="#lx-pin-60">60</a>) is taken as high because the regulator's inductor <a href="#lx-l3">L3</a> is fitted on the LX pins 63 and 64 ([Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)).
 - A group of option footprints (R39, R40, R45, R94 to R102, R108 and R109) sits next to <a href="#lx-u6">U6</a> and is partly populated
-  (<a href="#lx-photo-bottom-eeprom-flash">Bottom EEPROM and flash</a>). Its function is not traced.
+  (<a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a>). Its function is not traced.
 
 <a id="lx-what-the-strapping-selects"></a>
 ### What the strapping selects
@@ -222,8 +222,8 @@ are active low.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | <a id="lx-u4"></a>U4 | <a href="#tag-r">R</a> | Switch IC | YT9215SCH | `YT9215SCH` | LQFP-128 with exposed pad | – | – | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | [PDF](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) | – |
 | <a id="lx-y6"></a>Y6 | <a href="#tag-r">R</a> | Crystal | – | `25.000 MHZ` | SMD 4-pad | 25 MHz | – | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | – | – |
-| <a id="lx-u10"></a>U10 | <a href="#tag-r">R</a> | I²C EEPROM | 24C08 | `24C08` | SOIC-8 | 8 Kbit | – | Not known | Bottom | <a href="#lx-photo-bottom-eeprom-flash">Bottom EEPROM and flash</a> | [Similar part](../datasheets/components/Hangshun_HK24C08.pdf) | [C495286](https://jlcpcb.com/partdetail/C495286) |
-| <a id="lx-u6"></a>U6 | <a href="#tag-r">R</a> | SPI flash footprint | Not fitted | – | 8-pin footprint | – | – | Not known | Bottom | <a href="#lx-photo-bottom-eeprom-flash">Bottom EEPROM and flash</a> | – | – |
+| <a id="lx-u10"></a>U10 | <a href="#tag-r">R</a> | I²C EEPROM | 24C08 | `24C08` | SOIC-8 | 8 Kbit | – | Not known | Bottom | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> | [Similar part](../datasheets/components/Hangshun_HK24C08.pdf) | [C495286](https://jlcpcb.com/partdetail/C495286) |
+| <a id="lx-u6"></a>U6 | <a href="#tag-r">R</a> | SPI flash footprint | Not fitted | – | 8-pin footprint | – | – | Not known | Bottom | <a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a> | – | – |
 | <a id="lx-pu1"></a>PU1 | <a href="#tag-r">R</a> | Buck regulator | SCT2622 | `2622 SCT` | ESOP-8 | – | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | [PDF](../datasheets/components/SCT_SCT2622.pdf) | [C5361735](https://www.lcsc.com/product-detail/C5361735.html) |
 | <a id="lx-pr1"></a>PR1 | <a href="#tag-r">R</a> | Regulator resistor | – | `86C` | Chip resistor | 76.8 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
 | <a id="lx-pr2"></a>PR2 | <a href="#tag-r">R</a> | Regulator resistor | – | `30D` | Chip resistor | 200 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
@@ -325,7 +325,7 @@ transformer bodies, so the fifth is taken to be under the PoE module.
 - Three blue radial disc parts stand beside <a href="#lx-p4">P4</a> (<a href="#lx-photo-board-b-power-input">Board B power input</a>). They are taken to be surge protection parts on the power input.
 - An array of LEDs sits along the board edge beside G1 (<a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a>). On board B the edge of the PoE module covers it. The
   silkscreen at the array reads RJ7 to RJ18, which the [schematic notes](lx-is601f-board/schematic/README.md) take to be the names of the LEDs.
-- A group of option footprints sits next to <a href="#lx-u6">U6</a> on the bottom side and is partly populated (<a href="#lx-photo-bottom-eeprom-flash">Bottom EEPROM and flash</a>).
+- A group of option footprints sits next to <a href="#lx-u6">U6</a> on the bottom side and is partly populated (<a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a>).
 
 <a id="lx-photos"></a>
 ### Photos
@@ -346,7 +346,7 @@ transformer bodies, so the fifth is taken to be under the PoE module.
 | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | A | Top | Buck regulator <a href="#lx-pu1">PU1</a> with its parts |
 | <a href="#lx-photo-board-a-power-input">Board A power input</a> | A | Top | Power input parts |
 | <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | A | Top | LED array and two ESD arrays |
-| <a href="#lx-photo-bottom-eeprom-flash">Bottom EEPROM and flash</a> | Not known | Bottom | EEPROM <a href="#lx-u10">U10</a> and the flash footprint <a href="#lx-u6">U6</a> |
+| <a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a> | Not known | Bottom | Flash footprint <a href="#lx-u6">U6</a> with the option footprints beside it |
 
 Each photo is embedded in this section, except the annotated strap array, which is embedded under
 <a href="#lx-strap-resistor-array">Strap resistor array</a>. The originals are in the [photo album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9). The folder notes are in
@@ -430,11 +430,11 @@ Each photo is embedded in this section, except the annotated strap array, which 
 
 ![LED and ESD array area of LX-IS601F board A](lx-is601f-board/crop-board-a-led-esd.jpg)
 
-<a id="lx-photo-bottom-eeprom-flash"></a>
+<a id="lx-photo-bottom-flash-footprint"></a>
 
-**Bottom EEPROM and flash**
+**Bottom flash footprint**
 
-![EEPROM and flash footprint area on the bottom of the LX-IS601F](lx-is601f-board/crop-bottom-eeprom-flash.jpg)
+![Flash footprint and option footprints on the bottom of the LX-IS601F](lx-is601f-board/crop-bottom-flash-footprint.jpg)
 
 <a id="lx-checks"></a>
 ### Checks that would confirm the strapping

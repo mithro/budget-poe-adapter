@@ -55,7 +55,7 @@ addrmap yt9215 {
 
     reg {
         name = "Function enables";
-        desc = "Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for their effect.";
+        desc = "Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for their effect. The vendor SDK names a fourth enable bit, AC_EN in bit 3, which this manual does not describe.";
         field { desc = "Enable bit of the meters, whose registers are METER_CTRL and PORT_METER. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_rate_init() writes it as an enable. It is inferred that the block works only while the bit is set."; sw = rw; hw = r; } METER[4:4];
         field { desc = "Enable bit of the access control list, whose registers include ACL_KEY and ACL_ACT. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_acl_global_enable() writes it as an enable. It is inferred that the block works only while the bit is set."; sw = rw; hw = r; } ACL[2:2];
         field { desc = "Enable bit of the port counters of MIB_DATA. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_stat_mib_enable_set() writes it as an enable. It is inferred that the block works only while the bit is set."; sw = rw; hw = r; } MIB[1:1];
@@ -72,7 +72,7 @@ addrmap yt9215 {
         name = "External CPU port";
         desc = "Names the port that leads to the host CPU and turns CPU tagging on for it; see CPU port and frame tag.";
         field { desc = "Frames to and from the CPU port carry the 8-byte CPU tag."; sw = rw; hw = r; } TAG_EN[15:15];
-        field { desc = "PORT is valid and that port is treated as the CPU port."; sw = rw; hw = r; } PORT_EN[14:14];
+        field { desc = "EXT_CPU_PORT.PORT is valid and that port is treated as the CPU port."; sw = rw; hw = r; } PORT_EN[14:14];
         field { desc = "Number of the CPU port from 0 to 10."; sw = rw; hw = r; } PORT[3:0];
     } EXT_CPU_PORT @ 0x8000C;
 
@@ -175,7 +175,7 @@ addrmap yt9215 {
             V10000 = 3 { desc = "10000 Mbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
-        field { desc = "yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE."; sw = rw; hw = r; } PAUSE_AN[10:10];
+        field { desc = "yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII whose pause result the MAC may take. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE."; sw = rw; hw = r; } PAUSE_AN[10:10];
         field { desc = "yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the MAC then takes speed and duplex from the in-band status, that the bit also follows a built-in PHY and that the forced bits are then ignored."; sw = rw; hw = r; } LINK_AN[9:9];
         field { desc = "Use back pressure for flow control in half duplex."; sw = rw; hw = r; } HALF_PAUSE[8:8];
         field { desc = "Forced full duplex."; sw = rw; hw = r; } DUPLEX_FULL[7:7];
@@ -324,8 +324,8 @@ addrmap yt9215 {
         name = "Counter control";
         desc = "Clears port counters.";
         field { desc = "Write 1 to clear the selected counters."; sw = rw; hw = r; } CLEAN[30:30];
-        field { desc = "Port whose counters are cleared when ONE_PORT is set."; sw = rw; hw = r; } PORT[6:3];
-        field { desc = "Clear the counters of the port in PORT."; sw = rw; hw = r; } ONE_PORT[1:1];
+        field { desc = "Port whose counters are cleared when MIB_CTRL.ONE_PORT is set."; sw = rw; hw = r; } PORT[6:3];
+        field { desc = "Clear the counters of the port in MIB_CTRL.PORT."; sw = rw; hw = r; } ONE_PORT[1:1];
         field { desc = "It is inferred from the name that the bit clears the counters of every port. The vendor SDK function fal_tiger_stat_mib_clear_all() leaves the bit at 0 for a clear of every port."; sw = rw; hw = r; } ALL_PORT[0:0];
     } MIB_CTRL @ 0xC0004;
 
@@ -540,7 +540,7 @@ addrmap yt9215 {
         };
         field { desc = "Alternative blink cycle. The cycle is 512 ms shifted right by the field value. An LED uses it when its LED2_PORT.FORCE_BLINK field is 3."; sw = rw; hw = r; } OTHER_BLINK[31:30];
         field { desc = "Blink cycle of the low power idle indication. The cycle is 512 ms shifted right by the field value."; sw = rw; hw = r; } EEE_BLINK[29:28];
-        field { desc = "Swaps the on and off parts of the blink cycle. BLINK_DUTY then gives the off fraction."; sw = rw; hw = r; } BLINK_DUTY_COMP[27:27];
+        field { desc = "Swaps the on and off parts of the blink cycle. LED1_PORT.BLINK_DUTY then gives the off fraction."; sw = rw; hw = r; } BLINK_DUTY_COMP[27:27];
         field { desc = "Fraction of the blink cycle the LED is on."; sw = rw; hw = r; encode = led1_port_blink_duty_e; } BLINK_DUTY[26:25];
         field { desc = "Blink while the port is in low power idle."; sw = rw; hw = r; } ACT_EEE_BLINK[15:15];
         field { desc = "Blink when a loop is detected on the port."; sw = rw; hw = r; } ACT_LOOPDETECT_BLINK[14:14];
@@ -565,7 +565,7 @@ addrmap yt9215 {
         desc = "Conditions that light or blink LED 2 of one port, plus the forced state of all three LEDs of the port. Index: port = 0 to 9.";
         enum led2_port_force_e {
             DONTCARE = 0 { desc = "Not forced. The LED follows its behaviour bits"; };
-            BLINK = 1 { desc = "Blink at the rate in FORCE_BLINK"; };
+            BLINK = 1 { desc = "Blink at the rate in LED2_PORT.FORCE_BLINK"; };
             ON = 2 { desc = "On"; };
             OFF = 3 { desc = "Off"; };
         };
@@ -675,7 +675,7 @@ addrmap yt9215 {
         name = "Configuration byte store command";
         desc = "Command register of the configuration byte store of 256 bytes. Writing it starts the command; Identify the part shows the read sequence.";
         enum edata_ctrl_op_e {
-            READ = 5 { desc = "Read the byte at ADDR into EDATA_DATA.DATA"; };
+            READ = 5 { desc = "Read the byte at EDATA_CTRL.ADDR into EDATA_DATA.DATA"; };
         };
         field { desc = "Byte address from 0 to 255."; sw = rw; hw = r; } ADDR[15:8];
         field { desc = "Command."; sw = rw; hw = r; encode = edata_ctrl_op_e; } OP[3:0];
@@ -685,7 +685,7 @@ addrmap yt9215 {
         name = "Configuration byte store data and status";
         desc = "Result and state of the last EDATA_CTRL command.";
         enum edata_data_status_e {
-            IDLE = 3 { desc = "No command is running. DATA is valid"; };
+            IDLE = 3 { desc = "No command is running. EDATA_DATA.DATA is valid"; };
         };
         field { desc = "Byte that was read."; sw = r; hw = w; } DATA[31:24];
         field { desc = "State of the store."; sw = r; hw = w; encode = edata_data_status_e; } STATUS[3:0];
@@ -873,7 +873,7 @@ addrmap yt9215 {
         field { desc = "Copy frames with a not yet learned source address to the CPU."; sw = rw; hw = r; } SUSPEND_COPY_EN[19:19];
         field { desc = "Drop frames with a not yet learned source address."; sw = rw; hw = r; } SUSPEND_DROP_EN[18:18];
         field { desc = "Disables address learning on the port."; sw = rw; hw = r; } DIS[17:17];
-        field { desc = "Enables the limit in LIMIT."; sw = rw; hw = r; } LIMIT_EN[16:16];
+        field { desc = "Enables the limit in PORT_LEARN.LIMIT."; sw = rw; hw = r; } LIMIT_EN[16:16];
         field { desc = "Largest number of addresses learned on the port. The vendor SDK lists this field as 13 bits wide, at bits 15 to 3."; sw = rw; hw = r; } LIMIT[15:8];
         field { desc = "Drop frames with a new source address once the limit is reached."; sw = rw; hw = r; } DROP_ON_EXCEEDED[2:2];
         field { desc = "Who learns addresses."; sw = rw; hw = r; encode = port_learn_mode_e; } MODE[1:0];
@@ -902,7 +902,7 @@ addrmap yt9215 {
             PENDING = 6 { desc = "Entry waiting for the CPU to confirm it"; };
             STATIC = 7 { desc = "Static entry that never ages out"; };
         };
-        field { desc = "Apply PRIO to frames sent to this address."; sw = rw; hw = r; } EGR_PRIO_EN[31:31];
+        field { desc = "Apply the priority of the entry to frames sent to this address."; sw = rw; hw = r; } EGR_PRIO_EN[31:31];
         field { desc = "State of the entry."; sw = rw; hw = r; encode = fdb_in1_status_e; } STATUS[30:28];
         field { desc = "Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID."; sw = rw; hw = r; } FID[27:16];
         field { desc = "MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8."; sw = rw; hw = r; } ADDR_LO2[15:0];
@@ -916,14 +916,14 @@ addrmap yt9215 {
         field { desc = "Ports that frames to this address are sent to. Each port has one bit."; sw = rw; hw = r; } EGR_PORTS[28:18];
         field { desc = "Drop frames sent to this address."; sw = rw; hw = r; } EGR_DROP[17:17];
         field { desc = "Also copy frames to this address to the CPU."; sw = rw; hw = r; } COPY_TO_CPU[16:16];
-        field { desc = "Apply PRIO to frames received from this address."; sw = rw; hw = r; } IGR_PRIO_EN[15:15];
+        field { desc = "Apply FDB_IN2.PRIO to frames received from this address."; sw = rw; hw = r; } IGR_PRIO_EN[15:15];
         field { desc = "Priority given by this entry. It is a source for PORT_PRIO_ORD."; sw = rw; hw = r; } PRIO[14:12];
         field { desc = "Replacement VLAN ID for frames matching the entry."; sw = rw; hw = r; } NEW_VID[11:0];
     } FDB_IN2 @ 0x18045C;
 
     reg {
         name = "Forwarding database command";
-        desc = "Selects and starts a forwarding database command. Write the input words first, then this register with START set, then wait for FDB_RESULT.DONE.";
+        desc = "Selects and starts a forwarding database command. Write the input words first, then this register with FDB_OP.START set, then wait for FDB_RESULT.DONE.";
         enum fdb_op_flush_e {
             ALL = 0 { desc = "Every entry of the kind that FDB_OP.FLUSH_MCAST selects"; };
             PORT = 1 { desc = "Entries of the ports in FDB_IN2.EGR_PORTS"; };
@@ -940,15 +940,15 @@ addrmap yt9215 {
             ADD = 0 { desc = "Write an entry"; };
             DEL = 1 { desc = "Delete an entry"; };
             GET_ONE = 2 { desc = "Read one entry"; };
-            GET_NEXT = 3 { desc = "Read the next used entry after INDEX"; };
+            GET_NEXT = 3 { desc = "Read the next used entry after FDB_OP.INDEX"; };
             FLUSH = 4 { desc = "Delete many entries"; };
         };
-        field { desc = "Entry index from 0 to 4095. It is used when MODE_INDEX is set."; sw = rw; hw = r; } INDEX[22:11];
-        field { desc = "Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID."; sw = rw; hw = r; } MODE_INDEX[10:10];
+        field { desc = "Entry index from 0 to 4095. It is used when FDB_OP.MODE_INDEX is set."; sw = rw; hw = r; } INDEX[22:11];
+        field { desc = "Addresses the entry by FDB_OP.INDEX. Value 0 addresses it by MAC address and filtering ID."; sw = rw; hw = r; } MODE_INDEX[10:10];
         field { desc = "A flush removes multicast entries in place of unicast entries. The vendor SDK list yt_l2_tbl_op_flush_mode_t gives this meaning to the bit."; sw = rw; hw = r; } FLUSH_MCAST[9:9];
         field { desc = "Scope of a flush."; sw = rw; hw = r; encode = fdb_op_flush_e; } FLUSH[8:7];
         field { desc = "A flush also removes static entries."; sw = rw; hw = r; } FLUSH_STATIC[6:6];
-        field { desc = "Which entries GET_NEXT walks."; sw = rw; hw = r; encode = fdb_op_next_type_e; } NEXT_TYPE[5:4];
+        field { desc = "Which entries FDB_OP.OP.GET_NEXT walks."; sw = rw; hw = r; encode = fdb_op_next_type_e; } NEXT_TYPE[5:4];
         field { desc = "Command."; sw = rw; hw = r; encode = fdb_op_op_e; } OP[3:1];
         field { desc = "Write 1 to start the command."; sw = rw; hw = r; } START[0:0];
     } FDB_OP @ 0x180460;
@@ -979,7 +979,7 @@ addrmap yt9215 {
             PENDING = 6 { desc = "Entry waiting for the CPU to confirm it"; };
             STATIC = 7 { desc = "Static entry that never ages out"; };
         };
-        field { desc = "Apply PRIO to frames sent to this address."; sw = r; hw = w; } EGR_PRIO_EN[31:31];
+        field { desc = "Apply the priority of the entry to frames sent to this address."; sw = r; hw = w; } EGR_PRIO_EN[31:31];
         field { desc = "State of the entry."; sw = r; hw = w; encode = fdb_out1_status_e; } STATUS[30:28];
         field { desc = "Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID."; sw = r; hw = w; } FID[27:16];
         field { desc = "MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8."; sw = r; hw = w; } ADDR_LO2[15:0];
@@ -993,7 +993,7 @@ addrmap yt9215 {
         field { desc = "Ports that frames to this address are sent to. Each port has one bit."; sw = r; hw = w; } EGR_PORTS[28:18];
         field { desc = "Drop frames sent to this address."; sw = r; hw = w; } EGR_DROP[17:17];
         field { desc = "Also copy frames to this address to the CPU."; sw = r; hw = w; } COPY_TO_CPU[16:16];
-        field { desc = "Apply PRIO to frames received from this address."; sw = r; hw = w; } IGR_PRIO_EN[15:15];
+        field { desc = "Apply FDB_OUT2.PRIO to frames received from this address."; sw = r; hw = w; } IGR_PRIO_EN[15:15];
         field { desc = "Priority given by this entry. It is a source for PORT_PRIO_ORD."; sw = r; hw = w; } PRIO[14:12];
         field { desc = "Replacement VLAN ID for frames matching the entry."; sw = r; hw = w; } NEW_VID[11:0];
     } FDB_OUT2 @ 0x1804B8;
@@ -1146,8 +1146,8 @@ addrmap yt9215 {
             DROP = 2 { desc = "Discard the frame"; };
             COPY = 3 { desc = "Flood the frame and copy it to the CPU"; };
         };
-        field { desc = "Reserved multicast addresses are exempt from the DROP action."; sw = rw; hw = r; } BYPASS_DROP_RMA[23:23];
-        field { desc = "IGMP frames are exempt from the DROP action."; sw = rw; hw = r; } BYPASS_DROP_IGMP[22:22];
+        field { desc = "Reserved multicast addresses are exempt from the action ACT_UNK_MCAST.ACT.DROP."; sw = rw; hw = r; } BYPASS_DROP_RMA[23:23];
+        field { desc = "IGMP frames are exempt from the action ACT_UNK_MCAST.ACT.DROP."; sw = rw; hw = r; } BYPASS_DROP_IGMP[22:22];
         field { desc = "Action for frames received on port port."; sw = rw; hw = r; encode = act_unk_mcast_act_e; } ACT_10[21:20];
         field { desc = "Action for frames received on port port."; sw = rw; hw = r; encode = act_unk_mcast_act_e; } ACT_9[19:18];
         field { desc = "Action for frames received on port port."; sw = rw; hw = r; encode = act_unk_mcast_act_e; } ACT_8[17:16];
@@ -1186,7 +1186,7 @@ addrmap yt9215 {
         field { desc = "No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name reads as a service VLAN enable. The vendor SDK names the bit SVL_EN and sets it in fal_tiger_vlan_svlMode_enable_set(); the comment on yt_vlan_svlMode_enable_set() reads \"Set vlan svl mode.It will look up fid after enable svl.\" By that comment the bit makes the VLAN use VLAN_CTRL.FID for the address lookup, which disagrees with the reading of the Linux name."; sw = rw; hw = r; } SVLAN_EN[35:35];
         field { desc = "Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. The vendor SDK function fal_tiger_vlan_fid_set() writes the field, and the comment on yt_vlan_svlMode_enable_set() states that the lookup uses the filtering ID once VLAN_CTRL.SVLAN_EN is set. The field crosses the boundary between the two words."; sw = rw; hw = r; } FID[34:23];
         field { desc = "Source addresses of frames in this VLAN are not learned."; sw = rw; hw = r; } LEARN_DIS[22:22];
-        field { desc = "Frames of this VLAN get the priority in PRIO."; sw = rw; hw = r; } PRIO_EN[21:21];
+        field { desc = "Frames of this VLAN get the priority in VLAN_CTRL.PRIO."; sw = rw; hw = r; } PRIO_EN[21:21];
         field { desc = "VLAN priority. It is a source for PORT_PRIO_ORD."; sw = rw; hw = r; } PRIO[20:18];
         field { desc = "Member ports. Each port has one bit."; sw = rw; hw = r; } PORTS_10[17:17];
         field { desc = "Member ports. Each port has one bit."; sw = rw; hw = r; } PORTS_9[16:16];
@@ -1200,7 +1200,7 @@ addrmap yt9215 {
         field { desc = "Member ports. Each port has one bit."; sw = rw; hw = r; } PORTS_1[8:8];
         field { desc = "Member ports. Each port has one bit."; sw = rw; hw = r; } PORTS_0[7:7];
         field { desc = "Frames of this VLAN skip IEEE 802.1X access control."; sw = rw; hw = r; } BYPASS_1X_AC[6:6];
-        field { desc = "Frames of this VLAN are rate limited by the meter in METER_ID."; sw = rw; hw = r; } METER_EN[5:5];
+        field { desc = "Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID."; sw = rw; hw = r; } METER_EN[5:5];
         field { desc = "Meter number. It is an index of METER_CTRL."; sw = rw; hw = r; } METER_ID[4:0];
     } VLAN_CTRL[4096] @ 0x188000 += 0x8;
 
@@ -1222,8 +1222,8 @@ addrmap yt9215 {
         };
         enum acl_act_fwd_e {
             FWD = 0 { desc = "Forward normally"; };
-            COPY = 1 { desc = "Forward and also send to FWD_REDIR_DPORTS"; };
-            REDIR = 2 { desc = "Send only to FWD_REDIR_DPORTS"; };
+            COPY = 1 { desc = "Forward and also send to ACL_ACT.FWD_REDIR_DPORTS"; };
+            REDIR = 2 { desc = "Send only to ACL_ACT.FWD_REDIR_DPORTS"; };
             TRAP = 3 { desc = "Send only to the CPU"; };
         };
         enum acl_act_color_e {
@@ -1233,18 +1233,18 @@ addrmap yt9215 {
         };
         field { desc = "Service tag handling on transmit."; sw = rw; hw = r; encode = acl_act_stag_e; } STAG[90:89];
         field { desc = "Customer tag handling on transmit."; sw = rw; hw = r; encode = acl_act_ctag_e; } CTAG[88:87];
-        field { desc = "Forwarding action. It is used when FWD_EN is set."; sw = rw; hw = r; encode = acl_act_fwd_e; } FWD[86:85];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_10[84:84];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_9[83:83];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_8[82:82];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_7[81:81];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_6[80:80];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_5[79:79];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_4[78:78];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_3[77:77];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_2[76:76];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_1[75:75];
-        field { desc = "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_0[74:74];
+        field { desc = "Forwarding action. It is used when ACL_ACT.FWD_EN is set."; sw = rw; hw = r; encode = acl_act_fwd_e; } FWD[86:85];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_10[84:84];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_9[83:83];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_8[82:82];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_7[81:81];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_6[80:80];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_5[79:79];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_4[78:78];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_3[77:77];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_2[76:76];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_1[75:75];
+        field { desc = "Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame."; sw = rw; hw = r; } FWD_REDIR_DPORTS_0[74:74];
         field { desc = "Enables the forwarding action."; sw = rw; hw = r; } FWD_EN[73:73];
         field { desc = "New drop eligible bit of the service tag."; sw = rw; hw = r; } SDEI[72:72];
         field { desc = "Replace the drop eligible bit of the service tag."; sw = rw; hw = r; } SDEI_REPLACE[71:71];
@@ -1259,17 +1259,17 @@ addrmap yt9215 {
         field { desc = "New customer VLAN ID."; sw = rw; hw = r; } CVID[47:36];
         field { desc = "Replace the customer VLAN ID."; sw = rw; hw = r; } CVID_REPLACE[35:35];
         field { desc = "Internal priority given to the frame. It is inferred that it is a source for PORT_PRIO_ORD."; sw = rw; hw = r; } PRIO[34:32];
-        field { desc = "Enables PRIO."; sw = rw; hw = r; } PRIO_EN[31:31];
+        field { desc = "Enables ACL_ACT.PRIO."; sw = rw; hw = r; } PRIO_EN[31:31];
         field { desc = "Colour given to the frame."; sw = rw; hw = r; encode = acl_act_color_e; } COLOR[30:29];
-        field { desc = "Enables COLOR."; sw = rw; hw = r; } COLOR_EN[28:28];
+        field { desc = "Enables ACL_ACT.COLOR."; sw = rw; hw = r; } COLOR_EN[28:28];
         field { desc = "New IP DSCP value."; sw = rw; hw = r; } DSCP[27:22];
         field { desc = "Replace the IP DSCP value."; sw = rw; hw = r; } DSCP_REPLACE[21:21];
         field { desc = "Meter that rate limits matching frames. It is an index of METER_CTRL."; sw = rw; hw = r; } METER_ID[20:15];
-        field { desc = "Enables METER_ID."; sw = rw; hw = r; } METER_EN[14:14];
+        field { desc = "Enables ACL_ACT.METER_ID."; sw = rw; hw = r; } METER_EN[14:14];
         field { desc = "Copy matching frames to the monitor port in MIRROR.PORT."; sw = rw; hw = r; } MIRROR_EN[13:13];
-        field { desc = "Count matching frames in the flow counter FLOWSTAT_ID."; sw = rw; hw = r; } FLOWSTAT_EN[12:12];
+        field { desc = "Count matching frames in the flow counter ACL_ACT.FLOWSTAT_ID."; sw = rw; hw = r; } FLOWSTAT_EN[12:12];
         field { desc = "Flow counter number."; sw = rw; hw = r; } FLOWSTAT_ID[11:6];
-        field { desc = "Signal a match on the pin in GPIO_PIN."; sw = rw; hw = r; } GPIO_EN[5:5];
+        field { desc = "Signal a match on the pin in ACL_ACT.GPIO_PIN."; sw = rw; hw = r; } GPIO_EN[5:5];
         field { desc = "Pin number."; sw = rw; hw = r; } GPIO_PIN[4:1];
         field { desc = "Raise an interrupt on a match."; sw = rw; hw = r; } INTR_EN[0:0];
     } ACL_ACT[384] @ 0x1C0000 += 0x10;
@@ -1468,7 +1468,7 @@ addrmap yt9215 {
 
     reg {
         name = "Meter configuration";
-        desc = "96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates. Index: meter = 0 to 74.";
+        desc = "96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters, which :ref:`rate-meter` attaches to ACL rules and VLANs; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates. Index: meter = 0 to 74.";
         regwidth = 128;
         enum meter_ctrl_drop_e {
             GYR = 0 { desc = "Drop every frame"; };
@@ -1480,7 +1480,7 @@ addrmap yt9215 {
         field { desc = "Tokens that overflow the committed bucket spill into the excess bucket. This meaning is inferred from a comment. The comment on the field reads \"RFC4115: yellow use unused green bw\"."; sw = rw; hw = r; } TOKEN_OVERFLOW_EN[77:77];
         field { desc = "Colours that are dropped."; sw = rw; hw = r; encode = meter_ctrl_drop_e; } DROP[76:75];
         field { desc = "Ignore the colour the frame already has."; sw = rw; hw = r; } COLOR_BLIND[74:74];
-        field { desc = "Token scale. Every token value is multiplied by 4 to the power of UNIT."; sw = rw; hw = r; } UNIT[73:71];
+        field { desc = "Token scale. Every token value is multiplied by 4 to the power of this field."; sw = rw; hw = r; } UNIT[73:71];
         field { desc = "Add PORT_RATE.GAP_VALUE bytes to each frame in byte mode."; sw = rw; hw = r; } BYTE_MODE_INCLUDE_GAP[70:70];
         field { desc = "Meter packets. Value 0 meters bytes."; sw = rw; hw = r; } PKT_MODE[69:69];
         field { desc = "Select the algorithm of RFC 2698. Value 0 selects that of RFC 4115."; sw = rw; hw = r; } RFC2698[68:68];
@@ -1559,7 +1559,7 @@ addrmap yt9215 {
         regwidth = 64;
         field { desc = "Enables the shaper."; sw = rw; hw = r; } EN[36:36];
         field { desc = "Shape packets. Value 0 shapes bytes."; sw = rw; hw = r; } PKT_MODE[35:35];
-        field { desc = "Token scale. Every token value is multiplied by 4 to the power of UNIT."; sw = rw; hw = r; } UNIT[34:32];
+        field { desc = "Token scale. Every token value is multiplied by 4 to the power of this field."; sw = rw; hw = r; } UNIT[34:32];
         field { desc = "Burst size in tokens."; sw = rw; hw = r; } CBS[31:18];
         field { desc = "Rate in tokens per time slot."; sw = rw; hw = r; } CIR[17:0];
     } PORT_SHAPE_CTRL[11] @ 0x354000 += 0x8;

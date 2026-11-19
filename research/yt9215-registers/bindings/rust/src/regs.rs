@@ -388,7 +388,7 @@ pub const EDATA_CTRL: u32 = 0xe0000;
 pub const EDATA_CTRL_ADDR: Field = Field { lsb: 8, width: 8 };
 /// Command.
 pub const EDATA_CTRL_OP: Field = Field { lsb: 0, width: 4 };
-/// Read the byte at ADDR into EDATA_DATA.DATA
+/// Read the byte at EDATA_CTRL.ADDR into EDATA_DATA.DATA
 pub const EDATA_CTRL_OP_READ: u32 = 5;
 
 /// Configuration byte store data and status.
@@ -397,7 +397,7 @@ pub const EDATA_DATA: u32 = 0xe0004;
 pub const EDATA_DATA_DATA: Field = Field { lsb: 24, width: 8 };
 /// State of the store.
 pub const EDATA_DATA_STATUS: Field = Field { lsb: 0, width: 4 };
-/// No command is running. DATA is valid
+/// No command is running. EDATA_DATA.DATA is valid
 pub const EDATA_DATA_STATUS_IDLE: u32 = 3;
 
 /// System clock select.
@@ -417,7 +417,7 @@ pub const SYS_CLK_SEL_V143M: u32 = 1;
 pub const EXT_CPU_PORT: u32 = 0x8000c;
 /// Frames to and from the CPU port carry the 8-byte CPU tag.
 pub const EXT_CPU_PORT_TAG_EN: Field = Field { lsb: 15, width: 1 };
-/// PORT is valid and that port is treated as the CPU port.
+/// EXT_CPU_PORT.PORT is valid and that port is treated as the CPU port.
 pub const EXT_CPU_PORT_PORT_EN: Field = Field { lsb: 14, width: 1 };
 /// Number of the CPU port from 0 to 10.
 pub const EXT_CPU_PORT_PORT: Field = Field { lsb: 0, width: 4 };
@@ -492,7 +492,7 @@ pub const fn port_ctrl(port: u32) -> u32 {
 pub const PORT_CTRL_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_ctrl`].
 pub const PORT_CTRL_PORT_COUNT: u32 = 11;
-/// yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE.
+/// yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII whose pause result the MAC may take. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE.
 pub const PORT_CTRL_PAUSE_AN: Field = Field { lsb: 10, width: 1 };
 /// yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the MAC then takes speed and duplex from the in-band status, that the bit also follows a built-in PHY and that the forced bits are then ignored.
 pub const PORT_CTRL_LINK_AN: Field = Field { lsb: 9, width: 1 };
@@ -710,9 +710,9 @@ pub const EEE_CTRL_EN_ALL: Field = Field { lsb: 0, width: 11 };
 pub const MIB_CTRL: u32 = 0xc0004;
 /// Write 1 to clear the selected counters.
 pub const MIB_CTRL_CLEAN: Field = Field { lsb: 30, width: 1 };
-/// Port whose counters are cleared when ONE_PORT is set.
+/// Port whose counters are cleared when MIB_CTRL.ONE_PORT is set.
 pub const MIB_CTRL_PORT: Field = Field { lsb: 3, width: 4 };
-/// Clear the counters of the port in PORT.
+/// Clear the counters of the port in MIB_CTRL.PORT.
 pub const MIB_CTRL_ONE_PORT: Field = Field { lsb: 1, width: 1 };
 /// It is inferred from the name that the bit clears the counters of every port. The vendor SDK function fal_tiger_stat_mib_clear_all() leaves the bit at 0 for a clear of every port.
 pub const MIB_CTRL_ALL_PORT: Field = Field { lsb: 0, width: 1 };
@@ -804,7 +804,7 @@ pub const LED1_PORT_PORT_COUNT: u32 = 10;
 pub const LED1_PORT_OTHER_BLINK: Field = Field { lsb: 30, width: 2 };
 /// Blink cycle of the low power idle indication. The cycle is 512 ms shifted right by the field value.
 pub const LED1_PORT_EEE_BLINK: Field = Field { lsb: 28, width: 2 };
-/// Swaps the on and off parts of the blink cycle. BLINK_DUTY then gives the off fraction.
+/// Swaps the on and off parts of the blink cycle. LED1_PORT.BLINK_DUTY then gives the off fraction.
 pub const LED1_PORT_BLINK_DUTY_COMP: Field = Field { lsb: 27, width: 1 };
 /// Fraction of the blink cycle the LED is on.
 pub const LED1_PORT_BLINK_DUTY: Field = Field { lsb: 25, width: 2 };
@@ -865,7 +865,7 @@ pub const fn led2_port_force(grp: u32) -> Field {
 }
 /// Not forced. The LED follows its behaviour bits
 pub const LED2_PORT_FORCE_DONTCARE: u32 = 0;
-/// Blink at the rate in FORCE_BLINK
+/// Blink at the rate in LED2_PORT.FORCE_BLINK
 pub const LED2_PORT_FORCE_BLINK: u32 = 1;
 /// On
 pub const LED2_PORT_FORCE_ON: u32 = 2;
@@ -1056,7 +1056,7 @@ pub const VLAN_CTRL_SVLAN_EN: Field = Field { lsb: 35, width: 1 };
 pub const VLAN_CTRL_FID: Field = Field { lsb: 23, width: 12 };
 /// Source addresses of frames in this VLAN are not learned.
 pub const VLAN_CTRL_LEARN_DIS: Field = Field { lsb: 22, width: 1 };
-/// Frames of this VLAN get the priority in PRIO.
+/// Frames of this VLAN get the priority in VLAN_CTRL.PRIO.
 pub const VLAN_CTRL_PRIO_EN: Field = Field { lsb: 21, width: 1 };
 /// VLAN priority. It is a source for PORT_PRIO_ORD.
 pub const VLAN_CTRL_PRIO: Field = Field { lsb: 18, width: 3 };
@@ -1068,7 +1068,7 @@ pub const fn vlan_ctrl_ports(port: u32) -> Field {
 pub const VLAN_CTRL_PORTS_ALL: Field = Field { lsb: 7, width: 11 };
 /// Frames of this VLAN skip IEEE 802.1X access control.
 pub const VLAN_CTRL_BYPASS_1X_AC: Field = Field { lsb: 6, width: 1 };
-/// Frames of this VLAN are rate limited by the meter in METER_ID.
+/// Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID.
 pub const VLAN_CTRL_METER_EN: Field = Field { lsb: 5, width: 1 };
 /// Meter number. It is an index of METER_CTRL.
 pub const VLAN_CTRL_METER_ID: Field = Field { lsb: 0, width: 5 };
@@ -1287,7 +1287,7 @@ pub const PORT_LEARN_SUSPEND_COPY_EN: Field = Field { lsb: 19, width: 1 };
 pub const PORT_LEARN_SUSPEND_DROP_EN: Field = Field { lsb: 18, width: 1 };
 /// Disables address learning on the port.
 pub const PORT_LEARN_DIS: Field = Field { lsb: 17, width: 1 };
-/// Enables the limit in LIMIT.
+/// Enables the limit in PORT_LEARN.LIMIT.
 pub const PORT_LEARN_LIMIT_EN: Field = Field { lsb: 16, width: 1 };
 /// Largest number of addresses learned on the port. The vendor SDK lists this field as 13 bits wide, at bits 15 to 3.
 pub const PORT_LEARN_LIMIT: Field = Field { lsb: 8, width: 8 };
@@ -1316,7 +1316,7 @@ pub const FDB_IN0_ADDR_HI4: Field = Field { lsb: 0, width: 32 };
 
 /// Forwarding database command data 1.
 pub const FDB_IN1: u32 = 0x180458;
-/// Apply PRIO to frames sent to this address.
+/// Apply the priority of the entry to frames sent to this address.
 pub const FDB_IN1_EGR_PRIO_EN: Field = Field { lsb: 31, width: 1 };
 /// State of the entry.
 pub const FDB_IN1_STATUS: Field = Field { lsb: 28, width: 3 };
@@ -1349,7 +1349,7 @@ pub const FDB_IN2_EGR_PORTS: Field = Field { lsb: 18, width: 11 };
 pub const FDB_IN2_EGR_DROP: Field = Field { lsb: 17, width: 1 };
 /// Also copy frames to this address to the CPU.
 pub const FDB_IN2_COPY_TO_CPU: Field = Field { lsb: 16, width: 1 };
-/// Apply PRIO to frames received from this address.
+/// Apply FDB_IN2.PRIO to frames received from this address.
 pub const FDB_IN2_IGR_PRIO_EN: Field = Field { lsb: 15, width: 1 };
 /// Priority given by this entry. It is a source for PORT_PRIO_ORD.
 pub const FDB_IN2_PRIO: Field = Field { lsb: 12, width: 3 };
@@ -1358,9 +1358,9 @@ pub const FDB_IN2_NEW_VID: Field = Field { lsb: 0, width: 12 };
 
 /// Forwarding database command.
 pub const FDB_OP: u32 = 0x180460;
-/// Entry index from 0 to 4095. It is used when MODE_INDEX is set.
+/// Entry index from 0 to 4095. It is used when FDB_OP.MODE_INDEX is set.
 pub const FDB_OP_INDEX: Field = Field { lsb: 11, width: 12 };
-/// Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID.
+/// Addresses the entry by FDB_OP.INDEX. Value 0 addresses it by MAC address and filtering ID.
 pub const FDB_OP_MODE_INDEX: Field = Field { lsb: 10, width: 1 };
 /// A flush removes multicast entries in place of unicast entries. The vendor SDK list yt_l2_tbl_op_flush_mode_t gives this meaning to the bit.
 pub const FDB_OP_FLUSH_MCAST: Field = Field { lsb: 9, width: 1 };
@@ -1376,7 +1376,7 @@ pub const FDB_OP_FLUSH_PORT_VID: u32 = 2;
 pub const FDB_OP_FLUSH_VID: u32 = 3;
 /// A flush also removes static entries.
 pub const FDB_OP_FLUSH_STATIC: Field = Field { lsb: 6, width: 1 };
-/// Which entries GET_NEXT walks.
+/// Which entries FDB_OP.OP.GET_NEXT walks.
 pub const FDB_OP_NEXT_TYPE: Field = Field { lsb: 4, width: 2 };
 /// Unicast entries of one port
 pub const FDB_OP_NEXT_TYPE_UCAST_PORT: u32 = 0;
@@ -1394,7 +1394,7 @@ pub const FDB_OP_OP_ADD: u32 = 0;
 pub const FDB_OP_OP_DEL: u32 = 1;
 /// Read one entry
 pub const FDB_OP_OP_GET_ONE: u32 = 2;
-/// Read the next used entry after INDEX
+/// Read the next used entry after FDB_OP.INDEX
 pub const FDB_OP_OP_GET_NEXT: u32 = 3;
 /// Delete many entries
 pub const FDB_OP_OP_FLUSH: u32 = 4;
@@ -1419,7 +1419,7 @@ pub const FDB_OUT0_ADDR_HI4: Field = Field { lsb: 0, width: 32 };
 
 /// Forwarding database result data 1.
 pub const FDB_OUT1: u32 = 0x1804b4;
-/// Apply PRIO to frames sent to this address.
+/// Apply the priority of the entry to frames sent to this address.
 pub const FDB_OUT1_EGR_PRIO_EN: Field = Field { lsb: 31, width: 1 };
 /// State of the entry.
 pub const FDB_OUT1_STATUS: Field = Field { lsb: 28, width: 3 };
@@ -1452,7 +1452,7 @@ pub const FDB_OUT2_EGR_PORTS: Field = Field { lsb: 18, width: 11 };
 pub const FDB_OUT2_EGR_DROP: Field = Field { lsb: 17, width: 1 };
 /// Also copy frames to this address to the CPU.
 pub const FDB_OUT2_COPY_TO_CPU: Field = Field { lsb: 16, width: 1 };
-/// Apply PRIO to frames received from this address.
+/// Apply FDB_OUT2.PRIO to frames received from this address.
 pub const FDB_OUT2_IGR_PRIO_EN: Field = Field { lsb: 15, width: 1 };
 /// Priority given by this entry. It is a source for PORT_PRIO_ORD.
 pub const FDB_OUT2_PRIO: Field = Field { lsb: 12, width: 3 };
@@ -1521,9 +1521,9 @@ pub const ACT_UNK_UCAST_ACT_COPY: u32 = 3;
 
 /// Unknown multicast action.
 pub const ACT_UNK_MCAST: u32 = 0x180738;
-/// Reserved multicast addresses are exempt from the DROP action.
+/// Reserved multicast addresses are exempt from the action ACT_UNK_MCAST.ACT.DROP.
 pub const ACT_UNK_MCAST_BYPASS_DROP_RMA: Field = Field { lsb: 23, width: 1 };
-/// IGMP frames are exempt from the DROP action.
+/// IGMP frames are exempt from the action ACT_UNK_MCAST.ACT.DROP.
 pub const ACT_UNK_MCAST_BYPASS_DROP_IGMP: Field = Field { lsb: 22, width: 1 };
 /// Action for frames received on port port.
 pub const fn act_unk_mcast_act(port: u32) -> Field {
@@ -1630,17 +1630,17 @@ pub const ACL_ACT_CTAG_UNTAG: u32 = 1;
 pub const ACL_ACT_CTAG_TAG: u32 = 2;
 /// Send as received
 pub const ACL_ACT_CTAG_KEEP: u32 = 3;
-/// Forwarding action. It is used when FWD_EN is set.
+/// Forwarding action. It is used when ACL_ACT.FWD_EN is set.
 pub const ACL_ACT_FWD: Field = Field { lsb: 85, width: 2 };
 /// Forward normally
 pub const ACL_ACT_FWD_FWD: u32 = 0;
-/// Forward and also send to FWD_REDIR_DPORTS
+/// Forward and also send to ACL_ACT.FWD_REDIR_DPORTS
 pub const ACL_ACT_FWD_COPY: u32 = 1;
-/// Send only to FWD_REDIR_DPORTS
+/// Send only to ACL_ACT.FWD_REDIR_DPORTS
 pub const ACL_ACT_FWD_REDIR: u32 = 2;
 /// Send only to the CPU
 pub const ACL_ACT_FWD_TRAP: u32 = 3;
-/// Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame.
+/// Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame.
 pub const fn acl_act_fwd_redir_dports(port: u32) -> Field {
     Field { lsb: (74 + port) as u8, width: 1 }
 }
@@ -1674,7 +1674,7 @@ pub const ACL_ACT_CVID: Field = Field { lsb: 36, width: 12 };
 pub const ACL_ACT_CVID_REPLACE: Field = Field { lsb: 35, width: 1 };
 /// Internal priority given to the frame. It is inferred that it is a source for PORT_PRIO_ORD.
 pub const ACL_ACT_PRIO: Field = Field { lsb: 32, width: 3 };
-/// Enables PRIO.
+/// Enables ACL_ACT.PRIO.
 pub const ACL_ACT_PRIO_EN: Field = Field { lsb: 31, width: 1 };
 /// Colour given to the frame.
 pub const ACL_ACT_COLOR: Field = Field { lsb: 29, width: 2 };
@@ -1684,7 +1684,7 @@ pub const ACL_ACT_COLOR_GREEN: u32 = 0;
 pub const ACL_ACT_COLOR_YELLOW: u32 = 1;
 /// Red
 pub const ACL_ACT_COLOR_RED: u32 = 2;
-/// Enables COLOR.
+/// Enables ACL_ACT.COLOR.
 pub const ACL_ACT_COLOR_EN: Field = Field { lsb: 28, width: 1 };
 /// New IP DSCP value.
 pub const ACL_ACT_DSCP: Field = Field { lsb: 22, width: 6 };
@@ -1692,15 +1692,15 @@ pub const ACL_ACT_DSCP: Field = Field { lsb: 22, width: 6 };
 pub const ACL_ACT_DSCP_REPLACE: Field = Field { lsb: 21, width: 1 };
 /// Meter that rate limits matching frames. It is an index of METER_CTRL.
 pub const ACL_ACT_METER_ID: Field = Field { lsb: 15, width: 6 };
-/// Enables METER_ID.
+/// Enables ACL_ACT.METER_ID.
 pub const ACL_ACT_METER_EN: Field = Field { lsb: 14, width: 1 };
 /// Copy matching frames to the monitor port in MIRROR.PORT.
 pub const ACL_ACT_MIRROR_EN: Field = Field { lsb: 13, width: 1 };
-/// Count matching frames in the flow counter FLOWSTAT_ID.
+/// Count matching frames in the flow counter ACL_ACT.FLOWSTAT_ID.
 pub const ACL_ACT_FLOWSTAT_EN: Field = Field { lsb: 12, width: 1 };
 /// Flow counter number.
 pub const ACL_ACT_FLOWSTAT_ID: Field = Field { lsb: 6, width: 6 };
-/// Signal a match on the pin in GPIO_PIN.
+/// Signal a match on the pin in ACL_ACT.GPIO_PIN.
 pub const ACL_ACT_GPIO_EN: Field = Field { lsb: 5, width: 1 };
 /// Pin number.
 pub const ACL_ACT_GPIO_PIN: Field = Field { lsb: 1, width: 4 };
@@ -2087,7 +2087,7 @@ pub const METER_CTRL_DROP_R: u32 = 2;
 pub const METER_CTRL_DROP_NONE: u32 = 3;
 /// Ignore the colour the frame already has.
 pub const METER_CTRL_COLOR_BLIND: Field = Field { lsb: 74, width: 1 };
-/// Token scale. Every token value is multiplied by 4 to the power of UNIT.
+/// Token scale. Every token value is multiplied by 4 to the power of this field.
 pub const METER_CTRL_UNIT: Field = Field { lsb: 71, width: 3 };
 /// Add PORT_RATE.GAP_VALUE bytes to each frame in byte mode.
 pub const METER_CTRL_BYTE_MODE_INCLUDE_GAP: Field = Field { lsb: 70, width: 1 };
@@ -2138,7 +2138,7 @@ pub const PORT_SHAPE_CTRL_WORDS: usize = 2;
 pub const PORT_SHAPE_CTRL_EN: Field = Field { lsb: 36, width: 1 };
 /// Shape packets. Value 0 shapes bytes.
 pub const PORT_SHAPE_CTRL_PKT_MODE: Field = Field { lsb: 35, width: 1 };
-/// Token scale. Every token value is multiplied by 4 to the power of UNIT.
+/// Token scale. Every token value is multiplied by 4 to the power of this field.
 pub const PORT_SHAPE_CTRL_UNIT: Field = Field { lsb: 32, width: 3 };
 /// Burst size in tokens.
 pub const PORT_SHAPE_CTRL_CBS: Field = Field { lsb: 18, width: 14 };

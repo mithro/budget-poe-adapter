@@ -182,7 +182,9 @@ For the values 2 and 3 :lx:`yt921x_chip_detect` assumes 8 ns. No source names a 
 Turn on function blocks
 -----------------------
 
-Three function blocks have an enable bit in :reg:`FUNC`.
+Three function blocks have an enable bit in :reg:`FUNC` that the
+:ref:`Linux driver <sources-list>` names. The :ref:`vendor SDK <sources-list>` names a
+fourth, `AC_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L16>`__ in bit 3, which this manual does not describe.
 :lx:`yt921x_chip_setup` of the :ref:`Linux driver <sources-list>` sets the three bits before
 it uses the blocks. It is :ev:`inferred` from that code that a block works only while its bit is
 set and that the bits are clear after reset.

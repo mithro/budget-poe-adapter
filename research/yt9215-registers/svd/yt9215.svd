@@ -164,7 +164,7 @@
         </register>
         <register>
           <name>FUNC</name>
-          <description>Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for their effect.</description>
+          <description>Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for their effect. The vendor SDK names a fourth enable bit, AC_EN in bit 3, which this manual does not describe.</description>
           <addressOffset>0x4</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -231,7 +231,7 @@
             </field>
             <field>
               <name>PORT_EN</name>
-              <description>PORT is valid and that port is treated as the CPU port.</description>
+              <description>EXT_CPU_PORT.PORT is valid and that port is treated as the CPU port.</description>
               <bitOffset>14</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -618,7 +618,7 @@
             </field>
             <field>
               <name>PAUSE_AN</name>
-              <description>yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE.</description>
+              <description>yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII whose pause result the MAC may take. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE.</description>
               <bitOffset>10</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -1154,14 +1154,14 @@
             </field>
             <field>
               <name>ONE_PORT</name>
-              <description>Clear the counters of the port in PORT.</description>
+              <description>Clear the counters of the port in MIB_CTRL.PORT.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>PORT</name>
-              <description>Port whose counters are cleared when ONE_PORT is set.</description>
+              <description>Port whose counters are cleared when MIB_CTRL.ONE_PORT is set.</description>
               <bitOffset>3</bitOffset>
               <bitWidth>4</bitWidth>
               <access>read-write</access>
@@ -1805,7 +1805,7 @@
             </field>
             <field>
               <name>BLINK_DUTY_COMP</name>
-              <description>Swaps the on and off parts of the blink cycle. BLINK_DUTY then gives the off fraction.</description>
+              <description>Swaps the on and off parts of the blink cycle. LED1_PORT.BLINK_DUTY then gives the off fraction.</description>
               <bitOffset>27</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -1981,7 +1981,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>BLINK</name>
-                  <description>Blink at the rate in FORCE_BLINK</description>
+                  <description>Blink at the rate in LED2_PORT.FORCE_BLINK</description>
                   <value>1</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -2353,7 +2353,7 @@
               <enumeratedValues>
                 <enumeratedValue>
                   <name>READ</name>
-                  <description>Read the byte at ADDR into EDATA_DATA.DATA</description>
+                  <description>Read the byte at EDATA_CTRL.ADDR into EDATA_DATA.DATA</description>
                   <value>5</value>
                 </enumeratedValue>
               </enumeratedValues>
@@ -2383,7 +2383,7 @@
               <enumeratedValues>
                 <enumeratedValue>
                   <name>IDLE</name>
-                  <description>No command is running. DATA is valid</description>
+                  <description>No command is running. EDATA_DATA.DATA is valid</description>
                   <value>3</value>
                 </enumeratedValue>
               </enumeratedValues>
@@ -2894,7 +2894,7 @@
             </field>
             <field>
               <name>LIMIT_EN</name>
-              <description>Enables the limit in LIMIT.</description>
+              <description>Enables the limit in PORT_LEARN.LIMIT.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3037,7 +3037,7 @@
             </field>
             <field>
               <name>EGR_PRIO_EN</name>
-              <description>Apply PRIO to frames sent to this address.</description>
+              <description>Apply the priority of the entry to frames sent to this address.</description>
               <bitOffset>31</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3067,7 +3067,7 @@
             </field>
             <field>
               <name>IGR_PRIO_EN</name>
-              <description>Apply PRIO to frames received from this address.</description>
+              <description>Apply FDB_IN2.PRIO to frames received from this address.</description>
               <bitOffset>15</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3111,7 +3111,7 @@
         </register>
         <register>
           <name>FDB_OP</name>
-          <description>Selects and starts a forwarding database command. Write the input words first, then this register with START set, then wait for FDB_RESULT.DONE.</description>
+          <description>Selects and starts a forwarding database command. Write the input words first, then this register with FDB_OP.START set, then wait for FDB_RESULT.DONE.</description>
           <addressOffset>0x460</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -3147,7 +3147,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>GET_NEXT</name>
-                  <description>Read the next used entry after INDEX</description>
+                  <description>Read the next used entry after FDB_OP.INDEX</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -3159,7 +3159,7 @@
             </field>
             <field>
               <name>NEXT_TYPE</name>
-              <description>Which entries GET_NEXT walks.</description>
+              <description>Which entries FDB_OP.OP.GET_NEXT walks.</description>
               <bitOffset>4</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
@@ -3231,14 +3231,14 @@
             </field>
             <field>
               <name>MODE_INDEX</name>
-              <description>Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID.</description>
+              <description>Addresses the entry by FDB_OP.INDEX. Value 0 addresses it by MAC address and filtering ID.</description>
               <bitOffset>10</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>INDEX</name>
-              <description>Entry index from 0 to 4095. It is used when MODE_INDEX is set.</description>
+              <description>Entry index from 0 to 4095. It is used when FDB_OP.MODE_INDEX is set.</description>
               <bitOffset>11</bitOffset>
               <bitWidth>12</bitWidth>
               <access>read-write</access>
@@ -3360,7 +3360,7 @@
             </field>
             <field>
               <name>EGR_PRIO_EN</name>
-              <description>Apply PRIO to frames sent to this address.</description>
+              <description>Apply the priority of the entry to frames sent to this address.</description>
               <bitOffset>31</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-only</access>
@@ -3390,7 +3390,7 @@
             </field>
             <field>
               <name>IGR_PRIO_EN</name>
-              <description>Apply PRIO to frames received from this address.</description>
+              <description>Apply FDB_OUT2.PRIO to frames received from this address.</description>
               <bitOffset>15</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-only</access>
@@ -3701,14 +3701,14 @@
             </field>
             <field>
               <name>BYPASS_DROP_IGMP</name>
-              <description>IGMP frames are exempt from the DROP action.</description>
+              <description>IGMP frames are exempt from the action ACT_UNK_MCAST.ACT.DROP.</description>
               <bitOffset>22</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>BYPASS_DROP_RMA</name>
-              <description>Reserved multicast addresses are exempt from the DROP action.</description>
+              <description>Reserved multicast addresses are exempt from the action ACT_UNK_MCAST.ACT.DROP.</description>
               <bitOffset>23</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3753,7 +3753,7 @@
               </field>
               <field>
                 <name>METER_EN</name>
-                <description>Frames of this VLAN are rate limited by the meter in METER_ID.</description>
+                <description>Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID.</description>
                 <bitOffset>5</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -3784,7 +3784,7 @@
               </field>
               <field>
                 <name>PRIO_EN</name>
-                <description>Frames of this VLAN get the priority in PRIO.</description>
+                <description>Frames of this VLAN get the priority in VLAN_CTRL.PRIO.</description>
                 <bitOffset>21</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -3887,7 +3887,7 @@
               </field>
               <field>
                 <name>GPIO_EN</name>
-                <description>Signal a match on the pin in GPIO_PIN.</description>
+                <description>Signal a match on the pin in ACL_ACT.GPIO_PIN.</description>
                 <bitOffset>5</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -3901,7 +3901,7 @@
               </field>
               <field>
                 <name>FLOWSTAT_EN</name>
-                <description>Count matching frames in the flow counter FLOWSTAT_ID.</description>
+                <description>Count matching frames in the flow counter ACL_ACT.FLOWSTAT_ID.</description>
                 <bitOffset>12</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -3915,7 +3915,7 @@
               </field>
               <field>
                 <name>METER_EN</name>
-                <description>Enables METER_ID.</description>
+                <description>Enables ACL_ACT.METER_ID.</description>
                 <bitOffset>14</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -3943,7 +3943,7 @@
               </field>
               <field>
                 <name>COLOR_EN</name>
-                <description>Enables COLOR.</description>
+                <description>Enables ACL_ACT.COLOR.</description>
                 <bitOffset>28</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -3974,7 +3974,7 @@
               </field>
               <field>
                 <name>PRIO_EN</name>
-                <description>Enables PRIO.</description>
+                <description>Enables ACL_ACT.PRIO.</description>
                 <bitOffset>31</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -4107,14 +4107,14 @@
                 <dimIncrement>1</dimIncrement>
                 <dimIndex>0-10</dimIndex>
                 <name>FWD_REDIR_DPORTS%s</name>
-                <description>Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame.</description>
+                <description>Destination ports for ACL_ACT.FWD.COPY and ACL_ACT.FWD.REDIR. Each port has one bit. ACL_ACT.FWD.REDIR with no port set drops the frame.</description>
                 <bitOffset>10</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
               </field>
               <field>
                 <name>FWD</name>
-                <description>Forwarding action. It is used when FWD_EN is set.</description>
+                <description>Forwarding action. It is used when ACL_ACT.FWD_EN is set.</description>
                 <bitOffset>21</bitOffset>
                 <bitWidth>2</bitWidth>
                 <access>read-write</access>
@@ -4126,12 +4126,12 @@
                   </enumeratedValue>
                   <enumeratedValue>
                     <name>COPY</name>
-                    <description>Forward and also send to FWD_REDIR_DPORTS</description>
+                    <description>Forward and also send to ACL_ACT.FWD_REDIR_DPORTS</description>
                     <value>1</value>
                   </enumeratedValue>
                   <enumeratedValue>
                     <name>REDIR</name>
-                    <description>Send only to FWD_REDIR_DPORTS</description>
+                    <description>Send only to ACL_ACT.FWD_REDIR_DPORTS</description>
                     <value>2</value>
                   </enumeratedValue>
                   <enumeratedValue>
@@ -9140,11 +9140,11 @@
           <dim>75</dim>
           <dimIncrement>0x10</dimIncrement>
           <name>METER_CTRL[%s]</name>
-          <description>96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates. Index: meter = 0 to 74.</description>
+          <description>96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters, which :ref:`rate-meter` attaches to ACL rules and VLANs; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates. Index: meter = 0 to 74.</description>
           <addressOffset>0x800</addressOffset>
           <register>
             <name>W0</name>
-            <description>Meter configuration: bits 31 to 0. 96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates.</description>
+            <description>Meter configuration: bits 31 to 0. 96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters, which :ref:`rate-meter` attaches to ACL rules and VLANs; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates.</description>
             <addressOffset>0x0</addressOffset>
             <size>32</size>
             <access>read-write</access>
@@ -9167,7 +9167,7 @@
           </register>
           <register>
             <name>W1</name>
-            <description>Meter configuration: bits 63 to 32. 96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates.</description>
+            <description>Meter configuration: bits 63 to 32. 96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters, which :ref:`rate-meter` attaches to ACL rules and VLANs; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates.</description>
             <addressOffset>0x4</addressOffset>
             <size>32</size>
             <access>read-write</access>
@@ -9197,7 +9197,7 @@
           </register>
           <register>
             <name>W2</name>
-            <description>Meter configuration: bits 95 to 64. 96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates.</description>
+            <description>Meter configuration: bits 95 to 64. 96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are general-purpose meters, which :ref:`rate-meter` attaches to ACL rules and VLANs; entries 64 to 74 are the per-port meters. Token arithmetic gives the conversion from bit rates.</description>
             <addressOffset>0x8</addressOffset>
             <size>32</size>
             <access>read-write</access>
@@ -9232,7 +9232,7 @@
               </field>
               <field>
                 <name>UNIT</name>
-                <description>Token scale. Every token value is multiplied by 4 to the power of UNIT.</description>
+                <description>Token scale. Every token value is multiplied by 4 to the power of this field.</description>
                 <bitOffset>7</bitOffset>
                 <bitWidth>3</bitWidth>
                 <access>read-write</access>
@@ -9561,7 +9561,7 @@
             <fields>
               <field>
                 <name>UNIT</name>
-                <description>Token scale. Every token value is multiplied by 4 to the power of UNIT.</description>
+                <description>Token scale. Every token value is multiplied by 4 to the power of this field.</description>
                 <bitOffset>0</bitOffset>
                 <bitWidth>3</bitWidth>
                 <access>read-write</access>

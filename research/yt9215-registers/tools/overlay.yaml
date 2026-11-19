@@ -409,7 +409,8 @@ registers:
     title: Function enables
     desc: |
       Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for
-      their effect.
+      their effect. The :ref:`vendor SDK <sources-list>` names a fourth enable bit, `AC_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L16>`__ in
+      bit 3, which this manual does not describe.
     fields:
       METER: {desc: "Enable bit of the meters, whose registers are :reg:`METER_CTRL` and :reg:`PORT_METER`. :lx:`yt921x_chip_setup` sets the bit, and the :ref:`vendor SDK <sources-list>` function `fal_tiger_rate_init() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_rate.c#L90>`__ writes it as an enable. It is :ev:`inferred` that the block works only while the bit is set."}
       ACL: {desc: "Enable bit of the access control list, whose registers include :reg:`ACL_KEY` and :reg:`ACL_ACT`. :lx:`yt921x_chip_setup` sets the bit, and the :ref:`vendor SDK <sources-list>` function `fal_tiger_acl_global_enable() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_acl.c#L84>`__ writes it as an enable. It is :ev:`inferred` that the block works only while the bit is set."}
@@ -587,7 +588,7 @@ registers:
       :reg:`PORT_STATUS`; it is :ev:`inferred` from the name of :field:`PORT_CTRL.LINK_AN` that with the bit clear
       the MAC uses the values written here. :ref:`Bring a port up <ports-up>` gives the order of writes.
     fields:
-      PAUSE_AN: {desc: ":lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band negotiation other than SGMII. It is :ev:`inferred` from the name that the MAC then takes the pause settings from in-band negotiation and ignores :field:`PORT_CTRL.RX_PAUSE` and :field:`PORT_CTRL.TX_PAUSE`."}
+      PAUSE_AN: {desc: ":lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band negotiation other than SGMII whose pause result the MAC may take. It is :ev:`inferred` from the name that the MAC then takes the pause settings from in-band negotiation and ignores :field:`PORT_CTRL.RX_PAUSE` and :field:`PORT_CTRL.TX_PAUSE`."}
       LINK_AN: {desc: ":lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band status. It is :ev:`inferred` from the name that the MAC then takes speed and duplex from the in-band status, that the bit also follows a built-in PHY and that the forced bits are then ignored."}
       HALF_PAUSE: {desc: "Use back pressure for flow control in half duplex."}
       DUPLEX_FULL: {desc: "Forced full duplex."}
@@ -1109,7 +1110,7 @@ registers:
     title: Forwarding database command data 1
     desc: Second input word of a forwarding database command.
     fields: &fdb1
-      EGR_PRIO_EN: {desc: "Apply PRIO to frames sent to this address.", inferred: true}
+      EGR_PRIO_EN: {desc: "Apply the priority of the entry to frames sent to this address.", inferred: true}
       STATUS:
         desc: "State of the entry."
         inferred_values: [MIN_TIME, MOVE_AGING_MAX_TIME, MAX_TIME, PENDING]
@@ -1144,7 +1145,7 @@ registers:
         values: {ALL: "Every entry of the kind that :field:`FDB_OP.FLUSH_MCAST` selects", PORT: "Entries of the ports in :field:`FDB_IN2.EGR_PORTS`", PORT_VID: "Entries of the ports in :field:`FDB_IN2.EGR_PORTS` with the filtering ID in :field:`FDB_IN1.FID`", VID: "Entries with the filtering ID in :field:`FDB_IN1.FID`"}
       FLUSH_STATIC: {desc: "A flush also removes static entries."}
       NEXT_TYPE:
-        desc: "Which entries GET_NEXT walks."
+        desc: "Which entries :val:`FDB_OP.OP.GET_NEXT` walks."
         values: {UCAST_PORT: "Unicast entries of one port", UCAST_VID: "Unicast entries of one filtering ID", UCAST: "All unicast entries", MCAST: "Multicast entries"}
       OP:
         desc: "Command."
@@ -1230,8 +1231,8 @@ registers:
       What the switch does with a frame whose multicast destination is not in the forwarding
       database, chosen per receiving port.
     fields:
-      BYPASS_DROP_RMA: {desc: "Reserved multicast addresses are exempt from the DROP action.", inferred: true}
-      BYPASS_DROP_IGMP: {desc: "IGMP frames are exempt from the DROP action.", inferred: true}
+      BYPASS_DROP_RMA: {desc: "Reserved multicast addresses are exempt from the action :val:`ACT_UNK_MCAST.ACT.DROP`.", inferred: true}
+      BYPASS_DROP_IGMP: {desc: "IGMP frames are exempt from the action :val:`ACT_UNK_MCAST.ACT.DROP`.", inferred: true}
       ACTn: *actunk
 
   LAG_GROUP:
@@ -1383,7 +1384,7 @@ registers:
       FWD:
         desc: "Forwarding action. It is used when FWD_EN is set."
         values: {FWD: "Forward normally", COPY: "Forward and also send to FWD_REDIR_DPORTS", REDIR: "Send only to FWD_REDIR_DPORTS", TRAP: "Send only to the CPU"}
-      FWD_REDIR_DPORTS: {desc: "Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame."}
+      FWD_REDIR_DPORTS: {desc: "Destination ports for :val:`ACL_ACT.FWD.COPY` and :val:`ACL_ACT.FWD.REDIR`. Each port has one bit. :val:`ACL_ACT.FWD.REDIR` with no port set drops the frame."}
       FWD_EN: {desc: "Enables the forwarding action."}
       SDEI: {desc: "New drop eligible bit of the service tag."}
       SDEI_REPLACE: {desc: "Replace the drop eligible bit of the service tag."}
@@ -1453,7 +1454,7 @@ registers:
     title: Meter configuration
     desc: |
       96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are
-      general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters.
+      general-purpose meters, which :ref:`rate-meter` attaches to ACL rules and VLANs; entries 64 to 74 are the per-port meters.
       :ref:`Token arithmetic <rate-tokens>` gives the conversion from bit rates.
     fields:
       METER_EN: {desc: "Enables the meter."}
@@ -1462,7 +1463,7 @@ registers:
         desc: "Colours that are dropped."
         values: {GYR: "Drop every frame", YR: "Drop yellow and red frames", R: "Drop red frames", NONE: "Drop nothing and only colour the frame"}
       COLOR_BLIND: {desc: "Ignore the colour the frame already has.", inferred: true}
-      UNIT: {desc: "Token scale. Every token value is multiplied by 4 to the power of UNIT."}
+      UNIT: {desc: "Token scale. Every token value is multiplied by 4 to the power of this field."}
       BYTE_MODE_INCLUDE_GAP: {desc: "Add :field:`PORT_RATE.GAP_VALUE` bytes to each frame in byte mode.", inferred: true}
       PKT_MODE: {desc: "Meter packets. Value 0 meters bytes."}
       RFC2698: {desc: "Select the algorithm of `RFC 2698 <https://www.rfc-editor.org/rfc/rfc2698>`__. Value 0 selects that of `RFC 4115 <https://www.rfc-editor.org/rfc/rfc4115>`__.", inferred: true}
@@ -1498,7 +1499,7 @@ registers:
     fields:
       EN: {desc: "Enables the shaper."}
       PKT_MODE: {desc: "Shape packets. Value 0 shapes bytes."}
-      UNIT: {desc: "Token scale. Every token value is multiplied by 4 to the power of UNIT."}
+      UNIT: {desc: "Token scale. Every token value is multiplied by 4 to the power of this field."}
       CBS: {desc: "Burst size in tokens."}
       CIR: {desc: "Rate in tokens per time slot."}
   PORT_SHAPE_STAT:

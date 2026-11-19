@@ -956,6 +956,23 @@ def main():
                                    desc=ocon[c["name"]],
                                    linux=dict(macro=c["cname"], src=c["src"])))
 
+    # ---- link the bare names of sibling fields in descriptions
+    for r in out_regs:
+        names = {f["name"] for f in r["fields"]} - {"EEE", "DSCP"}
+        if not names:
+            continue
+        pat = re.compile(r"(:\w+:`[^`]*`|`[^`]*`__|``[^`]*``|\"[^\"]*\")|(?<![\w.])(%s)(?![\w])"
+                         % "|".join(sorted(map(re.escape, names), key=len, reverse=True)))
+
+        def link(text, own=None):
+            return pat.sub(lambda mo: mo.group(0) if mo.group(1) or mo.group(2) == own
+                           else ":field:`%s.%s`" % (r["id"], mo.group(2)), text)
+        r["desc"] = link(r["desc"])
+        for f in r["fields"]:
+            f["desc"] = link(f["desc"], f["name"])
+            for v in f.get("values") or []:
+                v["desc"] = link(v["desc"], f["name"])
+
     # ---- SDK tables that lie inside an array register beyond its first table
     based = {r["sdk"]["table"] for r in out_regs if "table" in r.get("sdk", {})}
     for r in out_regs:

@@ -642,9 +642,10 @@ def register_section(m, reg, guide_refs, mentions):
     for lay in reg["layouts"]:
         lf = [f for f in lay["fields"] if not (f.get("key_only") and reg["id"] != "ACL_KEY")]
         out += [".. rubric:: Layout %s: %s" % (lay["name"], lay["title"]), ""]
-        types = ", ".join(":val:`acl_type.%s`" % t for t in lay["types"])
-        out += ["Used when TYPE of the slot (:field:`ACL_KEY.TYPE`, values :enum:`acl_type`) is %s."
-                % types, ""]
+        types = [":val:`acl_type.%s`" % t for t in lay["types"]]
+        types = types[0] if len(types) == 1 else "%s or %s" % (types[0], types[1]) \
+            if len(types) == 2 else "one of the values from %s to %s" % (types[0], types[-1])
+        out += ["Used when :field:`ACL_KEY.TYPE` of the slot is %s." % types, ""]
         out += [".. yt-bitfield:: " + reg["id"], "   :layout: " + lay["name"], ""]
         out += field_table(m, reg, lf, lay)
         out += value_tables(m, reg, lf, lay)

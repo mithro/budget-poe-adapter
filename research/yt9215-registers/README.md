@@ -1,7 +1,7 @@
 # YT921x switch: programmer's guide, register description and bindings
 
 Everything needed to write a driver for the Motorcomm YT921x Gigabit Ethernet switches
-(YT9215S, YT9215SC, YT9215SCH, YT9215RB, YT9214NB, YT9213NB, YT9218N, YT9218MB): a manual, a
+of the YT9215 and YT9218 families: a manual, a
 machine-readable register description, and register definitions with a small access layer
 for C, Rust, MicroPython and Zephyr.
 

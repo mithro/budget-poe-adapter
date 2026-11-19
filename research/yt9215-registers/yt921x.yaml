@@ -1503,7 +1503,10 @@ registers:
   title: Function enables
   desc: 'Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for
 
-    their effect.'
+    their effect. The :ref:`vendor SDK <sources-list>` names a fourth enable bit, `AC_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L16>`__
+    in
+
+    bit 3, which this manual does not describe.'
   access: rw
   words: 1
   sdk:
@@ -2222,7 +2225,7 @@ registers:
         - 171
         used: true
         use: [chip.c, yt921x_edata_read_cont, 2129]
-      desc: Read the byte at ADDR into :field:`EDATA_DATA.DATA`
+      desc: Read the byte at :field:`EDATA_CTRL.ADDR` into :field:`EDATA_DATA.DATA`
     lsb: 0
     width: 4
     desc: Command.
@@ -2284,7 +2287,7 @@ registers:
         - 176
         used: true
         use: [chip.c, yt921x_edata_wait, 2110]
-      desc: No command is running. DATA is valid
+      desc: No command is running. :field:`EDATA_DATA.DATA` is valid
     lsb: 0
     width: 4
     desc: State of the store.
@@ -2410,7 +2413,7 @@ registers:
       use: [chip.c, yt921x_chip_setup_dsa, 2284]
     lsb: 14
     width: 1
-    desc: PORT is valid and that port is treated as the CPU port.
+    desc: :field:`EXT_CPU_PORT.PORT` is valid and that port is treated as the CPU port.
     access: rw
     sdk:
       status: same bits
@@ -2815,8 +2818,8 @@ registers:
     lsb: 10
     width: 1
     desc: :lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band negotiation other than
-      SGMII. It is :ev:`inferred` from the name that the MAC then takes the pause settings from in-band
-      negotiation and ignores :field:`PORT_CTRL.RX_PAUSE` and :field:`PORT_CTRL.TX_PAUSE`.
+      SGMII whose pause result the MAC may take. It is :ev:`inferred` from the name that the MAC then
+      takes the pause settings from in-band negotiation and ignores :field:`PORT_CTRL.RX_PAUSE` and :field:`PORT_CTRL.TX_PAUSE`.
     access: rw
     sdk:
       status: same bits
@@ -4093,7 +4096,7 @@ registers:
       used: false
     lsb: 3
     width: 4
-    desc: Port whose counters are cleared when ONE_PORT is set.
+    desc: Port whose counters are cleared when :field:`MIB_CTRL.ONE_PORT` is set.
     access: rw
     inferred: true
     sdk:
@@ -4107,7 +4110,7 @@ registers:
       used: false
     lsb: 1
     width: 1
-    desc: Clear the counters of the port in PORT.
+    desc: Clear the counters of the port in :field:`MIB_CTRL.PORT`.
     access: rw
     inferred: true
     sdk:
@@ -4639,7 +4642,8 @@ registers:
       use: [leds.c, yt921x_led_blink_set, 139]
     lsb: 27
     width: 1
-    desc: Swaps the on and off parts of the blink cycle. BLINK_DUTY then gives the off fraction.
+    desc: Swaps the on and off parts of the blink cycle. :field:`LED1_PORT.BLINK_DUTY` then gives the
+      off fraction.
     access: rw
     sdk:
       status: no SDK table
@@ -4992,7 +4996,7 @@ registers:
         - 44
         used: true
         use: [leds.c, yt921x_led_blink_set, 170]
-      desc: Blink at the rate in FORCE_BLINK
+      desc: Blink at the rate in :field:`LED2_PORT.FORCE_BLINK`
     - name: 'ON'
       value: 2
       linux:
@@ -5984,7 +5988,7 @@ registers:
       used: false
     lsb: 21
     width: 1
-    desc: Frames of this VLAN get the priority in PRIO.
+    desc: Frames of this VLAN get the priority in :field:`VLAN_CTRL.PRIO`.
     access: rw
     inferred: true
     sdk:
@@ -6057,7 +6061,7 @@ registers:
       used: false
     lsb: 5
     width: 1
-    desc: Frames of this VLAN are rate limited by the meter in METER_ID.
+    desc: Frames of this VLAN are rate limited by the meter in :field:`VLAN_CTRL.METER_ID`.
     access: rw
     inferred: true
     sdk:
@@ -7079,7 +7083,7 @@ registers:
       used: false
     lsb: 16
     width: 1
-    desc: Enables the limit in LIMIT.
+    desc: Enables the limit in :field:`PORT_LEARN.LIMIT`.
     access: rw
     inferred: true
     sdk:
@@ -7270,7 +7274,7 @@ registers:
       used: false
     lsb: 31
     width: 1
-    desc: Apply PRIO to frames sent to this address.
+    desc: Apply the priority of the entry to frames sent to this address.
     access: rw
     inferred: true
     sdk:
@@ -7489,7 +7493,7 @@ registers:
       used: false
     lsb: 15
     width: 1
-    desc: Apply PRIO to frames received from this address.
+    desc: Apply :field:`FDB_IN2.PRIO` to frames received from this address.
     access: rw
     inferred: true
     sdk:
@@ -7558,7 +7562,7 @@ registers:
       use: [chip.c, yt921x_fdb_dump, 585]
     lsb: 11
     width: 12
-    desc: Entry index from 0 to 4095. It is used when MODE_INDEX is set.
+    desc: Entry index from 0 to 4095. It is used when :field:`FDB_OP.MODE_INDEX` is set.
     access: rw
     sdk:
       status: same bits
@@ -7573,7 +7577,8 @@ registers:
       use: [chip.c, yt921x_fdb_dump, 585]
     lsb: 10
     width: 1
-    desc: Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID.
+    desc: Addresses the entry by :field:`FDB_OP.INDEX`. Value 0 addresses it by MAC address and filtering
+      ID.
     access: rw
     sdk:
       status: same bits
@@ -7712,7 +7717,7 @@ registers:
       desc: Multicast entries
     lsb: 4
     width: 2
-    desc: Which entries GET_NEXT walks.
+    desc: Which entries :val:`FDB_OP.OP.GET_NEXT` walks.
     access: rw
     sdk:
       status: same bits
@@ -7765,7 +7770,7 @@ registers:
         - 279
         used: true
         use: [chip.c, yt921x_fdb_dump, 609]
-      desc: Read the next used entry after INDEX
+      desc: Read the next used entry after :field:`FDB_OP.INDEX`
     - name: FLUSH
       value: 4
       linux:
@@ -7802,7 +7807,7 @@ registers:
   title: Forwarding database command
   desc: 'Selects and starts a forwarding database command. Write the input words first, then this
 
-    register with START set, then wait for :field:`FDB_RESULT.DONE`.'
+    register with :field:`FDB_OP.START` set, then wait for :field:`FDB_RESULT.DONE`.'
   access: rw
   words: 1
   sdk:
@@ -7953,7 +7958,7 @@ registers:
       used: false
     lsb: 31
     width: 1
-    desc: Apply PRIO to frames sent to this address.
+    desc: Apply the priority of the entry to frames sent to this address.
     access: ro
     inferred: true
     sdk:
@@ -8173,7 +8178,7 @@ registers:
       used: false
     lsb: 15
     width: 1
-    desc: Apply PRIO to frames received from this address.
+    desc: Apply :field:`FDB_OUT2.PRIO` to frames received from this address.
     access: ro
     inferred: true
     sdk:
@@ -8573,7 +8578,7 @@ registers:
       used: false
     lsb: 23
     width: 1
-    desc: Reserved multicast addresses are exempt from the DROP action.
+    desc: Reserved multicast addresses are exempt from the action :val:`ACT_UNK_MCAST.ACT.DROP`.
     access: rw
     inferred: true
     sdk:
@@ -8588,7 +8593,7 @@ registers:
       used: false
     lsb: 22
     width: 1
-    desc: IGMP frames are exempt from the DROP action.
+    desc: IGMP frames are exempt from the action :val:`ACT_UNK_MCAST.ACT.DROP`.
     access: rw
     inferred: true
     sdk:
@@ -9114,7 +9119,7 @@ registers:
         - tc.h
         - 28
         used: false
-      desc: Forward and also send to FWD_REDIR_DPORTS
+      desc: Forward and also send to :field:`ACL_ACT.FWD_REDIR_DPORTS`
     - name: REDIR
       value: 2
       linux:
@@ -9124,7 +9129,7 @@ registers:
         - 29
         used: true
         use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1063]
-      desc: Send only to FWD_REDIR_DPORTS
+      desc: Send only to :field:`ACL_ACT.FWD_REDIR_DPORTS`
     - name: TRAP
       value: 3
       linux:
@@ -9137,7 +9142,7 @@ registers:
       desc: Send only to the CPU
     lsb: 85
     width: 2
-    desc: Forwarding action. It is used when FWD_EN is set.
+    desc: Forwarding action. It is used when :field:`ACL_ACT.FWD_EN` is set.
     access: rw
     sdk:
       status: same bits
@@ -9164,8 +9169,8 @@ registers:
       src:
       - tc.h
       - 33
-    desc: Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the
-      frame.
+    desc: Destination ports for :val:`ACL_ACT.FWD.COPY` and :val:`ACL_ACT.FWD.REDIR`. Each port has one
+      bit. :val:`ACL_ACT.FWD.REDIR` with no port set drops the frame.
     access: rw
     sdk:
       status: same bits
@@ -9378,7 +9383,7 @@ registers:
       use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1083]
     lsb: 31
     width: 1
-    desc: Enables PRIO.
+    desc: Enables :field:`ACL_ACT.PRIO`.
     access: rw
     sdk:
       status: same bits
@@ -9435,7 +9440,7 @@ registers:
       used: false
     lsb: 28
     width: 1
-    desc: Enables COLOR.
+    desc: Enables :field:`ACL_ACT.COLOR`.
     access: rw
     inferred: true
     sdk:
@@ -9496,7 +9501,7 @@ registers:
       use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1103]
     lsb: 14
     width: 1
-    desc: Enables METER_ID.
+    desc: Enables :field:`ACL_ACT.METER_ID`.
     access: rw
     sdk:
       status: same bits
@@ -9525,7 +9530,7 @@ registers:
       used: false
     lsb: 12
     width: 1
-    desc: Count matching frames in the flow counter FLOWSTAT_ID.
+    desc: Count matching frames in the flow counter :field:`ACL_ACT.FLOWSTAT_ID`.
     access: rw
     inferred: true
     sdk:
@@ -9555,7 +9560,7 @@ registers:
       used: false
     lsb: 5
     width: 1
-    desc: Signal a match on the pin in GPIO_PIN.
+    desc: Signal a match on the pin in :field:`ACL_ACT.GPIO_PIN`.
     access: rw
     inferred: true
     sdk:
@@ -11993,7 +11998,7 @@ registers:
       use: [tc.c, yt921x_meter_config, 226]
     lsb: 71
     width: 3
-    desc: Token scale. Every token value is multiplied by 4 to the power of UNIT.
+    desc: Token scale. Every token value is multiplied by 4 to the power of this field.
     access: rw
     sdk:
       status: same bits
@@ -12107,7 +12112,8 @@ registers:
   title: Meter configuration
   desc: '96-bit configuration of one two-rate token bucket meter. Entries 0 to 63 are
 
-    general-purpose meters for ACL rules; entries 64 to 74 are the per-port meters.
+    general-purpose meters, which :ref:`rate-meter` attaches to ACL rules and VLANs; entries 64 to 74
+    are the per-port meters.
 
     :ref:`Token arithmetic <rate-tokens>` gives the conversion from bit rates.'
   access: rw
@@ -12247,7 +12253,7 @@ registers:
       use: [tc.c, yt921x_dsa_port_setup_tc_tbf_port, 325]
     lsb: 32
     width: 3
-    desc: Token scale. Every token value is multiplied by 4 to the power of UNIT.
+    desc: Token scale. Every token value is multiplied by 4 to the power of this field.
     access: rw
     sdk:
       status: same bits

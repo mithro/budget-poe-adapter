@@ -366,18 +366,18 @@ The routes were read from photos of the top side only, and the lead numbers were
 
 | Function | Signal | U4 pin | Top-layer route | Part | Signal name printed in |
 |---|---|---|---|---|---|
-| UART0 | RX | [46](#sch-pin-46) | Lead only | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| UART0 | TX | [47](#sch-pin-47) | Lead only | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| UART1 | RX | [70](#sch-pin-70) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| UART1 | TX | [76](#sch-pin-76) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF1 | SCK | [83](#sch-pin-83) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF1 | SI | [79](#sch-pin-79) | Lead only | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF1 | SO | [78](#sch-pin-78) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF1 | CS | [81](#sch-pin-81) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF0 | SCK | [49](#sch-pin-49) | Resistor pad | [R93](#lx-r93) | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF0 | SI | [50](#sch-pin-50) | Resistor pad | [R92](#lx-r92) | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF0 | SO | [54](#sch-pin-54) | Resistor pad | [R89](#lx-r89) | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| SPF0 | CS | [55](#sch-pin-55) | Resistor pad | [R44](#lx-r44) | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
+| UART0 | RX | [46](#sch-pin-46) | Lead only | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| UART0 | TX | [47](#sch-pin-47) | Lead only | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| UART1 | RX | [70](#sch-pin-70) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| UART1 | TX | [76](#sch-pin-76) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF1 | SCK | [83](#sch-pin-83) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF1 | SI | [79](#sch-pin-79) | Lead only | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF1 | SO | [78](#sch-pin-78) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF1 | CS | [81](#sch-pin-81) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF0 | SCK | [49](#sch-pin-49) | Resistor pad | [R93](#lx-r93) | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF0 | SI | [50](#sch-pin-50) | Resistor pad | [R92](#lx-r92) | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF0 | SO | [54](#sch-pin-54) | Resistor pad | [R89](#lx-r89) | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| SPF0 | CS | [55](#sch-pin-55) | Resistor pad | [R44](#lx-r44) | [Both datasheets](#yt9215sc-and-yt9215sch) |
 | JTAG0 | TCK | [73](#sch-pin-73) | LED trace | – | [Draft_07](#yt9215sc-and-yt9215sch) |
 | JTAG0 | TMS | [72](#sch-pin-72) | LED trace | – | [Draft_07](#yt9215sc-and-yt9215sch) |
 | JTAG0 | TDI | [74](#sch-pin-74) | Via | – | [Draft_07](#yt9215sc-and-yt9215sch) |
@@ -386,9 +386,9 @@ The routes were read from photos of the top side only, and the lead numbers were
 | JTAG1 | TMS | [81](#sch-pin-81) | Via | – | [Draft_07](#yt9215sc-and-yt9215sch) |
 | JTAG1 | TDI | [84](#sch-pin-84) | Via | – | [Draft_07](#yt9215sc-and-yt9215sch) |
 | JTAG1 | TDO | [67](#sch-pin-67) | Lead only | – | [Draft_07](#yt9215sc-and-yt9215sch) |
-| Strap | EN_SPIF | [75](#sch-pin-75) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| Strap | DIS_MCU | [76](#sch-pin-76) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
-| Strap | DISAUTOLOAD | [77](#sch-pin-77) | Via | – | [Draft_07 and V1.03](#yt9215sc-and-yt9215sch) |
+| Strap | EN_SPIF | [75](#sch-pin-75) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| Strap | DIS_MCU | [76](#sch-pin-76) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
+| Strap | DISAUTOLOAD | [77](#sch-pin-77) | Via | – | [Both datasheets](#yt9215sc-and-yt9215sch) |
 
 - The vias for pins [70](#sch-pin-70) and [76](#sch-pin-76) sit just above the chip in the [annotated photo](#annotated-photo).
 - Pin [76](#sch-pin-76) is both UART1 TX and the `DIS_MCU` strap.

@@ -50,7 +50,7 @@ cameras and small displays. 9/15/20 V and PPS are out of scope.
 
 | # | Change | How | Alternative | Why | Cost delta @1k |
 |---|---|---|---|---|---:|
-| 1 | 5 V / 12 V select | GPIO-driven NMOS adds a resistor to the buck FB divider | – | Two fixed set points with no PWM "DAC" | +$0.02 |
+| 1 | Output voltage select | GPIO-driven NMOS adds a resistor to the buck FB divider | – | Two fixed set points with no PWM "DAC" | +$0.02 |
 | 2 | Output caps | Rated 16–25 V | – | 12 V rail | +$0.02 |
 | 3 | VBUS PMOS drive | Gate zener with an NPN driver | – | Keeps Vgs within limits when switching 12 V | +$0.02 |
 | 4 | VBUS TVS | 15 V part | – | Clamp level for a 12 V rail | +$0.01 |
@@ -110,7 +110,7 @@ Each block is tagged with its cost @1k; PCB and assembly are listed under each p
 | Block | With switch | Without switch |
 |---|---:|---:|
 | PoE front end | 0.53 | 0.53 |
-| Output buck, 5 V / 12 V | 1.09 | 1.09 |
+| Dual-voltage output buck | 1.09 | 1.09 |
 | 3.3 V logic rail | 0.15 | 0.04 |
 | USB-C output | 0.42 | 0.42 |
 | Ethernet magnetics and jacks | 1.75 | 0.70 |

@@ -101,7 +101,8 @@ Side-by-side tables holding the data of the *Switch detail* tab in the [comparis
 | Port-based mirroring | Yes | Yes | Yes |
 | Flow-based mirroring | Not listed | Not listed | Yes |
 | IGMP/MLD snooping | Yes | Yes | Yes |
-| LLDP / OAM | ? | Yes | Yes |
+| LLDP | ? | Yes | Yes |
+| OAM | ? | Yes | Yes |
 
 ## PHY & diagnostics
 
@@ -321,7 +322,7 @@ Copy traffic to a monitor port.
 **IGMP/MLD snooping**  
 Multicast snooping in hardware.
 
-**LLDP / OAM**  
+**LLDP** and **OAM**  
 Hardware LLDP or OAM support listed in the datasheet.  
 For this adapter LLDP is sent by the MCU anyway.
 

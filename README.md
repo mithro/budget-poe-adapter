@@ -71,9 +71,9 @@ The research notes cover these topics:
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Dev boards carrying the YT9215S |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Off-the-shelf hardware carrying the RTL8367S |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Off-the-shelf hardware carrying the YT9215S |
-| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | JTAG pins of the YT9215S, YT9215SC, YT9215SCH and YT9215RB |
-| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | SPI flash pins of the same four parts |
-| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | UART pins of the same four parts |
+| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | JTAG pins of the YT9215 variants |
+| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | SPI flash pins of the YT9215 variants |
+| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | UART pins of the YT9215 variants |
 | [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Annotated photos of a bought LX-IS601F V2.0 board |
 | [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Where the debug pins of its YT9215SCH come out |
 | [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking a small device on a gigabit Ethernet link |

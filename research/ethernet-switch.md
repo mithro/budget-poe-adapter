@@ -125,10 +125,14 @@ power is good), use the cable diagnostics, and drive LEDs.
 
 | MCU | Property | Value |
 |---|---|---|
-| CH32V307 / CH32V317 | Rating | Cleanest |
-| CH32V307 / CH32V317 | How the MAC sees the switch | As a PHY |
-| CH32V307 / CH32V317 | Software 1 | WCH TCP/IP lib |
-| CH32V307 / CH32V317 | Software 2 | lwIP ports |
+| CH32V307 | Rating | Cleanest |
+| CH32V307 | How the MAC sees the switch | As a PHY |
+| CH32V307 | Software 1 | WCH TCP/IP lib |
+| CH32V307 | Software 2 | lwIP ports |
+| CH32V317 | Rating | Cleanest |
+| CH32V317 | How the MAC sees the switch | As a PHY |
+| CH32V317 | Software 1 | WCH TCP/IP lib |
+| CH32V317 | Software 2 | lwIP ports |
 | CH32V208 | MAC wiring | Not verified here |
 | CH32V208 | Switch with spare PHYs, option 1 | YT9215S |
 | CH32V208 | Switch with spare PHYs, option 2 | RTL8367S |
@@ -136,11 +140,16 @@ power is good), use the cable diagnostics, and drive LEDs.
 | CH32V208 | Trace | Short (on-board) |
 | CH32V208 | Cost | Wastes a GbE PHY |
 | CH32V208 | Extra parts | None |
-| RP2040 / RP2350 | Software | Community PIO-RMII drivers |
-| RP2040 / RP2350 | Framing and CRC | Done by PIO + CPU |
-| RP2040 / RP2350 | Good for 1 | LLDP |
-| RP2040 / RP2350 | Good for 2 | A little management traffic |
-| RP2040 / RP2350 | Not for | Throughput |
+| RP2040 | Software | Community PIO-RMII drivers |
+| RP2040 | Framing and CRC | Done by PIO with the CPU |
+| RP2040 | Good for 1 | LLDP |
+| RP2040 | Good for 2 | A little management traffic |
+| RP2040 | Not for | Throughput |
+| RP2350 | Software | Community PIO-RMII drivers |
+| RP2350 | Framing and CRC | Done by PIO with the CPU |
+| RP2350 | Good for 1 | LLDP |
+| RP2350 | Good for 2 | A little management traffic |
+| RP2350 | Not for | Throughput |
 | CH32V003 / any MCU | Management bus 1 | SMI |
 | CH32V003 / any MCU | Management bus 2 | I²C |
 | CH32V003 / any MCU | Can read 1 | Link state |

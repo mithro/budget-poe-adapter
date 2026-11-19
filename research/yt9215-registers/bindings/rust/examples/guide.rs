@@ -29,7 +29,7 @@ impl Delay for BoardDelay {
 // [bus end]
 
 // [bringup]
-/// Find the switch, reset it, identify the part and enable port 0.
+/// Find the switch, reset it and identify the part.
 fn bringup<M: Mdio, D: Delay>(mdio: M, delay: D) -> Result<Yt921x<M, D>, Error<M::Error>> {
     let mut found = None;
     let mut bus = Some((mdio, delay));
@@ -47,21 +47,6 @@ fn bringup<M: Mdio, D: Delay>(mdio: M, delay: D) -> Result<Yt921x<M, D>, Error<M
     dev.reset()?;
     let id = dev.identify()?;
     let _ = id.part.name;
-
-    // Force the MAC of external port 8, the CPU port, to 1000 Mbit/s full duplex
-    // without pause and enable it.
-    let mask = regs::PORT_CTRL_SPEED.mask()
-        | regs::PORT_CTRL_DUPLEX_FULL.mask()
-        | regs::PORT_CTRL_RX_PAUSE.mask()
-        | regs::PORT_CTRL_TX_PAUSE.mask()
-        | regs::PORT_CTRL_RX_MAC_EN.mask()
-        | regs::PORT_CTRL_TX_MAC_EN.mask()
-        | regs::PORT_CTRL_LINK_AN.mask();
-    let val = regs::PORT_CTRL_SPEED.prep(regs::SPEED_V1000)
-        | regs::PORT_CTRL_DUPLEX_FULL.mask()
-        | regs::PORT_CTRL_RX_MAC_EN.mask()
-        | regs::PORT_CTRL_TX_MAC_EN.mask();
-    dev.reg_update(regs::port_ctrl(8), mask, val)?;
     Ok(dev)
 }
 // [bringup end]

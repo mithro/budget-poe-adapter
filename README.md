@@ -19,7 +19,7 @@ The documents are grouped by the question they answer. Each group is listed in r
 | [Design](#design) | What does the adapter contain and what does it cost? |
 | [Power](#power) | How does the adapter take PoE power and hand it on over USB-C? |
 | [Switch ICs](#switch-ics) | Which switch IC passes gigabit Ethernet through? |
-| [LX-IS601F switch board](#lx-is601f-switch-board) | How is a bought YT9215SCH switch board built? |
+| [Switch boards](#switch-boards) | How are the two YT9215 switch boards built? |
 | [YT921x switch programming](#yt921x-switch-programming) | How is a YT921x switch programmed? |
 | [MCU and its network link](#mcu-and-its-network-link) | Which MCU runs the adapter and how does it reach the network? |
 | [Datasheets](#datasheets) | Where are the vendor documents? |
@@ -49,11 +49,12 @@ The documents are grouped by the question they answer. Each group is listed in r
 | [Switch IC dev boards](research/switch-cpu-dev-boards.md) | Hardware to buy that carries an RTL8367S or a YT9215S |
 | [Motorcomm debug pins](research/motorcomm-debug-pins.md) | Debug pins of the YT9215 variants with their routes on the LX-IS601F board |
 
-### LX-IS601F switch board
+### Switch boards
 
 | Document | Covers |
 | --- | --- |
-| [LX-IS601F debug pins](research/lx-is601f-board/README.md) | Annotated photos of where the debug pins of the YT9215SCH come out |
+| [Switch boards: strapping and major components](research/switch-board-strapping.md) | Strap settings with the major components of both boards |
+| [LX-IS601F V2.0 switch board](research/lx-is601f-board/README.md) | Annotated photos of the debug pins and the strap resistors |
 | [LX-IS601F schematic](research/lx-is601f-board/schematic/README.md) | Reverse-engineered KiCad schematic of the board |
 | [LX-IS601F photo catalogue](research/lx-is601f-board/photos/README.md) | 34 photos of two LX-IS601F boards |
 
@@ -78,7 +79,7 @@ The documents are grouped by the question they answer. Each group is listed in r
 
 | Document | Covers |
 | --- | --- |
-| [Switch IC documentation](datasheets/README.md) | Vendor documents of the switch ICs |
+| [Datasheets](datasheets/README.md) | Vendor documents of the switch ICs and of the parts on the two switch boards |
 
 ## Block diagrams
 
@@ -97,7 +98,7 @@ explains both.
 | [`research/`](https://github.com/mithro/budget-poe-adapter/tree/main/research) | Research notes |
 | [`research/lx-is601f-board/`](https://github.com/mithro/budget-poe-adapter/tree/main/research/lx-is601f-board) | Photos and schematic of the LX-IS601F switch board |
 | [`research/yt9215-registers/`](https://github.com/mithro/budget-poe-adapter/tree/main/research/yt9215-registers) | YT921x manual with register description and bindings |
-| [`datasheets/`](https://github.com/mithro/budget-poe-adapter/tree/main/datasheets) | Vendor documents of the switch ICs |
+| [`datasheets/`](https://github.com/mithro/budget-poe-adapter/tree/main/datasheets) | Vendor documents of the switch ICs and the board parts |
 
 [`conf.py`](https://github.com/mithro/budget-poe-adapter/blob/main/conf.py) is the Sphinx configuration of the documentation site and
 [`index.md`](https://github.com/mithro/budget-poe-adapter/blob/main/index.md) holds its navigation. The site shows this file as its
@@ -105,10 +106,10 @@ landing page, so links to folders here are full GitHub addresses.
 
 ## Related repositories
 
-* [YT9215S 5-port switch mirror](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0):
+* [The wu-kou board repository](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0):
   mirror of an open-hardware 5-port gigabit switch built around the Motorcomm YT9215S
   (EasyEDA source, schematic, PCB, Gerbers, BOM). It is the reference design for the
-  YT9215S notes here. [Switch IC documentation](datasheets/README.md) lists the datasheets
+  YT9215S notes here. [Datasheets](datasheets/README.md) lists the datasheets
   that are also attachments of that repository.
 
 ## Licence

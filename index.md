@@ -36,8 +36,9 @@ research/motorcomm-debug-pins
 
 ```{toctree}
 :hidden:
-:caption: LX-IS601F switch board
+:caption: Switch boards
 
+research/switch-board-strapping
 research/lx-is601f-board/README
 research/lx-is601f-board/schematic/README
 research/lx-is601f-board/photos/README

@@ -4,7 +4,7 @@ Scope: everything except the switch-vs-passthrough
 question (covered in [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md)). The
 baseline is the **no-switch variant in [`design/bom-rough.csv`](../design/bom-rough.csv) (≈ $4.11 @1k,
 ~65 placed parts)**. <a id="evidence-codes"></a>Evidence code **live**: the price or stock figure was read from the LCSC product page on 2026-10-21.
-Every other price is an estimate on the same basis as the BOM CSV.
+Every other price is an estimate on the same basis as [`bom-rough.csv`](../design/bom-rough.csv).
 
 ## 1. TL;DR
 
@@ -39,9 +39,9 @@ Every other price is an estimate on the same basis as the BOM CSV.
   ≈ $0.45. Using jacks without shield tabs or LEDs, or SMD jacks
   (unshielded right-angle SMD RJ45 **$0.26** [**live**](#evidence-codes)), saves **≈ $0.15–0.20**.
 
-**Net (same pricing basis as the BOM):** $4.11 → **≈ $3.45** with the
+**Net (same pricing basis as [`bom-rough.csv`](../design/bom-rough.csv)):** $4.11 → **≈ $3.45** with the
 low-risk items, and **≈ $3.00** if the MCU-driven buck works. Placed parts
-go from ~65 to ~45. The caveat in bullet 3 still applies: if the buck
+go from ~65 to ~45. The buck-controller caveat of [section 4.2](#42-buck-controller-the-biggest-open-cost) applies: if the buck
 controller really costs ~$1.40, both numbers rise by ~$0.80.
 
 ## 2. Itemised changes (no-switch variant)
@@ -138,7 +138,7 @@ surveys, LCSC):
 | TME7350 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
 | TMI7321 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
 
-All of these integrate the PD interface. The TMI7303B price is a live LCSC price.
+All of these integrate the PD interface. The TMI7303B price is [**live**](#evidence-codes).
 The isolated flyback parts are not useful here.
 
 The AS7829AE would make a one-chip "lite" SKU (Pi Zero or ESP32), but it is too
@@ -194,7 +194,7 @@ body diode blocks (VBUS < Vin). So:
 ## 5. Magnetics and connectors
 
 * **HR911130C PoE magjack: $1.64 @1k** [**live**](#evidence-codes) (BOM assumed $1.10). Option 1
-  in the design (two magjacks) would be ~$2.30–2.50 for magnetics alone.
+  in [`block-diagram-and-bom.md`](../design/block-diagram-and-bom.md) (two magjacks) would be ~$2.30–2.50 for magnetics alone.
   **Option 2 (4-channel splitter transformer + two plain jacks) remains the
   cheapest.** The transformer price ($0.50) is still unverified: Pulse H5007NL
   is ~$1+ at Western distributors, and Chinese equivalents (HanRun, Mentech,
@@ -241,7 +241,7 @@ body diode blocks (VBUS < Vin). So:
 | **Total** | **4.11** | **≈ 3.46** | **≈ 2.96** |
 | Placed parts | ~65 | ~45 | ~44 |
 
-Same ±30 % caveat as the BOM. The buck controller and splitter
+Same ±30 % caveat as [`block-diagram-and-bom.md`](../design/block-diagram-and-bom.md). The buck controller and splitter
 transformer prices dominate that uncertainty.
 
 ## 8. Next steps
@@ -276,3 +276,5 @@ transformer prices dominate that uncertainty.
 * SMD RJ45 FG-RJ-068T-1-6: https://www.lcsc.com/product-detail/C53457406.html
 * JLCPCB assembly pricing: https://api.jlcpcb.com/help/article/pcb-assembly-price and https://techoverflow.net/2024/04/09/jlcpcb-pcba-assembly-price-overview/
 * Car-charger PD+buck ICs (all ≤ 32–36 V input, so not usable from 57 V): https://www.chongdiantou.com/archives/348794.html
+
+[JLCPCB help pages]: https://api.jlcpcb.com/help/article/pcb-assembly-price

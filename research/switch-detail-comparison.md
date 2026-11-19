@@ -307,7 +307,7 @@ Learned MAC entries.
 
 **Jumbo frames**  
 Maximum frame forwarded at wire speed.  
-The YT9215S datasheet says 9 KB, which is the same 9,216 B.
+The [YT9215S datasheet](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf) says 9 KB, which is the same 9,216 B.
 
 **Priority queues**  
 Egress queues per port.
@@ -433,7 +433,8 @@ What to check before committing.
 
 - RTL8363NB-VB-CG datasheet Rev. 1.2 (2018), via LCSC.
 - RTL8367S-CG preliminary datasheet (Rev. Pre-0.941, 2016).
-- YT9215S draft datasheet via LCSC; YT9215SC DRAFT_07 (2023) for the second SerDes.
+- [YT9215S draft datasheet](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf).
+- [YT9215SC Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) for the second SerDes.
 - Linux yt921x DSA driver patches (MCU port 10).
 - RTLPlayground (community 8051 firmware for RTL8372 and RTL8373, SDCC).
 - CSDN design note on RK3568 + YT9215 (crystal, reset, AVDD filtering).

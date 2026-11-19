@@ -231,7 +231,7 @@ Longer entries for this table:
 
 * RMII always clocks at 50 MHz with 2-bit dibits. At 10 Mbit/s each dibit is
   held for 10 clocks, so PIO samples at 5 MHz effective. At 100 Mbit/s a dibit
-  changes every 20 ns and the PIO must sample every edge, with RX_DV/CRS_DV
+  changes every 20 ns and the PIO must sample every edge, with RX_DV and CRS_DV
   framing, at full speed into DMA. Nobody has published a working 100 Mbit/s
   PIO RX; the existing drivers force the PHY to 10M.
 * **FCS in hardware on RP2040:** the DMA sniffer has an IEEE 802.3 CRC-32
@@ -281,7 +281,7 @@ that would be a small port, using the standard BMCR and ANAR registers.
 ## 5. Recommendation
 
 1. **Cheap SKU:** don't bit-bang Ethernet. Use the host relay over USB
-   ([`gigabit-piggyback.md`](gigabit-piggyback.md) option A).
+   ([`gigabit-piggyback.md` option A](gigabit-piggyback.md#a-host-relay-over-usbc-recommended-for-the-cheap-sku)).
 2. **Switch SKU:** RTL8363NB + **RP2040 running a PIO RMII MAC into the
    switch's extension port** (MAC-to-MAC, no PHY, no magnetics, no analog
    front end). Start from the Mongoose pico-rmii driver; change the MDIO

@@ -1,6 +1,6 @@
 # Bit-banged (software) USB device for the PoE → USB-C adapter
 
-Scope: USB **device** mode only (host mode is out of
+Sources were read on 2026-10-22. Scope: USB **device** mode only (host mode is out of
 scope). Price cap is the RP2040 (~$0.79 @100); MCU prices come from
 [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md). The question: can a
 cheaper MCU with no USB hardware do the adapter's USB link in software, the way
@@ -41,17 +41,17 @@ Sean "xobs" Cross did with grainuum?
 
 From [`gigabit-piggyback.md` section A](gigabit-piggyback.md#a-host-relay-over-usbc-recommended-for-the-cheap-sku) ("host relay"):
 
-| Job | Size | Rate | Needs high throughput? | In scope |
+| Job | Size | Rate | Needs bulk throughput? | In scope |
 | --- | --- | --- | --- | --- |
 | Status reports | tens of bytes | ~1/s | No | Yes |
-| LLDP power negotiation | a few bytes | per change | No | Yes |
+| LLDP power request and grant | a few bytes | per change | No | Yes |
 | Firmware update from the host | 8–32 KB | rare | No (slow is fine) | Yes |
 | Act as a USB NIC for the host | Mbit/s | – | **Yes** | No |
 
 Notes on the rows of this table:
 
 - **Status reports**, note: [Status report fields](#status-report-fields)
-- **LLDP power negotiation**, note: Relayed by a host daemon (`lldpd`)
+- **LLDP power request and grant**, note: Relayed by a host daemon (`lldpd`)
 - **Act as a USB NIC for the host**, note: Host already has gigabit via the passthrough.
 
 <a id="status-report-fields"></a>
@@ -113,7 +113,7 @@ the same for hardware and software USB; see [`gigabit-piggyback.md` section A](g
 | V-USB | CDC-ACM transport | Out-of-spec LS bulk |
 | V-USB | Reference | [V-USB] |
 | rv003usb | Clock source | HSI |
-| rv003usb | HSI trim source | 1 ms keep-alive |
+| rv003usb | HSI trim source | 1 ms SOF keep-alive |
 | rv003usb | HID type 1 | Keyboard |
 | rv003usb | HID type 2 | Mouse |
 | rv003usb | HID type 3 | Gamepad |
@@ -213,12 +213,12 @@ Notes on the rows of this table:
 - **Interrupt `bInterval`**, effect: ~800 B/s per interrupt endpoint.
 - **Interrupt `bInterval`**, workaround: Control-transfer DFU is quicker.
 - **Interrupt `bInterval`**, note: Hosts often poll faster.
-- **Bulk endpoints**, effect: No USB network class on Linux.
+- **Bulk endpoints**, effect: No CDC-ECM, NCM or RNDIS on Linux.
 - **CDC-ACM**, effect: Out of spec.
 - **CDC-ACM**, workaround: HID.
-- **CDC-ACM**, alt workaround: Vendor control transfers.
+- **CDC-ACM**, alt workaround: WebUSB or vendor control transfers.
 - **CDC-ACM**, note: Works by luck on some hosts.
-- **LS edge rates from plain GPIOs**, effect: Some hosts are less tolerant.
+- **LS edge rates from plain GPIOs**, effect: Some hubs and hosts are less tolerant.
 - **LS edge rates from plain GPIOs**, workaround: 33–47 Ω series resistors.
 - **LS edge rates from plain GPIOs**, note: Long cables are less tolerant too.
 
@@ -289,3 +289,14 @@ against a CH570Q, which has hardware USB for the same money.
 * [PIO-USB] https://github.com/sekigon-gonnoc/Pico-PIO-USB (README resource use; [`src/pio_usb_device.c`](https://github.com/sekigon-gonnoc/Pico-PIO-USB/blob/main/src/pio_usb_device.c) computes the PIO divider as sys_clk / 48 MHz)
 * [EEVblog] STM32G030 thread on bit-banging USB FS vs LS: https://www.eevblog.com/forum/microcontrollers/stm32g030-g031/msg4983739/
 * CH32V003 USB dev board (rv003usb hardware reference): https://hackaday.io/project/192233
+
+[33C3]: https://infocondb.org/con/ccc/33c3/no-usb-no-problem-how-to-write-an-open-source-bit-bang-low-speed-usb-stack-running-on-a-sub-1-cortex-m0
+[grainuum]: https://github.com/xobs/grainuum
+[V-USB]: https://github.com/obdev/v-usb
+[rv003usb]: https://github.com/cnlohr/rv003usb
+[rv003usb test_ethernet]: https://github.com/cnlohr/rv003usb/tree/master/testing/test_ethernet
+[LS bulk patch]: https://git.linaro.org/plugins/gitiles/kernel/linux-linaro-stable.git/+/60aac1ec26b960fe77bf600457bc6c06f8aa7db4%5E%21
+[f030-vusb]: https://github.com/ads830e/stm32f030-vusb
+[py32 issue]: https://github.com/IOsetting/py32f0-template/issues/12
+[PIO-USB]: https://github.com/sekigon-gonnoc/Pico-PIO-USB
+[EEVblog]: https://www.eevblog.com/forum/microcontrollers/stm32g030-g031/msg4983739/

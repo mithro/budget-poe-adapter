@@ -5,13 +5,13 @@
 Rough first-pass design for a 5 V and 12 V output, with prices as of 2026-10-21. Built
 from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
 [`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
-[`bom-rough.csv`](bom-rough.csv). The diagram at the top of this page is [`block-diagram.svg`](block-diagram.svg);
+[`bom-rough.csv`](bom-rough.csv). The diagram is [`block-diagram.svg`](block-diagram.svg);
 [`block-diagram.png`](block-diagram.png) is the same figure as a bitmap.
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
-RTL8363NB price ($1.43 @1k) was checked live (in the switch research). Every
+RTL8363NB price ($1.43 @1k) was checked live (in [`research/ethernet-switch.md`](../research/ethernet-switch.md)). Every
 other price is an estimate from typical LCSC pricing for that part class and
-is tagged high, medium or low confidence in the CSV. Treat the totals as ±30 %.
+is tagged high, medium or low confidence in [`bom-rough.csv`](bom-rough.csv). Treat the totals as ±30 %.
 
 ## Summary
 
@@ -66,7 +66,7 @@ Notes on the rows of this table:
 - **Output caps**, why: 12 V rail.
 - **VBUS PMOS drive**, how: Gate zener with an NPN driver.
 - **VBUS PMOS drive**, why: Keeps Vgs within limits when switching 12 V.
-- **VBUS TVS**, how: 15 V part.
+- **VBUS TVS**, how: 15 V part, where a 5 V-only design uses a 6–7 V part.
 - **VBUS TVS**, why: Clamp level for a 12 V rail.
 - **CC-pin protection against a 12 V short**, how: Series NMOS clamps.
 - **CC-pin protection against a 12 V short**, why: VBUS on CC would kill 3.3 V MCU pins.
@@ -193,6 +193,6 @@ receptacle (~$0.50–0.80), test and programming, shipping, duties.
 ## Suggested next steps
 
 * Get real LCSC prices for 3–4 candidate magjacks and splitter transformers and
-  2–3 60 V buck controllers, then update the CSV.
+  2–3 60 V buck controllers, then update [`bom-rough.csv`](bom-rough.csv).
 * Bench-check CH32V307 supply current at low clock against the 4 mA mark-event
   limit, to decide whether the CH32V003 helper is needed.

@@ -2,7 +2,7 @@
 
 > **Which YT9215 variants have the CPU:** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC**, the YT9218N and the YT9218MB, while the selection guide and the YT9215S, YT9215SC and YT9215RB datasheets all list it (see [`switch-cpu-dev-boards.md`](switch-cpu-dev-boards.md) and [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md)). The core is probably on every die but supported only on the SC. Plan any CPU work on the YT9215SC.
 
-This note looks at the CPU inside each candidate switch chip and asks whether it could run our own firmware and replace, or shrink, the external MCU (RP2040-class or CH32X035) in the PoE → USB-C adapter. It builds on [`switch-detail-comparison.md`](switch-detail-comparison.md) and [`ethernet-switch-comparison.md`](ethernet-switch-comparison.md) and does not repeat the datasheet basics given there.
+Sources were read on 2026-10-22. This note looks at the CPU inside each candidate switch chip and asks whether it could run our own firmware and replace, or shrink, the external MCU (RP2040-class or CH32X035) in the PoE → USB-C adapter. It builds on [`switch-detail-comparison.md`](switch-detail-comparison.md) and [`ethernet-switch-comparison.md`](ethernet-switch-comparison.md) and does not repeat the datasheet basics given there.
 
 <a id="evidence-codes"></a>
 Each statement is marked with one of these evidence codes:
@@ -32,7 +32,7 @@ Each statement is marked with one of these evidence codes:
 - **Recommendation: keep the external MCU.**
   - None of these CPUs has USB or a USB-PD PHY.
   - Only the RTL8367S's 8051 is realistically programmable, and getting there means reverse-engineering effort measured in weeks.
-  - Strap the embedded CPUs off, as already planned.
+  - Strap the embedded CPUs off, as the design plans.
   - The RTL8367S 8051 is worth a later side project only if the MCU's job ever shrinks to LLDP and switch configuration, with USB-PD handled by a fixed-function controller.
 
 ## Summary table
@@ -90,8 +90,7 @@ Each statement is marked with one of these evidence codes:
 | Internal NIC registers | 0x1A00–0x1A5C | [**V**](#evidence-codes) | – |  | – |  |
 | Trap to CPU | – |  | Trap-to-internal-CPU bit | [**V**](#evidence-codes) | None |  |
 | Interrupt: link change | Yes | [**V**](#evidence-codes) | – |  | None |  |
-| Interrupt: LLDP | Yes | [**V**](#evidence-codes) | – |  | None |  |
-| Interrupt: EEE | Yes | [**V**](#evidence-codes) | – |  | None |  |
+| Interrupt: EEE-LLDP | Yes | [**V**](#evidence-codes) | – |  | None |  |
 | Interrupt: loop detect | Yes | [**V**](#evidence-codes) | – |  | None |  |
 | Interrupt: cable diag | Yes | [**V**](#evidence-codes) | – |  | None |  |
 | Interrupt: ACL | Yes | [**V**](#evidence-codes) | – |  | None |  |
@@ -112,7 +111,7 @@ Each statement is marked with one of these evidence codes:
 | Open API | GPL rtl8367c |  | – |  | GPL rtl8367c |  |
 | Register header in the API | Full |  | – |  | – |  |
 | Linux driver as a reference | – |  | yt921x |  | – |  |
-| Leaked docs | RTL8367RB register table |  | – |  | – |  |
+| Leaked docs | Register table for RTL8367RB and RTL8367MB |  | – |  | – |  |
 | Toolchain 1 | SDCC |  | GCC rv32imac | [**I**](#evidence-codes) | None |  |
 | Toolchain 1 source | As used by RTLPlayground |  | Upstream |  | – |  |
 | Toolchain 2 | Keil C51 |  | GCC rv32imac (Nuclei SDK) | [**I**](#evidence-codes) | None |  |
@@ -308,7 +307,7 @@ Evidence code for this section: [**V**](#evidence-codes).
 
 > The pin numbers in this section are for the **YT9215SC** only. The YT9215S (RTL8367S pinout), the YT9215SC (RTL8367SC pinout) and the YT9215RB (RTL8367RB-VB pinout) are pinned differently, and all three have the RISC-V MCU. [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md) gives the JTAG, flash and UART pins of each variant.
 
-From the [YT9215SC datasheet Draft 0.7](https://cdn.promelec.ru/upload/grab/datasheet.lcsc.com/lcsc/2512311716_Motorcomm-YT9215SC_C51037433.pdf); the YT9215S comes in the same LQFP-128 package with a different pinout ([YT9215S draft](https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf)).
+From the [YT9215SC datasheet Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf); the YT9215S comes in the same LQFP-128 package with a different pinout ([YT9215S Draft_05](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf)).
 
 - **SPI flash.**
   - One flash interface placed on either of two pin sets by `SPF_MUX_SEL`: SPF0 on pins [49](motorcomm-debug-pins.md#sch-pin-49), [50](motorcomm-debug-pins.md#sch-pin-50), [54](motorcomm-debug-pins.md#sch-pin-54) and [55](motorcomm-debug-pins.md#sch-pin-55), SPF1 on pins [78](motorcomm-debug-pins.md#sch-pin-78), [79](motorcomm-debug-pins.md#sch-pin-79), [81](motorcomm-debug-pins.md#sch-pin-81) and [83](motorcomm-debug-pins.md#sch-pin-83).
@@ -360,7 +359,7 @@ Evidence code for this section: [**I**](#evidence-codes).
 
 - **Datasheet.** [**V**](#evidence-codes) [RTL8363NB-VB datasheet Rev 1.2, 2018, szlcsc copy](https://atta.szlcsc.com/upload/public/pdf/source/20240423/989DCAA6328F19215A910B22766A32D7.pdf):
   - no mention of 8051, an embedded CPU, SPI flash, instruction memory or DIS_8051;
-  - straps are only DISAUTOLOAD, SMI_SEL_1/0, MID29, EN_PHY and EN_SWR;
+  - straps are only DISAUTOLOAD, SMI_SEL_1, SMI_SEL_0, MID29, EN_PHY and EN_SWR;
   - the only CPU text is "Slave I²C-like Interface … for external CPU";
   - the I²C *master* is described as "for EEPROM auto-download".
 - **Family.** [**V**](#evidence-codes) Linux `rtl8365mb` lists RTL8363NB and RTL8363NB-VB in the same vendor family as RTL8367S ([rtl8365mb_main.c](https://github.com/torvalds/linux/blob/master/drivers/net/dsa/realtek/rtl8365mb_main.c)), so the register map includes the DW8051 control bits.
@@ -375,7 +374,7 @@ Evidence code for this section: [**I**](#evidence-codes).
    - RTL8367S: DIS_8051 pulled up.
    - YT9215S: DIS_MCU pulled up.
 
-   Configure the switch from the MCU over SMI or MDIO, as planned. The RTL8363NB pick is unaffected because it has no CPU.
+   Configure the switch from the MCU over SMI or MDIO, as the design plans. The RTL8363NB pick is unaffected because it has no CPU.
 3. **Optional later experiment, RTL8367S only.**
    - If a cost-down ever lets USB-PD be handled by a fixed-function controller, the MCU's remaining jobs would be LLDP-MED power requests, switch configuration, LEDs, and I²C to the PD controller. The RTL8367S 8051 could take those over, saving the MCU and its MII or RMII link.
    - Cost: a 24C256 EEPROM (≤32 KB code) or a small SPI flash, plus significant reverse engineering of the NIC path and boot format.

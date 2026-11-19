@@ -103,9 +103,11 @@ Every USB-C power source must implement this, even without PD.
 
 | Role | Component | Type | Where | Value min | Value max |
 |---|---|---|---|---|---|
-| Source advertises current | **Rp** | Pull-up | Each CC pin | See the next table | See the next table |
+| Source advertises current | **Rp** | Pull-up | Each CC pin | [Rp table](#rp-values) | [Rp table](#rp-values) |
 | Sink | **Rd** | Pull-down | – | 5.1 kΩ | 5.1 kΩ |
 | Active cable (VCONN powered) | **Ra** | – | The unused CC | 0.8 kΩ | 1.2 kΩ |
+
+<a id="rp-values"></a>
 
 | Rp advertises | Rp to 5 V | Rp to 3.3 V | Or current source |
 |---|---|---|---|
@@ -217,7 +219,7 @@ Message types needed for a minimal source:
 1. VBUS on at vSafe5V. Start sending **Source_Capabilities** every **tTypeCSendSourceCap 100 to 200 ms** until a GoodCRC arrives (give up after nCapsCount = 50 and remain a Type-C-only source).
 2. Sink responds with **GoodCRC** (within tReceive ≈ 0.9 to 1.1 ms of your EOP, otherwise retry: nRetryCount = 2 in PD3, 3 in PD2). It then sends a **Request** within tSenderResponse (about 24 to 30 ms).
 3. Source → GoodCRC (**must start within tTransmit ≤ 195 µs of the Request's EOP**), then **Accept**.
-4. Transition the supply (5 V to 5 V is a no-op), wait tSrcTransition 25 to 35 ms, then send **PS_RDY**. An explicit contract is now in place. At 5 V at 5 A, also switch the Rp to 3 A and use it for collision avoidance (below).
+4. Transition the supply (5 V to 5 V is a no-op), wait tSrcTransition 25 to 35 ms, then send **PS_RDY**. An explicit contract is now in place. At 5 V at 5 A, also switch the Rp to 3 A and use it for collision avoidance.
 5. While in contract, answer Get_Source_Cap (resend caps), and answer anything unknown with **Not_Supported** (PD3) or Reject. Ignore unsupported VDMs in PD2. The Pi 5 and many sinks may send Discover Identity VDMs.
 6. Errors: no GoodCRC after retries leads to **Soft_Reset**, then **Hard Reset** (VBUS goes to vSafe0V then back on, tSrcRecover 0.66 to 1 s). Implement Hard Reset receive at minimum: drop the contract and restart.
 

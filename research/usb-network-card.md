@@ -1,6 +1,6 @@
 # The adapter as a USB network card (CDC-ECM, NCM or RNDIS)
 
-Presenting as a USB network card is a project goal, and
+Presenting as a USB network card is an interesting idea, and
 10 Mbit/s is fully acceptable. Price cap: RP2040,
 $0.786 @100. Prices are LCSC prices; unmarked ones come from
 [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md). <a id="evidence-codes"></a>Evidence code **live**: the price or stock figure was read from the LCSC product page on 2026-10-22. Related:
@@ -13,7 +13,7 @@ $0.786 @100. Prices are LCSC prices; unmarked ones come from
 "USB network card" can mean two different things, and both are cheap.
 
 1. **A virtual NIC whose far end is the adapter's own MCU** (no Ethernet
-   hardware). The host sees a `usb0`/"USB Ethernet" interface, gets an address
+   hardware). The host sees an interface named `usb0` or "USB Ethernet", gets an address
    from the MCU's DHCP server, and talks to the adapter over IP: a status web
    page, a REST or MQTT endpoint, firmware upload. **$0 extra** on the current
    CH32X035 (TinyUSB supports it; NCM or ECM class drivers are in TinyUSB).
@@ -179,7 +179,7 @@ than gigabit). CH397A draws 42–80 mA in 10BASE-T and ~70–75 mA at 100M
 (datasheet), about 0.25–0.4 W, which fits even a Class 3 budget.
 
 One wrinkle: with the CH397A on D+ and D−, the CH32X035 is not on USB, so
-the adapter's own telemetry needs either a USB 2.0 hub chip (e.g. WCH CH334/
+the adapter's own telemetry needs either a USB 2.0 hub chip (e.g. WCH CH334 or
 CH335, not priced here) or the CH397A alone (power info then only via PD).
 
 ## 5. Data roles: the part that needs testing
@@ -225,3 +225,10 @@ be devices and nothing enumerates, but power is unaffected.
 * [TinyUSB] [`src/tusb_option.h`](https://github.com/hathach/tinyusb/blob/0.18.0/src/tusb_option.h) (OPT_MCU_CH32X035) and [`src/portable/wch/dcd_ch32_usbfs.c`](https://github.com/hathach/tinyusb/blob/0.18.0/src/portable/wch/dcd_ch32_usbfs.c): https://github.com/hathach/tinyusb
 * [pico_eth_doc] RP2040 PIO 10BASE-T + lwIP: https://github.com/holysnippet/pico_eth_doc
 * CH335F hub (JLCPCB C5137013): https://jlcpcb.com/partdetail/CH335F/C5137013
+
+[C7465328]: https://www.lcsc.com/product-detail/C7465328.html
+[pico-usb-wifi]: https://www.cnx-software.com/2026/07/16/pico-usb-wifi-converts-the-raspberry-pi-pico-w-into-a-driverless-usb-wifi-adapter/
+[pmOS]: https://postmarketos.org/edge/2023/10/29/rndis-ncm
+[RNDIS removal]: https://forum.beagleboard.org/t/linux-dropping-support-for-rndis/35849
+[TinyUSB]: https://github.com/hathach/tinyusb/blob/0.18.0/src/tusb_option.h
+[pico_eth_doc]: https://github.com/holysnippet/pico_eth_doc

@@ -7,7 +7,7 @@ the passive variant in [`design/block-diagram-and-bom.md`](../design/block-diagr
 
 <a id="evidence-codes"></a>
 Prices are LCSC prices. Evidence code **live**: the price or stock figure was read from the LCSC product page on 2026-10-21.
-Unmarked prices are estimates carried over from the BOM CSV.
+Unmarked prices are estimates carried over from [`bom-rough.csv`](../design/bom-rough.csv).
 
 ## 1. TL;DR
 
@@ -117,7 +117,7 @@ What the host daemon does:
   cannot speak LLDP").
 * Firmware update of the adapter MCU from the host (DFU over the same link).
 
-Cost: the USB‑C receptacle in the CSV is already a 16‑pin part with D+ and D‑;
+Cost: the USB‑C receptacle in [`bom-rough.csv`](../design/bom-rough.csv) is already a 16‑pin part with D+ and D‑;
 add two traces, maybe a 2‑line ESD array (~$0.02). No extra silicon if the
 CH32V203 is kept. **Δ ≈ $0.00–0.05.**
 
@@ -129,14 +129,14 @@ Drawbacks:
   adapter cannot be managed if the host is down. For "is my Pi alive"
   monitoring this is a real limitation.
 * Pi 5 note: the official PSU signals 5 A via PD; the Pi's
-  `usb_max_current_enable` / `PSU_MAX_CURRENT` logic is unaffected by having
+  `usb_max_current_enable` and `PSU_MAX_CURRENT` logic is unaffected by having
   data on the same port, but test it.
 * A USB‑C *captive cable* variant must carry D+ and D‑ (most cheap power cables
   don't).
 
 ### B. Switch, trimmed
 
-Where the current $4.50 goes (from the design doc): switch + crystal +
+Where the current $4.50 goes (from [`block-diagram-and-bom.md`](../design/block-diagram-and-bom.md)): switch + crystal +
 passives $1.62, bigger MCU +$0.95, second magjack +$1.05, 4‑layer board
 +$0.25, more assembly +$0.50, 3.3 V buck instead of LDO +$0.11.
 
@@ -281,3 +281,8 @@ The reasoning behind each row:
 * RP2040 at LCSC (C2040), $0.73 @1k, 41,863 in stock: https://lcsc.com/product-detail/C2040.html
 * YT8531C‑CA at LCSC (C22472312), $0.79 @1k, 7,563 in stock: https://www.lcsc.com/product-detail/C22472312.html
 * Related project research: [`ethernet-switch.md`](ethernet-switch.md), [`poe.md`](poe.md), [`../design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md)
+
+[Pi5 gadget]: https://blog.hardill.me.uk/2023/12/23/pi5-usb-c-gadget/
+[ADI]: https://wiki.analog.com/resources/eval/user-guides/adin1300-and-adin1200/cap-coupling
+[YT9215S]: https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf
+[LAN Tap]: https://www.elektor.com/products/great-scott-gadgets-throwing-star-lan-tap-pro

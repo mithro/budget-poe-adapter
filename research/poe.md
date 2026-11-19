@@ -2,7 +2,7 @@
 
 Research notes for the open source PoE → USB-C adapter. Scope: the PoE
 standards, how a Powered Device (PD) negotiates power, and the electrical
-requirements for doing that negotiation with a budget MCU (WCH CH32V0xx /
+requirements for doing that negotiation with a budget MCU (WCH CH32V0xx,
 CH32V2xx, RP2040 and RP2350) plus a handful of discrete parts, non-isolated,
 with a 1000BASE-T data path passed through to the Raspberry Pi.
 
@@ -94,7 +94,7 @@ converter for **~36–57 V input** (and 60 V absolute with a TVS).
 ### Non-IEEE variants worth tolerating
 
 * **Passive PoE** (Ubiquiti, MikroTik, many cheap injectors): 24 V or 48 V,
-  sometimes 12–56 V, applied permanently on pairs 4-5(+)/7-8(−), no detection.
+  sometimes 12–56 V, applied permanently on pairs 4-5 (positive) and 7-8 (negative), no detection.
   An MCU-based PD can recognise "voltage already present above 30 V without a
   detection and classification sequence" and simply run. Worth supporting: it is
   free in firmware.
@@ -106,8 +106,8 @@ converter for **~36–57 V input** (and 60 V absolute with a TVS).
 
 ## 3. Wiring: Mode A, Mode B, polarity, and 1000BASE-T
 
-* **Mode A** ("endspan", alternative A"): power on pairs 1-2 and 3-6.
-* **Mode B** ("midspan", alternative B"): power on pairs 4-5 and 7-8.
+* **Mode A** ("endspan", "alternative A"): power on pairs 1-2 and 3-6.
+* **Mode B** ("midspan", "alternative B"): power on pairs 4-5 and 7-8.
 * **4-pair (bt)**: both at once, each pairset from its own PSE channel.
 * Polarity is not fixed in Mode A (MDI or MDI-X), so a PD **must accept either
   polarity on either pairset**. Standard solution: one full-wave bridge per
@@ -341,12 +341,12 @@ research thread.
 | Quantity | Range min | Range max | Needed resolution | Rate |
 | --- | --- | --- | --- | --- |
 | Port voltage (after bridge) | 0 V | 60 V | ~0.1 V | ≥ 1 kHz |
-| Classification current | 0 mA | 50 mA | ≤ 0.5 mA | ≥ 1 kHz |
+| Class and mark current | 0 mA | 50 mA | ≤ 0.5 mA | ≥ 1 kHz |
 | Load current (optional) | 0 A | 2 A | ~10 mA | ~1 kHz |
 
 Notes on the rows of this table:
 
-- **Port voltage (after bridge)**, why: To place the voltage windows below.
+- **Port voltage (after bridge)**, why: To place the voltage windows of [section 6.1](#61-measurement).
 - **Classification current**, why: The 36–44 mA window is ±10 %.
 
 | Voltage window edge to resolve |
@@ -426,14 +426,14 @@ it could have been given. Fine for an af- and at-only product; loses bt.
 | Signature | Optional disconnect | MOSFET |
 | Signature | Disconnect when | After power-on |
 | Signature | Disconnect saving | ~2 mW |
-| Classification sink | Transistor option 1 | NPN |
-| Classification sink | Transistor option 2 | NMOS |
-| Classification sink | Sense resistor | Yes |
-| Classification sink | Reference | MCU PWM-RC |
-| Classification sink | Current range | 0–45 mA |
-| Classification sink | Duration | ≤ 105 ms |
-| Classification sink | Dissipation during class | ~1 W |
-| Classification sink | Worst case | 20 V × 44 mA |
+| Class and mark sink | Transistor option 1 | NPN |
+| Class and mark sink | Transistor option 2 | NMOS |
+| Class and mark sink | Sense resistor | Yes |
+| Class and mark sink | Reference | MCU PWM-RC |
+| Class and mark sink | Current range | 0–45 mA |
+| Class and mark sink | Duration | ≤ 105 ms |
+| Class and mark sink | Dissipation during class | ~1 W |
+| Class and mark sink | Worst case | 20 V × 44 mA |
 | MCU bootstrap supply | Pass element option 1 | Depletion NMOS |
 | MCU bootstrap supply | Pass element option 2 | Zener |
 | MCU bootstrap supply | Pass element option 3 | HV LDO |
@@ -455,7 +455,7 @@ it could have been given. Fine for an af- and at-only product; loses bt.
 
 Longer entries for this table:
 
-- **Signature, Why bt wants it**: The signature must look invalid in some states.
+- **Signature, why bt requires it**: The signature must look invalid in some states.
 
 That is roughly 15–25 jellybean parts. For comparison, dedicated PD controller
 ICs (TI TPS2375 and TPS2378, TPS23730 for bt; ADI and Silvertel PD modules; Silicon
@@ -479,7 +479,7 @@ CLASSIFY:
   V < 2.8 V for ≥15 ms: reset count (MCU may brown out; that is fine)
 POWER_ON (V rises past ~42 V):
   ramp hot-swap gate (inrush < 400 mA), wait ≥ 80 ms
-  granted = f(events, PD class)   ← table in [section 4.2](#42-classification-how-much-power-do-you-want)
+  granted = f(events, PD class)   ← table in section 4.2
   tell USB-PD side the budget; enable buck
 RUN:
   monitor Vport/current, enforce budget, maintain MPS if Pi is idle

@@ -24,7 +24,7 @@ Spreadsheet copy: the *Dev boards* tab of the [comparison sheet](https://docs.go
 - **YT9215: much thinner.**
   - Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU. [**V**](#evidence-codes)
   - The YT9215S draft datasheet on LCSC says "Integrated RISC-V microprocessor" and has a `STRAP_DIS_MCU` pin, so the core is probably on the die but not supported on the S. [**VI**](#evidence-codes) For CPU work, buy the **YT9215SC**.
-  - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII or 2500base-X) and the BDY-G98 / 彼度云 G98 RK3588 box (two YT9215S over RGMII). [**V**](#evidence-codes) Both are mostly sold in China.
+  - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII or 2500base-X) and the BDY-G98 (彼度云 G98) RK3588 box (two YT9215S over RGMII). [**V**](#evidence-codes) Both are mostly sold in China.
   - The practical dev board is to **build our own**: one LQFP-128 chip (YT9215S about US$1.92 at LCSC), plus the open-hardware 5-port YT9215S switch on OSHWHub as a reference layout. [**VI**](#evidence-codes)
 - **Recommendation:** buy two or three TP-Link TL-SG105 V6 and LS1005G V1 units now for RTL8367S 8051 experiments, and treat any YT9215 work as "spin our own breakout with a YT9215SC" if it is ever needed.
 
@@ -144,7 +144,7 @@ Indicative prices and where to buy:
 | TOTOLINK A8000RU | **eBay** | – | 50 | 80 | US$ | – |
 | Buffalo WSR-2533DHP2 | **eBay** | Japanese sellers | – | – | – | – |
 
-Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches for RTL8367S posted June 2026), plus OpenWrt's `rtl8367b`/`rtk-gsw` drivers. [**V**](#evidence-codes)
+Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches for RTL8367S posted June 2026), plus OpenWrt's `rtl8367b` and `rtk-gsw` drivers. [**V**](#evidence-codes)
 
 ### 2c. Open hardware RTL8367S boards
 
@@ -287,7 +287,7 @@ I found **no cheap unmanaged retail switch** confirmed to use a YT9215. Motorcom
 
 ### 3c. Open hardware and self-build
 
-- **OSHWHub "基于裕太微YT9215S的五口千兆交换机" v2.0** by pankanwen ([oshwhub.com](https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0)) is an open 5-port gigabit switch on the YT9215S. It can be ordered through JLCPCB. I could not read the page (robots block), so I don't know whether JTAG or UART are broken out. **[V: exists] /** [**I**](#evidence-codes)
+- **OSHWHub "基于裕太微YT9215S的五口千兆交换机" v2.0** by pankanwen ([oshwhub.com](https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0)) is an open 5-port gigabit switch on the YT9215S. It can be ordered through JLCPCB. I could not read the page (robots block), so I don't know whether JTAG or UART are broken out. The board's existence is [**V**](#evidence-codes); the rest is [**I**](#evidence-codes).
 - **Chip cost:** YT9215S about US$1.92 at LCSC (C5899183, 57 in stock). The YT9215SC is LCSC C51037433. [**V**](#evidence-codes)
 - **Our own breakout** (recommended if we ever pursue the RISC-V core): YT9215SC + SPI flash socket + both JTAG groups on a 2.54 mm header + UART0 + strap jumpers (`STRAP_DIS_MCU`, `STRAP_EN_SPIF`, `STRAP_SMI_SEL`) + one RJ45 + SGMII to an SFP cage. [**I**](#evidence-codes)
 

@@ -23,8 +23,8 @@ Each variant is a pin-for-pin drop-in for a different Realtek part, according to
 | Variant | Realtek part it matches | Lower crystal pin | Higher crystal pin | Pin tables |
 |---|---|---|---|---|
 | YT9215S | RTL8367S | 83 | 84 | [YT9215S](#yt9215s) |
-| YT9215SC | RTL8367SC | 87 | 88 | [YT9215SC and YT9215SCH](#yt9215sc-and-yt9215sch) |
-| YT9215SCH | RTL8367SC | 87 | 88 | [YT9215SC and YT9215SCH](#yt9215sc-and-yt9215sch) |
+| YT9215SC | RTL8367SC | [87](#sch-pin-87) | [88](#sch-pin-88) | [YT9215SC and YT9215SCH](#yt9215sc-and-yt9215sch) |
+| YT9215SCH | RTL8367SC | [87](#sch-pin-87) | [88](#sch-pin-88) | [YT9215SC and YT9215SCH](#yt9215sc-and-yt9215sch) |
 | YT9215RB | RTL8367RB-VB | 89 | 90 | [YT9215RB](#yt9215rb) |
 
 ### Every variant has the RISC-V MCU
@@ -86,7 +86,7 @@ There is one flash interface, on one of two pin groups. The `SPF_MUX_SEL` strap 
 | SO | Flash | DO | IO1 |
 
 - `EN_SPIF` on pin <a id="s-pin-74"></a>74 (GPIO37, also P3LED0) is the enable strap: pull it up to enable flash [**V**](#evidence-codes).
-- SPF0 takes over the extension-port RGMII pins. If the adapter's MCU link uses that port, flash has to go on SPF1 [**I**](#evidence-codes).
+- SPF0 takes over the extension-port RGMII and MII pins. If the adapter's MCU link uses that port, flash has to go on SPF1 [**I**](#evidence-codes).
 - On SPF1, CS# is the `DISAUTOLOAD` strap pin. The usual CS# pull-up therefore latches DISAUTOLOAD=1, which the [YT9215SCH boot table](#boot-table) calls "no action", so nothing would load [**I**](#evidence-codes). This needs a bench test, or a pull-down on CS# during reset. The S datasheet has no boot-mode table, so this conclusion borrows the SCH table.
 
 ### JTAG on the YT9215S
@@ -318,7 +318,7 @@ Two bought 5-port switch boards with the silkscreen `LX-IS601F V2.0` were photog
 
 ### The switch IC is a YT9215SCH
 
-U4 on both boards is a YT9215SCH, not a YT9215S, so the [YT9215SC and YT9215SCH pin table](#yt9215sc-and-yt9215sch) applies and the [YT9215S tables](#yt9215s) do not. The part number is read from the top marking of U4 in one photo of each board [**V**](#evidence-codes).
+[U4](#lx-u4) on both boards is a YT9215SCH, not a YT9215S, so the [YT9215SC and YT9215SCH pin table](#yt9215sc-and-yt9215sch) applies and the [YT9215S tables](#yt9215s) do not. The part number is read from the top marking of U4 in one photo of each board [**V**](#evidence-codes).
 
 | Board | Marking line 1 | Marking line 2 | Marking line 3 | Marking line 4 | Marking line 5 | Photo |
 |---|---|---|---|---|---|---|

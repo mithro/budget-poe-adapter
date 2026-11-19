@@ -16,8 +16,9 @@ Confidence codes (also the wire style):
 Run:  python3 gen_schematic.py
 Writes lx-is601f.kicad_sch and its child sheets, then uses kicad-cli and pdftoppm
 to check the netlist KiCad computes against the model, write lx-is601f-nets.csv,
-lx-is601f-schematic.pdf and renders/*.png, and check that each render keeps a
-clear 10 mm margin. Exits non-zero when a check fails. Set KICAD7_SYMBOL_DIR if the KiCad
+lx-is601f-schematic.pdf, the full-sheet renders/N-name.png and the detail pieces
+renders/N-name-detail-NN.png, list the pieces in README.md, and check that each sheet keeps a clear 10 mm margin
+and that no detail piece is cut through a symbol or text. Needs Pillow and numpy. Exits non-zero when a check fails. Set KICAD7_SYMBOL_DIR if the KiCad
 symbol libraries are not in /usr/share/kicad/symbols.
 """
 import csv, os, subprocess, sys, collections, tempfile
@@ -169,6 +170,8 @@ upl = sheet('uplink_sfp.kicad_sch', 'Port 5 uplink and SFP', 'A3', '5')
 poe = sheet('poe_module.kicad_sch', 'PoE PSE module (daughterboard)', 'A3', '6')
 leds = sheet('leds.kicad_sch', 'Port LEDs', 'A3', '7')
 ALL = [root, power, switch, eth, upl, poe, leds]
+root.loose_titles = ['Title', 'Block diagram', 'Wire styles', 'How to read the schematic', 'Sources']
+eth.loose_titles = ['PoE bus to the PoE module sheet and notes']
 
 LEGEND = ('Wire style = confidence of each connection\n'
           'green solid      C  confirmed (traced on both sides, or measured)\n'
@@ -217,8 +220,8 @@ for i, (r, v, lib) in enumerate([('C1', '1206', 'Device:C'), ('C2', '1206', 'Dev
     c = two(s, lib, r, v, x, m(53), False)
     s.wire([(x, YL), c.p('1')], 'I'); s.mark(c, '1', '+48V', 'I')
     gnd(s, c.p('2'), 'I', drop=m(62) - c.p('2')[1]); s.mark(c, '2', 'GND', 'I')
-s.wire([l2.p('2'), (m(175), YL)], 'I'); s.mark(l2, '2', '+48V', 'I')
-s.power('+48V', m(175), YL); s.power('PWR_FLAG', m(175), YL, lib_name='PWR_FLAG', rot=180)
+s.wire([l2.p('2'), (m(165), YL)], 'I'); s.mark(l2, '2', '+48V', 'I')
+s.power('+48V', m(165), YL); s.power('PWR_FLAG', m(165), YL, lib_name='PWR_FLAG', rot=180)
 d1 = two(s, 'Device:D_Schottky', 'D1', 'SS510', m(40), m(80), True); s.stub(d1, '1', 'TBD_D1_K', 'U'); s.stub(d1, '2', 'TBD_D1_A', 'U')
 d5 = two(s, 'Device:D_Schottky', 'D5', 'SS510', m(80), m(80), True); s.stub(d5, '1', 'TBD_D5_K', 'U'); s.stub(d5, '2', 'TBD_D5_A', 'U')
 s.text('D1 and D5 sit next to the input; their nets are not traced.', m(15), m(88), size=1.27, italic=True)
@@ -333,7 +336,7 @@ for n in ('46', '47', '90'):
     s.nc(uC.p(n)); s.mark(uC, n, '(no trace seen)', 'V')
 for n in ('93', '44', '48', '51', '52', '53', '56', '57'):
     s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
-s.text('X on pins 46, 47, 90 and 79: no trace leaves\nthe pad in the photos.', m(120), m(195), size=1.27, italic=True)
+s.text('X on pins 46, 47, 90 and 79: no trace leaves\nthe pad in the photos.', m(143), m(195), size=1.27, italic=True)
 LEDMAP = {'85': 'LED_P0', '80': 'LED_P1', '77': 'LED_P2', '75': 'LED_P3', '71': 'LED_P4', '67': 'LED_P9'}
 for n in ('85', '84', '83', '80', '81', '79', '77', '78', '76', '75', '73', '74', '71', '72', '70', '67'):
     if n in LEDMAP:
@@ -414,17 +417,17 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=185, h=10
         q = t.p(pin); s.wire([q, (xt, q[1])], 'U'); s.mark(t, pin, 'P%d_TCT' % p, 'U')
     s.wire([(xt, t.p('1')[1]), (xt, t.p('10')[1] + m(5.08))], 'U')
     s.label('P%d_TCT' % p, (xt, t.p('10')[1] + m(5.08)), (0, 1))
-    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(157.48), y0 + m(45), mirror='y',
-                ref_at=(x0 + m(152.4), y0 + m(25.4)), val_at=(x0 + m(152.4), y0 + m(27.94)), center=set())
+    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(142.24), y0 + m(45), mirror='y',
+                ref_at=(x0 + m(137.16), y0 + m(25.4)), val_at=(x0 + m(137.16), y0 + m(27.94)), center=set())
     for tp, jp in [('23', '1'), ('22', '2'), ('20', '3'), ('19', '6'), ('17', '4'), ('16', '5'), ('14', '7'), ('13', '8')]:
         s.stub(t, tp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
-        s.stub(j, jp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
+        s.stub(j, jp, 'P%d_L%s' % (p, jp), 'V', length=m(7.62))
     sh = j.p('SH'); s.wire([sh, (sh[0], sh[1] + G)], 'U'); s.power('Earth_Protective', sh[0], sh[1] + G, lib_name='Earth_Protective')
     s.mark(j, 'SH', 'Earth_Protective', 'U')
     for pin, net in (('24', 'POE%d' % poe_base), ('21', 'POE%d' % (poe_base + 1)), ('18', 'P%d_CT45' % p), ('15', 'P%d_CT78' % p)):
         s.stub(t, pin, net, 'U', length=m(10.16))
     for k, ed in enumerate(eds):
-        ex, ey = x0 + m(45 + 75 * k), y0 + m(82.55)
+        ex, ey = x0 + m(45 + 66.04 * k), y0 + m(82.55)
         e = s.place('Power_Protection:SRV05-4', ed, '"05U"', ex, ey, ref_at=(ex + m(5.08), ey - m(15.24)), val_at=(ex + m(5.08), ey - m(12.7)), center=set())
         for pin, mi in zip(('1', '3', '4', '6'), ([0, 1, 2, 3] if k == 0 else [4, 5, 6, 7])):
             s.stub(e, pin, 'P%d_MDI%d' % (p, mi), 'I', length=m(5.08))
@@ -453,7 +456,7 @@ s.textbox('Notes: PoE assumed on the centre taps of pairs 1-2 and 3-6 (odd and e
           'The centre taps of pairs 4-5 and 7-8 (Pn_CT45 and Pn_CT78) are assumed to go to Bob-Smith terminations on the bottom. '
           'Bottom parts under J1 with no net assigned: 14x SMB "CP06C" (D6, D8-D19, D21), 1206 caps C16, C38, C55, C56, C60-C62, C65, C71, C75, C98, ..., '
           '0603 resistors R15, R32, R67, R71-R76, R82-R84. J1 is one 1x4 RJ45 block, drawn as J101-J104. G2401PR pinout assumed. '
-          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(12.7), m(241.3), m(165), size=1.1)
+          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(12.7), m(241.3), m(150), size=1.1)
 
 # ---------------------------------------------------------------- UPLINK + SFP
 s = upl
@@ -483,7 +486,7 @@ s.mark(sfp, 'CAGE', 'Earth_Protective', 'U')
 c = sfp.p('CAGE'); ye = c[1] + m(7.62); xe = c[0] - m(7.62)
 s.wire([c, (c[0], ye), (xe, ye)], 'U'); s.power('Earth_Protective', xe, ye, lib_name='Earth_Protective')
 s.textbox('U12 is a 20-pin SFP edge connector; one board has the cage fitted.\nAC-coupling caps, I2C and status pins are not traced.', m(225), m(120), m(100))
-s.textbox('The uplink has no PoE: POE9 and POE10 are placeholders for the centre taps of its pairs 1-2 and 3-6 (not traced).', m(12.7), m(124), m(195))
+s.textbox('The uplink has no PoE: POE9 and POE10 are placeholders for the centre taps of its pairs 1-2 and 3-6 (not traced).', m(12.7), m(124), m(150))
 
 # ---------------------------------------------------------------- POE MODULE
 s = poe
@@ -555,31 +558,31 @@ s.stub(r68, '1', 'TBD_R68_1', 'U', length=m(5.08)); s.stub(r68, '2', 'TBD_R68_2'
 
 # ---------------------------------------------------------------- ROOT
 s = root
-s.text('LX-IS601F V2.0 switch board: reverse-engineered schematic', m(15), m(15), size=3.5, bold=True)
-s.text('Two boards photographed 2026-11-17. YT9215SCH 5-port GbE switch + SFP, with a 4-port PoE PSE plug-in module.', m(15), m(22), size=1.8)
-pp = s.subsheet(power, m(20), m(45), m(55), m(20), [])
-sw = s.subsheet(switch, m(105), m(45), m(55), m(55),
+s.text('LX-IS601F V2.0 switch board: reverse-engineered schematic', m(15), m(15), size=2.8, bold=True)
+s.text('Two boards photographed 2026-11-17.\nYT9215SCH 5-port GbE switch + SFP, with a 4-port PoE PSE plug-in module.', m(15), m(22), size=1.8)
+pp = s.subsheet(power, m(20), m(115), m(45), m(20), [])
+sw = s.subsheet(switch, m(20), m(45), m(45), m(55),
                 [('P0_MDI[0..7]', 'R', 'bidirectional'), ('P1_MDI[0..7]', 'R', 'bidirectional'), ('P2_MDI[0..7]', 'R', 'bidirectional'),
                  ('P3_MDI[0..7]', 'R', 'bidirectional'), ('P4_MDI[0..7]', 'R', 'bidirectional'), ('SDS0_TXP', 'R', 'output'),
                  ('SDS0_TXN', 'R', 'output'), ('SDS0_RXP', 'R', 'input'), ('SDS0_RXN', 'R', 'input'),
                  ('LED_P0', 'R', 'output'), ('LED_P1', 'R', 'output'), ('LED_P2', 'R', 'output'), ('LED_P3', 'R', 'output'),
                  ('LED_P4', 'R', 'output'), ('LED_P9', 'R', 'output')])
-ep = s.subsheet(eth, m(240), m(45), m(60), m(18),
+ep = s.subsheet(eth, m(122), m(45), m(50), m(18),
                 [('P0_MDI[0..7]', 'L', 'bidirectional'), ('P1_MDI[0..7]', 'L', 'bidirectional'), ('P2_MDI[0..7]', 'L', 'bidirectional'),
                  ('P3_MDI[0..7]', 'L', 'bidirectional'), ('POE[1..8]', 'R', 'bidirectional')])
-up = s.subsheet(upl, m(240), m(75), m(60), m(18),
+up = s.subsheet(upl, m(122), m(75), m(50), m(18),
                 [('P4_MDI[0..7]', 'L', 'bidirectional'), ('SDS0_TXP', 'L', 'input'), ('SDS0_TXN', 'L', 'input'),
                  ('SDS0_RXP', 'L', 'output'), ('SDS0_RXN', 'L', 'output')])
-ld = s.subsheet(leds, m(240), m(105), m(60), m(20),
+ld = s.subsheet(leds, m(122), m(105), m(50), m(20),
                 [('LED_P0', 'L', 'input'), ('LED_P1', 'L', 'input'), ('LED_P2', 'L', 'input'), ('LED_P3', 'L', 'input'),
                  ('LED_P4', 'L', 'input'), ('LED_P9', 'L', 'input')])
-pm = s.subsheet(poe, m(317.5), m(45), m(60), m(12), [('POE[1..8]', 'L', 'bidirectional')])
-for (x, y, t) in [(m(22), m(50), 'J2 input, protection,\nSCT2622 buck to +3V3'),
-                  (m(108), m(90), 'YT9215SCH (4 units),\n25 MHz crystal, EEPROM U10,\nempty flash footprint U6'),
-                  (m(255), m(56), 'DXFRM2-5, J1, ED1-ED7, ED10'),
-                  (m(255), m(87), 'DXFRM6, J3, ED8-ED9, SFP U12'),
-                  (m(255), m(118), '12 LEDs, LED6 footprint'),
-                  (m(332.74), m(52), 'PIN1 header, PSE module')]:
+pm = s.subsheet(poe, m(122), m(137), m(50), m(12), [('POE[1..8]', 'R', 'bidirectional')])
+for (x, y, t) in [(m(22), m(120), 'J2 input, protection,\nSCT2622 buck to +3V3'),
+                  (m(22), m(88), 'YT9215SCH (4 units),\n25 MHz crystal,\nEEPROM U10,\nempty flash footprint U6'),
+                  (m(137), m(56), 'DXFRM2-5, J1, ED1-ED7, ED10'),
+                  (m(137), m(87), 'DXFRM6, J3, ED8-ED9, SFP U12'),
+                  (m(137), m(118), '12 LEDs, LED6 footprint'),
+                  (m(124), m(144), 'PIN1 header, PSE module')]:
     s.text(t, x, y, size=1.27, italic=True, color=(90, 90, 90))
 
 
@@ -591,23 +594,23 @@ def rw(a, b, xm, kind):
 
 
 for k in range(4):
-    rw(sw['P%d_MDI[0..7]' % k], ep['P%d_MDI[0..7]' % k], m(200 + 5.08 * k), 'bus')
-rw(sw['P4_MDI[0..7]'], up['P4_MDI[0..7]'], m(233.68), 'bus')
+    rw(sw['P%d_MDI[0..7]' % k], ep['P%d_MDI[0..7]' % k], m(88.9 + 5.08 * k), 'bus')
+rw(sw['P4_MDI[0..7]'], up['P4_MDI[0..7]'], m(119.38), 'bus')
 for k, n in enumerate(('SDS0_TXP', 'SDS0_TXN', 'SDS0_RXP', 'SDS0_RXN')):
-    rw(sw[n], up[n], m(231.14 - 2.54 * k), 'wire')
+    rw(sw[n], up[n], m(116.84 - 2.54 * k), 'wire')
 for k, n in enumerate(['LED_P0', 'LED_P1', 'LED_P2', 'LED_P3', 'LED_P4', 'LED_P9']):
-    rw(sw[n], ld[n], m(180 + 2.54 * (5 - k)), 'wire')
+    rw(sw[n], ld[n], m(71.12 + 2.54 * (5 - k)), 'wire')
 a, b = ep['POE[1..8]'], pm['POE[1..8]']
-rw(a, b, m(309.88), 'bus')
-s.textbox(LEGEND, m(15), m(150), m(120), m(35), size=1.5)
+rw(a, b, m(177.8), 'bus')
+s.textbox(LEGEND, m(15), m(162), m(120), m(35), size=1.5)
 s.textbox('How to read this schematic\n'
           '- One sheet per function. Power nets (+48V, +3V3, +1V15, GND) are global power ports.\n'
           '- Net names starting TBD_ are placeholders for pins whose destination is not traced.\n'
           '- Values come from part markings (EIA-96 codes decoded); unmarked parts show the package only.\n'
           '- Pinouts of G2401PR, the "05U" ESD arrays, SCT2622 and the PoE module chip are assumed.\n'
           '- Generated by gen_schematic.py; edit that, not the .kicad_sch files.\n'
-          '- lx-is601f-nets.csv lists every pin with its net and confidence code.', m(145), m(150), m(130), m(35), size=1.5)
-s.text('Sources: photos in the project album; Motorcomm YT9215SCH datasheet V1.03; SCT2622 datasheet; KiCad 7 standard libraries.', m(15), m(195), size=1.4, italic=True)
+          '- lx-is601f-nets.csv lists every pin with its net and confidence code.', m(15), m(206), m(130), m(35), size=1.5)
+s.text('Sources: photos in the project album; Motorcomm YT9215SCH datasheet V1.03; SCT2622 datasheet; KiCad 7 standard libraries.', m(15), m(248), size=1.4, italic=True)
 
 
 # ======================================================================
@@ -697,18 +700,156 @@ def clear_margin(png, paper):
     return True
 
 
+# Detail images. A whole sheet scaled to the width of a documentation page leaves its
+# text a few pixels high, so every sheet is also cut into pieces that are embedded
+# in README.md. All pieces share one scale, DETAIL_SCALE, so 1.27 mm schematic text is
+# the same readable size in each of them, and no piece is wider than DETAIL_MAX mm.
+DETAIL_DPI = 300
+DETAIL_SCALE = 5.5        # pixels per mm in the saved piece
+DETAIL_MAX = 165.0        # widest piece, mm (908 px)
+DETAIL_PAD = 3.0          # clear space kept around the ink of a piece, mm
+
+
+def detail_regions(png, sh):
+    """Cut one rendered sheet into pieces. Returns [(title, PIL image)].
+
+    Every dashed frame gives one region, named by its title. Ink outside the frames
+    (notes, the block diagram of the root sheet) is grouped into regions by proximity.
+    A region wider than DETAIL_MAX is cut into parts at columns that cross nothing but
+    horizontal wires. The second value returned is False when no such column was found.
+    """
+    import numpy as np
+    from PIL import Image, ImageChops, ImageDraw
+    Image.MAX_IMAGE_PIXELS = None
+    im = Image.open(png).convert('RGB')
+    W, H = Sheet.PAPER[sh.paper]
+    k = im.size[0] / W
+    bg = im.getpixel((round(13 * k), round(13 * k)))
+    r, g, bl = ImageChops.difference(im, Image.new('RGB', im.size, bg)).split()
+    ink = ImageChops.lighter(ImageChops.lighter(r, g), bl).point(lambda v: 255 if v > 8 else 0)   # fills count as ink
+    d = ImageDraw.Draw(ink)
+    px = lambda *mm: tuple(round(v * k) for v in mm)
+    b = Sheet.BORDER + 0.6                                   # drop the page border and the title block
+    for box in ((0, 0, W, b), (0, H - b, W, H), (0, 0, b, H), (W - b, 0, W, H),
+                (W - Sheet.BORDER - Sheet.TITLE_BLOCK[0] - 2, H - Sheet.BORDER - Sheet.TITLE_BLOCK[1] - 2, W, H)):
+        d.rectangle(px(*box), fill=0)
+    dx, dy = Sheet.offset
+    regions = []
+    for x1, y1, x2, y2, title in sh.frames:                  # frames: interior only, without the dashed outline
+        box = (x1 + dx + 0.8, y1 + dy + 0.8, x2 + dx - 0.8, y2 + dy - 0.8)
+        regions.append((title, box, ink.crop(px(*box))))
+        d.rectangle(px(x1 + dx - 0.8, y1 + dy - 0.8, x2 + dx + 0.8, y2 + dy + 0.8), fill=0)
+    # what is left: group ink that lies within 6 mm of other ink (grid of 1 mm cells)
+    small = ink.resize((W, H), Image.BOX).point(lambda v: 255 if v else 0)
+    cells = small.load()
+    seen = set()
+    loose = []
+    for cy in range(H):
+        for cx in range(W):
+            if not cells[cx, cy] or (cx, cy) in seen:
+                continue
+            todo, x0, y0, x1, y1 = [(cx, cy)], cx, cy, cx, cy
+            seen.add((cx, cy))
+            while todo:
+                ax, ay = todo.pop()
+                x0, y0, x1, y1 = min(x0, ax), min(y0, ay), max(x1, ax), max(y1, ay)
+                for bx in range(max(ax - 6, 0), min(ax + 7, W)):
+                    for by in range(max(ay - 6, 0), min(ay + 7, H)):
+                        if cells[bx, by] and (bx, by) not in seen:
+                            seen.add((bx, by)); todo.append((bx, by))
+            loose.append((y0, x0, x1 + 1, y1 + 1))
+    for n, (y0, x0, x1, y1) in enumerate(sorted(loose)):
+        box = (x0 - 1, y0 - 1, x1 + 1, y1 + 1)
+        regions.append((sh.loose_titles[n] if n < len(sh.loose_titles) else 'Notes', box, ink.crop(px(*box))))
+    regions.sort(key=lambda r: (r[1][1] // 100, r[1][0]))           # reading order: rows of 100 mm, left to right
+    out = []
+    clean_cut = True
+    pad = round(DETAIL_PAD * k)
+    for title, box, mask in regions:
+        bb = mask.getbbox()
+        if not bb:
+            continue
+        ox, oy = px(box[0], box[1])
+        lim = px(*box)
+        x0, y0 = max(ox + bb[0] - pad, lim[0]), max(oy + bb[1] - pad, lim[1])
+        x1, y1 = min(ox + bb[2] + pad, lim[2]), min(oy + bb[3] + pad, lim[3])
+        cuts = [x0]
+        if x1 - x0 > DETAIL_MAX * k:
+            # a column is clean when every run of ink down it is thinner than 0.5 mm: horizontal wires only
+            reg = np.asarray(mask.crop((x0 - ox, y0 - oy, x1 - ox, y1 - oy))) > 0
+            t = round(0.5 * k)
+            runs = reg[:-t].copy()
+            for j in range(1, t + 1):
+                runs &= reg[j:reg.shape[0] - t + j]
+            cost = runs.sum(axis=0)
+            band = round(1.5 * k)                           # clear space needed on both sides of a cut
+            width = x1 - x0
+            while x1 - cuts[-1] > DETAIL_MAX * k:
+                a = cuts[-1] - x0
+                left = width - a
+                ideal = a + left / -(-left // (DETAIL_MAX * k))
+                lo, hi = a + round(0.3 * DETAIL_MAX * k), min(a + round(DETAIL_MAX * k), width - band - 1)
+                good = [c for c in range(lo, hi) if not cost[c - band:c + band + 1].any()]
+                if good:
+                    cuts.append(x0 + min(good, key=lambda c: abs(c - ideal)))
+                else:
+                    clean_cut = False
+                    cuts.append(x0 + min(range(lo, hi), key=lambda c: (cost[c], abs(c - ideal))))
+        cuts.append(x1)
+        parts = len(cuts) - 1
+        for i, (a, c) in enumerate(zip(cuts, cuts[1:]), 1):
+            rows = mask.crop((a - ox, y0 - oy, c - ox, y1 - oy)).getbbox()       # each part keeps only its own rows
+            ya, yb = max(y0 + rows[1] - pad, y0), min(y0 + rows[3] + pad, y1)
+            piece = im.crop((a, ya, c, yb))
+            piece = piece.resize((round((c - a) / k * DETAIL_SCALE), round((yb - ya) / k * DETAIL_SCALE)), Image.LANCZOS)
+            out.append((title + (' (part %d of %d, left to right)' % (i, parts) if parts > 1 else ''), piece))
+    return out, clean_cut
+
+
 def render(tmp):
+    import glob
     pdf = os.path.join(HERE, 'lx-is601f-schematic.pdf')
     subprocess.run(['kicad-cli', 'sch', 'export', 'pdf', '-o', pdf, os.path.join(HERE, root.fname)], check=True, capture_output=True)
     subprocess.run(['pdftoppm', '-r', str(DPI), '-png', pdf, os.path.join(tmp, 'p')], check=True)
+    subprocess.run(['pdftoppm', '-r', str(DETAIL_DPI), '-png', pdf, os.path.join(tmp, 'hi')], check=True)
+    for old in glob.glob(os.path.join(HERE, 'renders', '*-detail-*.png')):
+        os.remove(old)
     ok = True
+    listing = []
     for i, (name, sh) in enumerate(zip(RENDERS, ALL), 1):
         png = os.path.join(HERE, 'renders', name + '.png')
         os.replace(os.path.join(tmp, 'p-%d.png' % i), png)
         clear = clear_margin(png, sh.paper)
         ok = ok and clear
         print('render %-28s margin %s' % (name + '.png', 'clear' if clear else 'NOT CLEAR'))
+        pieces, clean_cut = detail_regions(os.path.join(tmp, 'hi-%d.png' % i), sh)
+        if not clean_cut:
+            ok = False
+            print('  A CUT CROSSES A SYMBOL OR TEXT: make that group narrower or leave a gap for the cut')
+        for n, (title, piece) in enumerate(pieces, 1):
+            fn = '%s-detail-%02d.png' % (name, n)
+            piece.save(os.path.join(HERE, 'renders', fn), optimize=True)
+            wide = piece.size[0] / DETAIL_SCALE
+            ok = ok and wide <= DETAIL_MAX + 0.5
+            listing.append((i, sh.title, name, fn, title))
+            print('  detail %-28s %4d x %4d px  %s%s' % (fn, piece.size[0], piece.size[1], title, '' if wide <= DETAIL_MAX + 0.5 else '  TOO WIDE'))
+    write_readme_sheets(listing)
     return ok
+
+
+def write_readme_sheets(listing):
+    """Rewrite the list of detail images in README.md, between its two marker comments."""
+    path = os.path.join(HERE, 'README.md')
+    text = open(path, encoding='utf-8').read()
+    begin, end = '<!-- sheets:begin -->', '<!-- sheets:end -->'
+    out = []
+    for i, sheet_title, name, fn, title in listing:
+        head = '### Sheet %d: %s' % (i, sheet_title)
+        if head not in out:
+            out += [head, '']
+        out += ['[![Sheet %d, %s](renders/%s)](renders/%s.png)' % (i, title, fn, name), '']
+    a, b = text.index(begin) + len(begin), text.index(end)
+    open(path, 'w', encoding='utf-8').write(text[:a] + '\n\n' + '\n'.join(out) + text[b:])
 
 
 try:

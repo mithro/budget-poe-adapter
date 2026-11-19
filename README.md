@@ -32,13 +32,18 @@ The research notes cover these topics:
 
 ### Design
 
-![Block diagram](design/block-diagram.svg)
+![Block diagram A, with a switch chip](design/block-diagram-with-switch.svg)
+
+![Block diagram B, without a switch chip](design/block-diagram-without-switch.svg)
 
 | File | Contents |
 | --- | --- |
 | [`block-diagram-and-bom.md`](design/block-diagram-and-bom.md) | Block diagram with rough BOM cost |
-| [`block-diagram.svg`](design/block-diagram.svg) | Figure as SVG |
-| [`block-diagram.png`](design/block-diagram.png) | Figure as PNG |
+| [`block-diagram-with-switch.svg`](design/block-diagram-with-switch.svg) | Figure A as SVG |
+| [`block-diagram-without-switch.svg`](design/block-diagram-without-switch.svg) | Figure B as SVG |
+| [`block-diagram-with-switch.png`](design/block-diagram-with-switch.png) | Figure A as PNG |
+| [`block-diagram-without-switch.png`](design/block-diagram-without-switch.png) | Figure B as PNG |
+| [`make_block_diagram.py`](design/make_block_diagram.py) | Script that draws the SVG figures |
 | [`bom-rough.csv`](design/bom-rough.csv) | BOM table |
 
 ### Research: power

@@ -260,6 +260,8 @@ class Sheet:
         self.pins_used = []   # (ref, pin, net, conf)
         self.sheets = []
         self.comments = {}
+        self.frames = []         # (x1, y1, x2, y2, title) of each dashed frame, as drawn
+        self.loose_titles = []   # titles for the groups of items outside the frames, in reading order
 
     # library -----------------------------------------------------------
     def use(self, lib_id, node=None):
@@ -413,6 +415,7 @@ class Sheet:
         self.items.append(['text', Q(s), ['at', snap(x), snap(y), 0], ['effects', f, ['justify', justify, 'top']], ['uuid', U()]])
 
     def frame(self, x1, y1, x2, y2, title=None, color=(110, 110, 110)):
+        self.frames.append((snap(x1), snap(y1), snap(x2), snap(y2), title or 'Frame'))
         self.items.append(['rectangle', ['start', snap(x1), snap(y1)], ['end', snap(x2), snap(y2)],
                            ['stroke', ['width', 0.254], ['type', 'dash'], ['color'] + list(color) + [1]],
                            ['fill', ['type', 'none']], ['uuid', U()]])

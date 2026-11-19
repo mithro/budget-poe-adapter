@@ -2,7 +2,10 @@
 """Build the web-size photos, thumbnails and annotated callouts for README.md.
 
 Usage: python3 make_photos.py SRC_DIR
+       python3 make_photos.py --derived
 SRC_DIR holds the album originals named 01.jpg .. 34.jpg (album order).
+With --derived only the callout images and the detail crops are rebuilt, from the
+copies in web/.
 Output is written next to this script. EXIF (including GPS) is stripped.
 Needs Pillow.
 """
@@ -112,6 +115,25 @@ CALLOUTS = {
 }
 
 
+# Detail crops: name -> (photo, crop box in percent of the web/ copy). A detail shows one
+# part at close range, for a document that discusses only that part.
+DETAILS = {'06-u4-marking': ('06', (27.4, 29.4, 78.0, 62.5)),
+           '07-u4-marking': ('07', (26.6, 46.3, 72.2, 75.6))}
+
+
+def derived():
+    """Build the callout images and the detail crops from the copies in web/."""
+    for key, (title, pts) in CALLOUTS.items():
+        im = Image.open(os.path.join(HERE, 'web', key + '.jpg'))
+        annotate(im, title, pts).save(os.path.join(HERE, 'annotated', key + '.jpg'), quality=88, optimize=True)
+    os.makedirs(os.path.join(HERE, 'detail'), exist_ok=True)
+    for name, (key, (x0, y0, x1, y1)) in DETAILS.items():
+        im = Image.open(os.path.join(HERE, 'web', key + '.jpg'))
+        w, h = im.size
+        im = im.crop((round(w * x0 / 100), round(h * y0 / 100), round(w * x1 / 100), round(h * y1 / 100)))
+        im.save(os.path.join(HERE, 'detail', name + '.jpg'), quality=90, optimize=True)
+
+
 def strip(im, deg=0):
     """Return an upright copy with no EXIF data, rotated `deg` counter-clockwise."""
     im = ImageOps.exif_transpose(im)
@@ -127,6 +149,7 @@ PAD = 56    # plain margin around an annotated photo, for badges
 
 
 def annotate(im, title, points, height=1000):
+    """Draw the callouts on a copy of `im` at most `height` high; title above, legend below."""
     photo = im.copy()
     photo.thumbnail((10000, height))
     w, h = photo.size
@@ -164,20 +187,25 @@ def annotate(im, title, points, height=1000):
         bx, by = P(badge)
         d.ellipse((bx - r, by - r, bx + r, by + r), fill=red, outline='white', width=3)
         d.text((bx, by), str(i), font=f if i < 10 else f2, fill='white', anchor='mm')
+    # title above the photo, legend below it: the image stays as narrow as the photo,
+    # so the text keeps its size when the image is scaled to the width of a page
     w, h = im.size
-    fl = ImageFont.truetype(FONT_R, 22)
-    pw = max(d.textlength(lab, font=fl) for _, lab, _ in points) + 110
-    pw = int(max(pw, d.textlength(title, font=ImageFont.truetype(FONT, 26)) + 50))
-    out = Image.new('RGB', (w + pw, h), (250, 250, 248))
-    out.paste(im, (0, 0))
+    ft, fl, fn = ImageFont.truetype(FONT, 34), ImageFont.truetype(FONT_R, 28), ImageFont.truetype(FONT, 22)
+    row, top = 50, 64
+    longest = int(max(d.textlength(lab, font=fl) for _, lab, _ in points)) + 50 + 2 * PAD
+    cols = 2 if longest <= w / 2 else 1
+    per = -(-len(points) // cols)
+    x0 = max(longest - w, 0) // 2            # a legend wider than the photo widens the image
+    w = max(w, longest)
+    out = Image.new('RGB', (w, top + h + per * row + 16), (250, 250, 248))
+    out.paste(im, (x0, top))
     d = ImageDraw.Draw(out)
-    d.text((w + 24, 24), title, font=ImageFont.truetype(FONT, 26), fill=(30, 30, 30))
-    y = 84
-    for i, (_, label, _) in enumerate(points, 1):
-        d.ellipse((w + 24, y, w + 56, y + 32), fill=red)
-        d.text((w + 40, y + 16), str(i), font=ImageFont.truetype(FONT, 18), fill='white', anchor='mm')
-        d.text((w + 70, y + 4), label, font=fl, fill=(30, 30, 30))
-        y += 48
+    d.text((PAD, 14), title, font=ft, fill=(30, 30, 30))
+    for i, (_, label, _) in enumerate(points):
+        x, y = PAD + (i // per) * (w // 2), top + h + 4 + (i % per) * row
+        d.ellipse((x, y, x + 36, y + 36), fill=red)
+        d.text((x + 18, y + 18), str(i + 1), font=fn, fill='white', anchor='mm')
+        d.text((x + 50, y + 2), label, font=fl, fill=(30, 30, 30))
     return out
 
 
@@ -191,10 +219,11 @@ def main(src):
         web.save(os.path.join(HERE, 'web', key + '.jpg'), quality=85, optimize=True)
         th = im.copy(); th.thumbnail((240, 240))
         th.save(os.path.join(HERE, 'thumbs', key + '.jpg'), quality=82, optimize=True)
-        if key in CALLOUTS:
-            title, pts = CALLOUTS[key]
-            annotate(im, title, pts).save(os.path.join(HERE, 'annotated', key + '.jpg'), quality=85, optimize=True)
+    derived()
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    if sys.argv[1] == '--derived':
+        derived()
+    else:
+        main(sys.argv[1])

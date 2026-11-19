@@ -53,8 +53,9 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | [`gen_schematic.py`](gen_schematic.py) | Board data model and sheet layout |
 | [`kisch.py`](kisch.py) | KiCad schematic file writer |
 | [`renders/`](renders/) | PNG of each sheet |
+| [`renders/`](renders/) | Detail PNGs of each sheet, named `N-name-detail-NN.png` |
 
-Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` or `(no trace seen)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF and the renders and checks that each render keeps a clear 10 mm margin. Edit the scripts, not the `.kicad_sch` files.
+Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` or `(no trace seen)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF, the render of each sheet and the [detail images](#sheets), and lists the detail images in this file. It checks that each sheet keeps a clear 10 mm margin and that no detail image is cut through a symbol or text. Edit the scripts, not the `.kicad_sch` files.
 
 Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. The mainboard connectors whose silkscreen name is not a reference are drawn as follows:
 
@@ -66,35 +67,80 @@ Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash wit
 
 ## Sheets
 
-Each image links to the full-size render.
+A whole sheet scaled to the width of this page leaves its text too small to read, so each sheet is shown as detail images, one per framed group. The images share one scale, 5.5 pixels per millimetre of sheet. A group wider than 165 mm is shown in parts, cut where only wires cross; the parts read left to right. Each image links to the render of its whole sheet, and [`lx-is601f-schematic.pdf`](lx-is601f-schematic.pdf) holds all seven sheets as vector drawings.
+
+<!-- sheets:begin -->
 
 ### Sheet 1: Root: block diagram
 
-[![Sheet 1: Root: block diagram](renders/1-root.png)](renders/1-root.png)
+[![Sheet 1, Title](renders/1-root-detail-01.png)](renders/1-root.png)
+
+[![Sheet 1, Block diagram](renders/1-root-detail-02.png)](renders/1-root.png)
+
+[![Sheet 1, Wire styles](renders/1-root-detail-03.png)](renders/1-root.png)
+
+[![Sheet 1, How to read the schematic](renders/1-root-detail-04.png)](renders/1-root.png)
+
+[![Sheet 1, Sources](renders/1-root-detail-05.png)](renders/1-root.png)
 
 ### Sheet 2: Power input and 3.3 V buck
 
-[![Sheet 2: Power input and 3.3 V buck](renders/2-power.png)](renders/2-power.png)
+[![Sheet 2, DC input and protection](renders/2-power-detail-01.png)](renders/2-power.png)
+
+[![Sheet 2, Notes](renders/2-power-detail-02.png)](renders/2-power.png)
+
+[![Sheet 2, Notes](renders/2-power-detail-03.png)](renders/2-power.png)
+
+[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 1 of 2, left to right)](renders/2-power-detail-04.png)](renders/2-power.png)
+
+[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 2 of 2, left to right)](renders/2-power-detail-05.png)](renders/2-power.png)
 
 ### Sheet 3: Switch IC YT9215SCH
 
-[![Sheet 3: Switch IC YT9215SCH](renders/3-switch.png)](renders/3-switch.png)
+[![Sheet 3, U4C: clock, reset, regulator, management, GPIO and LEDs (part 1 of 2, left to right)](renders/3-switch-detail-01.png)](renders/3-switch.png)
+
+[![Sheet 3, U4C: clock, reset, regulator, management, GPIO and LEDs (part 2 of 2, left to right)](renders/3-switch-detail-02.png)](renders/3-switch.png)
+
+[![Sheet 3, U4A: copper ports (MDI)](renders/3-switch-detail-03.png)](renders/3-switch.png)
+
+[![Sheet 3, U4B: SerDes](renders/3-switch-detail-04.png)](renders/3-switch.png)
+
+[![Sheet 3, U4D: supply pins](renders/3-switch-detail-05.png)](renders/3-switch.png)
 
 ### Sheet 4: Ports 1-4 with PoE
 
-[![Sheet 4: Ports 1-4 with PoE](renders/4-ethernet-poe.png)](renders/4-ethernet-poe.png)
+[![Sheet 4, Port 1: U4 P0 -> DXFRM4 -> J1 port 1](renders/4-ethernet-poe-detail-01.png)](renders/4-ethernet-poe.png)
+
+[![Sheet 4, Port 2: U4 P1 -> DXFRM3 -> J1 port 2](renders/4-ethernet-poe-detail-02.png)](renders/4-ethernet-poe.png)
+
+[![Sheet 4, Port 3: U4 P2 -> DXFRM2 -> J1 port 3](renders/4-ethernet-poe-detail-03.png)](renders/4-ethernet-poe.png)
+
+[![Sheet 4, Port 4: U4 P3 -> DXFRM5 -> J1 port 4](renders/4-ethernet-poe-detail-04.png)](renders/4-ethernet-poe.png)
+
+[![Sheet 4, PoE bus to the PoE module sheet and notes](renders/4-ethernet-poe-detail-05.png)](renders/4-ethernet-poe.png)
 
 ### Sheet 5: Port 5 uplink and SFP
 
-[![Sheet 5: Port 5 uplink and SFP](renders/5-uplink-sfp.png)](renders/5-uplink-sfp.png)
+[![Sheet 5, Port 5 (uplink): U4 P4 -> DXFRM6 -> J3](renders/5-uplink-sfp-detail-01.png)](renders/5-uplink-sfp.png)
+
+[![Sheet 5, SFP: U12](renders/5-uplink-sfp-detail-02.png)](renders/5-uplink-sfp.png)
+
+[![Sheet 5, Notes](renders/5-uplink-sfp-detail-03.png)](renders/5-uplink-sfp.png)
 
 ### Sheet 6: PoE PSE module (daughterboard)
 
-[![Sheet 6: PoE PSE module (daughterboard)](renders/6-poe-module.png)](renders/6-poe-module.png)
+[![Sheet 6, Mainboard header PIN1](renders/6-poe-module-detail-01.png)](renders/6-poe-module.png)
+
+[![Sheet 6, PoE PSE module (separate PCB) (part 1 of 2, left to right)](renders/6-poe-module-detail-02.png)](renders/6-poe-module.png)
+
+[![Sheet 6, PoE PSE module (separate PCB) (part 2 of 2, left to right)](renders/6-poe-module-detail-03.png)](renders/6-poe-module.png)
 
 ### Sheet 7: Port LEDs
 
-[![Sheet 7: Port LEDs](renders/7-leds.png)](renders/7-leds.png)
+[![Sheet 7, Port LED array (silk lines FX and POW, positions P1-P5 and one unlabelled)](renders/7-leds-detail-01.png)](renders/7-leds.png)
+
+[![Sheet 7, LED6 footprint (DNP), LED7, LED8](renders/7-leds-detail-02.png)](renders/7-leds.png)
+<!-- sheets:end -->
 
 ## Confidence codes
 

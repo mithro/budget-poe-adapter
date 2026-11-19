@@ -134,7 +134,7 @@ With Rp off and VBUS off, a sink sees an unpowered port and waits. This has four
 - Rp must be switchable as a whole. Every Rp resistor is fed from a GPIO output, or from a rail that comes on with the grant, and none from the fixed 3.3 V rail.
 - The VBUS load switch must stay off through reset. Its enable needs a pull-down, and whatever drives it waits for the grant.
 - The BMC driver must stay off through reset, which the [strap pins](#pins-used) of option C do not give for free.
-- The reset state of the GPIO pins decides whether all this holds before firmware runs. The datasheet gives the strap pulls and not the reset state of every GPIO [**U**](#evidence-codes).
+- The reset state of the GPIO pins decides whether all this holds before firmware runs. The datasheet gives the strap pulls and not the reset state of every GPIO [**U**](#evidence-codes). A pin with an internal pull-up is not fully off when it floats: it leaves a weak Rp.
 
 <a id="power-budget"></a>
 
@@ -166,11 +166,12 @@ The current available at 5 V is the granted power times the efficiency, less the
 
 ### Documented resources
 
-Every row is from the pin tables of the datasheet [**V**](#evidence-codes). The datasheet calls port 9 Extension GMAC2 and names its pins `RG2_` in RGMII mode and `M2_` in MII mode. Port 9 is the only port of the YT9215SCH with such pins; port 8 has a SerDes interface only.
+Every row is from the pin tables of the datasheet [**V**](#evidence-codes). The xMII pins belong to Extension GMAC2, which is port 9 ([part table](yt9215-registers/docs/reference/parts.rst)). The datasheet names these pins `RG2_` in RGMII mode and `M2_` in MII mode. Port 9 is the only port of the YT9215SCH with such pins; port 8 has a SerDes interface only.
 
 | Resource | Pin | Pin also used for |
 |---|---|---|
 | GPIO5 | 44 | Interrupt output |
+| GPIO5 | 44 | Port 9 MII carrier sense |
 | GPIO6 to GPIO17 | 46 to 57 | Port 9 |
 | GPIO31 | 67 | LEDs |
 | GPIO32 to GPIO43 | 70 to 81 | LEDs |
@@ -260,7 +261,7 @@ These look promising and do not work [**I**](#evidence-codes):
 
 ## No PD: resistor and attach comparator
 
-A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is the only signalling part. The 3.3 V comes from a GPIO or a switched rail, so that Rp is off until PoE power is granted ([start-up order](#start-up-order)). USB-C also requires the source to keep VBUS off until a sink is attached and to remove it on detach ([attach detection](usb-c-pd.md#43-source-state-machine-and-timing)). A comparator that watches CC does this by driving the enable of the VBUS load switch directly, because a plain input pin cannot read the attach level ([electrical limits](#electrical-limits-of-the-pins)). A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). This is the baseline every other option has to beat. It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted.
+A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is the only signalling part. The resistor, the comparator and the load switch are powered from rails that the PoE front end turns on only after classification, so the [start-up order](#start-up-order) holds without firmware. USB-C also requires the source to keep VBUS off until a sink is attached and to remove it on detach ([attach detection](usb-c-pd.md#43-source-state-machine-and-timing)). A comparator that watches CC does this by driving the enable of the VBUS load switch directly, because a plain input pin cannot read the attach level ([electrical limits](#electrical-limits-of-the-pins)). A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). This is the baseline every other option has to beat. It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted. The price is a fixed offer: the Rp value cannot follow the class that was granted, and a grant by LLDP is out of reach because LLDP needs firmware ([power budget](#power-budget)).
 
 <a id="option-a"></a>
 
@@ -398,7 +399,7 @@ The datasheet asks for an external 4.7 kΩ pull-up on each of pins 47, 48 and 50
 - **The buffer is enabled from power-on.** With pins 48 and 50 pulled high, the buffer drives CC to 1.15 V until firmware puts port 9 into its 10 Mbit/s mode, and Rp does not work during that time. The enable therefore has to be gated by a second signal that is low at reset, such as a GPIO with a pull-down through an AND gate. The [front end](#front-end) includes that gate.
 - **The clock loop joins two pins with opposite pulls.** Pin 51 has an internal pull-down and is a strap; pin 52 has an internal pull-up. An external strap resistor on pin 51 has to set the level. The REVMII mode needs no loop.
 
-Three more wiring rules apply [**I**](#evidence-codes):
+Four more rules apply [**I**](#evidence-codes):
 
 - Pins 54 to 56 are tied to their fixed levels through resistors, because they are also GPIO and flash pins and can be driven.
 - Port 9 must have flow control off, so that the MAC never sends a pause frame onto CC.
@@ -413,7 +414,7 @@ A variant takes the buffer enable from TXD3, pin 46, in place of TX_CTL [**I**](
 
 - TXD3 is 0 in every preamble nibble and 1 in the last nibble of the start-of-frame delimiter, so the buffer turns on 400 ns before the first PD bit, inside the 1 µs that PD allows.
 - The data bytes become `0xAA` for high and `0x88` for low, which hold TXD3 high through the message.
-- The tail has to keep TXD3 high and TXD1 low through the FCS. That is 16 conditions in place of 8, so the tail is longer than four bytes.
+- The tail has to keep TXD3 high and TXD1 low through the FCS. That is 16 conditions in place of 8, which uses all 16 free bits of a four-byte tail and leaves exactly one solution.
 - Pin 46 has an internal pull-down as a strap, so the buffer is off at reset and the AND gate goes away, provided the board strap for `SWITCH_ID_1` is low.
 - The level of TXD3 between frames is not documented [**U**](#evidence-codes).
 
@@ -423,7 +424,7 @@ A variant takes the buffer enable from TXD3, pin 46, in place of TX_CTL [**I**](
 
 ![Front end: buffer and resistor for transmit, protection, two comparators for receive and attach detection, switchable Rp and a load switch](yt9215-usb-pd/front-end.svg)
 
-The figure shows the option C wiring with a [captive cable](#captive-cable). Option B uses the same parts on GPIO pins and has no fixed receive wiring. The last three rows of the table apply to option C only.
+The figure shows the option C wiring with a [captive cable](#captive-cable). Option B uses the same parts on GPIO pins and has no fixed receive wiring. The AND gate and the last three rows of the table apply to option C only. Option B needs a pull-down on the GPIO that enables the buffer.
 
 | Part | Example | Quantity | Job |
 |---|---|---|---|
@@ -528,7 +529,7 @@ How to answer each:
 
 - <a id="q-waveform"></a>**Waveform on TXD1.** On a board with the port 9 pins exposed, an external host sets port 9 to RGMII at 10 Mbit/s over the management interface, as the [register guide](yt9215-registers/README.md) describes. A PC on a copper port sends a frame from [`mac_bmc_frame.py`](yt9215-usb-pd/mac_bmc_frame.py), the switch forwards it to port 9, and an oscilloscope on pin 48 shows the result. `mac_bmc_frame.py --hex` prints such a frame. Its destination address is an unknown unicast address, so the switch floods it to port 9.
 - <a id="q-pi"></a>**Pi 5.** Add the transmit half of the [front end](#front-end), send Source_Capabilities the same way, and look for the GoodCRC of the Pi on CC.
-- <a id="q-fcs"></a>**Bad FCS.** Feed a frame with a wrong FCS into port 9 and see whether the switch forwards it to another port or only raises the error counter. Looping the port back needs no equipment: TX_CTL to RX_CTL, TXD3 to RXD3, TXC to RXC, and RXD0 to RXD2 tied as in the [receive scheme](#option-c). A frame sent out of the port then returns as `0x5` and `0xD` nibbles with a wrong FCS and group addresses. A rising `RX_FCS_ERR` counter shows that the MAC received it; whether it is forwarded answers the FCS and the address question together.
+- <a id="q-fcs"></a>**Bad FCS.** Feed a frame with a wrong FCS into port 9 and see whether the switch forwards it to another port or only raises the error counter. Looping the port back needs no equipment: TX_CTL to RX_CTL, TXD3 to RXD3, TXC to RXC, and RXD0 to RXD2 tied as in the [receive scheme](#option-c). The transmit delay of the port is switched on, so that the looped data meets the set-up time. A frame sent out of the port then returns as `0x5` and `0xD` nibbles with a wrong FCS and group addresses. A rising `RX_FCS_ERR` counter shows that the MAC received it; whether it is forwarded answers the FCS and the address question together.
 - <a id="q-comparator"></a>**Comparator.** Bench test candidates against a real PD sink.
 - <a id="q-code"></a>**Code on the CPU.** Obtain the firmware tree, or read the flash image of a managed switch that uses a YT9215 and work out the image format from it. The [boot modes](yt9215-embedded-cpu.md#boot) say where the chip loads code from.
 - <a id="q-i2c"></a>**I²C master.** The pin function register, the master's own registers and its transaction format come from the firmware tree, or from tracing a vendor image.

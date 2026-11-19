@@ -95,7 +95,8 @@ index.
 An entry
 --------
 
-An entry is three words. The input registers and the output registers share one layout.
+An entry is three words. The input registers and the output registers share one layout:
+:lx:`chip.h` defines the fields of both under the names ``IO0``, ``IO1`` and ``IO2``.
 
 .. yt-bitfield:: FDB_IN0
 

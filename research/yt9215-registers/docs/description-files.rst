@@ -41,8 +41,9 @@ from it for tools that read those formats.
      - :ref:`YT9218 <reference-parts>`
      - Registers of this manual
 
-Every other file is generated from :download:`yt921x.yaml <../yt921x.yaml>`.
-:download:`sdk-tables.yaml <../sdk-tables.yaml>` holds table names and bit positions only.
+The SVD and SystemRDL files are generated from :download:`yt921x.yaml <../yt921x.yaml>`.
+:download:`sdk-tables.yaml <../sdk-tables.yaml>` is taken from the
+:ref:`vendor SDK <sources-list>` and holds table names and bit positions only.
 There is one `CMSIS-SVD <https://open-cmsis-pack.github.io/svd-spec/main/index.html>`__ and one `SystemRDL <https://www.accellera.org/downloads/standards/systemrdl>`__ file per family because :reg:`IO_LEVEL` has a different
 layout in each.
 

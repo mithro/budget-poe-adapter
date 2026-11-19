@@ -54,7 +54,7 @@ digital and analog circuits return to their defaults, the lookup and VLAN tables
 a configuration is loaded again from an EEPROM or from flash where the strap pins ask for it,
 and the PHYs restart auto-negotiation. The bit clears itself.
 
-Section 4.1.2.2 calls :field:`RST.SW` SW_RESET and states that it does the same except that
+Section 4.1.2.2 of the |ds| calls :field:`RST.SW` SW_RESET and states that it does the same except that
 the analog circuits of the PHYs are not reset. The :ref:`Linux driver <sources-list>` does not use
 :field:`RST.SW`.
 

@@ -72,7 +72,8 @@ and the mask holds the upper bound in place of a bit mask.
 
 Types :val:`acl_type.UDF0` to :val:`acl_type.UDF7` match two-byte windows at configurable offsets.
 :reg:`UDF_CTRL` sets each window: the header it is counted from (:enum:`udf_type`) and the offset
-in bytes from the start of that header. The window is the two bytes at that offset. Key type
+in bytes from the start of that header. The window is the two bytes at that offset.
+:lx:`yt921x_acl_rule_ext_parse_flow_entries` uses the windows in this way. Key type
 :val:`acl_type.UDF0` holds windows 0 and 1, the next type windows 2 and 3, and so on, as the
 comment in :lx:`tc.h:121` states.
 

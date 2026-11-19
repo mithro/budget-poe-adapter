@@ -55,7 +55,7 @@ sources) is generated during the build by [`tools/gen_docs.py`](tools/gen_docs.p
 | [`rdl/yt9215.rdl`](rdl/yt9215.rdl) | [SystemRDL](https://www.accellera.org/downloads/standards/systemrdl) | YT9215 family |
 | [`rdl/yt9218.rdl`](rdl/yt9218.rdl) | [SystemRDL](https://www.accellera.org/downloads/standards/systemrdl) | YT9218 family |
 
-[`yt921x.yaml`](yt921x.yaml) is the source that every other file is generated from.
+[`yt921x.yaml`](yt921x.yaml) is the source that the SVD files, the SystemRDL files and the bindings are generated from.
 [`sdk-tables.yaml`](sdk-tables.yaml) holds names and bit positions only.
 
 ## Bindings

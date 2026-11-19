@@ -284,6 +284,8 @@ uses:
   "LED?_PORT.ACT_10M": [leds.c, 259]
   "LED?_PORT.ACT_COLLISION_BLINK": [leds.c, 259]
   LED1_PORT.ACT: [leds.c, 293]
+  SYS_CLK.SEL=V125M: [chip.c, 2208]
+  SYS_CLK.SEL=V167M: [chip.c, 2208]
   ACL_PORT.PORTS: [tc.c, 1410]
   PORT_PRIO_ORD.APP: [chip.c, 1605]
   FDB_IN1.STATUS: [chip.c, 480]
@@ -299,18 +301,18 @@ uses:
   ACL_KEY.ADDR: [tc.c, 647]
   ACL_KEY.DPORT: [tc.c, 680]
   ACL_KEY.SPORT: [tc.c, 680]
-  ACL_KEY.UDF0: [tc.c, 1008]
-  ACL_KEY.UDF1: [tc.c, 1008]
+  ACL_KEY.UDF0: [tc.c, 997]
+  ACL_KEY.UDF1: [tc.c, 997]
   ACL_KEY.ETHERTYPE: [tc.c, 804]
-  ACL_MASK.MAC_ADDR0/ADDR: [tc.c, 730]
-  ACL_MASK.MAC_DA1: [tc.c, 754]
-  ACL_MASK.MAC_SA1: [tc.c, 754]
+  ACL_MASK.MAC_ADDR0/ADDR: [tc.c, 722]
+  ACL_MASK.MAC_DA1: [tc.c, 744]
+  ACL_MASK.MAC_SA1: [tc.c, 745]
   ACL_MASK.IPV4/ADDR: [tc.c, 619]
   ACL_MASK.ADDR: [tc.c, 648]
   ACL_MASK.DPORT: [tc.c, 682]
   ACL_MASK.SPORT: [tc.c, 682]
-  ACL_MASK.UDF0: [tc.c, 1009]
-  ACL_MASK.UDF1: [tc.c, 1009]
+  ACL_MASK.UDF0: [tc.c, 998]
+  ACL_MASK.UDF1: [tc.c, 998]
   ACL_MASK.ETHERTYPE: [tc.c, 805]
 
 constants:
@@ -995,7 +997,8 @@ registers:
     fields: &ipm
       PRIO: {desc: "Internal priority from 0 to 7."}
       COLOR:
-        desc: "Drop precedence colour used by the meters."
+        desc: "Drop precedence colour. It is :ev:`inferred` from :field:`METER_CTRL.COLOR_BLIND` that the meters use it."
+        inferred_values: [GREEN, RED]
         values: {GREEN: "Lowest drop precedence", YELLOW: "Yellow", RED: "Highest drop precedence"}
   IPM_PCP:
     block: qos
@@ -1086,6 +1089,7 @@ registers:
       EGR_PRIO_EN: {desc: "Apply PRIO to frames sent to this address.", inferred: true}
       STATUS:
         desc: "State of the entry."
+        inferred_values: [MIN_TIME, MOVE_AGING_MAX_TIME, MAX_TIME, PENDING]
         values: {INVALID: "Entry is empty", MIN_TIME: "Dynamic entry about to age out", MOVE_AGING_MAX_TIME: "Dynamic entry that moved to another port", MAX_TIME: "Dynamic entry just learned or refreshed", PENDING: "Entry waiting for the CPU to confirm it", STATIC: "Static entry that never ages out"}
       FID: {desc: "Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID."}
       ADDR_LO2: {desc: "MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8."}

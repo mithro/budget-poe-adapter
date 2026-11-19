@@ -82,8 +82,8 @@ which of the four mark a customer tag and which mark a service tag.
      - :ref:`port VLAN ID <vlan-pvid>`
      - read
 
-The value 1 sets element 0 of the field, which stands for the identifier in element 0 of
-:reg:`TPID_IGR`. Both rows of the :ref:`mode table <vlan-aware-table>` are :ev:`confirmed` by
+The value 1 sets element 0 of the field. It is :ev:`inferred` from the names that element 0
+stands for the identifier in element 0 of :reg:`TPID_IGR`. Both rows of the :ref:`mode table <vlan-aware-table>` are :ev:`confirmed` by
 :lx:`yt921x_vlan_aware_set`. Its comment says that the VLAN-unaware setting works although :field:`VLAN_CTRL.SVLAN_EN` is never set.
 
 Write ``0x8100`` to element 0 of :reg:`TPID_IGR` before the first frame arrives. The
@@ -131,7 +131,7 @@ Ingress filtering
 :lx:`yt921x_vlan_filtering` sets the fields of the rows "VLAN does not include the receiving
 port" and "Untagged" of the :ref:`filter table <vlan-filter-table>`. It sets :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED` for a VLAN-aware
 port that has no port VLAN. It always clears :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`, and
-its comment leaves the dropping of tagged frames to :reg:`VLAN_IGR_FILTER`. The driver
+its comment leaves the dropping of tagged frames to :reg:`VLAN_IGR_FILTER`. The :ref:`Linux driver <sources-list>`
 therefore :ev:`confirms <confirmed>` the field only by clearing it; the effect of setting it is
 :ev:`inferred` from its name. An access port is a use for it.
 

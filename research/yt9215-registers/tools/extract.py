@@ -766,6 +766,8 @@ def main():
                     fld[k] = fo[k]
             vdesc = fo.get("values", {})
             for v in fld.get("values", []):
+                if v["name"] in fo.get("inferred_values", []):
+                    v["inferred"] = True
                 if v["name"] == "DEFAULT":
                     fld["reset"] = v["value"]
                 v["desc"] = vdesc.get(v["name"], "")
@@ -871,6 +873,12 @@ def main():
                 fld.pop("inferred", None)
             lx["used"] = True
             lx["use"] = Flow([u[0], OWNER[u[0]][u[1] - 1] or "", u[1]])
+        for lay, fld in lays:
+            for v in fld.get("values", []):
+                u = ou.get("%s.%s=%s" % (r["id"], fld["name"], v["name"]))
+                if u and v.get("linux"):
+                    v["linux"]["used"] = True
+                    v["linux"]["use"] = Flow([u[0], OWNER[u[0]][u[1] - 1] or "", u[1]])
         if len(allf) == 1 and r.get("inferred"):
             allf[0]["inferred"] = True
 

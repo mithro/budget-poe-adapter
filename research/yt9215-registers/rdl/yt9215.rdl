@@ -757,7 +757,7 @@ addrmap yt9215 {
             RED = 2 { desc = "Highest drop precedence"; };
         };
         field { desc = "Internal priority from 0 to 7."; sw = rw; hw = r; } PRIO[4:2];
-        field { desc = "Drop precedence colour used by the meters."; sw = rw; hw = r; encode = ipm_dscp_color_e; } COLOR[1:0];
+        field { desc = "Drop precedence colour. It is inferred from METER_CTRL.COLOR_BLIND that the meters use it."; sw = rw; hw = r; encode = ipm_dscp_color_e; } COLOR[1:0];
     } IPM_DSCP[64] @ 0x180000 += 0x4;
 
     reg {
@@ -769,7 +769,7 @@ addrmap yt9215 {
             RED = 2 { desc = "Highest drop precedence"; };
         };
         field { desc = "Internal priority from 0 to 7."; sw = rw; hw = r; } PRIO[4:2];
-        field { desc = "Drop precedence colour used by the meters."; sw = rw; hw = r; encode = ipm_pcp_color_e; } COLOR[1:0];
+        field { desc = "Drop precedence colour. It is inferred from METER_CTRL.COLOR_BLIND that the meters use it."; sw = rw; hw = r; encode = ipm_pcp_color_e; } COLOR[1:0];
     } IPM_PCP[2][2][8] @ 0x180100 += 0x4;
 
     reg {

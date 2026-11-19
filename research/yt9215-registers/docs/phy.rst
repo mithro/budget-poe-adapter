@@ -9,11 +9,13 @@ the :blk:`mbus` block.
 
 The internal master reaches the built-in PHY of port *n* at address *n*, and the PCS of the
 SerDes of port 8 or 9 at address 8 or 9. :lx:`yt921x_serdes_config` of the
-:ref:`Linux driver <sources-list>` reaches the PCS in this way. The external master reaches
+:ref:`Linux driver <sources-list>` reaches the PCS in this way, and :lx:`yt921x_mbus_int_read`
+passes the port number as the address of a PHY. The external master reaches
 PHYs wired to the MDIO master pins of the switch, at their own addresses. Tables 16 and 17
 of the |ds| name the pins of the two MDIO master groups: SMI1_MDC with SMI1_MDIO, and
 SMI2_MDC with SMI2_MDIO. It is :ev:`not known` which group the external master drives. Each
-master has four registers, and the two sets have the same layout.
+master has four registers, and :lx:`mdio_bus.h` defines the fields of the two sets under common
+names.
 
 .. _phy-registers-table:
 

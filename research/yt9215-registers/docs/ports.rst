@@ -14,7 +14,8 @@ Bring a port up
 ---------------
 
 :reg:`PORT_CTRL` holds the MAC settings of a port and :reg:`PORT_STATUS` shows what the MAC
-runs with. The low eight bits of the two registers have the same layout.
+runs with. The low eight bits of the two registers have the same layout, as the
+comment in :lx:`chip.h:92` states.
 
 .. yt-bitfield:: PORT_CTRL
 
@@ -386,5 +387,4 @@ Energy Efficient Ethernet has one enable for the whole chip and one per port.
    override of :ref:`bringup-strap-override`. Clear both when no port uses the function.
 2. Port: set the port's :field:`EEE_CTRL.EN` bit and :field:`EEE_VAL.DATA` of the port.
 
-The sequence is :ev:`confirmed` by :lx:`yt921x_set_eee`. A comment in that function calls the
-|ds| poor on EEE, and no source explains what the four bits do individually.
+The sequence is :ev:`confirmed` by :lx:`yt921x_set_eee`. A comment in that function reads "Poor datasheet for EEE operations", and no source explains what the four bits do individually.

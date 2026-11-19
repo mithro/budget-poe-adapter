@@ -2619,7 +2619,7 @@
           <fields>
             <field>
               <name>COLOR</name>
-              <description>Drop precedence colour used by the meters.</description>
+              <description>Drop precedence colour. It is inferred from METER_CTRL.COLOR_BLIND that the meters use it.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
@@ -2661,7 +2661,7 @@
           <fields>
             <field>
               <name>COLOR</name>
-              <description>Drop precedence colour used by the meters.</description>
+              <description>Drop precedence colour. It is inferred from METER_CTRL.COLOR_BLIND that the meters use it.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>

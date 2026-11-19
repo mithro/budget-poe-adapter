@@ -1159,7 +1159,7 @@ pub const IPM_DSCP_DSCP_FIRST: u32 = 0;
 pub const IPM_DSCP_DSCP_COUNT: u32 = 64;
 /// Internal priority from 0 to 7.
 pub const IPM_DSCP_PRIO: Field = Field { lsb: 2, width: 3 };
-/// Drop precedence colour used by the meters.
+/// Drop precedence colour. It is inferred from METER_CTRL.COLOR_BLIND that the meters use it.
 pub const IPM_DSCP_COLOR: Field = Field { lsb: 0, width: 2 };
 /// Lowest drop precedence
 pub const IPM_DSCP_COLOR_GREEN: u32 = 0;
@@ -1186,7 +1186,7 @@ pub const IPM_PCP_PCP_FIRST: u32 = 0;
 pub const IPM_PCP_PCP_COUNT: u32 = 8;
 /// Internal priority from 0 to 7.
 pub const IPM_PCP_PRIO: Field = Field { lsb: 2, width: 3 };
-/// Drop precedence colour used by the meters.
+/// Drop precedence colour. It is inferred from METER_CTRL.COLOR_BLIND that the meters use it.
 pub const IPM_PCP_COLOR: Field = Field { lsb: 0, width: 2 };
 /// Lowest drop precedence
 pub const IPM_PCP_COLOR_GREEN: u32 = 0;

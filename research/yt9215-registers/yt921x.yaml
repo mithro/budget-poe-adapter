@@ -2304,7 +2304,8 @@ registers:
         src:
         - chip.h
         - 179
-        used: false
+        used: true
+        use: [chip.c, yt921x_chip_detect, 2208]
       chip: yt9215
       desc: 125 MHz core clock
     - name: V167M
@@ -2314,7 +2315,8 @@ registers:
         src:
         - chip.h
         - 180
-        used: false
+        used: true
+        use: [chip.c, yt921x_chip_detect, 2208]
       chip: yt9218
       desc: 167 MHz core clock
     - name: V143M
@@ -6418,6 +6420,7 @@ registers:
         - chip.h
         - 197
         used: false
+      inferred: true
       desc: Lowest drop precedence
     - name: YELLOW
       value: 1
@@ -6436,10 +6439,12 @@ registers:
         - chip.h
         - 199
         used: false
+      inferred: true
       desc: Highest drop precedence
     lsb: 0
     width: 2
-    desc: Drop precedence colour used by the meters.
+    desc: Drop precedence colour. It is :ev:`inferred` from :field:`METER_CTRL.COLOR_BLIND` that the meters
+      use it.
     access: rw
     sdk:
       status: same bits
@@ -6511,6 +6516,7 @@ registers:
         - chip.h
         - 197
         used: false
+      inferred: true
       desc: Lowest drop precedence
     - name: YELLOW
       value: 1
@@ -6530,10 +6536,12 @@ registers:
         - chip.h
         - 199
         used: false
+      inferred: true
       desc: Highest drop precedence
     lsb: 0
     width: 2
-    desc: Drop precedence colour used by the meters.
+    desc: Drop precedence colour. It is :ev:`inferred` from :field:`METER_CTRL.COLOR_BLIND` that the meters
+      use it.
     access: rw
     sdk:
       status: same bits
@@ -7180,6 +7188,7 @@ registers:
         - chip.h
         - 295
         used: false
+      inferred: true
       desc: Dynamic entry about to age out
     - name: MOVE_AGING_MAX_TIME
       value: 3
@@ -7189,6 +7198,7 @@ registers:
         - chip.h
         - 296
         used: false
+      inferred: true
       desc: Dynamic entry that moved to another port
     - name: MAX_TIME
       value: 5
@@ -7198,6 +7208,7 @@ registers:
         - chip.h
         - 297
         used: false
+      inferred: true
       desc: Dynamic entry just learned or refreshed
     - name: PENDING
       value: 6
@@ -7207,6 +7218,7 @@ registers:
         - chip.h
         - 298
         used: false
+      inferred: true
       desc: Entry waiting for the CPU to confirm it
     - name: STATIC
       value: 7
@@ -7857,6 +7869,7 @@ registers:
         - chip.h
         - 295
         used: false
+      inferred: true
       desc: Dynamic entry about to age out
     - name: MOVE_AGING_MAX_TIME
       value: 3
@@ -7866,6 +7879,7 @@ registers:
         - chip.h
         - 296
         used: false
+      inferred: true
       desc: Dynamic entry that moved to another port
     - name: MAX_TIME
       value: 5
@@ -7875,6 +7889,7 @@ registers:
         - chip.h
         - 297
         used: false
+      inferred: true
       desc: Dynamic entry just learned or refreshed
     - name: PENDING
       value: 6
@@ -7884,6 +7899,7 @@ registers:
         - chip.h
         - 298
         used: false
+      inferred: true
       desc: Entry waiting for the CPU to confirm it
     - name: STATIC
       value: 7
@@ -10620,7 +10636,7 @@ registers:
         - tc.h
         - 218
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1008]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 997]
       lsb: 16
       width: 16
       desc: Two bytes from the even-numbered user-defined field window of the pair.
@@ -10634,7 +10650,7 @@ registers:
         - tc.h
         - 220
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1008]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 997]
       lsb: 0
       width: 16
       desc: Two bytes from the odd-numbered user-defined field window of the pair.
@@ -10749,7 +10765,7 @@ registers:
         - tc.h
         - 140
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 730]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 722]
       lsb: 0
       width: 32
       desc: MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
@@ -10781,7 +10797,7 @@ registers:
         - tc.h
         - 144
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 754]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 744]
       lsb: 16
       width: 16
       desc: Destination MAC address bytes 4 and 5.
@@ -10795,7 +10811,7 @@ registers:
         - tc.h
         - 145
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 754]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 745]
       lsb: 0
       width: 16
       desc: Source MAC address bytes 4 and 5.
@@ -11429,7 +11445,7 @@ registers:
         - tc.h
         - 218
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1009]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 998]
       lsb: 16
       width: 16
       desc: Two bytes from the even-numbered user-defined field window of the pair.
@@ -11443,7 +11459,7 @@ registers:
         - tc.h
         - 220
         used: true
-        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1009]
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 998]
       lsb: 0
       width: 16
       desc: Two bytes from the odd-numbered user-defined field window of the pair.

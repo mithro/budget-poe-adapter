@@ -371,13 +371,13 @@ Each photo is embedded in this section, except the annotated strap array, which 
 
 **U4 right edge**
 
-![Right edge of U4 on LX-IS601F board B with leads 46 to 55 and the SPF0 resistors marked](lx-is601f-board/u4-pins-right-edge-annotated.png)
+![Right edge of U4 on LX-IS601F board A with leads 46 to 55 and the SPF0 resistors marked](lx-is601f-board/u4-pins-right-edge-annotated.png)
 
 <a id="lx-photo-u4-top-edge"></a>
 
 **U4 top edge**
 
-![Top edge of U4 on LX-IS601F board B with the debug pins and their vias marked](lx-is601f-board/u4-pins-top-edge-annotated.png)
+![Top edge of U4 on LX-IS601F board A with the debug pins and their vias marked](lx-is601f-board/u4-pins-top-edge-annotated.png)
 
 <a id="lx-photo-bottom-strap-array"></a>
 

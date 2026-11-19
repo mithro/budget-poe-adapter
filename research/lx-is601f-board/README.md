@@ -17,7 +17,7 @@ The pin tables of both parts, and the route of each debug pin on this board, are
 | [`u4-pin-numbering-annotated.png`](u4-pin-numbering-annotated.png) | Annotated image | Pin 1 and the pin range of each side of [U4](../motorcomm-debug-pins.md#lx-u4) | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) |
 | [`u4-pins-top-edge-annotated.png`](u4-pins-top-edge-annotated.png) | Annotated image | Pins 65 to 96 of [U4](../motorcomm-debug-pins.md#lx-u4) and their vias | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) |
 | [`u4-pins-right-edge-annotated.png`](u4-pins-right-edge-annotated.png) | Annotated image | Pins 46 to 55 of [U4](../motorcomm-debug-pins.md#lx-u4) and the SPF0 resistors | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) |
-| [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink | – |
+| [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) on board A, straightened | [photo 13](photos/README.md#photo-13) |
 | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of [U4](../motorcomm-debug-pins.md#lx-u4) on board A | – |
 | [`u4-surroundings.jpg`](u4-surroundings.jpg) | Cropped photo | [U4](../motorcomm-debug-pins.md#lx-u4) and the named parts beside it | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) |
 | [`u4-corner-pins-65-71-photo-12.jpg`](u4-corner-pins-65-71-photo-12.jpg) | Cropped photo | Leads 65 to 71 of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, enlarged | [photo 12](photos/README.md#photo-12) |
@@ -74,11 +74,11 @@ A ring with a number marks the via that the lead of that pin runs to.
 ## Source photos
 
 The three annotated images of [U4](../motorcomm-debug-pins.md#lx-u4) are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jpg), a close-up of
-[U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
+[U4](../motorcomm-debug-pins.md#lx-u4) on board A. It is [photo 13](photos/README.md#photo-13) of the catalogue, the sharpest evenly lit view of the package among the 34 photos, scaled and straightened so that the package sits square. The grey strip on its right edge is outside that photo. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
 
-![Close-up of U4 on board B, without a heatsink](photo-u4-macro.jpg)
+![Close-up of U4 on board A](photo-u4-macro.jpg)
 
-[`photo-u4-wide.jpg`](photo-u4-wide.jpg) shows board A, which has the same layout. The crop under this paragraph keeps
+[`photo-u4-wide.jpg`](photo-u4-wide.jpg) is a wider view of board A. The crop under this paragraph keeps
 [U4](../motorcomm-debug-pins.md#lx-u4) and the parts beside it whose silkscreen names the pin table uses:
 [Y6](../motorcomm-debug-pins.md#lx-y6) and [R22](../motorcomm-debug-pins.md#lx-r22) above the chip, and
 [R44](../motorcomm-debug-pins.md#lx-r44), [R89](../motorcomm-debug-pins.md#lx-r89),

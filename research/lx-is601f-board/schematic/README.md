@@ -54,7 +54,7 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | [`kisch.py`](kisch.py) | KiCad schematic file writer |
 | [`renders/`](renders/) | PNG of each sheet, and detail PNGs named `N-name-detail-NN.png` |
 
-Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` or `(no trace seen)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF, the render of each sheet and the [detail images](#sheets), and lists the detail images in this file. It checks that each sheet keeps a clear 10 mm margin and that no detail image is cut through a symbol or text. Edit the scripts, not the `.kicad_sch` files.
+Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF, the render of each sheet and the [detail images](#sheets), and lists the detail images in this file. It checks that each sheet keeps a clear 10 mm margin and that no detail image is cut through a symbol or text. Edit the scripts, not the `.kicad_sch` files.
 
 Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. The mainboard connectors whose silkscreen name is not a reference are drawn as follows:
 
@@ -171,9 +171,9 @@ A whole sheet scaled to the width of this page leaves its text too small to read
 | Code | Wire colour | Wire style | Pin connections |
 |---|---|---|---|
 | **C** | Green | Solid | 0 |
-| **V** | Blue | Solid | 107 |
-| **I** | Orange | Dashed | 237 |
-| **U** | Red | Dotted | 202 |
+| **V** | Blue | Solid | 103 |
+| **I** | Orange | Dashed | 235 |
+| **U** | Red | Dotted | 208 |
 | All | | | 546 |
 
 Buses, and the links between sheet symbols on the root sheet, are drawn grey and carry no confidence code; the code is on the wires they join.
@@ -193,7 +193,7 @@ A managed-capable switch with five copper ports and one SFP port, with 4-port Po
 - **Config EEPROM U10** `24C08` with a maker logo that does not identify the maker (8 Kbit I²C) on the bottom. It is presumably on U4 pin 91 (SCL) and pin 92 (SDA). The OSHWHub YT9215S board has no EEPROM; this board does.
 - **Empty SPI-flash footprint U6** (SOP-8 or WSON-8) on the bottom, with R40, R94, R96, R98, R100, R102 and R109 next to it. Together with R44, R89, R92 and R93 on the SPF0 pins, the board looks designed to take a flash chip.
 - **ESD**: ED1–ED10, SOT-23-6 marked `05U`, two per copper port between U4 and the magnetics.
-- **LEDs**: a 6×2 array of 0603 LEDs with the silkscreen names RJ7–RJ18, in two lines labelled `POW` and `FX`. The silkscreen labels five positions P1 to P5 and leaves the sixth unlabelled. No resistors sit inside the array; R2–R5, R103 and R110–R114 beside it may be the LED resistors (not traced). LED7 and LED8 sit next to an unpopulated 2×2 through-hole footprint `LED6` (with R68).
+- **LEDs**: a 6×2 array of 0603 LEDs with the silkscreen names RJ7–RJ18, in two lines labelled `POW` and `FX`. The silkscreen labels five positions P1 to P5 and leaves the sixth unlabelled. The five labelled FX LEDs are drawn on the LEDx0 outputs of U4 ports 0 to 4 (inferred). What drives the sixth position is unknown. No trace leaves U4 pin 67 (P9LED0) outward on the top layer of either board; a route under the package is not ruled out, so the pin is drawn with an unknown destination. No resistors sit inside the array; R2–R5, R103 and R110–R114 beside it may be the LED resistors (not traced). LED7 and LED8 sit next to an unpopulated 2×2 through-hole footprint `LED6` (with R68).
 - **Bottom edge under the RJ45s**: fourteen SMB parts marked `CP06C` (D6, D8–D19 and D21, maybe bidirectional TVS), and 1206 capacitors (C16, C38, C55, C56, C60, C61, C62, C65, C71, C75 and C98 are readable) with 0603 resistors R15, R32, R67, R71 to R76 and R82 to R84. These are probably per-pair Bob-Smith terminations or PoE centre-tap filtering (inferred).
 
 ## Port mapping (inferred from placement)
@@ -266,6 +266,11 @@ These would let most I and U nets become V.
 | 8 | U12 | 18 | U4 | 31–42 | SerDes for TD+ |
 | 8 | U12 | 19 | U4 | 31–42 | SerDes for TD- |
 | 9 | RJ7–RJ18 | Cathode | U4 | 67–85 | LED pin mapping |
+| 10 | U4 | 46 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 47 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 67 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 79 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 90 | Nearby vias | Every via | Hidden route under the package |
 
 Check 8 may pass through AC-coupling capacitors, so probe both sides of any capacitor on the way.
 

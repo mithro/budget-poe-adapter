@@ -91,7 +91,7 @@ The jobs fall into three speed classes. Only the last class is hard for the YT92
 
 A PD 3 source tells the sink when it may start a message sequence by switching Rp between the 3 A and the 1.5 A value, so Rp needs two values under CPU control.
 
-A minimal source sends few message types: Source_Capabilities, GoodCRC, Accept, PS_RDY, Not_Supported or Reject, and Hard Reset. Each type has eight variants, one for each MessageID, and a second set of eight for a sink that speaks PD 2.0. Every waveform the source transmits can therefore be prepared in advance [**I**](#evidence-codes). The full set is about 80 waveforms of some 600 bytes each in the [option C](#option-c) coding, about 50 KB against 64 KB of RAM, so the set lives in flash or each waveform is built when its MessageID is known.
+A minimal source sends few message types: Source_Capabilities, GoodCRC, Accept, PS_RDY, Not_Supported or Reject, and Hard Reset. Each type has eight variants, one for each MessageID, and a second set of eight for a sink that speaks PD 2.0. Every waveform the source transmits can therefore be prepared in advance [**I**](#evidence-codes). The full set is about 80 waveforms of some 600 bytes each in the [option C](#option-c) coding, about 50 KB against 64 KB of RAM, so the set lives in flash or each waveform is built once the grant and its MessageID are known.
 
 VCONN, e-marker reading and DR_Swap are not needed with a [captive cable](#captive-cable) and a power-only port.
 
@@ -126,8 +126,10 @@ The USB-C side stays off until the PoE side has secured its power, by classifica
 | Stage | Rp | VBUS | PD messages |
 |---|---|---|---|
 | PoE power not yet granted | Off | Off | None |
-| Power granted with no sink attached | On | Off | None |
-| Sink attached | On | On | Source_Capabilities first |
+| Power granted with no sink attached | As the offer allows | Off | None |
+| Sink attached | As the offer allows | On | As the offer allows |
+
+Which Rp value is shown, and whether PD is spoken at all, follow from the [power budget](#power-budget).
 
 With Rp off and VBUS off, a sink sees an unpowered port and waits. This has four consequences for the hardware [**I**](#evidence-codes):
 
@@ -157,7 +159,7 @@ The current available at 5 V is the granted power times the efficiency, less the
 | 3 A to under 5 A | 12 kΩ and 7.5 kΩ | 5 V at the available current |
 | 5 A or more | 12 kΩ and 7.5 kΩ | 5 V at 5 A |
 
-- Below 3 A the port advertises by Rp alone. This is a design choice: PD is allowed there, but it gives a Raspberry Pi 5 nothing that Rp does not.
+- From 1.5 A to under 3 A the port advertises by Rp alone, and under 1.5 A it stays off. Leaving PD out below 3 A is a design choice: PD is allowed there, but it gives a Raspberry Pi 5 nothing that Rp does not.
 - An offer above 3 A relies on the [captive cable](#captive-cable).
 - If an LLDP allocation changes while a sink is attached, the source sends a new Source_Capabilities message. If the new budget is below the running contract, the sink has to accept the lower offer before the adapter may count on it.
 - A sink that ignores Rp or its contract is stopped only by a current limit on VBUS. The offer varies with the grant, so a fixed limit protects only the largest offer. Protecting the smaller ones needs a limit that firmware can select, because an overdraw makes the PoE switch cut the port.

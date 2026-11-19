@@ -213,7 +213,7 @@ What follows ([inferred](#evidence-codes)):
   The estimate takes 3 bytes as the average size of an RV32EC instruction.
 - **Loops are fast.** At 3 bytes each, 2 KB holds about 680 instructions. The whole
   benchmark, which is the PD transmitter, the PD receiver and the LLDP code, is
-  1,896 bytes built for size and 2,308 bytes built for speed
+  1,898 bytes built for size and 2,310 bytes built for speed
   ([measured](#evidence-codes)).
 - **Misses would use up the GoodCRC budget.** At 2.8 µs to 9.2 µs each, 21 to 70
   misses add up to 195 µs. This is the second reason to keep the PD code in SRAM.
@@ -371,7 +371,7 @@ Costs that do not depend on the clock ([measured](#evidence-codes)):
 | Line-code the longest message | 4,666 | 5,077 | 6,111 |
 | Edge interrupt handler body | 12 | 13 | 16 |
 | Parse an LLDPDU of 249 bytes | 226 | 241 | 294 |
-| Build an LLDP frame of 60 bytes | 101 | 102 | 118 |
+| Build an LLDP frame of 60 bytes | 102 | 103 | 119 |
 | 32-bit multiply, worst case | 228 | 260 | 292 |
 
 ## USB-PD by bit-banging
@@ -530,7 +530,7 @@ how the rest of the firmware is scheduled ([inferred](#evidence-codes)).
 - LLDP runs on a time scale of seconds. The default transmit interval of IEEE 802.1AB
   is 30 s and its fast interval is 1 s.
 - Parsing a realistic 249-byte LLDPDU from a PoE switch, including the IEEE 802.3
-  power TLV, takes 226 instructions. Building the reply frame takes 101
+  power TLV, takes 226 instructions. Building the reply frame takes 102
   ([measured](#evidence-codes)).
 - Fetched cold from the flash at 1 million instructions per second, the two routines
   together take a third of a millisecond ([estimated](#evidence-codes)).

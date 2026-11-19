@@ -1,8 +1,8 @@
 Code size as RV32EC, in bytes (the timed build is RV32E at -O2)
 optimisation  code and constants  initialised data  zeroed data
 ------------  ------------------  ----------------  -----------
--Os           1896                0                 112
--O2           2308                0                 112
+-Os           1898                0                 112
+-O2           2310                0                 112
 
 Routines
 routine                       model  instructions  cycles
@@ -13,7 +13,7 @@ Line-code GoodCRC             fast   1598          1794
 Line-code longest message     fast   4666          5077
 Edge interrupt handler body   fast   12            13
 Parse LLDPDU of 249 bytes     fast   226           241
-Build LLDP frame of 60 bytes  fast   101           102
+Build LLDP frame of 60 bytes  fast   102           103
 32-bit multiply, worst case   fast   228           260
 CRC-32 of 6 bytes             slow   109           139
 CRC-32 of 34 bytes            slow   585           755
@@ -21,7 +21,7 @@ Line-code GoodCRC             slow   1598          2123
 Line-code longest message     slow   4666          6111
 Edge interrupt handler body   slow   12            16
 Parse LLDPDU of 249 bytes     slow   226           294
-Build LLDP frame of 60 bytes  slow   101           118
+Build LLDP frame of 60 bytes  slow   102           119
 32-bit multiply, worst case   slow   228           292
 
 Transmit the eight GoodCRC messages by GPIO writes timed against mcycle

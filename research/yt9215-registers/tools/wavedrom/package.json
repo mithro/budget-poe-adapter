@@ -1,0 +1,10 @@
+{
+  "name": "yt921x-wavedrom",
+  "description": "WaveDrom renderer for the diagrams of the YT921x manual",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "onml": "2.1.0",
+    "wavedrom": "3.5.0"
+  }
+}

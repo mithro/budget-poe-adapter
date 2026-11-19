@@ -353,8 +353,8 @@ for n in ('85', '84', '83', '80', '81', '79', '77', '78', '76', '75', '73', '74'
         s.stub(uC, n, 'TBD_U4_%s' % n, 'U', length=m(7.62))
 for n in ('14', '15', '116'):
     s.nc(uC.p(n)); s.mark(uC, n, '(NC)', 'I')
-s.textbox('Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 goes to the LED\n'
-          'sheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced).', m(146), m(215), m(80), m(16))
+s.textbox('Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 of ports 0 to 4 goes\n'
+          'to the LED sheet (inferred). The other LED and strap pins have pull\nresistors R2-R5, R103, R110-R114 nearby (not traced).', m(146), m(215), m(80), m(16))
 # U4A MDI
 s.frame(m(290), m(15), m(450), m(270), 'U4A: copper ports (MDI)')
 uA = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(330), m(130), unit=1, node=u4node)

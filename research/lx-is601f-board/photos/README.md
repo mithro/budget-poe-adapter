@@ -3,13 +3,14 @@
 Photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with a
 Pixel 7 Pro. The full-resolution originals are in the
 [Google Photos album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9), and photo numbers
-follow the album order. This folder holds three kinds of copy:
+follow the album order. This folder holds four kinds of copy:
 
 | Folder | Copy |
 | --- | --- |
 | [`web/`](web/) | Resized to 1600 px |
 | [`thumbs/`](thumbs/) | 240 px thumbnail |
 | [`annotated/`](annotated/) | Callout image |
+| [`detail/`](detail/) | Close crop of one part |
 
 Every copy is rotated to one orientation and cropped to the board, and carries no EXIF
 data (so no GPS position).
@@ -353,6 +354,8 @@ the small dimple at the lower left (the large circle at the upper right is a mou
 mark). R44, R89, R92 and R93 sit on U4's SPF0 SPI-flash lines (CS, SO, SI and SCK
 in that order); see the [schematic notes](../schematic/README.md).
 
+![U4 marking on board A, cropped from photo 06](detail/06-u4-marking.jpg)
+
 ![Photo 06 with callouts](annotated/06.jpg)
 
 ### Photo 07
@@ -362,6 +365,8 @@ in that order); see the [schematic notes](../schematic/README.md).
 Board B, U4 with the corner of the PoE module at the top left. U4 reads
 `MOTORCOMM`, `YT9215SCH`, `VKJC09324`, `2500211C`, `3AW4849M0` on five lines. The module's U1 is
 visible, marked `2184A` over `533AQ1H`.
+
+![U4 marking on board B, cropped from photo 07](detail/07-u4-marking.jpg)
 
 ### Photo 08
 
@@ -556,12 +561,14 @@ apart.
 
 ## Regenerating the images
 
-[`make_photos.py`](make_photos.py) builds [`web/`](web/), [`thumbs/`](thumbs/) and
-[`annotated/`](annotated/) from the album originals:
+[`make_photos.py`](make_photos.py) builds [`web/`](web/), [`thumbs/`](thumbs/),
+[`annotated/`](annotated/) and [`detail/`](detail/). The first two come from the album
+originals, the last two from the copies in [`web/`](web/):
 
 ```
 python3 make_photos.py /path/to/originals   # 01.jpg .. 34.jpg in album order
+python3 make_photos.py --derived            # only the callout images and detail crops
 ```
 
-The script lists each photo's rotation (`ROTATE`), crop box (`CROP`) and callouts
-(`CALLOUTS`). Callout positions are percentages of the rotated, cropped photo.
+The script lists each photo's rotation (`ROTATE`), crop box (`CROP`), callouts
+(`CALLOUTS`) and detail crops (`DETAILS`). Callout positions are percentages of the rotated, cropped photo.

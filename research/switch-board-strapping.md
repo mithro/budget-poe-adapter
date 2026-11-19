@@ -152,10 +152,10 @@ not show which of the two photographed boards it is, so the table is for one boa
 | <a id="lx-pin-51"></a>51 | [SWITCH_ID_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">U</a> | – | Pull-down | 0 | <a href="#tag-i">I</a> | Switch ID bit 0 = 0 |
 | <a id="lx-pin-47"></a>47 | [RESERVED_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | No trace leaves the pin | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | 1 | <a href="#tag-i">I</a> | – |
 | <a id="lx-pin-48"></a>48 | [RESERVED_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | Not traced | <a href="#tag-u">U</a> | – | Pull-up | 1 | <a href="#tag-i">I</a> | – |
-| <a id="lx-pin-50"></a>50 | [RESERVED_2](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a id="lx-r92"></a>R92 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-u4-right-edge">Board A U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | – |
-| <a id="lx-pin-49"></a>49 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a id="lx-r93"></a>R93 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-u4-right-edge">Board A U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | Flash pin group |
-| <a id="lx-pin-54"></a>54 | [SPF0_SO](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r89"></a>R89 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-u4-right-edge">Board A U4 right edge</a> | Pull-up | – | – | Not a strap |
-| <a id="lx-pin-55"></a>55 | [SPF0_CS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r44"></a>R44 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-u4-right-edge">Board A U4 right edge</a> | Pull-up | – | – | Not a strap |
+| <a id="lx-pin-50"></a>50 | [RESERVED_2](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a id="lx-r92"></a>R92 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | – |
+| <a id="lx-pin-49"></a>49 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a id="lx-r93"></a>R93 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | Flash pin group |
+| <a id="lx-pin-54"></a>54 | [SPF0_SO](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r89"></a>R89 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
+| <a id="lx-pin-55"></a>55 | [SPF0_CS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r44"></a>R44 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
 | <a id="lx-pin-60"></a>60 | [EN_SWR](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">U</a> | – | None | 1 | <a href="#tag-i">I</a> | Internal regulator on |
 | <a id="lx-pin-89"></a>89 | [nRESET](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30) | Not traced | <a href="#tag-u">U</a> | – | Pull-up | – | – | Not a strap |
 
@@ -335,8 +335,7 @@ transformer bodies, so the fifth is taken to be under the PoE module.
 | <a href="#lx-photo-strap-array">Strap array annotated</a> | Not known | Bottom | Strap resistor array with decoded levels |
 | <a href="#lx-photo-bottom-under-u4">Bottom under U4</a> | Not known | Bottom | Area under <a href="#lx-u4">U4</a> with the strap resistor array |
 | <a href="#lx-photo-board-a-top">Board A top</a> | A | Top | Area around <a href="#lx-u4">U4</a> |
-| <a href="#lx-photo-u4-right-edge">U4 right edge</a> | B | Top | Leads 33 to 55 of <a href="#lx-u4">U4</a> with their traces |
-| <a href="#lx-photo-board-a-u4-right-edge">Board A U4 right edge</a> | A | Top | Resistors beside the right edge of <a href="#lx-u4">U4</a> with their traces |
+| <a href="#lx-photo-u4-right-edge">U4 right edge</a> | B | Top | Leads 46 to 55 of <a href="#lx-u4">U4</a> with their traces and the resistors beside them |
 | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> | Not known | Bottom | Strap resistor array beside <a href="#lx-u10">U10</a> |
 | <a href="#lx-photo-board-b-top">Board B top</a> | B | Top | Whole board |
 | <a href="#lx-photo-poe-module">PoE module</a> | B | Top | Plug-in PoE module |
@@ -368,13 +367,7 @@ Each photo is embedded in this section, except the annotated strap array, which 
 
 **U4 right edge**
 
-![Right edge of U4 on LX-IS601F board B with leads 33, 46, 47, 49, 50, 54 and 55 marked](lx-is601f-board/u4-right-edge-annotated.jpg)
-
-<a id="lx-photo-board-a-u4-right-edge"></a>
-
-**Board A U4 right edge**
-
-![Right edge of U4 on LX-IS601F board A with the resistors beside it](lx-is601f-board/crop-board-a-u4-right-edge.jpg)
+![Right edge of U4 on LX-IS601F board B with leads 46 to 55 and the SPF0 resistors marked](lx-is601f-board/u4-pins-right-edge-annotated.png)
 
 <a id="lx-photo-bottom-strap-array"></a>
 

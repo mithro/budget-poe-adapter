@@ -15,7 +15,6 @@ CROPS = {
     "crop-board-b-switch-ic.jpg": ("photo-board-b-top.jpg", (1360, 416, 1856, 1408)),
     "crop-board-b-magnetics.jpg": ("photo-board-b-top.jpg", (590, 560, 1700, 1520)),
     "crop-board-a-regulator.jpg": ("photo-u4-wide.jpg", (2192, 2060, 3072, 4010)),
-    "crop-board-a-u4-right-edge.jpg": ("photo-u4-wide.jpg", (1690, 1620, 2270, 2620)),
     "crop-board-a-power-input.jpg": ("photo-u4-wide.jpg", (1768, 163, 3072, 1745)),
     "crop-board-a-led-esd.jpg": ("photo-u4-wide.jpg", (0, 0, 1020, 1150)),
     "crop-bottom-flash-footprint.jpg": ("photo-bottom-under-u4.jpg", (320, 1395, 1040, 2200)),

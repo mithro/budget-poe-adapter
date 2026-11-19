@@ -19,14 +19,23 @@ the pin tables of both parts, and the route of each debug pin on this board, are
 | <a href="#photo-board-b-top">Board B top</a> | [`photo-board-b-top.jpg`](photo-board-b-top.jpg) | Source photo | B | Top | Whole board |
 | <a href="#photo-bottom-under-u4">Bottom under U4</a> | [`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg) | Source photo | Not known | Bottom | Area under [U4](../switch-board-strapping.md#major-components) with the strap resistor array |
 | <a href="#photo-poe-module">PoE module</a> | [`photo-poe-module.jpg`](photo-poe-module.jpg) | Source photo | B | Top | Plug-in PoE module |
+| <a href="#photo-poe-module-crop">PoE module crop</a> | [`crop-poe-module.jpg`](crop-poe-module.jpg) | Area crop | B | Top | Plug-in PoE module |
+| <a href="#photo-board-b-power-input">Board B power input</a> | [`crop-board-b-power-input.jpg`](crop-board-b-power-input.jpg) | Area crop | B | Top | Power input parts |
+| <a href="#photo-board-b-switch-ic">Board B switch IC</a> | [`crop-board-b-switch-ic.jpg`](crop-board-b-switch-ic.jpg) | Area crop | B | Top | [U4](../switch-board-strapping.md#major-components) with the parts beside it |
+| <a href="#photo-board-b-magnetics">Board B magnetics</a> | [`crop-board-b-magnetics.jpg`](crop-board-b-magnetics.jpg) | Area crop | B | Top | Port magnetics with ESD arrays |
+| <a href="#photo-board-a-regulator">Board A regulator</a> | [`crop-board-a-regulator.jpg`](crop-board-a-regulator.jpg) | Area crop | A | Top | Buck regulator |
+| <a href="#photo-board-a-power-input">Board A power input</a> | [`crop-board-a-power-input.jpg`](crop-board-a-power-input.jpg) | Area crop | A | Top | Power input parts |
+| <a href="#photo-board-a-led-esd">Board A LED and ESD arrays</a> | [`crop-board-a-led-esd.jpg`](crop-board-a-led-esd.jpg) | Area crop | A | Top | LED array with two ESD arrays |
+| <a href="#photo-bottom-eeprom-flash">Bottom EEPROM and flash</a> | [`crop-bottom-eeprom-flash.jpg`](crop-bottom-eeprom-flash.jpg) | Area crop | Not known | Bottom | EEPROM with the flash footprint |
 | None | [`photos/README.md`](photos/README.md) | Photo catalogue | Both | Both | 34 photos of the two boards |
 | None | [`strap-resistors-source.jpg`](strap-resistors-source.jpg) | Source photo | Not known | Bottom | Strap resistor array without labels |
 | None | [`annotate.py`](annotate.py) | Script | None | None | Draws the debug pin annotations |
 | None | [`annotate_straps.py`](annotate_straps.py) | Script | None | None | Draws the strap resistor annotations |
+| None | [`crop_photos.py`](crop_photos.py) | Script | None | None | Cuts the area crops out of the source photos |
 
 Run [`annotate.py`](annotate.py) with `python3 annotate.py`; it needs Pillow and draws on
 [`photo-u4-macro.jpg`](photo-u4-macro.jpg). Run [`annotate_straps.py`](annotate_straps.py) with `python3 annotate_straps.py`; it needs Pillow and the DejaVu Sans fonts, and draws on
-[`strap-resistors-source.jpg`](strap-resistors-source.jpg). The
+[`strap-resistors-source.jpg`](strap-resistors-source.jpg). Run [`crop_photos.py`](crop_photos.py) with `python3 crop_photos.py`; it needs Pillow. The
 strap resistors are explained in [`../switch-board-strapping.md`](../switch-board-strapping.md).
 
 ## Images
@@ -72,6 +81,54 @@ strap resistors are explained in [`../switch-board-strapping.md`](../switch-boar
 **PoE module**
 
 ![PoE module on board B](photo-poe-module.jpg)
+
+<a id="photo-poe-module-crop"></a>
+
+**PoE module crop**
+
+![PoE module on board B](crop-poe-module.jpg)
+
+<a id="photo-board-b-power-input"></a>
+
+**Board B power input**
+
+![Power input area of board B](crop-board-b-power-input.jpg)
+
+<a id="photo-board-b-switch-ic"></a>
+
+**Board B switch IC**
+
+![Switch IC area of board B](crop-board-b-switch-ic.jpg)
+
+<a id="photo-board-b-magnetics"></a>
+
+**Board B magnetics**
+
+![Port magnetics area of board B](crop-board-b-magnetics.jpg)
+
+<a id="photo-board-a-regulator"></a>
+
+**Board A regulator**
+
+![Buck regulator area of board A](crop-board-a-regulator.jpg)
+
+<a id="photo-board-a-power-input"></a>
+
+**Board A power input**
+
+![Power input area of board A](crop-board-a-power-input.jpg)
+
+<a id="photo-board-a-led-esd"></a>
+
+**Board A LED and ESD arrays**
+
+![LED and ESD array area of board A](crop-board-a-led-esd.jpg)
+
+<a id="photo-bottom-eeprom-flash"></a>
+
+**Bottom EEPROM and flash**
+
+![EEPROM and flash footprint area on the bottom side](crop-bottom-eeprom-flash.jpg)
 
 ## How the debug pins are identified
 

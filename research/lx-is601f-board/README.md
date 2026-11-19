@@ -74,7 +74,7 @@ A ring with a number marks the via that the lead of that pin runs to.
 ## Source photos
 
 The three annotated images of [U4](../motorcomm-debug-pins.md#lx-u4) are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jpg), a close-up of
-[U4](../motorcomm-debug-pins.md#lx-u4) on board A. It is [photo 13](photos/README.md#photo-13) of the catalogue, the clearest evenly lit view of the whole package among the 34 photos, scaled and straightened so that the package sits square. The grey strip on its right edge is outside that photo. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
+[U4](../motorcomm-debug-pins.md#lx-u4) on board A. It is [photo 13](photos/README.md#photo-13) of the catalogue, which shows the whole package and its surroundings without a shadow across the traces, scaled and straightened so that the package sits square. The grey strip on its right edge is outside that photo. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
 
 ![Close-up of U4 on board A](photo-u4-macro.jpg)
 

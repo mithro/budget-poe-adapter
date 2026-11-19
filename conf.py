@@ -14,6 +14,7 @@ source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
 root_doc = "index"
 exclude_patterns = [
     "_build",
+    "README.md",
     ".venv",
     "**/target",
     "**/__pycache__",
@@ -27,9 +28,12 @@ rst_prolog = """
 """
 primary_domain = None
 myst_heading_anchors = 4
+# Lets an HTML <img> in Markdown carry a width; Sphinx then copies the image file.
+myst_enable_extensions = ["html_image"]
 
 html_theme = "furo"
 html_title = project
+html_show_sourcelink = False
 html_static_path = []
 
 
@@ -61,6 +65,15 @@ def link_directories(app, docname, source):
         return "](%s%s)" % (REPO_URL, os.path.relpath(target, os.fspath(app.srcdir)).replace(os.sep, "/"))
 
     text = re.sub(r"\]\((?!https?:)([^)#\s]+/)\)", directory, text)
+
+    def root_readme(m):
+        # index.md includes the root README, so a link to that README goes to the index.
+        target = os.path.normpath(os.path.join(base, m.group(1)))
+        if target != os.path.join(os.fspath(app.srcdir), "README.md"):
+            return m.group(0)
+        return "](%sindex.md%s)" % (m.group(1)[:-len("README.md")], m.group(2) or "")
+
+    text = re.sub(r"\]\(((?:\.\./)*README\.md)(#[\w.-]+)?\)", root_readme, text)
     ids = set(re.findall(ANCHOR_RE, text))
 
     def local(m):
@@ -83,5 +96,18 @@ def link_directories(app, docname, source):
     source[0] = text
 
 
+# Furo opens the sidebar at its top; this brings the entry of the current page into view.
+SCROLL_SIDEBAR_JS = """
+document.addEventListener("DOMContentLoaded", function () {
+  var box = document.querySelector(".sidebar-scroll");
+  var here = document.querySelector(".sidebar-tree .current-page > a");
+  if (!box || !here) return;
+  var b = box.getBoundingClientRect(), h = here.getBoundingClientRect();
+  if (h.bottom > b.bottom || h.top < b.top) box.scrollTo({top: box.scrollTop + h.top - b.top - b.height / 3, behavior: "instant"});
+});
+"""
+
+
 def setup(app):
+    app.add_js_file(None, body=SCROLL_SIDEBAR_JS)
     app.connect("source-read", link_directories)

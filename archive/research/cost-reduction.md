@@ -1,4 +1,4 @@
-# Cost and part-count reduction for the PoE → USB-C adapter
+# Cost and part-count reduction
 
 > **Archived.** This note is not part of the current design. It trims a bill of materials built around an external CH32X035 MCU and a passive Ethernet passthrough. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

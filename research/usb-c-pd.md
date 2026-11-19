@@ -1,4 +1,4 @@
-# USB-C Power: Standards, RPi 5 Requirements, and PD Negotiation at the Electrical Level
+# USB-C power
 
 The adapter is a **USB-C power source**: it supplies a device such as a Raspberry Pi 5. This note gives the standards, the Raspberry Pi 5 requirements and the electrical and timing detail of PD negotiation that any implementation has to meet. The design has no microcontroller other than the RISC-V CPU inside the YT9215 switch IC ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)); how that chip does the job, and with which external parts, is worked out in [`yt9215-usb-pd.md`](yt9215-usb-pd.md).
 

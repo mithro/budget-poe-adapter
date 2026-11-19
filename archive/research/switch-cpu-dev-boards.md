@@ -1,4 +1,4 @@
-# Dev boards and off-the-shelf hardware for the RTL8367S and YT9215S
+# Switch IC dev boards
 
 > **Archived.** This note is not part of the current design. Most of it covers hardware for the RTL8367S. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The boards and products that carry a YT9215 are in [`yt9215-boards.md`](../../research/yt9215-boards.md). The [archive index](../README.md) lists every archived note.
 

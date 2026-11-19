@@ -1,4 +1,4 @@
-# Piggybacking a small device on a gigabit Ethernet link
+# Piggybacking on a gigabit link
 
 > **Archived.** This note is not part of the current design. It assumes an external MCU that has to reach a gigabit link passed through the adapter. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

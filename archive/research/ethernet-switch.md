@@ -1,4 +1,4 @@
-# Cheap ~3-port gigabit switch ICs for the PoE → USB-C adapter
+# Cheap gigabit switch ICs
 
 > **Archived.** This note is not part of the current design. It picks the RTL8363NB switch IC, managed by an external MCU. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
 

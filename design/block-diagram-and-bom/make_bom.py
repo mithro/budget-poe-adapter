@@ -22,13 +22,7 @@ PARTS = {
     "xtal": ("X322525MOB4SI", "YXC", "3.2 × 2.5 mm", "25 MHz", "–", "C9006", 0.0505, LCSC, "3,000"),
     "rj45": ("R-RJ45R08P-A004", "Ckmtw", "Through-hole", "–", "–", "C385834", 0.1049, LCSC, "992"),
     "xfmr": ("G2415S", "CND-tek", "SMD 24-pin", "350 µH", "–", "C3003219", 0.3006, LCSC, "850"),
-    "bridge": ("MB10S-50MIL", "MDD", "MBS", "–", "1 A", "C2488", 0.0145, LCSC, "3,000"),
-    "tvs": ("SMAJ58A", "Goodwork", "SMA", "–", "58 V", "C2980408", 0.0186, LCSC, "2,000"),
-    "elec": ("ERM1KM220E12OT", "Aishi", "6.3 × 12 mm", "22 µF", "100 V", "C106608", 0.0250, LCSC, "1,000"),
-    "hsfet": ("NCE0130KA", "NCE", "TO-252", "–", "100 V", "C502817", 0.3143, LCSC, "2,500"),
-    "zener": ("Not selected", "Not selected", "SOD-123", "Set by the PoE design", "–", "", 0.0100, EST, "–"),
-    "zgate": ("BZT52C15", "Goodwork", "SOD-123", "15 V", "–", "C2932746", 0.0099, LCSC, "3,000"),
-    "npn": ("MMBT5551", "JSCJ", "SOT-23", "–", "160 V", "C2145", 0.0096, LCSC, "3,000"),
+    "elec": ("RV100V47M8X10", "Jierr", "8 × 10 mm", "47 µF", "100 V", "C48935391", 0.0768, LCSC, "500"),
     "buck5": ("RT6365GSP", "Richtek", "SOP-8-EP", "5 A", "60 V", "C3024482", 0.5319, LCSC, "1,000"),
     "diode": ("SS56", "MDD", "SMA", "5 A", "60 V", "C65009", 0.0353, LCSC, "1,000"),
     "l10": ("MWSA1005S-100MT", "Sunlord", "11.5 × 10 mm", "10 µH", "8 A", "C17700185", 0.1872, JLC, "2,500"),
@@ -57,14 +51,11 @@ PARTS = {
     "r18k": ("0402WGF1802TCE", "Uni-Royal", "0402", "18 kΩ", "–", "C25762", 0.0011, LCSC, "1,000"),
     "r2k": ("0402WGF2001TCE", "Uni-Royal", "0402", "2 kΩ", "–", "C4109", 0.0015, LCSC, "1,000"),
     "r2k49": ("RC0402FR-072K49L", "Yageo", "0402", "2.49 kΩ", "–", "C145071", 0.0016, LCSC, "1,000"),
-    "r24k9": ("Not selected", "Not selected", "1206", "24.9 kΩ", "–", "", 0.0030, EST, "–"),
     "rhv": ("Not selected", "Not selected", "0805", "Set at schematic", "150 V", "", 0.0020, EST, "–"),
     "r36k": ("Not selected", "Not selected", "0402", "36 kΩ", "–", "", 0.0010, EST, "–"),
     "rgen": ("Not selected", "Not selected", "0402", "Set at schematic", "–", "", 0.0011, EST, "–"),
     "cgen": ("Not selected", "Not selected", "0402", "Set at schematic", "–", "", 0.0020, EST, "–"),
-    "csig": ("Not selected", "Not selected", "0805", "100 nF", "100 V", "", 0.0100, EST, "–"),
     "c100n": ("CL05B104KO5NNNC", "Samsung", "0402", "100 nF", "16 V", "C1525", 0.0018, LCSC, "1,000"),
-    "c100n50": ("CL05B104KB54PNC", "Samsung", "0402", "100 nF", "50 V", "C307331", 0.0064, LCSC, "1,000"),
     "c1u": ("CL05A105KA5NQNC", "Samsung", "0402", "1 µF", "25 V", "C52923", 0.0042, LCSC, "1,000"),
     "c10u": ("CL10A106KP8NNNC", "Samsung", "0603", "10 µF", "10 V", "C19702", 0.0107, LCSC, "4,000"),
     "c18p": ("0402CG180J500NT", "FH", "0402", "18 pF", "50 V", "C1549", 0.0014, LCSC, "1,000"),
@@ -77,7 +68,7 @@ JLC_ONLY = {"C17700185", "C193025", "C50543"}
 ETH, SW, POE, B5, B33, USB, CCC, CCB, CCM = (
     "Ethernet", "Switch", "PoE front end", "5 V converter", "3.3 V converter",
     "USB-C power", "CC interface: PD transceiver", "CC interface: GPIO bit-bang", "CC interface: port 9 MAC")
-BLOCKS = (ETH, SW, POE, B5, B33, USB, CCC, CCB, CCM)
+BLOCKS = (ETH, SW, B5, B33, USB, CCC, CCB, CCM)
 ANCHOR = {ETH: "block-ethernet", SW: "block-switch", POE: "block-poe", B5: "block-5v", B33: "block-3v3",
           USB: "block-usb", CCC: "block-cc-transceiver", CCB: "block-cc-bit-bang", CCM: "block-cc-mac"}
 BASE, CHIP, BANG, MAC = "Always", "PD transceiver", "GPIO bit-bang", "Port 9 MAC"
@@ -105,18 +96,6 @@ ROWS = [
     (SW, "Strap resistor", "r4k7", 6, 6, BASE),
     (SW, "Reset resistor", "r4k7", 1, 1, BASE),
     (SW, "Reset capacitor", "c10u", 1, 1, BASE),
-    (POE, "Polarity bridge", "bridge", 2, 2, BASE),
-    (POE, "Surge clamp", "tvs", 1, 1, BASE),
-    (POE, "Signature resistor", "r24k9", 1, 1, BASE),
-    (POE, "Signature capacitor", "csig", 1, 1, BASE),
-    (POE, "Class sink transistor", "npn", 2, 2, BASE),
-    (POE, "Class sink window zener", "zener", 1, 1, BASE),
-    (POE, "Class sink resistor", "rhv", 3, 3, BASE),
-    (POE, "Hot-swap MOSFET", "hsfet", 1, 1, BASE),
-    (POE, "Gate clamp zener", "zgate", 1, 1, BASE),
-    (POE, "Turn-on threshold zener", "zener", 1, 1, BASE),
-    (POE, "Turn-on threshold resistor", "rhv", 2, 2, BASE),
-    (POE, "Gate capacitor", "c100n50", 1, 1, BASE),
     (B5, "Converter IC", "buck5", 1, 1, BASE),
     (B5, "Catch diode", "diode", 1, 1, BASE),
     (B5, "Inductor", "l10", 1, 1, BASE),
@@ -124,6 +103,7 @@ ROWS = [
     (B5, "Input capacitor", "c2u2hv", 2, 2, BASE),
     (B5, "Output capacitor", "c22u", 2, 2, BASE),
     (B5, "Bootstrap capacitor", "c100n", 1, 1, BASE),
+    (B5, "Enable divider resistor", "rhv", 2, 2, BASE),
     (B5, "Feedback resistor", "rgen", 2, 2, BASE),
     (B5, "Frequency resistor", "rgen", 1, 1, BASE),
     (B5, "Compensation resistor", "rgen", 1, 1, BASE),
@@ -182,11 +162,6 @@ ROWS = [
     (CCM, "Supply pin capacitor", "c100n", 4, 0, MAC),
 ]
 
-# Estimates that are not parts of the bill of materials.
-PCB_USD = {"a": 0.40, "b": 0.50}
-ASSEMBLY_USD = {"a": 1.10, "b": 1.30}
-
-
 def number_link(num):
     if not num:
         return "–"
@@ -238,19 +213,51 @@ def block_table():
     return "\n".join(out)
 
 
+FRONT_END = "https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md"
+# (variant, parts, cost, 25.5 W from class events, 25.5 W by LLDP, signal to the CPU), from the PoE front end note.
+POE_VARIANTS = [
+    ("Discrete Class 0", 13, 0.22, "No", "No", "None"),
+    ("Discrete Class 4 with a class sink", 30, 0.42, "No", "Yes", "None"),
+    ("Discrete Class 4 with two-event detection", 62, 0.59, "Yes", "Yes", "T2P"),
+    ("PD controller IC", 8, 0.33, "Yes", "Yes", "T2P"),
+]
+
+
+def poe_variants_table():
+    out = ["| Variant | Parts | Cost | 25.5 W from class events | 25.5 W by LLDP | Signal to the CPU |",
+           "| --- | ---: | ---: | --- | --- | --- |"]
+    for name, parts, cost, events, lldp, signal in POE_VARIANTS:
+        out.append("| [%s](%s#summary) | %d | $%.2f | %s | %s | %s |" % (name, FRONT_END, parts, cost, events, lldp, signal))
+    return "\n".join(out)
+
+
+def poe_matrix(what):
+    out = ["| Option | CC interface | " + " | ".join(v[0] for v in POE_VARIANTS) + " |",
+           "| --- | --- | " + " | ".join("---:" for v in POE_VARIANTS) + " |"]
+    for option, name in (("a", "[A](#option-a)"), ("b", "[B](#option-b)")):
+        for build in (CHIP, BANG, MAC):
+            if not rows_of(option, (build,)):
+                continue
+            cost, placements, _ = summary(option, (BASE, build))
+            if what == "cost":
+                cells = ["$%.2f" % (cost + v[2]) for v in POE_VARIANTS]
+            else:
+                cells = ["%d" % (placements + v[1]) for v in POE_VARIANTS]
+            out.append("| %s | [%s](#%s) | %s |" % (name, build, ANCHOR[BUILD_BLOCK[build]], " | ".join(cells)))
+    return "\n".join(out)
+
+
 def totals_table():
-    out = ["| Option | CC interface | Parts cost | Placements | Line items | PCB estimate | Assembly estimate | Total |",
-           "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |"]
+    out = ["| Option | CC interface | Parts cost | Placements | Line items |",
+           "| --- | --- | ---: | ---: | ---: |"]
     for option, name in (("a", "[A](#option-a)"), ("b", "[B](#option-b)")):
         for build in (CHIP, BANG, MAC):
             label = "[%s](#%s)" % (build, ANCHOR[BUILD_BLOCK[build]])
             if not rows_of(option, (build,)):
-                out.append("| %s | %s | – | – | – | – | – | – |" % (name, label))
+                out.append("| %s | %s | – | – | – |" % (name, label))
                 continue
             cost, placements, items = summary(option, (BASE, build))
-            out.append("| %s | %s | $%.2f | %d | %d | $%.2f | $%.2f | $%.2f |"
-                       % (name, label, cost, placements, items, PCB_USD[option], ASSEMBLY_USD[option],
-                          cost + PCB_USD[option] + ASSEMBLY_USD[option]))
+            out.append("| %s | %s | $%.2f | %d | %d |" % (name, label, cost, placements, items))
     return "\n".join(out)
 
 
@@ -270,7 +277,8 @@ def write_csv(option):
 
 
 def main():
-    blocks = {"totals": totals_table(), "blocks": block_table()}
+    blocks = {"totals": totals_table(), "blocks": block_table(), "poe-variants": poe_variants_table(),
+              "totals-poe": poe_matrix("cost"), "placements-poe": poe_matrix("placements")}
     for option in "ab":
         blocks["bom-%s-base" % option] = bom_table(option, (BASE,))
         for build, key in ((CHIP, "transceiver"), (BANG, "bit-bang"), (MAC, "mac")):

@@ -21,26 +21,59 @@ signalling has three priced builds, each with its own BOM table: a
 <a id="totals"></a>
 
 <!-- BEGIN totals -->
-| Option | CC interface | Parts cost | Placements | Line items | PCB estimate | Assembly estimate | Total |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | $6.80 | 132 | 43 | $0.40 | $1.10 | $8.30 |
-| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | $6.65 | 147 | 50 | $0.40 | $1.10 | $8.15 |
-| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | $6.68 | 153 | 51 | $0.40 | $1.10 | $8.18 |
-| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | $8.24 | 156 | 43 | $0.50 | $1.30 | $10.04 |
-| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | $7.90 | 183 | 50 | $0.50 | $1.30 | $9.70 |
-| [B](#option-b) | [Port 9 MAC](#block-cc-mac) | – | – | – | – | – | – |
+| Option | CC interface | Parts cost | Placements | Line items |
+| --- | --- | ---: | ---: | ---: |
+| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | $6.42 | 117 | 34 |
+| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | $6.27 | 132 | 41 |
+| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | $6.30 | 138 | 42 |
+| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | $7.85 | 141 | 34 |
+| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | $7.51 | 168 | 41 |
+| [B](#option-b) | [Port 9 MAC](#block-cc-mac) | – | – | – |
 <!-- END totals -->
 
-- Parts cost is the sum of the BOM rows at the [price tiers](#prices) the BOM names.
+- Parts cost is the sum of the BOM rows at the [price tiers](#prices) the BOM names. It leaves
+  out the [PoE front end](#block-poe), which has four variants with their own BOM.
 - A placement is one part put on the board. A line item is one distinct part number. Parts
   whose value is not yet set share one line item, so the line item count is a lower bound.
-- The PCB and assembly columns are estimates [**I**](#evidence-codes) and are not BOM rows.
+- The PCB and assembly estimates add $1.50 in option A and $1.80 in option B
+  [**I**](#evidence-codes). They are not BOM rows.
 - The port 9 MAC serves one CC line, so it has no figures for option B
   ([port 9 MAC](#block-cc-mac)).
+
+Parts cost with each PoE front end variant added:
+
+<a id="totals-poe"></a>
+
+<!-- BEGIN totals-poe -->
+| Option | CC interface | Discrete Class 0 | Discrete Class 4 with a class sink | Discrete Class 4 with two-event detection | PD controller IC |
+| --- | --- | ---: | ---: | ---: | ---: |
+| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | $6.64 | $6.84 | $7.01 | $6.75 |
+| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | $6.49 | $6.69 | $6.86 | $6.60 |
+| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | $6.52 | $6.72 | $6.89 | $6.63 |
+| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | $8.07 | $8.27 | $8.44 | $8.18 |
+| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | $7.73 | $7.93 | $8.10 | $7.84 |
+<!-- END totals-poe -->
+
+Placements with each PoE front end variant added:
+
+<a id="placements-poe"></a>
+
+<!-- BEGIN placements-poe -->
+| Option | CC interface | Discrete Class 0 | Discrete Class 4 with a class sink | Discrete Class 4 with two-event detection | PD controller IC |
+| --- | --- | ---: | ---: | ---: | ---: |
+| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | 130 | 147 | 179 | 125 |
+| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | 145 | 162 | 194 | 140 |
+| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | 151 | 168 | 200 | 146 |
+| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | 154 | 171 | 203 | 149 |
+| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | 181 | 198 | 230 | 176 |
+<!-- END placements-poe -->
+
 - With a 25.5 W PoE grant the USB-C side gets about 19.8 W in option A and about 19.5 W in
   option B, where the two outputs share it ([power budget](#power-budget)).
 - A 25.5 W grant is too small for a 5 V, 5 A offer, and a 12.95 W grant is under the 3 A of a
   standard PD offer ([power budget](#power-budget)).
+- The PoE front end asks for a 5 V converter with a 100 V input rating. The counted converter
+  is a 60 V part, and no 100 V part with a 5 A output is found ([5 V converter](#block-5v)).
 - The open points are in [Assumptions not yet verified](#assumptions).
 
 <a id="evidence-codes"></a>
@@ -70,7 +103,7 @@ their pin numbers, and this note uses those numbers.
 
 | Job | Hardware not fitted | Runs on | Detail |
 | --- | --- | --- | --- |
-| Ask the PoE switch for more than 12.95 W | Two-event detection circuit | CPU | [PoE front end](#block-poe) |
+| Ask the PoE switch for more than 12.95 W by LLDP | Two-event detector | CPU | [PoE front end](#block-poe) |
 | Hold downstream ports off until the grant | Supervisor chip | CPU | [Start-up order](#start-up) |
 | Hold the USB-C outputs off until the grant | Supervisor chip | CPU | [Start-up order](#start-up) |
 | Work out the USB-C offer from the grant | Fixed offer resistors | CPU | [Power budget](#power-budget) |
@@ -184,7 +217,7 @@ output voltage, which adds about one [5 V converter](#block-5v) block per output
 Every column except "Granted at the PoE input" is an estimate [**I**](#evidence-codes):
 
 - Bridge loss is two diode drops of 1.1 V at the lowest input voltage of each grant. LCSC lists
-  1.1 V at 0.4 A for the counted bridge [**P**](#evidence-codes). The 0.6 A of a 25.5 W grant is past
+  1.1 V at 0.4 A for the MB10S, a 1 A bridge [**P**](#evidence-codes). The 0.6 A of a 25.5 W grant is past
   that listed point.
 - The 5 V rail is the remainder times an assumed converter efficiency of 87 %.
 - Switch supply starts from Table 28 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)
@@ -340,54 +373,50 @@ reset threshold not published [**I**](#evidence-codes). The discharge diode of t
 
 ### PoE front end
 
-The front end is discrete and has no PoE controller chip. It is not designed in this note. The
-BOM rows are placeholders for its functions, with part values left open
-[**U**](#evidence-codes). The standards background is in
-[PoE powered device](../research/poe.md).
+The front end is designed in [Discrete PoE front end](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md), which holds its circuit, its
+simulation and its BOM. This note carries its variants with their totals [**P**](#evidence-codes). The BOM
+tables of this note leave the front end out, and [parts cost by variant](#totals-poe) adds each
+variant in turn. The standards background is in [PoE powered device](../research/poe.md).
 
 | Function | Reason |
 | --- | --- |
 | Polarity bridges | Either pair set may carry either polarity |
 | Surge clamp | Cable surges |
 | Detection signature | Detection by the PoE switch |
-| Class 4 current sink | Marks the device as able to ask for 25.5 W |
-| Hot-swap switch | Turn-on threshold with inrush limit |
+| Class current sink | Tells the PoE switch the power class |
+| Two-event detector | Sees a 25.5 W grant made by class events |
+| Hot-swap switch | Inrush limit |
 
-| Way to get 25.5 W | Extra parts | Extra cost | Works with a PoE switch that has no LLDP | Counted in the BOM |
-| --- | ---: | ---: | --- | --- |
-| LLDP request from the CPU | 0 | $0.00 | No | Yes |
-| Two-event detection circuit | About 4 | About $0.03 | Yes | No |
+<!-- BEGIN poe-variants -->
+| Variant | Parts | Cost | 25.5 W from class events | 25.5 W by LLDP | Signal to the CPU |
+| --- | ---: | ---: | --- | --- | --- |
+| [Discrete Class 0](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#summary) | 13 | $0.22 | No | No | None |
+| [Discrete Class 4 with a class sink](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#summary) | 30 | $0.42 | No | Yes | None |
+| [Discrete Class 4 with two-event detection](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#summary) | 62 | $0.59 | Yes | Yes | T2P |
+| [PD controller IC](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#summary) | 8 | $0.33 | Yes | Yes | T2P |
+<!-- END poe-variants -->
 
-- The device starts at 12.95 W, and the CPU asks for 25.5 W by LLDP
-  ([LLDP](../research/poe.md#45-lldp-data-link-layer-classification)).
-- A PoE source without LLDP signals 25.5 W by two class events, and a device that cannot see
-  them stays at 12.95 W
-  ([classification](../research/poe.md#42-classification-how-much-power-do-you-want)).
-- Whether IEEE 802.3at requires a 25.5 W device to understand both ways is not checked
-  [**U**](#evidence-codes).
-- The two-event circuit is not designed, and its figures are a guess [**I**](#evidence-codes).
-- The class sink has to turn off above the classification window so that it draws nothing at
-  48 V. The placeholder rows may not be enough for that [**U**](#evidence-codes).
-- The class sink transistor dissipates about 1 W for up to 105 ms during classification
-  ([minimal external parts](../research/poe.md#64-minimal-external-parts-architecture-b)).
-  Whether the counted SOT-23 part survives that pulse is not checked [**U**](#evidence-codes).
-- The hot-swap switch has to stay off at the 20.5 V of classification and be fully on at 37 V.
-  A resistor divider alone cannot do that, so the BOM counts a threshold zener with no
-  selected part [**U**](#evidence-codes).
-- A resistor across the PoE input sees 57 V, and 93.6 V in a surge. An 0402 resistor is rated
-  50 V, so the BOM counts the class sink and threshold resistors as 0805 parts [**I**](#evidence-codes).
-- The signature resistor dissipates 0.13 W at 57 V, so the BOM counts a 1206 part. That loss is
-  not in the [power budget](#power-budget).
-- With power on two pairs, one bridge carries the whole current and dissipates up to 1.3 W.
-  Whether the MBS package can shed that is not checked [**U**](#evidence-codes).
+- The PD controller variant uses the TMI7303B,
+  [C29779845](https://www.lcsc.com/product-detail/C29779845.html), which is a PoE controller
+  chip ([discrete parts or a PD controller IC](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#discrete-parts-or-a-pd-controller-ic)).
+- A PoE source grants 25.5 W either by two class events or by LLDP, and it chooses which
+  ([getting more than 13 W](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#getting-more-than-13-w)).
+- The class sink variant has no mark latch, and its mark event behaviour misses two limits of
+  the standard. The mark latch adds 8 parts
+  ([getting more than 13 W](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#getting-more-than-13-w)).
+- A variant with two-event detection reports the grant on a signal named T2P, which takes one
+  GPIO input of the YT9215. The pin is not assigned [**U**](#evidence-codes).
+- The front end has no undervoltage lockout of its own in the discrete variants. It relies on
+  the enable threshold of the [5 V converter](#block-5v)
+  ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)).
 - The USB-C ground connects to the PoE input through the converters, with no isolation. That
   does not meet the 1500 V isolation of IEEE 802.3
   ([isolation and safety](../research/poe.md#8-isolation-and-safety-non-isolated-design)) [**U**](#evidence-codes).
-- The hot-swap MOSFET is $0.31 of this block. A cheaper 100 V part is not selected.
 - The switch draws more than the 10 mA a PoE switch needs to see, so no dummy load is fitted
   ([maintain power signature](../research/poe.md#44-maintain-power-signature-mps)).
-- The firmware is assumed to learn the grant from LLDP alone, with no signal from the front end
-  [**U**](#evidence-codes).
+- The front end note estimates 19.9 W for USB-C at a 25.5 W grant, with a 90 % converter and a
+  2.0 W switch supply ([power sequencing](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#power-sequencing)). The
+  [power budget](#power-budget) of this note uses 87 % and a smaller switch supply.
 
 <a id="block-5v"></a>
 
@@ -396,19 +425,23 @@ BOM rows are placeholders for its functions, with part values left open
 One converter makes 5 V for the USB-C outputs and for the 3.3 V converter. It is sized for the
 25.5 W grant: 21.0 W is 4.2 A at 5 V.
 
-| Converter | Maker | Input limit | Output current | Rectifier | Catalogue number | Price | Counted in the BOM |
-| --- | --- | ---: | ---: | --- | --- | ---: | --- |
-| RT6365GSP | Richtek | 60 V | 5 A | External diode | [C3024482](https://www.lcsc.com/product-detail/C3024482.html) | $0.53 | Yes |
-| TPS54560DDAR-JSM | JSMSEMI | 60 V | 5 A | External diode | [C54320988](https://www.lcsc.com/product-detail/C54320988.html) | $0.50 | No |
-| TX4138 | XDS | 60 V | 4 A | External diode | [C329267](https://www.lcsc.com/product-detail/C329267.html) | $0.41 | No |
-| SY8513FCC | Silergy | 100 V | 3 A | External diode | [C3034281](https://www.lcsc.com/product-detail/C3034281.html) | $0.58 | No |
-| SCT2650STER | SCT | 60 V | 5 A | External diode | [C2840771](https://www.lcsc.com/product-detail/C2840771.html) | $1.77 | No |
-| EG1163S | EG Micro | 600 V | Set by its MOSFETs | 2 external MOSFETs | [C480648](https://www.lcsc.com/product-detail/C480648.html) | $0.45 | No |
+| Converter | Maker | Input limit | Meets the 100 V input rating | Output current | Rectifier | Catalogue number | Price | Counted in the BOM |
+| --- | --- | ---: | --- | ---: | --- | --- | ---: | --- |
+| RT6365GSP | Richtek | 60 V | No | 5 A | External diode | [C3024482](https://www.lcsc.com/product-detail/C3024482.html) | $0.53 | Yes |
+| TPS54560DDAR-JSM | JSMSEMI | 60 V | No | 5 A | External diode | [C54320988](https://www.lcsc.com/product-detail/C54320988.html) | $0.50 | No |
+| TX4138 | XDS | 60 V | No | 4 A | External diode | [C329267](https://www.lcsc.com/product-detail/C329267.html) | $0.41 | No |
+| SY8513FCC | Silergy | 100 V | Yes | 3 A | External diode | [C3034281](https://www.lcsc.com/product-detail/C3034281.html) | $0.58 | No |
+| SCT2650STER | SCT | 60 V | No | 5 A | External diode | [C2840771](https://www.lcsc.com/product-detail/C2840771.html) | $1.77 | No |
+| EG1163S | EG Micro | 600 V | Yes | Set by its MOSFETs | 2 external MOSFETs | [C480648](https://www.lcsc.com/product-detail/C480648.html) | $0.45 | No |
 
-- A 58 V surge clamp lets the input rise to 93.6 V at its rated surge current
-  [**P**](#evidence-codes). That is above the 60 V rating of the counted converter and of the counted
-  SS56 catch diode. Whether 60 V parts survive depends on the [PoE front end](#block-poe)
+- The PoE front end asks the converter for a 100 V input rating, because its surge clamp lets
+  the input rise to 93.6 V ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)). The counted converter and the
+  counted SS56 catch diode are 60 V parts, so the counted set does not meet that request
   [**U**](#evidence-codes).
+- The front end also asks for an enable threshold of 38 V rising and 32.5 V falling within
+  4 %, a 47 µF input capacitor, and a start into about 3 W
+  ([interfaces](https://github.com/mithro/budget-poe-adapter/blob/main/design/poe-front-end/README.md#interfaces)). The BOM counts that capacitor and two enable divider
+  resistors. Whether the counted converter holds the 4 % is not checked [**U**](#evidence-codes).
 - The SY8513FCC stops at 3 A, which is 15 W, and the TX4138 at 4 A, under the 4.2 A needed.
 - The LCSC and JLCPCB searches for this note turned up no 100 V converter with built-in
   switches and 5 A output.
@@ -576,6 +609,7 @@ The parts of the two software builds are untested candidates [**U**](#evidence-c
 | Surge clamp | [PoE front end](#block-poe) | Acts in nanoseconds |
 | Detection signature | [PoE front end](#block-poe) | Measured before power is applied |
 | Class sink | [PoE front end](#block-poe) | Works before the chip has power |
+| Two-event detector | [PoE front end](#block-poe) | Works before the chip has power |
 | Hot-swap switch | [PoE front end](#block-poe) | Limits inrush before the CPU runs |
 | 5 V converter | [5 V converter](#block-5v) | Power conversion |
 | 3.3 V converter | [3.3 V converter](#block-3v3) | Power conversion |
@@ -600,7 +634,7 @@ The parts of the two software builds are untested candidates [**U**](#evidence-c
 - A row with the price source "Estimate" has no selected part [**I**](#evidence-codes).
 - Each option has one table of parts that are always fitted and one table per
   [CC interface](#block-cc) build. A complete BOM is the always-fitted table with one build
-  table.
+  table and one [PoE front end](#block-poe) variant from its own note.
 - The same rows are in [`bom-option-a.csv`](block-diagram-and-bom/bom-option-a.csv) and
   [`bom-option-b.csv`](block-diagram-and-bom/bom-option-b.csv).
 - The PCB estimates are $0.40 and $0.50 and the assembly estimates $1.10 and $1.30, with no
@@ -637,25 +671,14 @@ Parts that are always fitted in option A:
 | [Switch](#block-switch) | Strap resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 6 | $0.0013 | LCSC | 1,000 | $0.0078 |
 | [Switch](#block-switch) | Reset resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 1 | $0.0013 | LCSC | 1,000 | $0.0013 |
 | [Switch](#block-switch) | Reset capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 1 | $0.0107 | LCSC | 4,000 | $0.0107 |
-| [PoE front end](#block-poe) | Polarity bridge | MB10S-50MIL | MDD | MBS | – | 1 A | [C2488](https://www.lcsc.com/product-detail/C2488.html) | 2 | $0.0145 | LCSC | 3,000 | $0.0290 |
-| [PoE front end](#block-poe) | Surge clamp | SMAJ58A | Goodwork | SMA | – | 58 V | [C2980408](https://www.lcsc.com/product-detail/C2980408.html) | 1 | $0.0186 | LCSC | 2,000 | $0.0186 |
-| [PoE front end](#block-poe) | Signature resistor | Not selected | Not selected | 1206 | 24.9 kΩ | – | – | 1 | $0.0030 | Estimate | – | $0.0030 |
-| [PoE front end](#block-poe) | Signature capacitor | Not selected | Not selected | 0805 | 100 nF | 100 V | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Class sink transistor | MMBT5551 | JSCJ | SOT-23 | – | 160 V | [C2145](https://www.lcsc.com/product-detail/C2145.html) | 2 | $0.0096 | LCSC | 3,000 | $0.0192 |
-| [PoE front end](#block-poe) | Class sink window zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Class sink resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 3 | $0.0020 | Estimate | – | $0.0060 |
-| [PoE front end](#block-poe) | Hot-swap MOSFET | NCE0130KA | NCE | TO-252 | – | 100 V | [C502817](https://www.lcsc.com/product-detail/C502817.html) | 1 | $0.3143 | LCSC | 2,500 | $0.3143 |
-| [PoE front end](#block-poe) | Gate clamp zener | BZT52C15 | Goodwork | SOD-123 | 15 V | – | [C2932746](https://www.lcsc.com/product-detail/C2932746.html) | 1 | $0.0099 | LCSC | 3,000 | $0.0099 |
-| [PoE front end](#block-poe) | Turn-on threshold zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Turn-on threshold resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 2 | $0.0020 | Estimate | – | $0.0040 |
-| [PoE front end](#block-poe) | Gate capacitor | CL05B104KB54PNC | Samsung | 0402 | 100 nF | 50 V | [C307331](https://www.lcsc.com/product-detail/C307331.html) | 1 | $0.0064 | LCSC | 1,000 | $0.0064 |
 | [5 V converter](#block-5v) | Converter IC | RT6365GSP | Richtek | SOP-8-EP | 5 A | 60 V | [C3024482](https://www.lcsc.com/product-detail/C3024482.html) | 1 | $0.5319 | LCSC | 1,000 | $0.5319 |
 | [5 V converter](#block-5v) | Catch diode | SS56 | MDD | SMA | 5 A | 60 V | [C65009](https://www.lcsc.com/product-detail/C65009.html) | 1 | $0.0353 | LCSC | 1,000 | $0.0353 |
 | [5 V converter](#block-5v) | Inductor | MWSA1005S-100MT | Sunlord | 11.5 × 10 mm | 10 µH | 8 A | [C17700185](https://jlcpcb.com/partdetail/C17700185) | 1 | $0.1872 | JLCPCB | 2,500 | $0.1872 |
-| [5 V converter](#block-5v) | Input bulk capacitor | ERM1KM220E12OT | Aishi | 6.3 × 12 mm | 22 µF | 100 V | [C106608](https://www.lcsc.com/product-detail/C106608.html) | 1 | $0.0250 | LCSC | 1,000 | $0.0250 |
+| [5 V converter](#block-5v) | Input bulk capacitor | RV100V47M8X10 | Jierr | 8 × 10 mm | 47 µF | 100 V | [C48935391](https://www.lcsc.com/product-detail/C48935391.html) | 1 | $0.0768 | LCSC | 500 | $0.0768 |
 | [5 V converter](#block-5v) | Input capacitor | CS3225X7R225K101NRK | Samwha | 1210 | 2.2 µF | 100 V | [C2900749](https://www.lcsc.com/product-detail/C2900749.html) | 2 | $0.0658 | LCSC | 2,000 | $0.1316 |
 | [5 V converter](#block-5v) | Output capacitor | CL31A226KAHNNNE | Samsung | 1206 | 22 µF | 25 V | [C12891](https://www.lcsc.com/product-detail/C12891.html) | 2 | $0.0646 | LCSC | 2,000 | $0.1292 |
 | [5 V converter](#block-5v) | Bootstrap capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 1 | $0.0018 | LCSC | 1,000 | $0.0018 |
+| [5 V converter](#block-5v) | Enable divider resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 2 | $0.0020 | Estimate | – | $0.0040 |
 | [5 V converter](#block-5v) | Feedback resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 2 | $0.0011 | Estimate | – | $0.0022 |
 | [5 V converter](#block-5v) | Frequency resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 1 | $0.0011 | Estimate | – | $0.0011 |
 | [5 V converter](#block-5v) | Compensation resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 1 | $0.0011 | Estimate | – | $0.0011 |
@@ -771,25 +794,14 @@ Parts that are always fitted in option B:
 | [Switch](#block-switch) | Strap resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 6 | $0.0013 | LCSC | 1,000 | $0.0078 |
 | [Switch](#block-switch) | Reset resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 1 | $0.0013 | LCSC | 1,000 | $0.0013 |
 | [Switch](#block-switch) | Reset capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 1 | $0.0107 | LCSC | 4,000 | $0.0107 |
-| [PoE front end](#block-poe) | Polarity bridge | MB10S-50MIL | MDD | MBS | – | 1 A | [C2488](https://www.lcsc.com/product-detail/C2488.html) | 2 | $0.0145 | LCSC | 3,000 | $0.0290 |
-| [PoE front end](#block-poe) | Surge clamp | SMAJ58A | Goodwork | SMA | – | 58 V | [C2980408](https://www.lcsc.com/product-detail/C2980408.html) | 1 | $0.0186 | LCSC | 2,000 | $0.0186 |
-| [PoE front end](#block-poe) | Signature resistor | Not selected | Not selected | 1206 | 24.9 kΩ | – | – | 1 | $0.0030 | Estimate | – | $0.0030 |
-| [PoE front end](#block-poe) | Signature capacitor | Not selected | Not selected | 0805 | 100 nF | 100 V | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Class sink transistor | MMBT5551 | JSCJ | SOT-23 | – | 160 V | [C2145](https://www.lcsc.com/product-detail/C2145.html) | 2 | $0.0096 | LCSC | 3,000 | $0.0192 |
-| [PoE front end](#block-poe) | Class sink window zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Class sink resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 3 | $0.0020 | Estimate | – | $0.0060 |
-| [PoE front end](#block-poe) | Hot-swap MOSFET | NCE0130KA | NCE | TO-252 | – | 100 V | [C502817](https://www.lcsc.com/product-detail/C502817.html) | 1 | $0.3143 | LCSC | 2,500 | $0.3143 |
-| [PoE front end](#block-poe) | Gate clamp zener | BZT52C15 | Goodwork | SOD-123 | 15 V | – | [C2932746](https://www.lcsc.com/product-detail/C2932746.html) | 1 | $0.0099 | LCSC | 3,000 | $0.0099 |
-| [PoE front end](#block-poe) | Turn-on threshold zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Turn-on threshold resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 2 | $0.0020 | Estimate | – | $0.0040 |
-| [PoE front end](#block-poe) | Gate capacitor | CL05B104KB54PNC | Samsung | 0402 | 100 nF | 50 V | [C307331](https://www.lcsc.com/product-detail/C307331.html) | 1 | $0.0064 | LCSC | 1,000 | $0.0064 |
 | [5 V converter](#block-5v) | Converter IC | RT6365GSP | Richtek | SOP-8-EP | 5 A | 60 V | [C3024482](https://www.lcsc.com/product-detail/C3024482.html) | 1 | $0.5319 | LCSC | 1,000 | $0.5319 |
 | [5 V converter](#block-5v) | Catch diode | SS56 | MDD | SMA | 5 A | 60 V | [C65009](https://www.lcsc.com/product-detail/C65009.html) | 1 | $0.0353 | LCSC | 1,000 | $0.0353 |
 | [5 V converter](#block-5v) | Inductor | MWSA1005S-100MT | Sunlord | 11.5 × 10 mm | 10 µH | 8 A | [C17700185](https://jlcpcb.com/partdetail/C17700185) | 1 | $0.1872 | JLCPCB | 2,500 | $0.1872 |
-| [5 V converter](#block-5v) | Input bulk capacitor | ERM1KM220E12OT | Aishi | 6.3 × 12 mm | 22 µF | 100 V | [C106608](https://www.lcsc.com/product-detail/C106608.html) | 1 | $0.0250 | LCSC | 1,000 | $0.0250 |
+| [5 V converter](#block-5v) | Input bulk capacitor | RV100V47M8X10 | Jierr | 8 × 10 mm | 47 µF | 100 V | [C48935391](https://www.lcsc.com/product-detail/C48935391.html) | 1 | $0.0768 | LCSC | 500 | $0.0768 |
 | [5 V converter](#block-5v) | Input capacitor | CS3225X7R225K101NRK | Samwha | 1210 | 2.2 µF | 100 V | [C2900749](https://www.lcsc.com/product-detail/C2900749.html) | 2 | $0.0658 | LCSC | 2,000 | $0.1316 |
 | [5 V converter](#block-5v) | Output capacitor | CL31A226KAHNNNE | Samsung | 1206 | 22 µF | 25 V | [C12891](https://www.lcsc.com/product-detail/C12891.html) | 2 | $0.0646 | LCSC | 2,000 | $0.1292 |
 | [5 V converter](#block-5v) | Bootstrap capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 1 | $0.0018 | LCSC | 1,000 | $0.0018 |
+| [5 V converter](#block-5v) | Enable divider resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 2 | $0.0020 | Estimate | – | $0.0040 |
 | [5 V converter](#block-5v) | Feedback resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 2 | $0.0011 | Estimate | – | $0.0022 |
 | [5 V converter](#block-5v) | Frequency resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 1 | $0.0011 | Estimate | – | $0.0011 |
 | [5 V converter](#block-5v) | Compensation resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 1 | $0.0011 | Estimate | – | $0.0011 |
@@ -857,8 +869,7 @@ Added to option B for the [GPIO bit-bang](#block-cc-bit-bang) build:
 | --- | ---: | ---: | ---: | ---: |
 | [Ethernet](#block-ethernet) | $0.89 | 25 | $1.31 | 36 |
 | [Switch](#block-switch) | $3.28 | 54 | $3.28 | 54 |
-| [PoE front end](#block-poe) | $0.44 | 17 | $0.44 | 17 |
-| [5 V converter](#block-5v) | $1.05 | 15 | $1.05 | 15 |
+| [5 V converter](#block-5v) | $1.11 | 17 | $1.11 | 17 |
 | [3.3 V converter](#block-3v3) | $0.14 | 9 | $0.14 | 9 |
 | [USB-C power](#block-usb) | $0.59 | 6 | $1.18 | 12 |
 | [CC interface: PD transceiver](#block-cc-transceiver) | $0.42 | 6 | $0.84 | 13 |
@@ -885,15 +896,11 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | Table 28 of the YT9215SCH holds for the YT9215SC | Bench | USB-C budget changes |
 | A crystal on the 50 Ω limit starts reliably | Bench | Other crystal |
 | Switch supply matches the power budget | Bench | USB-C budget changes |
-| The PoE front end parts are as listed | PoE front end design | PoE rows change |
-| LLDP alone is an acceptable way to 25.5 W | PoE front end design | Two-event detection circuit |
-| The firmware learns the grant from LLDP alone | PoE front end design | One more signal |
-| 60 V converter parts survive behind the surge clamp | PoE front end design | 100 V parts |
-| The class sink transistor survives the class pulse | Datasheet check | Larger transistor |
-| One threshold zener makes the hot-swap switch work | PoE front end design | PoE rows change |
-| One bridge can shed 1.3 W | Schematic work | Schottky bridge |
-| A non-isolated design is acceptable | PoE front end design | Isolated converter |
-| Bridge loss is 1.3 W at 25.5 W | PoE front end design | USB-C budget changes |
+| 60 V converter parts survive behind the surge clamp | Bench | 100 V parts |
+| The converter enable threshold holds 4 % | Datasheet check | Reference with a comparator |
+| A GPIO input is free for T2P | CPU study | LLDP only |
+| A non-isolated design is acceptable | Safety review | Isolated converter |
+| Bridge loss is 1.3 W at 25.5 W | Bench | USB-C budget changes |
 | The 5 V converter reaches 87 % | Bench | USB-C budget changes |
 | The catch diode can shed its loss | Schematic work | Larger diode |
 | The G2415S carries the PoE current | Datasheet check | Other transformer |

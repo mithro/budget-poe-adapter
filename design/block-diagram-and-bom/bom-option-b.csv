@@ -19,25 +19,14 @@ Switch,Core regulator capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF,10 V,C19702,
 Switch,Strap resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,–,C25900,6,0.0013,LCSC,"1,000",0.0078,Always
 Switch,Reset resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,–,C25900,1,0.0013,LCSC,"1,000",0.0013,Always
 Switch,Reset capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF,10 V,C19702,1,0.0107,LCSC,"4,000",0.0107,Always
-PoE front end,Polarity bridge,MB10S-50MIL,MDD,MBS,–,1 A,C2488,2,0.0145,LCSC,"3,000",0.0290,Always
-PoE front end,Surge clamp,SMAJ58A,Goodwork,SMA,–,58 V,C2980408,1,0.0186,LCSC,"2,000",0.0186,Always
-PoE front end,Signature resistor,Not selected,Not selected,1206,24.9 kΩ,–,,1,0.0030,Estimate,–,0.0030,Always
-PoE front end,Signature capacitor,Not selected,Not selected,0805,100 nF,100 V,,1,0.0100,Estimate,–,0.0100,Always
-PoE front end,Class sink transistor,MMBT5551,JSCJ,SOT-23,–,160 V,C2145,2,0.0096,LCSC,"3,000",0.0192,Always
-PoE front end,Class sink window zener,Not selected,Not selected,SOD-123,Set by the PoE design,–,,1,0.0100,Estimate,–,0.0100,Always
-PoE front end,Class sink resistor,Not selected,Not selected,0805,Set at schematic,150 V,,3,0.0020,Estimate,–,0.0060,Always
-PoE front end,Hot-swap MOSFET,NCE0130KA,NCE,TO-252,–,100 V,C502817,1,0.3143,LCSC,"2,500",0.3143,Always
-PoE front end,Gate clamp zener,BZT52C15,Goodwork,SOD-123,15 V,–,C2932746,1,0.0099,LCSC,"3,000",0.0099,Always
-PoE front end,Turn-on threshold zener,Not selected,Not selected,SOD-123,Set by the PoE design,–,,1,0.0100,Estimate,–,0.0100,Always
-PoE front end,Turn-on threshold resistor,Not selected,Not selected,0805,Set at schematic,150 V,,2,0.0020,Estimate,–,0.0040,Always
-PoE front end,Gate capacitor,CL05B104KB54PNC,Samsung,0402,100 nF,50 V,C307331,1,0.0064,LCSC,"1,000",0.0064,Always
 5 V converter,Converter IC,RT6365GSP,Richtek,SOP-8-EP,5 A,60 V,C3024482,1,0.5319,LCSC,"1,000",0.5319,Always
 5 V converter,Catch diode,SS56,MDD,SMA,5 A,60 V,C65009,1,0.0353,LCSC,"1,000",0.0353,Always
 5 V converter,Inductor,MWSA1005S-100MT,Sunlord,11.5 × 10 mm,10 µH,8 A,C17700185,1,0.1872,JLCPCB,"2,500",0.1872,Always
-5 V converter,Input bulk capacitor,ERM1KM220E12OT,Aishi,6.3 × 12 mm,22 µF,100 V,C106608,1,0.0250,LCSC,"1,000",0.0250,Always
+5 V converter,Input bulk capacitor,RV100V47M8X10,Jierr,8 × 10 mm,47 µF,100 V,C48935391,1,0.0768,LCSC,500,0.0768,Always
 5 V converter,Input capacitor,CS3225X7R225K101NRK,Samwha,1210,2.2 µF,100 V,C2900749,2,0.0658,LCSC,"2,000",0.1316,Always
 5 V converter,Output capacitor,CL31A226KAHNNNE,Samsung,1206,22 µF,25 V,C12891,2,0.0646,LCSC,"2,000",0.1292,Always
 5 V converter,Bootstrap capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,Always
+5 V converter,Enable divider resistor,Not selected,Not selected,0805,Set at schematic,150 V,,2,0.0020,Estimate,–,0.0040,Always
 5 V converter,Feedback resistor,Not selected,Not selected,0402,Set at schematic,–,,2,0.0011,Estimate,–,0.0022,Always
 5 V converter,Frequency resistor,Not selected,Not selected,0402,Set at schematic,–,,1,0.0011,Estimate,–,0.0011,Always
 5 V converter,Compensation resistor,Not selected,Not selected,0402,Set at schematic,–,,1,0.0011,Estimate,–,0.0011,Always

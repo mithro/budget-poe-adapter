@@ -1,14 +1,14 @@
 # Cost and part-count reduction for the PoE → USB-C adapter
 
-Researched 2026-10-21. Scope: everything except the switch-vs-passthrough
+Scope: everything except the switch-vs-passthrough
 question (covered in [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md)). The
 baseline is the **no-switch variant in [`design/bom-rough.csv`](../design/bom-rough.csv) (≈ $4.11 @1k,
-~65 placed parts)**. Prices marked **[live]** were read from LCSC product pages
-today; everything else is an estimate on the same basis as the BOM CSV.
+~65 placed parts)**. <a id="evidence-codes"></a>Evidence code **live**: the price or stock figure was read from the LCSC product page on 2026-10-21.
+Every other price is an estimate on the same basis as the BOM CSV.
 
 ## 1. TL;DR
 
-* **Swap the CH32V203 for a CH32X035 [live $0.27 @1k, QFN20].** It has a
+* **Swap the CH32V203 for a CH32X035 ($0.27 @1k, QFN20).** [**live**](#evidence-codes) It has a
   hardware USB PD PHY (BMC + CRC), built-in CC pull-up current sources at the
   three Type-C Rp levels (80, 180 and 330 µA), 3 comparators, 2 PGAs, a 12-bit ADC,
   USB full-speed and a 48 MHz RC oscillator. That removes the crystal, the BMC
@@ -23,21 +23,21 @@ today; everything else is an estimate on the same basis as the BOM CSV.
 * **The 60 V buck controller is the biggest cost risk, not a saving.** The
   BOM assumes $0.60. The one 100 V synchronous controller I could price live,
   SCT82A30, is **$1.44 @1k**. Finding a sub-$0.60 Chinese controller, or
-  driving the buck from the MCU (§4.2), matters more than every other item
+  driving the buck from the MCU ([section 4.2](#42-buck-controller-the-biggest-open-cost)), matters more than every other item
   here combined.
 * **Keep the discrete PoE front end** for 802.3bt. Every Chinese PD IC I
-  found is af and at only. A cheap one exists (**TMI7303B [live $0.27]**, af and at,
+  found is af and at only. A cheap one exists (**TMI7303B, $0.27** [**live**](#evidence-codes), af and at,
   integrated 100 V pass switch) and is the right choice for an at-only SKU.
   In the bt design, downsize the hot-swap FET (a 100 V SOT-23 and SOT-223 part is
   enough at ≤ 1 A): **≈ −$0.10.**
 * **Stay with the splitter transformer, not magjacks.** The PoE magjack
-  in the BOM (HR911130C) is **$1.64 [live]**, not $1.10, so back-to-back
+  in the BOM (HR911130C) is **$1.64** [**live**](#evidence-codes), not $1.10, so back-to-back
   magjacks would cost ~$2 more than the splitter-transformer option.
 * **Through-hole joints are about half of the JLCPCB assembly cost.**
   JLCPCB charges $0.0157 per manual or THT joint vs $0.0016 per SMT joint. Two
   shielded RJ45s with LEDs plus the USB-C shell legs come to ~30 THT joints
   ≈ $0.45. Using jacks without shield tabs or LEDs, or SMD jacks
-  (unshielded right-angle SMD RJ45 **$0.26 [live]**), saves **≈ $0.15–0.20**.
+  (unshielded right-angle SMD RJ45 **$0.26** [**live**](#evidence-codes)), saves **≈ $0.15–0.20**.
 
 **Net (same pricing basis as the BOM):** $4.11 → **≈ $3.45** with the
 low-risk items, and **≈ $3.00** if the MCU-driven buck works. Placed parts
@@ -57,7 +57,7 @@ controller really costs ~$1.40, both numbers rise by ~$0.80.
 | 7 | Plainer connectors | −0.15 | −2 (LEDs) | Low |
 | 8 | Leaner assembly | −0.08 | — | Low |
 | | **Subtotal, up to medium risk** | **≈ −0.65** | **≈ −20** | |
-| 9 | MCU-driven synchronous buck (§4.2) | −0.50 more | −1 | **High** |
+| 9 | MCU-driven synchronous buck ([section 4.2](#42-buck-controller-the-biggest-open-cost)) | −0.50 more | −1 | **High** |
 
 | # | Removed | Replaced by | Alternative |
 |---|---|---|---|
@@ -92,19 +92,19 @@ From the WCH datasheet (V1.7) and LCSC:
 
 * **USB PD controller + PHY** on PC14 and PC15 (CC1 and CC2): PD 2.0 or 3.0, Source,
   Sink and DRP, automatic BMC encode and decode and CRC. The GoodCRC 195 µs
-  deadline, the main bit-bang risk in [`usb-c-pd.md`](usb-c-pd.md) §5, becomes a hardware job.
+  deadline, the main bit-bang risk in [`usb-c-pd.md` section 5](usb-c-pd.md#5-usb-pd-physical-layer-bmc-on-cc), becomes a hardware job.
 * **CC pull-up current sources** of 80 µA, 180 µA and 330 µA, which are the Default, 1.5 A and 3 A Rp
   without resistors.
 * **Analog:** 3 rail-to-rail comparators (15 ns, output straight into TIM2),
   2 OPA and PGA (×4–×32), 12-bit ADC with 14 channels. Enough for the Vport and
-  class-current loop in [`poe.md`](poe.md) §6, the 12 V at 5 V VBUS check and output current
+  class-current loop in [`poe.md` section 6](poe.md#6-what-a-software-pd-needs-electrically), the 12 V at 5 V VBUS check and output current
   sensing through a PGA.
 * **Supply:** 2.0–5.5 V (3.0–5.3 V with PD or USB on). **Run at 8 MHz HSI:
   2.2 mA**; sleep 1.3–1.5 mA. That fits the ≤ 4 mA mark-event budget with
   room for the 25 kΩ signature current.
 * **HSI** 48 MHz, ±1.6 % over 0–70 °C: fine for PD (BMC tolerates ±10 %),
   and WCH runs its USB crystal-less. No crystal.
-* **Price:** CH32X035F8U6 QFN20 **$0.272 @1k [live, LCSC C42442062]**. The
+* **Price:** CH32X035F8U6 QFN20 **$0.272 @1k** ([**live**](#evidence-codes), [LCSC C42442062](https://www.lcsc.com/product-detail/C42442062.html)). The
   TSSOP20 (F7P6) is easier to rework; it should cost about the same.
 * **Caveat:** the project brief preferred "no native PD hardware". Using the
   hardware PHY is cheaper and lower risk, and the firmware can still be
@@ -147,7 +147,7 @@ small for a Pi 5.
 **None supports 802.3bt.** A PD IC also can't be combined with MCU-driven bt
 classes, because it presents its own class current at every event. So:
 
-* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from [`poe.md`](poe.md) §6.4.
+* **bt SKU (Pi 5 at 5 A):** keep the discrete front end from [`poe.md` section 6.4](poe.md#64-minimal-external-parts-architecture-b).
 * **at-only SKU (≤ ~22 W):** TMI7303B replaces the signature, class sink,
   hot-swap FET and most of the UVLO and bootstrap. Roughly cost-neutral
   (~+$0.05) but ~6 fewer parts and much less compliance risk. The MCU then
@@ -156,7 +156,7 @@ classes, because it presents its own class current at every event. So:
 
 ### 4.2 Buck controller: the biggest open cost
 
-* SCT82A30 (SCT, 100 V synchronous, voltage-mode, QFN-20): **$1.44 @1k [live]**.
+* SCT82A30 (SCT, 100 V synchronous, voltage-mode, QFN-20): **$1.44 @1k** [**live**](#evidence-codes).
   TI and ADI parts (LM5145, LTC3810) are higher still.
 * Integrated 100 V bucks that are cheap are **asynchronous and ≤ 2 A**
   (SCT2A25: 2 A async; SCT2A23A: 1.2 A). ZCC1005Q claims 100 V, 5 A,
@@ -193,7 +193,7 @@ body diode blocks (VBUS < Vin). So:
 
 ## 5. Magnetics and connectors
 
-* **HR911130C PoE magjack: $1.64 @1k [live]** (BOM assumed $1.10). Option 1
+* **HR911130C PoE magjack: $1.64 @1k** [**live**](#evidence-codes) (BOM assumed $1.10). Option 1
   in the design (two magjacks) would be ~$2.30–2.50 for magnetics alone.
   **Option 2 (4-channel splitter transformer + two plain jacks) remains the
   cheapest.** The transformer price ($0.50) is still unverified: Pulse H5007NL
@@ -205,7 +205,7 @@ body diode blocks (VBUS < Vin). So:
 * **THT cost at JLCPCB:** $0.0157 per joint (manual or wave) vs $0.0016 per SMT
   joint [JLCPCB help pages]. Choices that cut THT joints:
   * Unshielded RJ45 with plastic pegs and no LEDs: 8 joints per jack.
-  * SMD RJ45 (e.g. FG-RJ-068T, unshielded right-angle, **$0.26 [live]**) is
+  * SMD RJ45 (e.g. FG-RJ-068T, unshielded right-angle, **$0.26** [**live**](#evidence-codes)) is
     about the same total as a $0.10 THT jack plus joints, but makes the board
     all-SMT (one reflow pass, no hand-solder fee).
   * USB-C: a full-SMD 16-pin receptacle (keeps D+ and D− for the host relay)
@@ -248,7 +248,7 @@ transformer prices dominate that uncertainty.
 
 1. Get real prices for 3–4 Chinese 80–100 V synchronous buck controllers and
    2–3 Chinese gigabit splitter transformers. Either could move the total by
-   more than all of §2.
+   more than all of [section 2](#2-itemised-changes-no-switch-variant).
 2. Bench-test the CH32X035 PD source with a Pi 5 and a 12 V sink, including
    current draw at 8 MHz during simulated mark events.
 3. Bench-test the "buck as VBUS switch" behaviour (turn-on time, 12 → 5 V

@@ -5,8 +5,9 @@ passthrough gigabit link more cheaply than with the 3‑port switch from
 [`ethernet-switch.md`](ethernet-switch.md) (RTL8363NB + CH32V307, about **+$4.50** per unit over
 the passive variant in [`design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md))?
 
-Researched 2026‑10‑21. Prices are LCSC, checked live where marked **[live]**;
-the rest are estimates carried over from the BOM CSV.
+<a id="evidence-codes"></a>
+Prices are LCSC prices. Evidence code **live**: the price or stock figure was read from the LCSC product page on 2026-10-21.
+Unmarked prices are estimates carried over from the BOM CSV.
 
 ## 1. TL;DR
 
@@ -34,7 +35,7 @@ the rest are estimates carried over from the BOM CSV.
 * Everything else surveyed (spare pairs, 10BASE‑T1S overlays, PoE‑DC
   powerline, autoneg next pages, PHY‑to‑PHY bridges, "MAC‑in‑PHY" parts)
   is either impossible on a standard gigabit port or costs more than the
-  switch. Details in §4.
+  switch. Details in [section 4](#4-dead-ends-and-why).
 
 ## 2. Options ranked
 
@@ -46,7 +47,7 @@ the rest are estimates carried over from the BOM CSV.
 | D | Switch with embedded CPU | YT9215S | Its RISC-V core | – | The core does the networking | – | Yes | Yes | A Motorcomm SDK | ≈ +$3.5 | ≈ +$4 | Estimate | Only if Motorcomm gives an SDK | – |
 | E | PoE-layer signalling | – | – | – | Class events | Autoclass | Not really | Yes | – | $0 | $0 | Already in design | Already used | Tells the PD its power grant only |
 | F | Analog link sensing | – | – | – | Detect pair activity | 10/100/1000 by which pairs are active | No | Yes | – | ≈ $0.05 | ≈ $0.10 | – | Status only | Risks return loss |
-| G | Passive and overlay schemes | – | – | – | Each one is listed in §4 | – | — | — | – | — | — | – | Dead ends (§4) | – |
+| G | Passive and overlay schemes | – | – | – | Each one is listed in [section 4](#4-dead-ends-and-why) | – | — | — | – | — | — | – | Dead ends ([section 4](#4-dead-ends-and-why)) | – |
 
 The Δ BOM columns are against the passive variant @1k.
 
@@ -95,7 +96,7 @@ What the host daemon does:
   passthrough, so `lldpd` on the host can advertise the adapter's request
   (`configure dot3 power pd supported enabled ... requested <mW>`) and pass
   the PSE's "allocated" answer back to the MCU, which then updates the PD
-  PDOs. This closes the gap [`poe.md`](poe.md) §4.5 noted ("passthrough has no PHY so
+  PDOs. This closes the gap [`poe.md` section 4.5](poe.md#45-lldp-data-link-layer-classification) noted ("passthrough has no PHY so
   cannot speak LLDP").
 * Firmware update of the adapter MCU from the host (DFU over the same link).
 
@@ -136,12 +137,12 @@ Trims worth bench‑testing:
    current‑mode with centre‑tap bias) allows this. Realtek doesn't say
    publicly. Also check EMC: a short shielded patch cable is likely needed.
 2. **RP2040 instead of CH32V307 on the RMII port (≈ −$0.40).** RP2040 is
-   **$0.73 @1k [live]**, plus ~$0.10 QSPI flash and a 12 MHz crystal,
+   **$0.73 @1k** [**live**](#evidence-codes), plus ~$0.10 QSPI flash and a 12 MHz crystal,
    vs. ~$1.30 estimated for CH32V307. PIO RMII drivers exist at 10 Mbit/s,
    enough for LLDP and management. The RP2040 also does USB host or device for
    option A, and has the PIO to bit‑bang USB‑PD BMC. Costs: no hardware MAC
    (CPU does CRC and framing), higher idle current, which matters for the ≤ 4 mA
-   PoE mark‑event budget ([`poe.md`](poe.md) §6.3), so a CH32V003 cold‑start helper is
+   PoE mark‑event budget ([`poe.md` section 6.3](poe.md#63-the-bootstrap-problem)), so a CH32V003 cold‑start helper is
    likely needed (+$0.15). Net ≈ −$0.30 to −$0.45.
 3. **Stay on 4 layers.** Two GbE ports plus a QFN‑76 switch really wants
    controlled impedance; I wouldn't try to save the $0.25 here.
@@ -165,11 +166,11 @@ RTL8367S has an embedded 8051 in the same role, also undocumented.
 ### E. PoE‑layer signalling (what we already get for free)
 
 * PSE → PD: number of class events (power grant), first‑class‑event length
-  (PSE type 1 and 2 vs 3 and 4), and Autoclass on bt. Already in [`poe.md`](poe.md) §4.
+  (PSE type 1 and 2 vs 3 and 4), and Autoclass on bt. Already in [`poe.md` section 4](poe.md#4-the-negotiation-sequence-end-to-end).
 * PD → PSE: the class signature only. A PD can also drop its MPS to get
   power removed and re‑detected, which is a crude one‑bit "reset me" signal.
 * No standard PSE carries data over the PoE DC. Any data‑over‑DC scheme would
-  need a custom injector at the other end (§4).
+  need a custom injector at the other end ([section 4](#4-dead-ends-and-why)).
 
 So this layer tells the adapter how much power it may offer, and nothing
 reaches the network.
@@ -187,16 +188,16 @@ not a network presence.
 
 ## 4. Dead ends and why
 
-| Idea | Would work if | Why it fails here | Key figure |
-|---|---|---|---|
-| **Passive tap (Throwing-Star style)** | The link is 10/100 | Gigabit sends both ways on all four pairs | – |
-| **Use the spare pairs** | The link drops to 100 Mbit | 1000BASE-T uses all four pairs | Needs ≥1 Gbit/s |
-| **10BASE-T1S overlay** | A custom injector is at the other end | The PSE switch has no receiver for it | – |
-| **Data over PoE DC (powerline-style)** | – | Nothing at the PSE end listens | – |
-| **Autoneg next pages** | The adapter terminates the link (has PHYs) | Only the two link endpoints exchange them | – |
-| **Two PHYs back-to-back + glue logic** | It does work | Costs more than the switch | 2 × YT8531C at **$0.79 @1k [live]** |
-| **"MAC-in-PHY" SPI Ethernet parts** | – | They all terminate their *own* link | – |
-| **USB-Ethernet bridge (RTL8153)** | The host has USB 3 | The Pi's USB-C port is USB 2.0 | 480 Mbit/s |
+| Idea | Would work if | Why it fails here | Key figure | Key figure evidence |
+| --- | --- | --- | --- | --- |
+| **Passive tap (Throwing-Star style)** | The link is 10/100 | Gigabit sends both ways on all four pairs | – |  |
+| **Use the spare pairs** | The link drops to 100 Mbit | 1000BASE-T uses all four pairs | Needs ≥1 Gbit/s |  |
+| **10BASE-T1S overlay** | A custom injector is at the other end | The PSE switch has no receiver for it | – |  |
+| **Data over PoE DC (powerline-style)** | – | Nothing at the PSE end listens | – |  |
+| **Autoneg next pages** | The adapter terminates the link (has PHYs) | Only the two link endpoints exchange them | – |  |
+| **Two PHYs back-to-back + glue logic** | It does work | Costs more than the switch | 2 × YT8531C at **$0.79 @1k** | [**live**](#evidence-codes) |
+| **"MAC-in-PHY" SPI Ethernet parts** | – | They all terminate their *own* link | – |  |
+| **USB-Ethernet bridge (RTL8153)** | The host has USB 3 | The Pi's USB-C port is USB 2.0 | 480 Mbit/s |  |
 
 The reasoning behind each row:
 

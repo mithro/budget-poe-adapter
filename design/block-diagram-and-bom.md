@@ -2,10 +2,10 @@
 
 ![Block diagram](block-diagram.svg)
 
-Rough first pass, 2026-10-21, for a 5 V and 12 V output. Built
+Rough first-pass design for a 5 V and 12 V output, with prices as of 2026-10-21. Built
 from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
 [`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
-[`bom-rough.csv`](bom-rough.csv). The diagram above is [`block-diagram.svg`](block-diagram.svg);
+[`bom-rough.csv`](bom-rough.csv). The diagram at the top of this page is [`block-diagram.svg`](block-diagram.svg);
 [`block-diagram.png`](block-diagram.png) is the same figure as a bitmap.
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
@@ -38,7 +38,7 @@ and its crystal and passives, $0.95 is the bigger MCU, $1.05 is the second set o
 magnetics, and the rest is the 4-layer board and more placements.
 
 Adding 12 V output costs about **$0.20** per unit on either variant compared
-with a 5 V-only design (see below).
+with a 5 V-only design (see [Output voltages](#output-voltages-5-v-and-12-v)).
 
 ## Output voltages: 5 V and 12 V
 
@@ -75,7 +75,7 @@ back to 5 V on Hard Reset or detach.
 ### What the PoE class allows
 
 The PDOs the adapter offers come from the PoE class it was granted (counted
-class events, [`poe.md`](../research/poe.md) §4.2), at roughly 90 % efficiency:
+class events, [`poe.md` section 4.2](../research/poe.md#42-classification-how-much-power-do-you-want)), at roughly 90 % efficiency:
 
 | Granted PoE class | Standard | PD input | USB-C budget | With the switch | 5 V PDO | 5 V with the Pi override | 12 V PDO |
 |---|---|---|---|---|---|---|---|
@@ -84,7 +84,7 @@ class events, [`poe.md`](../research/poe.md) §4.2), at roughly 90 % efficiency:
 | Class 5 | bt | 40 W | ~35 W | – | 5 A* | – | 2.9 A |
 | Class 6 | bt | 51 W | ~45 W | – | 5 A* | – | 3 A |
 
-\* 5 A needs a captive or e-marked cable ([`usb-c-pd.md`](../research/usb-c-pd.md) §5.4).
+\* 5 A needs a captive or e-marked cable ([`usb-c-pd.md` section 5.4](../research/usb-c-pd.md#54-cable-e-marker-for-advertising--3-a)).
 
 **Caveat:** a 5 V + 12 V source does not follow the PD "power rules", which
 expect 9 V on any source above 15 W. This only matters for certification.
@@ -101,7 +101,7 @@ Each block is tagged with its cost @1k; PCB and assembly are listed under each p
   CH32V307 sits on the switch's RMII port. Power path: PoE front end → 60 V
   sync buck (5 V or 12 V, selected by the MCU) → VBUS switch → USB-C.
 * **B (without switch):** RJ45 IN → 4-channel PoE splitter transformer →
-  RJ45 OUT ([`poe.md`](../research/poe.md) §3 option 2; the Pi's own magnetics stay in the link).
+  RJ45 OUT ([`poe.md` section 3](../research/poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t) option 2; the Pi's own magnetics stay in the link).
   Option 1, back-to-back magjacks, costs about $1 more and is lower risk on
   return loss. The power path is the same as A, with a CH32V203 as the MCU.
 
@@ -156,7 +156,7 @@ receptacle (~$0.50–0.80), test and programming, shipping, duties.
 3. **CH32V307 is overkill as an MCU but cheap for what it brings.** It is the
    only cheap WCH part with a MAC that can talk RMII to the switch. Its price
    is an estimate ($1.10–1.60 depending on package).
-4. **MCU power during PoE mark events.** [`poe.md`](../research/poe.md) §6.3 requires ≤ 4 mA total
+4. **MCU power during PoE mark events.** [`poe.md` section 6.3](../research/poe.md#63-the-bootstrap-problem) requires ≤ 4 mA total
    during mark events. A CH32V307 running from its internal oscillator at low
    clock may or may not fit that. If it doesn't, add a CH32V003 (~$0.12) as a
    cold-start PoE controller that wakes the CH32V307 after power-on. That adds
@@ -170,7 +170,7 @@ receptacle (~$0.50–0.80), test and programming, shipping, duties.
    On an at (PoE+) port this lowers the USB-C budget by about 1 W. On a bt
    Class 5 and 6 port it doesn't matter.
 7. **Output voltage safety.** With 12 V possible, a firmware bug that leaves
-   VBUS at 12 V on a 5 V-only sink is the main new failure mode. Mitigations:
+   VBUS at 12 V on a 5 V-only sink is the main added failure mode. Mitigations:
    the buck defaults to 5 V in hardware when the select GPIO is low or
    floating, and VBUS is checked against the contract before the load switch
    closes.

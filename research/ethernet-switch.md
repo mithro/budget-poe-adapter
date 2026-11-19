@@ -1,6 +1,6 @@
 # Cheap ~3-port gigabit switch ICs for the PoE → USB-C adapter
 
-Goal: replace the passive PoE passthrough (see [`poe.md`](poe.md) §3) with a tiny
+Goal: replace the passive PoE passthrough (see [`poe.md` section 3](poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t)) with a tiny
 managed switch so the adapter's MCU can sit on the network: report what was
 negotiated (PoE class, link speed, USB-PD contract), talk LLDP, expose
 counters and settings. Topology:
@@ -13,7 +13,7 @@ counters and settings. Topology:
 
 Two gigabit copper ports carry the user's traffic; the MCU port only needs
 ≤10 Mbit/s. Prices are LCSC (the part source JLCPCB assembly draws from),
-checked 2026‑10‑21. **[LCSC]** and **[JLC]** links are in §6.
+checked 2026‑10‑21. LCSC and JLCPCB links are in [Sources](#6-sources).
 
 ## 1. TL;DR
 
@@ -37,7 +37,7 @@ checked 2026‑10‑21. **[LCSC]** and **[JLC]** links are in §6.
   a blocker.
 * NextPCB: their parts arm (HQ Online) blocks automated lookup, so I could not
   confirm stock. They source from the Shenzhen market where RTL8363NB and RTL8367S
-  are common; check by hand before committing (see §5).
+  are common; check by hand before committing (see [section 5](#5-open-items)).
 
 ## 2. Candidates
 
@@ -99,12 +99,12 @@ far too expensive.
   classification during bring‑up.
 * **Software exists.** Realtek's GPL "rtl8367c" switch API (used in OpenWrt
   and many vendor SDKs) covers this chip family. Linux has an upstream DSA
-  driver, [`drivers/net/dsa/realtek/rtl8365mb.c`](https://codebrowser.dev/linux/linux/drivers/net/dsa/realtek/rtl8365mb.c.html), that drives the RTL8363NB /
+  driver, [`drivers/net/dsa/realtek/rtl8365mb.c`](https://codebrowser.dev/linux/linux/drivers/net/dsa/realtek/rtl8365mb.c.html), that drives the RTL8363NB,
   RTL8365MB and RTL8367S family. Both are good references for register
   sequences even on a bare‑metal MCU.
 * **Caveat:** full Realtek register docs are under NDA. The public datasheet
-  covers pins, straps and features; register details come from the GPL code
-  above.
+  covers pins, straps and features; register details come from the GPL `rtl8367c` code
+  and the `rtl8365mb` driver.
 
 What the MCU can do through SMI or I²C: read per‑port link, speed, duplex and autoneg
 results, force speeds, read RFC‑style MIB counters, set VLANs and QoS,
@@ -163,11 +163,11 @@ CH32V208's MAC is, as far as I know (not verified here), only wired to its
 internal 10M PHY, which is why it needs a copper port. The RP2040 option is
 not for throughput.
 
-A practical split, matching [`poe.md`](poe.md) §6.3: a tiny CH32V003‑class part does the
+A practical split, matching [`poe.md` section 6.3](poe.md#63-the-bootstrap-problem): a tiny CH32V003‑class part does the
 PoE signature and classification from cold start; the switch plus a CH32V307 (or
 RP2040) come up after the hot‑swap FET closes and handle networking, LLDP and
 USB‑PD reporting. With an Ethernet‑capable MCU the adapter can do **LLDP
-power negotiation**, which [`poe.md`](poe.md) §4.5 said a passive passthrough could not.
+power negotiation**, which [`poe.md` section 4.5](poe.md#45-lldp-data-link-layer-classification) said a passive passthrough could not.
 
 ## 4a. Chinese alternatives
 
@@ -236,7 +236,7 @@ Sources for this section:
 * **YT9213NB**: worth asking Motorcomm distributors; same family as the
   YT9215 with upstream Linux support, and the right port count.
 * Layout: two sets of GbE magnetics are still needed (one per jack), plus the
-  PoE centre‑tap extraction on the input side as in [`poe.md`](poe.md) §3 option 1.
+  PoE centre‑tap extraction on the input side as in [`poe.md` section 3](poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t) option 1.
 
 ## 6. Sources
 

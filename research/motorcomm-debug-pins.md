@@ -253,7 +253,7 @@ Source: [YT9215RB Draft_05](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_
 
 ## Other Motorcomm parts
 
-The [Motorcomm selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) lists no CPU for the PHYs below. They have MDIO, LEDs and straps, and no JTAG, UART or flash interface. Their pin lists were not checked in detail.
+The [Motorcomm selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) lists no CPU for the PHYs in this table. They have MDIO, LEDs and straps, and no JTAG, UART or flash interface. Their pin lists were not checked in detail.
 
 | Part | Kind |
 |---|---|
@@ -300,8 +300,10 @@ A debug option stays open cheaply with one 0402 pad on each of these YT9215S pin
 A first bench experiment on the mirrored board needs no new PCB:
 
 1. Leave `DIS_MCU` low, as the board has it.
-2. Lift the LED resistors R21, R22 and R23, then scan JTAG0 for an IDCODE at the strap resistors in the table below.
+2. Lift the LED resistors R21, R22 and R23, then scan JTAG0 for an IDCODE at the strap resistors in [the probe table](#jtag0-probe-points).
 3. Listen for boot-ROM output on UART0 (pins [45](#s-pin-45) and [46](#s-pin-46)) and on UART2 (pins [73](#s-pin-73) and [75](#s-pin-75)).
+
+<a id="jtag0-probe-points"></a>
 
 | JTAG0 signal | Pin | Probe at |
 |---|---|---|

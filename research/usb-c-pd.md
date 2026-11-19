@@ -121,7 +121,7 @@ Hardware this implies: a high-side load switch on VBUS (P-FET or N-FET with a ch
 
 ### 4.4 Protection on CC
 
-Pins on a USB-C receptacle can be shorted to VBUS by bad cables. If VBUS is only ever 5 V, a 3.3 V MCU pin still needs a series resistor (about 1 kΩ for the sense path) plus a clamp or the MCU's own 5 V-tolerant I/O. **The TX driver path cannot have 1 kΩ in series** (see §5.4), so use 5 V-tolerant pins or a small clamp and FET. Add ESD diodes on CC.
+Pins on a USB-C receptacle can be shorted to VBUS by bad cables. If VBUS is only ever 5 V, a 3.3 V MCU pin still needs a series resistor (about 1 kΩ for the sense path) plus a clamp or the MCU's own 5 V-tolerant I/O. **The TX driver path cannot have 1 kΩ in series** (see [section 5.4](#54-cable-e-marker-for-advertising--3-a)), so use 5 V-tolerant pins or a small clamp and FET. Add ESD diodes on CC.
 
 ---
 
@@ -296,7 +296,7 @@ Prices are approximate LCSC single-reel figures (verify).
 For completeness, here is what a source must do to satisfy each style of sink. Only the first two matter for a Pi.
 
 1. **Type-C current (mandatory):** a static Rp.
-2. **USB PD:** §5.
+2. **USB PD:** [section 5](#5-usb-pd-physical-layer-bmc-on-cc).
 3. **BC1.2 DCP:** short D+ to D- (< 200 Ω) on a power-only port. A BC1.2 sink drives 0.5 to 0.7 V on D+ and looks for it on D- (> 0.25 to 0.4 V). CDP (data plus charging) requires the host side to drive VDM_SRC on D- in response, which needs an analog switch or GPIO plus resistor.
 4. **Apple:** D+ and D- fixed by dividers, for example D+ at 2.7 V with D- at 2.7 V means 2.4 A (and combinations of 2.0 V and 2.7 V mean 1 A or 2.1 A, verify). This conflicts with the DCP short, so pick one or use an analog switch.
 5. **QC 2.0 and QC 3.0 (source):** start as DCP. When the sink holds D+ at 0.6 V for about 1.25 s, open the short between D+ and D- and pull D- low. The sink then sets levels: D+ at 0.6 V with D- at 0 V means 5 V, D+ at 3.3 V with D- at 0.6 V means 9 V, both at 0.6 V means 12 V, and both at 3.3 V means QC3 continuous mode (D+ pulses +200 mV, D- pulses -200 mV). The source needs two comparators or ADC channels and a variable converter. Not useful for a 5 V-only product.

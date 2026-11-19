@@ -1,6 +1,6 @@
 # Gigabit switch IC comparison for the PoE → USB-C adapter
 
-Researched 2026-10-22. Prices and stock were read live from LCSC product pages (JLCPCB assembly uses the same C-numbers and LCSC stock). The table holds the data of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
+Prices and stock were read from LCSC product pages on 2026-10-22 (JLCPCB assembly uses the same C-numbers and LCSC stock). The table holds the data of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
 
 Google Sheet: https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=1
 

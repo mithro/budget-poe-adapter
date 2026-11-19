@@ -1,9 +1,9 @@
 # The adapter as a USB network card (CDC-ECM, NCM or RNDIS)
 
-Researched 2026-10-22. Presenting as a USB network card is a project goal, and
+Presenting as a USB network card is a project goal, and
 10 Mbit/s is fully acceptable. Price cap: RP2040,
-$0.786 @100. Prices are LCSC, read live where marked **[live]**; others come from
-[`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md). Related:
+$0.786 @100. Prices are LCSC prices; unmarked ones come from
+[`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md). <a id="evidence-codes"></a>Evidence code **live**: the price or stock figure was read from the LCSC product page on 2026-10-22. Related:
 [`bitbang-usb.md`](bitbang-usb.md) (why it has to be hardware USB),
 [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md) and
 [`ethernet-switch.md`](ethernet-switch.md).
@@ -22,7 +22,7 @@ $0.786 @100. Prices are LCSC, read live where marked **[live]**; others come fro
 2. **A real USB NIC that bridges an RJ45 to USB**, so a USB-C-only device
    (phone, tablet, laptop, Pi Zero-class board) gets both power and wired
    network from one PoE cable.
-   * **Best part: WCH CH397A, $0.672 @100 and $0.596 @1k [live], 10.5k in
+   * **Best part: WCH CH397A, $0.672 @100 and $0.596 @1k [**live**](#evidence-codes), 10.5k in
      stock.** One chip: USB 2.0 **high speed** device + 10/100 MAC + PHY, built-in
      config flash, driverless CDC-ECM by default with NCM or RNDIS listed. Needs a
      25 MHz crystal and magnetics. Under the RP2040 cap and gives 100 Mbit/s,
@@ -93,7 +93,7 @@ lands at **roughly 5–9 Mbit/s**, which meets the 10 Mbit/s requirement. A
 high-speed part (CH397A, CH32V307) removes USB as the bottleneck.
 
 Low-speed (bit-banged) USB cannot do this at all: no bulk endpoints, and Linux
-rejects low-speed network devices ([`bitbang-usb.md`](bitbang-usb.md) §3).
+rejects low-speed network devices ([`bitbang-usb.md` section 3](bitbang-usb.md#3-low-speed-limits-that-matter-here)).
 
 ## 4. Parts that can do it
 
@@ -132,17 +132,17 @@ rejects low-speed network devices ([`bitbang-usb.md`](bitbang-usb.md) §3).
 | CH579M | CH579M | Built-in 10M PHY | – | – | FS | – | 10BASE-T | – | – | MCU bridge |
 | CH32V208WBU6 | CH32V208WBU6 | Built-in 10M PHY | – | – | FS | – | 10BASE-T | – | – | MCU bridge |
 
-| Option | Silicon $ @100 | Silicon $ @1k | Extra part 1 | Extra part 2 | Verdict | Reason | Second reason | Third reason |
-|---|---|---|---|---|---|---|---|---|
-| **CH397A** | **$0.672** | **$0.596 [live]** | 25 MHz crystal | – | **Best standalone NIC** | Cheapest | Fastest | No firmware |
-| Switch SKU with RP2040 | $0 extra | $0 extra | – | – | Good | Same board serves an Ethernet Pi | It also serves a USB-only device | – |
-| Switch SKU with CH32V307 | $0 extra | $0 extra | – | – | Fastest switch-SKU option | Already in that BOM at $2.15 @1k | The RP2040 swap saves ~$0.40 | – |
-| CH32X035 with CH390H | $1.25 | – | – | – | Over cap | Slower than the CH397A | More work than the CH397A | – |
-| RP2040 with PIO 10BASE-T | $0.79 | – | Flash | Crystal | Not worth it | 5–7 Mbit/s TCP | "not recommended for PoE equipment" | – |
-| CH579M | $1.21 | – | – | – | Over cap | – | – | – |
-| CH32V208WBU6 | $1.42 | – | – | – | Over cap | – | – | – |
+| Option | Silicon $ @100 | Silicon $ @1k | Silicon $ @1k evidence | Extra part 1 | Extra part 2 | Verdict | Reason | Second reason | Third reason |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| **CH397A** | **$0.672** | **$0.596** | [**live**](#evidence-codes) | 25 MHz crystal | – | **Best standalone NIC** | Cheapest | Fastest | No firmware |
+| Switch SKU with RP2040 | $0 extra | $0 extra |  | – | – | Good | Same board serves an Ethernet Pi | It also serves a USB-only device | – |
+| Switch SKU with CH32V307 | $0 extra | $0 extra |  | – | – | Fastest switch-SKU option | Already in that BOM at $2.15 @1k | The RP2040 swap saves ~$0.40 | – |
+| CH32X035 with CH390H | $1.25 | – |  | – | – | Over cap | Slower than the CH397A | More work than the CH397A | – |
+| RP2040 with PIO 10BASE-T | $0.79 | – |  | Flash | Crystal | Not worth it | 5–7 Mbit/s TCP | "not recommended for PoE equipment" | – |
+| CH579M | $1.21 | – |  | – | – | Over cap | – | – | – |
+| CH32V208WBU6 | $1.42 | – |  | – | – | Over cap | – | – | – |
 
-| Part of the CH32X035 with CH390H option | $ [live] |
+| Part of the CH32X035 with CH390H option | $ [**live**](#evidence-codes) |
 |---|---|
 | CH32X035 | $0.31 |
 | CH390H | $0.94 |

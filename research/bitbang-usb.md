@@ -1,6 +1,6 @@
 # Bit-banged (software) USB device for the PoE → USB-C adapter
 
-Researched 2026-10-22. Scope: USB **device** mode only (host mode is out of
+Scope: USB **device** mode only (host mode is out of
 scope). Price cap is the RP2040 (~$0.79 @100); MCU prices come from
 [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md). The question: can a
 cheaper MCU with no USB hardware do the adapter's USB link in software, the way
@@ -14,7 +14,7 @@ Sean "xobs" Cross did with grainuum?
   (Pico-PIO-USB). People on EEVblog who have tried it say FS on a generic 48 MHz
   MCU "is just not going to happen" ([EEVblog]).
 * **Low speed is enough for what the adapter needs.** The host relay in
-  [`gigabit-piggyback.md`](gigabit-piggyback.md) §A moves a few hundred bytes:
+  [`gigabit-piggyback.md` section A](gigabit-piggyback.md#a-host-relay-over-usbc-recommended-for-the-cheap-sku) moves a few hundred bytes:
   PoE class, PD contract, telemetry, LLDP power values, firmware update. A HID
   device does all of that with no drivers on Linux, Windows, macOS or Android.
   rv003usb's HID bootloader fits in 1,920 bytes.
@@ -29,7 +29,7 @@ Sean "xobs" Cross did with grainuum?
   CH32V003 ($0.244 @50), which does not. The current pick, CH32X035 ($0.31 @100),
   adds a hardware USB-PD PHY. Bit-banging USB on a CH32V003 saves at most ~$0.07
   against the CH32X035, and then USB-PD BMC has to be bit-banged on the same core
-  too (see risks below).
+  too (see [the risks](#risks-if-both-usb-and-pd-are-done-in-software-on-one-small-core)).
 * **Recommendation: don't bit-bang USB on the main MCU.** Keep the CH32X035
   (hardware USB FS + PD). Bit-banged low-speed HID is worth keeping in mind only
   when the MCU is chosen for some other reason and has no USB, for example a
@@ -39,14 +39,16 @@ Sean "xobs" Cross did with grainuum?
 
 ## 1. What the adapter's USB link has to do
 
-From [`gigabit-piggyback.md`](gigabit-piggyback.md) §A ("host relay"):
+From [`gigabit-piggyback.md` section A](gigabit-piggyback.md#a-host-relay-over-usbc-recommended-for-the-cheap-sku) ("host relay"):
 
 | Job | Size | Rate | Needs high throughput? | In scope | Note |
 |---|---|---|---|---|---|
-| Status reports | tens of bytes | ~1/s | No | Yes | Fields are listed below |
+| Status reports | tens of bytes | ~1/s | No | Yes | [Status report fields](#status-report-fields) |
 | LLDP power negotiation | a few bytes | per change | No | Yes | Relayed by a host daemon (`lldpd`) |
 | Firmware update from the host | 8–32 KB | rare | No (slow is fine) | Yes | – |
 | Act as a USB NIC for the host | Mbit/s | – | **Yes** | No | Host already has gigabit via the passthrough |
+
+<a id="status-report-fields"></a>
 
 | Status report field |
 |---|
@@ -64,7 +66,7 @@ So a low-speed HID device covers everything the design needs.
 host (DFP) and the Pi is the device. For the adapter to be a USB *device*, the
 host side must run as host on that port (laptops, phones, most SBCs do; a Pi
 needs `dtoverlay=dwc2,dr_mode=host`), or the two must do a PD `DR_Swap`. This is
-the same for hardware and software USB; see [`gigabit-piggyback.md`](gigabit-piggyback.md) §A option 2.
+the same for hardware and software USB; see [`gigabit-piggyback.md` section A](gigabit-piggyback.md#a-host-relay-over-usbc-recommended-for-the-cheap-sku) option 2.
 
 ## 2. Survey of software USB device stacks
 

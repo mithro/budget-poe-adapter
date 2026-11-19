@@ -28,9 +28,12 @@ rst_prolog = """
 """
 primary_domain = None
 myst_heading_anchors = 4
+# Lets an HTML <img> in Markdown carry a width; Sphinx then copies the image file.
+myst_enable_extensions = ["html_image"]
 
 html_theme = "furo"
 html_title = project
+html_show_sourcelink = False
 html_static_path = []
 
 
@@ -100,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var here = document.querySelector(".sidebar-tree .current-page > a");
   if (!box || !here) return;
   var b = box.getBoundingClientRect(), h = here.getBoundingClientRect();
-  if (h.bottom > b.bottom || h.top < b.top) box.scrollTop += h.top - b.top - b.height / 3;
+  if (h.bottom > b.bottom || h.top < b.top) box.scrollTo({top: box.scrollTop + h.top - b.top - b.height / 3, behavior: "instant"});
 });
 """
 

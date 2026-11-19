@@ -79,3 +79,8 @@ strap resistors are explained in [`../switch-board-strapping.md`](../switch-boar
 * Routing is traced from the <a href="#photo-u4-close-up">U4 close-up</a> and <a href="#photo-board-a-top">Board A top</a> images only. Where the vias go on other layers is not known. What the far pads of
   [R44](../switch-board-strapping.md#other-configuration-pins), [R89](../switch-board-strapping.md#other-configuration-pins), [R92](../switch-board-strapping.md#other-configuration-pins) and [R93](../switch-board-strapping.md#other-configuration-pins) connect to is not known either. The strap levels are worked out in
   [`../switch-board-strapping.md`](../switch-board-strapping.md).
+
+## Schematic
+
+A reverse-engineered KiCad schematic of the whole board is described in [`schematic/README.md`](schematic/README.md). It marks
+each connection as confirmed, seen, inferred or unknown, and lists the measurements that would settle the open ones.

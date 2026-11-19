@@ -210,7 +210,7 @@ and writes the contents into its registers. That is how the board can bring up i
 (<a href="#lx-sfp">the SFP connector</a>), which needs the SerDes configured by register, without any firmware (tag <a href="#tag-i">I</a>). Reading <a href="#lx-u10">U10</a> would
 show exactly which registers the vendor sets.
 
-The LEDs are driven in parallel mode, one pin per LED (tag <a href="#tag-i">I</a>, from the <a href="#lx-unlisted">row of six LEDs</a> on the board). LED polarity
+The LEDs are driven in parallel mode, one pin per LED (tag <a href="#tag-i">I</a>, from the <a href="#lx-unlisted">LED array</a> on the board). LED polarity
 follows the strap level on each pin ([datasheet, page 40](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=40)): a pin pulled up drives its LED active low, and a pin
 pulled down drives it active high. Pins <a href="#lx-pin-71">71</a>, <a href="#lx-pin-75">75</a> and <a href="#lx-pin-77">77</a> are therefore active high and the other six
 are active low.
@@ -317,12 +317,14 @@ columns point at the catalogue part that matches the marking, not at a known pur
 <a id="lx-unlisted"></a>
 #### Parts not in the table
 
-These are visible but are not identified.
+These are visible but are not identified from the photos on this page. The [schematic notes](lx-is601f-board/schematic/README.md) name more
+parts from other photos of the same boards: L2 for the `701` choke, J1 for the four-port RJ45 block, J3 for the uplink RJ45, U12
+for the SFP connector, RV1 to RV3 for the three blue disc parts, and five transformers DXFRM2 to DXFRM6. This page shows four
+transformer bodies, so the fifth is taken to be under the PoE module.
 
 - Three blue radial disc parts stand beside <a href="#lx-p4">P4</a> (<a href="#lx-photo-board-b-top">Board B top</a>). They are taken to be surge protection parts on the power input.
-- A row of six LEDs sits along the board edge beside G1, under the edge of the PoE module (<a href="#lx-photo-board-a-top">Board A top</a> and <a href="#lx-photo-poe-module">PoE module</a>). The
-  silkscreen under them reads RJ7 to RJ18. No part is visible at those labels, so what they designate is not confirmed; they are
-  taken to be the LED series resistors.
+- An array of LEDs sits along the board edge beside G1, under the edge of the PoE module (<a href="#lx-photo-board-a-top">Board A top</a> and <a href="#lx-photo-poe-module">PoE module</a>). The
+  silkscreen at the array reads RJ7 to RJ18, which the [schematic notes](lx-is601f-board/schematic/README.md) take to be the names of the LEDs.
 - A group of option footprints sits next to <a href="#lx-u6">U6</a> on the bottom side and is partly populated (<a href="#lx-photo-bottom-under-u4">Bottom under U4</a>).
 
 <a id="lx-photos"></a>

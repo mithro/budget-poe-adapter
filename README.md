@@ -1,7 +1,7 @@
 # Budget PoE to USB-C adapter
 
 Notes and research for an open source, non-isolated, very cheap and
-flexible PoE to USB-C adapter that passes Ethernet through at 1 Gbit/s or faster.
+flexible PoE to USB-C adapter with a built-in Ethernet switch that runs at 1 Gbit/s or faster.
 
 The design uses only the Motorcomm YT9215 switch IC and its internal RISC-V CPU. The
 adapter's firmware runs on that CPU, and there is no external MCU and no other switch IC.

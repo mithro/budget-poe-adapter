@@ -2,11 +2,11 @@
 
 ![Block diagram](block-diagram.svg)
 
-Rough first pass, 2026-10-21 (updated for 5 V + 12 V output). Built
+Rough first pass, 2026-10-21, for a 5 V and 12 V output. Built
 from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
 [`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
-[`bom-rough.csv`](bom-rough.csv). The diagram is also available as
-[`block-diagram.png`](block-diagram.png).
+[`bom-rough.csv`](bom-rough.csv). The diagram above is [`block-diagram.svg`](block-diagram.svg);
+[`block-diagram.png`](block-diagram.png) is the same figure as a bitmap.
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
 RTL8363NB price ($1.43 @1k) was checked live (in the switch research). Every
@@ -53,9 +53,9 @@ cameras and small displays. 9/15/20 V and PPS are out of scope.
 | 1 | 5 V / 12 V select | GPIO-driven NMOS adds a resistor to the buck FB divider | – | Two fixed set points with no PWM "DAC" | +$0.02 |
 | 2 | Output caps | Rated 16–25 V | – | 12 V rail | +$0.02 |
 | 3 | VBUS PMOS drive | Gate zener with an NPN driver | – | Keeps Vgs within limits when switching 12 V | +$0.02 |
-| 4 | VBUS TVS | 15 V part | – | Clamp level for a 12 V rail (was 6–7 V) | +$0.01 |
+| 4 | VBUS TVS | 15 V part | – | Clamp level for a 12 V rail | +$0.01 |
 | 5 | CC1/CC2 protection against a 12 V short | Series NMOS clamps | A CC OVP IC | VBUS on CC would kill 3.3 V MCU pins | +$0.10 |
-| 6 | 3.3 V rail fed from a 5–12 V rail | 18 V-rated buck | 16 V LDO | Its source rail is no longer fixed at 5 V | +$0.01–0.05 |
+| 6 | 3.3 V rail fed from a 5–12 V rail | 18 V-rated buck | 16 V LDO | Its source rail varies from 5 V to 12 V | +$0.01–0.05 |
 | | **Total** | | | | **≈ +$0.20** |
 
 | Select GPIO state | Buck output |
@@ -93,7 +93,9 @@ only ask for 9/15/20 V will fall back to 5 V, which is safe but slow.
 
 ## Block diagrams
 
-See [`block-diagram.svg`](block-diagram.svg) / [`block-diagram.png`](block-diagram.png). Each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
+![Block diagram](block-diagram.svg)
+
+Each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
 
 * **A (with switch):** RJ45 IN (PoE magjack) → RTL8363NB → RJ45 OUT. The
   CH32V307 sits on the switch's RMII port. Power path: PoE front end → 60 V

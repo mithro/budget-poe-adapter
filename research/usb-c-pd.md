@@ -19,7 +19,7 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1/3.2), BC1.2, and
 
 ## 2. USB power standards: voltages and currents
 
-| Mechanism | Signalling line | Signalling detail | Voltage | Voltage step | Max current | With 5 A cable | Max power | Relevance as a source | Reason |
+| Mechanism | Signalling line | Signalling detail | Voltage | Voltage step | Max current | With e-marked 5 A cable | Max power | Relevance as a source | Reason |
 |---|---|---|---|---|---|---|---|---|---|
 | USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W | Baseline | – |
 | USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W | Baseline | – |
@@ -35,7 +35,7 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1/3.2), BC1.2, and
 | USB PD Fixed (SPR) | CC | BMC | 9 V | – | 3 A | 5 A | – | – | – |
 | USB PD Fixed (SPR) | CC | BMC | 15 V | – | 3 A | 5 A | – | – | – |
 | USB PD Fixed (SPR) | CC | BMC | 20 V | – | 3 A | 5 A | 100 W | – | – |
-| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | 50 mA limit steps | – | ≤ 100 W | Skip | Needs a tightly controlled converter |
+| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | 50 mA current-limit steps | – | ≤ 100 W | Skip | Needs a tightly controlled converter |
 | USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 28 V | – | 5 A | – | 140 W | Out of PoE budget | bt max ≈ 71 W at the PD |
 | USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 36 V | – | 5 A | – | 180 W | Out of PoE budget | bt max ≈ 71 W at the PD |
 | USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W | Out of PoE budget | bt max ≈ 71 W at the PD |
@@ -46,9 +46,9 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1/3.2), BC1.2, and
 | Qualcomm QC 2.0 | D+/D- | Voltage levels | 12 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
 | Qualcomm QC 2.0 | D+/D- | Voltage levels | 20 V (optional) | – | – | – | ~18 W | Only for phones on legacy ports | – |
 | Qualcomm QC 3.0 | D+/D- | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W | Only for phones on legacy ports | – |
-| Samsung AFC | D+/D- or a single wire | Proprietary | 9 V etc. | – | – | – | – | Skip | – |
-| Huawei FCP | D+/D- or a single wire | Proprietary | 9 V etc. | – | – | – | – | Skip | – |
-| Huawei SCP | D+/D- or a single wire | Proprietary | 9 V etc. | – | – | – | – | Skip | – |
+| Samsung AFC | D+/D- | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei FCP | D+/D- | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Huawei SCP | D+/D- | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
 
 **PD power rules (SPR source profiles):** a source rated at P watts must offer every lower standard voltage. ≤15 W offers 5 V; 15 to 27 W also offers 9 V; 27 to 45 W also offers 15 V; >45 W also offers 20 V. A **5 V-only 25 W source is not a "PD Power Rule" compliant 27 W supply** (a compliant 27 W source must also offer 9 V/3 A). The Pi official PSU offers 5.1 V/5 A plus 9/12/15 V at lower current (verify exact PDO list). This matters only for certification, not function.
 

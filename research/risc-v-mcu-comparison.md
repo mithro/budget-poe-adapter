@@ -53,7 +53,9 @@ built-in Ethernet PHY driving the magnetics directly; MAC if. = how an Ethernet 
 exposed (RGMII/RMII to an external PHY, internal PHY only, or an SPI chip driven by a
 host MCU); 5 V = runs directly from 5 V; DC-DC = on-chip switching regulator for the
 chip itself; Xtal = needs an external crystal; Adv PWM = complementary PWM with dead
-time. ? = not confirmed; None = absent.
+time; Price tier = the LCSC quantity break the @100 price comes from; vs RP2040 = the @1k price minus the RP2040's;
+Cores = number of CPU cores; Alt core = a second, different core on the same chip; Second MAC if. = a further
+way the MAC is exposed; Ext flash = needs an external flash chip. ? = not confirmed; None = absent.
 
 | Part | Vendor | LCSC | Datasheet | Pkg | $ @100 | Price tier | $ @1k | Stock | vs RP2040 | Core | Cores | Alt core | Flash KB | SRAM KB | USB | Gen | PD | MDI PHY | MAC if. | Second MAC if. | Wi-Fi | BLE | 5 V | DC-DC | Xtal | Ext flash | Adv PWM | ADC | CMP | OPA | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -156,7 +158,7 @@ time. ? = not confirmed; None = absent.
 * "@100" is the LCSC price break that applies to an order of 100. Where LCSC has no
   100+ break, the break below it applies (e.g. 72+ or 50+). Out-of-stock parts show
   LCSC's reference price.
-* Feature flags come from datasheets, LCSC listings and earlier project research.
+* Feature flags come from datasheets, LCSC listings and the other notes in this folder.
   Where a feature was not confirmed it's marked ?, not guessed.
 * The "Ext" count in the sheet is a rough estimate of support parts beyond
   decoupling and a 3.3 V regulator.

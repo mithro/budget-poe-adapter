@@ -6,7 +6,7 @@ running the MAC in software (RP2040 PIO) against an external PHY or a switch
 port? Context: price cap is the RP2040 (~$0.79 @100); see
 [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md).
 
-Requirement (Tim, 2026-10-22): **10 Mbit/s is fully acceptable** for the MCU's
+Project requirement (2026-10-22): **10 Mbit/s is fully acceptable** for the MCU's
 own network link, so the 10M-only limits below are not a problem.
 
 Researched 2026-10-22. Prices are LCSC, read live where marked **[live]**.

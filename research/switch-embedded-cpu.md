@@ -1,6 +1,6 @@
 # Embedded CPUs in the candidate switch ICs: RTL8367S, YT9215S, RTL8363NB
 
-> **Correction (2026-10-22, see [`switch-cpu-dev-boards.md`](switch-cpu-dev-boards.md)):** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC** (and YT9218N/MB), not the YT9215S or YT9215RB. The YT9215S draft datasheet still mentions the RISC-V MCU, so the core is probably on the die but unsupported. Plan any CPU work on the YT9215SC.
+> **Which YT9215 variants have the CPU:** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC**, the YT9218N and the YT9218MB, while the selection guide and the YT9215S, YT9215SC and YT9215RB datasheets all list it (see [`switch-cpu-dev-boards.md`](switch-cpu-dev-boards.md) and [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md)). The core is probably on every die but supported only on the SC. Plan any CPU work on the YT9215SC.
 
 Researched 2026-10-22. This note looks at the CPU inside each candidate switch chip and asks whether it could run our own firmware and replace, or shrink, the external MCU (RP2040-class or CH32X035) in the PoE → USB-C adapter. It builds on [`switch-detail-comparison.md`](switch-detail-comparison.md) and [`ethernet-switch-comparison.md`](ethernet-switch-comparison.md) and does not repeat the datasheet basics given there.
 
@@ -251,7 +251,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 - **Vendor API (GPL).**
   - Realtek "rtl8367c" API, in OpenWrt/ImmortalWrt trees, for example [hanwckf/immortalwrt-mt798x …/rtk/rtl8367c](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c).
   - The full register header has about 22,800 lines.
-  - `rtl8367c_asicdrv_port.c` and `port.c` contain the 8051 programs `Sgmii_Init` (1,183 B), `Fiber2_Auto`/`Fiber2_1G`/`Fiber2_100M` (about 2 KB each) and `Fiber` (1,507 B), with their loader.
+  - [`rtl8367c_asicdrv_port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/rtl8367c_asicdrv_port.c) and [`port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/port.c) contain the 8051 programs `Sgmii_Init` (1,183 B), `Fiber2_Auto`/`Fiber2_1G`/`Fiber2_100M` (about 2 KB each) and `Fiber` (1,507 B), with their loader.
   - The [Mercusys MR80X v2 GPL drop](https://ratatoskr.run/linux-firmware/2026/06/17116216/t) is cited as the source of the 1,233-byte variant.
 - **Linux.**
   - Upstream `rtl8365mb` gained RTL8367S SGMII/HSGMII support in commit fcaf2221b970 (2026-07-22) ([cover letter thread](https://ratatoskr.run/lkml/2026/07/17247411/t)).
@@ -290,14 +290,14 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 
 ### Boot and pins [V]
 
-> **Correction 2026-11-16:** the pin numbers below are for the **YT9215SC** only. YT9215S (RTL8367S pinout), SC (RTL8367SC pinout) and RB (RTL8367RB-VB pinout) are pinned differently, and all three have the RISC-V MCU. See [motorcomm-debug-pins.md](motorcomm-debug-pins.md) for per-variant JTAG/flash/UART pins.
+> The pin numbers below are for the **YT9215SC** only. The YT9215S (RTL8367S pinout), the YT9215SC (RTL8367SC pinout) and the YT9215RB (RTL8367RB-VB pinout) are pinned differently, and all three have the RISC-V MCU. [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md) gives the JTAG, flash and UART pins of each variant.
 
-From the [YT9215SC datasheet Draft 0.7](https://cdn.promelec.ru/upload/grab/datasheet.lcsc.com/lcsc/2512311716_Motorcomm-YT9215SC_C51037433.pdf); YT9215S has the same LQFP-128 pinout family ([YT9215S draft](https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf)).
+From the [YT9215SC datasheet Draft 0.7](https://cdn.promelec.ru/upload/grab/datasheet.lcsc.com/lcsc/2512311716_Motorcomm-YT9215SC_C51037433.pdf); the YT9215S comes in the same LQFP-128 package with a different pinout ([YT9215S draft](https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2308291451_Motorcomm-YT9215S_C5899183.pdf)).
 
 - **SPI flash.**
   - One flash interface placed on either of two pin sets by `SPF_MUX_SEL`: SPF0 on pins 49/50/54/55, SPF1 on pins 78/79/81/83.
   - Enabled by `EN_SPIF` (pin 75).
-  - "Dual mode/Single mode" means SPI I/O width, not two flash chips. *This corrects "single or dual flash" in [`switch-detail-comparison.md`](switch-detail-comparison.md).*
+  - "Dual mode/Single mode" means SPI I/O width, not two flash chips. [`switch-detail-comparison.md`](switch-detail-comparison.md) lists the two I/O modes in separate rows.
 - **MCU disable.** `DIS_MCU` on pin 76, shared with GPIO38/UART1_TX/P2LED2. Pull-up disables the MCU.
 - **Peripherals.**
   - UART0 on pins 46/47, UART1 on pins 70/76.
@@ -315,7 +315,7 @@ From the [YT9215SC datasheet Draft 0.7](https://cdn.promelec.ru/upload/grab/data
 
 ### Packet path [V]
 
-The upstream [yt921x DSA driver](https://github.com/torvalds/linux/blob/master/drivers/net/dsa/yt921x.c) gives the packet-path facts:
+The upstream [yt921x DSA driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c) gives the packet-path facts:
 
 - 11 ports: "8 internal + 2 external + 1 mcu". The MCU is port 10.
 - "Port 10 for MCU … is untested yet".
@@ -394,7 +394,7 @@ The upstream [yt921x DSA driver](https://github.com/torvalds/linux/blob/master/d
 - Linux rtl8365mb SGMII series, final thread (merged as fcaf2221b970): https://ratatoskr.run/lkml/2026/07/17247411/t
 - linux-firmware rtl8367s-sgmii.bin licensing thread: https://ratatoskr.run/linux-firmware/2026/06/17116216/t
 - Linux rtl8365mb driver (family list): https://github.com/torvalds/linux/blob/master/drivers/net/dsa/realtek/rtl8365mb_main.c
-- Linux yt921x driver: https://github.com/torvalds/linux/blob/master/drivers/net/dsa/yt921x.c
+- Linux yt921x driver: https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c
 - yt921x v14 series: https://ratatoskr.run/lkml/2025/10/3255221/t
 - Synopsys DW8051 datasheet (Keil): https://www.keil.com/dd/docs/datashts/synopsys/dw8051_ds.pdf
 - RTLPlayground: https://github.com/logicog/RTLPlayground

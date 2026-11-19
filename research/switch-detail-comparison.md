@@ -1,10 +1,10 @@
 # Switch IC detail: RTL8363NB (pick) vs RTL8367S and YT9215S (candidates)
 
-Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=2). Prices are LCSC on 2026-10-22. `?` means no public source gives the value; None means the chip doesn't have it.
+Side-by-side tables holding the data of the *Switch detail* tab in the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=2). Prices are LCSC on 2026-10-22. `?` means no public source gives the value; None means the chip doesn't have it.
 
 **Takeaways**
 
-- RTL8363NB stays the pick: exactly two GbE PHYs, RMII to the MCU, smallest package (QFN-76 9×9 mm), no embedded CPU to manage.
+- RTL8363NB is the pick: exactly two GbE PHYs, RMII to the MCU, smallest package (QFN-76 9×9 mm), no embedded CPU to manage.
 - RTL8367S is $0.30 cheaper at 100 pcs (LCSC price break), but its extension port has no RMII, so the MCU must use MII, and three PHYs sit unused.
 - YT9215S is the Chinese second source with RMII and a Linux driver, but only 57 in stock and a draft datasheet.
 - Embedded CPUs: RTL8367S has an 8051 and YT9215S a RISC-V core. Neither has a public clock, memory size or SDK, and neither has USB, so both should be strapped off.
@@ -94,7 +94,7 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 | MAC address table | 2K entries | 2K entries | 4K entries |
 | VLAN table | 4K entries | 4K entries | 4K entries |
 | Jumbo frames | 9,216 B | 9,216 B | 9,216 B |
-| Priority queues | 8 | 8 | 8 |
+| Unicast priority queues | 8 | 8 | 8 |
 | Multicast queues | Not listed | Not listed | 4 |
 | ACL rules | 48 | 96 | 384 |
 | Link aggregation | None | 2 groups | 2 groups |

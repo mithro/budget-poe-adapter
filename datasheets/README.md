@@ -49,7 +49,7 @@ They are therefore linked, not copied into this repository.
 | What | Where | Notes |
 | --- | --- | --- |
 | Motorcomm switch product page | <https://www.motor-comm.com/product/switching-chip> | – |
-| Linux DSA driver for YT921x | `drivers/net/dsa/motorcomm/` | In the kernel tree |
+| Linux DSA driver for YT921x | [`drivers/net/dsa/motorcomm/`](https://github.com/torvalds/linux/tree/20eef29b7c84/drivers/net/dsa/motorcomm) | In the kernel tree |
 | Device-tree binding for YT921x | [motorcomm,yt921x.yaml](https://www.kernel.org/doc/Documentation/devicetree/bindings/net/dsa/motorcomm%2Cyt921x.yaml) | – |
 | OpenWrt thread on the IPQ5018 with a YT9215S | [forum.openwrt.org thread](https://forum.openwrt.org/t/ipq5018-and-motorcomm-yt9215s/239942) | – |
 | Synopsys DW8051 core | [Datasheet hosted by Keil](https://www.keil.com/dd/docs/datashts/synopsys/dw8051_ds.pdf) | The CPU inside the RTL8367S |

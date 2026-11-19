@@ -99,7 +99,7 @@ far too expensive.
   classification during bring‑up.
 * **Software exists.** Realtek's GPL "rtl8367c" switch API (used in OpenWrt
   and many vendor SDKs) covers this chip family. Linux has an upstream DSA
-  driver, `drivers/net/dsa/realtek/rtl8365mb.c`, that drives the RTL8363NB /
+  driver, [`drivers/net/dsa/realtek/rtl8365mb.c`](https://codebrowser.dev/linux/linux/drivers/net/dsa/realtek/rtl8365mb.c.html), that drives the RTL8363NB /
   RTL8365MB / RTL8367S family. Both are good references for register
   sequences even on a bare‑metal MCU.
 * **Caveat:** full Realtek register docs are under NDA. The public datasheet
@@ -157,26 +157,26 @@ not for throughput.
 A practical split, matching [`poe.md`](poe.md) §6.3: a tiny CH32V003‑class part does the
 PoE signature/classification from cold start; the switch plus a CH32V307 (or
 RP2040) come up after the hot‑swap FET closes and handle networking, LLDP and
-USB‑PD reporting. With an Ethernet‑capable MCU the adapter can now do **LLDP
+USB‑PD reporting. With an Ethernet‑capable MCU the adapter can do **LLDP
 power negotiation**, which [`poe.md`](poe.md) §4.5 said a passive passthrough could not.
 
-## 4a. Chinese alternatives (follow-up, 2026‑10‑21)
+## 4a. Chinese alternatives
 
-Short answer: **none of them is cheaper than the RTL8363NB at JLCPCB/LCSC
-today.** The domestic gigabit switch vendors are Motorcomm (裕太微) and JLSemi
+Short answer: **none of them is cheaper than the RTL8363NB at JLCPCB or LCSC.** The domestic gigabit switch vendors are Motorcomm (裕太微) and JLSemi
 (景略). Only Motorcomm parts are stocked at LCSC/JLCPCB.
 
-| Vendor | Part | GbE PHYs | Ext ports | Managed | MDIO | I²C | RGMII | MII | RMII | SGMII | On-chip CPU | Sold as drop-in for |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Motorcomm | **YT9215S** | 5 | 2 | Yes | Slave | Slave | Yes | Yes | Yes | Yes | RISC-V | – |
-| Motorcomm | **YT9213NB** | 2 | 1 | Yes | Yes | – | – | – | – | – | – | – |
-| Motorcomm | YT9214NB | 2 | 2 | Yes | Yes | – | – | – | – | – | – | – |
-| JLSemi | **JL6107-PC** | 5 | 2 | Yes | – | – | Yes | Yes | Yes | Yes | – | RTL8367RB |
-| JLSemi | **JL6107S-PC** | 5 | 2 | Yes | – | – | Yes | Yes | Yes | Yes | – | RTL8367S |
-| JLSemi | **JL6107SC** | 5 | 2 | Yes | – | – | Yes | Yes | Yes | Yes | – | RTL8367SC |
-| JLSemi | JL6105-NC | 5 | **None** | **No** | – | – | – | – | – | – | – | – |
-| JLSemi | JL6110 | 8 | 2 | Yes | – | – | – | – | – | – | – | – |
-| JLSemi | JL5104 / JL5106C | 4–5 | – | – | – | – | – | Yes | Yes | – | – | – |
+| Vendor | Part | PHY speed | PHY ports | Ext ports | Managed | MDIO | I²C | RGMII | MII | RMII | SGMII | On-chip CPU | Sold as drop-in for |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| Motorcomm | **YT9215S** | 1G | 5 | 2 | Yes | Slave | Slave | Yes | Yes | Yes | Yes | RISC-V | – |
+| Motorcomm | **YT9213NB** | 1G | 2 | 1 | Yes | Yes | – | – | – | – | – | – | – |
+| Motorcomm | YT9214NB | 1G | 2 | 2 | Yes | Yes | – | – | – | – | – | – | – |
+| JLSemi | **JL6107-PC** | 1G | 5 | 2 | Yes | – | – | Yes | Yes | Yes | Yes | – | RTL8367RB |
+| JLSemi | **JL6107S-PC** | 1G | 5 | 2 | Yes | – | – | Yes | Yes | Yes | Yes | – | RTL8367S |
+| JLSemi | **JL6107SC** | 1G | 5 | 2 | Yes | – | – | Yes | Yes | Yes | Yes | – | RTL8367SC |
+| JLSemi | JL6105-NC | 1G | 5 | **None** | **No** | – | – | – | – | – | – | – | – |
+| JLSemi | JL6110 | 1G | 8 | 2 | Yes | – | – | – | – | – | – | – | – |
+| JLSemi | JL5104 | 100M | 4–5 | – | – | – | – | – | Yes | Yes | – | – | – |
+| JLSemi | JL5106C | 100M | 4–5 | – | – | – | – | – | Yes | Yes | – | – | – |
 
 The YT9213NB is in the same family as the YT9215.
 
@@ -188,7 +188,8 @@ The YT9213NB is in the same family as the YT9215.
 | JLSemi | JL6107 family | No | – | – | – | – | Distributor VOOHU (no public price) | Pin compatibility claims unverified | – |
 | JLSemi | JL6105-NC | No | – | – | – | – | – | Useless here | The MCU has no port to attach to |
 | JLSemi | JL6110 | — | – | – | – | – | – | Too big | – |
-| JLSemi | JL5104 / JL5106C | — | – | – | – | – | – | Fails the GbE requirement | 100 Mbit only |
+| JLSemi | JL5104 | — | – | – | – | – | – | Fails the GbE requirement | 100 Mbit only |
+| JLSemi | JL5106C | — | – | – | – | – | – | Fails the GbE requirement | 100 Mbit only |
 
 The YT9215S also takes 4× the board area of the RTL8363NB (LQFP-128).
 
@@ -197,7 +198,7 @@ find a part number for it. If it exists, it would be the other Chinese
 RTL8363NB equivalent.
 
 Takeaways:
-* **For JLCPCB assembly, RTL8363NB stays the cheapest and smallest choice.**
+* **For JLCPCB assembly, RTL8363NB is the cheapest and smallest choice.**
   YT9215S is the only Chinese part you can buy there today. It's a reasonable
   second source if a single‑vendor Realtek BOM is a concern.
 * Unit price for YT9213NB or a JLSemi 3+1 part could come in below

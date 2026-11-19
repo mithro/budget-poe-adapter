@@ -1,7 +1,7 @@
 # Bit-banged (software) USB device for the PoE → USB-C adapter
 
 Researched 2026-10-22. Scope: USB **device** mode only (host mode is out of
-scope per Tim). Price cap is the RP2040 (~$0.79 @100); MCU prices come from
+scope). Price cap is the RP2040 (~$0.79 @100); MCU prices come from
 [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md). The question: can a
 cheaper MCU with no USB hardware do the adapter's USB link in software, the way
 Sean "xobs" Cross did with grainuum?
@@ -183,7 +183,7 @@ bit-level work in hardware state machines and the CPU only handles bytes.
 | Limit | Value | Effect | Workaround | Alt workaround | Verdict | Note | Reference |
 |---|---|---|---|---|---|---|---|
 | Max packet | 8 bytes | Larger blocks go in 8-byte pieces | HID feature reports (control transfers) | – | Fine | Enough for telemetry | USB 2.0 §5.7–5.8 |
-| Max packet | 8 bytes | As above | As above | – | Fine | Enough for DFU | USB 2.0 §5.7–5.8 |
+| Max packet | 8 bytes | Larger blocks go in 8-byte pieces | HID feature reports (control transfers) | – | Fine | Enough for DFU | USB 2.0 §5.7–5.8 |
 | Control endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
 | Interrupt endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
 | Interrupt `bInterval` | ≥ 10 ms by spec | ~800 B/s per interrupt endpoint | Control-transfer DFU is quicker | – | Fine either way | Hosts often poll faster | – |
@@ -209,7 +209,7 @@ so a config page for the adapter could be a static web page.
 | CH32V003F4P6 | rv003usb | $0.244 | 50 | SW **LS** | – | ✗ | Bit-banged on the same core | – | – | – | – | – |
 | RP2040 | Pico-PIO-USB | $0.786 | 100 | HW FS | SW FS | ✗ | – | – | – | – | – | Only useful as a second port |
 
-The MCU prices are from the MCU comparison.
+The MCU prices are from [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md).
 
 The saving from bit-banging is ≤ $0.07 against the CH32X035, and it is negative
 against a CH570Q, which has hardware USB for the same money.
@@ -252,6 +252,6 @@ against a CH570Q, which has hardware USB for the same money.
 * [LS bulk patch] Linux "USB: Handle bogus low-speed Bulk endpoints" (converts LS bulk to interrupt, 1 ms, 8 bytes): https://git.linaro.org/plugins/gitiles/kernel/linux-linaro-stable.git/+/60aac1ec26b960fe77bf600457bc6c06f8aa7db4%5E%21
 * [f030-vusb] https://github.com/ads830e/stm32f030-vusb
 * [py32 issue] https://github.com/IOsetting/py32f0-template/issues/12
-* [PIO-USB] https://github.com/sekigon-gonnoc/Pico-PIO-USB (README resource use; `src/pio_usb_device.c` computes the PIO divider as sys_clk / 48 MHz)
+* [PIO-USB] https://github.com/sekigon-gonnoc/Pico-PIO-USB (README resource use; [`src/pio_usb_device.c`](https://github.com/sekigon-gonnoc/Pico-PIO-USB/blob/main/src/pio_usb_device.c) computes the PIO divider as sys_clk / 48 MHz)
 * [EEVblog] STM32G030 thread on bit-banging USB FS vs LS: https://www.eevblog.com/forum/microcontrollers/stm32g030-g031/msg4983739/
 * CH32V003 USB dev board (rv003usb hardware reference): https://hackaday.io/project/192233

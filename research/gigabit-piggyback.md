@@ -245,4 +245,4 @@ The reasoning behind each row:
 * **[LAN Tap]** Throwing Star LAN Tap Pro (passive tap, 10/100 only): https://www.elektor.com/products/great-scott-gadgets-throwing-star-lan-tap-pro
 * RP2040 at LCSC (C2040), $0.73 @1k, 41,863 in stock: https://lcsc.com/product-detail/C2040.html
 * YT8531C‑CA at LCSC (C22472312), $0.79 @1k, 7,563 in stock: https://www.lcsc.com/product-detail/C22472312.html
-* Earlier project research: [`ethernet-switch.md`](ethernet-switch.md), [`poe.md`](poe.md), [`../design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md)
+* Related project research: [`ethernet-switch.md`](ethernet-switch.md), [`poe.md`](poe.md), [`../design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md)

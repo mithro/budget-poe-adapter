@@ -119,27 +119,27 @@ From the WCH datasheet (V1.7) and LCSC:
 
 ### 4.1 Combined PoE PD + DC-DC ICs
 
-Chinese vendors now make PD interface ICs with an integrated pass switch and
+Chinese vendors make PD interface ICs with an integrated pass switch and
 some with an integrated DC-DC (sources: chongdiantou.com and QQ News market
 surveys, LCSC):
 
-| Part | Vendor | af | at | Power | Switch rating | Switch Rds | DC-DC | Package | Note |
-|---|---|---|---|---|---|---|---|---|---|
-| **TMI7303B** | – | Yes | Yes | 25 W | 100 V | 0.48 Ω | – | DFN-10 | In stock |
-| TMI7301 | – | Yes | – | 15 W | Yes | – | – | SOP-8 | JLCPCB extended part |
-| SD4924S | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – |
-| SD4923E | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – |
-| AS7001EP | Ashare | – | Yes | – | 100 V | – | – | – | – |
-| AS7060AE | Ashare | Yes | Yes | – | 100 V | – | – | – | – |
-| **AS7829AE** | Ashare | Yes | – | 13 W | 100 V hot-swap | – | **80 V non-isolated buck** | ESOP-8 | 1.2 A out |
-| AS7016AQ | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
-| AS7064BQ | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
-| JWH7232 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
-| TME7350 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
-| TMI7321 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | Isolated |
+| Part | Vendor | af | at | Power | Switch rating | Switch Rds | DC-DC | Package | $ @1k | Note |
+|---|---|---|---|---|---|---|---|---|---|---|
+| **TMI7303B** | – | Yes | Yes | 25 W | 100 V | 0.48 Ω | – | DFN-10 | **$0.267** | In stock |
+| TMI7301 | – | Yes | – | 15 W | Yes | – | – | SOP-8 | – | JLCPCB extended part |
+| SD4924S | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – | – |
+| SD4923E | Silan | Yes | Yes | – | 100 V | 0.6 Ω | – | – | – | – |
+| AS7001EP | Ashare | – | Yes | – | 100 V | – | – | – | – | – |
+| AS7060AE | Ashare | Yes | Yes | – | 100 V | – | – | – | – | – |
+| **AS7829AE** | Ashare | Yes | – | 13 W | 100 V hot-swap | – | **80 V non-isolated buck** | ESOP-8 | – | 1.2 A out |
+| AS7016AQ | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
+| AS7064BQ | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
+| JWH7232 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
+| TME7350 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
+| TMI7321 | – | Yes | Yes | – | – | – | Flyback (PSR) controller | – | – | Isolated |
 
-All of these integrate the PD interface. The TMI7303B costs **$0.267 @1k
-[live]**. The isolated flyback parts are not useful here.
+All of these integrate the PD interface. The TMI7303B price is a live LCSC price.
+The isolated flyback parts are not useful here.
 
 The AS7829AE would make a one-chip "lite" SKU (Pi Zero/ESP32), but it is too
 small for a Pi 5.
@@ -199,7 +199,7 @@ body diode blocks (VBUS < Vin). So:
   cheapest.** The transformer price ($0.50) is still unverified: Pulse H5007NL
   is ~$1+ at Western distributors, and Chinese equivalents (HanRun, Mentech,
   GRT, 24-pin SOP gigabit transformers with centre taps on both sides) need a
-  real quote. This is now the biggest unverified line after the buck.
+  real quote. This is the biggest unverified line after the buck.
 * Magnetics-free DC extraction (inductor taps on each wire) needs ~350 µH,
   0.6 A-rated parts per wire; that costs more than a transformer. Dead end.
 * **THT cost at JLCPCB:** $0.0157 per joint (manual/wave) vs $0.0016 per SMT

@@ -16,8 +16,8 @@ Spreadsheet copy: the *Dev boards* tab of the [comparison sheet](https://docs.go
   - For a cleaner board with a real CPU link, the routers MERCUSYS MR85X (MT7981B, RTL8367S over 2500base-X) and TP-Link Archer C5 v4 (MT7620A) run OpenWrt with the switch already on DSA/swconfig. **[V]**
   - Open-hardware designs to copy or order from JLCPCB: AlbrechtL's `rpi-managed-switch-4-port` (GPL-3.0, KiCad) and the PCBWay "RTL8367S-4GE+SFP" project. **[V]**
 - **YT9215: much thinner.**
-  - **Correction to [`switch-embedded-cpu.md`](switch-embedded-cpu.md):** Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU. **[V]**
-  - The YT9215S draft datasheet on LCSC still says "Integrated RISC-V microprocessor" and has a `STRAP_DIS_MCU` pin, so the core is probably on the die but not supported on the S. **[V]/[I]** For CPU work, buy the **YT9215SC**.
+  - Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU. **[V]**
+  - The YT9215S draft datasheet on LCSC says "Integrated RISC-V microprocessor" and has a `STRAP_DIS_MCU` pin, so the core is probably on the die but not supported on the S. **[V]/[I]** For CPU work, buy the **YT9215SC**.
   - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII/2500base-X) and the BDY-G98 / 彼度云 G98 RK3588 box (two YT9215S over RGMII). **[V]** Both are mostly sold in China.
   - The practical dev board is to **build our own**: one LQFP-128 chip (YT9215S about US$1.92 at LCSC), plus the open-hardware 5-port YT9215S switch on OSHWHub as a reference layout. **[V]/[I]**
 - **Recommendation:** buy two or three TP-Link TL-SG105 V6 / LS1005G V1 units now for RTL8367S 8051 experiments, and treat any YT9215 work as "spin our own breakout with a YT9215SC" if it is ever needed.

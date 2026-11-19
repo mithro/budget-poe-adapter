@@ -1,12 +1,12 @@
 # Gigabit switch IC comparison for the PoE → USB-C adapter
 
-Researched 2026-10-22. Prices and stock were read live from LCSC product pages (JLCPCB assembly uses the same C-numbers and LCSC stock). This is the markdown copy of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
+Researched 2026-10-22. Prices and stock were read live from LCSC product pages (JLCPCB assembly uses the same C-numbers and LCSC stock). The table holds the data of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
 
 Google Sheet: https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=1
 
 ## TL;DR
 
-* **RTL8363NB-VB-CG stays the pick** ($1.96 @100 on the 30+ break, $1.48 @1k, 1,562 in stock): 2 GbE PHYs + 1 RGMII/MII/RMII/TMII MAC is exactly the passthrough shape, QFN-76 9×9, single 3.3 V rail, works unmanaged from straps.
+* **RTL8363NB-VB-CG is the pick** ($1.96 @100 on the 30+ break, $1.48 @1k, 1,562 in stock): 2 GbE PHYs + 1 RGMII/MII/RMII/TMII MAC is exactly the passthrough shape, QFN-76 9×9, single 3.3 V rail, works unmanaged from straps.
 * **At 100 pcs the RTL8367S is $0.30 cheaper** ($1.67, 90+ break) and the same price at 1k. It has 3 spare GbE PHYs (idle power) and an LQFP-128 about 2.5× the area, but its spare copper PHY would let a CH32V208 (built-in 10M PHY) or RP2040 PIO 10BASE-T attach cap-coupled. Worth a power check before choosing for a 100-unit run.
 * **YT9215S** ($2.12 @100, $1.92 @1k) is the only Chinese gigabit switch buyable at LCSC/JLCPCB: a second source, but only 57 in stock.
 * **100M (10/100) switches are cheaper** (IP175G $0.85) but fail the ≥1 Gbit/s passthrough requirement.

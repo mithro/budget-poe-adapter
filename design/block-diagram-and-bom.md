@@ -51,7 +51,7 @@ signalling has three priced builds, each with its own BOM table: a
 | --- | --- | --- |
 | **V** | Verified | Printed in a datasheet in [`datasheets/`](../datasheets/README.md) |
 | **P** | Catalogue read | Figure read from a parts catalogue listing |
-| **I** | Inferred | Estimated from other evidence |
+| **I** | Inferred | Derived from other evidence |
 | **U** | Unverified | Not yet checked |
 
 The switch datasheet is [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf). The
@@ -60,8 +60,8 @@ their pin numbers, and this note uses those numbers.
 
 - The catalogues are those of LCSC and JLCPCB.
 - Every price, stock figure and part rating in the comparison tables of [Blocks](#blocks) is a
-  catalogue read [**P**](#evidence-codes), except a row with no selected part and a figure that carries
-  its own code.
+  catalogue read [**P**](#evidence-codes), except a row with no selected part and a figure with its own code in or beside
+  the table.
 - An unverified point waits on bench work, on a datasheet check or on another note.
 
 <a id="software-jobs"></a>
@@ -878,7 +878,7 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | The CPU can exchange LLDP frames | CPU study | No grant above 12.95 W |
 | A 4 Mbit flash holds the firmware | CPU study | Larger flash |
 | GPIO registers are usable by firmware | CPU study | No VBUS control |
-| Pins 44 and 46 stay low until firmware drives them | CPU study | Hardware gate on VBUS |
+| The VBUS switch pins stay low until firmware drives them | CPU study | Hardware gate on VBUS |
 | The flash works on pin group SPF1 with these straps | CPU study | Strap changes |
 | Two ferrite beads are enough | Schematic work | Up to six more beads |
 | The reset circuit needs no diode | Schematic work | One more diode |
@@ -930,7 +930,7 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | Drop the line termination | About $0.01 per downstream port | Emissions |
 | Linear regulator for 3.3 V | About $0.07 | 0.5 W less for USB-C |
 | YT9215S in place of the YT9215SC | $0.97 | [Two pin conflicts](#block-switch) |
-| Rp resistor with one comparator in place of PD | $0.24 per output | No PD offer |
+| Rp resistor with one comparator in place of PD | About $0.24 per output | No PD offer |
 
 The Rp resistor with one comparator is the [no PD baseline](https://github.com/mithro/budget-poe-adapter/blob/main/research/yt9215-usb-pd.md#option-0)
 of the USB PD note.
@@ -939,7 +939,7 @@ of the USB PD note.
 
 | File | Contents |
 | --- | --- |
-| [`make_bom.py`](block-diagram-and-bom/make_bom.py) | Part list and BOM table generator |
+| [`make_bom.py`](block-diagram-and-bom/make_bom.py) | BOM table generator |
 | [`bom-option-a.csv`](block-diagram-and-bom/bom-option-a.csv) | BOM rows of option A |
 | [`bom-option-b.csv`](block-diagram-and-bom/bom-option-b.csv) | BOM rows of option B |
 | [`make_diagrams.py`](block-diagram-and-bom/make_diagrams.py) | Draws the two block diagrams with the power tree |

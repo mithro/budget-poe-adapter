@@ -15,59 +15,58 @@ LCSC = "LCSC"
 JLC = "JLCPCB"
 EST = "Estimate"
 
-# id: (part, maker, package, value, catalogue number, unit price in USD, price basis, quantity tier)
+# id: (part, maker, package, value, rating, catalogue number, unit price in USD, price source, price tier)
 PARTS = {
-    "sw": ("YT9215S", "Motorcomm", "LQFP-128", "–", "C5899183", 1.9221, LCSC, "900"),
-    "flash": ("P25Q40SH-SSH-IT", "Puya", "SOP-8", "4 Mbit", "C2836860", 0.1001, LCSC, "2,500"),
-    "xtal": ("X322525MOB4SI", "YXC", "3.2 × 2.5 mm", "25 MHz", "C9006", 0.0505, LCSC, "3,000"),
-    "rj45": ("R-RJ45R08P-A004", "Ckmtw", "Through-hole", "–", "C385834", 0.1049, LCSC, "992"),
-    "xfmr": ("G2415S", "CND-tek", "SMD 24-pin", "350 µH", "C3003219", 0.3006, LCSC, "850"),
-    "bridge": ("MB10S-50MIL", "MDD", "MBS", "1 A", "C2488", 0.0145, LCSC, "3,000"),
-    "tvs": ("SMAJ58A", "Goodwork", "SMA", "58 V", "C2980408", 0.0186, LCSC, "2,000"),
-    "elec": ("ERM1KM220E12OT", "Aishi", "6.3 × 12 mm", "22 µF 100 V", "C106608", 0.0250, LCSC, "1,000"),
-    "hsfet": ("NCE0130KA", "NCE", "TO-252", "100 V", "C502817", 0.3143, LCSC, "2,500"),
-    "zener": ("BZT52C15", "Goodwork", "SOD-123", "15 V", "C2932746", 0.0099, LCSC, "3,000"),
-    "npn": ("MMBT3904", "ST (Semtech)", "SOT-23", "40 V", "C84104", 0.0074, LCSC, "3,000"),
-    "buck5": ("RT6365GSP", "Richtek", "SOP-8-EP", "60 V 5 A", "C3024482", 0.5319, LCSC, "1,000"),
-    "diode": ("SS56", "MDD", "SMA", "60 V 5 A", "C65009", 0.0353, LCSC, "1,000"),
-    "l10": ("MWSA1005S-100MT", "Sunlord", "11.5 × 10 mm", "10 µH", "C17700185", 0.1786, JLC, "5,000"),
-    "c2u2hv": ("CS3225X7R225K101NRK", "Samwha", "1210", "2.2 µF 100 V", "C2900749", 0.0658, LCSC, "2,000"),
-    "c22u": ("CL31A226KAHNNNE", "Samsung", "1206", "22 µF 25 V", "C12891", 0.0646, LCSC, "2,000"),
-    "buck33": ("MT2492", "Aerosemi", "SOT-23-6", "2 A", "C89358", 0.0361, LCSC, "1,000"),
-    "l4u7": ("SWPA4030S4R7NT", "Sunlord", "4 × 4 mm", "4.7 µH", "C193025", 0.0563, JLC, "10,000"),
-    "l2u2": ("SWPA4018S2R2MT", "Sunlord", "4 × 4 mm", "2.2 µH", "C50543", 0.0600, EST, "–"),
-    "bead": ("BLM18KG221SN1D", "Murata", "0603", "220 Ω", "C88980", 0.0291, LCSC, "4,000"),
-    "pfet": ("AO4407A", "AOS", "SOIC-8", "30 V 12 A", "C16072", 0.1683, LCSC, "3,000"),
-    "dtc": ("DTC143ZCA", "JSCJ", "SOT-23", "4.7 kΩ 47 kΩ", "C15236", 0.0142, LCSC, "3,000"),
-    "lsw": ("SY6280AAC", "Silergy", "SOT-23-5", "2 A", "C55136", 0.0505, LCSC, "3,000"),
-    "usbc": ("TYPE-C 6P", "Shou Han", "SMD 6-pin", "3 A", "C456012", 0.0239, LCSC, "1,000"),
-    "cable": ("USB-C plug on a cable", "Not selected", "Soldered wires", "5 A", "", 0.4000, EST, "–"),
-    "fusb": ("FUSB302BMPX", "onsemi", "WQFN-14", "–", "C132291", 0.4080, LCSC, "1,000"),
-    "buf": ("74AUP1G126GW-TP", "Tech Public", "SOT-353", "–", "C51886129", 0.0304, LCSC, "3,000"),
-    "and": ("SN74AUP1G08DCKR", "UMW", "SC-70-5", "–", "C7394036", 0.0240, LCSC, "3,000"),
-    "fcmp": ("TP1942-SR", "3PEAK", "SOIC-8", "68 ns", "C248572", 0.1742, LCSC, "2,500"),
-    "scmp": ("LM393DR2G", "onsemi", "SOIC-8", "1.3 µs", "C7955", 0.0323, LCSC, "2,500"),
-    "bav": ("BAV99", "R+O", "SOT-23", "70 V", "C7420336", 0.0080, LCSC, "3,000"),
-    "r4k7": ("0402WGF4701TCE", "Uni-Royal", "0402", "4.7 kΩ", "C25900", 0.0013, LCSC, "1,000"),
-    "r10k": ("0402WGF1002TCE", "Uni-Royal", "0402", "10 kΩ", "C25744", 0.0011, LCSC, "1,000"),
-    "r100k": ("0402WGF1003TCE", "Uni-Royal", "0402", "100 kΩ", "C25741", 0.0007, LCSC, "1,000"),
-    "r75": ("0402WGF750JTCE", "Uni-Royal", "0402", "75 Ω", "C25133", 0.0010, LCSC, "1,000"),
-    "r1k": ("0402WGF1001TCE", "Uni-Royal", "0402", "1 kΩ", "C11702", 0.0011, LCSC, "1,000"),
-    "r12k": ("0402WGF1202TCE", "Uni-Royal", "0402", "12 kΩ", "C25752", 0.0010, LCSC, "1,000"),
-    "r7k5": ("0402WGF7501TCE", "Uni-Royal", "0402", "7.5 kΩ", "C25918", 0.0017, LCSC, "1,000"),
-    "r47": ("0402WGF470JTCE", "Uni-Royal", "0402", "47 Ω", "C25118", 0.0009, LCSC, "1,000"),
-    "r18k": ("0402WGF1802TCE", "Uni-Royal", "0402", "18 kΩ", "C25762", 0.0011, LCSC, "1,000"),
-    "r2k": ("0402WGF2001TCE", "Uni-Royal", "0402", "2 kΩ", "C4109", 0.0015, LCSC, "1,000"),
-    "r24k9": ("Not selected", "Not selected", "0603", "24.9 kΩ", "", 0.0015, EST, "–"),
-    "rgen": ("Not selected", "Not selected", "0402", "Set at schematic", "", 0.0011, EST, "–"),
-    "cgen": ("Not selected", "Not selected", "0402", "Set at schematic", "", 0.0020, EST, "–"),
-    "csig": ("Not selected", "Not selected", "0805", "100 nF 100 V", "", 0.0100, EST, "–"),
-    "c100n": ("CL05B104KO5NNNC", "Samsung", "0402", "100 nF 16 V", "C1525", 0.0018, LCSC, "1,000"),
-    "c100n50": ("CL05B104KB54PNC", "Samsung", "0402", "100 nF 50 V", "C307331", 0.0064, LCSC, "1,000"),
-    "c1u": ("CL05A105KA5NQNC", "Samsung", "0402", "1 µF 25 V", "C52923", 0.0042, LCSC, "1,000"),
-    "c10u": ("CL10A106KP8NNNC", "Samsung", "0603", "10 µF 10 V", "C19702", 0.0107, LCSC, "4,000"),
-    "c18p": ("0402CG180J500NT", "FH", "0402", "18 pF", "C1549", 0.0014, LCSC, "1,000"),
-    "c1n2kv": ("1206B102K202NT", "FH", "1206", "1 nF 2 kV", "C9196", 0.0105, LCSC, "3,000"),
+    "sw": ("YT9215SC", "Motorcomm", "LQFP-128", "–", "–", "C51037433", 2.8893, LCSC, "900"),
+    "flash": ("P25Q40SH-SSH-IT", "Puya", "SOP-8", "4 Mbit", "–", "C2836860", 0.1001, LCSC, "2,500"),
+    "xtal": ("X322525MOB4SI", "YXC", "3.2 × 2.5 mm", "25 MHz", "–", "C9006", 0.0505, LCSC, "3,000"),
+    "rj45": ("R-RJ45R08P-A004", "Ckmtw", "Through-hole", "–", "–", "C385834", 0.1049, LCSC, "992"),
+    "xfmr": ("G2415S", "CND-tek", "SMD 24-pin", "350 µH", "–", "C3003219", 0.3006, LCSC, "850"),
+    "bridge": ("MB10S-50MIL", "MDD", "MBS", "–", "1 A", "C2488", 0.0145, LCSC, "3,000"),
+    "tvs": ("SMAJ58A", "Goodwork", "SMA", "–", "58 V", "C2980408", 0.0186, LCSC, "2,000"),
+    "elec": ("ERM1KM220E12OT", "Aishi", "6.3 × 12 mm", "22 µF", "100 V", "C106608", 0.0250, LCSC, "1,000"),
+    "hsfet": ("NCE0130KA", "NCE", "TO-252", "–", "100 V", "C502817", 0.3143, LCSC, "2,500"),
+    "zener": ("Not selected", "Not selected", "SOD-123", "Set by the PoE design", "–", "", 0.0100, EST, "–"),
+    "zgate": ("BZT52C15", "Goodwork", "SOD-123", "15 V", "–", "C2932746", 0.0099, LCSC, "3,000"),
+    "npn": ("MMBT5551", "JSCJ", "SOT-23", "–", "160 V", "C2145", 0.0096, LCSC, "3,000"),
+    "buck5": ("RT6365GSP", "Richtek", "SOP-8-EP", "5 A", "60 V", "C3024482", 0.5319, LCSC, "1,000"),
+    "diode": ("SS56", "MDD", "SMA", "5 A", "60 V", "C65009", 0.0353, LCSC, "1,000"),
+    "l10": ("MWSA1005S-100MT", "Sunlord", "11.5 × 10 mm", "10 µH", "8 A", "C17700185", 0.1862, JLC, "2,500"),
+    "c2u2hv": ("CS3225X7R225K101NRK", "Samwha", "1210", "2.2 µF", "100 V", "C2900749", 0.0658, LCSC, "2,000"),
+    "c22u": ("CL31A226KAHNNNE", "Samsung", "1206", "22 µF", "25 V", "C12891", 0.0646, LCSC, "2,000"),
+    "buck33": ("MT2492", "Aerosemi", "SOT-23-6", "2 A", "–", "C89358", 0.0361, LCSC, "1,000"),
+    "l4u7": ("SWPA4030S4R7NT", "Sunlord", "4 × 4 mm", "4.7 µH", "2 A", "C193025", 0.0411, JLC, "2,000"),
+    "l2u2": ("SWPA4018S2R2MT", "Sunlord", "4 × 4 mm", "2.2 µH", "–", "C50543", 0.0357, JLC, "3,000"),
+    "bead": ("BLM18KG221SN1D", "Murata", "0603", "220 Ω", "2.2 A", "C88980", 0.0291, LCSC, "4,000"),
+    "pfet": ("AO4407A", "AOS", "SOIC-8", "12 A", "30 V", "C16072", 0.1683, LCSC, "3,000"),
+    "dtc": ("DTC143ZCA", "JSCJ", "SOT-23", "4.7 kΩ", "50 V", "C15236", 0.0142, LCSC, "3,000"),
+    "cable": ("USB-C plug on a cable", "Not selected", "Soldered wires", "–", "5 A", "", 0.4000, EST, "–"),
+    "fusb": ("FUSB302BMPX", "onsemi", "WQFN-14", "–", "–", "C132291", 0.4080, LCSC, "1,000"),
+    "buf": ("74AUP1G126GW-TP", "Tech Public", "SOT-353", "–", "–", "C51886129", 0.0304, LCSC, "3,000"),
+    "and": ("SN74AUP1G08DCKR", "UMW", "SC-70-5", "–", "–", "C7394036", 0.0240, LCSC, "3,000"),
+    "fcmp": ("TP1942-SR", "3PEAK", "SOIC-8", "68 ns", "–", "C248572", 0.1742, LCSC, "2,500"),
+    "scmp": ("LM393DR2G", "onsemi", "SOIC-8", "1.3 µs", "–", "C7955", 0.0323, LCSC, "2,500"),
+    "bav": ("BAV99", "R+O", "SOT-23", "–", "70 V", "C7420336", 0.0080, LCSC, "3,000"),
+    "r4k7": ("0402WGF4701TCE", "Uni-Royal", "0402", "4.7 kΩ", "–", "C25900", 0.0013, LCSC, "1,000"),
+    "r10k": ("0402WGF1002TCE", "Uni-Royal", "0402", "10 kΩ", "–", "C25744", 0.0011, LCSC, "1,000"),
+    "r75": ("0402WGF750JTCE", "Uni-Royal", "0402", "75 Ω", "–", "C25133", 0.0010, LCSC, "1,000"),
+    "r1k": ("0402WGF1001TCE", "Uni-Royal", "0402", "1 kΩ", "–", "C11702", 0.0011, LCSC, "1,000"),
+    "r12k": ("0402WGF1202TCE", "Uni-Royal", "0402", "12 kΩ", "–", "C25752", 0.0010, LCSC, "1,000"),
+    "r7k5": ("0402WGF7501TCE", "Uni-Royal", "0402", "7.5 kΩ", "–", "C25918", 0.0017, LCSC, "1,000"),
+    "r47": ("0402WGF470JTCE", "Uni-Royal", "0402", "47 Ω", "–", "C25118", 0.0009, LCSC, "1,000"),
+    "r18k": ("0402WGF1802TCE", "Uni-Royal", "0402", "18 kΩ", "–", "C25762", 0.0011, LCSC, "1,000"),
+    "r2k": ("0402WGF2001TCE", "Uni-Royal", "0402", "2 kΩ", "–", "C4109", 0.0015, LCSC, "1,000"),
+    "r2k49": ("RC0402FR-072K49L", "Yageo", "0402", "2.49 kΩ", "–", "C145071", 0.0016, LCSC, "1,000"),
+    "r24k9": ("Not selected", "Not selected", "1206", "24.9 kΩ", "–", "", 0.0030, EST, "–"),
+    "rgen": ("Not selected", "Not selected", "0402", "Set at schematic", "–", "", 0.0011, EST, "–"),
+    "cgen": ("Not selected", "Not selected", "0402", "Set at schematic", "–", "", 0.0020, EST, "–"),
+    "csig": ("Not selected", "Not selected", "0805", "100 nF", "100 V", "", 0.0100, EST, "–"),
+    "c100n": ("CL05B104KO5NNNC", "Samsung", "0402", "100 nF", "16 V", "C1525", 0.0018, LCSC, "1,000"),
+    "c100n50": ("CL05B104KB54PNC", "Samsung", "0402", "100 nF", "50 V", "C307331", 0.0064, LCSC, "1,000"),
+    "c1u": ("CL05A105KA5NQNC", "Samsung", "0402", "1 µF", "25 V", "C52923", 0.0042, LCSC, "1,000"),
+    "c10u": ("CL10A106KP8NNNC", "Samsung", "0603", "10 µF", "10 V", "C19702", 0.0107, LCSC, "4,000"),
+    "c18p": ("0402CG180J500NT", "FH", "0402", "18 pF", "50 V", "C1549", 0.0014, LCSC, "1,000"),
+    "c1n2kv": ("1206B102K202NT", "FH", "1206", "1 nF", "2 kV", "C9196", 0.0105, LCSC, "3,000"),
 }
 
 # Parts whose catalogue number is a JLCPCB number with no LCSC product page.
@@ -93,7 +92,9 @@ ROWS = [
     (SW, "Crystal", "xtal", 1, 1, BASE),
     (SW, "Crystal load capacitor", "c18p", 2, 2, BASE),
     (SW, "Firmware flash", "flash", 1, 1, BASE),
-    (SW, "Supply pin capacitor", "c100n", 28, 28, BASE),
+    (SW, "Bias resistor", "r2k49", 1, 1, BASE),
+    (SW, "Flash chip-select pull-up", "r10k", 1, 1, BASE),
+    (SW, "Supply pin capacitor", "c100n", 30, 30, BASE),
     (SW, "Supply bulk capacitor", "c10u", 4, 4, BASE),
     (SW, "Analogue supply bead", "bead", 2, 2, BASE),
     (SW, "Core regulator inductor", "l2u2", 1, 1, BASE),
@@ -109,13 +110,13 @@ ROWS = [
     (POE, "Class sink window zener", "zener", 1, 1, BASE),
     (POE, "Class sink resistor", "rgen", 3, 3, BASE),
     (POE, "Hot-swap MOSFET", "hsfet", 1, 1, BASE),
-    (POE, "Gate clamp zener", "zener", 1, 1, BASE),
+    (POE, "Gate clamp zener", "zgate", 1, 1, BASE),
     (POE, "Turn-on threshold resistor", "rgen", 2, 2, BASE),
     (POE, "Gate capacitor", "c100n50", 1, 1, BASE),
-    (POE, "Input bulk capacitor", "elec", 1, 1, BASE),
     (B5, "Converter IC", "buck5", 1, 1, BASE),
     (B5, "Catch diode", "diode", 1, 1, BASE),
     (B5, "Inductor", "l10", 1, 1, BASE),
+    (B5, "Input bulk capacitor", "elec", 1, 1, BASE),
     (B5, "Input capacitor", "c2u2hv", 2, 2, BASE),
     (B5, "Output capacitor", "c22u", 2, 2, BASE),
     (B5, "Bootstrap capacitor", "c100n", 1, 1, BASE),
@@ -130,18 +131,16 @@ ROWS = [
     (B33, "Input capacitor", "c10u", 1, 1, BASE),
     (B33, "Output capacitor", "c10u", 2, 2, BASE),
     (B33, "Bootstrap capacitor", "c100n", 1, 1, BASE),
-    (USB, "VBUS switch MOSFET", "pfet", 1, 0, BASE),
-    (USB, "VBUS switch driver", "dtc", 1, 0, BASE),
-    (USB, "VBUS gate pull-up", "r10k", 1, 0, BASE),
-    (USB, "Current-limited VBUS switch", "lsw", 0, 2, BASE),
-    (USB, "Current limit resistor", "rgen", 0, 2, BASE),
-    (USB, "Switch enable pull-down", "r100k", 0, 2, BASE),
+    (USB, "VBUS switch MOSFET", "pfet", 1, 2, BASE),
+    (USB, "VBUS switch driver", "dtc", 1, 2, BASE),
+    (USB, "VBUS gate pull-up", "r10k", 1, 2, BASE),
     (USB, "VBUS bleed resistor", "r1k", 1, 2, BASE),
     (USB, "VBUS capacitor", "c1u", 1, 2, BASE),
     (USB, "Captive cable", "cable", 1, 2, BASE),
     (CCC, "PD transceiver", "fusb", 1, 2, CHIP),
     (CCC, "I²C pull-up", "r4k7", 2, 4, CHIP),
     (CCC, "Supply pin capacitor", "c100n", 1, 2, CHIP),
+    (CCC, "Flash pin group strap", "r4k7", 0, 1, CHIP),
     (CCB, "BMC driver buffer", "buf", 1, 2, BANG),
     (CCB, "Receiver capacitor", "cgen", 1, 2, BANG),
     (CCB, "Driver series resistor", "r47", 1, 2, BANG),
@@ -154,7 +153,7 @@ ROWS = [
     (CCB, "Slow dual comparator", "scmp", 1, 1, BANG),
     (CCB, "VBUS threshold resistor", "rgen", 2, 4, BANG),
     (CCB, "Comparator output pull-up", "r10k", 1, 2, BANG),
-    (CCB, "Buffer enable pull-down", "r100k", 1, 2, BANG),
+    (CCB, "Buffer enable pull-down", "r10k", 1, 2, BANG),
     (CCB, "Supply pin capacitor", "c100n", 3, 5, BANG),
     (CCM, "BMC driver buffer", "buf", 1, 0, MAC),
     (CCM, "Buffer reset gate", "and", 1, 0, MAC),
@@ -171,7 +170,7 @@ ROWS = [
     (CCM, "Comparator output pull-up", "r10k", 1, 0, MAC),
     (CCM, "Receive tie resistor", "r4k7", 3, 0, MAC),
     (CCM, "Clock strap resistor", "r4k7", 1, 0, MAC),
-    (CCM, "Gate pull-down", "r100k", 1, 0, MAC),
+    (CCM, "Gate pull-down", "r10k", 1, 0, MAC),
     (CCM, "Supply pin capacitor", "c100n", 4, 0, MAC),
 ]
 
@@ -196,7 +195,7 @@ def rows_of(option, builds):
 def summary(option, builds):
     rows = rows_of(option, builds)
     col = 3 if option == "a" else 4
-    cost = sum(r[col] * PARTS[r[2]][5] for r in rows)
+    cost = sum(r[col] * PARTS[r[2]][6] for r in rows)
     placements = sum(r[col] for r in rows)
     items = len({r[2] for r in rows})
     return cost, placements, items
@@ -204,14 +203,14 @@ def summary(option, builds):
 
 def bom_table(option, builds):
     col = 3 if option == "a" else 4
-    out = ["| Block | Function | Part | Maker | Package | Value | Catalogue number | Quantity | Unit price | "
+    out = ["| Block | Function | Part | Maker | Package | Value | Rating | Catalogue number | Quantity | Unit price | "
            "Price source | Price tier | Line cost |",
-           "| --- | --- | --- | --- | --- | --- | --- | ---: | ---: | --- | ---: | ---: |"]
+           "| --- | --- | --- | --- | --- | --- | --- | --- | ---: | ---: | --- | ---: | ---: |"]
     for block, function, pid, *_ in rows_of(option, builds):
-        part, maker, package, value, num, price, basis, tier = PARTS[pid]
+        part, maker, package, value, rating, num, price, basis, tier = PARTS[pid]
         qty = dict(a=_[0], b=_[1])[option]
-        out.append("| [%s](#%s) | %s | %s | %s | %s | %s | %s | %d | $%.4f | %s | %s | $%.4f |"
-                   % (block, ANCHOR[block], function, part, maker, package, value, number_link(num), qty, price,
+        out.append("| [%s](#%s) | %s | %s | %s | %s | %s | %s | %s | %d | $%.4f | %s | %s | $%.4f |"
+                   % (block, ANCHOR[block], function, part, maker, package, value, rating, number_link(num), qty, price,
                       basis, tier, qty * price))
     return "\n".join(out)
 
@@ -224,7 +223,7 @@ def block_table():
         for option, col in (("a", 3), ("b", 4)):
             rows = [r for r in ROWS if r[0] == block and r[col]]
             if rows:
-                cells.append("$%.2f | %d" % (sum(r[col] * PARTS[r[2]][5] for r in rows), sum(r[col] for r in rows)))
+                cells.append("$%.2f | %d" % (sum(r[col] * PARTS[r[2]][6] for r in rows), sum(r[col] for r in rows)))
             else:
                 cells.append("– | –")
         out.append("| [%s](#%s) | %s |" % (block, ANCHOR[block], " | ".join(cells)))
@@ -252,13 +251,13 @@ def write_csv(option):
     path = HERE / ("bom-option-%s.csv" % option)
     with path.open("w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
-        w.writerow(["block", "function", "part", "maker", "package", "value", "catalogue_number", "quantity",
+        w.writerow(["block", "function", "part", "maker", "package", "value", "rating", "catalogue_number", "quantity",
                     "unit_usd", "price_source", "price_tier", "line_usd", "build"])
         for r in ROWS:
             if not r[col]:
                 continue
-            part, maker, package, value, num, price, basis, tier = PARTS[r[2]]
-            w.writerow([r[0], r[1], part, maker, package, value, num, r[col], "%.4f" % price, basis, tier,
+            part, maker, package, value, rating, num, price, basis, tier = PARTS[r[2]]
+            w.writerow([r[0], r[1], part, maker, package, value, rating, num, r[col], "%.4f" % price, basis, tier,
                         "%.4f" % (r[col] * price), r[5]])
 
 

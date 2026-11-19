@@ -19,7 +19,7 @@
 <text x="75" y="78" text-anchor="middle" dominant-baseline="middle">PoE in</text>
 <rect x="170" y="30" width="140" height="60" rx="6" fill="#f4f6fa" stroke="#222" stroke-width="1.5"/>
 <text x="240" y="51" text-anchor="middle" dominant-baseline="middle" font-weight="bold">LAN transformer</text>
-<text x="240" y="69" text-anchor="middle" dominant-baseline="middle">PoE rated</text>
+<text x="240" y="69" text-anchor="middle" dominant-baseline="middle">carries PoE</text>
 <path d="M135,60 L170,60" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#a)" marker-start="url(#b)"/>
 <path d="M310,60 L340,60" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#a)" marker-start="url(#b)"/>
 <text x="325" y="44" text-anchor="middle" dominant-baseline="middle">P0</text>
@@ -53,7 +53,7 @@
 <text x="652" y="225" text-anchor="middle" dominant-baseline="middle" font-weight="bold">VBUS switch</text>
 <text x="652" y="243" text-anchor="middle" dominant-baseline="middle">off at reset</text>
 <path d="M520,220 L585,220" fill="none" stroke="#222" stroke-width="1.5" marker-end="url(#a)"/>
-<text x="542" y="206" text-anchor="middle" dominant-baseline="middle">IO</text>
+<text x="552" y="206" text-anchor="middle" dominant-baseline="middle">GPIO</text>
 <rect x="745" y="120" width="90" height="144" rx="6" fill="#e8f6e8" stroke="#222" stroke-width="1.5"/>
 <text x="790" y="183" text-anchor="middle" dominant-baseline="middle" font-weight="bold">USB-C</text>
 <text x="790" y="201" text-anchor="middle" dominant-baseline="middle">output</text>
@@ -68,19 +68,18 @@
 <text x="90" y="486" text-anchor="middle" dominant-baseline="middle">hot-swap switch</text>
 <path d="M190,90 L190,108 L75,108 L75,400" fill="none" stroke="#b3261e" stroke-width="2.5" marker-end="url(#pa)"/>
 <text x="85" y="240" text-anchor="start" dominant-baseline="middle">centre taps</text>
-<text x="85" y="258" text-anchor="start" dominant-baseline="middle">37 to 57 V</text>
+<text x="85" y="258" text-anchor="start" dominant-baseline="middle">up to 57 V</text>
 <rect x="200" y="400" width="130" height="100" rx="6" fill="#fdecea" stroke="#222" stroke-width="1.5"/>
-<text x="265" y="432" text-anchor="middle" dominant-baseline="middle" font-weight="bold">5 V converter</text>
-<text x="265" y="450" text-anchor="middle" dominant-baseline="middle">60 V input</text>
-<text x="265" y="468" text-anchor="middle" dominant-baseline="middle">5 A output</text>
+<text x="265" y="441" text-anchor="middle" dominant-baseline="middle" font-weight="bold">5 V converter</text>
+<text x="265" y="459" text-anchor="middle" dominant-baseline="middle">5 A output</text>
 <path d="M165,450 L200,450" fill="none" stroke="#b3261e" stroke-width="2.5" marker-end="url(#pa)"/>
 <rect x="380" y="400" width="130" height="100" rx="6" fill="#fdecea" stroke="#222" stroke-width="1.5"/>
-<text x="445" y="441" text-anchor="middle" dominant-baseline="middle" font-weight="bold">3.3 V converter</text>
-<text x="445" y="459" text-anchor="middle" dominant-baseline="middle">2 A output</text>
+<text x="445" y="450" text-anchor="middle" dominant-baseline="middle" font-weight="bold">3.3 V converter</text>
 <path d="M330,430 L380,430" fill="none" stroke="#b3261e" stroke-width="2.5" marker-end="url(#pa)"/>
 <text x="355" y="416" text-anchor="middle" dominant-baseline="middle">5 V</text>
 <path d="M445,400 L445,350" fill="none" stroke="#b3261e" stroke-width="2.5" marker-end="url(#pa)"/>
 <text x="437" y="376" text-anchor="end" dominant-baseline="middle">3.3 V</text>
 <path d="M330,475 L355,475 L355,525 L565,525 L565,250 L585,250" fill="none" stroke="#b3261e" stroke-width="2.5" marker-end="url(#pa)"/>
-<text x="575" y="510" text-anchor="start" dominant-baseline="middle">5 V rail to each VBUS switch</text>
+<text x="575" y="510" text-anchor="start" dominant-baseline="middle">5 V rail to the VBUS switch</text>
+<text x="15" y="525" text-anchor="start" dominant-baseline="middle">Red: power. Black: signal.</text>
 </svg>

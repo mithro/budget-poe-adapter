@@ -1,87 +1,89 @@
-block,function,part,maker,package,value,catalogue_number,quantity,unit_usd,price_source,price_tier,line_usd,build
-Ethernet,RJ45 jack,R-RJ45R08P-A004,Ckmtw,Through-hole,–,C385834,2,0.1049,LCSC,992,0.2098,Always
-Ethernet,LAN transformer,G2415S,CND-tek,SMD 24-pin,350 µH,C3003219,2,0.3006,LCSC,850,0.6012,Always
-Ethernet,Line termination resistor,0402WGF750JTCE,Uni-Royal,0402,75 Ω,C25133,8,0.0010,LCSC,"1,000",0.0080,Always
-Ethernet,Line termination capacitor,1206B102K202NT,FH,1206,1 nF 2 kV,C9196,5,0.0105,LCSC,"3,000",0.0525,Always
-Ethernet,Chip-side centre-tap capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF 16 V,C1525,8,0.0018,LCSC,"1,000",0.0144,Always
-Switch,Switch IC with CPU,YT9215S,Motorcomm,LQFP-128,–,C5899183,1,1.9221,LCSC,900,1.9221,Always
-Switch,Crystal,X322525MOB4SI,YXC,3.2 × 2.5 mm,25 MHz,C9006,1,0.0505,LCSC,"3,000",0.0505,Always
-Switch,Crystal load capacitor,0402CG180J500NT,FH,0402,18 pF,C1549,2,0.0014,LCSC,"1,000",0.0028,Always
-Switch,Firmware flash,P25Q40SH-SSH-IT,Puya,SOP-8,4 Mbit,C2836860,1,0.1001,LCSC,"2,500",0.1001,Always
-Switch,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF 16 V,C1525,28,0.0018,LCSC,"1,000",0.0504,Always
-Switch,Supply bulk capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF 10 V,C19702,4,0.0107,LCSC,"4,000",0.0428,Always
-Switch,Analogue supply bead,BLM18KG221SN1D,Murata,0603,220 Ω,C88980,2,0.0291,LCSC,"4,000",0.0582,Always
-Switch,Core regulator inductor,SWPA4018S2R2MT,Sunlord,4 × 4 mm,2.2 µH,C50543,1,0.0600,Estimate,–,0.0600,Always
-Switch,Core regulator capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF 10 V,C19702,2,0.0107,LCSC,"4,000",0.0214,Always
-Switch,Strap resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,C25900,6,0.0013,LCSC,"1,000",0.0078,Always
-Switch,Reset resistor,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,C25744,1,0.0011,LCSC,"1,000",0.0011,Always
-Switch,Reset capacitor,CL05A105KA5NQNC,Samsung,0402,1 µF 25 V,C52923,1,0.0042,LCSC,"1,000",0.0042,Always
-PoE front end,Polarity bridge,MB10S-50MIL,MDD,MBS,1 A,C2488,2,0.0145,LCSC,"3,000",0.0290,Always
-PoE front end,Surge clamp,SMAJ58A,Goodwork,SMA,58 V,C2980408,1,0.0186,LCSC,"2,000",0.0186,Always
-PoE front end,Signature resistor,Not selected,Not selected,0603,24.9 kΩ,,1,0.0015,Estimate,–,0.0015,Always
-PoE front end,Signature capacitor,Not selected,Not selected,0805,100 nF 100 V,,1,0.0100,Estimate,–,0.0100,Always
-PoE front end,Class sink transistor,MMBT3904,ST (Semtech),SOT-23,40 V,C84104,2,0.0074,LCSC,"3,000",0.0148,Always
-PoE front end,Class sink window zener,BZT52C15,Goodwork,SOD-123,15 V,C2932746,1,0.0099,LCSC,"3,000",0.0099,Always
-PoE front end,Class sink resistor,Not selected,Not selected,0402,Set at schematic,,3,0.0011,Estimate,–,0.0033,Always
-PoE front end,Hot-swap MOSFET,NCE0130KA,NCE,TO-252,100 V,C502817,1,0.3143,LCSC,"2,500",0.3143,Always
-PoE front end,Gate clamp zener,BZT52C15,Goodwork,SOD-123,15 V,C2932746,1,0.0099,LCSC,"3,000",0.0099,Always
-PoE front end,Turn-on threshold resistor,Not selected,Not selected,0402,Set at schematic,,2,0.0011,Estimate,–,0.0022,Always
-PoE front end,Gate capacitor,CL05B104KB54PNC,Samsung,0402,100 nF 50 V,C307331,1,0.0064,LCSC,"1,000",0.0064,Always
-PoE front end,Input bulk capacitor,ERM1KM220E12OT,Aishi,6.3 × 12 mm,22 µF 100 V,C106608,1,0.0250,LCSC,"1,000",0.0250,Always
-5 V converter,Converter IC,RT6365GSP,Richtek,SOP-8-EP,60 V 5 A,C3024482,1,0.5319,LCSC,"1,000",0.5319,Always
-5 V converter,Catch diode,SS56,MDD,SMA,60 V 5 A,C65009,1,0.0353,LCSC,"1,000",0.0353,Always
-5 V converter,Inductor,MWSA1005S-100MT,Sunlord,11.5 × 10 mm,10 µH,C17700185,1,0.1786,JLCPCB,"5,000",0.1786,Always
-5 V converter,Input capacitor,CS3225X7R225K101NRK,Samwha,1210,2.2 µF 100 V,C2900749,2,0.0658,LCSC,"2,000",0.1316,Always
-5 V converter,Output capacitor,CL31A226KAHNNNE,Samsung,1206,22 µF 25 V,C12891,2,0.0646,LCSC,"2,000",0.1292,Always
-5 V converter,Bootstrap capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF 16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,Always
-5 V converter,Feedback resistor,Not selected,Not selected,0402,Set at schematic,,2,0.0011,Estimate,–,0.0022,Always
-5 V converter,Frequency resistor,Not selected,Not selected,0402,Set at schematic,,1,0.0011,Estimate,–,0.0011,Always
-5 V converter,Compensation resistor,Not selected,Not selected,0402,Set at schematic,,1,0.0011,Estimate,–,0.0011,Always
-5 V converter,Compensation capacitor,Not selected,Not selected,0402,Set at schematic,,2,0.0020,Estimate,–,0.0040,Always
-3.3 V converter,Converter IC,MT2492,Aerosemi,SOT-23-6,2 A,C89358,1,0.0361,LCSC,"1,000",0.0361,Always
-3.3 V converter,Inductor,SWPA4030S4R7NT,Sunlord,4 × 4 mm,4.7 µH,C193025,1,0.0563,JLCPCB,"10,000",0.0563,Always
-3.3 V converter,Feedback top resistor,0402WGF1802TCE,Uni-Royal,0402,18 kΩ,C25762,1,0.0011,LCSC,"1,000",0.0011,Always
-3.3 V converter,Feedback bottom resistor,0402WGF2001TCE,Uni-Royal,0402,2 kΩ,C4109,2,0.0015,LCSC,"1,000",0.0030,Always
-3.3 V converter,Input capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF 10 V,C19702,1,0.0107,LCSC,"4,000",0.0107,Always
-3.3 V converter,Output capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF 10 V,C19702,2,0.0107,LCSC,"4,000",0.0214,Always
-3.3 V converter,Bootstrap capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF 16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,Always
-USB-C power,VBUS switch MOSFET,AO4407A,AOS,SOIC-8,30 V 12 A,C16072,1,0.1683,LCSC,"3,000",0.1683,Always
-USB-C power,VBUS switch driver,DTC143ZCA,JSCJ,SOT-23,4.7 kΩ 47 kΩ,C15236,1,0.0142,LCSC,"3,000",0.0142,Always
-USB-C power,VBUS gate pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,C25744,1,0.0011,LCSC,"1,000",0.0011,Always
-USB-C power,VBUS bleed resistor,0402WGF1001TCE,Uni-Royal,0402,1 kΩ,C11702,1,0.0011,LCSC,"1,000",0.0011,Always
-USB-C power,VBUS capacitor,CL05A105KA5NQNC,Samsung,0402,1 µF 25 V,C52923,1,0.0042,LCSC,"1,000",0.0042,Always
-USB-C power,Captive cable,USB-C plug on a cable,Not selected,Soldered wires,5 A,,1,0.4000,Estimate,–,0.4000,Always
-CC interface: PD transceiver,PD transceiver,FUSB302BMPX,onsemi,WQFN-14,–,C132291,1,0.4080,LCSC,"1,000",0.4080,PD transceiver
-CC interface: PD transceiver,I²C pull-up,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,C25900,2,0.0013,LCSC,"1,000",0.0026,PD transceiver
-CC interface: PD transceiver,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF 16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,PD transceiver
-CC interface: GPIO bit-bang,BMC driver buffer,74AUP1G126GW-TP,Tech Public,SOT-353,–,C51886129,1,0.0304,LCSC,"3,000",0.0304,GPIO bit-bang
-CC interface: GPIO bit-bang,Receiver capacitor,Not selected,Not selected,0402,Set at schematic,,1,0.0020,Estimate,–,0.0020,GPIO bit-bang
-CC interface: GPIO bit-bang,Driver series resistor,0402WGF470JTCE,Uni-Royal,0402,47 Ω,C25118,1,0.0009,LCSC,"1,000",0.0009,GPIO bit-bang
-CC interface: GPIO bit-bang,Fast dual comparator,TP1942-SR,3PEAK,SOIC-8,68 ns,C248572,1,0.1742,LCSC,"2,500",0.1742,GPIO bit-bang
-CC interface: GPIO bit-bang,Threshold divider resistor,Not selected,Not selected,0402,Set at schematic,,4,0.0011,Estimate,–,0.0044,GPIO bit-bang
-CC interface: GPIO bit-bang,CC series resistor,0402WGF1001TCE,Uni-Royal,0402,1 kΩ,C11702,1,0.0011,LCSC,"1,000",0.0011,GPIO bit-bang
-CC interface: GPIO bit-bang,CC clamp diode,BAV99,R+O,SOT-23,70 V,C7420336,1,0.0080,LCSC,"3,000",0.0080,GPIO bit-bang
-CC interface: GPIO bit-bang,Rp for 1.5 A,0402WGF1202TCE,Uni-Royal,0402,12 kΩ,C25752,1,0.0010,LCSC,"1,000",0.0010,GPIO bit-bang
-CC interface: GPIO bit-bang,Rp step to 3 A,0402WGF7501TCE,Uni-Royal,0402,7.5 kΩ,C25918,1,0.0017,LCSC,"1,000",0.0017,GPIO bit-bang
-CC interface: GPIO bit-bang,Slow dual comparator,LM393DR2G,onsemi,SOIC-8,1.3 µs,C7955,1,0.0323,LCSC,"2,500",0.0323,GPIO bit-bang
-CC interface: GPIO bit-bang,VBUS threshold resistor,Not selected,Not selected,0402,Set at schematic,,2,0.0011,Estimate,–,0.0022,GPIO bit-bang
-CC interface: GPIO bit-bang,Comparator output pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,C25744,1,0.0011,LCSC,"1,000",0.0011,GPIO bit-bang
-CC interface: GPIO bit-bang,Buffer enable pull-down,0402WGF1003TCE,Uni-Royal,0402,100 kΩ,C25741,1,0.0007,LCSC,"1,000",0.0007,GPIO bit-bang
-CC interface: GPIO bit-bang,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF 16 V,C1525,3,0.0018,LCSC,"1,000",0.0054,GPIO bit-bang
-CC interface: port 9 MAC,BMC driver buffer,74AUP1G126GW-TP,Tech Public,SOT-353,–,C51886129,1,0.0304,LCSC,"3,000",0.0304,Port 9 MAC
-CC interface: port 9 MAC,Buffer reset gate,SN74AUP1G08DCKR,UMW,SC-70-5,–,C7394036,1,0.0240,LCSC,"3,000",0.0240,Port 9 MAC
-CC interface: port 9 MAC,Receiver capacitor,Not selected,Not selected,0402,Set at schematic,,1,0.0020,Estimate,–,0.0020,Port 9 MAC
-CC interface: port 9 MAC,Driver series resistor,0402WGF470JTCE,Uni-Royal,0402,47 Ω,C25118,1,0.0009,LCSC,"1,000",0.0009,Port 9 MAC
-CC interface: port 9 MAC,Fast dual comparator,TP1942-SR,3PEAK,SOIC-8,68 ns,C248572,1,0.1742,LCSC,"2,500",0.1742,Port 9 MAC
-CC interface: port 9 MAC,Threshold divider resistor,Not selected,Not selected,0402,Set at schematic,,4,0.0011,Estimate,–,0.0044,Port 9 MAC
-CC interface: port 9 MAC,CC series resistor,0402WGF1001TCE,Uni-Royal,0402,1 kΩ,C11702,1,0.0011,LCSC,"1,000",0.0011,Port 9 MAC
-CC interface: port 9 MAC,CC clamp diode,BAV99,R+O,SOT-23,70 V,C7420336,1,0.0080,LCSC,"3,000",0.0080,Port 9 MAC
-CC interface: port 9 MAC,Rp for 1.5 A,0402WGF1202TCE,Uni-Royal,0402,12 kΩ,C25752,1,0.0010,LCSC,"1,000",0.0010,Port 9 MAC
-CC interface: port 9 MAC,Rp step to 3 A,0402WGF7501TCE,Uni-Royal,0402,7.5 kΩ,C25918,1,0.0017,LCSC,"1,000",0.0017,Port 9 MAC
-CC interface: port 9 MAC,Slow dual comparator,LM393DR2G,onsemi,SOIC-8,1.3 µs,C7955,1,0.0323,LCSC,"2,500",0.0323,Port 9 MAC
-CC interface: port 9 MAC,VBUS threshold resistor,Not selected,Not selected,0402,Set at schematic,,2,0.0011,Estimate,–,0.0022,Port 9 MAC
-CC interface: port 9 MAC,Comparator output pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,C25744,1,0.0011,LCSC,"1,000",0.0011,Port 9 MAC
-CC interface: port 9 MAC,Receive tie resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,C25900,3,0.0013,LCSC,"1,000",0.0039,Port 9 MAC
-CC interface: port 9 MAC,Clock strap resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,C25900,1,0.0013,LCSC,"1,000",0.0013,Port 9 MAC
-CC interface: port 9 MAC,Gate pull-down,0402WGF1003TCE,Uni-Royal,0402,100 kΩ,C25741,1,0.0007,LCSC,"1,000",0.0007,Port 9 MAC
-CC interface: port 9 MAC,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF 16 V,C1525,4,0.0018,LCSC,"1,000",0.0072,Port 9 MAC
+block,function,part,maker,package,value,rating,catalogue_number,quantity,unit_usd,price_source,price_tier,line_usd,build
+Ethernet,RJ45 jack,R-RJ45R08P-A004,Ckmtw,Through-hole,–,–,C385834,2,0.1049,LCSC,992,0.2098,Always
+Ethernet,LAN transformer,G2415S,CND-tek,SMD 24-pin,350 µH,–,C3003219,2,0.3006,LCSC,850,0.6012,Always
+Ethernet,Line termination resistor,0402WGF750JTCE,Uni-Royal,0402,75 Ω,–,C25133,8,0.0010,LCSC,"1,000",0.0080,Always
+Ethernet,Line termination capacitor,1206B102K202NT,FH,1206,1 nF,2 kV,C9196,5,0.0105,LCSC,"3,000",0.0525,Always
+Ethernet,Chip-side centre-tap capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,8,0.0018,LCSC,"1,000",0.0144,Always
+Switch,Switch IC with CPU,YT9215SC,Motorcomm,LQFP-128,–,–,C51037433,1,2.8893,LCSC,900,2.8893,Always
+Switch,Crystal,X322525MOB4SI,YXC,3.2 × 2.5 mm,25 MHz,–,C9006,1,0.0505,LCSC,"3,000",0.0505,Always
+Switch,Crystal load capacitor,0402CG180J500NT,FH,0402,18 pF,50 V,C1549,2,0.0014,LCSC,"1,000",0.0028,Always
+Switch,Firmware flash,P25Q40SH-SSH-IT,Puya,SOP-8,4 Mbit,–,C2836860,1,0.1001,LCSC,"2,500",0.1001,Always
+Switch,Bias resistor,RC0402FR-072K49L,Yageo,0402,2.49 kΩ,–,C145071,1,0.0016,LCSC,"1,000",0.0016,Always
+Switch,Flash chip-select pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,Always
+Switch,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,30,0.0018,LCSC,"1,000",0.0540,Always
+Switch,Supply bulk capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF,10 V,C19702,4,0.0107,LCSC,"4,000",0.0428,Always
+Switch,Analogue supply bead,BLM18KG221SN1D,Murata,0603,220 Ω,2.2 A,C88980,2,0.0291,LCSC,"4,000",0.0582,Always
+Switch,Core regulator inductor,SWPA4018S2R2MT,Sunlord,4 × 4 mm,2.2 µH,–,C50543,1,0.0357,JLCPCB,"3,000",0.0357,Always
+Switch,Core regulator capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF,10 V,C19702,2,0.0107,LCSC,"4,000",0.0214,Always
+Switch,Strap resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,–,C25900,6,0.0013,LCSC,"1,000",0.0078,Always
+Switch,Reset resistor,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,Always
+Switch,Reset capacitor,CL05A105KA5NQNC,Samsung,0402,1 µF,25 V,C52923,1,0.0042,LCSC,"1,000",0.0042,Always
+PoE front end,Polarity bridge,MB10S-50MIL,MDD,MBS,–,1 A,C2488,2,0.0145,LCSC,"3,000",0.0290,Always
+PoE front end,Surge clamp,SMAJ58A,Goodwork,SMA,–,58 V,C2980408,1,0.0186,LCSC,"2,000",0.0186,Always
+PoE front end,Signature resistor,Not selected,Not selected,1206,24.9 kΩ,–,,1,0.0030,Estimate,–,0.0030,Always
+PoE front end,Signature capacitor,Not selected,Not selected,0805,100 nF,100 V,,1,0.0100,Estimate,–,0.0100,Always
+PoE front end,Class sink transistor,MMBT5551,JSCJ,SOT-23,–,160 V,C2145,2,0.0096,LCSC,"3,000",0.0192,Always
+PoE front end,Class sink window zener,Not selected,Not selected,SOD-123,Set by the PoE design,–,,1,0.0100,Estimate,–,0.0100,Always
+PoE front end,Class sink resistor,Not selected,Not selected,0402,Set at schematic,–,,3,0.0011,Estimate,–,0.0033,Always
+PoE front end,Hot-swap MOSFET,NCE0130KA,NCE,TO-252,–,100 V,C502817,1,0.3143,LCSC,"2,500",0.3143,Always
+PoE front end,Gate clamp zener,BZT52C15,Goodwork,SOD-123,15 V,–,C2932746,1,0.0099,LCSC,"3,000",0.0099,Always
+PoE front end,Turn-on threshold resistor,Not selected,Not selected,0402,Set at schematic,–,,2,0.0011,Estimate,–,0.0022,Always
+PoE front end,Gate capacitor,CL05B104KB54PNC,Samsung,0402,100 nF,50 V,C307331,1,0.0064,LCSC,"1,000",0.0064,Always
+5 V converter,Converter IC,RT6365GSP,Richtek,SOP-8-EP,5 A,60 V,C3024482,1,0.5319,LCSC,"1,000",0.5319,Always
+5 V converter,Catch diode,SS56,MDD,SMA,5 A,60 V,C65009,1,0.0353,LCSC,"1,000",0.0353,Always
+5 V converter,Inductor,MWSA1005S-100MT,Sunlord,11.5 × 10 mm,10 µH,8 A,C17700185,1,0.1862,JLCPCB,"2,500",0.1862,Always
+5 V converter,Input bulk capacitor,ERM1KM220E12OT,Aishi,6.3 × 12 mm,22 µF,100 V,C106608,1,0.0250,LCSC,"1,000",0.0250,Always
+5 V converter,Input capacitor,CS3225X7R225K101NRK,Samwha,1210,2.2 µF,100 V,C2900749,2,0.0658,LCSC,"2,000",0.1316,Always
+5 V converter,Output capacitor,CL31A226KAHNNNE,Samsung,1206,22 µF,25 V,C12891,2,0.0646,LCSC,"2,000",0.1292,Always
+5 V converter,Bootstrap capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,Always
+5 V converter,Feedback resistor,Not selected,Not selected,0402,Set at schematic,–,,2,0.0011,Estimate,–,0.0022,Always
+5 V converter,Frequency resistor,Not selected,Not selected,0402,Set at schematic,–,,1,0.0011,Estimate,–,0.0011,Always
+5 V converter,Compensation resistor,Not selected,Not selected,0402,Set at schematic,–,,1,0.0011,Estimate,–,0.0011,Always
+5 V converter,Compensation capacitor,Not selected,Not selected,0402,Set at schematic,–,,2,0.0020,Estimate,–,0.0040,Always
+3.3 V converter,Converter IC,MT2492,Aerosemi,SOT-23-6,2 A,–,C89358,1,0.0361,LCSC,"1,000",0.0361,Always
+3.3 V converter,Inductor,SWPA4030S4R7NT,Sunlord,4 × 4 mm,4.7 µH,2 A,C193025,1,0.0411,JLCPCB,"2,000",0.0411,Always
+3.3 V converter,Feedback top resistor,0402WGF1802TCE,Uni-Royal,0402,18 kΩ,–,C25762,1,0.0011,LCSC,"1,000",0.0011,Always
+3.3 V converter,Feedback bottom resistor,0402WGF2001TCE,Uni-Royal,0402,2 kΩ,–,C4109,2,0.0015,LCSC,"1,000",0.0030,Always
+3.3 V converter,Input capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF,10 V,C19702,1,0.0107,LCSC,"4,000",0.0107,Always
+3.3 V converter,Output capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF,10 V,C19702,2,0.0107,LCSC,"4,000",0.0214,Always
+3.3 V converter,Bootstrap capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,Always
+USB-C power,VBUS switch MOSFET,AO4407A,AOS,SOIC-8,12 A,30 V,C16072,1,0.1683,LCSC,"3,000",0.1683,Always
+USB-C power,VBUS switch driver,DTC143ZCA,JSCJ,SOT-23,4.7 kΩ,50 V,C15236,1,0.0142,LCSC,"3,000",0.0142,Always
+USB-C power,VBUS gate pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,Always
+USB-C power,VBUS bleed resistor,0402WGF1001TCE,Uni-Royal,0402,1 kΩ,–,C11702,1,0.0011,LCSC,"1,000",0.0011,Always
+USB-C power,VBUS capacitor,CL05A105KA5NQNC,Samsung,0402,1 µF,25 V,C52923,1,0.0042,LCSC,"1,000",0.0042,Always
+USB-C power,Captive cable,USB-C plug on a cable,Not selected,Soldered wires,–,5 A,,1,0.4000,Estimate,–,0.4000,Always
+CC interface: PD transceiver,PD transceiver,FUSB302BMPX,onsemi,WQFN-14,–,–,C132291,1,0.4080,LCSC,"1,000",0.4080,PD transceiver
+CC interface: PD transceiver,I²C pull-up,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,–,C25900,2,0.0013,LCSC,"1,000",0.0026,PD transceiver
+CC interface: PD transceiver,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,PD transceiver
+CC interface: GPIO bit-bang,BMC driver buffer,74AUP1G126GW-TP,Tech Public,SOT-353,–,–,C51886129,1,0.0304,LCSC,"3,000",0.0304,GPIO bit-bang
+CC interface: GPIO bit-bang,Receiver capacitor,Not selected,Not selected,0402,Set at schematic,–,,1,0.0020,Estimate,–,0.0020,GPIO bit-bang
+CC interface: GPIO bit-bang,Driver series resistor,0402WGF470JTCE,Uni-Royal,0402,47 Ω,–,C25118,1,0.0009,LCSC,"1,000",0.0009,GPIO bit-bang
+CC interface: GPIO bit-bang,Fast dual comparator,TP1942-SR,3PEAK,SOIC-8,68 ns,–,C248572,1,0.1742,LCSC,"2,500",0.1742,GPIO bit-bang
+CC interface: GPIO bit-bang,Threshold divider resistor,Not selected,Not selected,0402,Set at schematic,–,,4,0.0011,Estimate,–,0.0044,GPIO bit-bang
+CC interface: GPIO bit-bang,CC series resistor,0402WGF1001TCE,Uni-Royal,0402,1 kΩ,–,C11702,1,0.0011,LCSC,"1,000",0.0011,GPIO bit-bang
+CC interface: GPIO bit-bang,CC clamp diode,BAV99,R+O,SOT-23,–,70 V,C7420336,1,0.0080,LCSC,"3,000",0.0080,GPIO bit-bang
+CC interface: GPIO bit-bang,Rp for 1.5 A,0402WGF1202TCE,Uni-Royal,0402,12 kΩ,–,C25752,1,0.0010,LCSC,"1,000",0.0010,GPIO bit-bang
+CC interface: GPIO bit-bang,Rp step to 3 A,0402WGF7501TCE,Uni-Royal,0402,7.5 kΩ,–,C25918,1,0.0017,LCSC,"1,000",0.0017,GPIO bit-bang
+CC interface: GPIO bit-bang,Slow dual comparator,LM393DR2G,onsemi,SOIC-8,1.3 µs,–,C7955,1,0.0323,LCSC,"2,500",0.0323,GPIO bit-bang
+CC interface: GPIO bit-bang,VBUS threshold resistor,Not selected,Not selected,0402,Set at schematic,–,,2,0.0011,Estimate,–,0.0022,GPIO bit-bang
+CC interface: GPIO bit-bang,Comparator output pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,GPIO bit-bang
+CC interface: GPIO bit-bang,Buffer enable pull-down,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,GPIO bit-bang
+CC interface: GPIO bit-bang,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,3,0.0018,LCSC,"1,000",0.0054,GPIO bit-bang
+CC interface: port 9 MAC,BMC driver buffer,74AUP1G126GW-TP,Tech Public,SOT-353,–,–,C51886129,1,0.0304,LCSC,"3,000",0.0304,Port 9 MAC
+CC interface: port 9 MAC,Buffer reset gate,SN74AUP1G08DCKR,UMW,SC-70-5,–,–,C7394036,1,0.0240,LCSC,"3,000",0.0240,Port 9 MAC
+CC interface: port 9 MAC,Receiver capacitor,Not selected,Not selected,0402,Set at schematic,–,,1,0.0020,Estimate,–,0.0020,Port 9 MAC
+CC interface: port 9 MAC,Driver series resistor,0402WGF470JTCE,Uni-Royal,0402,47 Ω,–,C25118,1,0.0009,LCSC,"1,000",0.0009,Port 9 MAC
+CC interface: port 9 MAC,Fast dual comparator,TP1942-SR,3PEAK,SOIC-8,68 ns,–,C248572,1,0.1742,LCSC,"2,500",0.1742,Port 9 MAC
+CC interface: port 9 MAC,Threshold divider resistor,Not selected,Not selected,0402,Set at schematic,–,,4,0.0011,Estimate,–,0.0044,Port 9 MAC
+CC interface: port 9 MAC,CC series resistor,0402WGF1001TCE,Uni-Royal,0402,1 kΩ,–,C11702,1,0.0011,LCSC,"1,000",0.0011,Port 9 MAC
+CC interface: port 9 MAC,CC clamp diode,BAV99,R+O,SOT-23,–,70 V,C7420336,1,0.0080,LCSC,"3,000",0.0080,Port 9 MAC
+CC interface: port 9 MAC,Rp for 1.5 A,0402WGF1202TCE,Uni-Royal,0402,12 kΩ,–,C25752,1,0.0010,LCSC,"1,000",0.0010,Port 9 MAC
+CC interface: port 9 MAC,Rp step to 3 A,0402WGF7501TCE,Uni-Royal,0402,7.5 kΩ,–,C25918,1,0.0017,LCSC,"1,000",0.0017,Port 9 MAC
+CC interface: port 9 MAC,Slow dual comparator,LM393DR2G,onsemi,SOIC-8,1.3 µs,–,C7955,1,0.0323,LCSC,"2,500",0.0323,Port 9 MAC
+CC interface: port 9 MAC,VBUS threshold resistor,Not selected,Not selected,0402,Set at schematic,–,,2,0.0011,Estimate,–,0.0022,Port 9 MAC
+CC interface: port 9 MAC,Comparator output pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,Port 9 MAC
+CC interface: port 9 MAC,Receive tie resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,–,C25900,3,0.0013,LCSC,"1,000",0.0039,Port 9 MAC
+CC interface: port 9 MAC,Clock strap resistor,0402WGF4701TCE,Uni-Royal,0402,4.7 kΩ,–,C25900,1,0.0013,LCSC,"1,000",0.0013,Port 9 MAC
+CC interface: port 9 MAC,Gate pull-down,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,Port 9 MAC
+CC interface: port 9 MAC,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,4,0.0018,LCSC,"1,000",0.0072,Port 9 MAC

@@ -173,7 +173,11 @@ ALL = [root, power, switch, eth, upl, poe, leds]
 root.loose_titles = ['Title', 'Block diagram', 'Wire styles', 'How to read the schematic', 'Sources']
 eth.loose_titles = ['PoE bus to the PoE module sheet and notes']
 power.loose_titles = ['Notes on the DC input', 'Notes on the 3.3 V buck']
+power.detail_order = ['DC input and protection', 'Notes on the DC input',
+                      '3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous)', 'Notes on the 3.3 V buck']
 upl.loose_titles = ['Note on the uplink']
+# cut U4C left of the net labels on its left pins, so each label stays with its pin
+switch.cut_hints = {'U4C: clock, reset, regulator, management, GPIO and LEDs': [112.0]}
 
 LEGEND = ('Wire style = confidence of each connection\n'
           'green solid      C  confirmed (traced on both sides, or measured)\n'
@@ -293,16 +297,16 @@ c44 = two(s, 'Device:C', 'C44', '0402', m(80), m(90), False)
 c43 = two(s, 'Device:C', 'C43', '0402', m(100), m(90), False)
 s.wire([y6.p('2'), (m(80), y6.p('2')[1]), c44.p('1')], 'V'); s.mark(y6, '2', 'XTALI', 'V'); s.mark(c44, '1', 'XTALI', 'V')
 s.wire([y6.p('1'), (m(100), y6.p('1')[1]), c43.p('1')], 'V'); s.mark(y6, '1', 'XTALO', 'V'); s.mark(c43, '1', 'XTALO', 'V')
-s.wire([(m(80), m(80)), (m(80), m(72.39)), (m(114.3), m(72.39))], 'V'); s.route((m(114.3), m(72.39)), uC.p('88'), 'V', hfirst=False); s.mark(uC, '88', 'XTALI', 'V')
-s.route((m(100), m(80)), uC.p('87'), 'V', xm=m(106.68)); s.mark(uC, '87', 'XTALO', 'V')
+s.wire([(m(80), m(80)), (m(80), m(72.39)), (m(109.22), m(72.39))], 'V'); s.route((m(109.22), m(72.39)), uC.p('88'), 'V', hfirst=False); s.mark(uC, '88', 'XTALI', 'V')
+s.route((m(100), m(80)), uC.p('87'), 'V', xm=m(104.14)); s.mark(uC, '87', 'XTALO', 'V')
 for c in (c43, c44):
     gnd(s, c.p('2'), 'V'); s.mark(c, '2', 'GND', 'V')
-s.stub(uC, '89', 'NRESET', 'U', length=m(10))
-s.stub(uC, '12', 'RBIAS', 'I', length=m(10))
+s.stub(uC, '89', 'NRESET', 'U', length=m(7.62))
+s.stub(uC, '12', 'RBIAS', 'I', length=m(7.62))
 s.pin_power(uC, '60', '+3V3', 'I', length=m(25.4))
 l3 = two(s, 'Device:L', 'L3', '4u7 "4R7"', m(95), uC.p('63')[1], True)
 s.wire([uC.p('63'), l3.p('2')], 'V'); s.mark(uC, '63', 'SWR_LX', 'V'); s.mark(l3, '2', 'SWR_LX', 'V')
-xl = m(105)
+xl = m(109.22)
 s.wire([uC.p('64'), (xl, uC.p('64')[1]), (xl, uC.p('63')[1])], 'V'); s.mark(uC, '64', 'SWR_LX', 'V')
 s.wire([l3.p('1'), (m(85), l3.p('1')[1])], 'V'); s.mark(l3, '1', '+1V15', 'V')
 s.power('+1V15', m(85), l3.p('1')[1], lib_name='+1V1'); s.power('PWR_FLAG', m(85), l3.p('1')[1], lib_name='PWR_FLAG', rot=180)
@@ -324,7 +328,7 @@ fl = [('49', 'R93', 'SPF0_SCK', 'FL_SCK', '6'), ('50', 'R92', 'SPF0_SI', 'FL_SI'
       ('55', 'R44', 'SPF0_CS', 'FL_CS', '1')]
 for i, (n, rr, n1, n2, fp) in enumerate(fl):
     p = uC.p(n)
-    r = two(s, 'Device:R', rr, '0402', m(110), p[1], True, ref_at=(m(110) - 5.08, p[1] - 2.54), val_at=(m(110) + 0.635, p[1] - 2.54), center=set())
+    r = two(s, 'Device:R', rr, '0402', m(99), p[1], True, ref_at=(m(99) - 5.08, p[1] - 2.54), val_at=(m(99) + 0.635, p[1] - 2.54), center=set())
     s.wire([r.p('2'), p], 'V'); s.mark(r, '2', n1, 'V'); s.mark(uC, n, n1, 'V')
     q = u6.p(fp)
     xv = m(85 + 2.54 * i)
@@ -350,7 +354,7 @@ for n in ('85', '84', '83', '80', '81', '79', '77', '78', '76', '75', '73', '74'
 for n in ('14', '15', '116'):
     s.nc(uC.p(n)); s.mark(uC, n, '(NC)', 'I')
 s.textbox('Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 goes to the LED\n'
-          'sheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced).', m(169.6), m(215), m(80), m(16))
+          'sheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced).', m(146), m(215), m(80), m(16))
 # U4A MDI
 s.frame(m(290), m(15), m(450), m(270), 'U4A: copper ports (MDI)')
 uA = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(330), m(130), unit=1, node=u4node)
@@ -718,7 +722,8 @@ def detail_regions(png, sh):
     Every dashed frame gives one region, named by its title. Ink outside the frames
     (notes, the block diagram of the root sheet) is grouped into regions by proximity.
     A region wider than DETAIL_MAX is cut into parts at columns that cross nothing but
-    horizontal wires. The second value returned is False when no such column was found.
+    horizontal wires; sh.cut_hints (frame title -> x positions in mm, as drawn) can name
+    the column to use. The second value returned is False when no such column was found.
     """
     import numpy as np
     from PIL import Image, ImageChops, ImageDraw
@@ -764,6 +769,8 @@ def detail_regions(png, sh):
         box = (x0 - 1, y0 - 1, x1 + 1, y1 + 1)
         regions.append((sh.loose_titles[n] if n < len(sh.loose_titles) else 'Notes', box, ink.crop(px(*box))))
     regions.sort(key=lambda r: (r[1][1] // 100, r[1][0]))           # reading order: rows of 100 mm, left to right
+    if sh.detail_order:                                              # or the order the sheet asks for
+        regions.sort(key=lambda r: sh.detail_order.index(r[0]))
     out = []
     clean_cut = True
     pad = round(DETAIL_PAD * k)
@@ -795,17 +802,19 @@ def detail_regions(png, sh):
                 if hi <= lo:
                     clean_cut = False
                     break
-                if good:                                    # best: a column in a gap with no ink at all
+                hint = [round((h + dx) * k) - x0 for h in sh.cut_hints.get(title, []) if lo <= round((h + dx) * k) - x0 < hi]
+                if hint and hint[0] in good:                # a cut position chosen by hand for this group
+                    cuts.append(x0 + hint[0])
+                elif good:                                  # best: a column in a gap with no ink at all
                     cuts.append(x0 + min(good, key=lambda c: (bool(reg[:, c - band:c + band + 1].any()), abs(c - ideal))))
                 else:
                     clean_cut = False
                     cuts.append(x0 + min(range(lo, hi), key=lambda c: (cost[c], abs(c - ideal))))
         cuts.append(x1)
+        cuts = [c for i, c in enumerate(cuts) if i == 0 or mask.crop((cuts[i - 1] - ox, y0 - oy, c - ox, y1 - oy)).getbbox()]
         parts = len(cuts) - 1
         for i, (a, c) in enumerate(zip(cuts, cuts[1:]), 1):
             rows = mask.crop((a - ox, y0 - oy, c - ox, y1 - oy)).getbbox()       # each part keeps only its own rows
-            if not rows:
-                continue
             ya, yb = max(y0 + rows[1] - pad, y0), min(y0 + rows[3] + pad, y1)
             piece = im.crop((a, ya, c, yb))
             piece = piece.resize((round((c - a) / k * DETAIL_SCALE), round((yb - ya) / k * DETAIL_SCALE)), Image.LANCZOS)

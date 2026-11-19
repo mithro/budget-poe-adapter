@@ -18,7 +18,8 @@ The pin tables of both parts, and the route of each debug pin on this board, are
 | [`u4-pins-right-edge-annotated.png`](u4-pins-right-edge-annotated.png) | Annotated image | Pins 46 to 55 of [U4](../motorcomm-debug-pins.md#lx-u4) and the SPF0 resistors |
 | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) with the heatsink removed |
 | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of a second board with the same layout |
-| [`annotate.py`](annotate.py) | Script | Draws the annotations |
+| [`u4-surroundings.jpg`](u4-surroundings.jpg) | Cropped photo | [U4](../motorcomm-debug-pins.md#lx-u4) and the named parts beside it, from [`photo-u4-wide.jpg`](photo-u4-wide.jpg) |
+| [`annotate.py`](annotate.py) | Script | Draws the annotations and makes the crop |
 | [`photos/`](photos/README.md) | Photo catalogue | 34 photos of the two boards |
 
 [`annotate.py`](annotate.py) needs Pillow and runs as `python3 annotate.py`. It draws on
@@ -50,9 +51,16 @@ A ring with a number marks the via that the lead of that pin runs to.
 
 ## Source photos
 
-![Close-up of U4 with the heatsink removed](photo-u4-macro.jpg)
+The three annotated images are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jpg), a close-up of
+[U4](../motorcomm-debug-pins.md#lx-u4) with the heatsink removed.
 
-![Wider view of a second board with the same layout](photo-u4-wide.jpg)
+[`photo-u4-wide.jpg`](photo-u4-wide.jpg) shows a second board with the same layout. The crop below keeps
+[U4](../motorcomm-debug-pins.md#lx-u4) and the parts beside it whose silkscreen names the pin table uses:
+[Y6](../motorcomm-debug-pins.md#lx-y6) and [R22](../motorcomm-debug-pins.md#lx-r22) above the chip, and
+[R44](../motorcomm-debug-pins.md#lx-r44), [R89](../motorcomm-debug-pins.md#lx-r89),
+[R92](../motorcomm-debug-pins.md#lx-r92) and [R93](../motorcomm-debug-pins.md#lx-r93) to its right.
+
+![U4 on the second board with Y6, R22 and R23 above it and R44, R89, R92 and R93 to its right](u4-surroundings.jpg)
 
 All 34 photos of the two boards are catalogued in [`photos/README.md`](photos/README.md).
 

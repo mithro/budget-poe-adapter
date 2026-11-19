@@ -160,10 +160,10 @@ def draw(v):
     s.line([(l2 + 40, top(3)), (l2 + 40, bottom(2))], 'ctrl')
     s.label(l2 + 30, bottom(2) + 40, ['class PWM ·', 'hot-swap gate'], CTRL, 'end')
     s.line([(l2 + 75, bottom(2)), (l2 + 75, top(3))], 'ctrl')
-    s.label(l2 + 85, bottom(2) + 66, ['VIN / I sense'], CTRL, 'start')
+    s.label(l2 + 85, bottom(2) + 60, ['VIN /', 'I sense'], CTRL, 'start')
     ys = bottom(2) + 36
-    s.line([(r2 - 30, top(3)), (r2 - 30, ys), (l3 + 40, ys), (l3 + 40, bottom(2))], 'ctrl')
-    s.label((r2 - 30 + l3 + 40) / 2, ys - 9, ['5V/12V SEL (default 5 V)'], CTRL)
+    s.line([(r2 - 72, top(3)), (r2 - 72, ys), (l3 + 40, ys), (l3 + 40, bottom(2))], 'ctrl')
+    s.label((r2 - 72 + l3 + 40) / 2, ys - 9, ['5V/12V SEL (default 5 V)'], CTRL)
     s.line([(r2, top(3) + 32), (l3, top(3) + 32)], 'ctrl')
     s.label((r2 + l3) / 2, top(3) + 23, ['VBUS_EN (gate)'], CTRL)
     s.line([(l3, top(3) + 78), (r2, top(3) + 78)], 'ctrl')

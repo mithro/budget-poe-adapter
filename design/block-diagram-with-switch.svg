@@ -110,11 +110,13 @@
 <rect x="291.36" y="398.5" width="102.64" height="18" fill="#ffffff" opacity="0.92"/>
 <text x="390" y="412" font-size="14" fill="#15803d" text-anchor="end" font-weight="400">hot-swap gate</text>
 <path d="M435,357 L435,443" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
-<rect x="441" y="407.5" width="102.64" height="18" fill="#ffffff" opacity="0.92"/>
-<text x="445" y="421" font-size="14" fill="#15803d" text-anchor="start" font-weight="400">VIN / I sense</text>
-<path d="M550,443 L550,391 L740,391 L740,357" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
-<rect x="553.64" y="368.5" width="182.72" height="18" fill="#ffffff" opacity="0.92"/>
-<text x="645" y="382" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">5V/12V SEL (default 5 V)</text>
+<rect x="441" y="401.5" width="44.4" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="445" y="415" font-size="14" fill="#15803d" text-anchor="start" font-weight="400">VIN /</text>
+<rect x="441" y="418.5" width="58.96" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="445" y="432" font-size="14" fill="#15803d" text-anchor="start" font-weight="400">I sense</text>
+<path d="M508,443 L508,391 L740,391 L740,357" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<rect x="532.64" y="368.5" width="182.72" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="624" y="382" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">5V/12V SEL (default 5 V)</text>
 <path d="M582,477 L698,477" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
 <rect x="585.04" y="454.5" width="109.92" height="18" fill="#ffffff" opacity="0.92"/>
 <text x="640" y="468" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">VBUS_EN (gate)</text>

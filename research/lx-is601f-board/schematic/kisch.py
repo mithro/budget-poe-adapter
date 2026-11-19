@@ -262,6 +262,8 @@ class Sheet:
         self.comments = {}
         self.frames = []         # (x1, y1, x2, y2, title) of each dashed frame, as drawn
         self.loose_titles = []   # titles for the groups of items outside the frames, in reading order
+        self.cut_hints = {}      # frame title -> x positions (mm) preferred for cutting its detail image
+        self.detail_order = []   # titles of the detail images in the order to show them; empty: reading order
 
     # library -----------------------------------------------------------
     def use(self, lib_id, node=None):

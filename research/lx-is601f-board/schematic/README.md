@@ -67,7 +67,7 @@ Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash wit
 
 ## Sheets
 
-A whole sheet scaled to the width of this page leaves its text too small to read, so each sheet is shown as detail images, one per framed group. The images share one scale, 6.6 pixels per millimetre of sheet. A group wider than 136 mm is shown in parts, cut where only wires cross; the parts read left to right. Each image links to the render of its whole sheet, and [`lx-is601f-schematic.pdf`](lx-is601f-schematic.pdf) holds all seven sheets as vector drawings.
+A whole sheet scaled to the width of this page leaves its text too small to read, so each sheet is shown as detail images: one per framed group, and one per block of notes or drawing that stands outside the frames. The images share one scale, 6.6 pixels per millimetre of sheet. A group wider than 136 mm is shown in parts, cut where only wires cross; the parts read left to right. Each image links to the render of its whole sheet, and [`lx-is601f-schematic.pdf`](lx-is601f-schematic.pdf) holds all seven sheets as vector drawings.
 
 <!-- sheets:begin -->
 
@@ -91,13 +91,13 @@ A whole sheet scaled to the width of this page leaves its text too small to read
 
 [![Sheet 2, Notes on the DC input](renders/2-power-detail-03.png)](renders/2-power.png)
 
-[![Sheet 2, Notes on the 3.3 V buck](renders/2-power-detail-04.png)](renders/2-power.png)
+[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 1 of 3, left to right)](renders/2-power-detail-04.png)](renders/2-power.png)
 
-[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 1 of 3, left to right)](renders/2-power-detail-05.png)](renders/2-power.png)
+[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 2 of 3, left to right)](renders/2-power-detail-05.png)](renders/2-power.png)
 
-[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 2 of 3, left to right)](renders/2-power-detail-06.png)](renders/2-power.png)
+[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 3 of 3, left to right)](renders/2-power-detail-06.png)](renders/2-power.png)
 
-[![Sheet 2, 3.3 V buck: PU1 SCT2622 (4.2-60 V in, 2 A, non-synchronous) (part 3 of 3, left to right)](renders/2-power-detail-07.png)](renders/2-power.png)
+[![Sheet 2, Notes on the 3.3 V buck](renders/2-power-detail-07.png)](renders/2-power.png)
 
 ### Sheet 3: Switch IC YT9215SCH
 

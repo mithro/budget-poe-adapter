@@ -1,10 +1,11 @@
-"""Draw the debug-pin annotations on crops of photo-u4-macro.jpg.
+"""Draw the debug-pin annotations on crops of photo-u4-macro.jpg, and crop photo-u4-wide.jpg.
 
-Writes three images next to this script:
+Writes four images next to this script:
 
   u4-pin-numbering-annotated.png    the whole package, pin 1 and the pin range of each side
   u4-pins-top-edge-annotated.png    pins 65 to 96 with their functions and vias
   u4-pins-right-edge-annotated.png  pins 46 to 55 with the SPF0 resistors
+  u4-surroundings.jpg               U4 and the named parts beside it, from photo-u4-wide.jpg, not drawn on
 
 Each image is a tight crop, and the label size is chosen so the text is still
 readable when the image is scaled down to the width of a documentation page.
@@ -149,3 +150,9 @@ for lab, y in (('R44', 1825), ('R89', 1925), ('R92', 2025), ('R93', 2125)):
     c.d.rounded_rectangle((px - 75, py - 36, px + 75, py + 36), radius=8, outline=SPI, width=5)
     c.text(2840, y, lab, fs, SPI, 'rm')
 c.save('u4-pins-right-edge-annotated.png')
+
+# ---------- U4 and the parts beside it, with their silkscreen names, on the second board ----------
+wide = Image.open(SP + 'photo-u4-wide.jpg').convert('RGB').crop((600, 885, 2210, 2790))
+wide = wide.resize((850, round(850 * wide.height / wide.width)), Image.LANCZOS)
+wide.save(SP + 'u4-surroundings.jpg', quality=88, optimize=True)
+print('wrote u4-surroundings.jpg %dx%d' % wide.size)

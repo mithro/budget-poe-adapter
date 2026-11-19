@@ -407,7 +407,7 @@ The routes were read from photos of the top side only, and the lead numbers were
 - Pins [46](#sch-pin-46), [47](#sch-pin-47), [67](#sch-pin-67), [79](#sch-pin-79) and [90](#sch-pin-90) are "Lead only", so a wire has to be soldered to the lead itself, at 0.4 mm pitch.
 - On the flash buses SI is the chip's output to the flash DI pin, and SO is the flash DO pin into the chip.
 - [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) names pin [90](#sch-pin-90) GPIO47 and pin [67](#sch-pin-67) GPIO31.
-- The nRESET trace from pin 89 runs towards the crystal past R23 [**I**](#evidence-codes).
+- The nRESET trace from pin <a id="sch-pin-89"></a>89 runs towards [Y6](#lx-y6), past the resistor marked R23 on this board [**I**](#evidence-codes).
 
 ### Unknowns
 

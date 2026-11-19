@@ -55,10 +55,10 @@ addrmap yt9218 {
 
     reg {
         name = "Function enables";
-        desc = "Switches optional function blocks on.";
-        field { desc = "Enables the meters. The meter registers are METER_CTRL and PORT_METER."; sw = rw; hw = r; } METER[4:4];
-        field { desc = "Enables the access control list. Its registers include ACL_KEY and ACL_ACT."; sw = rw; hw = r; } ACL[2:2];
-        field { desc = "Enables the port counters of MIB_DATA."; sw = rw; hw = r; } MIB[1:1];
+        desc = "Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for their effect.";
+        field { desc = "Enable bit of the meters, whose registers are METER_CTRL and PORT_METER. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_rate_init() writes it as an enable. It is inferred that the block works only while the bit is set."; sw = rw; hw = r; } METER[4:4];
+        field { desc = "Enable bit of the access control list, whose registers include ACL_KEY and ACL_ACT. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_acl_global_enable() writes it as an enable. It is inferred that the block works only while the bit is set."; sw = rw; hw = r; } ACL[2:2];
+        field { desc = "Enable bit of the port counters of MIB_DATA. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_stat_mib_enable_set() writes it as an enable. It is inferred that the block works only while the bit is set."; sw = rw; hw = r; } MIB[1:1];
     } FUNC @ 0x80004;
 
     reg {
@@ -175,8 +175,8 @@ addrmap yt9218 {
             V10000 = 3 { desc = "10000 Mbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
-        field { desc = "Take the pause settings from in-band negotiation. yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that RX_PAUSE and TX_PAUSE are then ignored."; sw = rw; hw = r; } PAUSE_AN[10:10];
-        field { desc = "Take speed and duplex from the in-band status. yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the bit also follows a built-in PHY and that the forced bits are then ignored."; sw = rw; hw = r; } LINK_AN[9:9];
+        field { desc = "yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE."; sw = rw; hw = r; } PAUSE_AN[10:10];
+        field { desc = "yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the MAC then takes speed and duplex from the in-band status, that the bit also follows a built-in PHY and that the forced bits are then ignored."; sw = rw; hw = r; } LINK_AN[9:9];
         field { desc = "Use back pressure for flow control in half duplex."; sw = rw; hw = r; } HALF_PAUSE[8:8];
         field { desc = "Forced full duplex."; sw = rw; hw = r; } DUPLEX_FULL[7:7];
         field { desc = "Honour received pause frames."; sw = rw; hw = r; } RX_PAUSE[6:6];
@@ -762,7 +762,7 @@ addrmap yt9218 {
 
     reg {
         name = "VLAN priority to internal priority map";
-        desc = "Internal priority and colour for each VLAN tag priority. There are two maps (index map); each has one entry per drop eligible bit value (dei) and priority code point (pcp). The vendor SDK functions fal_tiger_qos_intPri_cpri_map_set() and fal_tiger_qos_intPri_spri_map_set() write the map number 0 or 1 to PORT_QOS and use it as the index map. Index: map = 0 to 1, dei = 0 to 1, pcp = 0 to 7.";
+        desc = "Internal priority and colour for each VLAN tag priority. There are two maps (index map); each has one entry per drop eligible bit value (dei) and priority code point (pcp). The vendor SDK functions fal_tiger_qos_intPri_cpri_map_set() and fal_tiger_qos_intPri_spri_map_set() write a fixed map number to PORT_QOS and use it as the index map: 0 for the customer tag and 1 for the service tag. Index: map = 0 to 1, dei = 0 to 1, pcp = 0 to 7.";
         enum ipm_pcp_color_e {
             GREEN = 0 { desc = "Lowest drop precedence"; };
             YELLOW = 1 { desc = "Yellow"; };
@@ -1101,7 +1101,7 @@ addrmap yt9218 {
 
     reg {
         name = "ACL unmatched frame permit";
-        desc = "Ports on which a frame that matches no ACL rule is forwarded.";
+        desc = "Port mask for frames that match no ACL rule. yt921x_chip_setup_acl sets the bit of every port.";
         field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_10[10:10];
         field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_9[9:9];
         field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_8[8:8];

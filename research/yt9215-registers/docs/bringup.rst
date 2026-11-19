@@ -58,7 +58,7 @@ Section 4.1.2.2 of the |ds| calls :field:`RST.SW` SW_RESET and states that it do
 the analog circuits of the PHYs are not reset. The :ref:`Linux driver <sources-list>` does not use
 :field:`RST.SW`.
 
-The reset pin is nRESET, pin 89 of the YT9215SCH in table 23 of the |ds|. Section 4.1.1
+The reset pin is nRESET, pin 89 of the :chip:`YT9215SCH` in table 23 of the |ds|. Section 4.1.1
 requires it to be low for at least 10 ms. The same section states that the hardware reset is to be
 applied after power-on.
 
@@ -122,9 +122,9 @@ The functions :ref:`yt921x_reset() <bindings-api>` and
 
 The part table of the :ref:`Linux driver <sources-list>`, which :lx:`yt921x_chip_detect` searches,
 has no entry for the :chip:`YT9215SCH`. No source gives the identification values of that part.
-This manual assumes the values of the :chip:`YT9215SC`, because the |ds| gives the YT9215SCH the
+This manual assumes the values of the :chip:`YT9215SC`, because the |ds| gives the :chip:`YT9215SCH` the
 package and pin numbers that the :doc:`debug pin note </research/motorcomm-debug-pins>` records
-for the YT9215SC. Whether the assumption is right is :ev:`not known`.
+for the :chip:`YT9215SC`. Whether the assumption is right is :ev:`not known`.
 
 The :ref:`vendor SDK <sources-list>` function
 `fal_tiger_sys_chipInfo_get() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_sys.c#L79>`__
@@ -134,7 +134,7 @@ the mode of the :chip:`YT9215S` it reports a part YT9215SL when either half is 1
 :ref:`Linux driver <sources-list>` has no such part. For the mode of the :chip:`YT9215RB` it
 reports the :chip:`YT9214NB` when either half is 2 and otherwise the :chip:`YT9213NB` when
 either half is 3. It does not use the byte for the other parts, and it calls the :chip:`YT9218MB` YT9218M.
-It has no case for the YT9215SCH either.
+It has no case for the :chip:`YT9215SCH` either.
 
 .. _bringup-clock:
 
@@ -287,8 +287,12 @@ registers.
 The sources disagree on the byte order. The names in :lx:`chip.h` read as the first two bytes
 of the address in :reg:`MAC_ADDR_HI2` and the last four in :reg:`MAC_ADDR_LO4`, which is
 :ev:`inferred`. The :ref:`vendor SDK <sources-list>` names the two bytes of
-:reg:`MAC_ADDR_HI2` ``MAC_ADDR_BYTE4`` and ``MAC_ADDR_BYTE5`` and the four bytes of
-:reg:`MAC_ADDR_LO4` ``MAC_ADDR_BYTE0`` to ``MAC_ADDR_BYTE3``, and its function
+:reg:`MAC_ADDR_HI2` `MAC_ADDR_BYTE4 <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L72>`__ and
+`MAC_ADDR_BYTE5 <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L73>`__
+and the four bytes of :reg:`MAC_ADDR_LO4`
+`MAC_ADDR_BYTE0 <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L77>`__ to
+`MAC_ADDR_BYTE3 <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L80>`__,
+and its function
 `fal_tiger_sys_mac_get() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_sys.c#L17>`__
 returns them in that order as bytes 0 to 5 of the address. It is :ev:`not known` which is
 right.

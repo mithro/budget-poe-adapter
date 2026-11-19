@@ -199,7 +199,7 @@ against the :ref:`software model <bindings-tests>` only. This manual leaves open
      - Section that depends on it
    * - Reset values of most registers
      - :ref:`sources-reset`
-   * - YT9215SCH identification
+   * - :chip:`YT9215SCH` identification
      - :ref:`bringup-identify`
    * - Registers outside the reference
      - :ref:`reference-sdk`

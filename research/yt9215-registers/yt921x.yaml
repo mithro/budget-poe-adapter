@@ -1457,7 +1457,9 @@ registers:
       use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 4
     width: 1
-    desc: Enables the meters. The meter registers are :reg:`METER_CTRL` and :reg:`PORT_METER`.
+    desc: Enable bit of the meters, whose registers are :reg:`METER_CTRL` and :reg:`PORT_METER`. :lx:`yt921x_chip_setup`
+      sets the bit, and the :ref:`vendor SDK <sources-list>` function `fal_tiger_rate_init() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_rate.c#L90>`__
+      writes it as an enable. It is :ev:`inferred` that the block works only while the bit is set.
     access: rw
     sdk:
       status: same bits
@@ -1472,7 +1474,10 @@ registers:
       use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 2
     width: 1
-    desc: Enables the access control list. Its registers include :reg:`ACL_KEY` and :reg:`ACL_ACT`.
+    desc: Enable bit of the access control list, whose registers include :reg:`ACL_KEY` and :reg:`ACL_ACT`.
+      :lx:`yt921x_chip_setup` sets the bit, and the :ref:`vendor SDK <sources-list>` function `fal_tiger_acl_global_enable()
+      <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_acl.c#L84>`__
+      writes it as an enable. It is :ev:`inferred` that the block works only while the bit is set.
     access: rw
     sdk:
       status: same bits
@@ -1487,14 +1492,18 @@ registers:
       use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 1
     width: 1
-    desc: Enables the port counters of :reg:`MIB_DATA`.
+    desc: Enable bit of the port counters of :reg:`MIB_DATA`. :lx:`yt921x_chip_setup` sets the bit, and
+      the :ref:`vendor SDK <sources-list>` function `fal_tiger_stat_mib_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L21>`__
+      writes it as an enable. It is :ev:`inferred` that the block works only while the bit is set.
     access: rw
     sdk:
       status: same bits
       fields: [MIB_EN]
   block: system
   title: Function enables
-  desc: Switches optional function blocks on.
+  desc: 'Enable bits of three function blocks. :ref:`bringup-features` gives the evidence for
+
+    their effect.'
   access: rw
   words: 1
   sdk:
@@ -2805,9 +2814,9 @@ registers:
       use: [pcs-921x.c, yt921x_serdes_config, 48]
     lsb: 10
     width: 1
-    desc: Take the pause settings from in-band negotiation. :lx:`yt921x_serdes_config` sets the bit for
-      a SerDes link with in-band negotiation other than SGMII. It is :ev:`inferred` from the name that
-      RX_PAUSE and TX_PAUSE are then ignored.
+    desc: :lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band negotiation other than
+      SGMII. It is :ev:`inferred` from the name that the MAC then takes the pause settings from in-band
+      negotiation and ignores :field:`PORT_CTRL.RX_PAUSE` and :field:`PORT_CTRL.TX_PAUSE`.
     access: rw
     sdk:
       status: same bits
@@ -2822,9 +2831,9 @@ registers:
       use: [chip.c, yt921x_port_down, 1667]
     lsb: 9
     width: 1
-    desc: Take speed and duplex from the in-band status. :lx:`yt921x_serdes_config` sets the bit for a
-      SerDes link with in-band status. It is :ev:`inferred` from the name that the bit also follows a
-      built-in PHY and that the forced bits are then ignored.
+    desc: :lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band status. It is :ev:`inferred`
+      from the name that the MAC then takes speed and duplex from the in-band status, that the bit also
+      follows a built-in PHY and that the forced bits are then ignored.
     access: rw
     sdk:
       status: same bits
@@ -3360,7 +3369,8 @@ registers:
     lsb: 11
     width: 1
     desc: 'The Linux name reads as: the transmit clock pin is an input. The :ref:`vendor SDK <sources-list>`
-      names the bit XMII_TXC_IN_SEL, and its function `fal_tiger_port_extif_xmiiClk_invert_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1671>`__
+      names the bit `XMII_TXC_IN_SEL <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L159>`__,
+      and its function `fal_tiger_port_extif_xmiiClk_invert_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1671>`__
       writes the bit as the enable of an inverted xMII clock. The two readings disagree, and it is :ev:`not
       known` which is right.'
     access: rw
@@ -5918,7 +5928,8 @@ registers:
     width: 1
     desc: No function of the :ref:`Linux driver <sources-list>` sets it, as the comment in :lx:`yt921x_vlan_aware_set`
       states. The Linux name reads as a service VLAN enable. The :ref:`vendor SDK <sources-list>` names
-      the bit SVL_EN and sets it in `fal_tiger_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L71>`__;
+      the bit `SVL_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L1216>`__
+      and sets it in `fal_tiger_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L71>`__;
       the `comment on yt_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan.h#L136>`__
       reads "Set vlan svl mode.It will look up fid after enable svl." By that comment the bit makes the
       VLAN use :field:`VLAN_CTRL.FID` for the address lookup, which disagrees with the reading of the
@@ -6362,8 +6373,8 @@ registers:
     lsb: 8
     width: 1
     desc: 'The Linux name reads as an enable of VLAN range matching with the profile in :field:`PORT_VLAN_CTRL1.VLAN_RANGE_PROFILE_ID`.
-      The :ref:`vendor SDK <sources-list>` names the bit VLAN_RANGE_MODE, and `fal_tiger_vlan_trans_mode_set()
-      <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan_translate.c#L186>`__
+      The :ref:`vendor SDK <sources-list>` names the bit `VLAN_RANGE_MODE <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L317>`__,
+      and `fal_tiger_vlan_trans_mode_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan_translate.c#L186>`__
       writes a value of the list `yt_vlan_range_trans_mode_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L34>`__
       to it: 0 for the customer tag and 1 for the service tag. By that code the bit selects the tag that
       range matching uses, which disagrees with the Linux name. It is :ev:`not known` which is right.'
@@ -6646,7 +6657,9 @@ registers:
 
     `fal_tiger_qos_intPri_spri_map_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_qos.c#L195>`__
 
-    write the map number 0 or 1 to :reg:`PORT_QOS` and use it as the index ``map``.'
+    write a fixed map number to :reg:`PORT_QOS` and use it as the index ``map``: 0 for the
+
+    customer tag and 1 for the service tag.'
   access: rw
   words: 1
   sdk:
@@ -8943,7 +8956,9 @@ registers:
       fields: [ENABLE]
   block: acl
   title: ACL unmatched frame permit
-  desc: Ports on which a frame that matches no ACL rule is forwarded.
+  desc: 'Port mask for frames that match no ACL rule. :lx:`yt921x_chip_setup_acl` sets the bit of
+
+    every port.'
   access: rw
   words: 1
   sdk:

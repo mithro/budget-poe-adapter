@@ -275,11 +275,11 @@ pub const RST_SW: Field = Field { lsb: 1, width: 1 };
 
 /// Function enables.
 pub const FUNC: u32 = 0x80004;
-/// Enables the meters. The meter registers are METER_CTRL and PORT_METER.
+/// Enable bit of the meters, whose registers are METER_CTRL and PORT_METER. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_rate_init() writes it as an enable. It is inferred that the block works only while the bit is set.
 pub const FUNC_METER: Field = Field { lsb: 4, width: 1 };
-/// Enables the access control list. Its registers include ACL_KEY and ACL_ACT.
+/// Enable bit of the access control list, whose registers include ACL_KEY and ACL_ACT. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_acl_global_enable() writes it as an enable. It is inferred that the block works only while the bit is set.
 pub const FUNC_ACL: Field = Field { lsb: 2, width: 1 };
-/// Enables the port counters of MIB_DATA.
+/// Enable bit of the port counters of MIB_DATA. yt921x_chip_setup sets the bit, and the vendor SDK function fal_tiger_stat_mib_enable_set() writes it as an enable. It is inferred that the block works only while the bit is set.
 pub const FUNC_MIB: Field = Field { lsb: 1, width: 1 };
 
 /// Chip identification.
@@ -492,9 +492,9 @@ pub const fn port_ctrl(port: u32) -> u32 {
 pub const PORT_CTRL_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_ctrl`].
 pub const PORT_CTRL_PORT_COUNT: u32 = 11;
-/// Take the pause settings from in-band negotiation. yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that RX_PAUSE and TX_PAUSE are then ignored.
+/// yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that the MAC then takes the pause settings from in-band negotiation and ignores PORT_CTRL.RX_PAUSE and PORT_CTRL.TX_PAUSE.
 pub const PORT_CTRL_PAUSE_AN: Field = Field { lsb: 10, width: 1 };
-/// Take speed and duplex from the in-band status. yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the bit also follows a built-in PHY and that the forced bits are then ignored.
+/// yt921x_serdes_config sets the bit for a SerDes link with in-band status. It is inferred from the name that the MAC then takes speed and duplex from the in-band status, that the bit also follows a built-in PHY and that the forced bits are then ignored.
 pub const PORT_CTRL_LINK_AN: Field = Field { lsb: 9, width: 1 };
 /// Use back pressure for flow control in half duplex.
 pub const PORT_CTRL_HALF_PAUSE: Field = Field { lsb: 8, width: 1 };

@@ -103,7 +103,8 @@ There are two :reg:`IPM_PCP` maps. :field:`PORT_QOS.CVLAN_PRIO_MAP_ID` and
 `fal_tiger_qos_intPri_cpri_map_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_qos.c#L148>`__
 and
 `fal_tiger_qos_intPri_spri_map_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_qos.c#L195>`__
-write the map number to them and use it as the index of the map. The
+write a fixed map number to them and use it as the index of the map: 0 for the customer tag
+and 1 for the service tag. The
 reference entry of :reg:`IPM_PCP` gives the address of each map entry.
 
 Fill the tables once at start-up, as :lx:`yt921x_chip_setup_qos` does. That function gives
@@ -112,7 +113,7 @@ every DSCP value the priority that the kernel function
 assigns to it, which follows `RFC 8325 <https://www.rfc-editor.org/rfc/rfc8325>`__. It maps
 every tag priority to itself, with the colour :val:`IPM_PCP.COLOR.YELLOW` when the drop
 eligible bit is set, and it writes both :reg:`IPM_PCP` maps alike. It is therefore
-:ev:`not known` which map a tag kind uses by default.
+:ev:`not known` which map a tag kind uses after reset.
 
 .. _qos-port:
 

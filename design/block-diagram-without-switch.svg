@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 965" width="940" height="965" font-family="Helvetica, Arial, sans-serif"><defs><marker id="adata" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker><marker id="armii" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1d4ed8"/></marker><marker id="apwr" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker><marker id="actl" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15803d"/></marker></defs><rect width="940" height="965" fill="#ffffff"/>
+<text x="20" y="36" font-size="22" fill="#0f172a" text-anchor="start" font-weight="700">B. Without switch chip (≈ $4.10 @1k)</text>
+<rect x="20" y="70" width="220" height="80" rx="8" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+<text x="130" y="106.5" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">PoE switch</text>
+<text x="130" y="127.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">(PSE) 44–57 V</text>
+<rect x="20" y="215" width="220" height="140" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="130" y="272" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">RJ45 IN</text>
+<text x="130" y="293" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">plain jack, no magnetics</text>
+<text x="130" y="312" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">(×2 jacks @ $0.10)</text>
+<rect x="178" y="203" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="211" y="220" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.10</text>
+<rect x="20" y="445" width="220" height="110" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="130" y="487" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">4-ch PoE splitter</text>
+<text x="130" y="508" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">transformer</text>
+<text x="130" y="527" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">data through, taps out</text>
+<rect x="178" y="433" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="211" y="450" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.50</text>
+<rect x="20" y="635" width="220" height="100" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+<text x="130" y="681.5" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">RJ45 OUT</text>
+<text x="130" y="702.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">plain jack</text>
+<rect x="178" y="623" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="211" y="640" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.10</text>
+<rect x="20" y="800" width="220" height="70" rx="8" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+<text x="130" y="831.5" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">Pi 5 / device</text>
+<text x="130" y="852.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">Ethernet port</text>
+<rect x="360" y="215" width="220" height="140" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+<text x="470" y="243.5" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">PoE PD front end</text>
+<text x="470" y="264.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">2× bridges + TVS</text>
+<text x="470" y="283.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">24.9 kΩ signature</text>
+<text x="470" y="302.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">class/mark current sink</text>
+<text x="470" y="321.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">low-side hot-swap NMOS</text>
+<text x="470" y="340.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">bootstrap reg → 3V3_BOOT</text>
+<rect x="518" y="203" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="551" y="220" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.53</text>
+<rect x="360" y="445" width="220" height="110" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<text x="470" y="487" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">CH32V203 (MCU)</text>
+<text x="470" y="508" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">PoE PD state machine</text>
+<text x="470" y="527" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">USB-PD source</text>
+<rect x="518" y="433" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="551" y="450" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.43</text>
+<rect x="700" y="70" width="220" height="80" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+<text x="810" y="106.5" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">3.3 V LDO</text>
+<text x="810" y="127.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">3V3 rail → MCU</text>
+<rect x="858" y="58" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="891" y="75" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.04</text>
+<rect x="700" y="215" width="220" height="140" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+<text x="810" y="272" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">60 V sync buck</text>
+<text x="810" y="293" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">36–57 V → 5.1 V or 12 V</text>
+<text x="810" y="312" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">5/12 V set by MCU GPIO</text>
+<rect x="858" y="203" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="891" y="220" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$1.09</text>
+<rect x="700" y="445" width="220" height="110" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+<text x="810" y="487" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">VBUS load switch</text>
+<text x="810" y="508" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">PMOS · I shunt</text>
+<text x="810" y="527" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">15 V TVS</text>
+<rect x="858" y="433" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="891" y="450" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.16</text>
+<rect x="700" y="635" width="220" height="100" rx="8" fill="#ffedd5" stroke="#c2410c" stroke-width="2"/>
+<text x="810" y="672" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">USB-C receptacle</text>
+<text x="810" y="693" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">PD 5 V / 12 V</text>
+<text x="810" y="712" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">CC 12 V-short protection</text>
+<rect x="858" y="623" width="66" height="24" rx="12" fill="#0f172a"/>
+<text x="891" y="640" font-size="14" fill="#ffffff" text-anchor="middle" font-weight="700">$0.26</text>
+<rect x="700" y="800" width="220" height="70" rx="8" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
+<text x="810" y="831.5" font-size="17" fill="#0f172a" text-anchor="middle" font-weight="700">Pi 5 / device</text>
+<text x="810" y="852.5" font-size="14" fill="#0f172a" text-anchor="middle" font-weight="400">USB-C power in</text>
+<path d="M130,152 L130,213" fill="none" stroke="#1d4ed8" stroke-width="3.5" marker-start="url(#adata)" marker-end="url(#adata)"/>
+<path d="M130,357 L130,443" fill="none" stroke="#1d4ed8" stroke-width="3.5" marker-start="url(#adata)" marker-end="url(#adata)"/>
+<rect x="138" y="391.5" width="29.84" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="142" y="405" font-size="14" fill="#1d4ed8" text-anchor="start" font-weight="400">MDI</text>
+<path d="M130,557 L130,633" fill="none" stroke="#1d4ed8" stroke-width="3.5" marker-start="url(#adata)" marker-end="url(#adata)"/>
+<rect x="138" y="586.5" width="29.84" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="142" y="600" font-size="14" fill="#1d4ed8" text-anchor="start" font-weight="400">MDI</text>
+<path d="M130,737 L130,798" fill="none" stroke="#1d4ed8" stroke-width="3.5" marker-start="url(#adata)" marker-end="url(#adata)"/>
+<path d="M242,500 L270,500 L270,285 L358,285" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<rect x="245.04" y="242.5" width="109.92" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="300" y="256" font-size="14" fill="#c2410c" text-anchor="middle" font-weight="400">4× centre taps</text>
+<rect x="248.68" y="259.5" width="102.64" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="300" y="273" font-size="14" fill="#c2410c" text-anchor="middle" font-weight="400">(all 4 pairs)</text>
+<path d="M582,285 L698,285" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<rect x="610.52" y="259.5" width="58.96" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="640" y="273" font-size="14" fill="#c2410c" text-anchor="middle" font-weight="400">36–57 V</text>
+<path d="M830,213 L830,152" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<rect x="838" y="173.5" width="80.8" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="842" y="187" font-size="14" fill="#c2410c" text-anchor="start" font-weight="400">5.1 / 12 V</text>
+<path d="M830,357 L830,443" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<rect x="838" y="391.5" width="80.8" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="842" y="405" font-size="14" fill="#c2410c" text-anchor="start" font-weight="400">5.1 / 12 V</text>
+<path d="M830,557 L830,633" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<rect x="838" y="586.5" width="37.12" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="842" y="600" font-size="14" fill="#c2410c" text-anchor="start" font-weight="400">VBUS</text>
+<path d="M810,737 L810,798" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<path d="M410,587 L410,557" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<rect x="376.88" y="591.5" width="66.24" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="410" y="605" font-size="14" fill="#c2410c" text-anchor="middle" font-weight="700">3V3_BOOT</text>
+<path d="M480,587 L480,557" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<rect x="465.08" y="591.5" width="29.84" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="480" y="605" font-size="14" fill="#c2410c" text-anchor="middle" font-weight="700">3V3</text>
+<path d="M400,443 L400,357" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<rect x="305.92" y="381.5" width="88.08" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="390" y="395" font-size="14" fill="#15803d" text-anchor="end" font-weight="400">class PWM ·</text>
+<rect x="291.36" y="398.5" width="102.64" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="390" y="412" font-size="14" fill="#15803d" text-anchor="end" font-weight="400">hot-swap gate</text>
+<path d="M435,357 L435,443" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<rect x="441" y="401.5" width="44.4" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="445" y="415" font-size="14" fill="#15803d" text-anchor="start" font-weight="400">VIN /</text>
+<rect x="441" y="418.5" width="58.96" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="445" y="432" font-size="14" fill="#15803d" text-anchor="start" font-weight="400">I sense</text>
+<path d="M508,443 L508,391 L740,391 L740,357" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<rect x="532.64" y="368.5" width="182.72" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="624" y="382" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">5V/12V SEL (default 5 V)</text>
+<path d="M582,477 L698,477" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<rect x="585.04" y="454.5" width="109.92" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="640" y="468" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">VBUS_EN (gate)</text>
+<path d="M698,523 L582,523" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<text x="640" y="544" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">VBUS V / I sense</text>
+<path d="M550,557 L550,597 L740,597 L740,633" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-start="url(#actl)" marker-end="url(#actl)"/>
+<rect x="560.92" y="605.5" width="168.16" height="18" fill="#ffffff" opacity="0.92"/>
+<text x="645" y="619" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">CC1 / CC2 (Rp, PD BMC)</text>
+<line x1="20" y1="890" x2="920" y2="890" stroke="#cbd5e1" stroke-width="1"/>
+<path d="M20,918 L72,918" fill="none" stroke="#1d4ed8" stroke-width="3.5" marker-start="url(#adata)" marker-end="url(#adata)"/>
+<text x="84" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">Gigabit data (MDI)</text>
+<path d="M255,918 L307,918" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<text x="319" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">Power</text>
+<path d="M410,918 L462,918" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<text x="474" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">MCU control / sense</text>
+<text x="20" y="950" font-size="14" fill="#475569" text-anchor="start" font-weight="400">Black tags are the cost of each block at 1k units.</text>
+</svg>

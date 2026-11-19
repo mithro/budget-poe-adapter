@@ -2,12 +2,15 @@
 
 <a id="block-diagram"></a>
 
-![Block diagram](block-diagram.svg)
+![Block diagram A, with a switch chip](block-diagram-with-switch.svg)
+
+![Block diagram B, without a switch chip](block-diagram-without-switch.svg)
 
 Rough first-pass design for a 5 V and 12 V output, with prices as of 2026-10-21. Built
 from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
 [`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
-[`bom-rough.csv`](bom-rough.csv). The diagram is [`block-diagram.svg`](block-diagram.svg).
+[`bom-rough.csv`](bom-rough.csv). The diagrams are [`block-diagram-with-switch.svg`](block-diagram-with-switch.svg) and
+[`block-diagram-without-switch.svg`](block-diagram-without-switch.svg), drawn by [`make_block_diagram.py`](make_block_diagram.py). [`svg_to_png.js`](svg_to_png.js) renders the bitmap copies.
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
 RTL8363NB price ($1.43 @1k) was checked live (in [`research/ethernet-switch.md`](../research/ethernet-switch.md)). Every
@@ -109,11 +112,43 @@ only ask for 9, 15 and 20 V will fall back to 5 V, which is safe but slow.
 
 ## Block diagrams
 
-[`block-diagram.png`](block-diagram.png) is the same figure as [the block diagram](#block-diagram), as a bitmap:
+[`block-diagram-with-switch.png`](block-diagram-with-switch.png) and [`block-diagram-without-switch.png`](block-diagram-without-switch.png) are the same figures as [the block diagrams](#block-diagram), as bitmaps:
 
-![Block diagram as a bitmap](block-diagram.png)
+![Block diagram A as a bitmap](block-diagram-with-switch.png)
 
-In [the block diagram](#block-diagram), each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
+![Block diagram B as a bitmap](block-diagram-without-switch.png)
+
+In [the block diagrams](#block-diagram), each block is tagged with its cost @1k, and the tags of a diagram sum to its parts total. Arrowheads show signal direction, and a line with two arrowheads is bidirectional.
+
+| | A, with switch | B, without switch |
+|---|---|---|
+| Block parts | $6.94 | $3.21 |
+| PCB | $0.45 | $0.20 |
+| PCB layers | 4 | 2 |
+| JLCPCB assembly | $1.20 | $0.70 |
+| MCU | CH32V307 | CH32V203 |
+| MCU does PoE PD | yes | yes |
+| MCU is the USB-PD source | yes | yes |
+| MCU networking (LLDP) via the switch | yes | no |
+| Gigabit path | switched | passive (MDI links are passive) |
+
+All costs are USD at 1k units, LCSC and JLCPCB estimates (±30 %).
+
+The hot-swap NMOS is low-side. The MCU and its bootstrap supply sit on VIN−, while the load side (buck, USB-C, switch) has a switched ground, so MCU I/O to the load side stays idle until the FET is on. The 36–57 V at the buck input is after cable drop and the bridges.
+
+| Term in the diagrams | Meaning |
+|---|---|
+| PSE | PoE power source |
+| MDI | Ethernet line side |
+| RMII | MAC data bus |
+| MDIO | Management bus |
+| CC | USB-C configuration channel |
+| Rp | Source pull-up |
+| BMC | USB-PD line code |
+| TVS | Surge clamp |
+| 3V3_BOOT | Output of a tiny high-voltage regulator |
+
+BMC transmit goes through a resistor divider, and BMC receive uses the MCU's on-chip op-amp as a comparator. The 3V3_BOOT regulator is on above about 12 V and supplies at most 4 mA during PoE mark events.
 
 * **A (with switch):** RJ45 IN (PoE magjack) → RTL8363NB → RJ45 OUT. The
   CH32V307 sits on the switch's RMII port. Power path: PoE front end → 60 V

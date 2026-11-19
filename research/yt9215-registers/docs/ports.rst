@@ -271,8 +271,7 @@ configures no xMII mode: :lx:`yt921x_port_config` accepts SerDes modes only. Ste
 RGMII follow the function
 `yt9215rb_init() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__
 of the :ref:`YT9215RB vendor driver <sources-list>`, which brings up RGMII on port 8 with the
-writes of the :ref:`RGMII table <ports-rgmii-table>`. The modes MII and RMII are :ev:`inferred`
-from the field definitions in :lx:`chip.h`. The three delay fields of the
+writes of the :ref:`RGMII table <ports-rgmii-table>`. The modes MII and RMII are :ev:`header` definitions in :lx:`chip.h`. The three delay fields of the
 :ref:`RGMII table <ports-rgmii-table>` depend on the board, and the vendor driver takes them from
 its configuration.
 

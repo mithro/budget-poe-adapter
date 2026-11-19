@@ -1332,7 +1332,7 @@ pub const FDB_IN1_STATUS_MAX_TIME: u32 = 5;
 pub const FDB_IN1_STATUS_PENDING: u32 = 6;
 /// Static entry that never ages out
 pub const FDB_IN1_STATUS_STATIC: u32 = 7;
-/// Filtering ID of the entry. The Linux driver writes the VLAN ID here.
+/// Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID.
 pub const FDB_IN1_FID: Field = Field { lsb: 16, width: 12 };
 /// MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
 pub const FDB_IN1_ADDR_LO2: Field = Field { lsb: 0, width: 16 };
@@ -1435,7 +1435,7 @@ pub const FDB_OUT1_STATUS_MAX_TIME: u32 = 5;
 pub const FDB_OUT1_STATUS_PENDING: u32 = 6;
 /// Static entry that never ages out
 pub const FDB_OUT1_STATUS_STATIC: u32 = 7;
-/// Filtering ID of the entry. The Linux driver writes the VLAN ID here.
+/// Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID.
 pub const FDB_OUT1_FID: Field = Field { lsb: 16, width: 12 };
 /// MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
 pub const FDB_OUT1_ADDR_LO2: Field = Field { lsb: 0, width: 16 };

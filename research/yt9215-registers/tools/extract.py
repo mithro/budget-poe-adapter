@@ -278,9 +278,11 @@ def register_of(use, regs):
     return scan(order[0]) or scan(order[1]) or None
 
 
-def enum_linux(member, use=None):
+def enum_linux(member, use=None, table_use=None):
     lx = dict(macro=member["cname"], src=member["src"])
     lx["used"] = first_use(lx, ())
+    if lx["used"] and not lx["use"][1]:
+        use = table_use or use
     if use and (not lx["used"] or not lx["use"][1]):
         lx["used"] = True
         lx["use"] = Flow([use[0], OWNER[use[0]][use[1] - 1] or "", use[1]])
@@ -915,7 +917,8 @@ def main():
             values=[dict(name=ident(m["name"]), value=m["value"],
                          desc=od.get("values", {}).get(m["name"], ""),
                          **({"inferred": True} if m["name"] in od.get("inferred", []) else {}),
-                         linux=enum_linux(m, overlay.get("enum_uses", {}).get(name)))
+                         linux=enum_linux(m, overlay.get("enum_uses", {}).get(name),
+                                          overlay.get("enum_table_uses", {}).get(name)))
                     for m in e["members"]]))
     omib = overlay["counters"]
     out_mibs = []

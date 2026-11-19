@@ -1358,8 +1358,7 @@ enums:
       src:
       - tc.h
       - 265
-      used: true
-      use: [tc.c, yt921x_chip_setup_acl, 1710]
+      used: false
   - name: L3
     value: 1
     desc: Start of the layer 3 header
@@ -2498,6 +2497,7 @@ registers:
     width: 1
     desc: Send such frames to the built-in microcontroller on port 10.
     access: rw
+    inferred: true
     sdk:
       status: same bits
       fields: [TO_INT_CPU]
@@ -4317,7 +4317,7 @@ registers:
       - leds.h
       - 54
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -4331,7 +4331,7 @@ registers:
       - leds.h
       - 55
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -4345,7 +4345,7 @@ registers:
       - leds.h
       - 56
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -4359,7 +4359,7 @@ registers:
       - leds.h
       - 57
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -4401,7 +4401,7 @@ registers:
       - leds.h
       - 60
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -4415,7 +4415,7 @@ registers:
       - leds.h
       - 61
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -4429,7 +4429,7 @@ registers:
       - leds.h
       - 62
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -4443,7 +4443,7 @@ registers:
       - leds.h
       - 63
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -4682,7 +4682,7 @@ registers:
       - leds.h
       - 54
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -4696,7 +4696,7 @@ registers:
       - leds.h
       - 55
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -4710,7 +4710,7 @@ registers:
       - leds.h
       - 56
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -4724,7 +4724,7 @@ registers:
       - leds.h
       - 57
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -4766,7 +4766,7 @@ registers:
       - leds.h
       - 60
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -4780,7 +4780,7 @@ registers:
       - leds.h
       - 61
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -4794,7 +4794,7 @@ registers:
       - leds.h
       - 62
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -4808,7 +4808,7 @@ registers:
       - leds.h
       - 63
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -5045,7 +5045,7 @@ registers:
       - leds.h
       - 54
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -5059,7 +5059,7 @@ registers:
       - leds.h
       - 55
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -5073,7 +5073,7 @@ registers:
       - leds.h
       - 56
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -5087,7 +5087,7 @@ registers:
       - leds.h
       - 57
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -5129,7 +5129,7 @@ registers:
       - leds.h
       - 60
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -5143,7 +5143,7 @@ registers:
       - leds.h
       - 61
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -5157,7 +5157,7 @@ registers:
       - leds.h
       - 62
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -5171,7 +5171,7 @@ registers:
       - leds.h
       - 63
       used: true
-      use: [leds.c, yt921x_led_trigger_set, 282]
+      use: [leds.c, yt921x_led_trigger_get, 259]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -6663,7 +6663,7 @@ registers:
       - chip.h
       - 207
       used: true
-      use: [chip.c, yt921x_dsa_port_set_apptrust, 1637]
+      use: [chip.c, yt921x_dsa_port_get_apptrust, 1605]
     lsb: 0
     width: 24
     array:
@@ -7235,7 +7235,7 @@ registers:
       use: [chip.c, yt921x_fdb_in01, 480]
     lsb: 16
     width: 12
-    desc: Filtering ID of the entry. The Linux driver writes the VLAN ID here.
+    desc: Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID.
     access: rw
     sdk:
       status: same bits
@@ -7912,7 +7912,7 @@ registers:
       use: [chip.c, yt921x_fdb_read, 561]
     lsb: 16
     width: 12
-    desc: Filtering ID of the entry. The Linux driver writes the VLAN ID here.
+    desc: Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID.
     access: ro
     sdk:
       status: same bits
@@ -9548,7 +9548,7 @@ registers:
       - tc.h
       - 79
       used: true
-      use: [tc.c, yt921x_acl_add, 1516]
+      use: [tc.c, yt921x_acl_del, 1410]
     lsb: 0
     width: 11
     array:

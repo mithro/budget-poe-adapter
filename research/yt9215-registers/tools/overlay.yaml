@@ -270,17 +270,22 @@ enums:
 # function uses the field although a shared macro suggests it.
 enum_uses:
   speed: [chip.c, 1696]
+# The same for a list whose values the driver keeps in a table; only the values in the
+# table take the use.
+enum_table_uses:
   udf_type: [tc.c, 1710]
 uses:
-  "LED?_PORT.ACT_DUPLEX_FULL": [leds.c, 282]
-  "LED?_PORT.ACT_DUPLEX_HALF": [leds.c, 282]
-  "LED?_PORT.ACT_TX_BLINK": [leds.c, 282]
-  "LED?_PORT.ACT_RX_BLINK": [leds.c, 282]
-  "LED?_PORT.ACT_1000M": [leds.c, 282]
-  "LED?_PORT.ACT_100M": [leds.c, 282]
-  "LED?_PORT.ACT_10M": [leds.c, 282]
-  "LED?_PORT.ACT_COLLISION_BLINK": [leds.c, 282]
+  "LED?_PORT.ACT_DUPLEX_FULL": [leds.c, 259]
+  "LED?_PORT.ACT_DUPLEX_HALF": [leds.c, 259]
+  "LED?_PORT.ACT_TX_BLINK": [leds.c, 259]
+  "LED?_PORT.ACT_RX_BLINK": [leds.c, 259]
+  "LED?_PORT.ACT_1000M": [leds.c, 259]
+  "LED?_PORT.ACT_100M": [leds.c, 259]
+  "LED?_PORT.ACT_10M": [leds.c, 259]
+  "LED?_PORT.ACT_COLLISION_BLINK": [leds.c, 259]
   LED1_PORT.ACT: [leds.c, 293]
+  ACL_PORT.PORTS: [tc.c, 1410]
+  PORT_PRIO_ORD.APP: [chip.c, 1605]
   FDB_IN1.STATUS: [chip.c, 480]
   FDB_IN1.FID: [chip.c, 480]
   FDB_IN1.ADDR_LO2: [chip.c, 480]
@@ -560,7 +565,7 @@ registers:
       Chooses where frames that are trapped or copied to the CPU go.
     fields:
       FORCE_INT_PORT: {desc: "Always send such frames to the built-in microcontroller port.", inferred: true}
-      TO_INT_CPU: {desc: "Send such frames to the built-in microcontroller on port 10."}
+      TO_INT_CPU: {desc: "Send such frames to the built-in microcontroller on port 10.", inferred: true}
       TO_EXT_CPU: {desc: "Send such frames to the external CPU port set in :reg:`EXT_CPU_PORT`."}
 
   PORT_CTRL:
@@ -1082,7 +1087,7 @@ registers:
       STATUS:
         desc: "State of the entry."
         values: {INVALID: "Entry is empty", MIN_TIME: "Dynamic entry about to age out", MOVE_AGING_MAX_TIME: "Dynamic entry that moved to another port", MAX_TIME: "Dynamic entry just learned or refreshed", PENDING: "Entry waiting for the CPU to confirm it", STATIC: "Static entry that never ages out"}
-      FID: {desc: "Filtering ID of the entry. The Linux driver writes the VLAN ID here."}
+      FID: {desc: "Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID."}
       ADDR_LO2: {desc: "MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8."}
   FDB_IN2:
     block: fdb

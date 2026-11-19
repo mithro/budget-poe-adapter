@@ -117,7 +117,9 @@ on. The reference does not use this level; the notes on the two reset bits of :r
 section of the |ds| in addition to their own level.
 
 The level :ref:`driver <evidence-driver>` of a field means that some function of the :ref:`Linux driver <sources-list>`
-reads or writes the field. The reference names the first such function in the row or column "First used
+reads or writes the field. A use is a line of code that names the field or one of its values,
+or that moves the bits of the field without a name; a write of 0 to the whole register is not
+a use of its fields. The reference names the first such function in the row or column "First used
 in", as a link to the line of code. A field that is the only field of its register shares the
 level of the register.
 

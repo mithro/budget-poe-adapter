@@ -2991,7 +2991,7 @@
             </field>
             <field>
               <name>FID</name>
-              <description>Filtering ID of the entry. The Linux driver writes the VLAN ID here.</description>
+              <description>Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>12</bitWidth>
               <access>read-write</access>
@@ -3314,7 +3314,7 @@
             </field>
             <field>
               <name>FID</name>
-              <description>Filtering ID of the entry. The Linux driver writes the VLAN ID here.</description>
+              <description>Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>12</bitWidth>
               <access>read-only</access>

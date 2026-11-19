@@ -904,7 +904,7 @@ addrmap yt9218 {
         };
         field { desc = "Apply PRIO to frames sent to this address."; sw = rw; hw = r; } EGR_PRIO_EN[31:31];
         field { desc = "State of the entry."; sw = rw; hw = r; encode = fdb_in1_status_e; } STATUS[30:28];
-        field { desc = "Filtering ID of the entry. The Linux driver writes the VLAN ID here."; sw = rw; hw = r; } FID[27:16];
+        field { desc = "Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID."; sw = rw; hw = r; } FID[27:16];
         field { desc = "MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8."; sw = rw; hw = r; } ADDR_LO2[15:0];
     } FDB_IN1 @ 0x180458;
 
@@ -981,7 +981,7 @@ addrmap yt9218 {
         };
         field { desc = "Apply PRIO to frames sent to this address."; sw = r; hw = w; } EGR_PRIO_EN[31:31];
         field { desc = "State of the entry."; sw = r; hw = w; encode = fdb_out1_status_e; } STATUS[30:28];
-        field { desc = "Filtering ID of the entry. The Linux driver writes the VLAN ID here."; sw = r; hw = w; } FID[27:16];
+        field { desc = "Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID."; sw = r; hw = w; } FID[27:16];
         field { desc = "MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8."; sw = r; hw = w; } ADDR_LO2[15:0];
     } FDB_OUT1 @ 0x1804B4;
 

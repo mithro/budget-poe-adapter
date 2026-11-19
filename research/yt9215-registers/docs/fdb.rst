@@ -112,10 +112,12 @@ The key is the MAC address, split over :field:`FDB_IN0.ADDR_HI4` and
 :field:`FDB_IN1.STATUS` tells static from learned entries. It is :ev:`inferred` from the value
 names :val:`FDB_IN1.STATUS.MIN_TIME` and :val:`FDB_IN1.STATUS.MOVE_AGING_MAX_TIME` that the field also
 carries the age of a learned entry. Write :val:`FDB_IN1.STATUS.STATIC` for an entry that must stay. The status
-:val:`FDB_IN1.STATUS.INVALID` in a result means that the entry is empty.
+:val:`FDB_OUT1.STATUS.INVALID` in a result means that the entry is empty, which is how
+:lx:`yt921x_fdb_read` treats it.
 :field:`FDB_IN2.EGR_PORTS` is the destination port mask. :lx:`yt921x_fdb_add` writes the mask
-of a unicast address, and :lx:`yt921x_dsa_port_mdb_add` adds the bit of one more port to the mask
-of a multicast group through :lx:`yt921x_fdb_join`.
+of an entry that does not exist yet, and :lx:`yt921x_fdb_join` adds the bit of one more port to
+the mask of an entry that exists. :lx:`yt921x_dsa_port_fdb_add` and
+:lx:`yt921x_dsa_port_mdb_add` both call :lx:`yt921x_fdb_join`.
 
 .. _fdb-add:
 
@@ -185,7 +187,7 @@ To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put t
 :field:`FDB_OP.INDEX`.
 
 1. Run :val:`FDB_OP.OP.GET_ONE` with index 0 and handle the entry if its status is not
-   :val:`FDB_IN1.STATUS.INVALID`.
+   :val:`FDB_OUT1.STATUS.INVALID`.
 2. Run :val:`FDB_OP.OP.GET_NEXT` with the index of the last
    entry seen. :field:`FDB_OP.NEXT_TYPE` selects what counts as next; for
    :val:`FDB_OP.NEXT_TYPE.UCAST_PORT` put the ports of interest in :field:`FDB_IN2.EGR_PORTS`

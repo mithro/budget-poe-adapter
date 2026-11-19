@@ -13,7 +13,8 @@ Port isolation
 --------------
 
 :reg:`PORT_ISOLATION` of a port lists the ports that frames received on it must never be sent
-to. Setting bit *n* in the register of port *p* blocks the direction from *p* to *n* only.
+to. Setting bit *n* in the register of port *p* blocks the direction from *p* to *n* only, which is
+how :lx:`yt921x_userport_standalone` and :lx:`yt921x_bridge` use the register.
 
 .. yt-bitfield:: PORT_ISOLATION
 
@@ -238,7 +239,8 @@ A flooded frame goes to the ports that the flood filter register of its kind all
    twice. A comment in :lx:`yt921x_tag_rcv` states this.
 
 A set bit in a filter register keeps flooded frames of that kind away from the port. This polarity
-is :ev:`inferred` from the word "filter" in the register names. The only value that the
+is :ev:`inferred` from the word "filter" in the register names, and the frame kinds of
+:reg:`FILTER_MCAST` and :reg:`FILTER_BCAST` are :ev:`inferred` from the rest of their names. The only value that the
 :ref:`Linux driver <sources-list>` writes, ``0x7ff`` in :lx:`yt921x_chip_setup_dsa` together with
 trapping every unknown frame, is consistent with it.
 

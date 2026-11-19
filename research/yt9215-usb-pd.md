@@ -663,7 +663,7 @@ Two circuits do this ([inferred](#evidence-codes)). Neither has been built.
   - A tail built only from the bytes `0x55` and `0xAA` is low after the filter, which removes the short pulse at each change between the two values. About 29 such bytes give enough freedom to make the FCS a low pattern that also ends in 0 and 1, as the end pulse requires. The line is then driven low for about 26 µs after the last PD edge, and PD allows 23 µs ([packet end](usb-c-pd.md#51-signalling)).
   - A GPIO switches the buffer off during a low tail. The firmware has to hit a window of about 20 µs after the last PD edge.
   - A latch switches the buffer off after the first low period longer than a BMC bit and keeps it off until the frame ends. That adds parts.
-- **End pulse and link pulses.** A frame ends with two edges 50 ns apart unless its last two FCS bits are 0 and then 1. The flip-flop then stores a high level and keeps it until the next edge. How long that lasts depends on the idle level of the line receiver: from the length of the end pulse, 250 ns or more, up to the next link pulse 16 ms later. A link pulse that the receiver sees as narrower than 75 ns has the same effect. The buffer therefore has to be off before the frame ends and stay off between frames, or the tail has to be chosen so that the FCS ends in 0 and 1 ([inferred](#evidence-codes)).
+- **End pulse and link pulses.** A frame ends with two edges 50 ns apart unless its last two FCS bits are 0 and then 1. The flip-flop then stores a high level and keeps it until the next edge. How long that lasts depends on the idle level of the line receiver: from the length of the end pulse, 250 ns or more, when the receiver idles at the opposite level, up to the start of the next frame when it idles at the pulse level. A link pulse that the receiver sees as narrower than 75 ns has the same effect. The buffer therefore has to stay off between frames. It also has to be off before the frame ends, unless the tail is chosen so that the FCS ends in 0 and 1 ([inferred](#evidence-codes)).
 
 ### Making the PHY transmit
 
@@ -712,7 +712,7 @@ Receive therefore uses the slicer on a GPIO ([option B receive](#b-receive)) or 
 - All YT9215 variants have five PHYs ([selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf)) ([verified](#evidence-codes)).
 - Each USB-C output can have a spare PHY of its own as its transmitter. Port 9 exists once.
 - A PHY used this way cannot serve a socket.
-- Option D leaves the port 9 pins free.
+- Option D leaves the port 9 pins free when receive is on a GPIO.
 
 ### What is unknown
 

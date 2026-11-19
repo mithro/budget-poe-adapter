@@ -4,7 +4,8 @@ Register description files
 ==========================
 
 The register map exists in three machine-readable forms. The YAML form is the source of this
-manual and of the :doc:`bindings <bindings>`. The CMSIS-SVD and SystemRDL forms are generated
+manual and of the :doc:`bindings <bindings>`. The `CMSIS-SVD <https://open-cmsis-pack.github.io/svd-spec/main/index.html>`__ and
+`SystemRDL <https://www.accellera.org/downloads/standards/systemrdl>`__ forms are generated
 from it for tools that read those formats.
 
 .. list-table::
@@ -79,7 +80,7 @@ of this manual.
    * - Field that crosses a word boundary
      - :field:`VLAN_CTRL.FID`
      - two fields
-     - suffix ``_LO`` or ``_HI``
+     - suffixes ``_LO``, ``_HI``
    * - Layout of :reg:`ACL_KEY`
      - :reg:`ACL_KEY`
      - alternate register
@@ -105,11 +106,11 @@ Structure of the YAML source
    * - Key
      - Contents
    * - ``device``
-     - Name and word sizes
+     - Name of the device
    * - ``sources``
-     - Repository and commit of each source
+     - Commit of each source
    * - ``linux_functions``
-     - File and line of each function of the :ref:`Linux driver <sources-list>`
+     - Location of each function of the :ref:`Linux driver <sources-list>`
    * - ``chips``
      - Parts with their identification values
    * - ``regions``
@@ -161,7 +162,7 @@ Regenerating
    * - :download:`guide_diagrams.py <../tools/guide_diagrams.py>`
      - Holds the content of the guide's diagrams
    * - :download:`yt921x_sphinx.py <../tools/yt921x_sphinx.py>`
-     - Provides the Sphinx roles and directives of this manual
+     - Sphinx extension of this manual
    * - :download:`test_generated.py <../tests/test_generated.py>`
      - Checks every generated file against the description
 

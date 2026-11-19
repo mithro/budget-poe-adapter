@@ -13,15 +13,15 @@ register. No part of the manual or the code has been run on a YT921x.
 
 ## Manual
 
-The manual is a Sphinx project and reads best when built. `make docs` builds it, and Read
-the Docs builds it with the [`.readthedocs.yaml`](../../.readthedocs.yaml) of this
+The manual is a Sphinx project and reads best when built. `make docs` builds it, and
+[Read the Docs](https://about.readthedocs.com/) builds it with the [`.readthedocs.yaml`](../../.readthedocs.yaml) of this
 repository.
 The pages are also readable as source:
 
 | Page | Topic |
 | --- | --- |
 | [`docs/index.rst`](docs/index.rst) | Start page |
-| [`docs/overview.rst`](docs/overview.rst) | What the chip contains and what a driver has to do |
+| [`docs/overview.rst`](docs/overview.rst) | Chip overview |
 | [`docs/access.rst`](docs/access.rst) | Register access over MDIO |
 | [`docs/bringup.rst`](docs/bringup.rst) | Reset and identification |
 | [`docs/ports.rst`](docs/ports.rst) | Port configuration |
@@ -49,7 +49,7 @@ sources) is generated during the build by [`tools/gen_docs.py`](tools/gen_docs.p
 | File | Format | Content |
 | --- | --- | --- |
 | [`yt921x.yaml`](yt921x.yaml) | YAML | 101 registers with 467 fields |
-| [`sdk-tables.yaml`](sdk-tables.yaml) | YAML | 237 register tables of the vendor SDK |
+| [`sdk-tables.yaml`](sdk-tables.yaml) | YAML | 237 register tables of the [vendor SDK](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk) |
 | [`svd/yt9215.svd`](svd/yt9215.svd) | CMSIS-SVD | YT9215 family |
 | [`svd/yt9218.svd`](svd/yt9218.svd) | CMSIS-SVD | YT9218 family |
 | [`rdl/yt9215.rdl`](rdl/yt9215.rdl) | SystemRDL | YT9215 family |

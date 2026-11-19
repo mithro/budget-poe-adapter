@@ -60,9 +60,9 @@ Where to start
      - Read
    * - Understand what the chip contains
      - :doc:`overview`
-   * - Read and write a register from a microcontroller
+   * - Access a register from a microcontroller
      - :doc:`access`
-   * - Reset the switch and find out which part it is
+   * - Start the switch
      - :doc:`bringup`
    * - Get a port to pass traffic
      - :doc:`ports`

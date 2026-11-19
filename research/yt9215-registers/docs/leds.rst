@@ -19,9 +19,11 @@ set.
 
 .. yt-bitfield:: LED0_PORT
 
-The table gives the bits for an LED that shows link and activity. Write all five bits in one
-write to :reg:`LED0_PORT` of the port. The five bits are :ev:`confirmed` by
-:lx:`yt921x_led_trigger_set` of the :ref:`Linux driver <sources-list>`.
+The :ref:`link and activity table <leds-link-table>` gives the bits for an LED that shows link
+and activity. Write all five bits in one write to :reg:`LED0_PORT` of the port. The five bits are
+:ev:`confirmed` by :lx:`yt921x_led_trigger_set` of the :ref:`Linux driver <sources-list>`.
+
+.. _leds-link-table:
 
 .. list-table::
    :header-rows: 1

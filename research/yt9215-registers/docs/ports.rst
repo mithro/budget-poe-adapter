@@ -19,9 +19,10 @@ runs with. The low eight bits of the two registers have the same layout.
 .. yt-bitfield:: PORT_CTRL
 
 There are two ways to run a MAC. With :field:`PORT_CTRL.LINK_AN` set, the MAC takes speed
-and duplex from in-band SGMII status, and with :field:`PORT_CTRL.PAUSE_AN` set it takes pause
-from there too. With it clear, the MAC is forced and uses the
-fields of the :ref:`forced-mode table <ports-forced>`.
+and duplex from the in-band status of the SerDes. With it clear, the MAC is forced and uses the
+fields of the :ref:`forced-mode table <ports-forced>`. :field:`PORT_CTRL.PAUSE_AN` does the same
+for pause alone: :lx:`yt921x_serdes_config` sets it only for a 1000BASE-X or 2500BASE-X link with
+in-band negotiation enabled whose pause result the MAC may take.
 
 .. _ports-forced:
 
@@ -48,8 +49,8 @@ In both modes the MAC passes frames only while :field:`PORT_CTRL.RX_MAC_EN` and
 Forcing is the :ev:`confirmed` way for a port with a built-in PHY. The Linux kernel watches
 the PHY and, on a link change, :lx:`yt921x_port_up` writes the negotiated speed, duplex and
 pause into :reg:`PORT_CTRL`. That function sets :field:`PORT_CTRL.LINK_AN` only for a SerDes
-with in-band status. It is :ev:`inferred` from the names of :field:`PORT_CTRL.LINK_AN` and
-:field:`PORT_CTRL.PAUSE_AN` that the two bits also make a copper port follow its built-in
+with in-band status. Both bits are :ev:`confirmed` for a SerDes by :lx:`yt921x_serdes_config`. It is
+:ev:`inferred` from their names that the two bits also make a copper port follow its built-in
 PHY.
 
 .. tab-set::
@@ -120,8 +121,11 @@ External ports 8 and 9
 
 An external port uses either its SerDes or its xMII pins. :ref:`reference-parts-ports` shows
 which of the two each part has. Select one before enabling the MAC.
-:lx:`yt921x_port_config` writes the SerDes row of the table. The xMII row is :ev:`inferred`
-as its mirror image.
+:lx:`yt921x_port_config` writes the values for the SerDes in the
+:ref:`selection table <ports-select-table>`. The values for the xMII pins are :ev:`inferred` as
+their mirror image.
+
+.. _ports-select-table:
 
 .. list-table::
    :header-rows: 1
@@ -149,8 +153,8 @@ SerDes
 1. Set the port's bit in :reg:`SERDES_CTRL`, clear it in :reg:`XMII_CTRL`, and make sure
    :field:`SERDES_CTRL.TEST` is clear.
 2. Write the protocol to :field:`SERDES.MODE`.
-3. For a link with in-band status (SGMII to a PHY), set :field:`PORT_CTRL.LINK_AN` and leave
-   :field:`SERDES.LINK` clear. The PCS of the SerDes negotiates; its registers are standard
+3. For a link with in-band status (SGMII to a PHY), set :field:`PORT_CTRL.LINK_AN`, write
+   :field:`PORT_CTRL.PAUSE_AN` and leave :field:`SERDES.LINK` clear. The PCS of the SerDes negotiates; its registers are standard
    clause 22 registers on the :ref:`internal MDIO master <phy-mbus>` at the address of the
    port number.
 4. For a fixed link (to another MAC, or 1000BASE-X or 2500BASE-X without negotiation), write
@@ -179,6 +183,9 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
      - :lx:`yt921x_serdes_config`
    * - 3
      - :field:`PORT_CTRL.LINK_AN` set
+     - :lx:`yt921x_serdes_config`
+   * - 3
+     - :field:`PORT_CTRL.PAUSE_AN`
      - :lx:`yt921x_serdes_config`
    * - 3
      - :field:`SERDES.LINK` clear
@@ -236,7 +243,7 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
      - :ev:`confirmed`
 
 The :ref:`Linux driver <sources-list>` names value 3 100BASEX and the |ds| lists the fibre mode of
-the extension ports under the heading "100FX" of the section "Extension Ports Fiber Mode".
+the extension ports as 100FX in the section "Extension Ports Fiber Mode (100FX/1000BX/2500BX)".
 
 .. _ports-xmii:
 
@@ -377,4 +384,4 @@ Energy Efficient Ethernet has one enable for the whole chip and one per port.
 2. Port: set the port's :field:`EEE_CTRL.EN` bit and :field:`EEE_VAL.DATA` of the port.
 
 The sequence is :ev:`confirmed` by :lx:`yt921x_set_eee`. A comment in that function calls the
-datasheet of the vendor poor on EEE; the |ds| is that datasheet, and no source explains what the four bits do individually.
+|ds| poor on EEE, and no source explains what the four bits do individually.

@@ -30,17 +30,20 @@ periods. :ref:`bringup-clock` gives the period.
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 35 35
+   :widths: 22 30 30 18
 
    * - Buckets
      - SLOT field
+     - Constant
      - Smallest value
    * - All meters
      - :field:`METER_SLOT.SLOT`
-     - :const:`METER_SLOT_MIN` (80)
+     - :const:`METER_SLOT_MIN`
+     - 80
    * - All port shapers
      - :field:`PORT_SHAPE_SLOT.SLOT`
-     - :const:`PORT_SHAPE_SLOT_MIN` (80)
+     - :const:`PORT_SHAPE_SLOT_MIN`
+     - 80
 
 With the 8 ns period of a :ref:`YT9215 family <reference-parts>` part at
 :field:`SYS_CLK.SEL` 0, the smallest slot is 5.12 µs. The slot formula and the two limits are
@@ -144,8 +147,13 @@ Meters
 ------
 
 A meter has two token buckets, committed and excess. It colours frames green, yellow or red
-and drops the colours selected in :field:`METER_CTRL.DROP`. Meters work only while
+and drops the colours selected in :field:`METER_CTRL.DROP`. The two buckets are the four fields
+of the :ref:`colour table <rate-colour-table>`, and the three colours are the value names of
+:field:`METER_CTRL.DROP` in :lx:`tc.h`. The assignment of a colour to a rate is :ev:`inferred`
+from the two RFCs that :field:`METER_CTRL.RFC2698` names. Meters work only while
 :field:`FUNC.METER` is set, which :ref:`bringup-features` describes.
+
+.. _rate-colour-table:
 
 .. list-table::
    :header-rows: 1
@@ -190,14 +198,20 @@ algorithm choice are :ev:`inferred` from the field names in :lx:`tc.h`.
    * - 0 to 63
      - General
      - :field:`ACL_ACT.METER_ID`
-   * - 0 to 63
+   * - 0 to 31
      - General
      - :field:`VLAN_CTRL.METER_ID`
    * - 64 + port
      - Per-port
      - :reg:`PORT_METER` of the port
 
-There are :const:`METER_NUM` general meters. Three steps limit what a port may receive.
+There are :const:`METER_NUM` general meters. The two ranges of general meters follow from the
+widths of the two fields: :field:`ACL_ACT.METER_ID` has 6 bits and :field:`VLAN_CTRL.METER_ID`
+has 5. :lx:`yt921x_acl_add` :ev:`confirms <confirmed>` the attachment by an ACL
+rule and :lx:`yt921x_dsa_port_policer_add` that by :reg:`PORT_METER`. The attachment by a
+VLAN is a :ev:`header` definition.
+
+Three steps limit what a port may receive.
 
 1. Once at start-up, write the slot length to :field:`METER_SLOT.SLOT`. Its reset value is
    :ev:`not known`.
@@ -250,9 +264,9 @@ and step 3 by :lx:`yt921x_dsa_port_policer_add`.
      - none
 
 The comment on :field:`METER_CTRL.TOKEN_OVERFLOW_EN` in :lx:`tc.h:280` reads "RFC4115: yellow
-use unused green bw". With the bit set, tokens that the full committed bucket cannot take
-fill the excess bucket. With an excess rate of 0 the excess burst then acts as a second burst
-allowance, and only red frames are dropped.
+use unused green bw". It is :ev:`inferred` from that comment that, with the bit set, tokens that the full
+committed bucket cannot take fill the excess bucket, and that with an excess rate of 0 the excess
+burst then acts as a second burst allowance.
 
 In byte mode a meter counts the frame bytes only, unless
 :field:`METER_CTRL.BYTE_MODE_INCLUDE_GAP` adds the per-frame overhead in

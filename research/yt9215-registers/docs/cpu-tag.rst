@@ -162,9 +162,12 @@ Reason codes
      - copied by a forwarding database entry
      - :field:`FDB_IN2.COPY_TO_CPU`
 
-The six codes are the list ``enum yt921x_tag_code`` of :lx:`tag_yt921x.c:50`, whose comment
-calls the list incomplete and adds "Some are configurable via RMA_CTRL_CPU_CODE". The column
-"Register that causes it" is :ev:`inferred` from the names of the codes and of the registers; no
+The six codes of the :ref:`reason code table <cpu-tag-codes>` are the list
+:lx:`enum yt921x_tag_code <tag_yt921x.c:50>`, whose comment
+calls the list incomplete and adds "Some are configurable via RMA_CTRL_CPU_CODE". No header of the
+:ref:`Linux driver <sources-list>` defines a register of that name, and the
+:ref:`vendor SDK <sources-list>` has the table :sdk:`RMA_CTRLN`. The column
+"Register that causes it" of the same table is :ev:`inferred` from the names of the codes and of the registers; no
 function of the :ref:`Linux driver <sources-list>` connects a code with a register. The reasons of :ref:`PORT_COPY <tag-code-port-copy>` and
 :ref:`FDB_COPY <tag-code-fdb-copy>` are :ev:`inferred` from the two names.
 

@@ -36,8 +36,10 @@ identifier.
 What the access layer does
 --------------------------
 
-The same operations exist in every language. Each C function of the table is a link to
+The same operations exist in every language. Each C function of the :ref:`operation table <bindings-api-table>` is a link to
 :download:`yt921x.h <../bindings/c/yt921x.h>`, which declares it.
+
+.. _bindings-api-table:
 
 .. list-table::
    :header-rows: 1
@@ -84,9 +86,8 @@ The same operations exist in every language. Each C function of the table is a l
      - :ref:`mib-counters`
 
 The Rust and MicroPython layers use the same names without the ``yt921x_`` prefix. In Rust
-they are methods of the type ``Yt921x`` in :download:`lib.rs <../bindings/rust/src/lib.rs>`,
-in MicroPython methods of the class ``YT921x`` in
-:download:`yt921x.py <../bindings/micropython/yt921x.py>`.
+they are methods of the type :download:`Yt921x <../bindings/rust/src/lib.rs>`, in MicroPython
+methods of the class :download:`YT921x <../bindings/micropython/yt921x.py>`.
 
 .. _bindings-naming:
 
@@ -160,25 +161,25 @@ files shift them into place.
      - Rust
      - MicroPython
    * - Extract a field
-     - ``YT921X_FGET(val, F)``
-     - ``F.get(val)``
-     - ``fget(val, mask, shift)``
+     - :download:`YT921X_FGET(val, F) <../bindings/c/yt921x_regs.h>`
+     - :download:`F.get(val) <../bindings/rust/src/regs.rs>`
+     - :download:`fget(val, mask, shift) <../bindings/micropython/yt921x_regs.py>`
    * - Place a value in a field
-     - ``YT921X_FPREP(F, x)``
-     - ``F.prep(x)``
-     - ``fprep(mask, shift, x)``
+     - :download:`YT921X_FPREP(F, x) <../bindings/c/yt921x_regs.h>`
+     - :download:`F.prep(x) <../bindings/rust/src/regs.rs>`
+     - :download:`fprep(mask, shift, x) <../bindings/micropython/yt921x_regs.py>`
    * - Extract an array element
-     - ``YT921X_FGET_AT(val, F, i)``
-     - ``f(i).get(val)``
-     - ``fget(val, F_M(i), F_S(i))``
+     - :download:`YT921X_FGET_AT(val, F, i) <../bindings/c/yt921x_regs.h>`
+     - :download:`f(i).get(val) <../bindings/rust/src/regs.rs>`
+     - :download:`fget(val, F_M(i), F_S(i)) <../bindings/micropython/yt921x_regs.py>`
    * - Read a wide field
-     - ``yt921x_bits_get()``
-     - ``F.get_words()``
-     - ``bits_get()``
+     - :download:`yt921x_bits_get() <../bindings/c/yt921x_regs.h>`
+     - :download:`F.get_words() <../bindings/rust/src/regs.rs>`
+     - :download:`bits_get() <../bindings/micropython/yt921x_regs.py>`
    * - Write a wide field
-     - ``yt921x_bits_set()``
-     - ``F.set_words()``
-     - ``bits_set()``
+     - :download:`yt921x_bits_set() <../bindings/c/yt921x_regs.h>`
+     - :download:`F.set_words() <../bindings/rust/src/regs.rs>`
+     - :download:`bits_set() <../bindings/micropython/yt921x_regs.py>`
 
 .. _bindings-c:
 
@@ -186,7 +187,7 @@ C
 -
 
 Portable C99 without dependencies. The caller supplies three functions in the structure
-``struct yt921x_bus`` of :download:`yt921x.h <../bindings/c/yt921x.h>`: clause 22 MDIO read,
+:download:`struct yt921x_bus <../bindings/c/yt921x.h>`: clause 22 MDIO read,
 MDIO write and a delay.
 
 .. list-table::
@@ -224,7 +225,8 @@ Rust
 ----
 
 A ``no_std`` crate without dependencies and without ``unsafe``. The board implements the
-traits ``Mdio`` and ``Delay`` of :download:`lib.rs <../bindings/rust/src/lib.rs>`.
+traits :download:`Mdio <../bindings/rust/src/lib.rs>` and
+:download:`Delay <../bindings/rust/src/lib.rs>`.
 
 .. list-table::
    :header-rows: 1
@@ -255,8 +257,8 @@ MicroPython
 -----------
 
 Two modules that also run under CPython. The bus is any object with the methods
-``read(phy, reg)`` and ``write(phy, reg, value)``. The class ``BitBangMDIO`` of
-:download:`yt921x.py <../bindings/micropython/yt921x.py>` provides one on two
+``read(phy, reg)`` and ``write(phy, reg, value)``. The class
+:download:`BitBangMDIO <../bindings/micropython/yt921x.py>` provides one on two
 ``machine.Pin`` objects.
 
 .. list-table::
@@ -335,8 +337,8 @@ lock.
 The module is the directory
 `bindings/zephyr <https://github.com/mithro/budget-poe-adapter/tree/main/research/yt9215-registers/bindings/zephyr>`__.
 Add it to a build by passing its path in the CMake variable ``ZEPHYR_EXTRA_MODULES``, or list
-it in the west manifest. The option ``CONFIG_YT921X`` of
-:download:`Kconfig <../bindings/zephyr/Kconfig>` enables the driver.
+it in the west manifest. The option
+:download:`CONFIG_YT921X <../bindings/zephyr/Kconfig>` enables the driver.
 
 .. _bindings-tests:
 
@@ -364,9 +366,9 @@ How the code is checked
    * - MicroPython
      - Compiled with ``mpy-cross``
    * - Zephyr
-     - Sample built for ``native_sim`` and run without a switch
+     - Sample run on ``native_sim``
    * - All
-     - Every generated address and field position compared with the description file
+     - Generated values compared with the description file
 
 None of the code has been run against a YT921x. The software model is
 :download:`mock_switch.h <../bindings/c/tests/mock_switch.h>` for C,

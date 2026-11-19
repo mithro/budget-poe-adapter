@@ -17,9 +17,12 @@ to. Setting bit *n* in the register of port *p* blocks the direction from *p* to
 
 .. yt-bitfield:: PORT_ISOLATION
 
-Isolation separates ports into groups without VLANs. Each row of the table is one
-arrangement of ports. The column "Bits to clear" names the bits of :reg:`PORT_ISOLATION` that are
-0 for the port; every other bit of that register is 1.
+Isolation separates ports into groups without VLANs. The
+:ref:`isolation table <forwarding-isolation-table>` gives, for four arrangements of ports, the
+state of the bits of :reg:`PORT_ISOLATION` that stand for the members of the group and for the
+CPU port. Every bit that the isolation table does not cover is set.
+
+.. _forwarding-isolation-table:
 
 .. list-table::
    :header-rows: 1
@@ -46,8 +49,11 @@ arrangement of ports. The column "Bits to clear" names the bits of :reg:`PORT_IS
      - set
      - set
 
-:lx:`yt921x_userport_standalone` of the :ref:`Linux driver <sources-list>` writes the second
-row, :lx:`yt921x_bridge` the third and :lx:`yt921x_port_setup` the fourth. The own bit of a port
+:lx:`yt921x_userport_standalone` of the :ref:`Linux driver <sources-list>` writes the
+arrangement "Port talks to the CPU port only" of the
+:ref:`isolation table <forwarding-isolation-table>`, :lx:`yt921x_bridge` the arrangement "Group
+of ports plus the CPU port" and :lx:`yt921x_port_setup` the arrangement "CPU port sends only
+where its tag says". The own bit of a port
 blocks hairpin forwarding, the sending of a frame back to the port it
 arrived on. :lx:`yt921x_bridge` sets the own bit of a port unless the port is in hairpin
 mode.
@@ -237,6 +243,8 @@ switch that floods by itself and for a host that forwards unknown frames in soft
 
 .. _forwarding-flood-config:
 
+.. _forwarding-flood-table:
+
 .. list-table::
    :header-rows: 1
    :widths: 28 22 25 25
@@ -270,7 +278,8 @@ switch that floods by itself and for a host that forwards unknown frames in soft
      - 0
      - ``0x7ff``
 
-The column "Host forwards unknown frames" is :ev:`confirmed` by
+The column "Host forwards unknown frames" of the :ref:`flood table <forwarding-flood-table>` is
+:ev:`confirmed` by
 :lx:`yt921x_chip_setup_dsa`: every unknown frame is trapped to the host, which floods it in
 software to the right group of ports. The column "Hardware switch" lets the switch flood by
 itself, within the limits of :ref:`port isolation <forwarding-isolation>`. It is

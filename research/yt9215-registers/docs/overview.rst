@@ -25,7 +25,8 @@ Ports 0 to 7 have a built-in Gigabit copper PHY that also runs at 10 and 100 Mbi
 :ref:`YT9218 family <reference-parts>` eight. Ports 8 and 9 are the external ports. Depending
 on the part each has an SGMII-class SerDes, parallel MAC pins or both. This manual calls the
 parallel MAC pins xMII; they carry MII, RMII or RGMII. Port 10 leads to the built-in
-microcontroller, which a host driver leaves alone. :ref:`reference-parts-ports` lists the
+microcontroller, which a host driver leaves alone. The comment in :lx:`chip.h:448` gives this
+layout as "8 internal + 2 external + 1 mcu". :ref:`reference-parts-ports` lists the
 ports of every part.
 
 A host that wants to send and receive frames through the switch connects its own Ethernet MAC
@@ -41,7 +42,7 @@ The path of a frame
 -------------------
 
 The functions of the switch are easiest to learn in the order a frame meets them. Each box
-of the diagram is a link to the page that describes the stage.
+of the :ref:`frame path diagram <overview-frame-path>` is a link to the page that describes the stage.
 
 .. yt-diagram:: frame-path
    :caption: Stages a frame passes through, from the receiving to the sending port.
@@ -64,16 +65,16 @@ What a driver has to do
      - Task
      - Described in
    * - 1
-     - Implement register read and write on top of an MDIO bus
+     - Implement register access
      - :ref:`access-smi`
    * - 2
-     - Reset and identify the switch
+     - Reset the switch
      - :ref:`bringup-reset`
    * - 3
      - Turn on the optional function blocks
      - :ref:`bringup-features`
    * - 4
-     - Choose the CPU port and decide whether it carries tags
+     - Set up the CPU port
      - :ref:`cpu-tag`
    * - 5
      - Enable the port MACs
@@ -102,7 +103,7 @@ uses port 8 or port 9, and steps 8 to 11 are needed only for the function they n
 
 .. _overview-init:
 
-The example is a start-up in code, built from the examples of steps 1 to 5 and step 7. It
+The :ref:`start-up example <overview-init>` is built from the examples of steps 1 to 5 and step 7. It
 finds, resets and identifies the switch, turns on the function blocks, sets up a tagged CPU
 port, forces its MAC to 1000 Mbit/s full duplex and puts all copper ports into one group. It
 leaves three tasks to the driver.
@@ -148,15 +149,18 @@ Conventions
    * - Notation
      - Meaning
    * - :reg:`PORT_CTRL`
-     - A register; the name is a link to its description.
+     - register
    * - :field:`PORT_CTRL.SPEED`
-     - A field of a register.
+     - field of a register
    * - ``PORT_CTRL[port]``
-     - A register that exists once per value of the index ``port``.
+     - register with the index ``port``
    * - ``17:6``
-     - Bits 17 down to 6; bit 0 is the least significant bit.
+     - bits 17 down to 6
    * - ``0x7ff``
-     - A hexadecimal number.
+     - hexadecimal number
+
+Every register and field name is a link to its description. A register with an index exists once
+per value of the index. Bit 0 is the least significant bit.
 
 Register and field names are the ones the :doc:`bindings <bindings>` use. They follow the
 :ref:`Linux driver <sources-list>`, with index letters removed. The reference entry of each

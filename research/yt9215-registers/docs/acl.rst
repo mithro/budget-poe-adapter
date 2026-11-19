@@ -22,7 +22,9 @@ A rule is one or more slots of one block that must all match. A rule that needs 
 than one slot holds, for example both MAC addresses and an IPv4 address, takes several slots.
 Every rule of a block has a group number from 0 to 7, and :reg:`ACL_ENTRY` records for each
 slot the group it belongs to. The group number also selects the action of the rule: the
-96-bit entry of :reg:`ACL_ACT` at index 8 × block + group.
+96-bit entry of :reg:`ACL_ACT` at index 8 × block + group. This model is :ev:`confirmed` by
+:lx:`yt921x_acl_commit`, which writes the keys, the masks, the groups and the actions of one
+block.
 
 .. list-table::
    :header-rows: 1
@@ -58,7 +60,8 @@ lower 36 bits, :field:`ACL_KEY.SPORTS` the receiving ports the slot applies to a
 :enum:`acl_type` names the types, and the :reg:`ACL_KEY` reference shows the layout of each.
 
 A bit set in :reg:`ACL_MASK` means the same bit of the key must match; a clear bit is "don't
-care". The mask covers only the lower, type-specific bits. :field:`ACL_KEY.TYPE`,
+care". This polarity is :ev:`confirmed` by :lx:`yt921x_acl_rule_ext_parse_flow_entries`, which
+copies the masks of a flower rule into :reg:`ACL_MASK` unchanged. The mask covers only the lower, type-specific bits. :field:`ACL_KEY.TYPE`,
 :field:`ACL_KEY.SPORTS`, :field:`ACL_KEY.ORD` and :field:`ACL_KEY.REVERSE` exist in the key
 alone and always apply; leave their positions in
 the mask at 0. The range flags of a layout, such as :field:`ACL_KEY.L4_DPORT_RANGE_EN`,
@@ -159,8 +162,8 @@ One-time setup
 --------------
 
 1. Set :field:`FUNC.ACL`.
-2. Write ``0x7ff`` to :reg:`ACL_PERMIT_UNMATCH` so that frames that match no rule are
-   forwarded normally.
+2. Write ``0x7ff`` to :reg:`ACL_PERMIT_UNMATCH`. It is :ev:`inferred` from the register name
+   that a set bit lets the port forward frames that match no rule.
 3. Write 0 to :reg:`ACL_PORT`; set a port's bit there when the first rule for that port is
    written.
 4. Program the :reg:`UDF_CTRL` windows if rules will use them.

@@ -693,18 +693,18 @@ def index_page(m):
     out += target("legend-access")
     out += heading("Access types", "-")
     out += table(["Access", "Who sets the value", "Use by a driver"],
-                 [["read-write", "driver", "read and write"],
+                 [["read-write", "driver", "read, write"],
                   ["read-only", "switch", "read"]], [30, 35, 35])
     out += target("legend-array")
     out += heading("Array fields", "-")
-    out += ["An array field holds several elements of the same width. The table \"Array "
-            "fields\" of a register gives the index, the first bit and the step of each array "
+    out += ["An array field holds several elements of the same width. Under its heading \"Array "
+            "fields\", a register gives the index, the first bit and the step of each array "
             "field. The lowest bit of an element is the first bit plus the step times the "
             "distance of the index from its first value. The Bits column of a field table shows "
             "\"array\" for an array field whose elements have other bits between them.", ""]
     out += target("reference-map")
     out += heading("Address map", "-")
-    out += ["Registers sit at 32-bit addresses that are multiples of four. The diagram shows the "
+    out += ["Registers sit at 32-bit addresses that are multiples of four. The :ref:`address map diagram <reference-map>` shows the "
             "regions this manual has registers in; each box is a link to the complete register "
             "list of that region.", "",
             ".. yt-diagram:: address-map", "   :caption: Address regions of the YT921x", ""]
@@ -761,7 +761,7 @@ def enums_page(m):
                  *short_cell(v.get("desc", ""), "note-enum-%s-%s" % (e["name"].lower(), v["name"].lower()),
                              notes, v["name"])] for v in e["values"]]
         out += ["The :ref:`C binding <bindings-c>` names each value ``YT921X_%s_`` followed by "
-                "the name in the table." % prefix, ""]
+                "the name in the column \"Name\"." % prefix, ""]
         out += table(["Value", "Name", "Linux name", ":ref:`Evidence <evidence>`", "Meaning",
                       "Notes"], rows, [9, 16, 27, 12, 28, 8])
         out += note_lines(notes)
@@ -798,10 +798,10 @@ def counters_page(m, guide_refs):
 def constants_page(m):
     out = target("reference-constants")
     out += heading("Constants", "=")
-    out += ["The table lists the sizes and fixed values that the register descriptions use. The "
+    out += ["This page lists the sizes and fixed values that the register descriptions use. The "
             ":ref:`C binding <bindings-c>` names each constant ``YT921X_`` followed by the name "
-            "in the table. The :ref:`Rust <bindings-rust>` and "
-            ":ref:`MicroPython <bindings-micropython>` bindings use the name in the table. The "
+            "in the column \"Name\". The :ref:`Rust <bindings-rust>` and "
+            ":ref:`MicroPython <bindings-micropython>` bindings use that name unchanged. The "
             "Linux name is a link to the definition of the value in the "
             ":ref:`Linux driver <sources-list>`. The meaning is read from that name, which is "
             "the evidence level :ev:`header`.", ""]
@@ -822,7 +822,7 @@ def constants_page(m):
 def parts_page(m):
     out = target("reference-parts")
     out += heading("Parts", "=")
-    out += ["The table lists the parts of the device table of the "
+    out += ["This page lists the parts of the device table of the "
             ":ref:`Linux driver <sources-list>` with the values that identify each part. "
             ":lx:`yt921x_chip_detect` reads the values and :ref:`bringup-identify` gives the "
             "procedure.", ""]
@@ -835,7 +835,7 @@ def parts_page(m):
                   ":field:`CHIP_MODE.MODE`", "Extended mode byte"], rows, [20, 20, 20, 20, 20])
     out += target("reference-parts-assumed")
     out += heading("Parts without identification values", "-")
-    out += ["No source gives the identification values of the parts of this table. This manual "
+    out += ["No source gives the identification values of the parts under this heading. This manual "
             "assumes the values of the part in the column \"Values assumed from\", which is "
             ":ev:`not known` to be right. :ref:`Reset and bring-up <bringup-sch>` gives the reason for the choice.", ""]
     rows = []
@@ -910,7 +910,7 @@ def sdk_pages(m):
             out += heading("Registers described in this manual", "-")
             if regs:
                 rows = [[lit(hexaddr(r["address"])), ":reg:`%s`" % r["id"],
-                         lit(M.index_text(r)) if r["dims"] else "", ":blk:`%s`" % r["block"],
+                         lit(M.index_text(r)) if r["dims"] else "none", ":blk:`%s`" % r["block"],
                          r["title"]] for r in regs]
                 out += table(["Address", "Register", "Index", "Block", "Purpose"], rows,
                              [14, 24, 14, 22, 26])

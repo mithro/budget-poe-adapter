@@ -62,9 +62,12 @@ register address it contains is that of :reg:`RST`, in its section 4.1.2.
 Evidence levels
 ---------------
 
-Every register and field in the :ref:`reference <reference>` has one of the levels driver,
-header and inferred. The guide pages use the words of the column "Word in the guide"; each
-use of such a word is a link to its row.
+Every register and field in the :ref:`reference <reference>` has one of the levels
+:ref:`driver <evidence-driver>`, :ref:`header <evidence-header>` and
+:ref:`inferred <evidence-inferred>` of the :ref:`level table <evidence-table>`. The guide pages
+use the words of its column "Word in the guide"; each use of such a word is a link to its row.
+
+.. _evidence-table:
 
 .. list-table::
    :header-rows: 1
@@ -78,25 +81,25 @@ use of such a word is a link to its row.
 
        driver
      - confirmed
-     - Code of the Linux driver
+     - Code of the :ref:`Linux driver <sources-list>`
      - Row "First used in" of the register
    * - .. _evidence-header:
 
        header
      - header
-     - Definition in a Linux driver header
-     - Row "Defined at" of the register
+     - Header of the :ref:`Linux driver <sources-list>`
+     - Row "Linux name" of the register
    * - .. _evidence-inferred:
 
        inferred
      - inferred
-     - Names in the Linux driver and the vendor SDK
+     - Names in the :ref:`sources <sources-list>`
      - Sentence that makes the statement
    * - .. _evidence-datasheet:
 
        datasheet
      - datasheet
-     - Table or figure of the datasheet
+     - |ds|
      - Sentence that makes the statement
    * - .. _evidence-unknown:
 
@@ -106,12 +109,14 @@ use of such a word is a link to its row.
      - :ref:`sources-open`
 
 A statement with the level driver follows what the code does. A header definition that no
-code uses carries a name and often a list of values, which is taken at face value. An inferred
-statement is a reading of names and can be wrong. The level datasheet applies to pins, timing
-and the two reset bits of :reg:`RST`, whose notes in the reference cite the section of the |ds|.
+code uses carries a name and often a list of values, which is taken at face value. An
+:ev:`inferred` statement is a reading of names in the Linux driver or the vendor SDK and can be
+wrong. A :ev:`datasheet` statement names the table, figure or section of the |ds| that it rests
+on. The reference does not use this level; the notes on the two reset bits of :reg:`RST` cite a
+section of the |ds| in addition to their own level.
 
 The driver level of a field means that some function of the :ref:`Linux driver <sources-list>`
-reads or writes the field. The reference names the first such function in the column "First used
+reads or writes the field. The reference names the first such function in the row or column "First used
 in", as a link to the line of code. A field that is the only field of its register shares the
 level of the register.
 
@@ -121,7 +126,8 @@ Comparison with the vendor SDK
 ------------------------------
 
 The reference compares every field with the :ref:`vendor SDK <sources-list>` table at the same
-address, in the second table under the heading "Sources of the fields" of each register. For an
+address. Each register of the reference has the comparison under its heading "Sources of the
+fields", in the columns "SDK field" and "SDK comparison". For an
 array field whose elements are separated by other bits, the comparison is that of element 0.
 
 .. list-table::
@@ -135,7 +141,7 @@ array field whose elements are separated by other bits, the comparison is that o
 
        same bits
      - present
-     - same position and width
+     - identical bits
    * - .. _sdk-part:
 
        part of SDK field
@@ -172,8 +178,10 @@ Open topics
 -----------
 
 No part of this manual and none of its code has been run on a YT921x. The code is tested
-against the :ref:`software model <bindings-tests>` only. No source settles the topics of this
-table.
+against the :ref:`software model <bindings-tests>` only. No source settles the topics of the
+:ref:`open-topic table <sources-open-table>`.
+
+.. _sources-open-table:
 
 .. list-table::
    :header-rows: 1
@@ -238,5 +246,5 @@ register that a function depends on before it uses the function.
      - :lx:`Comment in yt921x_dsa_port_change_mtu() <chip.c:241>`
 
 The comment on :field:`MAC_FRAME.SIZE` reads "always set to maximum after reset". The value
-9216 is :const:`FRAME_SIZE_MAX`, the largest size that :lx:`yt921x_dsa_port_change_mtu`
-allows for, so the reset value of the field is :ev:`inferred`.
+9216 is :const:`FRAME_SIZE_MAX`, the size from which :lx:`yt921x_dsa_port_max_mtu`
+computes the largest MTU, so the reset value of the field is :ev:`inferred`.

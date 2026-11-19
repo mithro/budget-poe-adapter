@@ -15,7 +15,8 @@ The MDIO bus
 
 MDC is a clock driven by the host. MDIO is a data line driven by either side. Table 18, "Management Interface Pins", of the
 |ds| gives the MDIO pin of the switch the type open drain, and the note under table 38 gives the
-timing with a pull-up resistor of 1 kΩ. The board therefore needs a pull-up resistor on MDIO. A
+timing with a pull-up resistor of 1 kΩ. The same table gives the pin an internal pull-up
+resistor. A board that wants the timing of table 38 adds an external one on MDIO. A
 frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit PHY address, a
 5-bit register number and 16 bits of data.
 
@@ -25,8 +26,8 @@ frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit
 
 The switch answers on one PHY address, ``0x1d`` or ``0x00``, selected by a
 :ref:`strap pin <access-straps>` at power-on. Any MDIO master will do: a hardware MDIO controller,
-or two GPIO pins as in the class ``BitBangMDIO`` of
-:download:`yt921x.py <../bindings/micropython/yt921x.py>`.
+or two GPIO pins as in the class
+:download:`BitBangMDIO <../bindings/micropython/yt921x.py>`.
 
 .. _access-timing:
 
@@ -162,8 +163,8 @@ what the 16 data bits of the frame are:
      - Value 0
    * - 4
      - none
-     - not used
-     - always
+     - :ev:`not known`
+     - always sent
    * - 3
      - Switch ID bit 1
      - :ref:`SWITCH_ID_1 <strap-switch-id-1>` is high
@@ -181,8 +182,11 @@ what the 16 data bits of the frame are:
      - register read
      - register write
 
-The switch ID lets up to :const:`SWITCHID_NUM` switches share one PHY address. A switch
-answers only the frames whose switch ID bits match its :ref:`strap pins <access-straps>`.
+The switch ID lets up to :const:`SWITCHID_NUM` switches share one PHY address. Table 20
+of the |ds| describes the two :ref:`strap pins <access-straps>` as "Switch_ID [1:0] for slave SMI
+and slave I2C format". It is :ev:`inferred` that a switch answers only the frames whose switch ID
+bits match its strap pins. No source names bit 4, and the
+:ref:`Linux driver <sources-list>` always sends it as 0.
 
 An access is two frames that set the address, high half first, and two frames that move the
 value, high half first. The READ bit has the same value in all four frames.
@@ -242,8 +246,9 @@ and :ref:`YT921x.reg_read() <bindings-api>` and
 :ref:`YT921x.reg_write() <bindings-api>` in
 :download:`yt921x.py <../bindings/micropython/yt921x.py>`.
 
-The switch keeps the address between frames, so the four frames of one access must not be
-mixed with those of another. A driver that can be called from several threads takes one lock
+It is :ev:`inferred` from the frame sequence that the switch keeps the address between
+frames, so the four frames of one access must not be mixed with those of another.
+:lx:`yt921x_reg_mdio_read` holds the lock of the MDIO bus over all four frames. A driver that can be called from several threads takes one lock
 around the whole access, and around every command sequence that spans several registers
 (:ref:`access-wait`).
 
@@ -277,16 +282,16 @@ The :ref:`bindings <bindings-naming>` carry helpers for fields that cross a word
      - Write a field
      - File
    * - C
-     - ``yt921x_bits_get()``
-     - ``yt921x_bits_set()``
+     - :download:`yt921x_bits_get() <../bindings/c/yt921x_regs.h>`
+     - :download:`yt921x_bits_set() <../bindings/c/yt921x_regs.h>`
      - :download:`yt921x_regs.h <../bindings/c/yt921x_regs.h>`
    * - Rust
-     - ``Field::get_words()``
-     - ``Field::set_words()``
+     - :download:`Field::get_words() <../bindings/rust/src/regs.rs>`
+     - :download:`Field::set_words() <../bindings/rust/src/regs.rs>`
      - :download:`regs.rs <../bindings/rust/src/regs.rs>`
    * - MicroPython
-     - ``bits_get()``
-     - ``bits_set()``
+     - :download:`bits_get() <../bindings/micropython/yt921x_regs.py>`
+     - :download:`bits_set() <../bindings/micropython/yt921x_regs.py>`
      - :download:`yt921x_regs.py <../bindings/micropython/yt921x_regs.py>`
 
 .. _access-wait:

@@ -59,8 +59,8 @@ the analog circuits of the PHYs are not reset. The :ref:`Linux driver <sources-l
 :field:`RST.SW`.
 
 The reset pin is nRESET, pin 89 of the YT9215SCH in table 23 of the |ds|. Section 4.1.1
-requires it to be low for at least 10 ms. A board that uses the register reset can leave the
-pin on its pull-up resistor.
+requires it to be low for at least 10 ms. The same section states that the hardware reset is to be
+applied after power-on.
 
 .. _bringup-identify:
 
@@ -271,11 +271,11 @@ After bring-up
 
    * - Next task
      - Page
-   * - Choose the CPU port and its tagging
+   * - Set up the CPU port
      - :doc:`cpu-tag`
    * - Enable the ports
      - :doc:`ports`
    * - Reach the PHYs
      - :doc:`phy`
-   * - Separate or bridge ports
+   * - Group ports
      - :doc:`forwarding`

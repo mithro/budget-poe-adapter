@@ -121,9 +121,9 @@ which uses the registers that
    * - 1
      - Basic status
    * - 2
-     - PHY identifier, high half
+     - High half of the PHY identifier
    * - 3
-     - PHY identifier, low half
+     - Low half of the PHY identifier
    * - 4
      - Auto-negotiation advertisement
    * - 5

@@ -66,9 +66,10 @@ header
 of the :ref:`vendor SDK <sources-list>` agrees with the Linux name, so this manual uses the Linux
 names.
 
-That table holds two more names that differ, both in entries that are commented out:
-"TxUnderRun" at the offset ``0x60``, where the Linux name is :counter:`TX_UNDERSIZE_ERR`, and
-"TxExcDefer" at the offset ``0x9c``, where the Linux name is :counter:`TX_PKT`.
+Other names of that table differ from the Linux names too, among them "TxUnderRun" at the
+offset ``0x60``, where the Linux name is :counter:`TX_UNDERSIZE_ERR`, and "TxExcDefer" at the
+offset ``0x9c``, where the Linux name is :counter:`TX_PKT`. Both of these entries are commented
+out.
 
 .. _mib-clear:
 

@@ -4,44 +4,45 @@ VLANs
 =====
 
 The switch implements `IEEE 802.1Q <https://en.wikipedia.org/wiki/IEEE_802.1Q>`__ VLANs with a
-table of 4096 entries. The registers are in the :blk:`vlan` block. The table names the register
-that answers each question about a frame.
+table of 4096 entries. The registers are in the :blk:`vlan` block. The :ref:`register overview <vlan-overview-table>` names the register for each setting.
+
+.. _vlan-overview-table:
 
 .. list-table::
    :header-rows: 1
    :widths: 44 28 28
 
-   * - Question
+   * - Setting
      - Register
      - Section
-   * - Which identifiers mark a tag?
+   * - Identifiers that mark a tag
      - :reg:`TPID_IGR`
      - :ref:`vlan-aware`
-   * - Which tags does a port recognise?
+   * - Tags that a port recognises
      - :reg:`PORT_IGR_TPID`
      - :ref:`vlan-aware`
-   * - Which VLAN does an untagged frame join?
+   * - VLAN of an untagged frame
      - :reg:`PORT_VLAN_CTRL`
      - :ref:`vlan-pvid`
-   * - Which frames does a port refuse by tag?
+   * - Frames that a port refuses by tag
      - :reg:`PORT_VLAN_CTRL1`
      - :ref:`vlan-filter`
-   * - Which ports check VLAN membership?
+   * - Ports that check VLAN membership
      - :reg:`VLAN_IGR_FILTER`
      - :ref:`vlan-filter`
-   * - Which ports belong to a VLAN?
+   * - Member ports of a VLAN
      - :reg:`VLAN_CTRL`
      - :ref:`vlan-table`
-   * - Which members send without a tag?
+   * - Members that send without a tag
      - :reg:`VLAN_CTRL`
      - :ref:`vlan-egress`
-   * - Which identifier does a port send?
+   * - Identifier that a port sends
      - :reg:`PORT_EGR`
      - :ref:`vlan-egress`
-   * - Which identifiers can be sent?
+   * - Identifiers that can be sent
      - :reg:`TPID_EGR`
      - :ref:`vlan-egress`
-   * - Which ports send to members only?
+   * - Ports that send to members only
      - :reg:`VLAN_EGR_FILTER`
      - :ref:`vlan-egress`
 
@@ -79,8 +80,8 @@ which of the four mark a customer tag and which mark a service tag.
      - read
 
 The value 1 sets element 0 of the field, which stands for the identifier in element 0 of
-:reg:`TPID_IGR`. Both rows are :ev:`confirmed` by :lx:`yt921x_vlan_aware_set`. Its comment
-says that the second row works although :field:`VLAN_CTRL.SVLAN_EN` is never set.
+:reg:`TPID_IGR`. Both rows of the :ref:`mode table <vlan-aware-table>` are :ev:`confirmed` by
+:lx:`yt921x_vlan_aware_set`. Its comment says that the VLAN-unaware setting works although :field:`VLAN_CTRL.SVLAN_EN` is never set.
 
 Write ``0x8100`` to element 0 of :reg:`TPID_IGR` before the first frame arrives. The
 :ref:`Linux driver <sources-list>` never writes :reg:`TPID_IGR`, so it is :ev:`inferred` that
@@ -125,7 +126,7 @@ Ingress filtering
      - :ev:`inferred`
 
 :lx:`yt921x_vlan_filtering` sets the fields of the rows "VLAN does not include the receiving
-port" and "Untagged". It sets :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED` for a VLAN-aware
+port" and "Untagged" of the :ref:`filter table <vlan-filter-table>`. It sets :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED` for a VLAN-aware
 port that has no port VLAN. It always clears :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`, and
 its comment leaves the dropping of tagged frames to :reg:`VLAN_IGR_FILTER`. The effect of
 setting that field is read from its name. An access port is a use for it.
@@ -200,7 +201,8 @@ uses.
 VLAN 0
 ~~~~~~
 
-The switch looks up a tag with VLAN ID 0 in entry 0 of :reg:`VLAN_CTRL`. Write entry 0 once
+It is :ev:`inferred` that the switch looks up a tag with VLAN ID 0 in entry 0 of
+:reg:`VLAN_CTRL`, because the driver writes that entry. Write entry 0 once
 at start-up with all ports in :field:`VLAN_CTRL.PORTS` and with :field:`VLAN_CTRL.LEARN_DIS`
 set, and use VLAN 0 for nothing else. :lx:`yt921x_chip_setup_dsa` writes this entry. Its
 :lx:`comment <chip.c:2334>` says that a frame tagged with VLAN ID 0 should be treated as
@@ -225,7 +227,7 @@ and from the names of the :ref:`vendor SDK <sources-list>` tables at the same ad
 
    * - Register
      - Direction
-     - Inferred function
+     - Function
      - Vendor SDK table
    * - :reg:`TPID_EGR`
      - egress

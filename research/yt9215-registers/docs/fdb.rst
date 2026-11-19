@@ -40,7 +40,7 @@ The sequence is :ev:`confirmed` by :lx:`yt921x_fdb_add`, :lx:`yt921x_fdb_wait` a
      - :val:`FDB_OP.OP.ADD`
      - write one entry
      - :ref:`key <fdb-entry>`
-     - none
+     - :field:`FDB_OP.INDEX`
    * - 1
      - :val:`FDB_OP.OP.DEL`
      - remove one entry
@@ -109,11 +109,13 @@ The key is the MAC address, split over :field:`FDB_IN0.ADDR_HI4` and
 ``02:11:22:33:44:55``, :field:`FDB_IN0.ADDR_HI4` is ``0x02112233`` and
 :field:`FDB_IN1.ADDR_LO2` is ``0x4455``.
 
-:field:`FDB_IN1.STATUS` tells static from learned entries and carries the age of learned
-ones. Write :val:`FDB_IN1.STATUS.STATIC` for an entry that must stay. The status
+:field:`FDB_IN1.STATUS` tells static from learned entries. It is :ev:`inferred` from the value
+names :val:`FDB_IN1.STATUS.MIN_TIME` and :val:`FDB_IN1.STATUS.MOVE_AGING_MAX_TIME` that the field also
+carries the age of a learned entry. Write :val:`FDB_IN1.STATUS.STATIC` for an entry that must stay. The status
 :val:`FDB_IN1.STATUS.INVALID` in a result means that the entry is empty.
-:field:`FDB_IN2.EGR_PORTS` is the destination port mask: one bit for a unicast address,
-several for a multicast group.
+:field:`FDB_IN2.EGR_PORTS` is the destination port mask. :lx:`yt921x_fdb_add` writes the mask
+of a unicast address, and :lx:`yt921x_dsa_port_mdb_add` adds the bit of one more port to the mask
+of a multicast group through :lx:`yt921x_fdb_join`.
 
 .. _fdb-add:
 

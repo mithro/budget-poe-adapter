@@ -3,7 +3,8 @@
 Priorities
 ==========
 
-Every frame gets an internal priority from 0 to 7 on receive. The field
+It is :ev:`inferred` from the registers of this page that every frame gets an internal
+priority from 0 to 7 on receive. The field
 :ref:`PRIO <tag-prio>` of the :ref:`CPU tag <cpu-tag-format>` reports it. It is
 :ev:`inferred` that the priority selects the transmit queue; the queue registers are among
 the :ref:`vendor SDK tables <reference-sdk>` that this manual does not describe. The
@@ -19,11 +20,12 @@ port: each source has a 3-bit weight, and of the sources that apply to a frame t
 the highest weight wins. :lx:`yt921x_dsa_port_set_apptrust` of the
 :ref:`Linux driver <sources-list>` gives the most trusted source weight 7 and each next one a
 weight that is 1 lower. :lx:`yt921x_port_setup` writes 0 to the register to turn all sources
-off. It is :ev:`inferred` that the port default priority (:field:`PORT_QOS.PRIO`) still
-applies with weight 0 when no other source does, because :field:`PORT_QOS.PRIO_EN` enables it
-separately.
+off. The comment in :lx:`chip.h:208` reads "0: disabled, except PORT_QOS_PRIO", so the port default
+priority (:field:`PORT_QOS.PRIO`) still applies with weight 0.
 
 .. yt-bitfield:: PORT_PRIO_ORD
+
+.. _qos-source-table:
 
 .. list-table::
    :header-rows: 1
@@ -77,8 +79,10 @@ separately.
 
 To trust DSCP first and the tag priority second, give :val:`app_selector.DSCP` weight 7 and
 both :val:`app_selector.CVLAN_PCP` and :val:`app_selector.SVLAN_PCP` weight 6. The :ev:`confirmed`
-rows are the three sources that :lx:`yt921x_dsa_port_set_apptrust` writes. The :ev:`inferred` rows
-follow the names of the list ``enum yt921x_app_selector`` in :lx:`chip.h`.
+rows of the :ref:`source table <qos-source-table>` are the three sources that
+:lx:`yt921x_dsa_port_set_apptrust` writes. The other rows follow the names of the list
+:lx:`enum yt921x_app_selector <chip.h:210>`, and the row of :val:`app_selector.PORT` follows the
+comment in :lx:`chip.h:218`.
 
 .. _qos-maps:
 
@@ -87,7 +91,8 @@ Mapping tables
 
 :reg:`IPM_DSCP` has one entry per DSCP value and :reg:`IPM_PCP` one per tag priority and drop
 eligible bit. Each entry gives the internal priority in :field:`IPM_PCP.PRIO` and, in
-:field:`IPM_PCP.COLOR`, a colour that the :ref:`meters <rate-meter>` use.
+:field:`IPM_PCP.COLOR`, a colour. It is :ev:`inferred` from the field :field:`METER_CTRL.COLOR_BLIND` that the
+:ref:`meters <rate-meter>` use this colour.
 
 .. yt-bitfield:: IPM_PCP
 

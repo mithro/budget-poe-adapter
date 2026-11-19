@@ -14,6 +14,7 @@ source_suffix = {".rst": "restructuredtext", ".md": "markdown"}
 root_doc = "index"
 exclude_patterns = [
     "_build",
+    "README.md",
     ".venv",
     "**/target",
     "**/__pycache__",
@@ -30,6 +31,12 @@ myst_heading_anchors = 4
 
 html_theme = "furo"
 html_title = project
+html_theme_options = {
+    "source_repository": "https://github.com/mithro/budget-poe-adapter/",
+    "source_branch": "main",
+    "source_directory": "",
+    "navigation_with_keys": True,
+}
 html_static_path = []
 
 
@@ -61,6 +68,15 @@ def link_directories(app, docname, source):
         return "](%s%s)" % (REPO_URL, os.path.relpath(target, os.fspath(app.srcdir)).replace(os.sep, "/"))
 
     text = re.sub(r"\]\((?!https?:)([^)#\s]+/)\)", directory, text)
+
+    def root_readme(m):
+        # index.md includes the root README, so a link to that README goes to the index.
+        target = os.path.normpath(os.path.join(base, m.group(1)))
+        if target != os.path.join(os.fspath(app.srcdir), "README.md"):
+            return m.group(0)
+        return "](%sindex.md%s)" % (m.group(1)[:-len("README.md")], m.group(2) or "")
+
+    text = re.sub(r"\]\(((?:\.\./)*README\.md)(#[\w.-]+)?\)", root_readme, text)
     ids = set(re.findall(ANCHOR_RE, text))
 
     def local(m):

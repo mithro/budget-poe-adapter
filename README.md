@@ -5,97 +5,102 @@ flexible PoE to USB-C adapter that passes Ethernet through at 1 Gbit/s or faster
 
 The project is at the research stage. It has no schematic or PCB of the adapter.
 
-## What is here
-
-| Folder | Contents | Index |
-| --- | --- | --- |
-| [`design/`](design/) | Block diagram with a rough BOM | [Design](#design) |
-| [`research/`](research/) | Research notes | [Research: power](#research-power) |
-| [`research/`](research/) | Research notes | [Research: Motorcomm and Realtek switch ICs](#research-motorcomm-and-realtek-switch-ics) |
-| [`research/`](research/) | Research notes | [Research: MCU and its network link](#research-mcu-and-its-network-link) |
-| [`datasheets/`](datasheets/) | Switch IC documentation | [`datasheets/README.md`](datasheets/README.md) |
-
-The research notes cover these topics:
-
-| Topic | Section |
+| Resource | Location |
 | --- | --- |
-| PoE | [Research: power](#research-power) |
-| USB-C PD | [Research: power](#research-power) |
-| Switch ICs | [Research: Motorcomm and Realtek switch ICs](#research-motorcomm-and-realtek-switch-ics) |
-| MCUs | [Research: MCU and its network link](#research-mcu-and-its-network-link) |
-| Attaching an MCU to the network | [Research: MCU and its network link](#research-mcu-and-its-network-link) |
+| Rendered documentation | [budget-poe-adapter.readthedocs.io](https://budget-poe-adapter.readthedocs.io/en/latest/) |
+| Source repository | [github.com/mithro/budget-poe-adapter](https://github.com/mithro/budget-poe-adapter) |
 
-| Vendor | Datasheets in [`datasheets/`](datasheets/) |
+## Documents
+
+The documents are grouped by the question they answer. Each group is listed in reading order.
+
+| Group | Question it answers |
 | --- | --- |
-| Motorcomm | Included |
-| Realtek | Linked |
+| [Design](#design) | What does the adapter contain and what does it cost? |
+| [Power](#power) | How does the adapter take PoE power and hand it on over USB-C? |
+| [Switch ICs](#switch-ics) | Which switch IC passes gigabit Ethernet through? |
+| [MCU and its network link](#mcu-and-its-network-link) | Which MCU runs the adapter and how does it reach the network? |
+| [LX-IS601F switch board](#lx-is601f-switch-board) | How is a bought YT9215SCH switch board built? |
+| [YT921x switch programming](#yt921x-switch-programming) | How is a YT921x switch programmed? |
+| [Datasheets](#datasheets) | Where are the vendor documents? |
 
 ### Design
+
+| Document | Covers |
+| --- | --- |
+| [Block diagram and rough BOM](design/block-diagram-and-bom.md) | The blocks of both variants with their rough cost |
+| [Cost and part-count reduction](research/cost-reduction.md) | Ways to cut the cost and the part count |
+
+### Power
+
+| Document | Covers |
+| --- | --- |
+| [PoE powered device](research/poe.md) | PoE standards and negotiation for a software-driven powered device |
+| [USB-C power](research/usb-c-pd.md) | USB-C power delivery to a Raspberry Pi 5 |
+
+### Switch ICs
+
+| Document | Covers |
+| --- | --- |
+| [Cheap gigabit switch ICs](research/ethernet-switch.md) | Survey of cheap gigabit switch ICs with about three ports |
+| [Switch IC comparison table](research/ethernet-switch-comparison.md) | The surveyed switch ICs side by side |
+| [Switch ICs in detail](research/switch-detail-comparison.md) | The RTL8363NB compared with the RTL8367S and the YT9215S |
+| [Embedded CPUs in the switch ICs](research/switch-embedded-cpu.md) | Whether the CPU inside a switch IC can replace the MCU |
+| [Switch IC dev boards](research/switch-cpu-dev-boards.md) | Hardware to buy that carries an RTL8367S or a YT9215S |
+| [Motorcomm debug pins](research/motorcomm-debug-pins.md) | Debug pins of the YT9215 variants |
+
+### MCU and its network link
+
+| Document | Covers |
+| --- | --- |
+| [MCU comparison](research/risc-v-mcu-comparison.md) | Candidate MCUs with their price and features |
+| [Piggybacking on a gigabit link](research/gigabit-piggyback.md) | Ways to attach a small device to a gigabit Ethernet link |
+| [Bit-banged 10 Mbit/s Ethernet](research/bitbang-10mbit-ethernet.md) | Whether an MCU can bit-bang 10 Mbit/s Ethernet |
+| [Bit-banged USB](research/bitbang-usb.md) | Whether an MCU can bit-bang a USB device |
+| [USB network card](research/usb-network-card.md) | The adapter presenting itself to the host as a USB network card |
+
+### LX-IS601F switch board
+
+| Document | Covers |
+| --- | --- |
+| [Debug pins on the board](research/lx-is601f-board/README.md) | Where the debug pins of the YT9215SCH come out |
+| [Reverse-engineered schematic](research/lx-is601f-board/schematic/README.md) | KiCad schematic of the board |
+| [Photo catalogue](research/lx-is601f-board/photos/README.md) | 34 photos of the two boards |
+
+### YT921x switch programming
+
+| Document | Covers |
+| --- | --- |
+| [Programmer's guide](research/yt9215-registers/docs/index.rst) | Manual for writing a YT921x driver with a register reference |
+| [Register description and bindings](research/yt9215-registers/README.md) | Register description files with bindings for four environments |
+
+### Datasheets
+
+| Document | Covers |
+| --- | --- |
+| [Switch IC documentation](datasheets/README.md) | Vendor documents of the switch ICs |
+
+## Block diagrams
+
+The adapter has two variants. [Block diagram and rough BOM](design/block-diagram-and-bom.md)
+explains both.
 
 ![Block diagram A, with a switch chip](design/block-diagram-with-switch.svg)
 
 ![Block diagram B, without a switch chip](design/block-diagram-without-switch.svg)
 
-| File | Contents |
+## Repository layout
+
+| Folder | Contents |
 | --- | --- |
-| [`block-diagram-and-bom.md`](design/block-diagram-and-bom.md) | Block diagram with rough BOM cost |
-| [`block-diagram-with-switch.svg`](design/block-diagram-with-switch.svg) | Figure A as SVG |
-| [`block-diagram-without-switch.svg`](design/block-diagram-without-switch.svg) | Figure B as SVG |
-| [`block-diagram-with-switch.png`](design/block-diagram-with-switch.png) | Figure A as PNG |
-| [`block-diagram-without-switch.png`](design/block-diagram-without-switch.png) | Figure B as PNG |
-| [`make_block_diagram.py`](design/make_block_diagram.py) | Script that draws the SVG figures |
-| [`svg_to_png.js`](design/svg_to_png.js) | Script that renders the PNG figures |
-| [`bom-rough.csv`](design/bom-rough.csv) | BOM table |
+| [`design/`](https://github.com/mithro/budget-poe-adapter/tree/main/design) | Block diagram with a rough BOM |
+| [`research/`](https://github.com/mithro/budget-poe-adapter/tree/main/research) | Research notes |
+| [`research/lx-is601f-board/`](https://github.com/mithro/budget-poe-adapter/tree/main/research/lx-is601f-board) | Photos and schematic of the LX-IS601F switch board |
+| [`research/yt9215-registers/`](https://github.com/mithro/budget-poe-adapter/tree/main/research/yt9215-registers) | YT921x manual with register description and bindings |
+| [`datasheets/`](https://github.com/mithro/budget-poe-adapter/tree/main/datasheets) | Vendor documents of the switch ICs |
 
-### Research: power
-
-| File | Covers |
-| --- | --- |
-| [`poe.md`](research/poe.md) | PoE for a cheap software-driven powered device |
-| [`usb-c-pd.md`](research/usb-c-pd.md) | USB-C power standards |
-| [`usb-c-pd.md`](research/usb-c-pd.md) | Raspberry Pi 5 requirements |
-| [`usb-c-pd.md`](research/usb-c-pd.md) | PD negotiation at the electrical level |
-| [`cost-reduction.md`](research/cost-reduction.md) | Cost reduction |
-| [`cost-reduction.md`](research/cost-reduction.md) | Part-count reduction |
-
-### Research: Motorcomm and Realtek switch ICs
-
-| File | Covers |
-| --- | --- |
-| [`ethernet-switch.md`](research/ethernet-switch.md) | Cheap gigabit switch ICs with about three ports |
-| [`ethernet-switch-comparison.md`](research/ethernet-switch-comparison.md) | Gigabit switch IC comparison table: price |
-| [`ethernet-switch-comparison.md`](research/ethernet-switch-comparison.md) | Gigabit switch IC comparison table: stock |
-| [`ethernet-switch-comparison.md`](research/ethernet-switch-comparison.md) | Gigabit switch IC comparison table: ports |
-| [`ethernet-switch-comparison.md`](research/ethernet-switch-comparison.md) | Gigabit switch IC comparison table: management |
-| [`switch-detail-comparison.md`](research/switch-detail-comparison.md) | Detail on the RTL8363NB (the pick) |
-| [`switch-detail-comparison.md`](research/switch-detail-comparison.md) | Detail on the RTL8367S (a candidate) |
-| [`switch-detail-comparison.md`](research/switch-detail-comparison.md) | Detail on the YT9215S (a candidate) |
-| [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The DW8051 CPU inside the RTL8367S |
-| [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The RISC-V CPU inside the YT9215S |
-| [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The RTL8363NB, which has no CPU |
-| [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Dev boards carrying the RTL8367S |
-| [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Dev boards carrying the YT9215S |
-| [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Off-the-shelf hardware carrying the RTL8367S |
-| [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Off-the-shelf hardware carrying the YT9215S |
-| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | JTAG pins of the YT9215 variants |
-| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | SPI flash pins of the YT9215 variants |
-| [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | UART pins of the YT9215 variants |
-| [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x switch programmer's guide with register reference |
-| [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x register bindings for C, Rust, MicroPython and Zephyr |
-| [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Annotated photos of a bought LX-IS601F V2.0 board |
-| [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Where the debug pins of its YT9215SCH come out |
-| [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking a small device on a gigabit Ethernet link |
-
-### Research: MCU and its network link
-
-| File | Covers |
-| --- | --- |
-| [`risc-v-mcu-comparison.md`](research/risc-v-mcu-comparison.md) | MCU comparison |
-| [`bitbang-10mbit-ethernet.md`](research/bitbang-10mbit-ethernet.md) | Bit-banging 10 Mbit/s Ethernet |
-| [`bitbang-usb.md`](research/bitbang-usb.md) | Bit-banged (software) USB device |
-| [`usb-network-card.md`](research/usb-network-card.md) | The adapter as a CDC-ECM USB network card |
-| [`usb-network-card.md`](research/usb-network-card.md) | The adapter as an NCM USB network card |
-| [`usb-network-card.md`](research/usb-network-card.md) | The adapter as an RNDIS USB network card |
+[`conf.py`](https://github.com/mithro/budget-poe-adapter/blob/main/conf.py) is the Sphinx configuration of the documentation site and
+[`index.md`](https://github.com/mithro/budget-poe-adapter/blob/main/index.md) holds its navigation.
 
 ## Related repositories
 
@@ -103,10 +108,10 @@ The research notes cover these topics:
   mirror of an open-hardware 5-port gigabit switch built around the Motorcomm YT9215S
   (EasyEDA source, schematic, PCB, Gerbers, BOM). It is the reference design for the
   YT9215S notes here. The [`attachments/...`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/tree/main/attachments) paths quoted in
-  [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) refer to that repository;
+  [Motorcomm debug pins](research/motorcomm-debug-pins.md) refer to that repository;
   the same two files are also in [`datasheets/motorcomm/`](https://github.com/mithro/budget-poe-adapter/tree/main/datasheets/motorcomm).
 
 ## Licence
 
-See [`LICENSE`](LICENSE). Vendor datasheets under [`datasheets/`](datasheets/) remain the property of
+See [`LICENSE`](https://github.com/mithro/budget-poe-adapter/blob/main/LICENSE). Vendor datasheets under [`datasheets/`](https://github.com/mithro/budget-poe-adapter/tree/main/datasheets) remain the property of
 their vendors.

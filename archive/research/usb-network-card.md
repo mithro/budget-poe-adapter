@@ -1,5 +1,7 @@
 # The adapter as a USB network card (CDC-ECM, NCM or RNDIS)
 
+> **Archived.** This note is not part of the current design. It assumes an external MCU (a CH32X035) or a CH397A USB network chip. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
+
 Presenting as a USB network card is an interesting idea, and
 10 Mbit/s is fully acceptable. Price cap: RP2040,
 $0.786 @100. Prices are LCSC prices; unmarked ones come from

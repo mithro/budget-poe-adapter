@@ -52,5 +52,8 @@ _build/
 __pycache__/
 *.pyc
 
+# Bills of materials of the design options are kept
+!design/block-diagram-and-bom/*.csv
+
 # WaveDrom renderer of the register manual, installed by npm ci
 node_modules/

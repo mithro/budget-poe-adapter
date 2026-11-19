@@ -354,7 +354,7 @@ uint32_t lldp_build(uint8_t *frame, const uint8_t *mac, uint32_t request)
 	v[3] = 2;    /* Power via MDI */
 	v[4] = 0x00; /* MDI power support: a PD */
 	v[5] = 1;    /* PSE power pair */
-	v[6] = 0;    /* power class */
+	v[6] = 5;    /* power class 4 */
 	v[7] = 0x53; /* type 2 PD, source PSE, priority low */
 	v[8] = (uint8_t)(request >> 8);
 	v[9] = (uint8_t)request;

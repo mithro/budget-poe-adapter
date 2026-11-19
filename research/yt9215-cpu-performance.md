@@ -7,7 +7,7 @@ memory it has to work with, and whether that is enough.
 
 The facts about the CPU, with their sources, are in
 [`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md). This note builds estimates on them.
-**Nothing in this note was measured on a YT9215.**
+**No figure in this note is a measurement on a YT9215.**
 
 Related notes:
 
@@ -21,8 +21,9 @@ Related notes:
 
 ## Summary
 
-- **The CPU is very likely fast enough for all four jobs.** The open questions are
-  about registers and boot, not about speed.
+- **At every candidate clock the CPU is fast enough for LLDP, sequencing and switch
+  management.** It is fast enough for bit-banged PD if the clock is 31.25 MHz or more
+  and the [conditions](#conditions) hold.
 - **The clock is not published.** It is most likely 125 MHz, the clock of the switch
   core. The estimates here are given for [five candidate clocks](#clock-scenarios)
   from 25 MHz to 125 MHz.
@@ -30,10 +31,10 @@ Related notes:
   polling receiver decodes PD messages from 21 MHz to 31 MHz upward, depending on the
   pipeline model. At 125 MHz the GoodCRC reply is ready 16 µs to 23 µs after the
   message ends, against a limit of 195 µs.
-- **Six conditions decide bit-banged PD, and only one of them is about CPU speed.**
+- **Seven conditions decide bit-banged PD, and only one of them is about CPU speed.**
   They are listed under [conditions](#conditions).
 - **LLDP takes about 330 instructions.** That is the cost of parsing a received LLDP
-  frame and building the reply, a few times a minute.
+  frame and building the reply, about twice a minute at the default interval of 30 s.
 - **The firmware needs about a quarter of the SRAM.** The adapter firmware is estimated
   at about 14 KB of the 64 KB of SRAM when the code runs from flash.
 - **Code that runs from flash can be slow.** Code that is not in the 2 KB cache is
@@ -90,8 +91,8 @@ multiplier and no atomic instructions.
 ## Clock scenarios
 
 The CPU clock is unknown. The chip has a 25 MHz crystal, a 125 MHz switch core clock
-and a 31.25 MHz flash clock, so the candidates are 125 MHz divided by a small number
-and the crystal itself ([inferred](#evidence-codes)). The table gives what each would
+and a 31.25 MHz flash clock, so the candidates are 125 MHz divided by 1 to 5,
+where the last is also the crystal frequency ([inferred](#evidence-codes)). The table gives what each would
 mean ([estimated](#evidence-codes)):
 
 | Clock | Cycle | Cycles per PD half bit | Cycles in 195 µs | Why it is a candidate |
@@ -110,12 +111,11 @@ mean ([estimated](#evidence-codes)):
   ([verified](#evidence-codes)).
 - A switch core that already has a 125 MHz clock tree gains nothing from a second,
   slower one for the CPU.
-- An instruction cache in front of a 31.25 MHz flash only pays off if the core is
-  much faster than the flash.
 
-The `SYS_CLK` register has a second setting of 143 MHz, which the Linux driver does
-not use for the YT9215 ([clock](yt9215-embedded-cpu.md#clock)). A CPU on that clock
-would be 14 % faster than the 125 MHz row.
+The `SYS_CLK` register has a second setting of 143 MHz, which the Linux driver and the
+vendor SDK both decode as a 7 ns cycle ([clock](yt9215-embedded-cpu.md#clock)). Setting
+0, 125 MHz, is the one both name for the YT9215. No source says which setting a
+YT9215 uses in practice. A CPU on 143 MHz would be 14 % faster than the 125 MHz row.
 
 The first firmware that runs can settle the clock by counting `mcycle` between two
 events a known time apart, such as two edges of a UART character from a host.
@@ -160,9 +160,8 @@ Published benchmark scores show what the configuration of a small core does to t
   and register writes, for which the instruction rates above hold whatever the
   CoreMark score ([inferred](#evidence-codes)).
 - A 32-bit multiply in software takes at most 260 to 292 cycles in the benchmark
-  ([measured](#evidence-codes)). That is 2.3 µs at 125 MHz. Scaling a power value
-  once per negotiation is the kind of multiply the firmware does, and at that rate
-  the cost is a few microseconds per second.
+  ([measured](#evidence-codes)). That is 2.1 µs to 2.3 µs at 125 MHz. Scaling a power
+  value once per negotiation is the kind of multiply the firmware does.
 - FreeRTOS does not need the atomic instructions; it masks interrupts
   ([inferred](#evidence-codes)).
 
@@ -195,8 +194,8 @@ The assumptions behind the table:
   4 clocks per byte.
 - A dual I/O read sends 8 command bits, the address on two lines in 12 clocks and
   4 mode clocks, then 4 clocks per byte.
-- The datasheet says the flash interface supports "serial/dual I/O" and does not name
-  the read commands, so all three are shown.
+- The datasheet names a serial I/O mode and a dual I/O mode of the flash interface and
+  does not name the read commands, so all three are shown.
 - The flash controller starts a new read command for every line. A controller that
   keeps reading sequentially would be faster for straight-line code.
 - The line size of the cache is not published. Nuclei cores report it in the
@@ -209,7 +208,7 @@ What follows ([inferred](#evidence-codes)):
 - **One miss costs more than a PD half bit.** A half bit is 1.67 µs. Code that
   transmits or receives PD must never miss, so it must run from SRAM.
 - **Cold code is slow whatever the CPU clock.** Straight-line code that misses on
-  every line runs at roughly 1 to 3 million instructions per second
+  every line runs at roughly 1 to 2 million instructions per second
   ([estimated](#evidence-codes)), against 94 to 124 million when cached at 125 MHz.
   The estimate takes 3 bytes as the average size of an RV32EC instruction.
 - **Loops are fast.** At 3 bytes each, 2 KB holds about 680 instructions. The whole
@@ -242,7 +241,8 @@ Notes on the table:
   assumed here instead. Whether the unpublished frame driver accepts fewer buffers
   than its minimum is unknown. With the SDK minimum the total is 22.3 KB.
 - The size of the vendor SDK library is not known, because it does not build without
-  the firmware tree that is not public. The adapter needs a small part of it.
+  the firmware tree that is not public. The adapter firmware calls only its port
+  control, LLDP trap and frame functions.
 
 ### Loading the code into SRAM
 
@@ -251,11 +251,11 @@ misses. The benchmark code is 2.3 KB, and the assumption here is that PD, LLDP a
 sequencing with a small kernel fit in 16 KB of code ([estimated](#evidence-codes)).
 The copy takes time at power-on ([estimated](#evidence-codes)):
 
-| Source | Bus speed | Time for 16 KB | Time for 64 KB |
-| --- | --- | --- | --- |
-| SPI flash, single I/O | 31.25 MHz | 4 ms | 17 ms |
-| I²C EEPROM | 100 kHz | 1.5 s | 5.9 s |
-| I²C EEPROM | 800 kHz | 0.2 s | 0.7 s |
+| Source | Mode | Bus speed | Time for 16 KB | Time for 64 KB |
+| --- | --- | --- | --- | --- |
+| SPI flash | Single I/O | 31.25 MHz | 4 ms | 17 ms |
+| I²C EEPROM | – | 100 kHz | 1.5 s | 5.9 s |
+| I²C EEPROM | – | 800 kHz | 0.2 s | 0.7 s |
 
 The I²C figures count 9 clocks per byte. The datasheet gives the EEPROM load clock as
 100 kHz typical and 800 kHz at most
@@ -279,14 +279,15 @@ Nuclei gives ideal latencies for its cores in cycles
 - An interrupt handler that time-stamps one edge of the PD signal and queues it has a
   body of 12 instructions ([measured](#evidence-codes)). With entry, register saves and
   return it comes to about 40 cycles per edge ([estimated](#evidence-codes)).
-- Edges arrive as little as 1.52 µs apart. That is 190 cycles at 125 MHz and 47 cycles
+- Edges arrive as little as 1.52 µs apart. That is 189 cycles at 125 MHz and 47 cycles
   at 31.25 MHz, so an interrupt per edge works at 125 MHz and is at its limit at
   31.25 MHz ([estimated](#evidence-codes)).
 - Whether a GPIO edge can raise an interrupt at all is
   [unknown](yt9215-embedded-cpu.md#interrupts-and-timers). If it can, the best use is
   to wake the firmware on the first edge of a message and to
-  [poll](#receive) from there. The 64-bit preamble of a PD message lasts 213 µs, which
-  leaves the handler that long to start before the first data bit.
+  [poll](#receive) from there. The 64-bit preamble of a PD message lasts 213 µs at
+  300 kbit/s and 194 µs at 330 kbit/s, which leaves the handler that long to start
+  before the first data bit.
 
 ## Register and GPIO access
 
@@ -323,7 +324,8 @@ How it works:
 - It is compiled with clang as RV32E at `-O2` for the instruction counts, and as RV32EC
   at `-Os` and at `-O2` for the code size.
 - The emulator counts instructions and cycles. It refuses any instruction outside
-  RV32E, so the counts are for the instruction set the vendor uses.
+  RV32E, so the counts are for RV32E. The vendor's RV32EC build may differ by a few
+  instructions.
 - The code reads time from the `mcycle` counter and reaches the PD signal through one
   GPIO input register and one GPIO output register.
 - `bench.py` generates the waveform of a PD message at 270, 300 and 330 kbit/s, feeds
@@ -343,6 +345,9 @@ Limits of the benchmark:
 
 - The cycle counts are as good as the two models. The real core may fall outside them.
 - A store to memory and a shift cost no extra cycle in either model.
+- Code in SRAM is fetched with no wait cycles. Whether the 64 KB SRAM is a local
+  memory of the core or sits on a slower bus is not published. Wait cycles on fetches
+  would add to every figure.
 - The waveforms have ideal edges. Noise, jitter and the delay of the comparator are
   not modelled.
 - The code is plain C at `-O2`, not tuned.
@@ -380,7 +385,9 @@ that starts 25 µs to 195 µs after the message ends
 
 The benchmark toggles the GPIO output and waits for `mcycle` to reach the time of the
 next edge. The table gives the worst distance of any edge from its ideal place over
-the eight GoodCRC messages ([measured](#evidence-codes)):
+the eight GoodCRC messages ([measured](#evidence-codes)). The ideal places are counted
+from the first transmitted edge at the bit rate in the table, so the figure is the
+jitter of the edges and not an error of the bit rate:
 
 | Clock | Cycles per bit | Bit rate | Edge error, fast model | Edge error, slow model |
 | --- | --- | --- | --- | --- |
@@ -432,10 +439,11 @@ and whether the six test messages decode at all of 270, 300 and 330 kbit/s
 - The usual pass of the polling loop is 8 cycles in the fast model and 11 in the slow
   model. The longest gap is 51 and 64 cycles ([measured](#evidence-codes)).
 - At 125 MHz the code samples the line 19 to 26 times per half bit, and its longest
-  gap is under a third of a half bit. Real edges have noise and jitter that the
+  gap is 0.25 to 0.34 of a half bit across the three bit rates. Real edges have noise and jitter that the
   benchmark does not model. This sampling rate leaves room for a filter that asks for
   several equal samples before it accepts an edge ([inferred](#evidence-codes)).
-- At 31.25 MHz the longest gap is as long as a half bit. The messages still decode
+- At 31.25 MHz the longest gap at 300 kbit/s is 0.98 of a half bit in the fast model
+  and 1.23 in the slow model. The messages still decode
   with ideal edges, but there is no margin left, so 31.25 MHz is marked marginal in
   the [summary](#summary) ([inferred](#evidence-codes)).
 - The long gaps are the passes that finish a 5-bit symbol and store a byte. Tuned
@@ -475,26 +483,34 @@ The results above hold only if all of these are true. None is confirmed for the
 YT9215:
 
 1. **Fast GPIO registers.** A GPIO pin can be read with one load and written with one
-   store, in a few cycles ([register and GPIO access](#register-and-gpio-access)).
+   store, with 0 to 2 extra cycles as the [pipeline models](#pipeline-models) assume
+   ([register and GPIO access](#register-and-gpio-access)).
 2. **A cycle counter.** The `mcycle` register, or a timer of similar resolution, is
-   readable ([interrupts and timers](yt9215-embedded-cpu.md#interrupts-and-timers)).
+   readable and is not stopped through `mcountinhibit`
+   ([interrupts and timers](yt9215-embedded-cpu.md#interrupts-and-timers)).
 3. **Code in SRAM.** The PD code runs from SRAM, or is otherwise certain never to miss
    the cache ([cost of a cache miss](#cost-of-a-cache-miss)).
 4. **Interrupts off.** Nothing interrupts the CPU from the first edge of a message to
    the end of its GoodCRC. For the longest message that is about 2.1 ms: 1.4 ms of
    message, up to 0.2 ms of gap and 0.5 ms of GoodCRC. With the usual FreeRTOS tick of
-   1 ms, two ticks fall into that time and one of them is lost, so the firmware must
+   1 ms, two or three ticks fall into that time and all but one are lost, so the firmware must
    take its time from `mtime` and not from a count of ticks
    ([inferred](#evidence-codes)).
-5. **A comparator.** No pin of the chip can read the 1.1 V PD signal, because the
-   input high threshold of the 3.3 V pins is 2.0 V
+5. **A comparator.** No pin of the chip reads the 1.1 V PD signal reliably. The input
+   high threshold is 2.0 V for a pin on a 3.3 V supply
    ([Table 31](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=51))
+   and 1.2 V for a pin on a 1.8 V supply
+   ([Table 31, continued](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=52))
    ([verified](#evidence-codes)). An external comparator turns the signal into a logic
-   level ([receive hardware](usb-c-pd.md#62-receive)). The same or a second comparator
-   output, read on a GPIO pin, detects attach on a time scale of milliseconds
-   ([CC layer](usb-c-pd.md#4-type-c-cc-layer-dc-no-protocol)).
-6. **A clock of 31.25 MHz or more**, and well above that for margin
-   ([receive](#receive)).
+   level ([receive hardware](usb-c-pd.md#62-receive)). Attach detection needs a second
+   comparator with a threshold near 2.6 V, read on a GPIO pin on a time scale of
+   milliseconds ([other analogue needs](usb-c-pd.md#63-other-analog-needs)).
+6. **A transmit pin that can be released.** The transmitter must stop driving the line
+   within 23 µs of the end of a message
+   ([signalling](usb-c-pd.md#51-signalling)). That needs a GPIO direction register
+   that is as fast as the data register, or an analogue switch on a second GPIO pin.
+7. **A clock of 31.25 MHz or more.** At 62.5 MHz the longest gap of the receiver is
+   0.5 to 0.6 of a half bit ([receive](#receive)).
 
 ### Verdict
 
@@ -512,7 +528,7 @@ how the rest of the firmware is scheduled ([inferred](#evidence-codes)).
 ## LLDP
 
 - LLDP runs on a time scale of seconds. The default transmit interval of IEEE 802.1AB
-  is 30 s and its fast interval is 1 s ([inferred](#evidence-codes)).
+  is 30 s and its fast interval is 1 s.
 - Parsing a realistic 249-byte LLDPDU from a PoE switch, including the IEEE 802.3
   power TLV, takes 226 instructions. Building the reply frame takes 101
   ([measured](#evidence-codes)).
@@ -536,8 +552,8 @@ or the registers behind it.
   ([register and GPIO access](#register-and-gpio-access)).
 - The delays between the steps come from the `mtime` timer through FreeRTOS, whose
   tick is normally 1 ms ([inferred](#evidence-codes)).
-- Polling link state, counters and the chip's temperature sensor is a few register
-  loads per second.
+- Polling link state, counters and the chip's temperature sensor once a second is
+  under 100 register loads per second ([estimated](#evidence-codes)).
 - A full switch set-up through the vendor SDK is assumed here to be 3,000 register
   accesses of 300 instructions each, about a million instructions. That is about
   10 ms when the code is cached and up to a second if every cache line misses
@@ -554,6 +570,7 @@ answers:
 | How fast is the CPU clock? | Count `mcycle` over a known time | [Clock scenarios](#clock-scenarios) |
 | How big is a cache line? | Read `micfg_info` | [Cost of a cache miss](#cost-of-a-cache-miss) |
 | How slow is cold code? | Time a long straight-line function twice | [Cost of a cache miss](#cost-of-a-cache-miss) |
+| Does code in SRAM run at full speed? | Time one loop in SRAM and the same loop in the cache | [The benchmark](#the-benchmark) |
 | How fast is a GPIO write? | Toggle a pin in a loop and measure the frequency | [Conditions](#conditions) |
 | How fast is a GPIO read? | Time a loop of reads with `mcycle` | [Conditions](#conditions) |
 | Can a GPIO edge interrupt the CPU? | Find the interrupt source in the ECLIC | [Interrupt latency](#interrupt-latency) |

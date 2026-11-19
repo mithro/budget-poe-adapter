@@ -40,7 +40,7 @@ Statements that rest on a source are marked with one of these words:
 | I-cache (YT9215SCH) | 2 KB | [Verified](#evidence-codes) | [Memory](#memory) |
 | Largest SPI NOR flash (YT9215SCH) | 8 MB | [Verified](#evidence-codes) | [Memory](#memory) |
 | CPU clock | Unknown | – | [Clock](#clock) |
-| Switch core clock | 125 MHz | [Verified](#evidence-codes) | [Clock](#clock) |
+| Switch core clock | 125 MHz | [Partly inferred](#evidence-codes) | [Clock](#clock) |
 | Boot source | SPI flash | [Verified](#evidence-codes) | [Boot](#boot) |
 | Boot source | EEPROM | [Verified](#evidence-codes) | [Boot](#boot) |
 | Enable strap | `DIS_MCU` low | [Verified](#evidence-codes) | [Boot](#boot) |
@@ -102,6 +102,7 @@ sets these facts ([verified](#evidence-codes)):
 | Architecture flag | `-march=rv32ec` | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
 | ABI flag | `-mabi=ilp32e` | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
 | Code model flag | `-mcmodel=medany` | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
+| Condition for these flags | `Tiger` set | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L28) |
 | Condition for these flags | `INTER_MCU` set | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L27) |
 
 What follows from the flags ([inferred](#evidence-codes)):
@@ -150,10 +151,12 @@ The memory map is not published.
 
 - The CPU clock is not published.
 - The chip takes a 25 MHz crystal or oscillator ([verified](#evidence-codes)).
-- The [`yt921x` Linux driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.h#L177) defines a `SYS_CLK` register at `0xE0040`. Its value 0 means a 125 MHz
-  switch core clock on the YT9215, and value 1 means 143 MHz ([verified](#evidence-codes)).
-  The vendor SDK reads the same register and turns value 0 into an 8 ns cycle time
+- The [`yt921x` Linux driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.h#L177) defines a `SYS_CLK` register at `0xE0040`. It names value 0 as 125 MHz for the
+  YT9215 and value 1 as 143 MHz ([verified](#evidence-codes)).
+  The vendor SDK reads the same register and turns value 0 into an 8 ns cycle time and value 1 into 7 ns
   ([`fal_tiger_rate.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_rate.c#L105)) ([verified](#evidence-codes)).
+- Both use the cycle time for the rate meters of the switch, so `SYS_CLK` is taken to
+  be the clock of the switch core ([inferred](#evidence-codes)).
 - The SPI flash clock is 31.25 MHz ([Table 33](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=53) of the
   YT9215SCH datasheet) ([verified](#evidence-codes)). That is 125 MHz divided by 4, so the
   flash controller is clocked from the 125 MHz domain ([inferred](#evidence-codes)).
@@ -214,7 +217,7 @@ experiments that can answer it.
   copies EEPROM contents into registers without the CPU ([verified](#evidence-codes)). The
   [LX-IS601F board](switch-board-strapping.md) is strapped this way and carries a
   24C08.
-- **The vendor build names match Nuclei's.** The Nuclei SDK builds a program in one of
+- **The datasheet's flash routes match two Nuclei SDK download modes.** The Nuclei SDK builds a program in one of
   the download modes `ilm`, `flash` and `flashxip`: run from RAM, copy from flash to
   RAM, and run in place from flash
   ([Nuclei SDK build system](https://doc.nucleisys.com/nuclei_sdk/develop/buildsystem.html))
@@ -223,8 +226,8 @@ experiments that can answer it.
 - **The public SDK has nothing on images.** It holds no linker script, no start-up
   code, no image tool and no firmware binary ([verified](#evidence-codes)). The words "flash",
   "boot" and "XIP" do not occur in its source files ([verified](#evidence-codes)).
-- **No firmware image was found.** Searches for a download, a flash dump or a
-  teardown of a YT9215 product with flash found none ([inferred](#evidence-codes)).
+- **No firmware image is public.** Searches for a download, a flash dump or a
+  teardown of a YT9215 product with flash turn up none ([inferred](#evidence-codes)).
 - **JTAG is named only in the draft datasheets** ([debug](#debug)).
 
 <a id="code-loading-unknowns"></a>
@@ -326,8 +329,8 @@ Notes on the table:
   sit on either of two pin groups ([verified](#evidence-codes)).
 - The SMI figure is the 250 ns minimum clock period with a 1 kΩ pull-up
   ([verified](#evidence-codes)).
-- The datasheet's block diagram draws "GPIO", "SMI", "I2C", "SPI" and "LED" beside the
-  CPU and nothing else. No source names a DMA controller, a PWM, a timer with capture
+- The datasheet's block diagram draws "GPIO", "SMI", "I2C", "SPI", "LED" and "Internal Buffer" beside
+  the CPU and nothing else. No source names a DMA controller, a PWM, a timer with capture
   inputs, a comparator or a general-purpose SPI master ([verified](#evidence-codes)).
 - The public SDK has no function that reads or writes a GPIO pin, a UART or an I²C
   master ([verified](#evidence-codes)). Their registers are in the
@@ -337,13 +340,16 @@ Notes on the table:
   these pins ([verified](#evidence-codes)). None of them is a register that reads or
   writes a GPIO pin directly:
 
-  | Table | Address | Fields | What it shows |
+  | Table | Address | Field | Width in bits |
   | --- | --- | --- | --- |
-  | `ACL2GPIO` | `0x80384` | None described | A link from the ACL to GPIO pins exists |
-  | `ACL_ACTION_TBL` | `0x1C0000` | `GPIO_EN` | An ACL rule can act on a GPIO pin |
-  | `ACL_ACTION_TBL` | `0x1C0000` | `GPIO_PIN` | The rule selects 1 of 16 pins |
-  | `LOOP_DETECT_TOP_CTRL` | `0x80230` | `BUZZER_EN` | The buzzer output belongs to loop detection |
-  | `LOOP_DETECT_TOP_CTRL` | `0x80230` | `BUZZER_MODE` | The buzzer has 2 mode bits |
+  | `ACL2GPIO` | `0x80384` | None described | – |
+  | `ACL_ACTION_TBL` | `0x1C0000` | `GPIO_EN` | 1 |
+  | `ACL_ACTION_TBL` | `0x1C0000` | `GPIO_PIN` | 4 |
+  | `LOOP_DETECT_TOP_CTRL` | `0x80230` | `BUZZER_EN` | 1 |
+  | `LOOP_DETECT_TOP_CTRL` | `0x80230` | `BUZZER_MODE` | 2 |
+
+  The ACL fields let a matching rule act on 1 of 16 GPIO pins, and the buzzer output
+  belongs to loop detection ([inferred](#evidence-codes)).
 
 The word "USB" does not occur in the
 [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) or
@@ -383,7 +389,7 @@ the Nuclei documents are the best available description ([partly inferred](#evid
   ([inferred](#evidence-codes)). The clock that `mtime` counts on the YT9215 is unknown.
 - **Cycle counter.** The Nuclei cores have the standard `mcycle` counter register
   ([Nuclei ISA specification, registers](https://doc.nucleisys.com/nuclei_spec/isa/core_csr.html))
-  ([verified](#evidence-codes)). It counts CPU clock cycles and is read with one instruction,
+  ([verified](#evidence-codes)). It counts CPU clock cycles unless it is stopped through the `mcountinhibit` register, and is read with one instruction,
   which makes it the finest time base firmware can have ([inferred](#evidence-codes)).
 - **Interrupt sources.** Which chip events reach the ECLIC is unknown: no source says
   whether a GPIO edge, a received frame, a UART or the switch's own
@@ -501,12 +507,12 @@ whether an interrupt announces a received frame, is therefore not published.
 - The application folder name says the vendor firmware includes an HTTP demonstration,
   which needs a TCP/IP stack ([inferred](#evidence-codes)).
 - The firmware tree `switch_sw_lite_mgmt` is not in the public SDK
-  ([verified](#evidence-codes)) and was not found anywhere else in searches
+  ([verified](#evidence-codes)) and does not turn up anywhere else in searches
   ([inferred](#evidence-codes)). It is the likely home of the frame driver, the
   GPIO, UART and I²C drivers, the interrupt numbers, the linker script with the memory
   map, and the tool that makes a boot image ([inferred](#evidence-codes)).
-- No public firmware image, OpenOCD configuration or boot-ROM dump was found. Searches
-  covered English and Chinese terms.
+- Searches in English and Chinese turn up no public firmware image, OpenOCD
+  configuration or boot-ROM dump.
 - A FreeBSD port of the switch driver exists
   ([if_yt921x_freebsd](https://github.com/am910021/if_yt921x_freebsd))
   ([verified](#evidence-codes)).

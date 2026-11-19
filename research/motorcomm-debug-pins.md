@@ -20,7 +20,7 @@ Each claim carries one of these marks.
 
 ### The three variants have three different pinouts
 
-Each variant is a pin-for-pin drop-in for a different Realtek part, according to the [Motorcomm selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) (2023-03-08; the same file is [`裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) in the board repo) ([verified](#evidence-codes)). Pin numbers from one variant's datasheet cannot be used for another. The crystal pins show it.
+Each variant is a pin-for-pin drop-in for a different Realtek part, according to the [Motorcomm selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) (2023-03-08; the same file is [`裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) in the board repo; [verified](#evidence-codes)). Pin numbers from one variant's datasheet cannot be used for another. The crystal pins show it.
 
 | Variant | Realtek part it matches | Lower crystal pin | Higher crystal pin | Pin tables |
 |---|---|---|---|---|
@@ -31,7 +31,7 @@ Each variant is a pin-for-pin drop-in for a different Realtek part, according to
 
 ### Every variant has the RISC-V MCU
 
-The selection guide marks the S, the RB and the SC "内置RISC-V" (built-in RISC-V) ([verified](#evidence-codes)). The S and RB datasheets both list "Integrated RISC-V microprocessor", the `DIS_MCU` strap, SPI flash, two UARTs and two JTAG groups ([verified](#evidence-codes)).
+The selection guide marks the S, the RB and the SC "内置RISC-V" (built-in RISC-V; [verified](#evidence-codes)). The S and RB datasheets both list "Integrated RISC-V microprocessor", the `DIS_MCU` strap, SPI flash, two UARTs and two JTAG groups ([verified](#evidence-codes)).
 
 ### The newest datasheet has no JTAG
 
@@ -219,7 +219,7 @@ Table 25 of [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_
 | 0 | 1 | 0 | X | X | EEPROM | Registers | [Verified](#evidence-codes) |
 | 0 | 1 | 1 | X | X | SPI flash | RAM | [Conflicting](#evidence-codes) |
 
-X means the strap level does not matter. Every other strap combination loads nothing ("No Action" in the datasheet). The row marked ([conflicting](#evidence-codes)) is as printed: it loads RAM from flash with the MCU disabled, which makes no sense as written.
+X means the strap level does not matter. Every other strap combination loads nothing ("No Action" in the datasheet). The row marked [conflicting](#evidence-codes) is as printed: it loads RAM from flash with the MCU disabled, which makes no sense as written.
 
 ## YT9215RB
 

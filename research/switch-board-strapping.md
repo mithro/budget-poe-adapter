@@ -125,7 +125,7 @@ each pair sharing one signal on its inner pads with the outer pads on two rails,
 each one. The resistors are unmarked, so their value is not known. The datasheet's typical value is
 [4.7 kΩ, page 40](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=40).
 
-Inferred (tag <a href="#tag-i">Inferred</a>), with the reasons:
+<a href="#tag-i">Inferred</a>, with the reasons:
 
 - <a id="lx-inference-pin-order"></a>**Pin order.** The YT9215SCH has exactly nine latched strap pins on the LED side
   (<a href="#lx-pin-70">70</a>, <a href="#lx-pin-71">71</a>, <a href="#lx-pin-74">74</a>, <a href="#lx-pin-75">75</a>, <a href="#lx-pin-76">76</a>, <a href="#lx-pin-77">77</a>, <a href="#lx-pin-80">80</a>, <a href="#lx-pin-83">83</a>, <a href="#lx-pin-85">85</a>), and the array has exactly nine pairs, so the pairs are assigned to the nine pins

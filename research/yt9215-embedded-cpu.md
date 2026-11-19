@@ -17,7 +17,7 @@ Statements that rest on a source carry one of these evidence marks:
 
 | Mark | Meaning |
 |---|---|
-| Verified | Read directly in a cited source: a datasheet, the Linux source or a vendor page |
+| Verified | Read directly in a cited source |
 | Inferred | A judgement from family similarity or general knowledge |
 | Partly inferred | Part read in a cited source and part inferred |
 | Conflicting | The source contradicts itself |
@@ -117,7 +117,7 @@ The memory map is not published.
   XIP means the code is executed in place from the flash and nothing is copied. The
   datasheet's figure "Load From Flash To RAM" draws the same strap levels as the third
   row, so the datasheet gives that combination twice. The row is marked
-  ([conflicting](#evidence-codes)) because it has `DIS_MCU` high, and the description of the
+  [conflicting](#evidence-codes) because it has `DIS_MCU` high, and the description of the
   `DIS_MCU` pin says a pull-up disables the CPU.
 - On the YT9215S, the chip-select pin of the second flash pin group is also the
   `DISAUTOLOAD` strap, so the usual pull-up on chip select would latch `DISAUTOLOAD`

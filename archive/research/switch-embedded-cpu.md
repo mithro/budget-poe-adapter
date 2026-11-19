@@ -11,7 +11,7 @@ Each statement carries one of these evidence marks:
 
 | Mark | Meaning |
 |---|---|
-| Verified | Read directly in a cited source: a datasheet, GPL source, the Linux source or a mailing list |
+| Verified | Read directly in a cited source |
 | Derived | Worked out by static disassembly of a GPL-published 8051 blob (Keil C51 output) |
 | Inferred | A judgement from family similarity or general knowledge |
 | Verified and derived | Read in a cited source and also derived from the disassembly |
@@ -32,7 +32,7 @@ The bytes of the disassembled blob were read but not run. Treat a derived statem
   - The YT9215SC datasheet shows two JTAG pin groups, two UARTs, I²C and MDIO masters and an SPI flash port ([verified](#evidence-codes)).
   - Clock, memory sizes, boot format and SDK are all unpublished. No firmware dumps or community work exist. Linux only knows it as "MCU port 10" ([verified](#evidence-codes)).
   - Using it would mean bring-up from scratch through JTAG.
-- **RTL8363NB: no usable CPU. Confirmed.** ([verified](#evidence-codes))
+- **RTL8363NB: no usable CPU** ([verified](#evidence-codes)).
   - Its datasheet never mentions an 8051 and has no DIS_8051, SPI-flash or UART pins. Its only CPU references are to an *external* CPU.
   - It does belong to the same RTL8367C register family, so a dormant DW8051 on the die can't be ruled out ([inferred](#evidence-codes)). Even then it could only be loaded by an external host over SMI, so it is useless here.
 - **Recommendation: keep the external MCU.**
@@ -144,7 +144,7 @@ A dash means not applicable or not stated.
 
 ### Identity and memory
 
-- **Core.** ([verified](#evidence-codes))
+- **Core** ([verified](#evidence-codes)).
   - The datasheet feature list says "Integrated 8051 microprocessor", and the block diagram shows a "GNIC 8051" block ([RTL8367S-CG datasheet mirror](https://www.framboise314.fr/wp-content/uploads/2021/06/RTL8367S-CG_Datasheet.pdf)).
   - The Linux SGMII patch series and Realtek's own register names call it a **DW8051**:
     - `RTL8367C_REG_DW8051_RDY` 0x1336;
@@ -152,7 +152,7 @@ A dash means not applicable or not stated.
     - `DW8051_RST` in 0x1322;
     - `DW8051_PRO_REG0..7` 0x13A0–0x13A7;
     - `DW8051_INT_CPU` 0x111A.
-- **DW8051 core, from the Synopsys datasheet hosted by Keil** ([verified](#evidence-codes)) ([dw8051_ds.pdf](https://www.keil.com/dd/docs/datashts/synopsys/dw8051_ds.pdf)):
+- **DW8051 core, from the Synopsys datasheet hosted by Keil** ([dw8051_ds.pdf](https://www.keil.com/dd/docs/datashts/synopsys/dw8051_ds.pdf); [verified](#evidence-codes)):
   - 4 clocks per instruction cycle against 12 on a classic 8051, about 2.4× faster on average at the same clock;
   - 0–64 KB program ROM outside the core;
   - 128 or 256 B internal RAM;
@@ -160,13 +160,13 @@ A dash means not applicable or not stated.
   - 6 or 13 interrupt sources;
   - dual DPTR and MOVX stretch;
   - an external SFR bus for custom peripherals.
-- **Instruction memory.** ([verified](#evidence-codes))
+- **Instruction memory** ([verified](#evidence-codes)).
   - The vendor driver maps the "lower bank of the instruction ROM" into switch-register space at 0xE000–0xFFFF, which is an 8 KB window (`RTL8365MB_IROM_SIZE 0x2000` in the Linux v2 patch).
   - `IROM_MSB` (0x1336 bits 3:2, a 2-bit field) selects the page.
   - The RTL8370 IROM loader Yakigani switches page when the address reaches 0x2000.
   - So the IROM holds at least 16 KB, and probably 32 KB with four pages ([inferred](#evidence-codes)). That would match the "32K-byte EEPROM" autoload and the EEPROM → "8051 Instruction Memory" boot path.
   - It is RAM, written at every boot ([verified](#evidence-codes)).
-- **Clock.** ([derived](#evidence-codes))
+- **Clock** ([derived](#evidence-codes)).
   - The vendor `Sgmii_Init` program reads register 0x1336, extracts bits 6:4 (`DW8051_RATE`) and picks a CPU frequency for its timer maths:
     - 0 → 200 MHz;
     - 1 → 125 MHz;
@@ -176,7 +176,7 @@ A dash means not applicable or not stated.
   - These are 32-bit constants 0x0BEBC200, 0x07735940, 0x05F5E100, 0x03B9ACA0 and 0x013D6200, divided by 12 × 200 to get a 5 ms Timer 0 tick.
   - The reset default of DW8051_RATE is unknown.
   - For comparison, RTLPlayground runs the RTL837x 8051 at 125 MHz ([rtlplayground.c](https://github.com/logicog/RTLPlayground)).
-- **XDATA.** ([derived](#evidence-codes)) The blob keeps counters in XDATA at 0x0624–0x0630, so there is at least about 1.6 KB of XDATA RAM. The real size is unknown. The RTL837x has 64 KB ([verified](#evidence-codes)), but that is a newer chip.
+- **XDATA** ([derived](#evidence-codes)). The blob keeps counters in XDATA at 0x0624–0x0630, so there is at least about 1.6 KB of XDATA RAM. The real size is unknown. The RTL837x has 64 KB ([verified](#evidence-codes)), but that is a newer chip.
 
 ### Boot flow
 
@@ -207,14 +207,14 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
 
 ### What the 8051 can reach
 
-- **Switch registers via the SFR bus.** ([derived](#evidence-codes)) The blob's register-access routines are:
+- **Switch registers via the SFR bus** ([derived](#evidence-codes)). The blob's register-access routines are:
   - read: `CLR EA; MOV 0xA2,addrH; MOV 0xA3,addrL; MOV 0xA0,#1; NOP×11; wait until SFR 0xA1 == 0; data = 0xA6:0xA7; SETB EA`;
   - write: address to 0xA2 and 0xA3, data to 0xA4 and 0xA5, `MOV 0xA0,#3`, poll 0xA1.
 
   This is the same scheme RTLPlayground uses on the RTL837x (`SFR_EXEC_GO` 0xA0 with 1 = read and 3 = write, `SFR_EXEC_STATUS` 0xA1, address 0xA2 and 0xA3, data 0xA4–0xA7; see [rtl837x_sfr.h](https://github.com/logicog/RTLPlayground)). RTLPlayground's register-access layer should therefore port almost directly ([inferred](#evidence-codes)).
 
   The blob also touches CKCON (0x8E), which is DW8051-specific, plus Timer 0 and the interrupt registers.
-- **Internal NIC.** ([verified](#evidence-codes)) Registers 0x1A04–0x1A5C (`nic_reg`, in the GPL [rtl8367c_reg.h](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c)) cover:
+- **Internal NIC** ([verified](#evidence-codes)). Registers 0x1A04–0x1A5C (`nic_reg`, in the GPL [rtl8367c_reg.h](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c)) cover:
   - RX and TX ring and buffer pointers;
   - RX and TX command;
   - interrupt mask and status;
@@ -223,7 +223,7 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
   - multicast hash.
 
   MISC_CFG0 has `NIC_ENABLE` and CHIP_RESET has `NIC_RST`. How packets reach 8051 memory (DMA into XDATA, or register windows) is **not documented** ([inferred](#evidence-codes)). By analogy with the RTL837x, it is probably a ring buffer copied with an SFR-triggered DMA.
-- **Interrupts to the 8051.** ([verified](#evidence-codes)) `INTR_IMR_8051` (0x1118) covers:
+- **Interrupts to the 8051** ([verified](#evidence-codes)). `INTR_IMR_8051` (0x1118) covers:
   - link change;
   - meter exceeded;
   - learn-over;
@@ -237,13 +237,13 @@ The boot path is set by three straps, per datasheet §7.5 and Table 8:
   - ACL action.
 
   There are also per-port link-up and link-down indicators for the 8051 and a thermal interrupt. RLDP (Realtek loop detection) can be handed to the 8051 (`rtl8367c_setAsicRldpEnable8051`).
-- **GPIO, I²C, UART, LEDs.** ([verified](#evidence-codes))
+- **GPIO, I²C, UART, LEDs** ([verified](#evidence-codes)).
   - GPIO: `EN_GPIO`, `CTRL_GPIO`, `SEL_GPIO` and `STATUS_GPIO` at 0x1350 and 0x13C7–0x13C9.
   - I²C master: register-level, on GPIO pin groups, about 252 kHz by default (`rtk_i2c_init`, `I2C_CTRL` 0x1374, `I2C_CLOCK_DIV` 0x130A).
   - UART: enable bits in the register map.
   - LEDs: CPU-forced LED registers at 0x1B07+.
   - So the 8051 could drive an I²C USB-PD controller or a PoE PD chip's status pins ([inferred](#evidence-codes)).
-- **Host mailbox.** ([verified](#evidence-codes)) `DW8051_PRO_REG0..7` (0x13A0–0x13A7) are scratch registers both sides can reach. Yakigani uses 0x13A4–0x13A7 to pass TFTP IP addresses to the RTL8370 boot loader.
+- **Host mailbox** ([verified](#evidence-codes)). `DW8051_PRO_REG0..7` (0x13A0–0x13A7) are scratch registers both sides can reach. Yakigani uses 0x13A4–0x13A7 to pass TFTP IP addresses to the RTL8370 boot loader.
 
 ### Performance
 
@@ -363,13 +363,13 @@ Evidence for this section: [inferred](#evidence-codes).
 
 ## RTL8363NB-VB: no CPU (confirmed)
 
-- **Datasheet.** ([verified](#evidence-codes)) [RTL8363NB-VB datasheet Rev 1.2, 2018, szlcsc copy](https://atta.szlcsc.com/upload/public/pdf/source/20240423/989DCAA6328F19215A910B22766A32D7.pdf):
+- **Datasheet** ([verified](#evidence-codes)). [RTL8363NB-VB datasheet Rev 1.2, 2018, szlcsc copy](https://atta.szlcsc.com/upload/public/pdf/source/20240423/989DCAA6328F19215A910B22766A32D7.pdf):
   - no mention of 8051, an embedded CPU, SPI flash, instruction memory or DIS_8051;
   - straps are only DISAUTOLOAD, SMI_SEL_1, SMI_SEL_0, MID29, EN_PHY and EN_SWR;
   - the only CPU text is "Slave I²C-like Interface … for external CPU";
   - the I²C *master* is described as "for EEPROM auto-download".
-- **Family.** ([verified](#evidence-codes)) Linux `rtl8365mb` lists RTL8363NB and RTL8363NB-VB in the same vendor family as RTL8367S ([rtl8365mb_main.c](https://github.com/torvalds/linux/blob/master/drivers/net/dsa/realtek/rtl8365mb_main.c)), so the register map includes the DW8051 control bits.
-- **Inference.** ([inferred](#evidence-codes)) A fused-off or unbonded DW8051 may exist on the die. Without flash, UART or DIS_8051 pins, though, it could only be loaded by our own MCU over SMI. That gains nothing and is untested.
+- **Family** ([verified](#evidence-codes)). Linux `rtl8365mb` lists RTL8363NB and RTL8363NB-VB in the same vendor family as RTL8367S ([rtl8365mb_main.c](https://github.com/torvalds/linux/blob/master/drivers/net/dsa/realtek/rtl8365mb_main.c)), so the register map includes the DW8051 control bits.
+- **A possible hidden core** ([inferred](#evidence-codes)). A fused-off or unbonded DW8051 may exist on the die. Without flash, UART or DIS_8051 pins, though, it could only be loaded by our own MCU over SMI. That gains nothing and is untested.
 
 ## Recommendation for the adapter
 

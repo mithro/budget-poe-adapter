@@ -73,9 +73,10 @@ external master.
 
 .. yt-bitfield:: INT_MBUS_CTRL
 
-The comments on the definitions of :field:`EXT_MBUS_CTRL.TYPE` in :lx:`mdio_bus.h:22` and of
-:field:`INT_MBUS_CTRL.OP` in :lx:`mdio_bus.h:25` read "wild guess", so the widths of the two
-fields are :ev:`inferred`. The two functions for the external master write :val:`EXT_MBUS_CTRL.TYPE.C22` for
+The comments on the definitions of the field TYPE in :lx:`mdio_bus.h:22` and of the field OP
+in :lx:`mdio_bus.h:25` read "wild guess". The two definitions serve both masters, so the
+widths of :field:`INT_MBUS_CTRL.TYPE`, :field:`INT_MBUS_CTRL.OP`, :field:`EXT_MBUS_CTRL.TYPE`
+and :field:`EXT_MBUS_CTRL.OP` are :ev:`inferred`. The two functions for the external master write :val:`EXT_MBUS_CTRL.TYPE.C22` for
 `clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ transfers. A
 :lx:`comment <mdio_bus.c:287>` in :lx:`yt921x_mbus_ext_init` reads "TODO: c45?", and no source
 describes a

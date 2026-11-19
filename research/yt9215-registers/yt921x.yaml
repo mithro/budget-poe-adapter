@@ -703,7 +703,8 @@ constants:
 enums:
 - name: speed
   title: Link speed codes
-  desc: Speed code used by every SPEED field.
+  desc: Speed code of :field:`PORT_CTRL.SPEED`, :field:`PORT_STATUS.SPEED`, :field:`SERDES.SPEED` and
+    :field:`MDIO_POLLING.SPEED`.
   linux:
     macro: enum yt921x_speed
     src:

@@ -63,7 +63,10 @@ The sequence is :ev:`confirmed` by :lx:`yt921x_fdb_add`, :lx:`yt921x_fdb_wait` a
      - none
 
 It is :ev:`not known` whether :val:`FDB_OP.OP.ADD` by key replaces an entry that has the same
-key. :lx:`yt921x_fdb_join` looks the entry up first and writes an existing entry back by its
+key. It is :ev:`inferred` from the name of :field:`FDB_RESULT.OVERWRITED` that the bit reports
+such a replacement, and the :ref:`vendor SDK <sources-list>` function
+`fal_tiger_l2_fdb_mcast_addr_add() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_l2.c#L132>`__
+adds by key without a lookup. :lx:`yt921x_fdb_join` looks the entry up first and writes an existing entry back by its
 index.
 :field:`FDB_OP.MODE_INDEX` decides whether :val:`FDB_OP.OP.GET_ONE` uses the key or the
 index.
@@ -197,7 +200,8 @@ To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put t
    :field:`NOTFOUND <FDB_RESULT.NOTFOUND>` or the index reaches 4095 (:const:`FDB_NUM` − 1).
 
 The three steps are :ev:`confirmed` by :lx:`yt921x_fdb_dump`, which reads each entry with
-:lx:`yt921x_fdb_read`.
+:lx:`yt921x_fdb_read`. That function also stops at a result whose
+:field:`FDB_OUT1.STATUS` is :val:`FDB_OUT1.STATUS.INVALID` or whose port mask is 0.
 
 .. warning::
 

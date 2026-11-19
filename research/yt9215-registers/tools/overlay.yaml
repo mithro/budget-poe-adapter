@@ -201,7 +201,7 @@ acl_layouts:
 enums:
   speed:
     title: Link speed codes
-    desc: Speed code used by every SPEED field.
+    desc: "Speed code of :field:`PORT_CTRL.SPEED`, :field:`PORT_STATUS.SPEED`, :field:`SERDES.SPEED` and :field:`MDIO_POLLING.SPEED`."
     values: {'10': 10 Mbit/s, '100': 100 Mbit/s, '1000': 1000 Mbit/s, '10000': 10000 Mbit/s, '2500': 2500 Mbit/s}
   app_selector:
     title: Priority sources

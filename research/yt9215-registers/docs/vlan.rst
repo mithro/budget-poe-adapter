@@ -146,7 +146,8 @@ VLAN table
 
 A basic VLAN needs two fields. :field:`VLAN_CTRL.PORTS` holds the member ports.
 :field:`VLAN_CTRL.UNTAG_PORTS` holds the members that send the frames of the VLAN without a
-tag. :lx:`yt921x_vlan_add` sets both and :lx:`yt921x_vlan_del` clears both. Include the
+tag. :lx:`yt921x_vlan_add` sets the bit of the port in :field:`VLAN_CTRL.PORTS` and sets or
+clears its bit in :field:`VLAN_CTRL.UNTAG_PORTS`, and :lx:`yt921x_vlan_del` clears both. Include the
 :ref:`CPU port <cpu-tag-port>` in the members if the host is to see the VLAN. The entry is
 two words. Write the low word first, as :ref:`access-wide` explains.
 

@@ -52,8 +52,8 @@ that function also clears :field:`SERDES.LINK` and :field:`XMII.LINK`.
 Forcing is the :ev:`confirmed` way for a port with a built-in PHY. The Linux kernel watches
 the PHY and, on a link change, :lx:`yt921x_port_up` writes the negotiated speed, duplex and
 pause into :reg:`PORT_CTRL`. That function sets :field:`PORT_CTRL.LINK_AN` only for a SerDes
-with in-band status. Both bits are :ev:`confirmed` for a SerDes by :lx:`yt921x_serdes_config`. It is
-:ev:`inferred` from their names that the two bits also make a copper port follow its built-in
+with in-band status. :field:`PORT_CTRL.LINK_AN` and :field:`PORT_CTRL.PAUSE_AN` are :ev:`confirmed` for a SerDes by
+:lx:`yt921x_serdes_config`. It is :ev:`inferred` from their names that the two bits also make a copper port follow its built-in
 PHY.
 
 .. tab-set::

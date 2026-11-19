@@ -98,8 +98,10 @@ What a driver has to do
      - Read counters
      - :doc:`mib`
 
-Steps 1 to 5 and step 7 are needed for any traffic to pass. Step 6 applies to a part that
-uses port 8 or port 9, and steps 8 to 11 are needed only for the function they name.
+Step 3 is
+needed for the counters, the ACL and the meters, step 4 for a host that sends and receives
+frames through the switch, step 6 for a part that uses port 8 or port 9, and steps 8 to 11
+only for the function they name.
 
 .. _overview-init:
 

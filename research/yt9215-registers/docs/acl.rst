@@ -179,8 +179,19 @@ A block is changed as a whole: open it, write the new content, and commit. It is
 :ev:`inferred` from the names :field:`ACL_BLK_CMD.MODIFY` and :field:`ACL_BLK_KEEP.KEEP` that the switch keeps using the old content
 until the commit.
 
-.. yt-diagram:: acl-sequence
-   :caption: Writing one rule into a block.
+.. wavedrom::
+   :caption: Writing one rule into a block. Time runs from left to right, and the host writes
+             every register.
+
+   {"signal": [
+     {"name": "Register", "period": 0.5, "wave": "=...=.....=...=....=......=....=.....",
+      "data": ["ACL_ACT", "ACL_BLK_CMD", "ACL_KEY", "ACL_MASK", "ACL_BLK_KEEP", "ACL_ENTRY",
+               "ACL_BLK_CMD"]},
+     {"name": "Value", "period": 0.5, "wave": "=...=.....=...=....=......=....=.....",
+      "data": ["action", "MODIFY = 1", "keys", "masks", "KEEP", "EN, GRPID", "MODIFY = 0"]},
+     {"name": "Block", "period": 0.5, "wave": "=.........4....................=.....",
+      "data": ["closed", "open", "commit"]}
+   ]}
 
 1. Write the three words of the rule's :reg:`ACL_ACT` entry.
 2. Write :reg:`ACL_BLK_CMD` with the block number and :field:`ACL_BLK_CMD.MODIFY` set.

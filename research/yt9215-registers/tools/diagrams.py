@@ -1,10 +1,10 @@
-"""Draw the block, sequence and frame diagrams of the documentation as SVG.
+"""Draw the block diagrams and the address map of the documentation as SVG.
 
 Every function returns one ``<svg>`` element as text. The drawings use CSS
 classes only; the colours come from ``docs/_static/yt921x.css`` when the SVG
 is placed inline in a page, or from :data:`STYLE` when it is saved as a file.
-Boxes can carry a link. WaveDrom draws the register and timing diagrams,
-through ``wavedrom_diagrams.py``.
+Boxes can carry a link. WaveDrom draws the register, timing, sequence and
+frame diagrams, through ``wavedrom_diagrams.py``.
 """
 from html import escape
 
@@ -22,7 +22,6 @@ STYLE = """
 .yt-d .yt-sp{fill:#fdf1dc}
 .yt-d .yt-rsv{fill:#eceef1}
 .yt-d .yt-ln{stroke:#4b5563;stroke-width:1;fill:none}
-.yt-d .yt-dash{stroke:#9aa3af;stroke-width:1;stroke-dasharray:4 3;fill:none}
 .yt-d .yt-fill{fill:#4b5563}
 """
 
@@ -82,88 +81,6 @@ class Svg:
                 'aria-label="%s">%s%s</svg>'
                 % (ns, self.w, self.h, self.w, self.h, escape(self.label, quote=True), style,
                    "".join(self.out)))
-
-
-# ------------------------------------------------------- strips of labelled boxes
-
-def strip(label, rows, width=748):
-    """Rows of labelled boxes with widths in proportion to their units.
-
-    Each row is ``(row label, [cell, ...])``; a cell is a dict with ``units``,
-    ``title`` and optionally ``sub`` (second line), ``top`` (small text above
-    the box), ``cls``, ``href`` and ``tip``.
-    """
-    left = max([tw(r[0]) for r in rows] + [0])
-    left = left + 12 if left else 0
-    row_h = 0
-    for _, cells in rows:
-        row_h = max(row_h, 18 + (46 if any(c.get("sub") for c in cells) else 32) + 10)
-    s = Svg(width, row_h * len(rows) + 2, label)
-    y = 2
-    for name, cells in rows:
-        total = sum(c["units"] for c in cells)
-        scale = (width - left - 2) / total
-        box_h = row_h - 28
-        if name:
-            s.text(0, y + 18 + box_h / 2 + 5, name, "yt-b", "start")
-        x = left + 1
-        for c in cells:
-            w = c["units"] * scale
-            if c.get("href"):
-                s.open_link(c["href"], c.get("tip"))
-            s.rect(x, y + 18, w, box_h, "yt-box " + c.get("cls", ""))
-            if c.get("sub"):
-                s.text(x + w / 2, y + 18 + box_h / 2 - 3, c["title"], "yt-b")
-                s.text(x + w / 2, y + 18 + box_h / 2 + 14, c["sub"], "yt-s")
-            else:
-                s.text(x + w / 2, y + 18 + box_h / 2 + 5, c["title"], "yt-b")
-            if c.get("href"):
-                s.close_link()
-            if c.get("top"):
-                s.text(x + w / 2, y + 13, c["top"], "yt-s")
-            x += w
-        y += row_h
-    return s
-
-
-# ------------------------------------------------------------ sequence diagrams
-
-def sequence(label, actors, steps, width=748):
-    """Message sequence between actors.
-
-    ``steps`` holds ``(from, to, text)`` messages, ``("note", actor, text)``
-    notes on one lifeline and ``("box", text)`` separators that span all
-    lifelines. Actors are named by their index.
-    """
-    n = len(actors)
-    margin = 70
-    xs = [margin + i * (width - 2 * margin) / max(n - 1, 1) for i in range(n)]
-    step_h = 34
-    height = 34 + step_h * len(steps) + 14
-    s = Svg(width, height, label)
-    for x, a in zip(xs, actors):
-        w = tw(a) + 18
-        s.line(x, 26, x, height - 4, "yt-dash")
-        s.rect(x - w / 2, 2, w, 24, "yt-box", 3)
-        s.text(x, 18, a, "yt-b")
-    y = 34
-    for st in steps:
-        mid = y + step_h / 2
-        if st[0] == "note":
-            _, actor, text = st
-            w = tw(text) + 14
-            x = min(max(xs[actor] - w / 2, 1), width - w - 1)
-            s.rect(x, mid - 11, w, 22, "yt-box yt-sp", 3)
-            s.text(x + w / 2, mid + 4, text)
-        elif st[0] == "box":
-            s.rect(1, mid - 11, width - 2, 22, "yt-box yt-rsv", 3)
-            s.text(width / 2, mid + 4, st[1], "yt-b")
-        else:
-            a, b, text = st
-            s.arrow(xs[a], mid + 6, xs[b], mid + 6)
-            s.text((xs[a] + xs[b]) / 2, mid, text)
-        y += step_h
-    return s
 
 
 # ------------------------------------------------------------------ pipelines

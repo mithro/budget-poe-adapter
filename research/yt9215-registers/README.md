@@ -16,7 +16,7 @@ register. No part of the manual or the code has been run on a YT921x.
 The manual is a Sphinx project and reads best when built. `make docs` builds it, and
 [Read the Docs](https://about.readthedocs.com/) builds it with the [`.readthedocs.yaml`](../../.readthedocs.yaml) of this
 repository.
-[WaveDrom](https://wavedrom.com/) draws the register and timing diagrams during the build, so the build needs
+[WaveDrom](https://wavedrom.com/) draws the register, timing, sequence and frame diagrams during the build, so the build needs
 [Node.js](https://nodejs.org/) in addition to the Python packages of [`docs/requirements.txt`](../../docs/requirements.txt).
 The pages are also readable as source:
 

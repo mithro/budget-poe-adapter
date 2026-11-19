@@ -63,8 +63,27 @@ frame from the host, send 0. The layout of the four words is the header comment 
 :lx:`tag_yt921x.c:7`, and :lx:`yt921x_tag_xmit` writes 0 to word 1 with the comment that the
 VLAN tag is unrelated on transmit.
 
-.. yt-diagram:: tagged-frame
-   :caption: A frame on the CPU port and the four 16-bit words of the tag.
+.. wavedrom::
+   :caption: A frame on the CPU port. Bytes are sent from left to right.
+
+   {"signal": [
+     {"name": "Field", "period": 0.5, "wave": "=....=...4...=..=...=..",
+      "data": ["Destination", "Source", "CPU tag", "Type", "Payload", "FCS"]},
+     {"name": "Bytes", "period": 0.5, "wave": "=....=...4...=..=...=..",
+      "data": ["6", "6", "8", "2", "variable", "4"]}
+   ]}
+
+.. wavedrom::
+   :caption: The four 16-bit words of the CPU tag.
+
+   {"signal": [
+     {"name": "Tag bytes", "period": 0.5, "wave": "=....=...=......=......",
+      "data": ["0 and 1", "2 and 3", "4 and 5", "6 and 7"]},
+     {"name": "Word", "period": 0.5, "wave": "=....=...=......=......",
+      "data": ["EtherType", "word 1", "word 2", "word 3"]},
+     {"name": "Content", "period": 0.5, "wave": "=....=...=......=......",
+      "data": ["0x9988", "VLAN tag", "port, priority, code", "destination ports"]}
+   ]}
 
 .. _cpu-tag-rx:
 

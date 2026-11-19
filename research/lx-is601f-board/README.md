@@ -71,10 +71,10 @@ A ring with a number marks the via that the lead of that pin runs to.
 
 ## Source photos
 
-The three annotated images are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jpg), a close-up of
+The three annotated images of [U4](../motorcomm-debug-pins.md#lx-u4) are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jpg), a close-up of
 [U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
 
-[`photo-u4-wide.jpg`](photo-u4-wide.jpg) shows board A, which has the same layout. The crop below keeps
+[`photo-u4-wide.jpg`](photo-u4-wide.jpg) shows board A, which has the same layout. The crop under this paragraph keeps
 [U4](../motorcomm-debug-pins.md#lx-u4) and the parts beside it whose silkscreen names the pin table uses:
 [Y6](../motorcomm-debug-pins.md#lx-y6) and [R22](../motorcomm-debug-pins.md#lx-r22) above the chip, and
 [R44](../motorcomm-debug-pins.md#lx-r44), [R89](../motorcomm-debug-pins.md#lx-r89),
@@ -166,8 +166,8 @@ there anticlockwise as seen from the top, 32 to a side, and checked against thes
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [87](../motorcomm-debug-pins.md#sch-pin-87) |
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [88](../motorcomm-debug-pins.md#sch-pin-88) |
 
-Routing was traced from top-side photos only. Where the vias go on other layers, the
-strap levels, and what the far pads of [R44](../motorcomm-debug-pins.md#lx-r44), [R89](../motorcomm-debug-pins.md#lx-r89), [R92](../motorcomm-debug-pins.md#lx-r92) and [R93](../motorcomm-debug-pins.md#lx-r93) connect to are unknown.
+The debug pin routing is traced from top-side photos only. Where the vias go on other layers and what the far pads of [R44](../motorcomm-debug-pins.md#lx-r44), [R89](../motorcomm-debug-pins.md#lx-r89), [R92](../motorcomm-debug-pins.md#lx-r92) and [R93](../motorcomm-debug-pins.md#lx-r93) connect to are unknown.
+The strap levels are inferred from the bottom-side resistor array in [`../switch-board-strapping.md`](../switch-board-strapping.md#strap-resistor-array) and are not confirmed by a meter.
 
 ## Schematic
 

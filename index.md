@@ -8,14 +8,6 @@
 
 ```{toctree}
 :hidden:
-:caption: Power
-
-research/poe
-research/usb-c-pd
-```
-
-```{toctree}
-:hidden:
 :caption: YT9215 switch IC
 
 research/yt9215-embedded-cpu
@@ -39,6 +31,14 @@ research/lx-is601f-board/photos/README
 
 research/yt9215-registers/docs/index
 research/yt9215-registers/README
+```
+
+```{toctree}
+:hidden:
+:caption: Power
+
+research/poe
+research/usb-c-pd
 ```
 
 ```{toctree}

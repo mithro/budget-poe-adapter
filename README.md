@@ -20,19 +20,12 @@ The [Archive](#archive) group comes last and holds the notes that are not part o
 
 | Group | Question it answers |
 | --- | --- |
-| [Power](#power) | How does the adapter take PoE power and hand it on over USB-C? |
 | [YT9215 switch IC](#yt9215-switch-ic) | What is known about the YT9215 and the CPU inside it? |
 | [Switch boards](#switch-boards) | How are the two YT9215 switch boards built? |
 | [YT921x switch programming](#yt921x-switch-programming) | How is a YT921x switch programmed? |
+| [Power](#power) | How does the adapter take PoE power and hand it on over USB-C? |
 | [Datasheets](#datasheets) | Where are the vendor documents? |
 | [Archive](#archive) | Which notes belong to designs that the project no longer follows? |
-
-### Power
-
-| Document | Covers |
-| --- | --- |
-| [PoE powered device](research/poe.md) | PoE standards and negotiation for a software-driven powered device |
-| [USB-C power](research/usb-c-pd.md) | USB-C power standards with PD negotiation for a source that feeds a Raspberry Pi 5 |
 
 ### YT9215 switch IC
 
@@ -61,6 +54,13 @@ over to firmware on the YT9215 CPU is an open question in
 | --- | --- |
 | [YT921x switch programmer's guide](research/yt9215-registers/docs/index.rst) | Manual for writing a YT921x driver with a register reference |
 | [YT921x source files and build commands](research/yt9215-registers/README.md) | The files behind the manual with the commands that check them |
+
+### Power
+
+| Document | Covers |
+| --- | --- |
+| [PoE powered device](research/poe.md) | PoE standards and negotiation for a software-driven powered device |
+| [USB-C power](research/usb-c-pd.md) | USB-C power standards with PD negotiation for a source that feeds a Raspberry Pi 5 |
 
 ### Datasheets
 

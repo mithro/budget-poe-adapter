@@ -11,7 +11,7 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | 1 | Root: block diagram | [`lx-is601f.kicad_sch`](lx-is601f.kicad_sch) | [`1-root.png`](renders/1-root.png) | A3 |
 | 2 | Power input and 3.3 V buck | [`power.kicad_sch`](power.kicad_sch) | [`2-power.png`](renders/2-power.png) | A3 |
 | 3 | Switch IC YT9215SCH | [`switch.kicad_sch`](switch.kicad_sch) | [`3-switch.png`](renders/3-switch.png) | A2 |
-| 4 | Ports 1-4 (PoE): magnetics, ESD, RJ45 | [`ethernet_poe.kicad_sch`](ethernet_poe.kicad_sch) | [`4-ethernet-poe.png`](renders/4-ethernet-poe.png) | A3 |
+| 4 | Ports 1-4 with PoE | [`ethernet_poe.kicad_sch`](ethernet_poe.kicad_sch) | [`4-ethernet-poe.png`](renders/4-ethernet-poe.png) | A3 |
 | 5 | Port 5 uplink and SFP | [`uplink_sfp.kicad_sch`](uplink_sfp.kicad_sch) | [`5-uplink-sfp.png`](renders/5-uplink-sfp.png) | A3 |
 | 6 | PoE PSE module (daughterboard) | [`poe_module.kicad_sch`](poe_module.kicad_sch) | [`6-poe-module.png`](renders/6-poe-module.png) | A3 |
 | 7 | Port LEDs | [`leds.kicad_sch`](leds.kicad_sch) | [`7-leds.png`](renders/7-leds.png) | A3 |
@@ -34,13 +34,13 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | 3 | U4 unit D: supply pins |
 | 4 | G2401PR magnetics |
 | 4 | `05U` ESD arrays |
-| 4 | J1 as four units J1A-J1D |
+| 4 | J1 as four connectors J1A-J1D |
 | 4 | PoE centre taps |
 | 5 | DXFRM6 magnetics |
 | 5 | J3 uplink connector |
 | 5 | U12 SFP connector |
 | 6 | PIN1 header |
-| 6 | PoE PSE daughterboard with U1 `2184A` |
+| 6 | PoE PSE daughterboard with U201 `2184A` |
 | 7 | FX LED column |
 | 7 | POW LED column |
 | 7 | LED6 header |
@@ -54,9 +54,9 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | [`kisch.py`](kisch.py) | KiCad schematic file writer |
 | [`renders/`](renders/) | PNG of each sheet |
 
-Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. [`gen_schematic.py`](gen_schematic.py) generates every sheet and the CSV from one data model, exports KiCad's netlist and checks it against the model, then writes the PDF and the renders and checks that each render keeps a clear 10 mm margin. Edit the scripts, not the `.kicad_sch` files.
+Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. The two differ where the sheet draws a wire with no label, for example `VIN_P` is `Net-(D4-K)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF and the renders and checks that each render keeps a clear 10 mm margin. Edit the scripts, not the `.kicad_sch` files.
 
-Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. For the same reason the mainboard connectors are drawn with new references:
+Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. The mainboard connectors whose silkscreen name is not a reference are drawn as follows:
 
 | Silkscreen | Drawn as |
 |---|---|
@@ -80,9 +80,9 @@ Each image links to the full-size render.
 
 [![Sheet 3: Switch IC YT9215SCH](renders/3-switch.png)](renders/3-switch.png)
 
-### Sheet 4: Ports 1-4 (PoE): magnetics, ESD, RJ45
+### Sheet 4: Ports 1-4 with PoE
 
-[![Sheet 4: Ports 1-4 (PoE): magnetics, ESD, RJ45](renders/4-ethernet-poe.png)](renders/4-ethernet-poe.png)
+[![Sheet 4: Ports 1-4 with PoE](renders/4-ethernet-poe.png)](renders/4-ethernet-poe.png)
 
 ### Sheet 5: Port 5 uplink and SFP
 
@@ -107,7 +107,7 @@ Each image links to the full-size render.
 | **I** | Inferred | Datasheet |
 | **I** | Inferred | Part marking |
 | **I** | Inferred | Usual practice |
-| **U** | Unknown | Pin exists but its destination is not traced |
+| **U** | Unknown | Destination not traced |
 
 | Code | Wire colour | Wire style | Pin connections |
 |---|---|---|---|
@@ -116,6 +116,8 @@ Each image links to the full-size render.
 | **I** | Orange | Dashed | 237 |
 | **U** | Red | Dotted | 228 |
 | All | | | 572 |
+
+Buses, and the links between sheet symbols on the root sheet, are drawn grey and carry no confidence code; the code is on the wires they join.
 
 **No net is confirmed.** The photos are handheld and oblique, and inner layers are invisible, so continuity checks are needed before anything can be marked C.
 
@@ -133,7 +135,7 @@ A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered 
 - **Empty SPI-flash footprint U6** (SOP-8 or WSON-8) on the bottom, with R40, R94, R96, R98, R100, R102 and R109 next to it. Together with R44, R89, R92 and R93 on the SPF0 pins, the board looks designed to take a flash chip.
 - **ESD**: ED1–ED10, SOT-23-6 marked `05U`, two per copper port between U4 and the magnetics.
 - **LEDs**: a 6×2 array of 0603 LEDs, columns `FX` and `POW`, rows 1–6, with RJ7–RJ18 resistors. LED7 and LED8 sit next to an unpopulated 2×3 header `LED6` (with R68).
-- **Bottom edge under the RJ45s**: twelve SMB parts marked `CP06C` (D6, D8–D18, maybe bidirectional TVS), and 1206 capacitors (C16, C38, C55, C56, C60, C61, C62, C65, C71, C75 and C98 are readable) with 0603 resistors R15, R32, R67, R71 to R76 and R82 to R84. These are probably per-pair Bob-Smith terminations or PoE center-tap filtering (inferred).
+- **Bottom edge under the RJ45s**: twelve SMB parts marked `CP06C` (D6, D8–D18, maybe bidirectional TVS), and 1206 capacitors (C16, C38, C55, C56, C60, C61, C62, C65, C71, C75 and C98 are readable) with 0603 resistors R15, R32, R67, R71 to R76 and R82 to R84. These are probably per-pair Bob-Smith terminations or PoE centre-tap filtering (inferred).
 
 ## Port mapping (inferred from placement)
 
@@ -162,7 +164,7 @@ The SFP connector U12 has no magnetics and no ESD array. Which SerDes feeds it i
 - Which SerDes feeds the SFP, and where the SFP's I²C, LOS and TX_DISABLE pins go.
 - What the 8 PIN1 pins carry, and how the PoE module gets 48 V and ground.
 
-## Measurements and photos still needed
+## Measurements and photos needed
 
 ### Photos
 
@@ -176,17 +178,17 @@ These would let most I and U nets become V.
 
 ### Continuity checks (power off; a meter in beep mode)
 
-| Check | From part | From pin | To part | To pin | Answers |
+| Check | From part | From pin | To part | To pin | Settles |
 |---|---|---|---|---|---|
-| 1 | U10 | 6 | U4 | 91 | Is the EEPROM clock on SCL? |
-| 1 | U10 | 5 | U4 | 92 | Is the EEPROM data on SDA? |
-| 2 | U6 | 1 | R44 | Far end | Is U6 chip select on SPF0_CS? |
-| 2 | U6 | 2 | R89 | Far end | Is U6 data out on SPF0_SO? |
-| 2 | U6 | 5 | R92 | Far end | Is U6 data in on SPF0_SI? |
-| 2 | U6 | 6 | R93 | Far end | Is U6 clock on SPF0_SCK? |
-| 3 | PIN1 | 1–8 | J1 | Every pin | Which PoE pair each PIN1 pin feeds |
-| 3 | PIN1 | 1–8 | GND | Any | Which PIN1 pins are module ground |
-| 3 | PIN1 | 1–8 | VIN | Any | Which PIN1 pins are module power |
+| 1 | U10 | 6 | U4 | 91 | EEPROM clock pin |
+| 1 | U10 | 5 | U4 | 92 | EEPROM data pin |
+| 2 | U6 | 1 | R44 | Far end | U6 chip select net |
+| 2 | U6 | 2 | R89 | Far end | U6 data out net |
+| 2 | U6 | 5 | R92 | Far end | U6 data in net |
+| 2 | U6 | 6 | R93 | Far end | U6 clock net |
+| 3 | PIN1 | 1–8 | J1 | Every pin | PoE pair of each PIN1 pin |
+| 3 | PIN1 | 1–8 | GND | Any | Module ground pins |
+| 3 | PIN1 | 1–8 | VIN | Any | Module power pins |
 | 4 | U4 | 95 | DXFRM4 | Chip side | Port mapping of P0 |
 | 4 | U4 | 105 | DXFRM3 | Chip side | Port mapping of P1 |
 | 4 | U4 | 119 | DXFRM2 | Chip side | Port mapping of P2 |
@@ -194,16 +196,16 @@ These would let most I and U nets become V.
 | 4 | U4 | 19 | DXFRM6 | Chip side | Port mapping of P4 |
 | 5 | DXFRM2–5 | Line side | J1 | Every pin | G2401PR pinout |
 | 5 | DXFRM6 | Line side | J3 | Every pin | G2401PR pinout |
-| 6 | PL3 | Output | U4 | 10 | Is AVDDH the 3.3 V rail? |
-| 6 | L3 | Output | U4 | 13 | Is AVDDL the 1.15 V rail? |
+| 6 | PL3 | Output | U4 | 10 | AVDDH rail |
+| 6 | L3 | Output | U4 | 13 | AVDDL rail |
 | 7 | POWER2 | 1–2 | D1 | Both | Input polarity protection |
 | 7 | POWER2 | 1–2 | D4 | Both | Input polarity protection |
 | 7 | POWER2 | 1–2 | L1 | Both | Input filter |
 | 7 | POWER2 | 1–2 | RV1–RV3 | Both | Input surge protection |
-| 8 | U12 | 12 | U4 | 31–42 | Which SerDes receives RD- |
-| 8 | U12 | 13 | U4 | 31–42 | Which SerDes receives RD+ |
-| 8 | U12 | 18 | U4 | 31–42 | Which SerDes drives TD+ |
-| 8 | U12 | 19 | U4 | 31–42 | Which SerDes drives TD- |
+| 8 | U12 | 12 | U4 | 31–42 | SerDes for RD- |
+| 8 | U12 | 13 | U4 | 31–42 | SerDes for RD+ |
+| 8 | U12 | 18 | U4 | 31–42 | SerDes for TD+ |
+| 8 | U12 | 19 | U4 | 31–42 | SerDes for TD- |
 | 9 | RJ7–RJ18 | LED side | U4 | 67–85 | LED pin mapping |
 
 Check 8 may pass through AC-coupling capacitors, so probe both sides of any capacitor on the way.
@@ -212,34 +214,3 @@ Check 8 may pass through AC-coupling capacitors, so probe both sides of any capa
 
 - The voltage on TC1 (expect 3.3 V) and on L3's output side (expect about 1.15 V).
 - Read U10 with a CH341A and SOIC-8 clip (power the board off, or lift VCC) to get the EEPROM contents.
-
-## Photo index
-
-Photo numbers are positions in the album. Board A is the one whose U4 is marked `VKTP18287` and board B the one marked `VKJC09324`.
-
-| Subject | Side | First photo | Last photo |
-|---|---|---|---|
-| U4 area with crystal | Top | 01 | 01 |
-| U4 area with crystal | Top | 07 | 08 |
-| U4 area with crystal | Top | 10 | 18 |
-| U4 area with crystal | Top | 20 | 20 |
-| U4 area with crystal | Top | 23 | 23 |
-| Overview without the PoE module | Top | 02 | 02 |
-| Overview without the PoE module | Top | 06 | 06 |
-| Overview | Top | 03 | 05 |
-| Overview | Top | 33 | 34 |
-| Overview with the SFP cage | Top | 09 | 09 |
-| PU1 SCT2622 buck | Top | 19 | 19 |
-| SPF0 series-resistor column | Top | 19 | 19 |
-| J1 edge | Top | 21 | 22 |
-| PIN1 header holes | Top | 21 | 22 |
-| DXFRM3 | Top | 21 | 22 |
-| DXFRM4 | Top | 21 | 22 |
-| LED array | Top | 21 | 22 |
-| LED6 header | Top | 21 | 22 |
-| PoE module with U1 `2184A` in place | Top | 30 | 32 |
-| CP06C diodes | Bottom | 24 | 29 |
-| Bob-Smith resistors and capacitors | Bottom | 24 | 29 |
-| U10 24C08 | Bottom | 24 | 29 |
-| U6 footprint | Bottom | 24 | 29 |
-| EPAD screw | Bottom | 24 | 29 |

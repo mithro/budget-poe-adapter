@@ -252,7 +252,7 @@ These are the requirements. [`yt9215-usb-pd.md`](yt9215-usb-pd.md) maps them to 
 | VBUS monitor | Must detect | vSafe0V |
 | VBUS monitor | Implementation | Comparator with a divider |
 | VBUS current | Purpose | Over-current shutdown |
-| VBUS current | Required | Optional |
+| VBUS current | Required | When the offer must be enforced |
 | VBUS current | Implementation | Load switch with ILIM |
 | VCONN | Voltage | 5 V |
 | VCONN | Power | ≤ 1 W |

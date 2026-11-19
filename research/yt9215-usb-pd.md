@@ -26,7 +26,7 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 |---|---|---|---|---|---|
 | Resistor and attach comparator | No | Nothing, no PD | $0.03 | $0.03 | [No PD](#option-0) |
 | I²C PD transceiver | Yes | Transceiver chip | $0.44 | $0.51 | [Option A](#option-a) |
-| GPIO bit-bang | Yes | CPU timing loops | $0.32 | $0.52 | [Option B](#option-b) |
+| GPIO bit-bang | Yes | CPU timing loops | $0.29 | $0.49 | [Option B](#option-b) |
 | Port 9 MAC | Yes | Port 9 MAC | $0.32 | $0.52 | [Option C](#option-c) |
 
 The costs are the totals of the [cost table](#cost).
@@ -127,7 +127,7 @@ The USB-C side stays off until the PoE side has secured its power, by classifica
 |---|---|---|---|
 | PoE power not yet granted | Off | Off | None |
 | Power granted with no sink attached | On | Off | None |
-| Sink attached | On | On | Source_Capabilities, then the rest |
+| Sink attached | On | On | Source_Capabilities first |
 
 With Rp off and VBUS off, a sink sees an unpowered port and waits. This has four consequences for the hardware [**I**](#evidence-codes):
 
@@ -157,10 +157,11 @@ The current available at 5 V is the granted power times the efficiency, less the
 | 3 A to under 5 A | 12 kΩ and 7.5 kΩ | 5 V at the available current |
 | 5 A or more | 12 kΩ and 7.5 kΩ | 5 V at 5 A |
 
-- Below 3 A the port advertises by Rp alone. PD 3 uses the two Rp values for collision avoidance, so a PD source has to be able to show the 3 A value.
+- Below 3 A the port advertises by Rp alone. This is a design choice: PD is allowed there, but it gives a Raspberry Pi 5 nothing that Rp does not.
 - An offer above 3 A relies on the [captive cable](#captive-cable).
 - If an LLDP allocation changes while a sink is attached, the source sends a new Source_Capabilities message. If the new budget is below the running contract, the sink has to accept the lower offer before the adapter may count on it.
-- The source enforces the offer with the current limit of the VBUS load switch, because a sink is not bound by Rp.
+- A sink that ignores Rp or its contract is stopped only by a current limit on VBUS. The offer varies with the grant, so a fixed limit protects only the largest offer. Protecting the smaller ones needs a limit that firmware can select, because an overdraw makes the PoE switch cut the port.
+- How the classification result reaches the firmware is open [**U**](#evidence-codes). The YT9215 has no power during classification, so the PoE front end has to hold the result on status lines, or the firmware learns the allocation by LLDP.
 
 ## What the YT9215 offers
 
@@ -414,7 +415,7 @@ A variant takes the buffer enable from TXD3, pin 46, in place of TX_CTL [**I**](
 
 - TXD3 is 0 in every preamble nibble and 1 in the last nibble of the start-of-frame delimiter, so the buffer turns on 400 ns before the first PD bit, inside the 1 µs that PD allows.
 - The data bytes become `0xAA` for high and `0x88` for low, which hold TXD3 high through the message.
-- The tail has to keep TXD3 high and TXD1 low through the FCS. That is 16 conditions in place of 8, which uses all 16 free bits of a four-byte tail and leaves exactly one solution.
+- The tail has to keep TXD3 high and TXD1 low through the FCS. That is 16 conditions in place of 8, which uses all 16 free bits of a four-byte tail and leaves exactly one solution. Dropping TXD3 after the low hold, so that the buffer is off through the FCS, is the looser alternative.
 - Pin 46 has an internal pull-down as a strap, so the buffer is off at reset and the AND gate goes away, provided the board strap for `SWITCH_ID_1` is low.
 - The level of TXD3 between frames is not documented [**U**](#evidence-codes).
 
@@ -485,8 +486,10 @@ All figures are estimates for quantities of about 1,000 [**I**](#evidence-codes)
 | [Front end](#front-end) | Capacitor | 1 | $0.002 | $0.002 |
 | [Front end](#front-end) | SPI flash for firmware | 1 | $0.10 | $0.10 |
 | [Front end](#front-end) | **Total** | | **$0.32** | **$0.52** |
+| [B](#option-b) | Front end without the AND gate | | **$0.29** | **$0.49** |
+| [C](#option-c) | Whole front end | | **$0.32** | **$0.52** |
 
-Options B and C both use the front end, so its total is the cost of either. That total and the total of option A overlap: the front end is cheaper by up to $0.19 or dearer by up to $0.08. A receptacle in place of the [captive cable](#captive-cable) adds a second set of CC parts to the front end and nothing to option A.
+Option C uses the whole front end. Option B leaves out the AND gate and four resistors. Both totals overlap the total of option A: option C is cheaper by up to $0.19 or dearer by up to $0.08, and option B is cheaper by up to $0.22 or dearer by up to $0.05. A receptacle in place of the [captive cable](#captive-cable) adds a second set of CC parts to the front end and nothing to option A.
 
 <a id="fixed-function-chips"></a>
 

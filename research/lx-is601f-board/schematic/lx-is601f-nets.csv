@@ -1,547 +1,547 @@
 net,kicad_net,ref,pin,confidence,sheet
-(NC),unconnected-(U4C-NC-Pad116),U4,116,I,Switch IC YT9215SCH
-(NC),unconnected-(U4C-NC-Pad14),U4,14,I,Switch IC YT9215SCH
-(NC),unconnected-(U4C-NC-Pad15),U4,15,I,Switch IC YT9215SCH
-(no trace seen),unconnected-(U4C-GPIO6{slash}UART0_RX-Pad46),U4,46,V,Switch IC YT9215SCH
-(no trace seen),unconnected-(U4C-GPIO7{slash}UART0_TX-Pad47),U4,47,V,Switch IC YT9215SCH
-(no trace seen),unconnected-(U4C-GPIO41{slash}P1LED2{slash}SPF1_SI-Pad79),U4,79,V,Switch IC YT9215SCH
-(no trace seen),unconnected-(U4C-GPIO47{slash}SSPI_CS-Pad90),U4,90,V,Switch IC YT9215SCH
-+1V15,+1V15,L3,1,V,Switch IC YT9215SCH
-+1V15,+1V15,U4,109,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,115,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,123,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,13,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,17,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,23,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,33,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,40,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,5,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,58,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,69,I,Switch IC YT9215SCH
-+1V15,+1V15,U4,99,I,Switch IC YT9215SCH
-+3V3,+3V3,C23,1,I,Power input and 3.3 V buck
-+3V3,+3V3,C24,1,I,Power input and 3.3 V buck
-+3V3,+3V3,PL3,2,V,Power input and 3.3 V buck
-+3V3,+3V3,PR2,1,I,Power input and 3.3 V buck
-+3V3,+3V3,RJ10,2,U,Port LEDs
-+3V3,+3V3,RJ11,2,U,Port LEDs
-+3V3,+3V3,RJ12,2,U,Port LEDs
-+3V3,+3V3,RJ13,2,U,Port LEDs
-+3V3,+3V3,RJ14,2,U,Port LEDs
-+3V3,+3V3,RJ15,2,U,Port LEDs
-+3V3,+3V3,RJ16,2,U,Port LEDs
-+3V3,+3V3,RJ17,2,U,Port LEDs
-+3V3,+3V3,RJ18,2,U,Port LEDs
-+3V3,+3V3,RJ7,2,U,Port LEDs
-+3V3,+3V3,RJ8,2,U,Port LEDs
-+3V3,+3V3,RJ9,2,U,Port LEDs
-+3V3,+3V3,TC1,1,I,Power input and 3.3 V buck
-+3V3,+3V3,U10,8,I,Switch IC YT9215SCH
-+3V3,+3V3,U12,15,U,Port 5 uplink and SFP
-+3V3,+3V3,U12,16,U,Port 5 uplink and SFP
-+3V3,+3V3,U4,10,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,104,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,114,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,118,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,128,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,16,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,18,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,28,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,29,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,45,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,59,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,60,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,65,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,66,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,68,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,82,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,86,I,Switch IC YT9215SCH
-+3V3,+3V3,U4,94,I,Switch IC YT9215SCH
-+3V3,+3V3,U6,8,U,Switch IC YT9215SCH
-+48V,+48V,C1,1,I,Power input and 3.3 V buck
-+48V,+48V,C2,1,I,Power input and 3.3 V buck
-+48V,+48V,C3,1,I,Power input and 3.3 V buck
-+48V,+48V,C4,1,I,Power input and 3.3 V buck
-+48V,+48V,L2,2,I,Power input and 3.3 V buck
-+48V,+48V,PU1,2,I,Power input and 3.3 V buck
-+48V,+48V,R7,1,I,Power input and 3.3 V buck
-+48V,+48V,U201,?1,U,PoE PSE module (daughterboard)
-BUCK_BST,Net-(PU1-BOOT),PC6,1,I,Power input and 3.3 V buck
-BUCK_BST,Net-(PU1-BOOT),PU1,1,I,Power input and 3.3 V buck
-BUCK_EN,Net-(PU1-EN),PU1,3,I,Power input and 3.3 V buck
-BUCK_EN,Net-(PU1-EN),R7,2,I,Power input and 3.3 V buck
-BUCK_EN,Net-(PU1-EN),R8,1,I,Power input and 3.3 V buck
-BUCK_FB,/Power input and 3.3 V buck/BUCK_FB,PR2,2,I,Power input and 3.3 V buck
-BUCK_FB,/Power input and 3.3 V buck/BUCK_FB,PR3,1,I,Power input and 3.3 V buck
-BUCK_FB,/Power input and 3.3 V buck/BUCK_FB,PU1,5,I,Power input and 3.3 V buck
-BUCK_RT,Net-(PU1-RT),PR1,1,I,Power input and 3.3 V buck
-BUCK_RT,Net-(PU1-RT),PU1,4,I,Power input and 3.3 V buck
-BUCK_SW,Net-(D40-K),D40,1,I,Power input and 3.3 V buck
-BUCK_SW,Net-(D40-K),PC6,2,I,Power input and 3.3 V buck
-BUCK_SW,Net-(D40-K),PL3,1,V,Power input and 3.3 V buck
-BUCK_SW,Net-(D40-K),PU1,8,V,Power input and 3.3 V buck
-Earth_Protective,Earth_Protective,J101,SH,U,Ports 1-4 with PoE
-Earth_Protective,Earth_Protective,J102,SH,U,Ports 1-4 with PoE
-Earth_Protective,Earth_Protective,J103,SH,U,Ports 1-4 with PoE
-Earth_Protective,Earth_Protective,J104,SH,U,Ports 1-4 with PoE
-Earth_Protective,Earth_Protective,J3,SH,U,Port 5 uplink and SFP
-Earth_Protective,Earth_Protective,U12,CAGE,U,Port 5 uplink and SFP
-FL_CS,Net-(U6-~{CS}),R44,1,U,Switch IC YT9215SCH
-FL_CS,Net-(U6-~{CS}),U6,1,U,Switch IC YT9215SCH
-FL_SCK,Net-(U6-CLK),R93,1,U,Switch IC YT9215SCH
-FL_SCK,Net-(U6-CLK),U6,6,U,Switch IC YT9215SCH
-FL_SI,Net-(U6-DI(IO0)),R92,1,U,Switch IC YT9215SCH
-FL_SI,Net-(U6-DI(IO0)),U6,5,U,Switch IC YT9215SCH
-FL_SO,Net-(U6-DO(IO1)),R89,1,U,Switch IC YT9215SCH
-FL_SO,Net-(U6-DO(IO1)),U6,2,U,Switch IC YT9215SCH
-GND,GND,C1,2,I,Power input and 3.3 V buck
-GND,GND,C2,2,I,Power input and 3.3 V buck
-GND,GND,C23,2,I,Power input and 3.3 V buck
-GND,GND,C24,2,I,Power input and 3.3 V buck
-GND,GND,C3,2,I,Power input and 3.3 V buck
-GND,GND,C4,2,I,Power input and 3.3 V buck
-GND,GND,C43,2,V,Switch IC YT9215SCH
-GND,GND,C44,2,V,Switch IC YT9215SCH
-GND,GND,D40,2,I,Power input and 3.3 V buck
-GND,GND,ED1,2,I,Ports 1-4 with PoE
-GND,GND,ED10,2,I,Ports 1-4 with PoE
-GND,GND,ED2,2,I,Ports 1-4 with PoE
-GND,GND,ED3,2,I,Ports 1-4 with PoE
-GND,GND,ED4,2,I,Ports 1-4 with PoE
-GND,GND,ED5,2,I,Ports 1-4 with PoE
-GND,GND,ED6,2,I,Ports 1-4 with PoE
-GND,GND,ED7,2,I,Ports 1-4 with PoE
-GND,GND,ED8,2,I,Port 5 uplink and SFP
-GND,GND,ED9,2,I,Port 5 uplink and SFP
-GND,GND,J2,2,I,Power input and 3.3 V buck
-GND,GND,PR1,2,I,Power input and 3.3 V buck
-GND,GND,PR3,2,I,Power input and 3.3 V buck
-GND,GND,PU1,7,I,Power input and 3.3 V buck
-GND,GND,PU1,9,I,Power input and 3.3 V buck
-GND,GND,R8,2,I,Power input and 3.3 V buck
-GND,GND,RV1,2,U,Power input and 3.3 V buck
-GND,GND,RV2,2,U,Power input and 3.3 V buck
-GND,GND,RV3,2,U,Power input and 3.3 V buck
-GND,GND,TC1,2,I,Power input and 3.3 V buck
-GND,GND,U10,1,I,Switch IC YT9215SCH
-GND,GND,U10,2,I,Switch IC YT9215SCH
-GND,GND,U10,3,I,Switch IC YT9215SCH
-GND,GND,U10,4,I,Switch IC YT9215SCH
-GND,GND,U12,1,U,Port 5 uplink and SFP
-GND,GND,U12,10,U,Port 5 uplink and SFP
-GND,GND,U12,11,U,Port 5 uplink and SFP
-GND,GND,U12,14,U,Port 5 uplink and SFP
-GND,GND,U12,17,U,Port 5 uplink and SFP
-GND,GND,U12,20,U,Port 5 uplink and SFP
-GND,GND,U12,9,U,Port 5 uplink and SFP
-GND,GND,U201,?5,U,PoE PSE module (daughterboard)
-GND,GND,U4,11,I,Switch IC YT9215SCH
-GND,GND,U4,117,I,Switch IC YT9215SCH
-GND,GND,U4,129,I,Switch IC YT9215SCH
-GND,GND,U4,30,I,Switch IC YT9215SCH
-GND,GND,U4,36,I,Switch IC YT9215SCH
-GND,GND,U4,37,I,Switch IC YT9215SCH
-GND,GND,U4,43,I,Switch IC YT9215SCH
-GND,GND,U4,61,I,Switch IC YT9215SCH
-GND,GND,U4,62,I,Switch IC YT9215SCH
-GND,GND,U6,4,U,Switch IC YT9215SCH
-I2C_SCL,Net-(U10-SCL),U10,6,I,Switch IC YT9215SCH
-I2C_SCL,Net-(U10-SCL),U4,91,I,Switch IC YT9215SCH
-I2C_SDA,Net-(U10-SDA),U10,5,I,Switch IC YT9215SCH
-I2C_SDA,Net-(U10-SDA),U4,92,I,Switch IC YT9215SCH
-LED_P0,/Port LEDs/LED_P0,RJ17,1,I,Port LEDs
-LED_P0,/Port LEDs/LED_P0,U4,85,I,Switch IC YT9215SCH
-LED_P1,/Port LEDs/LED_P1,RJ15,1,I,Port LEDs
-LED_P1,/Port LEDs/LED_P1,U4,80,I,Switch IC YT9215SCH
-LED_P2,/Port LEDs/LED_P2,RJ13,1,I,Port LEDs
-LED_P2,/Port LEDs/LED_P2,U4,77,I,Switch IC YT9215SCH
-LED_P3,/Port LEDs/LED_P3,RJ11,1,I,Port LEDs
-LED_P3,/Port LEDs/LED_P3,U4,75,I,Switch IC YT9215SCH
-LED_P4,/Port LEDs/LED_P4,RJ9,1,I,Port LEDs
-LED_P4,/Port LEDs/LED_P4,U4,71,I,Switch IC YT9215SCH
-LED_P9,/Port LEDs/LED_P9,RJ7,1,I,Port LEDs
-LED_P9,/Port LEDs/LED_P9,U4,67,I,Switch IC YT9215SCH
-NRESET,/Switch IC YT9215SCH/NRESET,U4,89,U,Switch IC YT9215SCH
-P0_CT45,/Ports 1-4 with PoE/P0_CT45,DXFRM4,18,U,Ports 1-4 with PoE
-P0_CT78,/Ports 1-4 with PoE/P0_CT78,DXFRM4,15,U,Ports 1-4 with PoE
-P0_L1,/Ports 1-4 with PoE/P0_L1,DXFRM4,23,V,Ports 1-4 with PoE
-P0_L1,/Ports 1-4 with PoE/P0_L1,J101,1,V,Ports 1-4 with PoE
-P0_L2,/Ports 1-4 with PoE/P0_L2,DXFRM4,22,V,Ports 1-4 with PoE
-P0_L2,/Ports 1-4 with PoE/P0_L2,J101,2,V,Ports 1-4 with PoE
-P0_L3,/Ports 1-4 with PoE/P0_L3,DXFRM4,20,V,Ports 1-4 with PoE
-P0_L3,/Ports 1-4 with PoE/P0_L3,J101,3,V,Ports 1-4 with PoE
-P0_L4,/Ports 1-4 with PoE/P0_L4,DXFRM4,17,V,Ports 1-4 with PoE
-P0_L4,/Ports 1-4 with PoE/P0_L4,J101,4,V,Ports 1-4 with PoE
-P0_L5,/Ports 1-4 with PoE/P0_L5,DXFRM4,16,V,Ports 1-4 with PoE
-P0_L5,/Ports 1-4 with PoE/P0_L5,J101,5,V,Ports 1-4 with PoE
-P0_L6,/Ports 1-4 with PoE/P0_L6,DXFRM4,19,V,Ports 1-4 with PoE
-P0_L6,/Ports 1-4 with PoE/P0_L6,J101,6,V,Ports 1-4 with PoE
-P0_L7,/Ports 1-4 with PoE/P0_L7,DXFRM4,14,V,Ports 1-4 with PoE
-P0_L7,/Ports 1-4 with PoE/P0_L7,J101,7,V,Ports 1-4 with PoE
-P0_L8,/Ports 1-4 with PoE/P0_L8,DXFRM4,13,V,Ports 1-4 with PoE
-P0_L8,/Ports 1-4 with PoE/P0_L8,J101,8,V,Ports 1-4 with PoE
-P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,DXFRM4,2,I,Ports 1-4 with PoE
-P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,ED1,1,I,Ports 1-4 with PoE
-P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,U4,95,I,Switch IC YT9215SCH
-P0_MDI1,/Ports 1-4 with PoE/P0_MDI1,DXFRM4,3,I,Ports 1-4 with PoE
-P0_MDI1,/Ports 1-4 with PoE/P0_MDI1,ED1,3,I,Ports 1-4 with PoE
-P0_MDI1,/Ports 1-4 with PoE/P0_MDI1,U4,96,I,Switch IC YT9215SCH
-P0_MDI2,/Ports 1-4 with PoE/P0_MDI2,DXFRM4,5,I,Ports 1-4 with PoE
-P0_MDI2,/Ports 1-4 with PoE/P0_MDI2,ED1,4,I,Ports 1-4 with PoE
-P0_MDI2,/Ports 1-4 with PoE/P0_MDI2,U4,97,I,Switch IC YT9215SCH
-P0_MDI3,/Ports 1-4 with PoE/P0_MDI3,DXFRM4,6,I,Ports 1-4 with PoE
-P0_MDI3,/Ports 1-4 with PoE/P0_MDI3,ED1,6,I,Ports 1-4 with PoE
-P0_MDI3,/Ports 1-4 with PoE/P0_MDI3,U4,98,I,Switch IC YT9215SCH
-P0_MDI4,/Ports 1-4 with PoE/P0_MDI4,DXFRM4,8,I,Ports 1-4 with PoE
-P0_MDI4,/Ports 1-4 with PoE/P0_MDI4,ED10,1,I,Ports 1-4 with PoE
-P0_MDI4,/Ports 1-4 with PoE/P0_MDI4,U4,100,I,Switch IC YT9215SCH
-P0_MDI5,/Ports 1-4 with PoE/P0_MDI5,DXFRM4,9,I,Ports 1-4 with PoE
-P0_MDI5,/Ports 1-4 with PoE/P0_MDI5,ED10,3,I,Ports 1-4 with PoE
-P0_MDI5,/Ports 1-4 with PoE/P0_MDI5,U4,101,I,Switch IC YT9215SCH
-P0_MDI6,/Ports 1-4 with PoE/P0_MDI6,DXFRM4,11,I,Ports 1-4 with PoE
-P0_MDI6,/Ports 1-4 with PoE/P0_MDI6,ED10,4,I,Ports 1-4 with PoE
-P0_MDI6,/Ports 1-4 with PoE/P0_MDI6,U4,102,I,Switch IC YT9215SCH
-P0_MDI7,/Ports 1-4 with PoE/P0_MDI7,DXFRM4,12,I,Ports 1-4 with PoE
-P0_MDI7,/Ports 1-4 with PoE/P0_MDI7,ED10,6,I,Ports 1-4 with PoE
-P0_MDI7,/Ports 1-4 with PoE/P0_MDI7,U4,103,I,Switch IC YT9215SCH
-P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,1,U,Ports 1-4 with PoE
-P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,10,U,Ports 1-4 with PoE
-P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,4,U,Ports 1-4 with PoE
-P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,7,U,Ports 1-4 with PoE
-P1_CT45,/Ports 1-4 with PoE/P1_CT45,DXFRM3,18,U,Ports 1-4 with PoE
-P1_CT78,/Ports 1-4 with PoE/P1_CT78,DXFRM3,15,U,Ports 1-4 with PoE
-P1_L1,/Ports 1-4 with PoE/P1_L1,DXFRM3,23,V,Ports 1-4 with PoE
-P1_L1,/Ports 1-4 with PoE/P1_L1,J102,1,V,Ports 1-4 with PoE
-P1_L2,/Ports 1-4 with PoE/P1_L2,DXFRM3,22,V,Ports 1-4 with PoE
-P1_L2,/Ports 1-4 with PoE/P1_L2,J102,2,V,Ports 1-4 with PoE
-P1_L3,/Ports 1-4 with PoE/P1_L3,DXFRM3,20,V,Ports 1-4 with PoE
-P1_L3,/Ports 1-4 with PoE/P1_L3,J102,3,V,Ports 1-4 with PoE
-P1_L4,/Ports 1-4 with PoE/P1_L4,DXFRM3,17,V,Ports 1-4 with PoE
-P1_L4,/Ports 1-4 with PoE/P1_L4,J102,4,V,Ports 1-4 with PoE
-P1_L5,/Ports 1-4 with PoE/P1_L5,DXFRM3,16,V,Ports 1-4 with PoE
-P1_L5,/Ports 1-4 with PoE/P1_L5,J102,5,V,Ports 1-4 with PoE
-P1_L6,/Ports 1-4 with PoE/P1_L6,DXFRM3,19,V,Ports 1-4 with PoE
-P1_L6,/Ports 1-4 with PoE/P1_L6,J102,6,V,Ports 1-4 with PoE
-P1_L7,/Ports 1-4 with PoE/P1_L7,DXFRM3,14,V,Ports 1-4 with PoE
-P1_L7,/Ports 1-4 with PoE/P1_L7,J102,7,V,Ports 1-4 with PoE
-P1_L8,/Ports 1-4 with PoE/P1_L8,DXFRM3,13,V,Ports 1-4 with PoE
-P1_L8,/Ports 1-4 with PoE/P1_L8,J102,8,V,Ports 1-4 with PoE
-P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,DXFRM3,2,I,Ports 1-4 with PoE
-P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,ED2,1,I,Ports 1-4 with PoE
-P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,U4,105,I,Switch IC YT9215SCH
-P1_MDI1,/Ports 1-4 with PoE/P1_MDI1,DXFRM3,3,I,Ports 1-4 with PoE
-P1_MDI1,/Ports 1-4 with PoE/P1_MDI1,ED2,3,I,Ports 1-4 with PoE
-P1_MDI1,/Ports 1-4 with PoE/P1_MDI1,U4,106,I,Switch IC YT9215SCH
-P1_MDI2,/Ports 1-4 with PoE/P1_MDI2,DXFRM3,5,I,Ports 1-4 with PoE
-P1_MDI2,/Ports 1-4 with PoE/P1_MDI2,ED2,4,I,Ports 1-4 with PoE
-P1_MDI2,/Ports 1-4 with PoE/P1_MDI2,U4,107,I,Switch IC YT9215SCH
-P1_MDI3,/Ports 1-4 with PoE/P1_MDI3,DXFRM3,6,I,Ports 1-4 with PoE
-P1_MDI3,/Ports 1-4 with PoE/P1_MDI3,ED2,6,I,Ports 1-4 with PoE
-P1_MDI3,/Ports 1-4 with PoE/P1_MDI3,U4,108,I,Switch IC YT9215SCH
-P1_MDI4,/Ports 1-4 with PoE/P1_MDI4,DXFRM3,8,I,Ports 1-4 with PoE
-P1_MDI4,/Ports 1-4 with PoE/P1_MDI4,ED3,1,I,Ports 1-4 with PoE
-P1_MDI4,/Ports 1-4 with PoE/P1_MDI4,U4,110,I,Switch IC YT9215SCH
-P1_MDI5,/Ports 1-4 with PoE/P1_MDI5,DXFRM3,9,I,Ports 1-4 with PoE
-P1_MDI5,/Ports 1-4 with PoE/P1_MDI5,ED3,3,I,Ports 1-4 with PoE
-P1_MDI5,/Ports 1-4 with PoE/P1_MDI5,U4,111,I,Switch IC YT9215SCH
-P1_MDI6,/Ports 1-4 with PoE/P1_MDI6,DXFRM3,11,I,Ports 1-4 with PoE
-P1_MDI6,/Ports 1-4 with PoE/P1_MDI6,ED3,4,I,Ports 1-4 with PoE
-P1_MDI6,/Ports 1-4 with PoE/P1_MDI6,U4,112,I,Switch IC YT9215SCH
-P1_MDI7,/Ports 1-4 with PoE/P1_MDI7,DXFRM3,12,I,Ports 1-4 with PoE
-P1_MDI7,/Ports 1-4 with PoE/P1_MDI7,ED3,6,I,Ports 1-4 with PoE
-P1_MDI7,/Ports 1-4 with PoE/P1_MDI7,U4,113,I,Switch IC YT9215SCH
-P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,1,U,Ports 1-4 with PoE
-P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,10,U,Ports 1-4 with PoE
-P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,4,U,Ports 1-4 with PoE
-P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,7,U,Ports 1-4 with PoE
-P2_CT45,/Ports 1-4 with PoE/P2_CT45,DXFRM2,18,U,Ports 1-4 with PoE
-P2_CT78,/Ports 1-4 with PoE/P2_CT78,DXFRM2,15,U,Ports 1-4 with PoE
-P2_L1,/Ports 1-4 with PoE/P2_L1,DXFRM2,23,V,Ports 1-4 with PoE
-P2_L1,/Ports 1-4 with PoE/P2_L1,J103,1,V,Ports 1-4 with PoE
-P2_L2,/Ports 1-4 with PoE/P2_L2,DXFRM2,22,V,Ports 1-4 with PoE
-P2_L2,/Ports 1-4 with PoE/P2_L2,J103,2,V,Ports 1-4 with PoE
-P2_L3,/Ports 1-4 with PoE/P2_L3,DXFRM2,20,V,Ports 1-4 with PoE
-P2_L3,/Ports 1-4 with PoE/P2_L3,J103,3,V,Ports 1-4 with PoE
-P2_L4,/Ports 1-4 with PoE/P2_L4,DXFRM2,17,V,Ports 1-4 with PoE
-P2_L4,/Ports 1-4 with PoE/P2_L4,J103,4,V,Ports 1-4 with PoE
-P2_L5,/Ports 1-4 with PoE/P2_L5,DXFRM2,16,V,Ports 1-4 with PoE
-P2_L5,/Ports 1-4 with PoE/P2_L5,J103,5,V,Ports 1-4 with PoE
-P2_L6,/Ports 1-4 with PoE/P2_L6,DXFRM2,19,V,Ports 1-4 with PoE
-P2_L6,/Ports 1-4 with PoE/P2_L6,J103,6,V,Ports 1-4 with PoE
-P2_L7,/Ports 1-4 with PoE/P2_L7,DXFRM2,14,V,Ports 1-4 with PoE
-P2_L7,/Ports 1-4 with PoE/P2_L7,J103,7,V,Ports 1-4 with PoE
-P2_L8,/Ports 1-4 with PoE/P2_L8,DXFRM2,13,V,Ports 1-4 with PoE
-P2_L8,/Ports 1-4 with PoE/P2_L8,J103,8,V,Ports 1-4 with PoE
-P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,DXFRM2,2,I,Ports 1-4 with PoE
-P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,ED4,1,I,Ports 1-4 with PoE
-P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,U4,119,I,Switch IC YT9215SCH
-P2_MDI1,/Ports 1-4 with PoE/P2_MDI1,DXFRM2,3,I,Ports 1-4 with PoE
-P2_MDI1,/Ports 1-4 with PoE/P2_MDI1,ED4,3,I,Ports 1-4 with PoE
-P2_MDI1,/Ports 1-4 with PoE/P2_MDI1,U4,120,I,Switch IC YT9215SCH
-P2_MDI2,/Ports 1-4 with PoE/P2_MDI2,DXFRM2,5,I,Ports 1-4 with PoE
-P2_MDI2,/Ports 1-4 with PoE/P2_MDI2,ED4,4,I,Ports 1-4 with PoE
-P2_MDI2,/Ports 1-4 with PoE/P2_MDI2,U4,121,I,Switch IC YT9215SCH
-P2_MDI3,/Ports 1-4 with PoE/P2_MDI3,DXFRM2,6,I,Ports 1-4 with PoE
-P2_MDI3,/Ports 1-4 with PoE/P2_MDI3,ED4,6,I,Ports 1-4 with PoE
-P2_MDI3,/Ports 1-4 with PoE/P2_MDI3,U4,122,I,Switch IC YT9215SCH
-P2_MDI4,/Ports 1-4 with PoE/P2_MDI4,DXFRM2,8,I,Ports 1-4 with PoE
-P2_MDI4,/Ports 1-4 with PoE/P2_MDI4,ED5,1,I,Ports 1-4 with PoE
-P2_MDI4,/Ports 1-4 with PoE/P2_MDI4,U4,124,I,Switch IC YT9215SCH
-P2_MDI5,/Ports 1-4 with PoE/P2_MDI5,DXFRM2,9,I,Ports 1-4 with PoE
-P2_MDI5,/Ports 1-4 with PoE/P2_MDI5,ED5,3,I,Ports 1-4 with PoE
-P2_MDI5,/Ports 1-4 with PoE/P2_MDI5,U4,125,I,Switch IC YT9215SCH
-P2_MDI6,/Ports 1-4 with PoE/P2_MDI6,DXFRM2,11,I,Ports 1-4 with PoE
-P2_MDI6,/Ports 1-4 with PoE/P2_MDI6,ED5,4,I,Ports 1-4 with PoE
-P2_MDI6,/Ports 1-4 with PoE/P2_MDI6,U4,126,I,Switch IC YT9215SCH
-P2_MDI7,/Ports 1-4 with PoE/P2_MDI7,DXFRM2,12,I,Ports 1-4 with PoE
-P2_MDI7,/Ports 1-4 with PoE/P2_MDI7,ED5,6,I,Ports 1-4 with PoE
-P2_MDI7,/Ports 1-4 with PoE/P2_MDI7,U4,127,I,Switch IC YT9215SCH
-P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,1,U,Ports 1-4 with PoE
-P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,10,U,Ports 1-4 with PoE
-P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,4,U,Ports 1-4 with PoE
-P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,7,U,Ports 1-4 with PoE
-P3_CT45,/Ports 1-4 with PoE/P3_CT45,DXFRM5,18,U,Ports 1-4 with PoE
-P3_CT78,/Ports 1-4 with PoE/P3_CT78,DXFRM5,15,U,Ports 1-4 with PoE
-P3_L1,/Ports 1-4 with PoE/P3_L1,DXFRM5,23,V,Ports 1-4 with PoE
-P3_L1,/Ports 1-4 with PoE/P3_L1,J104,1,V,Ports 1-4 with PoE
-P3_L2,/Ports 1-4 with PoE/P3_L2,DXFRM5,22,V,Ports 1-4 with PoE
-P3_L2,/Ports 1-4 with PoE/P3_L2,J104,2,V,Ports 1-4 with PoE
-P3_L3,/Ports 1-4 with PoE/P3_L3,DXFRM5,20,V,Ports 1-4 with PoE
-P3_L3,/Ports 1-4 with PoE/P3_L3,J104,3,V,Ports 1-4 with PoE
-P3_L4,/Ports 1-4 with PoE/P3_L4,DXFRM5,17,V,Ports 1-4 with PoE
-P3_L4,/Ports 1-4 with PoE/P3_L4,J104,4,V,Ports 1-4 with PoE
-P3_L5,/Ports 1-4 with PoE/P3_L5,DXFRM5,16,V,Ports 1-4 with PoE
-P3_L5,/Ports 1-4 with PoE/P3_L5,J104,5,V,Ports 1-4 with PoE
-P3_L6,/Ports 1-4 with PoE/P3_L6,DXFRM5,19,V,Ports 1-4 with PoE
-P3_L6,/Ports 1-4 with PoE/P3_L6,J104,6,V,Ports 1-4 with PoE
-P3_L7,/Ports 1-4 with PoE/P3_L7,DXFRM5,14,V,Ports 1-4 with PoE
-P3_L7,/Ports 1-4 with PoE/P3_L7,J104,7,V,Ports 1-4 with PoE
-P3_L8,/Ports 1-4 with PoE/P3_L8,DXFRM5,13,V,Ports 1-4 with PoE
-P3_L8,/Ports 1-4 with PoE/P3_L8,J104,8,V,Ports 1-4 with PoE
-P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,DXFRM5,2,I,Ports 1-4 with PoE
-P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,ED6,1,I,Ports 1-4 with PoE
-P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,U4,1,I,Switch IC YT9215SCH
-P3_MDI1,/Ports 1-4 with PoE/P3_MDI1,DXFRM5,3,I,Ports 1-4 with PoE
-P3_MDI1,/Ports 1-4 with PoE/P3_MDI1,ED6,3,I,Ports 1-4 with PoE
-P3_MDI1,/Ports 1-4 with PoE/P3_MDI1,U4,2,I,Switch IC YT9215SCH
-P3_MDI2,/Ports 1-4 with PoE/P3_MDI2,DXFRM5,5,I,Ports 1-4 with PoE
-P3_MDI2,/Ports 1-4 with PoE/P3_MDI2,ED6,4,I,Ports 1-4 with PoE
-P3_MDI2,/Ports 1-4 with PoE/P3_MDI2,U4,3,I,Switch IC YT9215SCH
-P3_MDI3,/Ports 1-4 with PoE/P3_MDI3,DXFRM5,6,I,Ports 1-4 with PoE
-P3_MDI3,/Ports 1-4 with PoE/P3_MDI3,ED6,6,I,Ports 1-4 with PoE
-P3_MDI3,/Ports 1-4 with PoE/P3_MDI3,U4,4,I,Switch IC YT9215SCH
-P3_MDI4,/Ports 1-4 with PoE/P3_MDI4,DXFRM5,8,I,Ports 1-4 with PoE
-P3_MDI4,/Ports 1-4 with PoE/P3_MDI4,ED7,1,I,Ports 1-4 with PoE
-P3_MDI4,/Ports 1-4 with PoE/P3_MDI4,U4,6,I,Switch IC YT9215SCH
-P3_MDI5,/Ports 1-4 with PoE/P3_MDI5,DXFRM5,9,I,Ports 1-4 with PoE
-P3_MDI5,/Ports 1-4 with PoE/P3_MDI5,ED7,3,I,Ports 1-4 with PoE
-P3_MDI5,/Ports 1-4 with PoE/P3_MDI5,U4,7,I,Switch IC YT9215SCH
-P3_MDI6,/Ports 1-4 with PoE/P3_MDI6,DXFRM5,11,I,Ports 1-4 with PoE
-P3_MDI6,/Ports 1-4 with PoE/P3_MDI6,ED7,4,I,Ports 1-4 with PoE
-P3_MDI6,/Ports 1-4 with PoE/P3_MDI6,U4,8,I,Switch IC YT9215SCH
-P3_MDI7,/Ports 1-4 with PoE/P3_MDI7,DXFRM5,12,I,Ports 1-4 with PoE
-P3_MDI7,/Ports 1-4 with PoE/P3_MDI7,ED7,6,I,Ports 1-4 with PoE
-P3_MDI7,/Ports 1-4 with PoE/P3_MDI7,U4,9,I,Switch IC YT9215SCH
-P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,1,U,Ports 1-4 with PoE
-P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,10,U,Ports 1-4 with PoE
-P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,4,U,Ports 1-4 with PoE
-P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,7,U,Ports 1-4 with PoE
-P4_CT45,/Port 5 uplink and SFP/P4_CT45,DXFRM6,18,U,Port 5 uplink and SFP
-P4_CT78,/Port 5 uplink and SFP/P4_CT78,DXFRM6,15,U,Port 5 uplink and SFP
-P4_L1,/Port 5 uplink and SFP/P4_L1,DXFRM6,23,V,Port 5 uplink and SFP
-P4_L1,/Port 5 uplink and SFP/P4_L1,J3,1,V,Port 5 uplink and SFP
-P4_L2,/Port 5 uplink and SFP/P4_L2,DXFRM6,22,V,Port 5 uplink and SFP
-P4_L2,/Port 5 uplink and SFP/P4_L2,J3,2,V,Port 5 uplink and SFP
-P4_L3,/Port 5 uplink and SFP/P4_L3,DXFRM6,20,V,Port 5 uplink and SFP
-P4_L3,/Port 5 uplink and SFP/P4_L3,J3,3,V,Port 5 uplink and SFP
-P4_L4,/Port 5 uplink and SFP/P4_L4,DXFRM6,17,V,Port 5 uplink and SFP
-P4_L4,/Port 5 uplink and SFP/P4_L4,J3,4,V,Port 5 uplink and SFP
-P4_L5,/Port 5 uplink and SFP/P4_L5,DXFRM6,16,V,Port 5 uplink and SFP
-P4_L5,/Port 5 uplink and SFP/P4_L5,J3,5,V,Port 5 uplink and SFP
-P4_L6,/Port 5 uplink and SFP/P4_L6,DXFRM6,19,V,Port 5 uplink and SFP
-P4_L6,/Port 5 uplink and SFP/P4_L6,J3,6,V,Port 5 uplink and SFP
-P4_L7,/Port 5 uplink and SFP/P4_L7,DXFRM6,14,V,Port 5 uplink and SFP
-P4_L7,/Port 5 uplink and SFP/P4_L7,J3,7,V,Port 5 uplink and SFP
-P4_L8,/Port 5 uplink and SFP/P4_L8,DXFRM6,13,V,Port 5 uplink and SFP
-P4_L8,/Port 5 uplink and SFP/P4_L8,J3,8,V,Port 5 uplink and SFP
-P4_MDI0,/Port 5 uplink and SFP/P4_MDI0,DXFRM6,2,I,Port 5 uplink and SFP
-P4_MDI0,/Port 5 uplink and SFP/P4_MDI0,ED8,1,I,Port 5 uplink and SFP
-P4_MDI0,/Port 5 uplink and SFP/P4_MDI0,U4,19,I,Switch IC YT9215SCH
-P4_MDI1,/Port 5 uplink and SFP/P4_MDI1,DXFRM6,3,I,Port 5 uplink and SFP
-P4_MDI1,/Port 5 uplink and SFP/P4_MDI1,ED8,3,I,Port 5 uplink and SFP
-P4_MDI1,/Port 5 uplink and SFP/P4_MDI1,U4,20,I,Switch IC YT9215SCH
-P4_MDI2,/Port 5 uplink and SFP/P4_MDI2,DXFRM6,5,I,Port 5 uplink and SFP
-P4_MDI2,/Port 5 uplink and SFP/P4_MDI2,ED8,4,I,Port 5 uplink and SFP
-P4_MDI2,/Port 5 uplink and SFP/P4_MDI2,U4,21,I,Switch IC YT9215SCH
-P4_MDI3,/Port 5 uplink and SFP/P4_MDI3,DXFRM6,6,I,Port 5 uplink and SFP
-P4_MDI3,/Port 5 uplink and SFP/P4_MDI3,ED8,6,I,Port 5 uplink and SFP
-P4_MDI3,/Port 5 uplink and SFP/P4_MDI3,U4,22,I,Switch IC YT9215SCH
-P4_MDI4,/Port 5 uplink and SFP/P4_MDI4,DXFRM6,8,I,Port 5 uplink and SFP
-P4_MDI4,/Port 5 uplink and SFP/P4_MDI4,ED9,1,I,Port 5 uplink and SFP
-P4_MDI4,/Port 5 uplink and SFP/P4_MDI4,U4,24,I,Switch IC YT9215SCH
-P4_MDI5,/Port 5 uplink and SFP/P4_MDI5,DXFRM6,9,I,Port 5 uplink and SFP
-P4_MDI5,/Port 5 uplink and SFP/P4_MDI5,ED9,3,I,Port 5 uplink and SFP
-P4_MDI5,/Port 5 uplink and SFP/P4_MDI5,U4,25,I,Switch IC YT9215SCH
-P4_MDI6,/Port 5 uplink and SFP/P4_MDI6,DXFRM6,11,I,Port 5 uplink and SFP
-P4_MDI6,/Port 5 uplink and SFP/P4_MDI6,ED9,4,I,Port 5 uplink and SFP
-P4_MDI6,/Port 5 uplink and SFP/P4_MDI6,U4,26,I,Switch IC YT9215SCH
-P4_MDI7,/Port 5 uplink and SFP/P4_MDI7,DXFRM6,12,I,Port 5 uplink and SFP
-P4_MDI7,/Port 5 uplink and SFP/P4_MDI7,ED9,6,I,Port 5 uplink and SFP
-P4_MDI7,/Port 5 uplink and SFP/P4_MDI7,U4,27,I,Switch IC YT9215SCH
-P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,1,U,Port 5 uplink and SFP
-P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,10,U,Port 5 uplink and SFP
-P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,4,U,Port 5 uplink and SFP
-P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,7,U,Port 5 uplink and SFP
-POE1,/PoE PSE module (daughterboard)/POE1,DXFRM4,24,U,Ports 1-4 with PoE
-POE1,/PoE PSE module (daughterboard)/POE1,J4,1,U,PoE PSE module (daughterboard)
-POE10,/Port 5 uplink and SFP/POE10,DXFRM6,21,U,Port 5 uplink and SFP
-POE2,/PoE PSE module (daughterboard)/POE2,DXFRM4,21,U,Ports 1-4 with PoE
-POE2,/PoE PSE module (daughterboard)/POE2,J4,2,U,PoE PSE module (daughterboard)
-POE3,/PoE PSE module (daughterboard)/POE3,DXFRM3,24,U,Ports 1-4 with PoE
-POE3,/PoE PSE module (daughterboard)/POE3,J4,3,U,PoE PSE module (daughterboard)
-POE4,/PoE PSE module (daughterboard)/POE4,DXFRM3,21,U,Ports 1-4 with PoE
-POE4,/PoE PSE module (daughterboard)/POE4,J4,4,U,PoE PSE module (daughterboard)
-POE5,/PoE PSE module (daughterboard)/POE5,DXFRM2,24,U,Ports 1-4 with PoE
-POE5,/PoE PSE module (daughterboard)/POE5,J4,5,U,PoE PSE module (daughterboard)
-POE6,/PoE PSE module (daughterboard)/POE6,DXFRM2,21,U,Ports 1-4 with PoE
-POE6,/PoE PSE module (daughterboard)/POE6,J4,6,U,PoE PSE module (daughterboard)
-POE7,/PoE PSE module (daughterboard)/POE7,DXFRM5,24,U,Ports 1-4 with PoE
-POE7,/PoE PSE module (daughterboard)/POE7,J4,7,U,PoE PSE module (daughterboard)
-POE8,/PoE PSE module (daughterboard)/POE8,DXFRM5,21,U,Ports 1-4 with PoE
-POE8,/PoE PSE module (daughterboard)/POE8,J4,8,U,PoE PSE module (daughterboard)
-POE9,/Port 5 uplink and SFP/POE9,DXFRM6,24,U,Port 5 uplink and SFP
-POE_OUT1,/PoE PSE module (daughterboard)/POE_OUT1,D201,1,U,PoE PSE module (daughterboard)
-POE_OUT1,/PoE PSE module (daughterboard)/POE_OUT1,R203,1,U,PoE PSE module (daughterboard)
-POE_OUT1,/PoE PSE module (daughterboard)/POE_OUT1,U201,?10,U,PoE PSE module (daughterboard)
-POE_OUT2,/PoE PSE module (daughterboard)/POE_OUT2,D203,1,U,PoE PSE module (daughterboard)
-POE_OUT2,/PoE PSE module (daughterboard)/POE_OUT2,R209,1,U,PoE PSE module (daughterboard)
-POE_OUT2,/PoE PSE module (daughterboard)/POE_OUT2,U201,?20,U,PoE PSE module (daughterboard)
-POE_OUT3,/PoE PSE module (daughterboard)/POE_OUT3,D205,1,U,PoE PSE module (daughterboard)
-POE_OUT3,/PoE PSE module (daughterboard)/POE_OUT3,R210,1,U,PoE PSE module (daughterboard)
-POE_OUT3,/PoE PSE module (daughterboard)/POE_OUT3,U201,?30,U,PoE PSE module (daughterboard)
-POE_OUT4,/PoE PSE module (daughterboard)/POE_OUT4,D207,1,U,PoE PSE module (daughterboard)
-POE_OUT4,/PoE PSE module (daughterboard)/POE_OUT4,R211,1,U,PoE PSE module (daughterboard)
-POE_OUT4,/PoE PSE module (daughterboard)/POE_OUT4,U201,?40,U,PoE PSE module (daughterboard)
-POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R208,2,U,PoE PSE module (daughterboard)
-POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R212,2,U,PoE PSE module (daughterboard)
-POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R213,2,U,PoE PSE module (daughterboard)
-POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R214,2,U,PoE PSE module (daughterboard)
-POE_SNS1,Net-(U201-SENSE1),R208,1,U,PoE PSE module (daughterboard)
-POE_SNS1,Net-(U201-SENSE1),U201,?11,U,PoE PSE module (daughterboard)
-POE_SNS2,Net-(U201-SENSE2),R212,1,U,PoE PSE module (daughterboard)
-POE_SNS2,Net-(U201-SENSE2),U201,?21,U,PoE PSE module (daughterboard)
-POE_SNS3,Net-(U201-SENSE3),R213,1,U,PoE PSE module (daughterboard)
-POE_SNS3,Net-(U201-SENSE3),U201,?31,U,PoE PSE module (daughterboard)
-POE_SNS4,Net-(U201-SENSE4),R214,1,U,PoE PSE module (daughterboard)
-POE_SNS4,Net-(U201-SENSE4),U201,?41,U,PoE PSE module (daughterboard)
-RBIAS,/Switch IC YT9215SCH/RBIAS,U4,12,I,Switch IC YT9215SCH
-SDS0_RXN,/Port 5 uplink and SFP/SDS0_RXN,U12,12,U,Port 5 uplink and SFP
-SDS0_RXN,/Port 5 uplink and SFP/SDS0_RXN,U4,42,U,Switch IC YT9215SCH
-SDS0_RXP,/Port 5 uplink and SFP/SDS0_RXP,U12,13,U,Port 5 uplink and SFP
-SDS0_RXP,/Port 5 uplink and SFP/SDS0_RXP,U4,41,U,Switch IC YT9215SCH
-SDS0_TXN,/Port 5 uplink and SFP/SDS0_TXN,U12,19,U,Port 5 uplink and SFP
-SDS0_TXN,/Port 5 uplink and SFP/SDS0_TXN,U4,38,U,Switch IC YT9215SCH
-SDS0_TXP,/Port 5 uplink and SFP/SDS0_TXP,U12,18,U,Port 5 uplink and SFP
-SDS0_TXP,/Port 5 uplink and SFP/SDS0_TXP,U4,39,U,Switch IC YT9215SCH
-SDS1_RXN,/Switch IC YT9215SCH/SDS1_RXN,U4,35,U,Switch IC YT9215SCH
-SDS1_RXP,/Switch IC YT9215SCH/SDS1_RXP,U4,34,U,Switch IC YT9215SCH
-SDS1_TXN,/Switch IC YT9215SCH/SDS1_TXN,U4,31,U,Switch IC YT9215SCH
-SDS1_TXP,/Switch IC YT9215SCH/SDS1_TXP,U4,32,U,Switch IC YT9215SCH
-SPF0_CS,Net-(U4C-GPIO15{slash}SPF0_CS),R44,2,V,Switch IC YT9215SCH
-SPF0_CS,Net-(U4C-GPIO15{slash}SPF0_CS),U4,55,V,Switch IC YT9215SCH
-SPF0_SCK,Net-(U4C-GPIO9{slash}SPF0_SCK{slash}SPF_MUX_SEL),R93,2,V,Switch IC YT9215SCH
-SPF0_SCK,Net-(U4C-GPIO9{slash}SPF0_SCK{slash}SPF_MUX_SEL),U4,49,V,Switch IC YT9215SCH
-SPF0_SI,Net-(U4C-GPIO10{slash}SPF0_SI),R92,2,V,Switch IC YT9215SCH
-SPF0_SI,Net-(U4C-GPIO10{slash}SPF0_SI),U4,50,V,Switch IC YT9215SCH
-SPF0_SO,Net-(U4C-GPIO14{slash}SPF0_SO),R89,2,V,Switch IC YT9215SCH
-SPF0_SO,Net-(U4C-GPIO14{slash}SPF0_SO),U4,54,V,Switch IC YT9215SCH
-SWR_LX,Net-(L3-Pad2),L3,2,V,Switch IC YT9215SCH
-SWR_LX,Net-(L3-Pad2),U4,63,V,Switch IC YT9215SCH
-SWR_LX,Net-(L3-Pad2),U4,64,V,Switch IC YT9215SCH
-TBD_D1_A,/Power input and 3.3 V buck/TBD_D1_A,D1,2,U,Power input and 3.3 V buck
-TBD_D1_K,/Power input and 3.3 V buck/TBD_D1_K,D1,1,U,Power input and 3.3 V buck
-TBD_D5_A,/Power input and 3.3 V buck/TBD_D5_A,D5,2,U,Power input and 3.3 V buck
-TBD_D5_K,/Power input and 3.3 V buck/TBD_D5_K,D5,1,U,Power input and 3.3 V buck
-TBD_LED6_1,/Port LEDs/TBD_LED6_1,J5,1,U,Port LEDs
-TBD_LED6_2,/Port LEDs/TBD_LED6_2,J5,2,U,Port LEDs
-TBD_LED6_3,/Port LEDs/TBD_LED6_3,J5,3,U,Port LEDs
-TBD_LED6_4,/Port LEDs/TBD_LED6_4,J5,4,U,Port LEDs
-TBD_LED7_A,/Port LEDs/TBD_LED7_A,LED7,2,U,Port LEDs
-TBD_LED7_K,/Port LEDs/TBD_LED7_K,LED7,1,U,Port LEDs
-TBD_LED8_A,/Port LEDs/TBD_LED8_A,LED8,2,U,Port LEDs
-TBD_LED8_K,/Port LEDs/TBD_LED8_K,LED8,1,U,Port LEDs
-TBD_MOD_R10,/PoE PSE module (daughterboard)/TBD_MOD_R10,R210,2,U,PoE PSE module (daughterboard)
-TBD_MOD_R11,/PoE PSE module (daughterboard)/TBD_MOD_R11,R211,2,U,PoE PSE module (daughterboard)
-TBD_MOD_R3,/PoE PSE module (daughterboard)/TBD_MOD_R3,R203,2,U,PoE PSE module (daughterboard)
-TBD_MOD_R9,/PoE PSE module (daughterboard)/TBD_MOD_R9,R209,2,U,PoE PSE module (daughterboard)
-TBD_P0_ESD_VP,/Ports 1-4 with PoE/TBD_P0_ESD_VP,ED1,5,U,Ports 1-4 with PoE
-TBD_P0_ESD_VP,/Ports 1-4 with PoE/TBD_P0_ESD_VP,ED10,5,U,Ports 1-4 with PoE
-TBD_P1_ESD_VP,/Ports 1-4 with PoE/TBD_P1_ESD_VP,ED2,5,U,Ports 1-4 with PoE
-TBD_P1_ESD_VP,/Ports 1-4 with PoE/TBD_P1_ESD_VP,ED3,5,U,Ports 1-4 with PoE
-TBD_P2_ESD_VP,/Ports 1-4 with PoE/TBD_P2_ESD_VP,ED4,5,U,Ports 1-4 with PoE
-TBD_P2_ESD_VP,/Ports 1-4 with PoE/TBD_P2_ESD_VP,ED5,5,U,Ports 1-4 with PoE
-TBD_P3_ESD_VP,/Ports 1-4 with PoE/TBD_P3_ESD_VP,ED6,5,U,Ports 1-4 with PoE
-TBD_P3_ESD_VP,/Ports 1-4 with PoE/TBD_P3_ESD_VP,ED7,5,U,Ports 1-4 with PoE
-TBD_P4_ESD_VP,/Port 5 uplink and SFP/TBD_P4_ESD_VP,ED8,5,U,Port 5 uplink and SFP
-TBD_P4_ESD_VP,/Port 5 uplink and SFP/TBD_P4_ESD_VP,ED9,5,U,Port 5 uplink and SFP
-TBD_PC2_1,/Power input and 3.3 V buck/TBD_PC2_1,PC2,1,U,Power input and 3.3 V buck
-TBD_PC2_2,/Power input and 3.3 V buck/TBD_PC2_2,PC2,2,U,Power input and 3.3 V buck
-TBD_POW1,/Port LEDs/TBD_POW1,RJ18,1,U,Port LEDs
-TBD_POW2,/Port LEDs/TBD_POW2,RJ16,1,U,Port LEDs
-TBD_POW3,/Port LEDs/TBD_POW3,RJ14,1,U,Port LEDs
-TBD_POW4,/Port LEDs/TBD_POW4,RJ12,1,U,Port LEDs
-TBD_POW5,/Port LEDs/TBD_POW5,RJ10,1,U,Port LEDs
-TBD_POW6,/Port LEDs/TBD_POW6,RJ8,1,U,Port LEDs
-TBD_PSE_IO1,/PoE PSE module (daughterboard)/TBD_PSE_IO1,U201,?3,U,PoE PSE module (daughterboard)
-TBD_PSE_IO2,/PoE PSE module (daughterboard)/TBD_PSE_IO2,U201,?4,U,PoE PSE module (daughterboard)
-TBD_PSE_VDD,/PoE PSE module (daughterboard)/TBD_PSE_VDD,U201,?2,U,PoE PSE module (daughterboard)
-TBD_R11_1,/Power input and 3.3 V buck/TBD_R11_1,R11,1,U,Power input and 3.3 V buck
-TBD_R11_2,/Power input and 3.3 V buck/TBD_R11_2,R11,2,U,Power input and 3.3 V buck
-TBD_R68_1,/Port LEDs/TBD_R68_1,R68,1,U,Port LEDs
-TBD_R68_2,/Port LEDs/TBD_R68_2,R68,2,U,Port LEDs
-TBD_SFP_LOS,/Port 5 uplink and SFP/TBD_SFP_LOS,U12,8,U,Port 5 uplink and SFP
-TBD_SFP_MODDEF0,/Port 5 uplink and SFP/TBD_SFP_MODDEF0,U12,6,U,Port 5 uplink and SFP
-TBD_SFP_RS,/Port 5 uplink and SFP/TBD_SFP_RS,U12,7,U,Port 5 uplink and SFP
-TBD_SFP_SCL,/Port 5 uplink and SFP/TBD_SFP_SCL,U12,5,U,Port 5 uplink and SFP
-TBD_SFP_SDA,/Port 5 uplink and SFP/TBD_SFP_SDA,U12,4,U,Port 5 uplink and SFP
-TBD_SFP_TXDIS,/Port 5 uplink and SFP/TBD_SFP_TXDIS,U12,3,U,Port 5 uplink and SFP
-TBD_SFP_TXFAULT,/Port 5 uplink and SFP/TBD_SFP_TXFAULT,U12,2,U,Port 5 uplink and SFP
-TBD_TVS1,/PoE PSE module (daughterboard)/TBD_TVS1,D201,2,U,PoE PSE module (daughterboard)
-TBD_TVS2,/PoE PSE module (daughterboard)/TBD_TVS2,D203,2,U,PoE PSE module (daughterboard)
-TBD_TVS3,/PoE PSE module (daughterboard)/TBD_TVS3,D205,2,U,PoE PSE module (daughterboard)
-TBD_TVS4,/PoE PSE module (daughterboard)/TBD_TVS4,D207,2,U,PoE PSE module (daughterboard)
-TBD_U10_WP,/Switch IC YT9215SCH/TBD_U10_WP,U10,7,U,Switch IC YT9215SCH
-TBD_U4_44,/Switch IC YT9215SCH/TBD_U4_44,U4,44,U,Switch IC YT9215SCH
-TBD_U4_48,/Switch IC YT9215SCH/TBD_U4_48,U4,48,U,Switch IC YT9215SCH
-TBD_U4_51,/Switch IC YT9215SCH/TBD_U4_51,U4,51,U,Switch IC YT9215SCH
-TBD_U4_52,/Switch IC YT9215SCH/TBD_U4_52,U4,52,U,Switch IC YT9215SCH
-TBD_U4_53,/Switch IC YT9215SCH/TBD_U4_53,U4,53,U,Switch IC YT9215SCH
-TBD_U4_56,/Switch IC YT9215SCH/TBD_U4_56,U4,56,U,Switch IC YT9215SCH
-TBD_U4_57,/Switch IC YT9215SCH/TBD_U4_57,U4,57,U,Switch IC YT9215SCH
-TBD_U4_70,/Switch IC YT9215SCH/TBD_U4_70,U4,70,U,Switch IC YT9215SCH
-TBD_U4_72,/Switch IC YT9215SCH/TBD_U4_72,U4,72,U,Switch IC YT9215SCH
-TBD_U4_73,/Switch IC YT9215SCH/TBD_U4_73,U4,73,U,Switch IC YT9215SCH
-TBD_U4_74,/Switch IC YT9215SCH/TBD_U4_74,U4,74,U,Switch IC YT9215SCH
-TBD_U4_76,/Switch IC YT9215SCH/TBD_U4_76,U4,76,U,Switch IC YT9215SCH
-TBD_U4_78,/Switch IC YT9215SCH/TBD_U4_78,U4,78,U,Switch IC YT9215SCH
-TBD_U4_81,/Switch IC YT9215SCH/TBD_U4_81,U4,81,U,Switch IC YT9215SCH
-TBD_U4_83,/Switch IC YT9215SCH/TBD_U4_83,U4,83,U,Switch IC YT9215SCH
-TBD_U4_84,/Switch IC YT9215SCH/TBD_U4_84,U4,84,U,Switch IC YT9215SCH
-TBD_U4_93,/Switch IC YT9215SCH/TBD_U4_93,U4,93,U,Switch IC YT9215SCH
-TBD_U6_HOLD,/Switch IC YT9215SCH/TBD_U6_HOLD,U6,7,U,Switch IC YT9215SCH
-TBD_U6_WP,/Switch IC YT9215SCH/TBD_U6_WP,U6,3,U,Switch IC YT9215SCH
-VIN_F,Net-(D4-A),D4,2,I,Power input and 3.3 V buck
-VIN_F,Net-(D4-A),L1,2,I,Power input and 3.3 V buck
-VIN_F,Net-(D4-A),RV1,1,U,Power input and 3.3 V buck
-VIN_F,Net-(D4-A),RV2,1,U,Power input and 3.3 V buck
-VIN_F,Net-(D4-A),RV3,1,U,Power input and 3.3 V buck
-VIN_P,Net-(D4-K),D4,1,I,Power input and 3.3 V buck
-VIN_P,Net-(D4-K),L2,1,I,Power input and 3.3 V buck
-VIN_RAW,Net-(J2-Pin_1),J2,1,I,Power input and 3.3 V buck
-VIN_RAW,Net-(J2-Pin_1),L1,1,I,Power input and 3.3 V buck
-XTALI,Net-(U4C-XTALI),C44,1,V,Switch IC YT9215SCH
-XTALI,Net-(U4C-XTALI),U4,88,V,Switch IC YT9215SCH
-XTALI,Net-(U4C-XTALI),Y6,2,V,Switch IC YT9215SCH
-XTALO,Net-(U4C-XTALO),C43,1,V,Switch IC YT9215SCH
-XTALO,Net-(U4C-XTALO),U4,87,V,Switch IC YT9215SCH
-XTALO,Net-(U4C-XTALO),Y6,1,V,Switch IC YT9215SCH
+(NC),unconnected-(U4C-NC-Pad116),U4,116,inferred,Switch IC YT9215SCH
+(NC),unconnected-(U4C-NC-Pad14),U4,14,inferred,Switch IC YT9215SCH
+(NC),unconnected-(U4C-NC-Pad15),U4,15,inferred,Switch IC YT9215SCH
+(no trace seen),unconnected-(U4C-GPIO6{slash}UART0_RX-Pad46),U4,46,seen,Switch IC YT9215SCH
+(no trace seen),unconnected-(U4C-GPIO7{slash}UART0_TX-Pad47),U4,47,seen,Switch IC YT9215SCH
+(no trace seen),unconnected-(U4C-GPIO41{slash}P1LED2{slash}SPF1_SI-Pad79),U4,79,seen,Switch IC YT9215SCH
+(no trace seen),unconnected-(U4C-GPIO47{slash}SSPI_CS-Pad90),U4,90,seen,Switch IC YT9215SCH
++1V15,+1V15,L3,1,seen,Switch IC YT9215SCH
++1V15,+1V15,U4,109,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,115,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,123,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,13,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,17,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,23,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,33,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,40,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,5,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,58,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,69,inferred,Switch IC YT9215SCH
++1V15,+1V15,U4,99,inferred,Switch IC YT9215SCH
++3V3,+3V3,C23,1,inferred,Power input and 3.3 V buck
++3V3,+3V3,C24,1,inferred,Power input and 3.3 V buck
++3V3,+3V3,PL3,2,seen,Power input and 3.3 V buck
++3V3,+3V3,PR2,1,inferred,Power input and 3.3 V buck
++3V3,+3V3,RJ10,2,unknown,Port LEDs
++3V3,+3V3,RJ11,2,unknown,Port LEDs
++3V3,+3V3,RJ12,2,unknown,Port LEDs
++3V3,+3V3,RJ13,2,unknown,Port LEDs
++3V3,+3V3,RJ14,2,unknown,Port LEDs
++3V3,+3V3,RJ15,2,unknown,Port LEDs
++3V3,+3V3,RJ16,2,unknown,Port LEDs
++3V3,+3V3,RJ17,2,unknown,Port LEDs
++3V3,+3V3,RJ18,2,unknown,Port LEDs
++3V3,+3V3,RJ7,2,unknown,Port LEDs
++3V3,+3V3,RJ8,2,unknown,Port LEDs
++3V3,+3V3,RJ9,2,unknown,Port LEDs
++3V3,+3V3,TC1,1,inferred,Power input and 3.3 V buck
++3V3,+3V3,U10,8,inferred,Switch IC YT9215SCH
++3V3,+3V3,U12,15,unknown,Port 5 uplink and SFP
++3V3,+3V3,U12,16,unknown,Port 5 uplink and SFP
++3V3,+3V3,U4,10,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,104,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,114,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,118,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,128,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,16,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,18,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,28,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,29,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,45,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,59,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,60,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,65,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,66,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,68,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,82,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,86,inferred,Switch IC YT9215SCH
++3V3,+3V3,U4,94,inferred,Switch IC YT9215SCH
++3V3,+3V3,U6,8,unknown,Switch IC YT9215SCH
++48V,+48V,C1,1,inferred,Power input and 3.3 V buck
++48V,+48V,C2,1,inferred,Power input and 3.3 V buck
++48V,+48V,C3,1,inferred,Power input and 3.3 V buck
++48V,+48V,C4,1,inferred,Power input and 3.3 V buck
++48V,+48V,L2,2,inferred,Power input and 3.3 V buck
++48V,+48V,PU1,2,inferred,Power input and 3.3 V buck
++48V,+48V,R7,1,inferred,Power input and 3.3 V buck
++48V,+48V,U201,?1,unknown,PoE PSE module (daughterboard)
+BUCK_BST,Net-(PU1-BOOT),PC6,1,inferred,Power input and 3.3 V buck
+BUCK_BST,Net-(PU1-BOOT),PU1,1,inferred,Power input and 3.3 V buck
+BUCK_EN,Net-(PU1-EN),PU1,3,inferred,Power input and 3.3 V buck
+BUCK_EN,Net-(PU1-EN),R7,2,inferred,Power input and 3.3 V buck
+BUCK_EN,Net-(PU1-EN),R8,1,inferred,Power input and 3.3 V buck
+BUCK_FB,/Power input and 3.3 V buck/BUCK_FB,PR2,2,inferred,Power input and 3.3 V buck
+BUCK_FB,/Power input and 3.3 V buck/BUCK_FB,PR3,1,inferred,Power input and 3.3 V buck
+BUCK_FB,/Power input and 3.3 V buck/BUCK_FB,PU1,5,inferred,Power input and 3.3 V buck
+BUCK_RT,Net-(PU1-RT),PR1,1,inferred,Power input and 3.3 V buck
+BUCK_RT,Net-(PU1-RT),PU1,4,inferred,Power input and 3.3 V buck
+BUCK_SW,Net-(D40-K),D40,1,inferred,Power input and 3.3 V buck
+BUCK_SW,Net-(D40-K),PC6,2,inferred,Power input and 3.3 V buck
+BUCK_SW,Net-(D40-K),PL3,1,seen,Power input and 3.3 V buck
+BUCK_SW,Net-(D40-K),PU1,8,seen,Power input and 3.3 V buck
+Earth_Protective,Earth_Protective,J101,SH,unknown,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J102,SH,unknown,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J103,SH,unknown,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J104,SH,unknown,Ports 1-4 with PoE
+Earth_Protective,Earth_Protective,J3,SH,unknown,Port 5 uplink and SFP
+Earth_Protective,Earth_Protective,U12,CAGE,unknown,Port 5 uplink and SFP
+FL_CS,Net-(U6-~{CS}),R44,1,unknown,Switch IC YT9215SCH
+FL_CS,Net-(U6-~{CS}),U6,1,unknown,Switch IC YT9215SCH
+FL_SCK,Net-(U6-CLK),R93,1,unknown,Switch IC YT9215SCH
+FL_SCK,Net-(U6-CLK),U6,6,unknown,Switch IC YT9215SCH
+FL_SI,Net-(U6-DI(IO0)),R92,1,unknown,Switch IC YT9215SCH
+FL_SI,Net-(U6-DI(IO0)),U6,5,unknown,Switch IC YT9215SCH
+FL_SO,Net-(U6-DO(IO1)),R89,1,unknown,Switch IC YT9215SCH
+FL_SO,Net-(U6-DO(IO1)),U6,2,unknown,Switch IC YT9215SCH
+GND,GND,C1,2,inferred,Power input and 3.3 V buck
+GND,GND,C2,2,inferred,Power input and 3.3 V buck
+GND,GND,C23,2,inferred,Power input and 3.3 V buck
+GND,GND,C24,2,inferred,Power input and 3.3 V buck
+GND,GND,C3,2,inferred,Power input and 3.3 V buck
+GND,GND,C4,2,inferred,Power input and 3.3 V buck
+GND,GND,C43,2,seen,Switch IC YT9215SCH
+GND,GND,C44,2,seen,Switch IC YT9215SCH
+GND,GND,D40,2,inferred,Power input and 3.3 V buck
+GND,GND,ED1,2,inferred,Ports 1-4 with PoE
+GND,GND,ED10,2,inferred,Ports 1-4 with PoE
+GND,GND,ED2,2,inferred,Ports 1-4 with PoE
+GND,GND,ED3,2,inferred,Ports 1-4 with PoE
+GND,GND,ED4,2,inferred,Ports 1-4 with PoE
+GND,GND,ED5,2,inferred,Ports 1-4 with PoE
+GND,GND,ED6,2,inferred,Ports 1-4 with PoE
+GND,GND,ED7,2,inferred,Ports 1-4 with PoE
+GND,GND,ED8,2,inferred,Port 5 uplink and SFP
+GND,GND,ED9,2,inferred,Port 5 uplink and SFP
+GND,GND,J2,2,inferred,Power input and 3.3 V buck
+GND,GND,PR1,2,inferred,Power input and 3.3 V buck
+GND,GND,PR3,2,inferred,Power input and 3.3 V buck
+GND,GND,PU1,7,inferred,Power input and 3.3 V buck
+GND,GND,PU1,9,inferred,Power input and 3.3 V buck
+GND,GND,R8,2,inferred,Power input and 3.3 V buck
+GND,GND,RV1,2,unknown,Power input and 3.3 V buck
+GND,GND,RV2,2,unknown,Power input and 3.3 V buck
+GND,GND,RV3,2,unknown,Power input and 3.3 V buck
+GND,GND,TC1,2,inferred,Power input and 3.3 V buck
+GND,GND,U10,1,inferred,Switch IC YT9215SCH
+GND,GND,U10,2,inferred,Switch IC YT9215SCH
+GND,GND,U10,3,inferred,Switch IC YT9215SCH
+GND,GND,U10,4,inferred,Switch IC YT9215SCH
+GND,GND,U12,1,unknown,Port 5 uplink and SFP
+GND,GND,U12,10,unknown,Port 5 uplink and SFP
+GND,GND,U12,11,unknown,Port 5 uplink and SFP
+GND,GND,U12,14,unknown,Port 5 uplink and SFP
+GND,GND,U12,17,unknown,Port 5 uplink and SFP
+GND,GND,U12,20,unknown,Port 5 uplink and SFP
+GND,GND,U12,9,unknown,Port 5 uplink and SFP
+GND,GND,U201,?5,unknown,PoE PSE module (daughterboard)
+GND,GND,U4,11,inferred,Switch IC YT9215SCH
+GND,GND,U4,117,inferred,Switch IC YT9215SCH
+GND,GND,U4,129,inferred,Switch IC YT9215SCH
+GND,GND,U4,30,inferred,Switch IC YT9215SCH
+GND,GND,U4,36,inferred,Switch IC YT9215SCH
+GND,GND,U4,37,inferred,Switch IC YT9215SCH
+GND,GND,U4,43,inferred,Switch IC YT9215SCH
+GND,GND,U4,61,inferred,Switch IC YT9215SCH
+GND,GND,U4,62,inferred,Switch IC YT9215SCH
+GND,GND,U6,4,unknown,Switch IC YT9215SCH
+I2C_SCL,Net-(U10-SCL),U10,6,inferred,Switch IC YT9215SCH
+I2C_SCL,Net-(U10-SCL),U4,91,inferred,Switch IC YT9215SCH
+I2C_SDA,Net-(U10-SDA),U10,5,inferred,Switch IC YT9215SCH
+I2C_SDA,Net-(U10-SDA),U4,92,inferred,Switch IC YT9215SCH
+LED_P0,/Port LEDs/LED_P0,RJ17,1,inferred,Port LEDs
+LED_P0,/Port LEDs/LED_P0,U4,85,inferred,Switch IC YT9215SCH
+LED_P1,/Port LEDs/LED_P1,RJ15,1,inferred,Port LEDs
+LED_P1,/Port LEDs/LED_P1,U4,80,inferred,Switch IC YT9215SCH
+LED_P2,/Port LEDs/LED_P2,RJ13,1,inferred,Port LEDs
+LED_P2,/Port LEDs/LED_P2,U4,77,inferred,Switch IC YT9215SCH
+LED_P3,/Port LEDs/LED_P3,RJ11,1,inferred,Port LEDs
+LED_P3,/Port LEDs/LED_P3,U4,75,inferred,Switch IC YT9215SCH
+LED_P4,/Port LEDs/LED_P4,RJ9,1,inferred,Port LEDs
+LED_P4,/Port LEDs/LED_P4,U4,71,inferred,Switch IC YT9215SCH
+LED_P9,/Port LEDs/LED_P9,RJ7,1,inferred,Port LEDs
+LED_P9,/Port LEDs/LED_P9,U4,67,inferred,Switch IC YT9215SCH
+NRESET,/Switch IC YT9215SCH/NRESET,U4,89,unknown,Switch IC YT9215SCH
+P0_CT45,/Ports 1-4 with PoE/P0_CT45,DXFRM4,18,unknown,Ports 1-4 with PoE
+P0_CT78,/Ports 1-4 with PoE/P0_CT78,DXFRM4,15,unknown,Ports 1-4 with PoE
+P0_L1,/Ports 1-4 with PoE/P0_L1,DXFRM4,23,seen,Ports 1-4 with PoE
+P0_L1,/Ports 1-4 with PoE/P0_L1,J101,1,seen,Ports 1-4 with PoE
+P0_L2,/Ports 1-4 with PoE/P0_L2,DXFRM4,22,seen,Ports 1-4 with PoE
+P0_L2,/Ports 1-4 with PoE/P0_L2,J101,2,seen,Ports 1-4 with PoE
+P0_L3,/Ports 1-4 with PoE/P0_L3,DXFRM4,20,seen,Ports 1-4 with PoE
+P0_L3,/Ports 1-4 with PoE/P0_L3,J101,3,seen,Ports 1-4 with PoE
+P0_L4,/Ports 1-4 with PoE/P0_L4,DXFRM4,17,seen,Ports 1-4 with PoE
+P0_L4,/Ports 1-4 with PoE/P0_L4,J101,4,seen,Ports 1-4 with PoE
+P0_L5,/Ports 1-4 with PoE/P0_L5,DXFRM4,16,seen,Ports 1-4 with PoE
+P0_L5,/Ports 1-4 with PoE/P0_L5,J101,5,seen,Ports 1-4 with PoE
+P0_L6,/Ports 1-4 with PoE/P0_L6,DXFRM4,19,seen,Ports 1-4 with PoE
+P0_L6,/Ports 1-4 with PoE/P0_L6,J101,6,seen,Ports 1-4 with PoE
+P0_L7,/Ports 1-4 with PoE/P0_L7,DXFRM4,14,seen,Ports 1-4 with PoE
+P0_L7,/Ports 1-4 with PoE/P0_L7,J101,7,seen,Ports 1-4 with PoE
+P0_L8,/Ports 1-4 with PoE/P0_L8,DXFRM4,13,seen,Ports 1-4 with PoE
+P0_L8,/Ports 1-4 with PoE/P0_L8,J101,8,seen,Ports 1-4 with PoE
+P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,DXFRM4,2,inferred,Ports 1-4 with PoE
+P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,ED1,1,inferred,Ports 1-4 with PoE
+P0_MDI0,/Ports 1-4 with PoE/P0_MDI0,U4,95,inferred,Switch IC YT9215SCH
+P0_MDI1,/Ports 1-4 with PoE/P0_MDI1,DXFRM4,3,inferred,Ports 1-4 with PoE
+P0_MDI1,/Ports 1-4 with PoE/P0_MDI1,ED1,3,inferred,Ports 1-4 with PoE
+P0_MDI1,/Ports 1-4 with PoE/P0_MDI1,U4,96,inferred,Switch IC YT9215SCH
+P0_MDI2,/Ports 1-4 with PoE/P0_MDI2,DXFRM4,5,inferred,Ports 1-4 with PoE
+P0_MDI2,/Ports 1-4 with PoE/P0_MDI2,ED1,4,inferred,Ports 1-4 with PoE
+P0_MDI2,/Ports 1-4 with PoE/P0_MDI2,U4,97,inferred,Switch IC YT9215SCH
+P0_MDI3,/Ports 1-4 with PoE/P0_MDI3,DXFRM4,6,inferred,Ports 1-4 with PoE
+P0_MDI3,/Ports 1-4 with PoE/P0_MDI3,ED1,6,inferred,Ports 1-4 with PoE
+P0_MDI3,/Ports 1-4 with PoE/P0_MDI3,U4,98,inferred,Switch IC YT9215SCH
+P0_MDI4,/Ports 1-4 with PoE/P0_MDI4,DXFRM4,8,inferred,Ports 1-4 with PoE
+P0_MDI4,/Ports 1-4 with PoE/P0_MDI4,ED10,1,inferred,Ports 1-4 with PoE
+P0_MDI4,/Ports 1-4 with PoE/P0_MDI4,U4,100,inferred,Switch IC YT9215SCH
+P0_MDI5,/Ports 1-4 with PoE/P0_MDI5,DXFRM4,9,inferred,Ports 1-4 with PoE
+P0_MDI5,/Ports 1-4 with PoE/P0_MDI5,ED10,3,inferred,Ports 1-4 with PoE
+P0_MDI5,/Ports 1-4 with PoE/P0_MDI5,U4,101,inferred,Switch IC YT9215SCH
+P0_MDI6,/Ports 1-4 with PoE/P0_MDI6,DXFRM4,11,inferred,Ports 1-4 with PoE
+P0_MDI6,/Ports 1-4 with PoE/P0_MDI6,ED10,4,inferred,Ports 1-4 with PoE
+P0_MDI6,/Ports 1-4 with PoE/P0_MDI6,U4,102,inferred,Switch IC YT9215SCH
+P0_MDI7,/Ports 1-4 with PoE/P0_MDI7,DXFRM4,12,inferred,Ports 1-4 with PoE
+P0_MDI7,/Ports 1-4 with PoE/P0_MDI7,ED10,6,inferred,Ports 1-4 with PoE
+P0_MDI7,/Ports 1-4 with PoE/P0_MDI7,U4,103,inferred,Switch IC YT9215SCH
+P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,1,unknown,Ports 1-4 with PoE
+P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,10,unknown,Ports 1-4 with PoE
+P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,4,unknown,Ports 1-4 with PoE
+P0_TCT,/Ports 1-4 with PoE/P0_TCT,DXFRM4,7,unknown,Ports 1-4 with PoE
+P1_CT45,/Ports 1-4 with PoE/P1_CT45,DXFRM3,18,unknown,Ports 1-4 with PoE
+P1_CT78,/Ports 1-4 with PoE/P1_CT78,DXFRM3,15,unknown,Ports 1-4 with PoE
+P1_L1,/Ports 1-4 with PoE/P1_L1,DXFRM3,23,seen,Ports 1-4 with PoE
+P1_L1,/Ports 1-4 with PoE/P1_L1,J102,1,seen,Ports 1-4 with PoE
+P1_L2,/Ports 1-4 with PoE/P1_L2,DXFRM3,22,seen,Ports 1-4 with PoE
+P1_L2,/Ports 1-4 with PoE/P1_L2,J102,2,seen,Ports 1-4 with PoE
+P1_L3,/Ports 1-4 with PoE/P1_L3,DXFRM3,20,seen,Ports 1-4 with PoE
+P1_L3,/Ports 1-4 with PoE/P1_L3,J102,3,seen,Ports 1-4 with PoE
+P1_L4,/Ports 1-4 with PoE/P1_L4,DXFRM3,17,seen,Ports 1-4 with PoE
+P1_L4,/Ports 1-4 with PoE/P1_L4,J102,4,seen,Ports 1-4 with PoE
+P1_L5,/Ports 1-4 with PoE/P1_L5,DXFRM3,16,seen,Ports 1-4 with PoE
+P1_L5,/Ports 1-4 with PoE/P1_L5,J102,5,seen,Ports 1-4 with PoE
+P1_L6,/Ports 1-4 with PoE/P1_L6,DXFRM3,19,seen,Ports 1-4 with PoE
+P1_L6,/Ports 1-4 with PoE/P1_L6,J102,6,seen,Ports 1-4 with PoE
+P1_L7,/Ports 1-4 with PoE/P1_L7,DXFRM3,14,seen,Ports 1-4 with PoE
+P1_L7,/Ports 1-4 with PoE/P1_L7,J102,7,seen,Ports 1-4 with PoE
+P1_L8,/Ports 1-4 with PoE/P1_L8,DXFRM3,13,seen,Ports 1-4 with PoE
+P1_L8,/Ports 1-4 with PoE/P1_L8,J102,8,seen,Ports 1-4 with PoE
+P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,DXFRM3,2,inferred,Ports 1-4 with PoE
+P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,ED2,1,inferred,Ports 1-4 with PoE
+P1_MDI0,/Ports 1-4 with PoE/P1_MDI0,U4,105,inferred,Switch IC YT9215SCH
+P1_MDI1,/Ports 1-4 with PoE/P1_MDI1,DXFRM3,3,inferred,Ports 1-4 with PoE
+P1_MDI1,/Ports 1-4 with PoE/P1_MDI1,ED2,3,inferred,Ports 1-4 with PoE
+P1_MDI1,/Ports 1-4 with PoE/P1_MDI1,U4,106,inferred,Switch IC YT9215SCH
+P1_MDI2,/Ports 1-4 with PoE/P1_MDI2,DXFRM3,5,inferred,Ports 1-4 with PoE
+P1_MDI2,/Ports 1-4 with PoE/P1_MDI2,ED2,4,inferred,Ports 1-4 with PoE
+P1_MDI2,/Ports 1-4 with PoE/P1_MDI2,U4,107,inferred,Switch IC YT9215SCH
+P1_MDI3,/Ports 1-4 with PoE/P1_MDI3,DXFRM3,6,inferred,Ports 1-4 with PoE
+P1_MDI3,/Ports 1-4 with PoE/P1_MDI3,ED2,6,inferred,Ports 1-4 with PoE
+P1_MDI3,/Ports 1-4 with PoE/P1_MDI3,U4,108,inferred,Switch IC YT9215SCH
+P1_MDI4,/Ports 1-4 with PoE/P1_MDI4,DXFRM3,8,inferred,Ports 1-4 with PoE
+P1_MDI4,/Ports 1-4 with PoE/P1_MDI4,ED3,1,inferred,Ports 1-4 with PoE
+P1_MDI4,/Ports 1-4 with PoE/P1_MDI4,U4,110,inferred,Switch IC YT9215SCH
+P1_MDI5,/Ports 1-4 with PoE/P1_MDI5,DXFRM3,9,inferred,Ports 1-4 with PoE
+P1_MDI5,/Ports 1-4 with PoE/P1_MDI5,ED3,3,inferred,Ports 1-4 with PoE
+P1_MDI5,/Ports 1-4 with PoE/P1_MDI5,U4,111,inferred,Switch IC YT9215SCH
+P1_MDI6,/Ports 1-4 with PoE/P1_MDI6,DXFRM3,11,inferred,Ports 1-4 with PoE
+P1_MDI6,/Ports 1-4 with PoE/P1_MDI6,ED3,4,inferred,Ports 1-4 with PoE
+P1_MDI6,/Ports 1-4 with PoE/P1_MDI6,U4,112,inferred,Switch IC YT9215SCH
+P1_MDI7,/Ports 1-4 with PoE/P1_MDI7,DXFRM3,12,inferred,Ports 1-4 with PoE
+P1_MDI7,/Ports 1-4 with PoE/P1_MDI7,ED3,6,inferred,Ports 1-4 with PoE
+P1_MDI7,/Ports 1-4 with PoE/P1_MDI7,U4,113,inferred,Switch IC YT9215SCH
+P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,1,unknown,Ports 1-4 with PoE
+P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,10,unknown,Ports 1-4 with PoE
+P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,4,unknown,Ports 1-4 with PoE
+P1_TCT,/Ports 1-4 with PoE/P1_TCT,DXFRM3,7,unknown,Ports 1-4 with PoE
+P2_CT45,/Ports 1-4 with PoE/P2_CT45,DXFRM2,18,unknown,Ports 1-4 with PoE
+P2_CT78,/Ports 1-4 with PoE/P2_CT78,DXFRM2,15,unknown,Ports 1-4 with PoE
+P2_L1,/Ports 1-4 with PoE/P2_L1,DXFRM2,23,seen,Ports 1-4 with PoE
+P2_L1,/Ports 1-4 with PoE/P2_L1,J103,1,seen,Ports 1-4 with PoE
+P2_L2,/Ports 1-4 with PoE/P2_L2,DXFRM2,22,seen,Ports 1-4 with PoE
+P2_L2,/Ports 1-4 with PoE/P2_L2,J103,2,seen,Ports 1-4 with PoE
+P2_L3,/Ports 1-4 with PoE/P2_L3,DXFRM2,20,seen,Ports 1-4 with PoE
+P2_L3,/Ports 1-4 with PoE/P2_L3,J103,3,seen,Ports 1-4 with PoE
+P2_L4,/Ports 1-4 with PoE/P2_L4,DXFRM2,17,seen,Ports 1-4 with PoE
+P2_L4,/Ports 1-4 with PoE/P2_L4,J103,4,seen,Ports 1-4 with PoE
+P2_L5,/Ports 1-4 with PoE/P2_L5,DXFRM2,16,seen,Ports 1-4 with PoE
+P2_L5,/Ports 1-4 with PoE/P2_L5,J103,5,seen,Ports 1-4 with PoE
+P2_L6,/Ports 1-4 with PoE/P2_L6,DXFRM2,19,seen,Ports 1-4 with PoE
+P2_L6,/Ports 1-4 with PoE/P2_L6,J103,6,seen,Ports 1-4 with PoE
+P2_L7,/Ports 1-4 with PoE/P2_L7,DXFRM2,14,seen,Ports 1-4 with PoE
+P2_L7,/Ports 1-4 with PoE/P2_L7,J103,7,seen,Ports 1-4 with PoE
+P2_L8,/Ports 1-4 with PoE/P2_L8,DXFRM2,13,seen,Ports 1-4 with PoE
+P2_L8,/Ports 1-4 with PoE/P2_L8,J103,8,seen,Ports 1-4 with PoE
+P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,DXFRM2,2,inferred,Ports 1-4 with PoE
+P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,ED4,1,inferred,Ports 1-4 with PoE
+P2_MDI0,/Ports 1-4 with PoE/P2_MDI0,U4,119,inferred,Switch IC YT9215SCH
+P2_MDI1,/Ports 1-4 with PoE/P2_MDI1,DXFRM2,3,inferred,Ports 1-4 with PoE
+P2_MDI1,/Ports 1-4 with PoE/P2_MDI1,ED4,3,inferred,Ports 1-4 with PoE
+P2_MDI1,/Ports 1-4 with PoE/P2_MDI1,U4,120,inferred,Switch IC YT9215SCH
+P2_MDI2,/Ports 1-4 with PoE/P2_MDI2,DXFRM2,5,inferred,Ports 1-4 with PoE
+P2_MDI2,/Ports 1-4 with PoE/P2_MDI2,ED4,4,inferred,Ports 1-4 with PoE
+P2_MDI2,/Ports 1-4 with PoE/P2_MDI2,U4,121,inferred,Switch IC YT9215SCH
+P2_MDI3,/Ports 1-4 with PoE/P2_MDI3,DXFRM2,6,inferred,Ports 1-4 with PoE
+P2_MDI3,/Ports 1-4 with PoE/P2_MDI3,ED4,6,inferred,Ports 1-4 with PoE
+P2_MDI3,/Ports 1-4 with PoE/P2_MDI3,U4,122,inferred,Switch IC YT9215SCH
+P2_MDI4,/Ports 1-4 with PoE/P2_MDI4,DXFRM2,8,inferred,Ports 1-4 with PoE
+P2_MDI4,/Ports 1-4 with PoE/P2_MDI4,ED5,1,inferred,Ports 1-4 with PoE
+P2_MDI4,/Ports 1-4 with PoE/P2_MDI4,U4,124,inferred,Switch IC YT9215SCH
+P2_MDI5,/Ports 1-4 with PoE/P2_MDI5,DXFRM2,9,inferred,Ports 1-4 with PoE
+P2_MDI5,/Ports 1-4 with PoE/P2_MDI5,ED5,3,inferred,Ports 1-4 with PoE
+P2_MDI5,/Ports 1-4 with PoE/P2_MDI5,U4,125,inferred,Switch IC YT9215SCH
+P2_MDI6,/Ports 1-4 with PoE/P2_MDI6,DXFRM2,11,inferred,Ports 1-4 with PoE
+P2_MDI6,/Ports 1-4 with PoE/P2_MDI6,ED5,4,inferred,Ports 1-4 with PoE
+P2_MDI6,/Ports 1-4 with PoE/P2_MDI6,U4,126,inferred,Switch IC YT9215SCH
+P2_MDI7,/Ports 1-4 with PoE/P2_MDI7,DXFRM2,12,inferred,Ports 1-4 with PoE
+P2_MDI7,/Ports 1-4 with PoE/P2_MDI7,ED5,6,inferred,Ports 1-4 with PoE
+P2_MDI7,/Ports 1-4 with PoE/P2_MDI7,U4,127,inferred,Switch IC YT9215SCH
+P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,1,unknown,Ports 1-4 with PoE
+P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,10,unknown,Ports 1-4 with PoE
+P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,4,unknown,Ports 1-4 with PoE
+P2_TCT,/Ports 1-4 with PoE/P2_TCT,DXFRM2,7,unknown,Ports 1-4 with PoE
+P3_CT45,/Ports 1-4 with PoE/P3_CT45,DXFRM5,18,unknown,Ports 1-4 with PoE
+P3_CT78,/Ports 1-4 with PoE/P3_CT78,DXFRM5,15,unknown,Ports 1-4 with PoE
+P3_L1,/Ports 1-4 with PoE/P3_L1,DXFRM5,23,seen,Ports 1-4 with PoE
+P3_L1,/Ports 1-4 with PoE/P3_L1,J104,1,seen,Ports 1-4 with PoE
+P3_L2,/Ports 1-4 with PoE/P3_L2,DXFRM5,22,seen,Ports 1-4 with PoE
+P3_L2,/Ports 1-4 with PoE/P3_L2,J104,2,seen,Ports 1-4 with PoE
+P3_L3,/Ports 1-4 with PoE/P3_L3,DXFRM5,20,seen,Ports 1-4 with PoE
+P3_L3,/Ports 1-4 with PoE/P3_L3,J104,3,seen,Ports 1-4 with PoE
+P3_L4,/Ports 1-4 with PoE/P3_L4,DXFRM5,17,seen,Ports 1-4 with PoE
+P3_L4,/Ports 1-4 with PoE/P3_L4,J104,4,seen,Ports 1-4 with PoE
+P3_L5,/Ports 1-4 with PoE/P3_L5,DXFRM5,16,seen,Ports 1-4 with PoE
+P3_L5,/Ports 1-4 with PoE/P3_L5,J104,5,seen,Ports 1-4 with PoE
+P3_L6,/Ports 1-4 with PoE/P3_L6,DXFRM5,19,seen,Ports 1-4 with PoE
+P3_L6,/Ports 1-4 with PoE/P3_L6,J104,6,seen,Ports 1-4 with PoE
+P3_L7,/Ports 1-4 with PoE/P3_L7,DXFRM5,14,seen,Ports 1-4 with PoE
+P3_L7,/Ports 1-4 with PoE/P3_L7,J104,7,seen,Ports 1-4 with PoE
+P3_L8,/Ports 1-4 with PoE/P3_L8,DXFRM5,13,seen,Ports 1-4 with PoE
+P3_L8,/Ports 1-4 with PoE/P3_L8,J104,8,seen,Ports 1-4 with PoE
+P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,DXFRM5,2,inferred,Ports 1-4 with PoE
+P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,ED6,1,inferred,Ports 1-4 with PoE
+P3_MDI0,/Ports 1-4 with PoE/P3_MDI0,U4,1,inferred,Switch IC YT9215SCH
+P3_MDI1,/Ports 1-4 with PoE/P3_MDI1,DXFRM5,3,inferred,Ports 1-4 with PoE
+P3_MDI1,/Ports 1-4 with PoE/P3_MDI1,ED6,3,inferred,Ports 1-4 with PoE
+P3_MDI1,/Ports 1-4 with PoE/P3_MDI1,U4,2,inferred,Switch IC YT9215SCH
+P3_MDI2,/Ports 1-4 with PoE/P3_MDI2,DXFRM5,5,inferred,Ports 1-4 with PoE
+P3_MDI2,/Ports 1-4 with PoE/P3_MDI2,ED6,4,inferred,Ports 1-4 with PoE
+P3_MDI2,/Ports 1-4 with PoE/P3_MDI2,U4,3,inferred,Switch IC YT9215SCH
+P3_MDI3,/Ports 1-4 with PoE/P3_MDI3,DXFRM5,6,inferred,Ports 1-4 with PoE
+P3_MDI3,/Ports 1-4 with PoE/P3_MDI3,ED6,6,inferred,Ports 1-4 with PoE
+P3_MDI3,/Ports 1-4 with PoE/P3_MDI3,U4,4,inferred,Switch IC YT9215SCH
+P3_MDI4,/Ports 1-4 with PoE/P3_MDI4,DXFRM5,8,inferred,Ports 1-4 with PoE
+P3_MDI4,/Ports 1-4 with PoE/P3_MDI4,ED7,1,inferred,Ports 1-4 with PoE
+P3_MDI4,/Ports 1-4 with PoE/P3_MDI4,U4,6,inferred,Switch IC YT9215SCH
+P3_MDI5,/Ports 1-4 with PoE/P3_MDI5,DXFRM5,9,inferred,Ports 1-4 with PoE
+P3_MDI5,/Ports 1-4 with PoE/P3_MDI5,ED7,3,inferred,Ports 1-4 with PoE
+P3_MDI5,/Ports 1-4 with PoE/P3_MDI5,U4,7,inferred,Switch IC YT9215SCH
+P3_MDI6,/Ports 1-4 with PoE/P3_MDI6,DXFRM5,11,inferred,Ports 1-4 with PoE
+P3_MDI6,/Ports 1-4 with PoE/P3_MDI6,ED7,4,inferred,Ports 1-4 with PoE
+P3_MDI6,/Ports 1-4 with PoE/P3_MDI6,U4,8,inferred,Switch IC YT9215SCH
+P3_MDI7,/Ports 1-4 with PoE/P3_MDI7,DXFRM5,12,inferred,Ports 1-4 with PoE
+P3_MDI7,/Ports 1-4 with PoE/P3_MDI7,ED7,6,inferred,Ports 1-4 with PoE
+P3_MDI7,/Ports 1-4 with PoE/P3_MDI7,U4,9,inferred,Switch IC YT9215SCH
+P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,1,unknown,Ports 1-4 with PoE
+P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,10,unknown,Ports 1-4 with PoE
+P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,4,unknown,Ports 1-4 with PoE
+P3_TCT,/Ports 1-4 with PoE/P3_TCT,DXFRM5,7,unknown,Ports 1-4 with PoE
+P4_CT45,/Port 5 uplink and SFP/P4_CT45,DXFRM6,18,unknown,Port 5 uplink and SFP
+P4_CT78,/Port 5 uplink and SFP/P4_CT78,DXFRM6,15,unknown,Port 5 uplink and SFP
+P4_L1,/Port 5 uplink and SFP/P4_L1,DXFRM6,23,seen,Port 5 uplink and SFP
+P4_L1,/Port 5 uplink and SFP/P4_L1,J3,1,seen,Port 5 uplink and SFP
+P4_L2,/Port 5 uplink and SFP/P4_L2,DXFRM6,22,seen,Port 5 uplink and SFP
+P4_L2,/Port 5 uplink and SFP/P4_L2,J3,2,seen,Port 5 uplink and SFP
+P4_L3,/Port 5 uplink and SFP/P4_L3,DXFRM6,20,seen,Port 5 uplink and SFP
+P4_L3,/Port 5 uplink and SFP/P4_L3,J3,3,seen,Port 5 uplink and SFP
+P4_L4,/Port 5 uplink and SFP/P4_L4,DXFRM6,17,seen,Port 5 uplink and SFP
+P4_L4,/Port 5 uplink and SFP/P4_L4,J3,4,seen,Port 5 uplink and SFP
+P4_L5,/Port 5 uplink and SFP/P4_L5,DXFRM6,16,seen,Port 5 uplink and SFP
+P4_L5,/Port 5 uplink and SFP/P4_L5,J3,5,seen,Port 5 uplink and SFP
+P4_L6,/Port 5 uplink and SFP/P4_L6,DXFRM6,19,seen,Port 5 uplink and SFP
+P4_L6,/Port 5 uplink and SFP/P4_L6,J3,6,seen,Port 5 uplink and SFP
+P4_L7,/Port 5 uplink and SFP/P4_L7,DXFRM6,14,seen,Port 5 uplink and SFP
+P4_L7,/Port 5 uplink and SFP/P4_L7,J3,7,seen,Port 5 uplink and SFP
+P4_L8,/Port 5 uplink and SFP/P4_L8,DXFRM6,13,seen,Port 5 uplink and SFP
+P4_L8,/Port 5 uplink and SFP/P4_L8,J3,8,seen,Port 5 uplink and SFP
+P4_MDI0,/Port 5 uplink and SFP/P4_MDI0,DXFRM6,2,inferred,Port 5 uplink and SFP
+P4_MDI0,/Port 5 uplink and SFP/P4_MDI0,ED8,1,inferred,Port 5 uplink and SFP
+P4_MDI0,/Port 5 uplink and SFP/P4_MDI0,U4,19,inferred,Switch IC YT9215SCH
+P4_MDI1,/Port 5 uplink and SFP/P4_MDI1,DXFRM6,3,inferred,Port 5 uplink and SFP
+P4_MDI1,/Port 5 uplink and SFP/P4_MDI1,ED8,3,inferred,Port 5 uplink and SFP
+P4_MDI1,/Port 5 uplink and SFP/P4_MDI1,U4,20,inferred,Switch IC YT9215SCH
+P4_MDI2,/Port 5 uplink and SFP/P4_MDI2,DXFRM6,5,inferred,Port 5 uplink and SFP
+P4_MDI2,/Port 5 uplink and SFP/P4_MDI2,ED8,4,inferred,Port 5 uplink and SFP
+P4_MDI2,/Port 5 uplink and SFP/P4_MDI2,U4,21,inferred,Switch IC YT9215SCH
+P4_MDI3,/Port 5 uplink and SFP/P4_MDI3,DXFRM6,6,inferred,Port 5 uplink and SFP
+P4_MDI3,/Port 5 uplink and SFP/P4_MDI3,ED8,6,inferred,Port 5 uplink and SFP
+P4_MDI3,/Port 5 uplink and SFP/P4_MDI3,U4,22,inferred,Switch IC YT9215SCH
+P4_MDI4,/Port 5 uplink and SFP/P4_MDI4,DXFRM6,8,inferred,Port 5 uplink and SFP
+P4_MDI4,/Port 5 uplink and SFP/P4_MDI4,ED9,1,inferred,Port 5 uplink and SFP
+P4_MDI4,/Port 5 uplink and SFP/P4_MDI4,U4,24,inferred,Switch IC YT9215SCH
+P4_MDI5,/Port 5 uplink and SFP/P4_MDI5,DXFRM6,9,inferred,Port 5 uplink and SFP
+P4_MDI5,/Port 5 uplink and SFP/P4_MDI5,ED9,3,inferred,Port 5 uplink and SFP
+P4_MDI5,/Port 5 uplink and SFP/P4_MDI5,U4,25,inferred,Switch IC YT9215SCH
+P4_MDI6,/Port 5 uplink and SFP/P4_MDI6,DXFRM6,11,inferred,Port 5 uplink and SFP
+P4_MDI6,/Port 5 uplink and SFP/P4_MDI6,ED9,4,inferred,Port 5 uplink and SFP
+P4_MDI6,/Port 5 uplink and SFP/P4_MDI6,U4,26,inferred,Switch IC YT9215SCH
+P4_MDI7,/Port 5 uplink and SFP/P4_MDI7,DXFRM6,12,inferred,Port 5 uplink and SFP
+P4_MDI7,/Port 5 uplink and SFP/P4_MDI7,ED9,6,inferred,Port 5 uplink and SFP
+P4_MDI7,/Port 5 uplink and SFP/P4_MDI7,U4,27,inferred,Switch IC YT9215SCH
+P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,1,unknown,Port 5 uplink and SFP
+P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,10,unknown,Port 5 uplink and SFP
+P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,4,unknown,Port 5 uplink and SFP
+P4_TCT,/Port 5 uplink and SFP/P4_TCT,DXFRM6,7,unknown,Port 5 uplink and SFP
+POE1,/PoE PSE module (daughterboard)/POE1,DXFRM4,24,unknown,Ports 1-4 with PoE
+POE1,/PoE PSE module (daughterboard)/POE1,J4,1,unknown,PoE PSE module (daughterboard)
+POE10,/Port 5 uplink and SFP/POE10,DXFRM6,21,unknown,Port 5 uplink and SFP
+POE2,/PoE PSE module (daughterboard)/POE2,DXFRM4,21,unknown,Ports 1-4 with PoE
+POE2,/PoE PSE module (daughterboard)/POE2,J4,2,unknown,PoE PSE module (daughterboard)
+POE3,/PoE PSE module (daughterboard)/POE3,DXFRM3,24,unknown,Ports 1-4 with PoE
+POE3,/PoE PSE module (daughterboard)/POE3,J4,3,unknown,PoE PSE module (daughterboard)
+POE4,/PoE PSE module (daughterboard)/POE4,DXFRM3,21,unknown,Ports 1-4 with PoE
+POE4,/PoE PSE module (daughterboard)/POE4,J4,4,unknown,PoE PSE module (daughterboard)
+POE5,/PoE PSE module (daughterboard)/POE5,DXFRM2,24,unknown,Ports 1-4 with PoE
+POE5,/PoE PSE module (daughterboard)/POE5,J4,5,unknown,PoE PSE module (daughterboard)
+POE6,/PoE PSE module (daughterboard)/POE6,DXFRM2,21,unknown,Ports 1-4 with PoE
+POE6,/PoE PSE module (daughterboard)/POE6,J4,6,unknown,PoE PSE module (daughterboard)
+POE7,/PoE PSE module (daughterboard)/POE7,DXFRM5,24,unknown,Ports 1-4 with PoE
+POE7,/PoE PSE module (daughterboard)/POE7,J4,7,unknown,PoE PSE module (daughterboard)
+POE8,/PoE PSE module (daughterboard)/POE8,DXFRM5,21,unknown,Ports 1-4 with PoE
+POE8,/PoE PSE module (daughterboard)/POE8,J4,8,unknown,PoE PSE module (daughterboard)
+POE9,/Port 5 uplink and SFP/POE9,DXFRM6,24,unknown,Port 5 uplink and SFP
+POE_OUT1,/PoE PSE module (daughterboard)/POE_OUT1,D201,1,unknown,PoE PSE module (daughterboard)
+POE_OUT1,/PoE PSE module (daughterboard)/POE_OUT1,R203,1,unknown,PoE PSE module (daughterboard)
+POE_OUT1,/PoE PSE module (daughterboard)/POE_OUT1,U201,?10,unknown,PoE PSE module (daughterboard)
+POE_OUT2,/PoE PSE module (daughterboard)/POE_OUT2,D203,1,unknown,PoE PSE module (daughterboard)
+POE_OUT2,/PoE PSE module (daughterboard)/POE_OUT2,R209,1,unknown,PoE PSE module (daughterboard)
+POE_OUT2,/PoE PSE module (daughterboard)/POE_OUT2,U201,?20,unknown,PoE PSE module (daughterboard)
+POE_OUT3,/PoE PSE module (daughterboard)/POE_OUT3,D205,1,unknown,PoE PSE module (daughterboard)
+POE_OUT3,/PoE PSE module (daughterboard)/POE_OUT3,R210,1,unknown,PoE PSE module (daughterboard)
+POE_OUT3,/PoE PSE module (daughterboard)/POE_OUT3,U201,?30,unknown,PoE PSE module (daughterboard)
+POE_OUT4,/PoE PSE module (daughterboard)/POE_OUT4,D207,1,unknown,PoE PSE module (daughterboard)
+POE_OUT4,/PoE PSE module (daughterboard)/POE_OUT4,R211,1,unknown,PoE PSE module (daughterboard)
+POE_OUT4,/PoE PSE module (daughterboard)/POE_OUT4,U201,?40,unknown,PoE PSE module (daughterboard)
+POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R208,2,unknown,PoE PSE module (daughterboard)
+POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R212,2,unknown,PoE PSE module (daughterboard)
+POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R213,2,unknown,PoE PSE module (daughterboard)
+POE_RTN,/PoE PSE module (daughterboard)/POE_RTN,R214,2,unknown,PoE PSE module (daughterboard)
+POE_SNS1,Net-(U201-SENSE1),R208,1,unknown,PoE PSE module (daughterboard)
+POE_SNS1,Net-(U201-SENSE1),U201,?11,unknown,PoE PSE module (daughterboard)
+POE_SNS2,Net-(U201-SENSE2),R212,1,unknown,PoE PSE module (daughterboard)
+POE_SNS2,Net-(U201-SENSE2),U201,?21,unknown,PoE PSE module (daughterboard)
+POE_SNS3,Net-(U201-SENSE3),R213,1,unknown,PoE PSE module (daughterboard)
+POE_SNS3,Net-(U201-SENSE3),U201,?31,unknown,PoE PSE module (daughterboard)
+POE_SNS4,Net-(U201-SENSE4),R214,1,unknown,PoE PSE module (daughterboard)
+POE_SNS4,Net-(U201-SENSE4),U201,?41,unknown,PoE PSE module (daughterboard)
+RBIAS,/Switch IC YT9215SCH/RBIAS,U4,12,inferred,Switch IC YT9215SCH
+SDS0_RXN,/Port 5 uplink and SFP/SDS0_RXN,U12,12,unknown,Port 5 uplink and SFP
+SDS0_RXN,/Port 5 uplink and SFP/SDS0_RXN,U4,42,unknown,Switch IC YT9215SCH
+SDS0_RXP,/Port 5 uplink and SFP/SDS0_RXP,U12,13,unknown,Port 5 uplink and SFP
+SDS0_RXP,/Port 5 uplink and SFP/SDS0_RXP,U4,41,unknown,Switch IC YT9215SCH
+SDS0_TXN,/Port 5 uplink and SFP/SDS0_TXN,U12,19,unknown,Port 5 uplink and SFP
+SDS0_TXN,/Port 5 uplink and SFP/SDS0_TXN,U4,38,unknown,Switch IC YT9215SCH
+SDS0_TXP,/Port 5 uplink and SFP/SDS0_TXP,U12,18,unknown,Port 5 uplink and SFP
+SDS0_TXP,/Port 5 uplink and SFP/SDS0_TXP,U4,39,unknown,Switch IC YT9215SCH
+SDS1_RXN,/Switch IC YT9215SCH/SDS1_RXN,U4,35,unknown,Switch IC YT9215SCH
+SDS1_RXP,/Switch IC YT9215SCH/SDS1_RXP,U4,34,unknown,Switch IC YT9215SCH
+SDS1_TXN,/Switch IC YT9215SCH/SDS1_TXN,U4,31,unknown,Switch IC YT9215SCH
+SDS1_TXP,/Switch IC YT9215SCH/SDS1_TXP,U4,32,unknown,Switch IC YT9215SCH
+SPF0_CS,Net-(U4C-GPIO15{slash}SPF0_CS),R44,2,seen,Switch IC YT9215SCH
+SPF0_CS,Net-(U4C-GPIO15{slash}SPF0_CS),U4,55,seen,Switch IC YT9215SCH
+SPF0_SCK,Net-(U4C-GPIO9{slash}SPF0_SCK{slash}SPF_MUX_SEL),R93,2,seen,Switch IC YT9215SCH
+SPF0_SCK,Net-(U4C-GPIO9{slash}SPF0_SCK{slash}SPF_MUX_SEL),U4,49,seen,Switch IC YT9215SCH
+SPF0_SI,Net-(U4C-GPIO10{slash}SPF0_SI),R92,2,seen,Switch IC YT9215SCH
+SPF0_SI,Net-(U4C-GPIO10{slash}SPF0_SI),U4,50,seen,Switch IC YT9215SCH
+SPF0_SO,Net-(U4C-GPIO14{slash}SPF0_SO),R89,2,seen,Switch IC YT9215SCH
+SPF0_SO,Net-(U4C-GPIO14{slash}SPF0_SO),U4,54,seen,Switch IC YT9215SCH
+SWR_LX,Net-(L3-Pad2),L3,2,seen,Switch IC YT9215SCH
+SWR_LX,Net-(L3-Pad2),U4,63,seen,Switch IC YT9215SCH
+SWR_LX,Net-(L3-Pad2),U4,64,seen,Switch IC YT9215SCH
+TBD_D1_A,/Power input and 3.3 V buck/TBD_D1_A,D1,2,unknown,Power input and 3.3 V buck
+TBD_D1_K,/Power input and 3.3 V buck/TBD_D1_K,D1,1,unknown,Power input and 3.3 V buck
+TBD_D5_A,/Power input and 3.3 V buck/TBD_D5_A,D5,2,unknown,Power input and 3.3 V buck
+TBD_D5_K,/Power input and 3.3 V buck/TBD_D5_K,D5,1,unknown,Power input and 3.3 V buck
+TBD_LED6_1,/Port LEDs/TBD_LED6_1,J5,1,unknown,Port LEDs
+TBD_LED6_2,/Port LEDs/TBD_LED6_2,J5,2,unknown,Port LEDs
+TBD_LED6_3,/Port LEDs/TBD_LED6_3,J5,3,unknown,Port LEDs
+TBD_LED6_4,/Port LEDs/TBD_LED6_4,J5,4,unknown,Port LEDs
+TBD_LED7_A,/Port LEDs/TBD_LED7_A,LED7,2,unknown,Port LEDs
+TBD_LED7_K,/Port LEDs/TBD_LED7_K,LED7,1,unknown,Port LEDs
+TBD_LED8_A,/Port LEDs/TBD_LED8_A,LED8,2,unknown,Port LEDs
+TBD_LED8_K,/Port LEDs/TBD_LED8_K,LED8,1,unknown,Port LEDs
+TBD_MOD_R10,/PoE PSE module (daughterboard)/TBD_MOD_R10,R210,2,unknown,PoE PSE module (daughterboard)
+TBD_MOD_R11,/PoE PSE module (daughterboard)/TBD_MOD_R11,R211,2,unknown,PoE PSE module (daughterboard)
+TBD_MOD_R3,/PoE PSE module (daughterboard)/TBD_MOD_R3,R203,2,unknown,PoE PSE module (daughterboard)
+TBD_MOD_R9,/PoE PSE module (daughterboard)/TBD_MOD_R9,R209,2,unknown,PoE PSE module (daughterboard)
+TBD_P0_ESD_VP,/Ports 1-4 with PoE/TBD_P0_ESD_VP,ED1,5,unknown,Ports 1-4 with PoE
+TBD_P0_ESD_VP,/Ports 1-4 with PoE/TBD_P0_ESD_VP,ED10,5,unknown,Ports 1-4 with PoE
+TBD_P1_ESD_VP,/Ports 1-4 with PoE/TBD_P1_ESD_VP,ED2,5,unknown,Ports 1-4 with PoE
+TBD_P1_ESD_VP,/Ports 1-4 with PoE/TBD_P1_ESD_VP,ED3,5,unknown,Ports 1-4 with PoE
+TBD_P2_ESD_VP,/Ports 1-4 with PoE/TBD_P2_ESD_VP,ED4,5,unknown,Ports 1-4 with PoE
+TBD_P2_ESD_VP,/Ports 1-4 with PoE/TBD_P2_ESD_VP,ED5,5,unknown,Ports 1-4 with PoE
+TBD_P3_ESD_VP,/Ports 1-4 with PoE/TBD_P3_ESD_VP,ED6,5,unknown,Ports 1-4 with PoE
+TBD_P3_ESD_VP,/Ports 1-4 with PoE/TBD_P3_ESD_VP,ED7,5,unknown,Ports 1-4 with PoE
+TBD_P4_ESD_VP,/Port 5 uplink and SFP/TBD_P4_ESD_VP,ED8,5,unknown,Port 5 uplink and SFP
+TBD_P4_ESD_VP,/Port 5 uplink and SFP/TBD_P4_ESD_VP,ED9,5,unknown,Port 5 uplink and SFP
+TBD_PC2_1,/Power input and 3.3 V buck/TBD_PC2_1,PC2,1,unknown,Power input and 3.3 V buck
+TBD_PC2_2,/Power input and 3.3 V buck/TBD_PC2_2,PC2,2,unknown,Power input and 3.3 V buck
+TBD_POW1,/Port LEDs/TBD_POW1,RJ18,1,unknown,Port LEDs
+TBD_POW2,/Port LEDs/TBD_POW2,RJ16,1,unknown,Port LEDs
+TBD_POW3,/Port LEDs/TBD_POW3,RJ14,1,unknown,Port LEDs
+TBD_POW4,/Port LEDs/TBD_POW4,RJ12,1,unknown,Port LEDs
+TBD_POW5,/Port LEDs/TBD_POW5,RJ10,1,unknown,Port LEDs
+TBD_POW6,/Port LEDs/TBD_POW6,RJ8,1,unknown,Port LEDs
+TBD_PSE_IO1,/PoE PSE module (daughterboard)/TBD_PSE_IO1,U201,?3,unknown,PoE PSE module (daughterboard)
+TBD_PSE_IO2,/PoE PSE module (daughterboard)/TBD_PSE_IO2,U201,?4,unknown,PoE PSE module (daughterboard)
+TBD_PSE_VDD,/PoE PSE module (daughterboard)/TBD_PSE_VDD,U201,?2,unknown,PoE PSE module (daughterboard)
+TBD_R11_1,/Power input and 3.3 V buck/TBD_R11_1,R11,1,unknown,Power input and 3.3 V buck
+TBD_R11_2,/Power input and 3.3 V buck/TBD_R11_2,R11,2,unknown,Power input and 3.3 V buck
+TBD_R68_1,/Port LEDs/TBD_R68_1,R68,1,unknown,Port LEDs
+TBD_R68_2,/Port LEDs/TBD_R68_2,R68,2,unknown,Port LEDs
+TBD_SFP_LOS,/Port 5 uplink and SFP/TBD_SFP_LOS,U12,8,unknown,Port 5 uplink and SFP
+TBD_SFP_MODDEF0,/Port 5 uplink and SFP/TBD_SFP_MODDEF0,U12,6,unknown,Port 5 uplink and SFP
+TBD_SFP_RS,/Port 5 uplink and SFP/TBD_SFP_RS,U12,7,unknown,Port 5 uplink and SFP
+TBD_SFP_SCL,/Port 5 uplink and SFP/TBD_SFP_SCL,U12,5,unknown,Port 5 uplink and SFP
+TBD_SFP_SDA,/Port 5 uplink and SFP/TBD_SFP_SDA,U12,4,unknown,Port 5 uplink and SFP
+TBD_SFP_TXDIS,/Port 5 uplink and SFP/TBD_SFP_TXDIS,U12,3,unknown,Port 5 uplink and SFP
+TBD_SFP_TXFAULT,/Port 5 uplink and SFP/TBD_SFP_TXFAULT,U12,2,unknown,Port 5 uplink and SFP
+TBD_TVS1,/PoE PSE module (daughterboard)/TBD_TVS1,D201,2,unknown,PoE PSE module (daughterboard)
+TBD_TVS2,/PoE PSE module (daughterboard)/TBD_TVS2,D203,2,unknown,PoE PSE module (daughterboard)
+TBD_TVS3,/PoE PSE module (daughterboard)/TBD_TVS3,D205,2,unknown,PoE PSE module (daughterboard)
+TBD_TVS4,/PoE PSE module (daughterboard)/TBD_TVS4,D207,2,unknown,PoE PSE module (daughterboard)
+TBD_U10_WP,/Switch IC YT9215SCH/TBD_U10_WP,U10,7,unknown,Switch IC YT9215SCH
+TBD_U4_44,/Switch IC YT9215SCH/TBD_U4_44,U4,44,unknown,Switch IC YT9215SCH
+TBD_U4_48,/Switch IC YT9215SCH/TBD_U4_48,U4,48,unknown,Switch IC YT9215SCH
+TBD_U4_51,/Switch IC YT9215SCH/TBD_U4_51,U4,51,unknown,Switch IC YT9215SCH
+TBD_U4_52,/Switch IC YT9215SCH/TBD_U4_52,U4,52,unknown,Switch IC YT9215SCH
+TBD_U4_53,/Switch IC YT9215SCH/TBD_U4_53,U4,53,unknown,Switch IC YT9215SCH
+TBD_U4_56,/Switch IC YT9215SCH/TBD_U4_56,U4,56,unknown,Switch IC YT9215SCH
+TBD_U4_57,/Switch IC YT9215SCH/TBD_U4_57,U4,57,unknown,Switch IC YT9215SCH
+TBD_U4_70,/Switch IC YT9215SCH/TBD_U4_70,U4,70,unknown,Switch IC YT9215SCH
+TBD_U4_72,/Switch IC YT9215SCH/TBD_U4_72,U4,72,unknown,Switch IC YT9215SCH
+TBD_U4_73,/Switch IC YT9215SCH/TBD_U4_73,U4,73,unknown,Switch IC YT9215SCH
+TBD_U4_74,/Switch IC YT9215SCH/TBD_U4_74,U4,74,unknown,Switch IC YT9215SCH
+TBD_U4_76,/Switch IC YT9215SCH/TBD_U4_76,U4,76,unknown,Switch IC YT9215SCH
+TBD_U4_78,/Switch IC YT9215SCH/TBD_U4_78,U4,78,unknown,Switch IC YT9215SCH
+TBD_U4_81,/Switch IC YT9215SCH/TBD_U4_81,U4,81,unknown,Switch IC YT9215SCH
+TBD_U4_83,/Switch IC YT9215SCH/TBD_U4_83,U4,83,unknown,Switch IC YT9215SCH
+TBD_U4_84,/Switch IC YT9215SCH/TBD_U4_84,U4,84,unknown,Switch IC YT9215SCH
+TBD_U4_93,/Switch IC YT9215SCH/TBD_U4_93,U4,93,unknown,Switch IC YT9215SCH
+TBD_U6_HOLD,/Switch IC YT9215SCH/TBD_U6_HOLD,U6,7,unknown,Switch IC YT9215SCH
+TBD_U6_WP,/Switch IC YT9215SCH/TBD_U6_WP,U6,3,unknown,Switch IC YT9215SCH
+VIN_F,Net-(D4-A),D4,2,inferred,Power input and 3.3 V buck
+VIN_F,Net-(D4-A),L1,2,inferred,Power input and 3.3 V buck
+VIN_F,Net-(D4-A),RV1,1,unknown,Power input and 3.3 V buck
+VIN_F,Net-(D4-A),RV2,1,unknown,Power input and 3.3 V buck
+VIN_F,Net-(D4-A),RV3,1,unknown,Power input and 3.3 V buck
+VIN_P,Net-(D4-K),D4,1,inferred,Power input and 3.3 V buck
+VIN_P,Net-(D4-K),L2,1,inferred,Power input and 3.3 V buck
+VIN_RAW,Net-(J2-Pin_1),J2,1,inferred,Power input and 3.3 V buck
+VIN_RAW,Net-(J2-Pin_1),L1,1,inferred,Power input and 3.3 V buck
+XTALI,Net-(U4C-XTALI),C44,1,seen,Switch IC YT9215SCH
+XTALI,Net-(U4C-XTALI),U4,88,seen,Switch IC YT9215SCH
+XTALI,Net-(U4C-XTALI),Y6,2,seen,Switch IC YT9215SCH
+XTALO,Net-(U4C-XTALO),C43,1,seen,Switch IC YT9215SCH
+XTALO,Net-(U4C-XTALO),U4,87,seen,Switch IC YT9215SCH
+XTALO,Net-(U4C-XTALO),Y6,1,seen,Switch IC YT9215SCH

@@ -46,33 +46,31 @@ port speed, port mode or the extension-port interface type; those are register s
 
 ## Source tags
 
-Each value carries one of these tags. A value tagged R is read directly from a design file or from a photo. A value tagged D is
-from the datasheet of the matching chip variant. A value tagged I is inferred, and the reasoning is in the prose of the same section.
-A value tagged U is not known because it is not traced.
+Each value carries one of these source tags. The reasoning behind an inferred value is in the prose of the same section.
 
 | Tag | Meaning |
 |---|---|
-| <a id="tag-r"></a>**R** | Read directly |
-| <a id="tag-d"></a>**D** | From the datasheet |
-| <a id="tag-i"></a>**I** | Inferred |
-| <a id="tag-u"></a>**U** | Not known |
+| <a id="tag-r"></a>Read | Read directly from a design file or from a photo |
+| <a id="tag-d"></a>Datasheet | From the datasheet of the matching chip variant |
+| <a id="tag-i"></a>Inferred | Reasoned from other evidence |
+| <a id="tag-u"></a>Unknown | Not traced |
 
 ## Summary
 
 | Setting | LX-IS601F V2.0 | Tag | wu-kou YT9215S V2.0 | Tag |
 |---|---|---|---|---|
-| Embedded MCU | <a href="#lx-pin-76">Disabled</a> | <a href="#tag-i">I</a> | <a href="#wk-pin-75">Enabled</a> | <a href="#tag-r">R</a> |
-| Start-up load | <a href="#lx-what-the-strapping-selects">EEPROM to registers</a> | <a href="#tag-i">I</a> | <a href="#wk-what-the-strapping-selects">None</a> | <a href="#tag-i">I</a> |
-| SPI flash interface | <a href="#lx-pin-75">Disabled</a> | <a href="#tag-i">I</a> | <a href="#wk-pin-74">Disabled</a> | <a href="#tag-r">R</a> |
-| EEPROM autoload | <a href="#lx-pin-77">Enabled</a> | <a href="#tag-i">I</a> | <a href="#wk-pin-76">Disabled</a> | <a href="#tag-r">R</a> |
-| EEPROM fitted | <a href="#lx-u10">24C08</a> | <a href="#tag-r">R</a> | <a href="#wk-bom">None</a> | <a href="#tag-r">R</a> |
-| SPI flash fitted | <a href="#lx-u6">None</a> | <a href="#tag-r">R</a> | <a href="#wk-bom">None</a> | <a href="#tag-r">R</a> |
-| Embedded PHYs | <a href="#lx-pin-83">Enabled</a> | <a href="#tag-i">I</a> | <a href="#wk-pin-79">Enabled</a> | <a href="#tag-r">R</a> |
-| Internal core regulator | <a href="#lx-pin-60">Enabled</a> | <a href="#tag-i">I</a> | <a href="#wk-pin-60">Enabled</a> | <a href="#tag-r">R</a> |
-| Slave SMI address | <a href="#lx-pin-80">0x1d</a> | <a href="#tag-i">I</a> | <a href="#wk-configuration-pins">No strap</a> | <a href="#tag-d">D</a> |
-| Switch ID | <a href="#lx-other-configuration-pins">0</a> | <a href="#tag-i">I</a> | <a href="#wk-configuration-pins">0</a> | <a href="#tag-d">D</a> |
-| LED mode | <a href="#lx-what-the-strapping-selects">Parallel</a> | <a href="#tag-i">I</a> | <a href="#wk-led-wiring">Parallel</a> | <a href="#tag-i">I</a> |
-| Power-on LED blink | <a href="#lx-pin-74">Enabled</a> | <a href="#tag-i">I</a> | <a href="#wk-pin-73">Enabled</a> | <a href="#tag-r">R</a> |
+| Embedded MCU | <a href="#lx-pin-76">Disabled</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-pin-75">Enabled</a> | <a href="#tag-r">Read</a> |
+| Start-up load | <a href="#lx-what-the-strapping-selects">EEPROM to registers</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-what-the-strapping-selects">None</a> | <a href="#tag-i">Inferred</a> |
+| SPI flash interface | <a href="#lx-pin-75">Disabled</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-pin-74">Disabled</a> | <a href="#tag-r">Read</a> |
+| EEPROM autoload | <a href="#lx-pin-77">Enabled</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-pin-76">Disabled</a> | <a href="#tag-r">Read</a> |
+| EEPROM fitted | <a href="#lx-u10">24C08</a> | <a href="#tag-r">Read</a> | <a href="#wk-bom">None</a> | <a href="#tag-r">Read</a> |
+| SPI flash fitted | <a href="#lx-u6">None</a> | <a href="#tag-r">Read</a> | <a href="#wk-bom">None</a> | <a href="#tag-r">Read</a> |
+| Embedded PHYs | <a href="#lx-pin-83">Enabled</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-pin-79">Enabled</a> | <a href="#tag-r">Read</a> |
+| Internal core regulator | <a href="#lx-pin-60">Enabled</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-pin-60">Enabled</a> | <a href="#tag-r">Read</a> |
+| Slave SMI address | <a href="#lx-pin-80">0x1d</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-configuration-pins">No strap</a> | <a href="#tag-d">Datasheet</a> |
+| Switch ID | <a href="#lx-other-configuration-pins">0</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-configuration-pins">0</a> | <a href="#tag-d">Datasheet</a> |
+| LED mode | <a href="#lx-what-the-strapping-selects">Parallel</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-led-wiring">Parallel</a> | <a href="#tag-i">Inferred</a> |
+| Power-on LED blink | <a href="#lx-pin-74">Enabled</a> | <a href="#tag-i">Inferred</a> | <a href="#wk-pin-73">Enabled</a> | <a href="#tag-r">Read</a> |
 
 The LX-IS601F is strapped as a switch that loads its register settings from the I²C EEPROM at reset, with the embedded MCU held
 off. The wu-kou board is strapped as a plain unmanaged switch: nothing is loaded, and the embedded MCU is left enabled with nothing to
@@ -110,24 +108,24 @@ The designators do not run in order along the rows: <a href="#lx-r65">R65</a> an
 
 | Column | Tag | Source |
 |---|---|---|
-| Position | <a href="#tag-r">R</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
-| Pull-up | <a href="#tag-r">R</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
-| Pull-down | <a href="#tag-r">R</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
-| Pull-up fitted | <a href="#tag-r">R</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
-| Pull-down fitted | <a href="#tag-r">R</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
-| Strap | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
-| LED output | <a href="#tag-d">D</a> | [Table 8 on pages 24 to 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=24) |
-| Internal | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
-| Selects | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
-| Pin | <a href="#tag-i">I</a> | <a href="#lx-inference-pin-order">Pin order</a> |
-| Level | <a href="#tag-i">I</a> | <a href="#lx-inference-row">Which row pulls up</a> |
+| Position | <a href="#tag-r">Read</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
+| Pull-up | <a href="#tag-r">Read</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
+| Pull-down | <a href="#tag-r">Read</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
+| Pull-up fitted | <a href="#tag-r">Read</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
+| Pull-down fitted | <a href="#tag-r">Read</a> | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> |
+| Strap | <a href="#tag-d">Datasheet</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
+| LED output | <a href="#tag-d">Datasheet</a> | [Table 8 on pages 24 to 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=24) |
+| Internal | <a href="#tag-d">Datasheet</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
+| Selects | <a href="#tag-d">Datasheet</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
+| Pin | <a href="#tag-i">Inferred</a> | <a href="#lx-inference-pin-order">Pin order</a> |
+| Level | <a href="#tag-i">Inferred</a> | <a href="#lx-inference-row">Which row pulls up</a> |
 
 Read from <a href="#lx-photo-bottom-strap-array">Bottom strap array</a>: which footprints carry a resistor, and their designators. Short traces run between the two rows, which fits
 each pair sharing one signal on its inner pads with the outer pads on two rails, but the photo is not sharp enough to follow
 each one. The resistors are unmarked, so their value is not known. The datasheet's typical value is
 [4.7 kΩ, page 40](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=40).
 
-Inferred (tag <a href="#tag-i">I</a>), with the reasons:
+Inferred (tag <a href="#tag-i">Inferred</a>), with the reasons:
 
 - <a id="lx-inference-pin-order"></a>**Pin order.** The YT9215SCH has exactly nine latched strap pins on the LED side
   (<a href="#lx-pin-70">70</a>, <a href="#lx-pin-71">71</a>, <a href="#lx-pin-74">74</a>, <a href="#lx-pin-75">75</a>, <a href="#lx-pin-76">76</a>, <a href="#lx-pin-77">77</a>, <a href="#lx-pin-80">80</a>, <a href="#lx-pin-83">83</a>, <a href="#lx-pin-85">85</a>), and the array has exactly nine pairs, so the pairs are assigned to the nine pins
@@ -148,25 +146,25 @@ not show which of the two photographed boards it is, so the <a href="#lx-strap-r
 
 | Pin | Signal | Board connection | Tag | Photo | Internal | Level | Level tag | Selects |
 |---|---|---|---|---|---|---|---|---|
-| <a id="lx-pin-46"></a>46 | [SWITCH_ID_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | No trace leaves the pin | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | 0 | <a href="#tag-i">I</a> | Switch ID bit 1 = 0 |
-| <a id="lx-pin-51"></a>51 | [SWITCH_ID_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">U</a> | – | Pull-down | 0 | <a href="#tag-i">I</a> | Switch ID bit 0 = 0 |
-| <a id="lx-pin-47"></a>47 | [RESERVED_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | No trace leaves the pin | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | 1 | <a href="#tag-i">I</a> | – |
-| <a id="lx-pin-48"></a>48 | [RESERVED_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | Not traced | <a href="#tag-u">U</a> | – | Pull-up | 1 | <a href="#tag-i">I</a> | – |
-| <a id="lx-pin-50"></a>50 | [RESERVED_2](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a id="lx-r92"></a>R92 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | – |
-| <a id="lx-pin-49"></a>49 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a id="lx-r93"></a>R93 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | Flash pin group |
-| <a id="lx-pin-54"></a>54 | [SPF0_SO](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r89"></a>R89 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
-| <a id="lx-pin-55"></a>55 | [SPF0_CS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r44"></a>R44 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
-| <a id="lx-pin-60"></a>60 | [EN_SWR](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">U</a> | – | None | 1 | <a href="#tag-i">I</a> | Internal regulator on |
-| <a id="lx-pin-89"></a>89 | [nRESET](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30) | Trace to a via | <a href="#tag-i">I</a> | <a href="#lx-photo-u4-top-edge">U4 top edge</a> | Pull-up | – | – | Not a strap |
+| <a id="lx-pin-46"></a>46 | [SWITCH_ID_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | No trace leaves the pin | <a href="#tag-r">Read</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | 0 | <a href="#tag-i">Inferred</a> | Switch ID bit 1 = 0 |
+| <a id="lx-pin-51"></a>51 | [SWITCH_ID_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">Unknown</a> | – | Pull-down | 0 | <a href="#tag-i">Inferred</a> | Switch ID bit 0 = 0 |
+| <a id="lx-pin-47"></a>47 | [RESERVED_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | No trace leaves the pin | <a href="#tag-r">Read</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | 1 | <a href="#tag-i">Inferred</a> | – |
+| <a id="lx-pin-48"></a>48 | [RESERVED_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | Not traced | <a href="#tag-u">Unknown</a> | – | Pull-up | 1 | <a href="#tag-i">Inferred</a> | – |
+| <a id="lx-pin-50"></a>50 | [RESERVED_2](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a id="lx-r92"></a>R92 | <a href="#tag-r">Read</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">Unknown</a> | – |
+| <a id="lx-pin-49"></a>49 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a id="lx-r93"></a>R93 | <a href="#tag-r">Read</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">Unknown</a> | Flash pin group |
+| <a id="lx-pin-54"></a>54 | [SPF0_SO](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r89"></a>R89 | <a href="#tag-r">Read</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
+| <a id="lx-pin-55"></a>55 | [SPF0_CS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r44"></a>R44 | <a href="#tag-r">Read</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
+| <a id="lx-pin-60"></a>60 | [EN_SWR](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">Unknown</a> | – | None | 1 | <a href="#tag-i">Inferred</a> | Internal regulator on |
+| <a id="lx-pin-89"></a>89 | [nRESET](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30) | Trace to a via | <a href="#tag-i">Inferred</a> | <a href="#lx-photo-u4-top-edge">U4 top edge</a> | Pull-up | – | – | Not a strap |
 
 | Column | Tag | Source |
 |---|---|---|
 | Board connection | Per row | Photo column |
 | Level | Per row | <a href="#lx-level-reasons">Level reasoning</a> |
-| Pin | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
-| Signal | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
-| Internal | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
-| Selects | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
+| Pin | <a href="#tag-d">Datasheet</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
+| Signal | <a href="#tag-d">Datasheet</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
+| Internal | <a href="#tag-d">Datasheet</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
+| Selects | <a href="#tag-d">Datasheet</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
 
 Six rows use other tables. Pins <a href="#lx-pin-54">54</a> and <a href="#lx-pin-55">55</a> take Pin, Signal and Internal from [Table 10 on page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25), and pin <a href="#lx-pin-89">89</a> takes them from [Table 23 on page 30](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30).
 Pins <a href="#lx-pin-47">47</a>, <a href="#lx-pin-48">48</a> and <a href="#lx-pin-50">50</a> take only Internal from [Table 19 on page 27](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=27).
@@ -188,29 +186,29 @@ Pins <a href="#lx-pin-47">47</a>, <a href="#lx-pin-48">48</a> and <a href="#lx-p
 
 | Strap | Pin | Level | Tag |
 |---|---|---|---|
-| [DISAUTOLOAD](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a href="#lx-pin-77">77</a> | 0 | <a href="#tag-i">I</a> |
-| [DIS_MCU](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a href="#lx-pin-76">76</a> | 1 | <a href="#tag-i">I</a> |
-| [EN_SPIF](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a href="#lx-pin-75">75</a> | 0 | <a href="#tag-i">I</a> |
-| [DIS_SPIS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a href="#lx-pin-70">70</a> | 1 | <a href="#tag-i">I</a> |
-| [SMI_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a href="#lx-pin-85">85</a> | 1 | <a href="#tag-i">I</a> |
+| [DISAUTOLOAD](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a href="#lx-pin-77">77</a> | 0 | <a href="#tag-i">Inferred</a> |
+| [DIS_MCU](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a href="#lx-pin-76">76</a> | 1 | <a href="#tag-i">Inferred</a> |
+| [EN_SPIF](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a href="#lx-pin-75">75</a> | 0 | <a href="#tag-i">Inferred</a> |
+| [DIS_SPIS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a href="#lx-pin-70">70</a> | 1 | <a href="#tag-i">Inferred</a> |
+| [SMI_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a href="#lx-pin-85">85</a> | 1 | <a href="#tag-i">Inferred</a> |
 
 | Result | Value | Tag |
 |---|---|---|
-| Loads from | EEPROM <a href="#lx-u10">U10</a> | <a href="#tag-d">D</a> |
-| Loads to | Registers | <a href="#tag-d">D</a> |
-| MCU | Does not run | <a href="#tag-d">D</a> |
+| Loads from | EEPROM <a href="#lx-u10">U10</a> | <a href="#tag-d">Datasheet</a> |
+| Loads to | Registers | <a href="#tag-d">Datasheet</a> |
+| MCU | Does not run | <a href="#tag-d">Datasheet</a> |
 
-The tag <a href="#tag-d">D</a> covers the mapping from levels to result. The levels themselves are inferred, so the [summary](#summary) tags the
-outcome <a href="#tag-i">I</a>.
+The tag <a href="#tag-d">Datasheet</a> covers the mapping from levels to result. The levels themselves are inferred, so the [summary](#summary) tags the
+outcome <a href="#tag-i">Inferred</a>.
 
 These levels match the third row of [Table 25, "Flexible Applications", on pages 33 to 34](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=33), which the datasheet heads
 DISAUTOLOAD, DIS_MCU, EN_SPIF, DIS_SPI and SMI_SEL. That row is 0, 1, 0, X, X, so DIS_SPIS (pin <a href="#lx-pin-70">70</a>) and SMI_SEL (pin <a href="#lx-pin-85">85</a>) do not affect the
 result. At reset the chip reads <a href="#lx-u10">U10</a>
 and writes the contents into its registers. That is how the board can bring up its SFP port
-(<a href="#lx-sfp">the SFP connector</a>), which needs the SerDes configured by register, without any firmware (tag <a href="#tag-i">I</a>). Reading <a href="#lx-u10">U10</a> would
+(<a href="#lx-sfp">the SFP connector</a>), which needs the SerDes configured by register, without any firmware (tag <a href="#tag-i">Inferred</a>). Reading <a href="#lx-u10">U10</a> would
 show exactly which registers the vendor sets.
 
-The LEDs are driven in parallel mode, one pin per LED (tag <a href="#tag-i">I</a>, from the <a href="#lx-unlisted">LED array</a> on the board). LED polarity
+The LEDs are driven in parallel mode, one pin per LED (tag <a href="#tag-i">Inferred</a>, from the <a href="#lx-unlisted">LED array</a> on the board). LED polarity
 follows the strap level on each pin ([datasheet, page 40](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=40)): a pin pulled up drives its LED active low, and a pin
 pulled down drives it active high. Pins <a href="#lx-pin-71">71</a>, <a href="#lx-pin-75">75</a> and <a href="#lx-pin-77">77</a> are therefore active high and the other six
 are active low.
@@ -220,82 +218,82 @@ are active low.
 
 | Ref | Ref tag | Function | Part | Marking | Package | Value | Rating | Board | Side | Photo | Datasheet | LCSC |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| <a id="lx-u4"></a>U4 | <a href="#tag-r">R</a> | Switch IC | YT9215SCH | `YT9215SCH` | LQFP-128 with exposed pad | – | – | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | [PDF](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) | – |
-| <a id="lx-y6"></a>Y6 | <a href="#tag-r">R</a> | Crystal | – | `25.000 MHZ` | SMD 4-pad | 25 MHz | – | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | – | – |
-| <a id="lx-u10"></a>U10 | <a href="#tag-r">R</a> | I²C EEPROM | 24C08 | `24C08` | SOIC-8 | 8 Kbit | – | Not known | Bottom | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> | [Similar part](../datasheets/components/Hangshun_HK24C08.pdf) | [C495286](https://jlcpcb.com/partdetail/C495286) |
-| <a id="lx-u6"></a>U6 | <a href="#tag-r">R</a> | SPI flash footprint | Not fitted | – | 8-pin footprint | – | – | Not known | Bottom | <a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a> | – | – |
-| <a id="lx-pu1"></a>PU1 | <a href="#tag-r">R</a> | Buck regulator | SCT2622 | `2622 SCT` | ESOP-8 | – | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | [PDF](../datasheets/components/SCT_SCT2622.pdf) | [C5361735](https://www.lcsc.com/product-detail/C5361735.html) |
-| <a id="lx-pr1"></a>PR1 | <a href="#tag-r">R</a> | Regulator resistor | – | `86C` | Chip resistor | 76.8 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
-| <a id="lx-pr2"></a>PR2 | <a href="#tag-r">R</a> | Regulator resistor | – | `30D` | Chip resistor | 200 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
-| <a id="lx-pr3"></a>PR3 | <a href="#tag-r">R</a> | Regulator resistor | – | `304` | Chip resistor | 300 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
-| <a id="lx-r8"></a>R8 | <a href="#tag-r">R</a> | Regulator resistor | – | `49C` | Chip resistor | 31.6 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
-| <a id="lx-r11"></a>R11 | <a href="#tag-r">R</a> | Regulator resistor | – | `51C` | Chip resistor | 33.2 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
-| <a id="lx-pl3"></a>PL3 | <a href="#tag-r">R</a> | Buck inductor | – | `100` | SMD | 10 µH | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
-| <a id="lx-d40"></a>D40 | <a href="#tag-r">R</a> | Buck catch diode | SS310 | `LGE SS310` | SMA | 3 A | 100 V | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | [PDF](../datasheets/components/LGE_SS32-SS320_Series.pdf) | [C432297](https://www.lcsc.com/product-detail/C432297.html) |
-| <a id="lx-tc1"></a>TC1 | <a href="#tag-r">R</a> | Buck output capacitor | – | `220 16V` | Aluminium can | 220 µF | 16 V | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | – | – |
-| <a id="lx-l3"></a>L3 | <a href="#tag-i">I</a> | Core regulator inductor | – | `4R7` | SMD | 4.7 µH | – | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | – | – |
-| <a id="lx-c4"></a>C4 | <a href="#tag-r">R</a> | Input capacitor | – | `YX 47 63V` | Aluminium can | 47 µF | 63 V | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | – | – |
-| <a id="lx-c4-b"></a>C4 | <a href="#tag-r">R</a> | Input capacitor | – | `22 63V MB` | Aluminium can | 22 µF | 63 V | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
-| <a id="lx-choke"></a>Not legible | <a href="#tag-u">U</a> | Input choke | – | `701` | SMD | – | – | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
-| <a id="lx-d4"></a>D4 | <a href="#tag-r">R</a> | Input diode | SS510 | `LGE SS510` | SMA | 5 A | 100 V | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | [PDF](../datasheets/components/LGE_SS52-SS520_Series.pdf) | [C432296](https://www.lcsc.com/product-detail/C432296.html) |
-| <a id="lx-d5"></a>D5 | <a href="#tag-r">R</a> | Input diode | SS510 | `LGE SS510` | SMA | 5 A | 100 V | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | [PDF](../datasheets/components/LGE_SS52-SS520_Series.pdf) | [C432296](https://www.lcsc.com/product-detail/C432296.html) |
-| <a id="lx-p4"></a>P4 | <a href="#tag-r">R</a> | Power input | – | – | 2-pin through-hole header | – | – | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
-| <a id="lx-dxfrm1"></a>DXFRM1 | <a href="#tag-r">R</a> | Port magnetics footprint | – | – | Not visible | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-dxfrm2"></a>DXFRM2 | <a href="#tag-r">R</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
-| <a id="lx-dxfrm3"></a>DXFRM3 | <a href="#tag-r">R</a> | Port magnetics | G2401PR | Partly hidden | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
-| <a id="lx-dxfrm5"></a>DXFRM5 | <a href="#tag-r">R</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
-| <a id="lx-dxfrm6"></a>DXFRM6 | <a href="#tag-r">R</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
-| <a id="lx-ed1"></a>ED1 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | A | Top | <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | – | – |
-| <a id="lx-ed2"></a>ED2 | <a href="#tag-r">R</a> | ESD array | Not identified | Hidden | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed3"></a>ED3 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed4"></a>ED4 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed5"></a>ED5 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed6"></a>ED6 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed7"></a>ED7 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed8"></a>ED8 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed9"></a>ED9 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
-| <a id="lx-ed10"></a>ED10 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | A | Top | <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | – | – |
-| <a id="lx-poe-ports"></a>Not legible | <a href="#tag-u">U</a> | PoE ports 1 to 4 | – | – | Through-hole 1×4 RJ45 block | – | – | B | Top | <a href="#lx-photo-board-b-top">Board B top</a> | – | – |
-| <a id="lx-uplink"></a>Not legible | <a href="#tag-u">U</a> | Uplink port | – | – | Through-hole RJ45 | – | – | B | Top | <a href="#lx-photo-board-b-top">Board B top</a> | – | – |
-| <a id="lx-sfp"></a>Not legible | <a href="#tag-u">U</a> | SFP connector | – | – | SMD with cage | – | – | B | Top | <a href="#lx-photo-board-b-top">Board B top</a> | – | – |
-| <a id="lx-pin1"></a>PIN1 | <a href="#tag-r">R</a> | PoE module header | – | – | 8-pin through-hole | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-u1"></a>Module U1 | <a href="#tag-r">R</a> | PoE PSE controller | Not identified | `2184A` | QFN | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r8"></a>Module R8 | <a href="#tag-r">R</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r12"></a>Module R12 | <a href="#tag-r">R</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r13"></a>Module R13 | <a href="#tag-r">R</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r14"></a>Module R14 | <a href="#tag-r">R</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r3"></a>Module R3 | <a href="#tag-r">R</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r9"></a>Module R9 | <a href="#tag-r">R</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r10"></a>Module R10 | <a href="#tag-r">R</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-r11"></a>Module R11 | <a href="#tag-r">R</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-d1"></a>Module D1 | <a href="#tag-r">R</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-d3"></a>Module D3 | <a href="#tag-r">R</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-d5"></a>Module D5 | <a href="#tag-r">R</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-d7"></a>Module D7 | <a href="#tag-r">R</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
-| <a id="lx-module-d-unlabelled"></a>Not legible | <a href="#tag-u">U</a> | Module diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-u4"></a>U4 | <a href="#tag-r">Read</a> | Switch IC | YT9215SCH | `YT9215SCH` | LQFP-128 with exposed pad | – | – | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | [PDF](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) | – |
+| <a id="lx-y6"></a>Y6 | <a href="#tag-r">Read</a> | Crystal | – | `25.000 MHZ` | SMD 4-pad | 25 MHz | – | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | – | – |
+| <a id="lx-u10"></a>U10 | <a href="#tag-r">Read</a> | I²C EEPROM | 24C08 | `24C08` | SOIC-8 | 8 Kbit | – | Not known | Bottom | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> | [Similar part](../datasheets/components/Hangshun_HK24C08.pdf) | [C495286](https://jlcpcb.com/partdetail/C495286) |
+| <a id="lx-u6"></a>U6 | <a href="#tag-r">Read</a> | SPI flash footprint | Not fitted | – | 8-pin footprint | – | – | Not known | Bottom | <a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a> | – | – |
+| <a id="lx-pu1"></a>PU1 | <a href="#tag-r">Read</a> | Buck regulator | SCT2622 | `2622 SCT` | ESOP-8 | – | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | [PDF](../datasheets/components/SCT_SCT2622.pdf) | [C5361735](https://www.lcsc.com/product-detail/C5361735.html) |
+| <a id="lx-pr1"></a>PR1 | <a href="#tag-r">Read</a> | Regulator resistor | – | `86C` | Chip resistor | 76.8 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
+| <a id="lx-pr2"></a>PR2 | <a href="#tag-r">Read</a> | Regulator resistor | – | `30D` | Chip resistor | 200 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
+| <a id="lx-pr3"></a>PR3 | <a href="#tag-r">Read</a> | Regulator resistor | – | `304` | Chip resistor | 300 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
+| <a id="lx-r8"></a>R8 | <a href="#tag-r">Read</a> | Regulator resistor | – | `49C` | Chip resistor | 31.6 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
+| <a id="lx-r11"></a>R11 | <a href="#tag-r">Read</a> | Regulator resistor | – | `51C` | Chip resistor | 33.2 kΩ | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
+| <a id="lx-pl3"></a>PL3 | <a href="#tag-r">Read</a> | Buck inductor | – | `100` | SMD | 10 µH | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
+| <a id="lx-d40"></a>D40 | <a href="#tag-r">Read</a> | Buck catch diode | SS310 | `LGE SS310` | SMA | 3 A | 100 V | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | [PDF](../datasheets/components/LGE_SS32-SS320_Series.pdf) | [C432297](https://www.lcsc.com/product-detail/C432297.html) |
+| <a id="lx-tc1"></a>TC1 | <a href="#tag-r">Read</a> | Buck output capacitor | – | `220 16V` | Aluminium can | 220 µF | 16 V | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | – | – |
+| <a id="lx-l3"></a>L3 | <a href="#tag-i">Inferred</a> | Core regulator inductor | – | `4R7` | SMD | 4.7 µH | – | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | – | – |
+| <a id="lx-c4"></a>C4 | <a href="#tag-r">Read</a> | Input capacitor | – | `YX 47 63V` | Aluminium can | 47 µF | 63 V | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | – | – |
+| <a id="lx-c4-b"></a>C4 | <a href="#tag-r">Read</a> | Input capacitor | – | `22 63V MB` | Aluminium can | 22 µF | 63 V | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
+| <a id="lx-choke"></a>Not legible | <a href="#tag-u">Unknown</a> | Input choke | – | `701` | SMD | – | – | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
+| <a id="lx-d4"></a>D4 | <a href="#tag-r">Read</a> | Input diode | SS510 | `LGE SS510` | SMA | 5 A | 100 V | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | [PDF](../datasheets/components/LGE_SS52-SS520_Series.pdf) | [C432296](https://www.lcsc.com/product-detail/C432296.html) |
+| <a id="lx-d5"></a>D5 | <a href="#tag-r">Read</a> | Input diode | SS510 | `LGE SS510` | SMA | 5 A | 100 V | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | [PDF](../datasheets/components/LGE_SS52-SS520_Series.pdf) | [C432296](https://www.lcsc.com/product-detail/C432296.html) |
+| <a id="lx-p4"></a>P4 | <a href="#tag-r">Read</a> | Power input | – | – | 2-pin through-hole header | – | – | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
+| <a id="lx-dxfrm1"></a>DXFRM1 | <a href="#tag-r">Read</a> | Port magnetics footprint | – | – | Not visible | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-dxfrm2"></a>DXFRM2 | <a href="#tag-r">Read</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
+| <a id="lx-dxfrm3"></a>DXFRM3 | <a href="#tag-r">Read</a> | Port magnetics | G2401PR | Partly hidden | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
+| <a id="lx-dxfrm5"></a>DXFRM5 | <a href="#tag-r">Read</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
+| <a id="lx-dxfrm6"></a>DXFRM6 | <a href="#tag-r">Read</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
+| <a id="lx-ed1"></a>ED1 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | A | Top | <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | – | – |
+| <a id="lx-ed2"></a>ED2 | <a href="#tag-r">Read</a> | ESD array | Not identified | Hidden | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed3"></a>ED3 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed4"></a>ED4 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed5"></a>ED5 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed6"></a>ED6 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed7"></a>ED7 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed8"></a>ED8 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed9"></a>ED9 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed10"></a>ED10 | <a href="#tag-r">Read</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | A | Top | <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | – | – |
+| <a id="lx-poe-ports"></a>Not legible | <a href="#tag-u">Unknown</a> | PoE ports 1 to 4 | – | – | Through-hole 1×4 RJ45 block | – | – | B | Top | <a href="#lx-photo-board-b-top">Board B top</a> | – | – |
+| <a id="lx-uplink"></a>Not legible | <a href="#tag-u">Unknown</a> | Uplink port | – | – | Through-hole RJ45 | – | – | B | Top | <a href="#lx-photo-board-b-top">Board B top</a> | – | – |
+| <a id="lx-sfp"></a>Not legible | <a href="#tag-u">Unknown</a> | SFP connector | – | – | SMD with cage | – | – | B | Top | <a href="#lx-photo-board-b-top">Board B top</a> | – | – |
+| <a id="lx-pin1"></a>PIN1 | <a href="#tag-r">Read</a> | PoE module header | – | – | 8-pin through-hole | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-u1"></a>Module U1 | <a href="#tag-r">Read</a> | PoE PSE controller | Not identified | `2184A` | QFN | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r8"></a>Module R8 | <a href="#tag-r">Read</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r12"></a>Module R12 | <a href="#tag-r">Read</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r13"></a>Module R13 | <a href="#tag-r">Read</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r14"></a>Module R14 | <a href="#tag-r">Read</a> | Module sense resistor | – | `R250` | Chip resistor | 0.25 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r3"></a>Module R3 | <a href="#tag-r">Read</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r9"></a>Module R9 | <a href="#tag-r">Read</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r10"></a>Module R10 | <a href="#tag-r">Read</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-r11"></a>Module R11 | <a href="#tag-r">Read</a> | Module resistor | – | `330` | Chip resistor | 33 Ω | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-d1"></a>Module D1 | <a href="#tag-r">Read</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-d3"></a>Module D3 | <a href="#tag-r">Read</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-d5"></a>Module D5 | <a href="#tag-r">Read</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-d7"></a>Module D7 | <a href="#tag-r">Read</a> | Module port diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
+| <a id="lx-module-d-unlabelled"></a>Not legible | <a href="#tag-u">Unknown</a> | Module diode | Not identified | `2616 RGS` | SMD 2-pin | – | – | B | Top | <a href="#lx-photo-poe-module">PoE module</a> | – | – |
 
 | Column | Tag | Source |
 |---|---|---|
 | Ref | Per row | Silkscreen in the linked photo |
-| Marking | <a href="#tag-r">R</a> | Top marking in the linked photo |
-| Board | <a href="#tag-r">R</a> | The linked photo |
-| Side | <a href="#tag-r">R</a> | The linked photo |
-| Function | <a href="#tag-i">I</a> | Position on the board |
-| Part | <a href="#tag-i">I</a> | The marking |
-| Package | <a href="#tag-i">I</a> | Appearance in the linked photo |
-| Value | <a href="#tag-i">I</a> | The marking code |
-| Rating | <a href="#tag-i">I</a> | The marking code |
-| Datasheet | <a href="#tag-i">I</a> | Catalogue match of the marking |
-| LCSC | <a href="#tag-i">I</a> | Catalogue match of the marking |
+| Marking | <a href="#tag-r">Read</a> | Top marking in the linked photo |
+| Board | <a href="#tag-r">Read</a> | The linked photo |
+| Side | <a href="#tag-r">Read</a> | The linked photo |
+| Function | <a href="#tag-i">Inferred</a> | Position on the board |
+| Part | <a href="#tag-i">Inferred</a> | The marking |
+| Package | <a href="#tag-i">Inferred</a> | Appearance in the linked photo |
+| Value | <a href="#tag-i">Inferred</a> | The marking code |
+| Rating | <a href="#tag-i">Inferred</a> | The marking code |
+| Datasheet | <a href="#tag-i">Inferred</a> | Catalogue match of the marking |
+| LCSC | <a href="#tag-i">Inferred</a> | Catalogue match of the marking |
 
-A Ref of "Not legible" with tag <a href="#tag-u">U</a> means no designator can be read for that part in the photos. The Datasheet and LCSC
+A Ref of "Not legible" with tag <a href="#tag-u">Unknown</a> means no designator can be read for that part in the photos. The Datasheet and LCSC
 columns point at the catalogue part that matches the marking, not at a known purchase.
 
 - There is no separate MCU on the board. The only processor is the embedded MCU inside
   <a href="#lx-u4">U4</a>, which the <a href="#lx-pin-76">DIS_MCU strap</a> disables.
 - The 1.15 V core rail comes from <a href="#lx-u4">U4</a>'s own switching regulator through <a href="#lx-l3">L3</a>, not from a second DC-DC.
 - <a href="#lx-pu1">PU1</a> has a 0.8 V feedback reference ([datasheet, page 3](../datasheets/components/SCT_SCT2622.pdf#page=3)). Its output is taken to be the 3.3 V rail
-  (tag <a href="#tag-i">I</a>: the switch IC and the other 3.3 V parts need that rail and no other regulator is on the board). <a href="#lx-pr1">PR1</a>, <a href="#lx-pr2">PR2</a>, <a href="#lx-pr3">PR3</a>, <a href="#lx-r8">R8</a> and <a href="#lx-r11">R11</a> sit beside it and
+  (tag <a href="#tag-i">Inferred</a>: the switch IC and the other 3.3 V parts need that rail and no other regulator is on the board). <a href="#lx-pr1">PR1</a>, <a href="#lx-pr2">PR2</a>, <a href="#lx-pr3">PR3</a>, <a href="#lx-r8">R8</a> and <a href="#lx-r11">R11</a> sit beside it and
   their values are decoded from the marking codes, but which of them form the feedback divider is not traced.
 - The board is PoE sourcing equipment (PSE): it feeds power out of the <a href="#lx-poe-ports">four-port RJ45 block</a> under control of
   <a href="#lx-module-u1">module U1</a>, taken to be a four-port controller from the four `R250` sense resistors (<a href="#lx-module-r8">module R8</a>, <a href="#lx-module-r12">R12</a>, <a href="#lx-module-r13">R13</a> and <a href="#lx-module-r14">R14</a>). It has no powered-device front end.
@@ -488,34 +486,34 @@ Strap names are written without the `STRAP_` prefix that [Table 15 on pages 28 t
 
 | Pin | Strap | Net | Resistor | Value | Pulls to | BOM line | Test point | Sheet | Internal | Level | Level tag | Selects |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| <a id="wk-pin-45"></a>45 | [SWITCH_ID_1](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">D</a> | Switch ID bit 1 = 0 |
-| <a id="wk-pin-50"></a>50 | [SWITCH_ID_0](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">D</a> | Switch ID bit 0 = 0 |
-| <a id="wk-pin-48"></a>48 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">D</a> | Flash pin group SPF1 |
-| <a id="wk-pin-46"></a>46 | [reserved_0](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-d">D</a> | – |
-| <a id="wk-pin-47"></a>47 | [reserved_1](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-d">D</a> | – |
-| <a id="wk-pin-49"></a>49 | [reserved_2](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">D</a> | – |
-| <a id="wk-pin-60"></a>60 | [EN_SWR](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | EN_SWR | <a id="wk-r14"></a>R14 | 4.7 kΩ | 3V3 | <a href="#wk-bom-28">28</a> | <a href="#wk-tp16">TP16</a> | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | None | 1 | <a href="#tag-r">R</a> | Internal regulator on |
-| <a id="wk-pin-70"></a>70 | [EEPROM_MOD](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P4_LED0 | <a id="wk-r29"></a>R29 | 4.7 kΩ | 3V3 | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 1 | <a href="#tag-r">R</a> | EEPROM over 16 Kbit |
-| <a id="wk-pin-73"></a>73 | [EN_PWRLIGHT](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | EN_PWRLIGHT | <a id="wk-r12"></a>R12 | 4.7 kΩ | 3V3 | <a href="#wk-bom-28">28</a> | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-r">R</a> | Power-on LED blink on |
-| <a id="wk-pin-74"></a>74 | [EN_SPIF](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P3_LED0 | <a id="wk-r27"></a>R27 | 4.7 kΩ | GND | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 0 | <a href="#tag-r">R</a> | SPI flash interface off |
-| <a id="wk-pin-75"></a>75 | [DIS_MCU](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P2_LED0 | <a id="wk-r19"></a>R19 | 4.7 kΩ | GND | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 0 | <a href="#tag-r">R</a> | MCU enabled |
-| <a id="wk-pin-76"></a>76 | [DISAUTOLOAD](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | DISAUTOLOAD | <a id="wk-r11"></a>R11 | 4.7 kΩ | 3V3 | <a href="#wk-bom-28">28</a> | <a href="#wk-tp14">TP14</a> | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-r">R</a> | EEPROM autoload off |
-| <a id="wk-pin-79"></a>79 | [EN_PHY](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P1_LED0 | <a id="wk-r17"></a>R17 | 4.7 kΩ | 3V3 | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 1 | <a href="#tag-r">R</a> | Embedded PHYs on |
-| <a id="wk-pin-81"></a>81 | [SMI_SEL](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P0_LED0 | <a id="wk-r15"></a>R15 | 4.7 kΩ | 3V3 | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 1 | <a href="#tag-r">R</a> | EEPROM SMI interface |
+| <a id="wk-pin-45"></a>45 | [SWITCH_ID_1](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">Datasheet</a> | Switch ID bit 1 = 0 |
+| <a id="wk-pin-50"></a>50 | [SWITCH_ID_0](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">Datasheet</a> | Switch ID bit 0 = 0 |
+| <a id="wk-pin-48"></a>48 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">Datasheet</a> | Flash pin group SPF1 |
+| <a id="wk-pin-46"></a>46 | [reserved_0](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-d">Datasheet</a> | – |
+| <a id="wk-pin-47"></a>47 | [reserved_1](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-d">Datasheet</a> | – |
+| <a id="wk-pin-49"></a>49 | [reserved_2](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">Datasheet</a> | – |
+| <a id="wk-pin-60"></a>60 | [EN_SWR](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | EN_SWR | <a id="wk-r14"></a>R14 | 4.7 kΩ | 3V3 | <a href="#wk-bom-28">28</a> | <a href="#wk-tp16">TP16</a> | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | None | 1 | <a href="#tag-r">Read</a> | Internal regulator on |
+| <a id="wk-pin-70"></a>70 | [EEPROM_MOD](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P4_LED0 | <a id="wk-r29"></a>R29 | 4.7 kΩ | 3V3 | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 1 | <a href="#tag-r">Read</a> | EEPROM over 16 Kbit |
+| <a id="wk-pin-73"></a>73 | [EN_PWRLIGHT](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | EN_PWRLIGHT | <a id="wk-r12"></a>R12 | 4.7 kΩ | 3V3 | <a href="#wk-bom-28">28</a> | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-r">Read</a> | Power-on LED blink on |
+| <a id="wk-pin-74"></a>74 | [EN_SPIF](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P3_LED0 | <a id="wk-r27"></a>R27 | 4.7 kΩ | GND | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 0 | <a href="#tag-r">Read</a> | SPI flash interface off |
+| <a id="wk-pin-75"></a>75 | [DIS_MCU](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P2_LED0 | <a id="wk-r19"></a>R19 | 4.7 kΩ | GND | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 0 | <a href="#tag-r">Read</a> | MCU enabled |
+| <a id="wk-pin-76"></a>76 | [DISAUTOLOAD](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | DISAUTOLOAD | <a id="wk-r11"></a>R11 | 4.7 kΩ | 3V3 | <a href="#wk-bom-28">28</a> | <a href="#wk-tp14">TP14</a> | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-up | 1 | <a href="#tag-r">Read</a> | EEPROM autoload off |
+| <a id="wk-pin-79"></a>79 | [EN_PHY](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P1_LED0 | <a id="wk-r17"></a>R17 | 4.7 kΩ | 3V3 | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 1 | <a href="#tag-r">Read</a> | Embedded PHYs on |
+| <a id="wk-pin-81"></a>81 | [SMI_SEL](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | P0_LED0 | <a id="wk-r15"></a>R15 | 4.7 kΩ | 3V3 | <a href="#wk-bom-29">29</a> | None | [P2](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/2_P2.kicad_sch) | Pull-up | 1 | <a href="#tag-r">Read</a> | EEPROM SMI interface |
 
 | Column | Tag | Source |
 |---|---|---|
-| Net | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Resistor | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Value | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Pulls to | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| BOM line | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Test point | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Sheet | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Pin | <a href="#tag-d">D</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
-| Strap | <a href="#tag-d">D</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
-| Internal | <a href="#tag-d">D</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
-| Selects | <a href="#tag-d">D</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
+| Net | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Resistor | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Value | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Pulls to | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| BOM line | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Test point | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Sheet | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Pin | <a href="#tag-d">Datasheet</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
+| Strap | <a href="#tag-d">Datasheet</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
+| Internal | <a href="#tag-d">Datasheet</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
+| Selects | <a href="#tag-d">Datasheet</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
 | Level | Per row | <a href="#wk-level-reasons">Level reasoning</a> |
 
 <a id="wk-level-reasons"></a>
@@ -546,14 +544,14 @@ and is not latched; the other pins in the <a href="#wk-configuration-pins">confi
 
 | Column | Tag | Source |
 |---|---|---|
-| Net | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Resistor | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Value | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Pulls to | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| BOM line | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Sheet | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Pin | <a href="#tag-d">D</a> | [Table 7 on pages 24 to 25](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=24) |
-| LED signal | <a href="#tag-d">D</a> | [Table 7 on pages 24 to 25](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=24) |
+| Net | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Resistor | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Value | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Pulls to | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| BOM line | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Sheet | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Pin | <a href="#tag-d">Datasheet</a> | [Table 7 on pages 24 to 25](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=24) |
+| LED signal | <a href="#tag-d">Datasheet</a> | [Table 7 on pages 24 to 25](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=24) |
 
 [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) lists no strap on these five pins, so their pull direction only sets the LED polarity. The
 datasheet is not consistent about them: its pin tables give a latched-input type to pin <a href="#wk-pin-71">71</a>
@@ -573,18 +571,18 @@ naming a strap function.
 
 | Column | Tag | Source |
 |---|---|---|
-| Port | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Jack | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| LED0 pin | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| LED1 pin | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| LED0 series | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| LED1 series | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Series value | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Series BOM line | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| LED common | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Sheet | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Pin pull | <a href="#tag-r">R</a> | <a href="#wk-configuration-pins">Configuration pins</a> |
-| Drive | <a href="#tag-i">I</a> | The rail the LED common is on |
+| Port | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Jack | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| LED0 pin | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| LED1 pin | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| LED0 series | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| LED1 series | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Series value | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Series BOM line | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| LED common | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Sheet | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Pin pull | <a href="#tag-r">Read</a> | <a href="#wk-configuration-pins">Configuration pins</a> |
+| Drive | <a href="#tag-i">Inferred</a> | The rail the LED common is on |
 
 The pull direction on each LED0 pin is fixed by the strap level that pin needs, so the LEDs on ports 2 and 3 are wired
 to ground and driven high, and the others are wired to 3V3 and driven low. The LED1 pin of each port is pulled the same way
@@ -596,19 +594,19 @@ as its LED0 pin. The LED mode is parallel: pins <a href="#wk-pin-80">80</a> and 
 
 | Strap | Pin | Level | Tag |
 |---|---|---|---|
-| [DISAUTOLOAD](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-76">76</a> | 1 | <a href="#tag-r">R</a> |
-| [DIS_MCU](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-75">75</a> | 0 | <a href="#tag-r">R</a> |
-| [EN_SPIF](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-74">74</a> | 0 | <a href="#tag-r">R</a> |
-| [SMI_SEL](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-81">81</a> | 1 | <a href="#tag-r">R</a> |
+| [DISAUTOLOAD](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-76">76</a> | 1 | <a href="#tag-r">Read</a> |
+| [DIS_MCU](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-75">75</a> | 0 | <a href="#tag-r">Read</a> |
+| [EN_SPIF](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-74">74</a> | 0 | <a href="#tag-r">Read</a> |
+| [SMI_SEL](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=29) | <a href="#wk-pin-81">81</a> | 1 | <a href="#tag-r">Read</a> |
 
 | Result | Value | Tag |
 |---|---|---|
-| Loads from | Nothing | <a href="#tag-i">I</a> |
-| Loads to | Nothing | <a href="#tag-i">I</a> |
-| MCU | Enabled with no boot source | <a href="#tag-i">I</a> |
+| Loads from | Nothing | <a href="#tag-i">Inferred</a> |
+| Loads to | Nothing | <a href="#tag-i">Inferred</a> |
+| MCU | Enabled with no boot source | <a href="#tag-i">Inferred</a> |
 
 The YT9215S datasheet has no boot-mode table, so the result uses [Table 25 of the YT9215SCH datasheet, on pages 33 to 34](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=33),
-which describes the same straps (tag <a href="#tag-i">I</a>). DISAUTOLOAD (pin <a href="#wk-pin-76">76</a>) = 1 falls in its "Others" row, which loads nothing. Nothing is loaded
+which describes the same straps (tag <a href="#tag-i">Inferred</a>). DISAUTOLOAD (pin <a href="#wk-pin-76">76</a>) = 1 falls in its "Others" row, which loads nothing. Nothing is loaded
 at reset and the switch runs on its register defaults as an unmanaged five-port switch.
 
 <a id="wk-other-pins"></a>
@@ -639,7 +637,7 @@ at reset and the switch runs on its register defaults as an unmanaged five-port 
 | <a id="wk-pin-15"></a>15 | No connect | Unconnected | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) |
 | <a id="wk-pin-16"></a>16 | No connect | Unconnected | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) |
 
-All columns are tagged <a href="#tag-r">R</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet), except Group, which is tagged <a href="#tag-d">D</a> from [Table 1, pages 15 to 18](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=15). With the extension port, the SerDes, the I²C pins and the interrupt pin all
+All columns are tagged <a href="#tag-r">Read</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet), except Group, which is tagged <a href="#tag-d">Datasheet</a> from [Table 1, pages 15 to 18](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=15). With the extension port, the SerDes, the I²C pins and the interrupt pin all
 unconnected, there is no management interface on the board. Pins <a href="#wk-pin-15">15</a> and <a href="#wk-pin-16">16</a> are NC pins that the [datasheet, page 32](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32)
 says must be left floating.
 
@@ -649,7 +647,7 @@ says must be left floating.
 | <a href="#wk-c51">C51</a> | Reset delay capacitor | 10 µF | NRST | GND | <a href="#wk-bom-6">6</a> | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) |
 | <a href="#wk-d1">D1</a> | Reset discharge diode | – | NRST | 3V3 | <a href="#wk-bom-13">13</a> | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) |
 
-These three parts form the reset network on pin <a href="#wk-pin-86">86</a>. All columns are tagged <a href="#tag-r">R</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) and [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv), except Role, which is tagged <a href="#tag-i">I</a>: it follows from the nets in the From and To columns.
+These three parts form the reset network on pin <a href="#wk-pin-86">86</a>. All columns are tagged <a href="#tag-r">Read</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) and [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv), except Role, which is tagged <a href="#tag-i">Inferred</a>: it follows from the nets in the From and To columns.
 
 <a id="wk-major-components"></a>
 ### Major components
@@ -711,16 +709,16 @@ These three parts form the reset network on pin <a href="#wk-pin-86">86</a>. All
 
 | Column | Tag | Source |
 |---|---|---|
-| Ref | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Part | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Maker | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Package | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Value | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| BOM line | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| LCSC | <a href="#tag-r">R</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
-| Sheet | <a href="#tag-r">R</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
-| Function | <a href="#tag-i">I</a> | The nets the part connects to |
-| Datasheet | <a href="#tag-i">I</a> | Maker datasheet of the BOM part |
+| Ref | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Part | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Maker | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Package | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Value | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| BOM line | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| LCSC | <a href="#tag-r">Read</a> | [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv) |
+| Sheet | <a href="#tag-r">Read</a> | [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) |
+| Function | <a href="#tag-i">Inferred</a> | The nets the part connects to |
+| Datasheet | <a href="#tag-i">Inferred</a> | Maker datasheet of the BOM part |
 
 Four cells do not come from the BOM. The part fitted as <a href="#wk-u2">U2</a>, its maker and its package are from the
 [author's description](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/docs/description.en.md) and the [YT9215S datasheet](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf). The 25 MHz value of <a href="#wk-x1">X1</a> is
@@ -749,7 +747,7 @@ decoded from its part number.
 | <a href="#wk-l9">L9</a> | AVDDL | PLLVDDL |
 | <a href="#wk-l10">L10</a> | GND | PLLGND |
 
-All columns are tagged <a href="#tag-r">R</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet).
+All columns are tagged <a href="#tag-r">Read</a> from [netlist-schematic.enet](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet).
 
 <a id="wk-bom"></a>
 ### All BOM lines
@@ -796,7 +794,7 @@ under <a href="#wk-designators">Designators</a>.
 | <a id="wk-bom-35"></a>[35](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv?plain=1#L36) | 1 | TYPE-C 6P(040新) | Shou Han | SMD 6-pin | – | [PDF](../datasheets/components/ShouHan_TYPE-C-6P.pdf) | [C2887422](https://www.lcsc.com/product-detail/C2887422.html) |
 | <a id="wk-bom-36"></a>[36](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv?plain=1#L37) | 1 | XRCGB25M000F3M00R0 | Murata | 2.0 × 1.6 mm | – | [PDF](../datasheets/components/Murata_XRCGB_Crystal.pdf) | [C127893](https://www.lcsc.com/product-detail/C127893.html) |
 
-All columns are tagged <a href="#tag-r">R</a> from [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv), except Datasheet, which is tagged <a href="#tag-i">I</a>: it is the maker datasheet for the part number.
+All columns are tagged <a href="#tag-r">Read</a> from [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv), except Datasheet, which is tagged <a href="#tag-i">Inferred</a>: it is the maker datasheet for the part number.
 
 - No datasheet is available for the exact BSMD1206-075-30V fuse (<a href="#wk-f1">F1</a>, <a href="#wk-bom-15">line 15</a>).
 - The RTL8367S-CG datasheet (<a href="#wk-bom-34">line 34</a>) is marked confidential by Realtek, so it is linked from

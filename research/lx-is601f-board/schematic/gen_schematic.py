@@ -640,13 +640,16 @@ for r in rows:
 rows = sorted(seen.values(), key=lambda r: (r[0], r[1], r[2]))
 
 
+CONFIDENCE = {'C': 'confirmed', 'V': 'seen', 'I': 'inferred', 'U': 'unknown'}
+
+
 def write_csv(actual):
     """One row per pin. `net` is the model's name; `kicad_net` is the name in KiCad's netlist."""
     with open(os.path.join(HERE, 'lx-is601f-nets.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['net', 'kicad_net', 'ref', 'pin', 'confidence', 'sheet'])
         for r in rows:
-            w.writerow((r[0], actual.get((r[1], r[2]), ''), r[1], r[2], r[3], r[4]))
+            w.writerow((r[0], actual.get((r[1], r[2]), ''), r[1], r[2], CONFIDENCE[r[3]], r[4]))
 
 
 cnt = collections.Counter(r[3] for r in rows)

@@ -2,23 +2,25 @@
 
 Where the debug and boot interfaces of the YT9215 family come out: the YT9215S, the YT9215SC with its YT9215SCH revision, and the YT9215RB.
 
-## Evidence codes
+## Evidence marks
 
-Each claim carries one of these codes.
+<a id="evidence-codes"></a>
 
-| Code | Name | Evidence |
-|---|---|---|
-| **V** | Verified | Printed in a datasheet |
-| **V** | Verified | Present in a board netlist |
-| **V** | Verified | Read from a chip marking in a photo |
-| **I** | Inferred | Reasoned from other evidence |
-| **C** | Conflicting | Sources disagree or one source contradicts itself |
+Each claim carries one of these marks.
+
+| Mark | Meaning |
+|---|---|
+| Verified | Printed in a datasheet |
+| Verified | Present in a board netlist |
+| Verified | Read from a chip marking in a photo |
+| Inferred | Reasoned from other evidence |
+| Conflicting | Sources disagree or one source contradicts itself |
 
 ## Headline findings
 
 ### The three variants have three different pinouts
 
-Each variant is a pin-for-pin drop-in for a different Realtek part, according to the [Motorcomm selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) (2023-03-08; the same file is [`裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) in the board repo) [**V**](#evidence-codes). Pin numbers from one variant's datasheet cannot be used for another. The crystal pins show it.
+Each variant is a pin-for-pin drop-in for a different Realtek part, according to the [Motorcomm selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) (2023-03-08; the same file is [`裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) in the board repo) ([verified](#evidence-codes)). Pin numbers from one variant's datasheet cannot be used for another. The crystal pins show it.
 
 | Variant | Realtek part it matches | Lower crystal pin | Higher crystal pin | Pin tables |
 |---|---|---|---|---|
@@ -29,15 +31,15 @@ Each variant is a pin-for-pin drop-in for a different Realtek part, according to
 
 ### Every variant has the RISC-V MCU
 
-The selection guide marks the S, the RB and the SC "内置RISC-V" (built-in RISC-V) [**V**](#evidence-codes). The S and RB datasheets both list "Integrated RISC-V microprocessor", the `DIS_MCU` strap, SPI flash, two UARTs and two JTAG groups [**V**](#evidence-codes).
+The selection guide marks the S, the RB and the SC "内置RISC-V" (built-in RISC-V) ([verified](#evidence-codes)). The S and RB datasheets both list "Integrated RISC-V microprocessor", the `DIS_MCU` strap, SPI flash, two UARTs and two JTAG groups ([verified](#evidence-codes)).
 
 ### The newest datasheet has no JTAG
 
-[YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) (2025-02-10) has no JTAG pin names. The pins that [YT9215SC Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) (2023-02-28) calls JTAG are listed there as GPIO, LED and I²C only; the UART and SPI-flash pins are in both [**V**](#evidence-codes). Either Motorcomm does not document JTAG or it is disabled in production silicon [**I**](#evidence-codes). Treat JTAG as unconfirmed until it has been probed.
+[YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) (2025-02-10) has no JTAG pin names. The pins that [YT9215SC Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) (2023-02-28) calls JTAG are listed there as GPIO, LED and I²C only; the UART and SPI-flash pins are in both ([verified](#evidence-codes)). Either Motorcomm does not document JTAG or it is disabled in production silicon ([inferred](#evidence-codes)). Treat JTAG as unconfirmed until it has been probed.
 
 ### The YT9215SCH datasheet describes the MCU
 
-[YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) is the only public description of the MCU [**V**](#evidence-codes).
+[YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) is the only public description of the MCU ([verified](#evidence-codes)).
 
 | Item | Value |
 |---|---|
@@ -56,9 +58,9 @@ The selection guide marks the S, the RB and the SC "内置RISC-V" (built-in RISC
 
 The YT9215S has the RTL8367S pinout and is the part on the [mirrored open-hardware board](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0).
 
-Sources: [YT9215S Draft_01](../datasheets/motorcomm/YT9215S_Datasheet_Draft_01_2022-11-08.pdf) (2022-11-08; also [`YT9215S_Datasheet_draft_V0.1.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/YT9215S_Datasheet_draft_V0.1.pdf) in the board repo) and [YT9215S Draft_05](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf) (2023-02-21; also on [LCSC](https://atta.szlcsc.com/upload/public/pdf/source/20230829/432918AE041FF2F1E459558942DE4628.pdf)). Both drafts give the same pin numbers [**V**](#evidence-codes).
+Sources: [YT9215S Draft_01](../datasheets/motorcomm/YT9215S_Datasheet_Draft_01_2022-11-08.pdf) (2022-11-08; also [`YT9215S_Datasheet_draft_V0.1.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/YT9215S_Datasheet_draft_V0.1.pdf) in the board repo) and [YT9215S Draft_05](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf) (2023-02-21; also on [LCSC](https://atta.szlcsc.com/upload/public/pdf/source/20230829/432918AE041FF2F1E459558942DE4628.pdf)). Both drafts give the same pin numbers ([verified](#evidence-codes)).
 
-The board netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) uses an RTL8367S-CG symbol with the crystal on pins 83 and 84 and nRESET on pin 86, and the board's author reports that it boots with a YT9215S fitted. That confirms the shipping S silicon uses this pinout [**V**](#evidence-codes).
+The board netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) uses an RTL8367S-CG symbol with the crystal on pins 83 and 84 and nRESET on pin 86, and the board's author reports that it boots with a YT9215S fitted. That confirms the shipping S silicon uses this pinout ([verified](#evidence-codes)).
 
 ### SPI flash on the YT9215S
 
@@ -85,13 +87,13 @@ There is one flash interface, on one of two pin groups. The `SPF_MUX_SEL` strap 
 | SI | Chip | DI | IO0 |
 | SO | Flash | DO | IO1 |
 
-- `EN_SPIF` on pin <a id="s-pin-74"></a>74 (GPIO37, also P3LED0) is the enable strap: pull it up to enable flash [**V**](#evidence-codes).
-- SPF0 takes over the extension-port RGMII and MII pins. A design that uses that port has to put flash on SPF1 [**I**](#evidence-codes).
-- On SPF1, CS# is the `DISAUTOLOAD` strap pin. The usual CS# pull-up therefore latches DISAUTOLOAD=1, which the [YT9215SCH boot table](#boot-table) calls "no action", so nothing would load [**I**](#evidence-codes). This needs a bench test, or a pull-down on CS# during reset. The S datasheet has no boot-mode table, so this conclusion borrows the SCH table.
+- `EN_SPIF` on pin <a id="s-pin-74"></a>74 (GPIO37, also P3LED0) is the enable strap: pull it up to enable flash ([verified](#evidence-codes)).
+- SPF0 takes over the extension-port RGMII and MII pins. A design that uses that port has to put flash on SPF1 ([inferred](#evidence-codes)).
+- On SPF1, CS# is the `DISAUTOLOAD` strap pin. The usual CS# pull-up therefore latches DISAUTOLOAD=1, which the [YT9215SCH boot table](#boot-table) calls "no action", so nothing would load ([inferred](#evidence-codes)). This needs a bench test, or a pull-down on CS# during reset. The S datasheet has no boot-mode table, so this conclusion borrows the SCH table.
 
 ### JTAG on the YT9215S
 
-There are two JTAG groups, both shared with LEDs and straps [**V**](#evidence-codes).
+There are two JTAG groups, both shared with LEDs and straps ([verified](#evidence-codes)).
 
 | Group | Signal | Pin | GPIO | Other function | Strap on pin |
 |---|---|---|---|---|---|
@@ -104,24 +106,24 @@ There are two JTAG groups, both shared with LEDs and straps [**V**](#evidence-co
 | JTAG1 | TDI | [72](#s-pin-72) | GPIO35 | P3LED1 | – |
 | JTAG1 | TDO | [77](#s-pin-77) | GPIO40 | P2LED1 | – |
 
-- Pin [79](#s-pin-79) is listed as both JTAG1 TCK and JTAG0 TMS in both drafts, so the two groups cannot be used at once [**V**](#evidence-codes).
-- JTAG1 uses pins [71](#s-pin-71), [72](#s-pin-72) and [77](#s-pin-77), which are also SPF1 pins, so it cannot coexist with flash on SPF1 [**I**](#evidence-codes).
-- There is no TRST and no pin that selects JTAG. Whether the pins become JTAG after reset or only after a register write is not documented. Nor is whether they reach the RISC-V debug module or only boundary scan [**I**](#evidence-codes).
+- Pin [79](#s-pin-79) is listed as both JTAG1 TCK and JTAG0 TMS in both drafts, so the two groups cannot be used at once ([verified](#evidence-codes)).
+- JTAG1 uses pins [71](#s-pin-71), [72](#s-pin-72) and [77](#s-pin-77), which are also SPF1 pins, so it cannot coexist with flash on SPF1 ([inferred](#evidence-codes)).
+- There is no TRST and no pin that selects JTAG. Whether the pins become JTAG after reset or only after a register write is not documented. Nor is whether they reach the RISC-V debug module or only boundary scan ([inferred](#evidence-codes)).
 
 ### UART on the YT9215S
 
 | UART | Signal | Pin | GPIO | Other function | Strap on pin | Evidence |
 |---|---|---|---|---|---|---|
-| UART0 | RX | <a id="s-pin-45"></a>45 | GPIO6 | RGMII TXD3 | `SWITCH_ID_1` | [**V**](#evidence-codes) |
-| UART0 | TX | <a id="s-pin-46"></a>46 | GPIO7 | RGMII TXD2 | – | [**V**](#evidence-codes) |
-| UART1 | RX | <a id="s-pin-19"></a>19 | GPIO2 | INTERRUPT | – | [**V**](#evidence-codes) |
-| UART1 | TX | <a id="s-pin-75"></a>75 | GPIO38 | P2LED0 | `DIS_MCU` | [**V**](#evidence-codes) |
-| UART2 | RX | [73](#s-pin-73) | GPIO36 | – | `EN_PWRLIGHT` | [**V**](#evidence-codes) |
-| UART2 | TX | [75](#s-pin-75) | GPIO38 | UART1 TX | `DIS_MCU` | [**C**](#evidence-codes) |
+| UART0 | RX | <a id="s-pin-45"></a>45 | GPIO6 | RGMII TXD3 | `SWITCH_ID_1` | [Verified](#evidence-codes) |
+| UART0 | TX | <a id="s-pin-46"></a>46 | GPIO7 | RGMII TXD2 | – | [Verified](#evidence-codes) |
+| UART1 | RX | <a id="s-pin-19"></a>19 | GPIO2 | INTERRUPT | – | [Verified](#evidence-codes) |
+| UART1 | TX | <a id="s-pin-75"></a>75 | GPIO38 | P2LED0 | `DIS_MCU` | [Verified](#evidence-codes) |
+| UART2 | RX | [73](#s-pin-73) | GPIO36 | – | `EN_PWRLIGHT` | [Verified](#evidence-codes) |
+| UART2 | TX | [75](#s-pin-75) | GPIO38 | UART1 TX | `DIS_MCU` | [Conflicting](#evidence-codes) |
 
 - UART0 appears in the pin table of both drafts and in the Draft_05 UART table. The Draft_01 UART table leaves it out.
-- On the RTL8367S symbol, pin [45](#s-pin-45) is labelled UART_RX and pin [46](#s-pin-46) UART_TX, so UART0 is the Realtek-compatible console position [**V**](#evidence-codes).
-- The datasheet puts TX on pin [75](#s-pin-75) for both UART1 and UART2. That is probably a typo for one of them [**C**](#evidence-codes).
+- On the RTL8367S symbol, pin [45](#s-pin-45) is labelled UART_RX and pin [46](#s-pin-46) UART_TX, so UART0 is the Realtek-compatible console position ([verified](#evidence-codes)).
+- The datasheet puts TX on pin [75](#s-pin-75) for both UART1 and UART2. That is probably a typo for one of them ([conflicting](#evidence-codes)).
 
 ### Other boot-related pins on the YT9215S
 
@@ -137,7 +139,7 @@ There are two JTAG groups, both shared with LEDs and straps [**V**](#evidence-co
 
 ### How the mirrored board wires these pins
 
-All of this table is from the netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) [**V**](#evidence-codes). Blank cells mean nothing applies to that pin, and `?` means the netlist gives no value.
+All of this table is from the netlist [`schematic/netlist-schematic.enet`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/schematic/netlist-schematic.enet) ([verified](#evidence-codes)). Blank cells mean nothing applies to that pin, and `?` means the netlist gives no value.
 
 | Pin | First signal | Second signal | Third signal | Board net | Strap resistor | Strap value | Pulls to | LED resistor | Test point | Strap level | Effect |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -160,8 +162,8 @@ All of this table is from the netlist [`schematic/netlist-schematic.enet`](https
 
 What the wiring means:
 
-- The board runs with the MCU enabled but with no flash and no EEPROM. DISAUTOLOAD=1 is "no action" in the [YT9215SCH boot table](#boot-table), so the MCU probably sits in its boot ROM doing nothing [**I**](#evidence-codes).
-- To probe JTAG0, JTAG1 or UART2, lift the 470 Ω LED resistors and tap the 4.7 kΩ strap pads. Leaving the LEDs on loads TCK and TDO [**I**](#evidence-codes).
+- The board runs with the MCU enabled but with no flash and no EEPROM. DISAUTOLOAD=1 is "no action" in the [YT9215SCH boot table](#boot-table), so the MCU probably sits in its boot ROM doing nothing ([inferred](#evidence-codes)).
+- To probe JTAG0, JTAG1 or UART2, lift the 470 Ω LED resistors and tap the 4.7 kΩ strap pads. Leaving the LEDs on loads TCK and TDO ([inferred](#evidence-codes)).
 - UART0 has no pad, so reaching it means soldering to LQFP leads [45](#s-pin-45) and [46](#s-pin-46).
 
 ## YT9215SC and YT9215SCH
@@ -172,33 +174,33 @@ Sources: [YT9215SC Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07
 
 | Function | Signal | Pin | Strap on pin | In Draft_07 | In V1.03 | Evidence |
 |---|---|---|---|---|---|---|
-| SPF0 | SCK | <a id="sch-pin-49"></a>49 | `SPF_MUX_SEL` | Yes | Yes | [**V**](#evidence-codes) |
-| SPF0 | SI | <a id="sch-pin-50"></a>50 | – | Yes | Yes | [**V**](#evidence-codes) |
-| SPF0 | SO | <a id="sch-pin-54"></a>54 | – | Yes | Yes | [**V**](#evidence-codes) |
-| SPF0 | CS | <a id="sch-pin-55"></a>55 | – | Yes | Yes | [**V**](#evidence-codes) |
-| SPF1 | SO | <a id="sch-pin-78"></a>78 | – | Yes | Yes | [**V**](#evidence-codes) |
-| SPF1 | SI | <a id="sch-pin-79"></a>79 | – | Yes | Yes | [**V**](#evidence-codes) |
-| SPF1 | CS | <a id="sch-pin-81"></a>81 | – | Yes | Yes | [**V**](#evidence-codes) |
-| SPF1 | SCK | <a id="sch-pin-83"></a>83 | `EN_PHY` | Yes | Yes | [**V**](#evidence-codes) |
-| Strap | EN_SPIF | <a id="sch-pin-75"></a>75 | `EN_SPIF` | Yes | Yes | [**V**](#evidence-codes) |
-| Strap | DIS_MCU | <a id="sch-pin-76"></a>76 | `DIS_MCU` | Yes | Yes | [**V**](#evidence-codes) |
-| Strap | DISAUTOLOAD | <a id="sch-pin-77"></a>77 | `DISAUTOLOAD` | Yes | Yes | [**V**](#evidence-codes) |
-| UART0 | RX | <a id="sch-pin-46"></a>46 | – | Yes | Yes | [**V**](#evidence-codes) |
-| UART0 | TX | <a id="sch-pin-47"></a>47 | – | Yes | Yes | [**V**](#evidence-codes) |
-| UART1 | RX | <a id="sch-pin-70"></a>70 | `DIS_SPIS` | Yes | Yes | [**V**](#evidence-codes) |
-| UART1 | TX | [76](#sch-pin-76) | `DIS_MCU` | Yes | Yes | [**V**](#evidence-codes) |
-| JTAG0 | TCK | <a id="sch-pin-73"></a>73 | – | Yes | No | [**V**](#evidence-codes) |
-| JTAG0 | TMS | <a id="sch-pin-72"></a>72 | – | Yes | No | [**V**](#evidence-codes) |
-| JTAG0 | TDI | <a id="sch-pin-74"></a>74 | `EN_PWRLIGHT` | Yes | No | [**V**](#evidence-codes) |
-| JTAG0 | TDO | <a id="sch-pin-90"></a>90 | – | Yes | No | [**V**](#evidence-codes) |
-| JTAG1 | TCK | [83](#sch-pin-83) | `EN_PHY` | Yes | No | [**V**](#evidence-codes) |
-| JTAG1 | TMS | [81](#sch-pin-81) | – | Yes | No | [**V**](#evidence-codes) |
-| JTAG1 | TDI | <a id="sch-pin-84"></a>84 | – | Yes | No | [**V**](#evidence-codes) |
-| JTAG1 | TDO | <a id="sch-pin-67"></a>67 | – | Yes | No | [**V**](#evidence-codes) |
-| I²C | SCL | <a id="sch-pin-91"></a>91 | – | Yes | Yes | [**V**](#evidence-codes) |
-| I²C | SDA | <a id="sch-pin-92"></a>92 | – | Yes | Yes | [**V**](#evidence-codes) |
-| Slave SPI | CS | [90](#sch-pin-90) | – | Yes | Yes | [**V**](#evidence-codes) |
-| Slave SPI | SO | <a id="sch-pin-93"></a>93 | – | Yes | Yes | [**V**](#evidence-codes) |
+| SPF0 | SCK | <a id="sch-pin-49"></a>49 | `SPF_MUX_SEL` | Yes | Yes | [Verified](#evidence-codes) |
+| SPF0 | SI | <a id="sch-pin-50"></a>50 | – | Yes | Yes | [Verified](#evidence-codes) |
+| SPF0 | SO | <a id="sch-pin-54"></a>54 | – | Yes | Yes | [Verified](#evidence-codes) |
+| SPF0 | CS | <a id="sch-pin-55"></a>55 | – | Yes | Yes | [Verified](#evidence-codes) |
+| SPF1 | SO | <a id="sch-pin-78"></a>78 | – | Yes | Yes | [Verified](#evidence-codes) |
+| SPF1 | SI | <a id="sch-pin-79"></a>79 | – | Yes | Yes | [Verified](#evidence-codes) |
+| SPF1 | CS | <a id="sch-pin-81"></a>81 | – | Yes | Yes | [Verified](#evidence-codes) |
+| SPF1 | SCK | <a id="sch-pin-83"></a>83 | `EN_PHY` | Yes | Yes | [Verified](#evidence-codes) |
+| Strap | EN_SPIF | <a id="sch-pin-75"></a>75 | `EN_SPIF` | Yes | Yes | [Verified](#evidence-codes) |
+| Strap | DIS_MCU | <a id="sch-pin-76"></a>76 | `DIS_MCU` | Yes | Yes | [Verified](#evidence-codes) |
+| Strap | DISAUTOLOAD | <a id="sch-pin-77"></a>77 | `DISAUTOLOAD` | Yes | Yes | [Verified](#evidence-codes) |
+| UART0 | RX | <a id="sch-pin-46"></a>46 | – | Yes | Yes | [Verified](#evidence-codes) |
+| UART0 | TX | <a id="sch-pin-47"></a>47 | – | Yes | Yes | [Verified](#evidence-codes) |
+| UART1 | RX | <a id="sch-pin-70"></a>70 | `DIS_SPIS` | Yes | Yes | [Verified](#evidence-codes) |
+| UART1 | TX | [76](#sch-pin-76) | `DIS_MCU` | Yes | Yes | [Verified](#evidence-codes) |
+| JTAG0 | TCK | <a id="sch-pin-73"></a>73 | – | Yes | No | [Verified](#evidence-codes) |
+| JTAG0 | TMS | <a id="sch-pin-72"></a>72 | – | Yes | No | [Verified](#evidence-codes) |
+| JTAG0 | TDI | <a id="sch-pin-74"></a>74 | `EN_PWRLIGHT` | Yes | No | [Verified](#evidence-codes) |
+| JTAG0 | TDO | <a id="sch-pin-90"></a>90 | – | Yes | No | [Verified](#evidence-codes) |
+| JTAG1 | TCK | [83](#sch-pin-83) | `EN_PHY` | Yes | No | [Verified](#evidence-codes) |
+| JTAG1 | TMS | [81](#sch-pin-81) | – | Yes | No | [Verified](#evidence-codes) |
+| JTAG1 | TDI | <a id="sch-pin-84"></a>84 | – | Yes | No | [Verified](#evidence-codes) |
+| JTAG1 | TDO | <a id="sch-pin-67"></a>67 | – | Yes | No | [Verified](#evidence-codes) |
+| I²C | SCL | <a id="sch-pin-91"></a>91 | – | Yes | Yes | [Verified](#evidence-codes) |
+| I²C | SDA | <a id="sch-pin-92"></a>92 | – | Yes | Yes | [Verified](#evidence-codes) |
+| Slave SPI | CS | [90](#sch-pin-90) | – | Yes | Yes | [Verified](#evidence-codes) |
+| Slave SPI | SO | <a id="sch-pin-93"></a>93 | – | Yes | Yes | [Verified](#evidence-codes) |
 
 - Pin [49](#sch-pin-49) is the `SPF_MUX_SEL` strap: a pull-up selects SPF0, and SPF1 is the default.
 - V1.03 names pins [73](#sch-pin-73), [72](#sch-pin-72), [74](#sch-pin-74), [90](#sch-pin-90), [83](#sch-pin-83), [81](#sch-pin-81), [84](#sch-pin-84) and [67](#sch-pin-67) as GPIO, LED and I²C pins only. The JTAG names on them come from Draft_07.
@@ -208,22 +210,22 @@ Sources: [YT9215SC Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07
 
 ### YT9215SCH boot table
 
-Table 25 of [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) lists what the chip loads at power-on, hardware reset and software reset [**V**](#evidence-codes).
+Table 25 of [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) lists what the chip loads at power-on, hardware reset and software reset ([verified](#evidence-codes)).
 
 | DISAUTOLOAD | DIS_MCU | EN_SPIF | DIS_SPIS | SMI_SEL | Loads from | Loads to | Evidence |
 |---|---|---|---|---|---|---|---|
-| 0 | 0 | 0 | 1 | 1 | EEPROM | MCU RAM | [**V**](#evidence-codes) |
-| 0 | 0 | 1 | X | X | SPI flash | XIP | [**V**](#evidence-codes) |
-| 0 | 1 | 0 | X | X | EEPROM | Registers | [**V**](#evidence-codes) |
-| 0 | 1 | 1 | X | X | SPI flash | RAM | [**C**](#evidence-codes) |
+| 0 | 0 | 0 | 1 | 1 | EEPROM | MCU RAM | [Verified](#evidence-codes) |
+| 0 | 0 | 1 | X | X | SPI flash | XIP | [Verified](#evidence-codes) |
+| 0 | 1 | 0 | X | X | EEPROM | Registers | [Verified](#evidence-codes) |
+| 0 | 1 | 1 | X | X | SPI flash | RAM | [Conflicting](#evidence-codes) |
 
-X means the strap level does not matter. Every other strap combination loads nothing ("No Action" in the datasheet). The row marked [**C**](#evidence-codes) is as printed: it loads RAM from flash with the MCU disabled, which makes no sense as written.
+X means the strap level does not matter. Every other strap combination loads nothing ("No Action" in the datasheet). The row marked ([conflicting](#evidence-codes)) is as printed: it loads RAM from flash with the MCU disabled, which makes no sense as written.
 
 ## YT9215RB
 
 The YT9215RB has the RTL8367RB-VB pinout.
 
-Source: [YT9215RB Draft_05](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) (2023-02-16; also on [LCSC](https://datasheet.lcsc.com/datasheet/pdf/762da1ba434211a9b4be1fec673c7fcf.pdf?productCode=C5449202)). Every row of this table is printed in it [**V**](#evidence-codes).
+Source: [YT9215RB Draft_05](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) (2023-02-16; also on [LCSC](https://datasheet.lcsc.com/datasheet/pdf/762da1ba434211a9b4be1fec673c7fcf.pdf?productCode=C5449202)). Every row of this table is printed in it ([verified](#evidence-codes)).
 
 | Function | Signal | Pin | Strap on pin |
 |---|---|---|---|
@@ -265,7 +267,7 @@ The [Motorcomm selection guide](../datasheets/motorcomm/Motorcomm_Product_Select
 
 The YT9218N and YT9218MB are 8-port relatives of the YT9215. Both are in the chip table of the Linux driver [`drivers/net/dsa/motorcomm/chip.c`](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c); no datasheet was checked for them.
 
-The driver identifies a YT9215 by the major number 0x9002 in the `CHIP_ID` register (0x80008), and the variant by the `CHIP_MODE` register [**V**](#evidence-codes):
+The driver identifies a YT9215 by the major number 0x9002 in the `CHIP_ID` register (0x80008), and the variant by the `CHIP_MODE` register ([verified](#evidence-codes)):
 
 | `CHIP_MODE` | Variant |
 |---|---|
@@ -273,7 +275,7 @@ The driver identifies a YT9215 by the major number 0x9002 in the `CHIP_ID` regis
 | 2 | [YT9215S](#yt9215s) |
 | 3 | [YT9215RB](#yt9215rb) |
 
-The strap levels sampled at power-on can be read back over MDIO from the [`PON_STRAP_CAP`](yt9215-registers/rdl/yt9215.rdl) register (0x80328), which is taken from its name to hold those levels. The bit positions of `DIS_MCU` and `EN_SPIF` in it are not documented [**I**](#evidence-codes).
+The strap levels sampled at power-on can be read back over MDIO from the [`PON_STRAP_CAP`](yt9215-registers/rdl/yt9215.rdl) register (0x80328), which is taken from its name to hold those levels. The bit positions of `DIS_MCU` and `EN_SPIF` in it are not documented ([inferred](#evidence-codes)).
 
 ## Community and SDK status
 
@@ -282,7 +284,7 @@ The strap levels sampled at power-on can be read back over MDIO from the [`PON_S
 
 ## Implications for the adapter
 
-The adapter runs its firmware on the switch's own MCU and has no external MCU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). On a YT9215S, running code in place from flash means `DIS_MCU` (pin [75](#s-pin-75)) stays low, as on the [mirrored board](#how-the-mirrored-board-wires-these-pins). It also needs `EN_SPIF` (pin [74](#s-pin-74)) high and `DISAUTOLOAD` (pin [76](#s-pin-76)) low. The mirrored board pulls `EN_SPIF` low and `DISAUTOLOAD` high, and flash on SPF1 puts its CS# on the `DISAUTOLOAD` pin ([SPI flash on the YT9215S](#spi-flash-on-the-yt9215s)). This reading takes the strap combinations from the [YT9215SCH boot table](#boot-table), because the S datasheet has no boot-mode table [**I**](#evidence-codes). That table's flash-to-RAM row has `DIS_MCU` high [**C**](#evidence-codes).
+The adapter runs its firmware on the switch's own MCU and has no external MCU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). On a YT9215S, running code in place from flash means `DIS_MCU` (pin [75](#s-pin-75)) stays low, as on the [mirrored board](#how-the-mirrored-board-wires-these-pins). It also needs `EN_SPIF` (pin [74](#s-pin-74)) high and `DISAUTOLOAD` (pin [76](#s-pin-76)) low. The mirrored board pulls `EN_SPIF` low and `DISAUTOLOAD` high, and flash on SPF1 puts its CS# on the `DISAUTOLOAD` pin ([SPI flash on the YT9215S](#spi-flash-on-the-yt9215s)). This reading takes the strap combinations from the [YT9215SCH boot table](#boot-table), because the S datasheet has no boot-mode table ([inferred](#evidence-codes)). That table's flash-to-RAM row has `DIS_MCU` high ([conflicting](#evidence-codes)).
 
 A debug option stays open cheaply with one 0402 pad on each of these YT9215S pins. Most already carry strap resistors, so a test pad per net costs almost nothing.
 
@@ -318,7 +320,7 @@ Two bought switch boards with five copper ports and one SFP port and the silkscr
 
 ### The switch IC is a YT9215SCH
 
-[U4](#lx-u4) on both boards is a YT9215SCH, not a YT9215S, so the [YT9215SC and YT9215SCH pin table](#yt9215sc-and-yt9215sch) applies and the [YT9215S tables](#yt9215s) do not. The part number is read from the top marking of U4 in one photo of each board [**V**](#evidence-codes).
+[U4](#lx-u4) on both boards is a YT9215SCH, not a YT9215S, so the [YT9215SC and YT9215SCH pin table](#yt9215sc-and-yt9215sch) applies and the [YT9215S tables](#yt9215s) do not. The part number is read from the top marking of U4 in one photo of each board ([verified](#evidence-codes)).
 
 | Board | Marking line 1 | Marking line 2 | Marking line 3 | Marking line 4 | Marking line 5 | Photo |
 |---|---|---|---|---|---|---|
@@ -367,7 +369,7 @@ Pin 1 of [U4](#lx-u4) is the lead beside the small dimple on the package. Leads 
 
 ### Where each debug pin goes
 
-The routes were read from photos of the top side only, and the lead numbers were counted by eye, so every row of this table is [**I**](#evidence-codes). The "Top-layer route" column uses these values:
+The routes were read from photos of the top side only, and the lead numbers were counted by eye, so every row of this table is ([inferred](#evidence-codes)). The "Top-layer route" column uses these values:
 
 | Value | Meaning |
 |---|---|
@@ -408,13 +410,13 @@ The routes were read from photos of the top side only, and the lead numbers were
 - Pins [46](#sch-pin-46), [47](#sch-pin-47), [67](#sch-pin-67), [79](#sch-pin-79) and [90](#sch-pin-90) are "Lead only", so a wire has to be soldered to the lead itself, at 0.4 mm pitch.
 - On the flash buses SI is the chip's output to the flash DI pin, and SO is the flash DO pin into the chip.
 - [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) names pin [90](#sch-pin-90) GPIO47 and pin [67](#sch-pin-67) GPIO31.
-- The nRESET trace from pin <a id="sch-pin-89"></a>89 runs under the left half of the `R23` silkscreen label, then up beside the R23 footprint to a via level with the top of [Y6](#lx-y6)'s corner mark, ringed 89 in the [annotated photo of the top edge](#annotated-top-edge) [**I**](#evidence-codes). The label hides part of the trace.
+- The nRESET trace from pin <a id="sch-pin-89"></a>89 runs under the left half of the `R23` silkscreen label, then up beside the R23 footprint to a via level with the top of [Y6](#lx-y6)'s corner mark, ringed 89 in the [annotated photo of the top edge](#annotated-top-edge) ([inferred](#evidence-codes)). The label hides part of the trace.
 
 ### Unknowns
 
 - Where the vias go on other layers.
 - The strap levels are inferred from the bottom-side resistor array in [`switch-board-strapping.md`](switch-board-strapping.md#strap-resistor-array) and are not confirmed by a meter.
 - What the far pads of [R44](#lx-r44), [R89](#lx-r89), [R92](#lx-r92) and [R93](#lx-r93) connect to.
-- Pin [86](#sch-pin-86) is AVDDH in [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf), yet a trace appears to run from it to [R22](#lx-r22) beside the crystal [**I**](#evidence-codes).
+- Pin [86](#sch-pin-86) is AVDDH in [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf), yet a trace appears to run from it to [R22](#lx-r22) beside the crystal ([inferred](#evidence-codes)).
 
 A continuity check would settle these.

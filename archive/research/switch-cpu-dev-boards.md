@@ -5,11 +5,13 @@
 Companion to [`switch-embedded-cpu.md`](switch-embedded-cpu.md) (what the embedded CPUs are) and [`switch-detail-comparison.md`](switch-detail-comparison.md). This note answers: what can we buy to experiment with the RTL8367S DW8051 and the YT9215 RISC-V core, and how easy is it to reach the chip's pins on each?
 
 <a id="evidence-codes"></a>
-Evidence codes:
+Each statement carries one of these evidence marks:
 
-- **V**: read in a cited source.
-- **I**: inference.
-- **VI**: part read in a cited source, part inference.
+| Mark | Meaning |
+|---|---|
+| Verified | Read in a cited source |
+| Inferred | Reasoned from other evidence |
+| Partly inferred | Part read in a cited source and part inferred |
 
 Prices are indicative from listings and deal sites seen on 2026-10-22, not quotes. Retail switches change chips between hardware versions, so **always check the hardware version (Vx.y) on the label** before buying.
 
@@ -17,28 +19,28 @@ Spreadsheet copy: the *Dev boards* tab of the [comparison sheet](https://docs.go
 
 ## TL;DR
 
-- **Neither vendor sells a public evaluation board.** I found no Realtek RTL8367S EVB or Motorcomm YT9215 EVB listed at any distributor, AliExpress, eBay or Amazon. Both exist only through distributors under NDA. [**V**](#evidence-codes) (absence in searches)
+- **Neither vendor sells a public evaluation board.** I found no Realtek RTL8367S EVB or Motorcomm YT9215 EVB listed at any distributor, AliExpress, eBay or Amazon. Both exist only through distributors under NDA ([verified](#evidence-codes)). (absence in searches)
 - **RTL8367S: the cheapest and best dev platform is a A$15–30 unmanaged 5-port TP-Link switch.**
-  - TP-Link TL-SG105 **V6**, LS1005G **V1** and TL-SG1005D **rev 7** use the RTL8367S with only a 24Cxx EEPROM next to it. [**V**](#evidence-codes)
-  - Pull the EEPROM and its footprint gives you the chip's SMI bus (SDA and SCK), 3.3 V and GND. McMCCRU drove a TL-SG1005D rev 7 from an Arduino Nano and an STM32 Blue Pill this way. [**V**](#evidence-codes)
-  - From there an RP2040 can load 8051 code into the IROM window over SMI, exactly as the GPL `rtl8367c` driver does. UART (pins 45 and 46) and the SPI-flash pins would need fine-pitch wires to the LQFP. [**I**](#evidence-codes)
-  - For a cleaner board with a real CPU link, the routers MERCUSYS MR85X (MT7981B, RTL8367S over 2500base-X) and TP-Link Archer C5 v4 (MT7620A) run OpenWrt with the switch already on DSA and swconfig. [**V**](#evidence-codes)
-  - Open-hardware designs to copy or order from JLCPCB: AlbrechtL's `rpi-managed-switch-4-port` (GPL-3.0, KiCad) and the PCBWay "RTL8367S-4GE+SFP" project. [**V**](#evidence-codes)
+  - TP-Link TL-SG105 **V6**, LS1005G **V1** and TL-SG1005D **rev 7** use the RTL8367S with only a 24Cxx EEPROM next to it ([verified](#evidence-codes)).
+  - Pull the EEPROM and its footprint gives you the chip's SMI bus (SDA and SCK), 3.3 V and GND. McMCCRU drove a TL-SG1005D rev 7 from an Arduino Nano and an STM32 Blue Pill this way ([verified](#evidence-codes)).
+  - From there an RP2040 can load 8051 code into the IROM window over SMI, exactly as the GPL `rtl8367c` driver does. UART (pins 45 and 46) and the SPI-flash pins would need fine-pitch wires to the LQFP ([inferred](#evidence-codes)).
+  - For a cleaner board with a real CPU link, the routers MERCUSYS MR85X (MT7981B, RTL8367S over 2500base-X) and TP-Link Archer C5 v4 (MT7620A) run OpenWrt with the switch already on DSA and swconfig ([verified](#evidence-codes)).
+  - Open-hardware designs to copy or order from JLCPCB: AlbrechtL's `rpi-managed-switch-4-port` (GPL-3.0, KiCad) and the PCBWay "RTL8367S-4GE+SFP" project ([verified](#evidence-codes)).
 - **YT9215: much thinner.**
-  - Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU. [**V**](#evidence-codes)
-  - The YT9215S draft datasheet on LCSC says "Integrated RISC-V microprocessor" and has a `STRAP_DIS_MCU` pin, so the core is probably on the die but not supported on the S. [**VI**](#evidence-codes) For CPU work, buy the **YT9215SC**.
-  - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII or 2500base-X) and the BDY-G98 (彼度云 G98) RK3588 box (two YT9215S over RGMII). [**V**](#evidence-codes) Both are mostly sold in China.
-  - The practical dev board is to **build our own**: one LQFP-128 chip (YT9215S about US$1.92 at LCSC), plus the open-hardware 5-port YT9215S switch on OSHWHub as a reference layout. [**VI**](#evidence-codes)
+  - Motorcomm's product page lists the embedded RISC-V CPU and "simple network management" **only for the YT9215SC**. The YT9215S and YT9215RB entries don't mention a CPU ([verified](#evidence-codes)).
+  - The YT9215S draft datasheet on LCSC says "Integrated RISC-V microprocessor" and has a `STRAP_DIS_MCU` pin, so the core is probably on the die but not supported on the S ([partly inferred](#evidence-codes)). For CPU work, buy the **YT9215SC**.
+  - The only retail products I could confirm are the Xiaomi CR881x routers (IPQ5018 + YT9215S over SGMII or 2500base-X) and the BDY-G98 (彼度云 G98) RK3588 box (two YT9215S over RGMII) ([verified](#evidence-codes)). Both are mostly sold in China.
+  - The practical dev board is to **build our own**: one LQFP-128 chip (YT9215S about US$1.92 at LCSC), plus the open-hardware 5-port YT9215S switch on OSHWHub as a reference layout ([partly inferred](#evidence-codes)).
 - **Recommendation:** buy two or three TP-Link TL-SG105 V6 and LS1005G V1 units now for RTL8367S 8051 experiments, and treat any YT9215 work as "spin our own breakout with a YT9215SC" if it is ever needed.
 
 ## 1. Official evaluation boards
 
 | Chip | Official EVB | Official EVB evidence | Who can get it | Who can get it evidence | Public availability | Public availability evidence |
 | --- | --- | --- | --- | --- | --- | --- |
-| RTL8367S-CG | Reference designs and EVBs | [**V**](#evidence-codes) | Partners only | Leaked programming guide | None found | [**V**](#evidence-codes) |
-| YT9215S | None mentioned | [**V**](#evidence-codes) | – | Motorcomm product page | None found | [**V**](#evidence-codes) |
-| YT9215SC | None mentioned | [**V**](#evidence-codes) | – | Motorcomm product page | None found | [**V**](#evidence-codes) |
-| YT9215RB | None mentioned | [**V**](#evidence-codes) | – | Motorcomm product page | None found | [**V**](#evidence-codes) |
+| RTL8367S-CG | Reference designs and EVBs | [Verified](#evidence-codes) | Partners only | Leaked programming guide | None found | [Verified](#evidence-codes) |
+| YT9215S | None mentioned | [Verified](#evidence-codes) | – | Motorcomm product page | None found | [Verified](#evidence-codes) |
+| YT9215SC | None mentioned | [Verified](#evidence-codes) | – | Motorcomm product page | None found | [Verified](#evidence-codes) |
+| YT9215RB | None mentioned | [Verified](#evidence-codes) | – | Motorcomm product page | None found | [Verified](#evidence-codes) |
 
 | Leaked Realtek document | Rev | Year | Marking | Audience |
 |---|---|---|---|---|
@@ -104,14 +106,14 @@ Indicative prices and where to buy:
 
 On Amazon AU the TL-SG105 and the LS1005G are common and the TL-SG1005D is less common.
 
-How to use one as a dev board: [**I**](#evidence-codes), building on the [**V**](#evidence-codes) items in this section.
+How to use one as a dev board: [inferred](#evidence-codes), building on the ([verified](#evidence-codes)) items in this section.
 
 1. Desolder the EEPROM and solder a 6-pin header to its pads (SDA, SCK, 3.3 V, GND).
 2. Wire an RP2040 (Pico) to SDA and SCK. Port the GPL `rtl8367c` SMI routines, or start from McMCCRU's Arduino sketch.
 3. Load test code into the 8051 IROM: assert `DW8051_RST`, enable `ACS_IROM_EN`, write bytes to 0xE000+, release reset (see [`switch-embedded-cpu.md`](switch-embedded-cpu.md) boot flow).
 4. For printf debug, tack a wire to the chip's UART TX (pin 46). For flash boot experiments, add a SOIC-8 SPI flash on SPIF pins 48, 49, 53 and 54 and set the EN_SPIF strap.
 
-Variants to avoid: newer hardware versions of these models may move to RTL8367S-VB, RTL8367RB-VB or a different vendor. Older TL-SG1005D v5 uses "RTL8367" (no S, per [shaddack's notes](https://shaddack.mauriceward.com/notes/ethernet.webt)). AliExpress "5-port gigabit switch module" PCBAs are almost all **RTL8367RB** (older RTL8367B family), not the S (e.g. [eBay 135146159571](https://www.ebay.com/itm/135146159571)). [**V**](#evidence-codes)
+Variants to avoid: newer hardware versions of these models may move to RTL8367S-VB, RTL8367RB-VB or a different vendor. Older TL-SG1005D v5 uses "RTL8367" (no S, per [shaddack's notes](https://shaddack.mauriceward.com/notes/ethernet.webt)). AliExpress "5-port gigabit switch module" PCBAs are almost all **RTL8367RB** (older RTL8367B family), not the S (e.g. [eBay 135146159571](https://www.ebay.com/itm/135146159571)) ([verified](#evidence-codes)).
 
 ### 2b. Routers with RTL8367S behind a Linux SoC
 
@@ -121,9 +123,9 @@ Useful if we want the switch on a real CPU port with a working Linux driver to c
 |---|---|---|---|---|---|---|---|
 | **MERCUSYS MR85X** | AX3000 | MT7981B | 2500base-X fixed link | [OpenWrt commit](https://git.openwrt.org/b2648d89517c05f7b5633e1d79a989c3e5fd011e) | Supported | Current model | – |
 | **TP-Link Archer C5 v4** | – | MT7620A | – | [OpenWrt forum](https://forum.openwrt.org/t/reduce-number-of-drivers-for-rtl8367s/237681) | Supported | Old | Cheap |
-| **TP-Link EC220-G5 v2** | – | MT7620A-class | – | [**V**](#evidence-codes) | – | ISP-branded | Cheap second-hand |
+| **TP-Link EC220-G5 v2** | – | MT7620A-class | – | [Verified](#evidence-codes) | – | ISP-branded | Cheap second-hand |
 | **TOTOLINK A8000RU** | – | MT7622 | 2500base-X | [OpenWrt PR #24861](https://github.com/openwrt/openwrt/pull/24861) | Supported | – | – |
-| **Buffalo WSR-2533DHP2** | – | MT7622 | 2500base-X | [**V**](#evidence-codes) | – | – | Japan |
+| **Buffalo WSR-2533DHP2** | – | MT7622 | 2500base-X | [Verified](#evidence-codes) | – | – | Japan |
 
 | Product | Board detail | Value |
 |---|---|---|
@@ -147,7 +149,7 @@ Indicative prices and where to buy:
 | TOTOLINK A8000RU | **eBay** | – | 50 | 80 | US$ | – |
 | Buffalo WSR-2533DHP2 | **eBay** | Japanese sellers | – | – | – | – |
 
-Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches for RTL8367S posted June 2026), plus OpenWrt's `rtl8367b` and `rtk-gsw` drivers. [**V**](#evidence-codes)
+Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches for RTL8367S posted June 2026), plus OpenWrt's `rtl8367b` and `rtk-gsw` drivers ([verified](#evidence-codes)).
 
 ### 2c. Open hardware RTL8367S boards
 
@@ -161,44 +163,44 @@ Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches f
 
 | Project | Property | Value | Value evidence |
 | --- | --- | --- | --- |
-| AlbrechtL | Switch IC | RTL8367S | [**V**](#evidence-codes) |
-| AlbrechtL | Host | Raspberry Pi Zero | [**V**](#evidence-codes) |
-| AlbrechtL | Host link chip | ENC28J60 | [**V**](#evidence-codes) |
-| AlbrechtL | Design files | KiCad | [**V**](#evidence-codes) |
-| AlbrechtL | Production | "ready for JLCPCB production" | [**V**](#evidence-codes) |
-| AlbrechtL | Licence | GPL-3.0 | [**V**](#evidence-codes) |
-| AlbrechtL | Software | OpenWrt fork using `rtl8365mb` DSA | [**V**](#evidence-codes) |
-| AlbrechtL | Cost (author's estimate) | About US$54/unit for 2-unit PCBA | [**V**](#evidence-codes) |
+| AlbrechtL | Switch IC | RTL8367S | [Verified](#evidence-codes) |
+| AlbrechtL | Host | Raspberry Pi Zero | [Verified](#evidence-codes) |
+| AlbrechtL | Host link chip | ENC28J60 | [Verified](#evidence-codes) |
+| AlbrechtL | Design files | KiCad | [Verified](#evidence-codes) |
+| AlbrechtL | Production | "ready for JLCPCB production" | [Verified](#evidence-codes) |
+| AlbrechtL | Licence | GPL-3.0 | [Verified](#evidence-codes) |
+| AlbrechtL | Software | OpenWrt fork using `rtl8365mb` DSA | [Verified](#evidence-codes) |
+| AlbrechtL | Cost (author's estimate) | About US$54/unit for 2-unit PCBA | [Verified](#evidence-codes) |
 | AlbrechtL | Pi link speed | Only about 5 Mbit/s over SPI |  |
 | AlbrechtL | 8051 broken out | No |  |
 | AlbrechtL | UART broken out | No |  |
 | AlbrechtL | Flash broken out | No |  |
 | AlbrechtL | Use to us | Good layout reference |  |
-| PCBWay | GE ports | 4 | [**V**](#evidence-codes) |
-| PCBWay | SFP ports | 1 | [**V**](#evidence-codes) |
-| PCBWay | SFP link | SGMII | [**V**](#evidence-codes) |
-| PCBWay | Power input | USB 5 V | [**V**](#evidence-codes) |
-| PCBWay | Buck converter | MT2492 | [**V**](#evidence-codes) |
-| PCBWay | Core rail | On-chip 1.1 V DC-DC | [**V**](#evidence-codes) |
+| PCBWay | GE ports | 4 | [Verified](#evidence-codes) |
+| PCBWay | SFP ports | 1 | [Verified](#evidence-codes) |
+| PCBWay | SFP link | SGMII | [Verified](#evidence-codes) |
+| PCBWay | Power input | USB 5 V | [Verified](#evidence-codes) |
+| PCBWay | Buck converter | MT2492 | [Verified](#evidence-codes) |
+| PCBWay | Core rail | On-chip 1.1 V DC-DC | [Verified](#evidence-codes) |
 | PCBWay | Licence | None stated |  |
 | PCBWay | Firmware | Realtek config `.bin` |  |
 | PCBWay | Firmware terms | "non-commercial use only" |  |
 | PCBWay | How to get | Order through PCBWay |  |
 | BrixIT | Author | Martijn Braam |  |
-| BrixIT | Control link | GPIO SMI from the PINE64 A64-LTS | [**V**](#evidence-codes) |
-| BrixIT | Straps | Solder jumpers | [**V**](#evidence-codes) |
-| BrixIT | SPI flash | Optional footprint | [**V**](#evidence-codes) |
+| BrixIT | Control link | GPIO SMI from the PINE64 A64-LTS | [Verified](#evidence-codes) |
+| BrixIT | Straps | Solder jumpers | [Verified](#evidence-codes) |
+| BrixIT | SPI flash | Optional footprint | [Verified](#evidence-codes) |
 | BrixIT | Repo | None linked |  |
 | BrixIT | Useful notes 1 | Straps |  |
 | BrixIT | Useful notes 2 | The minimal config |  |
-| maxx-ukoo | Target | ZX900-AFG-82N PoE switch | [**V**](#evidence-codes) |
-| maxx-ukoo | Switch ICs | 2 × RTL8367S over RGMII | [**V**](#evidence-codes) |
+| maxx-ukoo | Target | ZX900-AFG-82N PoE switch | [Verified](#evidence-codes) |
+| maxx-ukoo | Switch ICs | 2 × RTL8367S over RGMII | [Verified](#evidence-codes) |
 | maxx-ukoo | PoE controller in target | TMI7608S |  |
-| libc0607 | Contents 1 | Docs | [**V**](#evidence-codes) |
-| libc0607 | Contents 2 | ESP8266 SMI tools | [**V**](#evidence-codes) |
-| libc0607 | Contents 3 | Yakigani RTL8370 IROM programmer | [**V**](#evidence-codes) |
-| libc0607 | Open board switch IC | RTL8367RB | [**V**](#evidence-codes) |
-| libc0607 | Open board MCU | ESP8266 | [**V**](#evidence-codes) |
+| libc0607 | Contents 1 | Docs | [Verified](#evidence-codes) |
+| libc0607 | Contents 2 | ESP8266 SMI tools | [Verified](#evidence-codes) |
+| libc0607 | Contents 3 | Yakigani RTL8370 IROM programmer | [Verified](#evidence-codes) |
+| libc0607 | Open board switch IC | RTL8367RB | [Verified](#evidence-codes) |
+| libc0607 | Open board MCU | ESP8266 | [Verified](#evidence-codes) |
 
 Longer entries for this table:
 
@@ -213,11 +215,11 @@ Longer entries for this table:
 
 | Part | GE ports | SerDes ports | SerDes SGMII | SerDes 2.5G | RGMII ports | CPU on Motorcomm product page | CPU on Motorcomm product page evidence | CPU in LCSC draft datasheet | CPU in LCSC draft datasheet evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| YT9215S | 5 | 1 | Yes | – | 1 | No | [**V**](#evidence-codes) | Yes | [**V**](#evidence-codes) |
-| YT9215SC | 5 | 2 | Yes | Yes | – | Yes | [**V**](#evidence-codes) | Yes | [**V**](#evidence-codes) |
-| YT9215RB | 5 | – | – | – | 2 | No | [**V**](#evidence-codes) | n/a |  |
-| YT9218N | 8 | – | – | – | – | Yes | [**V**](#evidence-codes) | n/a |  |
-| YT9218MB | 8 | – | – | – | – | Yes | [**V**](#evidence-codes) | n/a |  |
+| YT9215S | 5 | 1 | Yes | – | 1 | No | [Verified](#evidence-codes) | Yes | [Verified](#evidence-codes) |
+| YT9215SC | 5 | 2 | Yes | Yes | – | Yes | [Verified](#evidence-codes) | Yes | [Verified](#evidence-codes) |
+| YT9215RB | 5 | – | – | – | 2 | No | [Verified](#evidence-codes) | n/a |  |
+| YT9218N | 8 | – | – | – | – | Yes | [Verified](#evidence-codes) | n/a |  |
+| YT9218MB | 8 | – | – | – | – | Yes | [Verified](#evidence-codes) | n/a |  |
 
 | Part | Source | What it says |
 |---|---|---|
@@ -236,7 +238,7 @@ Longer entries for this table:
 | YT9218MB | Product page | RISC-V CPU |
 | YT9218MB | Product page | Simple management |
 
-So on retail YT9215S boards the core is probably present but unsupported and likely strapped off. [**I**](#evidence-codes) Plan any CPU work on the **YT9215SC**.
+So on retail YT9215S boards the core is probably present but unsupported and likely strapped off ([inferred](#evidence-codes)). Plan any CPU work on the **YT9215SC**.
 
 ### 3b. Retail products with YT9215
 
@@ -254,8 +256,8 @@ So on retail YT9215S boards the core is probably present but unsupported and lik
 | Xiaomi CR881x | More models | Yes |  |
 | Xiaomi CR881x | Type | China carrier AX3000 mesh units |  |
 | Xiaomi CR881x | Board | M79 |  |
-| Xiaomi CR881x | Switch CPU port | Port 8 | [**V**](#evidence-codes) |
-| Xiaomi CR881x | Switch reset | GPIO 35 | [**V**](#evidence-codes) |
+| Xiaomi CR881x | Switch CPU port | Port 8 | [Verified](#evidence-codes) |
+| Xiaomi CR881x | Switch reset | GPIO 35 | [Verified](#evidence-codes) |
 | Xiaomi CR881x | Evidence 1 | [OpenWrt forum](https://forum.openwrt.org/t/ipq5018-yt9215s-and-1000base-x-2500base-x/241325) |  |
 | Xiaomi CR881x | Evidence 2 | [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150) |  |
 | Xiaomi CR881x | UART | J1 (VCC-RX-GND-TX) |  |
@@ -265,16 +267,16 @@ So on retail YT9215S boards the core is probably present but unsupported and lik
 | Xiaomi CR881x | **eBay** | Occasional listings |  |
 | Xiaomi CR881x | Typical price | US$25–50 |  |
 | Xiaomi CR881x | Check before buying | The model must be **CR881x** |  |
-| Xiaomi CR881x | Not confirmed YT9215 | CR8806 | [**I**](#evidence-codes) |
-| Xiaomi CR881x | Not confirmed YT9215 | CR8808 | [**I**](#evidence-codes) |
-| Xiaomi CR881x | Not confirmed YT9215 | CR8809 | [**I**](#evidence-codes) |
-| Xiaomi CR881x | Not confirmed YT9215 | Redmi AX3000 | [**I**](#evidence-codes) |
+| Xiaomi CR881x | Not confirmed YT9215 | CR8806 | [Inferred](#evidence-codes) |
+| Xiaomi CR881x | Not confirmed YT9215 | CR8808 | [Inferred](#evidence-codes) |
+| Xiaomi CR881x | Not confirmed YT9215 | CR8809 | [Inferred](#evidence-codes) |
+| Xiaomi CR881x | Not confirmed YT9215 | Redmi AX3000 | [Inferred](#evidence-codes) |
 | BDY-G98 | Type 1 | NAS |  |
 | BDY-G98 | Type 2 | Router |  |
 | BDY-G98 | LAN ports | 8 |  |
-| BDY-G98 | Switch attach | Each YT9215S on an RK3588 GMAC | [**V**](#evidence-codes) |
+| BDY-G98 | Switch attach | Each YT9215S on an RK3588 GMAC | [Verified](#evidence-codes) |
 | BDY-G98 | Evidence | [GitHub issue](https://github.com/yifengyou/BDY_G98_RK3588/issues/6) |  |
-| BDY-G98 | Known issue | Cross-chip forwarding lock-up bug reported | [**V**](#evidence-codes) |
+| BDY-G98 | Known issue | Cross-chip forwarding lock-up bug reported | [Verified](#evidence-codes) |
 | BDY-G98 | Where sold | China-market box |  |
 | BDY-G98 | Amazon AU | Not found in this search |  |
 | BDY-G98 | eBay | Not found in this search |  |
@@ -284,15 +286,15 @@ So on retail YT9215S boards the core is probably present but unsupported and lik
 
 Longer entries for this table:
 
-- **Xiaomi CR881x, Known issue**: Switch probe still flaky on some boards. [**V**](#evidence-codes)
+- **Xiaomi CR881x, Known issue**: Switch probe still flaky on some boards ([verified](#evidence-codes)).
 
-I found **no cheap unmanaged retail switch** confirmed to use a YT9215. Motorcomm targets "dumb switch" use, so some Chinese-brand 5-port switches likely use it, but none were identified in teardowns. [**I**](#evidence-codes)
+I found **no cheap unmanaged retail switch** confirmed to use a YT9215. Motorcomm targets "dumb switch" use, so some Chinese-brand 5-port switches likely use it, but none were identified in teardowns ([inferred](#evidence-codes)).
 
 ### 3c. Open hardware and self-build
 
-- **OSHWHub "基于裕太微YT9215S的五口千兆交换机" v2.0** by pankanwen ([oshwhub.com](https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0)) is an open 5-port gigabit switch on the YT9215S. It can be ordered through JLCPCB. I could not read the page (robots block), so I don't know whether JTAG or UART are broken out. The board's existence is [**V**](#evidence-codes); the rest is [**I**](#evidence-codes).
-- **Chip cost:** YT9215S about US$1.92 at LCSC (C5899183, 57 in stock). The YT9215SC is LCSC C51037433. [**V**](#evidence-codes)
-- **Our own breakout** (recommended if we ever pursue the RISC-V core): YT9215SC + SPI flash socket + both JTAG groups on a 2.54 mm header + UART0 + strap jumpers (`STRAP_DIS_MCU`, `STRAP_EN_SPIF`, `STRAP_SMI_SEL`) + one RJ45 + SGMII to an SFP cage. [**I**](#evidence-codes)
+- **OSHWHub "基于裕太微YT9215S的五口千兆交换机" v2.0** by pankanwen ([oshwhub.com](https://oshwhub.com/pankanwen/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0)) is an open 5-port gigabit switch on the YT9215S. It can be ordered through JLCPCB. I could not read the page (robots block), so I don't know whether JTAG or UART are broken out. The board's existence is ([verified](#evidence-codes)); the rest is ([inferred](#evidence-codes)).
+- **Chip cost:** YT9215S about US$1.92 at LCSC (C5899183, 57 in stock). The YT9215SC is LCSC C51037433 ([verified](#evidence-codes)).
+- **Our own breakout** (recommended if we ever pursue the RISC-V core): YT9215SC + SPI flash socket + both JTAG groups on a 2.54 mm header + UART0 + strap jumpers (`STRAP_DIS_MCU`, `STRAP_EN_SPIF`, `STRAP_SMI_SEL`) + one RJ45 + SGMII to an SFP cage ([inferred](#evidence-codes)).
 
 ## 4. Purchase quick-links
 

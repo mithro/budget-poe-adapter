@@ -1,10 +1,10 @@
 # Switch IC detail: RTL8363NB (pick) vs RTL8367S and YT9215S (candidates)
 
-Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=2). Prices are LCSC on 2026-10-22. `?` means no public source gives the value; None means the chip doesn't have it.
+Side-by-side tables holding the data of the *Switch detail* tab in the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=2). Prices are LCSC on 2026-10-22. `?` means no public source gives the value; None means the chip doesn't have it.
 
 **Takeaways**
 
-- RTL8363NB stays the pick: exactly two GbE PHYs, RMII to the MCU, smallest package (QFN-76 9×9 mm), no embedded CPU to manage.
+- RTL8363NB is the pick: exactly two GbE PHYs, RMII to the MCU, smallest package (QFN-76 9×9 mm), no embedded CPU to manage.
 - RTL8367S is $0.30 cheaper at 100 pcs (LCSC price break), but its extension port has no RMII, so the MCU must use MII, and three PHYs sit unused.
 - YT9215S is the Chinese second source with RMII and a Linux driver, but only 57 in stock and a draft datasheet.
 - Embedded CPUs: RTL8367S has an 8051 and YT9215S a RISC-V core. Neither has a public clock, memory size or SDK, and neither has USB, so both should be strapped off.
@@ -20,7 +20,9 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 | Verdict | Pick | Candidate | Candidate |
 | Vendor | Realtek | Realtek | Motorcomm |
 
-## Price & stock (LCSC, 2026-10-22)
+## Price and stock
+
+Prices and stock were read from LCSC product pages on 2026-10-22.
 
 | Feature | RTL8363NB-VB-CG | RTL8367S-CG | YT9215S |
 |---|---|---|---|
@@ -94,14 +96,16 @@ Side-by-side copy of the *Switch detail* tab in the [comparison sheet](https://d
 | MAC address table | 2K entries | 2K entries | 4K entries |
 | VLAN table | 4K entries | 4K entries | 4K entries |
 | Jumbo frames | 9,216 B | 9,216 B | 9,216 B |
-| Priority queues | 8 | 8 | 8 |
+| Unicast priority queues | 8 | 8 | 8 |
 | Multicast queues | Not listed | Not listed | 4 |
 | ACL rules | 48 | 96 | 384 |
 | Link aggregation | None | 2 groups | 2 groups |
 | Port-based mirroring | Yes | Yes | Yes |
 | Flow-based mirroring | Not listed | Not listed | Yes |
-| IGMP/MLD snooping | Yes | Yes | Yes |
-| LLDP / OAM | ? | Yes | Yes |
+| IGMP snooping | Yes | Yes | Yes |
+| MLD snooping | Yes | Yes | Yes |
+| LLDP | ? | Yes | Yes |
+| OAM | ? | Yes | Yes |
 
 ## PHY & diagnostics
 
@@ -234,7 +238,7 @@ Not needed for this adapter.
 
 **SerDes modes**  
 Modes listed in the public datasheets.  
-YT9215S: the key features list 2500BASE-X, SGMII, 1000BASE-X and 100BASE-FX; the general description calls it SGMII/HSGMII.
+YT9215S: the key features list 2500BASE-X, SGMII, 1000BASE-X and 100BASE-FX; the general description calls it SGMII or HSGMII.
 
 **SerDes line rate**  
 Baud rate on the wire (8b/10b coded).  
@@ -242,7 +246,7 @@ Both datasheets write these as 1.25 GHz and 3.125 GHz.
 
 **SerDes max data rate**  
 Payload rate after 8b/10b coding.  
-HSGMII / 2500BASE-X at 3.125 GBd carries 2.5 Gbit/s; SGMII at 1.25 GBd carries 1 Gbit/s.
+HSGMII (2500BASE-X) at 3.125 GBd carries 2.5 Gbit/s; SGMII at 1.25 GBd carries 1 Gbit/s.
 
 **External CPU interface**  
 How the adapter MCU configures and reads the switch.  
@@ -270,7 +274,7 @@ YT9215S: the datasheet says only "RISC-V microprocessor" and doesn't name the co
 Not given in any public datasheet.
 
 **CPU memory**  
-On-chip instruction and data RAM/ROM sizes.  
+On-chip instruction and data RAM and ROM sizes.  
 RTL8367S: code is copied into "8051 instruction memory" at reset; its size isn't given.
 
 **Code storage**  
@@ -289,7 +293,7 @@ The Linux yt921x driver lists port 10 as the MCU port.
 **SDK**  
 Firmware toolkit for the embedded CPU.  
 Realtek's unmanaged-switch SDK is NDA-only.  
-Community firmware (RTLPlayground, SDCC) runs on the 8051 in the RTL8372/RTL8373, a different family, so the RTL8367S 8051 is probably programmable but undocumented.
+Community firmware (RTLPlayground, SDCC) runs on the 8051 in the RTL8372 and RTL8373, a different family, so the RTL8367S 8051 is probably programmable but undocumented.
 
 **Useful here**  
 Could the embedded CPU replace the adapter MCU?  
@@ -309,7 +313,7 @@ The YT9215S datasheet says 9 KB, which is the same 9,216 B.
 Egress queues per port.
 
 **ACL rules**  
-Hardware ACL entries (L2/L3/L4 match).
+Hardware ACL entries (L2, L3 and L4 match).
 
 **Link aggregation**  
 802.3ad groups.  
@@ -318,10 +322,10 @@ Not needed for this adapter.
 **Port mirroring**  
 Copy traffic to a monitor port.
 
-**IGMP/MLD snooping**  
+**IGMP and MLD snooping**  
 Multicast snooping in hardware.
 
-**LLDP / OAM**  
+**LLDP** and **OAM**  
 Hardware LLDP or OAM support listed in the datasheet.  
 For this adapter LLDP is sent by the MCU anyway.
 
@@ -329,7 +333,7 @@ For this adapter LLDP is sent by the MCU anyway.
 Energy-Efficient Ethernet: saves power on idle links.
 
 **Cable diagnostics**  
-Cable fault/length test, readable by the MCU.
+Cable fault and length test, readable by the MCU.
 
 **LEDs**  
 LED outputs.
@@ -389,7 +393,7 @@ Each strap pin is left floating or tied through a resistor.
 YT9215S: three reserved pins must also be pulled up to DVDDIO.
 
 **Unused MAC inputs**  
-Pull-downs on unused RGMII/MII receive inputs of the extension port.
+Pull-downs on unused RGMII or MII receive inputs of the extension port.
 
 **Interrupt pin**  
 External resistor on the interrupt output.  
@@ -431,5 +435,5 @@ What to check before committing.
 - RTL8367S-CG preliminary datasheet (Rev. Pre-0.941, 2016).
 - YT9215S draft datasheet via LCSC; YT9215SC DRAFT_07 (2023) for the second SerDes.
 - Linux yt921x DSA driver patches (MCU port 10).
-- RTLPlayground (community 8051 firmware for RTL8372/RTL8373, SDCC).
+- RTLPlayground (community 8051 firmware for RTL8372 and RTL8373, SDCC).
 - CSDN design note on RK3568 + YT9215 (crystal, reset, AVDD filtering).

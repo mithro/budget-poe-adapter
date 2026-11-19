@@ -1,17 +1,19 @@
 # Bit-banging 10 Mbit/s Ethernet
 
-Question: can the adapter's MCU get onto Ethernet with no MAC/PHY silicon of
+Question: can the adapter's MCU get onto Ethernet with no MAC or PHY silicon of
 its own, either by driving 10BASE-T on the wire straight from GPIO, or by
 running the MAC in software (RP2040 PIO) against an external PHY or a switch
 port? Context: price cap is the RP2040 (~$0.79 @100); see
 [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md).
 
-Requirement (Tim, 2026-10-22): **10 Mbit/s is fully acceptable** for the MCU's
-own network link, so the 10M-only limits below are not a problem.
+Project requirement: **10 Mbit/s is fully acceptable** for the MCU's
+own network link, so the 10M-only limits in this note are not a problem.
 
-Researched 2026-10-22. Prices are LCSC, read live where marked **[live]**.
-Spec numbers marked **[802.3]** are from IEEE 802.3 clause 14 (10BASE-T) as I
-remember them, not re-read for this note.
+<a id="evidence-codes"></a>
+Prices are LCSC prices. Evidence codes:
+
+- **live**: the price or stock figure was read from the LCSC product page on 2026-10-22.
+- **802.3**: the number is from IEEE 802.3 clause 14 (10BASE-T) from memory, not re-read for this note.
 
 ## 1. TL;DR
 
@@ -25,37 +27,37 @@ remember them, not re-read for this note.
 * **The problem in this product is not the bit-banging, it is the link
   partner.** The adapter is a gigabit passthrough. A 1000BASE-T link uses all
   four pairs in both directions, so there is no wire on the PoE cable that a
-  bit-banged 10BASE-T port could talk on (see [`gigabit-piggyback.md`](gigabit-piggyback.md) §1, §4).
+  bit-banged 10BASE-T port could talk on (see [`gigabit-piggyback.md` section 1](gigabit-piggyback.md#1-tldr) and [section 4](gigabit-piggyback.md#4-dead-ends-and-why)).
   A bit-banged port needs something on the board to talk to, and that means
   the 3-port switch from [`ethernet-switch.md`](ethernet-switch.md).
 * **Best fit: PIO MAC to the switch's extension MAC port, with no PHY at all.**
-  The RTL8363NB's extension port speaks RMII/MII in PHY mode, so an RP2040
+  The RTL8363NB's extension port speaks RMII or MII in PHY mode, so an RP2040
   can run the existing PIO RMII code (or a simpler MII variant at 10 Mbit/s)
   straight into it. That replaces the CH32V307 in the switch design for
   $0 of extra silicon, which is the "RP2040 on RMII" trim already costed in
-  [`gigabit-piggyback.md`](gigabit-piggyback.md) §3 (≈ −$0.40). This is the recommendation.
+  [`gigabit-piggyback.md` section 3](gigabit-piggyback.md#3-viable-options-in-detail) (≈ −$0.40). This is the recommendation.
 * **Direct 10BASE-T from GPIO into a switch copper port also works on paper**
   (cap-coupled, no magnetics, on-board trace), but the RTL8363NB has no spare
   copper PHY, so it needs a bigger switch (RTL8367S, YT9215S), which costs
   more than it saves. It also lands in half duplex unless the MCU sends FLP
-  autonegotiation bursts (§3.3).
+  autonegotiation bursts ([section 3.3](#33-fit-for-this-adapter)).
 * **A separate, standalone 10/100 port via a cheap PHY** is possible:
-  CoreChips SR8201F RMII PHY is **$0.27 @100 / $0.23 @1k [live]**, plus a
+  CoreChips SR8201F RMII PHY is **$0.27 @100 and $0.23 @1k** [**live**](#evidence-codes), plus a
   25 MHz crystal and a magjack. It only makes sense as a second cable
   (management port), which the passthrough product doesn't have. If you did
   want that, the WCH CH390H SPI MAC+PHY at ~$0.94 (from
   [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md)) is simpler and frees the PIO.
 * **Without PIO (CH32X035, CH32V003), MII at 10 Mbit/s is the only plausible
   bit-bang target.** MII at 10M is a 2.5 MHz nibble clock supplied by the
-  PHY/switch, slow enough for timer-triggered DMA to and from a GPIO port on
+  PHY or switch, slow enough for timer-triggered DMA to and from a GPIO port on
   a 48 MHz part. I found no one who has done this; it is a research item, not
-  a plan (§4.3).
+  a plan ([section 4.3](#43-without-pio-dma-driven-mii-on-a-wch-part-untested-idea)).
 
 ## 2. Options ranked for this adapter
 
 | # | MCU | Alt MCU | Method | Via | Ends at | Switch | Alt switch | Link partner on the board |
 |---|---|---|---|---|---|---|---|---|
-| A | **RP2040** | – | **PIO RMII/MII MAC** | – | **Switch ext port (MAC-to-MAC)** | RTL8363NB | – | Switch ext MAC port in PHY mode |
+| A | **RP2040** | – | **PIO RMII MAC** | – | **Switch ext port (MAC-to-MAC)** | RTL8363NB | – | Switch ext MAC port in PHY mode |
 | B | RP2040 | – | PIO direct 10BASE-T | – | Spare copper port | RTL8367S | YT9215S | Copper PHY (cap-coupled) |
 | C | RP2040 | – | PIO RMII | SR8201F PHY | Own magjack | – | – | Whatever the user plugs into the second port |
 | D | RP2040 | – | PIO direct 10BASE-T | – | Own magjack | – | – | Same as C |
@@ -83,7 +85,9 @@ remember them, not re-read for this note.
 
 ## 3. Direct on the wire (10BASE-T from MCU pins)
 
-### 3.1 What the signal needs **[802.3]**
+### 3.1 What the signal needs
+
+Evidence code for this section: [**802.3**](#evidence-codes).
 
 * **Manchester at 10 Mbit/s** = 20 Mbaud, 50 ns half-bit cells. Every bit has
   a mid-bit transition, so receivers resync every bit.
@@ -110,7 +114,7 @@ remember them, not re-read for this note.
 | Pico-10BASE-T ([Tom's Hardware]) | kingyoPiyo | 2022 | RP2040 | – | PIO | 2 GPIOs | None | – |
 | [Pico-100BASE-TX] | Steve Markgraf | 2025 | RP2040 | RP2350 | PIO+DMA | 2 GPIOs | None | – |
 | [cnlohr/espthernet] | Charles Lohr | 2016 | ESP8266 | – | I2S at 40 MHz | – | I2S at 40 MHz | – |
-| AVR projects (listed below) | – | – | ATtiny85 | AVR | Bit-banged | – | Overclocked USI | – |
+| AVR projects | – | – | ATtiny85 | AVR | Bit-banged | – | Overclocked USI | – |
 
 | AVR project | Author |
 |---|---|
@@ -165,13 +169,13 @@ remember them, not re-read for this note.
 
 ### 3.3 Fit for this adapter
 
-* **Off-board use is unattractive.** Every project above warns against PoE
+* **Off-board use is unattractive.** Every project in [section 3.2](#32-projects) warns against PoE
   ports and recommends real magnetics. A bit-banged port on its own RJ45
   costs a magjack and buys only a second cable. The passthrough already has
   the cable the user cares about.
 * **On-board use (chip to chip) is clean electrically.** Into a switch copper
   PHY over a few cm of trace, cap-coupled with no magnetics (same idea as the
-  cap-coupled device port in [`gigabit-piggyback.md`](gigabit-piggyback.md) §3), the RX eye is large
+  cap-coupled device port in [`gigabit-piggyback.md` section 3](gigabit-piggyback.md#3-viable-options-in-detail)), the RX eye is large
   and the passive bias receiver from pico_eth_doc should be reliable. Send
   FLPs advertising 10BASE-T full duplex so the switch doesn't fall back to
   half duplex.
@@ -212,12 +216,12 @@ remember them, not re-read for this note.
   framing, at full speed into DMA. Nobody has published a working 100 Mbit/s
   PIO RX; the existing drivers force the PHY to 10M.
 * **FCS in hardware on RP2040:** the DMA sniffer has an IEEE 802.3 CRC-32
-  mode, so the CPU need not compute the FCS. Neither driver above uses it;
+  mode, so the CPU need not compute the FCS. Neither driver in [section 4.1](#41-projects) uses it;
   worth adding.
 * **MII at 10 Mbit/s** is 4-bit nibbles at 2.5 MHz, with TX_CLK and RX_CLK
   supplied by the PHY (or by the switch in MII PHY mode). Even slower than
   RMII, at the cost of ~5 more pins (TXD0-3, TX_EN, TX_CLK, RXD0-3, RX_DV,
-  RX_CLK, plus MDC/MDIO).
+  RX_CLK, plus MDC and MDIO).
 
 ### 4.3 Without PIO: DMA-driven MII on a WCH part (untested idea)
 
@@ -240,15 +244,15 @@ relay, it would need a MAC. A software one is conceivable over MII at 10M:
 
 ### 4.4 Cheap PHYs if a standalone port is wanted
 
-| Vendor | Part | LCSC | MII | RMII | Speed | Pkg | $ @100 | $ @1k | Stock | Core supply | Auto-MDIX | Notes |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CoreChips | SR8201F | [C378491] | Yes | Yes | 10/100 | QFN-32 | **$0.266** | **$0.229** | 6,895 **[live]** | Internal 1.1 V | Yes | Cheapest found |
-| WCH | CH182H | [C22370607] | Yes | Yes | 10/100 | QFN-32 | $0.452 | $0.390 | **Out of stock [live]** | – | – | – |
-| Microchip | LAN8710A | [C46185] | Yes | Yes | – | QFN-32 | $0.545 | $0.513 | 5,829 **[live]** | – | – | LAN8720A is the one the PIO drivers test against |
+| Vendor | Part | LCSC | MII | RMII | Speed | Pkg | $ @100 | $ @1k | Stock | Stock evidence | Core supply | Auto-MDIX | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CoreChips | SR8201F | [C378491] | Yes | Yes | 10/100 | QFN-32 | **$0.266** | **$0.229** | 6,895 | [**live**](#evidence-codes) | Internal 1.1 V | Yes | Cheapest found |
+| WCH | CH182H | [C22370607] | Yes | Yes | 10/100 | QFN-32 | $0.452 | $0.390 | **Out of stock** | [**live**](#evidence-codes) | – | – | – |
+| Microchip | LAN8710A | [C46185] | Yes | Yes | – | QFN-32 | $0.545 | $0.513 | 5,829 | [**live**](#evidence-codes) | – | – | LAN8720A is the one the PIO drivers test against |
 
 All need a 25 MHz crystal (or 50 MHz RMII clock) and magnetics. The PIO
 drivers use a few LAN87xx-specific MDIO registers to force 10M; for SR8201F
-that would be a small port, using the standard BMCR/ANAR registers.
+that would be a small port, using the standard BMCR and ANAR registers.
 
 ## 5. Recommendation
 
@@ -258,13 +262,13 @@ that would be a small port, using the standard BMCR/ANAR registers.
    switch's extension port** (MAC-to-MAC, no PHY, no magnetics, no analog
    front end). Start from the Mongoose pico-rmii driver; change the MDIO
    part to talk to the switch's SMI instead of a PHY; use the DMA sniffer for
-   CRC-32. 10 Mbit/s is plenty for LLDP, DHCP and a small web/management page.
+   CRC-32. 10 Mbit/s is plenty for LLDP, DHCP and a small web and management page.
 3. **Bench tests needed before committing:**
    * RTL8363NB ext port in RMII PHY mode at 10 Mbit/s against PIO RMII:
      who sources the 50 MHz clock (the PIO driver expects to be clocked by it).
    * RP2040 idle current with the PIO MAC running vs. the PoE MPS budget
-     ([`poe.md`](poe.md) §6.3).
-   * Optional: CH32X035 DMA-driven MII (§4.3). If it works, the switch SKU
+     ([`poe.md` section 6.3](poe.md#63-the-bootstrap-problem)).
+   * Optional: CH32X035 DMA-driven MII ([section 4.3](#43-without-pio-dma-driven-mii-on-a-wch-part-untested-idea)). If it works, the switch SKU
      doesn't need a second MCU at all.
 
 ## Sources

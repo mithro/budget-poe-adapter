@@ -1,20 +1,20 @@
 # Gigabit switch IC comparison for the PoE → USB-C adapter
 
-Researched 2026-10-22. Prices and stock were read live from LCSC product pages (JLCPCB assembly uses the same C-numbers and LCSC stock). This is the markdown copy of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
+Prices and stock were read from LCSC product pages on 2026-10-22 (JLCPCB assembly uses the same C-numbers and LCSC stock). The table holds the data of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
 
 Google Sheet: https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=1
 
 ## TL;DR
 
-* **RTL8363NB-VB-CG stays the pick** ($1.96 @100 on the 30+ break, $1.48 @1k, 1,562 in stock): 2 GbE PHYs + 1 RGMII/MII/RMII/TMII MAC is exactly the passthrough shape, QFN-76 9×9, single 3.3 V rail, works unmanaged from straps.
+* **RTL8363NB-VB-CG is the pick** ($1.96 @100 on the 30+ break, $1.48 @1k, 1,562 in stock): 2 GbE PHYs + 1 RGMII, MII, RMII or TMII MAC is exactly the passthrough shape, QFN-76 9×9, single 3.3 V rail, works unmanaged from straps.
 * **At 100 pcs the RTL8367S is $0.30 cheaper** ($1.67, 90+ break) and the same price at 1k. It has 3 spare GbE PHYs (idle power) and an LQFP-128 about 2.5× the area, but its spare copper PHY would let a CH32V208 (built-in 10M PHY) or RP2040 PIO 10BASE-T attach cap-coupled. Worth a power check before choosing for a 100-unit run.
-* **YT9215S** ($2.12 @100, $1.92 @1k) is the only Chinese gigabit switch buyable at LCSC/JLCPCB: a second source, but only 57 in stock.
+* **YT9215S** ($2.12 @100, $1.92 @1k) is the only Chinese gigabit switch buyable at LCSC and JLCPCB: a second source, but only 57 in stock.
 * **100M (10/100) switches are cheaper** (IP175G $0.85) but fail the ≥1 Gbit/s passthrough requirement.
-* **YT9213NB** (Motorcomm's exact RTL8363NB equivalent) and **JLSemi JL6107** aren't listed at LCSC/JLCPCB; they'd need distributor quotes and consigning.
+* **YT9213NB** (Motorcomm's exact RTL8363NB equivalent) and **JLSemi JL6107** aren't listed at LCSC and JLCPCB; they'd need distributor quotes and consigning.
 
 ## Table
 
-| Part | Vendor | LCSC | Datasheet | Pkg | Body size | $ @100 | Price tier | $ @1k | Stock | vs RTL8363NB | Speed | PHYs | Ext MACs | RGMII | MII | RMII | TMII | SerDes lanes | SerDes rate | Spare PHY | SMI / MDIO | I²C | SPI | UART | CPU | Strap boot | Linux driver | Driver type | JLC | Supply | Core rail | Verdict |
+| Part | Vendor | LCSC | Datasheet | Pkg | Body size | $ @100 | Price tier | $ @1k | Stock | vs RTL8363NB | Speed | PHYs | Ext MACs | RGMII | MII | RMII | TMII | SerDes lanes | SerDes rate | Spare PHY | SMI | I²C | SPI | UART | CPU | Strap boot | Linux driver | Driver type | JLC | Supply | Core rail | Verdict |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | IP175G | IC Plus | [C80220](https://www.lcsc.com/product-detail/C80220.html) | [PDF](https://www.lcsc.com/datasheet/C80220.pdf) | QFN-48 | 6×6 mm | $0.853 | 100+ | $0.671 | 3,241 | -$1.109 | 100M | 5 | ? | ? | ? | ? | ? | 0 | None | Yes | ? | ? | ? | ? | None | Yes | ? | ? | ? | 3.3 V | Not listed | Too slow |
 | RTL8367S-CG | Realtek | [C2760849](https://www.lcsc.com/product-detail/C2760849.html) | [PDF](https://www.lcsc.com/datasheet/C2760849.pdf) | LQFP-128 | 14×14 mm | $1.665 | 90+ | $1.490 | 4,576 | -$0.297 | 1000M | 5 | 2 | Yes | Yes | No | No | 1 | 2.5 Gbit/s | Yes | SMI | Not listed | Yes | Not listed | 8051 | Yes | rtl8365mb | DSA | Extended | 3.3 V | int. 1.1 V buck | Candidate |
@@ -33,27 +33,27 @@ Google Sheet: https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_i
 ## Why the Pick and Candidates
 
 * **RTL8367S-CG (Candidate)**: Cheapest gigabit switch at 100 pcs ($1.67 vs $1.96 for the RTL8363NB). Same driver family as the RTL8363NB, so firmware carries over. Its spare copper PHYs allow a cap-coupled MCU port (e.g. CH32V208 built-in PHY or PIO 10BASE-T). Loses on size and idle power: 3 unused PHYs and LQFP-128.
-* **RTL8363NB-VB-CG (Pick)**: Exact port count: 2 GbE PHYs + 1 MAC, no wasted PHYs. Smallest package (QFN-76 9×9) and a single 3.3 V rail. Cheapest gigabit option at 1k ($1.48). RMII/MII to the MCU, so a CH32V307 MAC or RP2040 PIO RMII plugs straight in. Well stocked (1,562) and in the JLCPCB library.
-* **YT9215S (Candidate)**: The only Chinese gigabit switch you can buy at LCSC/JLCPCB today: a second source to Realtek. Upstream Linux yt921x driver. If Motorcomm provides an SDK, its RISC-V core could do the networking and drop the separate network MCU. Loses on size (LQFP-128), price at 100 and stock (57).
+* **RTL8363NB-VB-CG (Pick)**: Exact port count: 2 GbE PHYs + 1 MAC, no wasted PHYs. Smallest package (QFN-76 9×9) and a single 3.3 V rail. Cheapest gigabit option at 1k ($1.48). RMII or MII to the MCU, so a CH32V307 MAC or RP2040 PIO RMII plugs straight in. Well stocked (1,562) and in the JLCPCB library.
+* **YT9215S (Candidate)**: The only Chinese gigabit switch you can buy at LCSC and JLCPCB today: a second source to Realtek. Upstream Linux yt921x driver. If Motorcomm provides an SDK, its RISC-V core could do the networking and drop the separate network MCU. Loses on size (LQFP-128), price at 100 and stock (57).
 
 ## Per-part notes
 
-* **IP175G**: 5-port 10/100 switch with integrated PHYs. Cheapest switch found, but 100 Mbit/s only, so it fails the ≥1 Gbit/s passthrough requirement. Whether a port can be used as an MII/RMII MAC for the MCU is not confirmed.
-* **RTL8367S-CG**: 5 GbE PHYs plus SGMII/HSGMII and RGMII/MII extension ports. Embedded 8051, disabled by strap. Cheaper than the RTL8363NB at 100 pcs because its 90+ break applies; about the same at 1k. But 3 unused GbE PHYs cost power and the LQFP-128 is about 2.5× the board area of the QFN-76.
+* **IP175G**: 5-port 10/100 switch with integrated PHYs. Cheapest switch found, but 100 Mbit/s only, so it fails the ≥1 Gbit/s passthrough requirement. Whether a port can be used as an MII or RMII MAC for the MCU is not confirmed.
+* **RTL8367S-CG**: 5 GbE PHYs plus SGMII or HSGMII and RGMII or MII extension ports. Embedded 8051, disabled by strap. Cheaper than the RTL8363NB at 100 pcs because its 90+ break applies; about the same at 1k. But 3 unused GbE PHYs cost power and the LQFP-128 is about 2.5× the board area of the QFN-76.
 * **RTL8305NBI-VB-CG**: 5-port 10/100 switch with SMI management, VLAN and QoS. Industrial-temperature version of the RTL8305NB. 100 Mbit/s only, so it fails the ≥1 Gbit/s passthrough requirement.
-* **RTL8363NB-VB-CG**: 2 GbE PHYs plus 1 extension MAC: exactly the passthrough shape (PoE side, device side, MCU). The MCU attaches over RMII/MII with no PHY and no magnetics on its side. Managed over slave SMI (MDC/MDIO) or a 2-wire I²C-like bus, plus an interrupt pin. Comes up as a plain learning switch from straps, so the user's link works even if the MCU firmware is dead. Full register docs are under NDA; the GPL rtl8367c API and Linux rtl8365mb driver cover the registers. Power draw not found in the public datasheet (expect a few hundred mW to ~1 W).
-* **YT9215S**: 5 GbE PHYs, one RGMII/MII/RMII port and one SGMII/HSGMII SerDes. On-chip RISC-V MCU with SPI flash interface; can be disabled by strap. The public datasheet is a draft and says nothing about the RISC-V core's SDK. Only 57 in stock.
+* **RTL8363NB-VB-CG**: 2 GbE PHYs plus 1 extension MAC: exactly the passthrough shape (PoE side, device side, MCU). The MCU attaches over RMII or MII with no PHY and no magnetics on its side. Managed over slave SMI (MDC and MDIO) or a 2-wire I²C-like bus, plus an interrupt pin. Comes up as a plain learning switch from straps, so the user's link works even if the MCU firmware is dead. Full register docs are under NDA; the GPL rtl8367c API and Linux rtl8365mb driver cover the registers. Power draw not found in the public datasheet (expect a few hundred mW to ~1 W).
+* **YT9215S**: 5 GbE PHYs, one RGMII, MII or RMII port and one SGMII or HSGMII SerDes. On-chip RISC-V MCU with SPI flash interface; can be disabled by strap. The public datasheet is a draft and says nothing about the RISC-V core's SDK. Only 57 in stock.
 * **YT9215SC**: YT9215S variant; LCSC gives no functional difference. About 50 % dearer than the YT9215S.
-* **KSZ8863RLLI**: 3-port 10/100 switch: 2 PHYs + 1 MII/RMII MAC, the same shape as the RTL8363NB. Well documented (open datasheet). 100 Mbit/s only, so it fails the ≥1 Gbit/s passthrough requirement, and dearer than the gigabit RTL8363NB anyway.
+* **KSZ8863RLLI**: 3-port 10/100 switch: 2 PHYs + 1 MII or RMII MAC, the same shape as the RTL8363NB. Well documented (open datasheet). 100 Mbit/s only, so it fails the ≥1 Gbit/s passthrough requirement, and dearer than the gigabit RTL8363NB anyway.
 * **RTL8364NB-VB-CG**: Same family as the RTL8363NB with more ports; exact configuration not verified. More than twice the RTL8363NB's price.
 * **YT9215RBH**: Industrial-temperature (−40…85 °C) YT9215 variant with two extra MAC ports. About 4–5× the YT9215S price.
-* **KSZ9893RNXI**: The nicely documented 3-port GbE part: open datasheet, SPI/I²C/MDIO management. 6–9× the RTL8363NB's price. Only worth it if Realtek's NDA documentation becomes a blocker.
+* **KSZ9893RNXI**: The nicely documented 3-port GbE part: open datasheet, SPI, I²C or MDIO management. 6–9× the RTL8363NB's price. Only worth it if Realtek's NDA documentation becomes a blocker.
 * **RTL8305NB-CG**: Commercial-temperature RTL8305NB. Out of stock at LCSC; $0.845 is LCSC's 'from' price, tier not shown. 100 Mbit/s only.
 * **YT9213NB**: The exact Motorcomm equivalent of the RTL8363NB: 2 GbE PHYs + 1 MAC. Not found at LCSC, JLCPCB or szlcsc. Price needs a Motorcomm distributor quote; it would then be consigned to JLCPCB.
-* **JL6107-PC**: 5 GbE PHYs + 2 extension ports (RGMII/MII/RMII, SGMII). Marketed as a pin-compatible drop-in for the RTL8367RB/RTL8367S; that claim is unverified. Not at LCSC/JLCPCB; sold via the distributor VOOHU with no public price.
+* **JL6107-PC**: 5 GbE PHYs + 2 extension ports (RGMII, MII or RMII, SGMII). Marketed as a pin-compatible drop-in for the RTL8367RB and RTL8367S; that claim is unverified. Not at LCSC and JLCPCB; sold via the distributor VOOHU with no public price.
 
 ## Caveats
 
 * "@100" is the LCSC break that applies to an order of 100 (e.g. 90+ or 30+ where there's no 100+ break). Out-of-stock parts show LCSC's 'from' price in the @1k column.
 * ? = not confirmed. RTL8364NB port configuration, several supply rails, and the JLCPCB library status of the non-Realtek parts were not checked.
-* Power draw for the RTL8363NB / RTL8367S wasn't in the public datasheets; it matters for the PoE budget and is the main open item.
+* Power draw for the RTL8363NB and RTL8367S wasn't in the public datasheets; it matters for the PoE budget and is the main open item.

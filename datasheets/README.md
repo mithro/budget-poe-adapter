@@ -25,7 +25,7 @@ kept here unmodified (only renamed) so the notes can cite a fixed copy.
 | [`Motorcomm_Product_Selection_Guide_2023-03-08.pdf`](motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf) | `5025e54d6e6ca72b76c5ba4b840ccbba` | [`attachments/裕太微电子产品选型20230308.pdf`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/attachments/%E8%A3%95%E5%A4%AA%E5%BE%AE%E7%94%B5%E5%AD%90%E4%BA%A7%E5%93%81%E9%80%89%E5%9E%8B20230308.pdf) |
 
 The three YT9215 variants have three different pinouts (S = RTL8367S-compatible,
-SC/SCH = RTL8367SC-compatible, RB = RTL8367RB-VB-compatible). Always take pin numbers
+SC and SCH = RTL8367SC-compatible, RB = RTL8367RB-VB-compatible). Always take pin numbers
 from the exact variant's datasheet. See
 [`../research/motorcomm-debug-pins.md`](../research/motorcomm-debug-pins.md).
 
@@ -42,14 +42,15 @@ They are therefore linked, not copied into this repository.
 | RTL8364NB-VB-CG | Datasheet | – | – | [LCSC C3013610](https://www.lcsc.com/datasheet/C3013610.pdf) | – | – |
 | RTL8305NB-CG | Datasheet | – | – | [LCSC C52146](https://www.lcsc.com/datasheet/C52146.pdf) | – | 10/100 part (for comparison) |
 | RTL8305NBI-VB-CG | Datasheet | – | – | [LCSC C42451794](https://www.lcsc.com/datasheet/C42451794.pdf) | – | 10/100 part (for comparison) |
-| RTL8367RB / RTL8367MB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
+| RTL8367RB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
+| RTL8367MB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
 
 ## Other references
 
 | What | Where | Notes |
 | --- | --- | --- |
 | Motorcomm switch product page | <https://www.motor-comm.com/product/switching-chip> | – |
-| Linux DSA driver for YT921x | `drivers/net/dsa/motorcomm/` | In the kernel tree |
+| Linux DSA driver for YT921x | [`drivers/net/dsa/motorcomm/`](https://github.com/torvalds/linux/tree/20eef29b7c84/drivers/net/dsa/motorcomm) | In the kernel tree |
 | Device-tree binding for YT921x | [motorcomm,yt921x.yaml](https://www.kernel.org/doc/Documentation/devicetree/bindings/net/dsa/motorcomm%2Cyt921x.yaml) | – |
 | OpenWrt thread on the IPQ5018 with a YT9215S | [forum.openwrt.org thread](https://forum.openwrt.org/t/ipq5018-and-motorcomm-yt9215s/239942) | – |
 | Synopsys DW8051 core | [Datasheet hosted by Keil](https://www.keil.com/dd/docs/datashts/synopsys/dw8051_ds.pdf) | The CPU inside the RTL8367S |

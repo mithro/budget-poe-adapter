@@ -17,7 +17,7 @@ Prices are LCSC prices. Evidence codes:
 
 ## 1. TL;DR
 
-* **Bit-banged 10 Mbit/s Ethernet works today on an RP2040, both ways.**
+* **Bit-banged 10 Mbit/s Ethernet works on an RP2040, both ways.**
   Direct on the wire: a PIO 10BASE-T MAC+PHY with lwIP, 2 GPIOs for TX,
   1 GPIO for RX, measured 5–7 Mbit/s TCP ([holysnippet/pico_eth_doc]).
   Via a PHY: PIO RMII to a LAN8720 at 10 Mbit/s, with lwIP

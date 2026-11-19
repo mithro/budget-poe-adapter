@@ -144,7 +144,7 @@ With 3 A Rp, one comparator or ADC channel per CC pin suffices: below 0.8 V mean
 3. Turn VBUS on within **tVBUSON ≤ 275 ms** (verify). If Ra is on the other CC and you support VCONN, apply 5 V VCONN to that pin.
 4. Detach (CC goes open, debounce tPDDebounce 10 to 20 ms) → VBUS off and discharged to vSafe0V within **tVBUSOFF ≤ 650 ms** (needs a bleed resistor or discharge FET).
 
-Hardware this implies: a high-side load switch on VBUS (P-FET or N-FET with a charge pump, about $0.05 to $0.15), a discharge path, and reverse and over-current protection. Plugging two sources together must never back-feed, because a dumb 5 V barrel-style output on a USB-C receptacle is non-compliant and dangerous.
+Hardware this implies: a high-side load switch on VBUS (P-FET or N-FET with a charge pump, about $0.05 to $0.15), a discharge path, and reverse and over-current protection. An eFuse or a load switch with a current-limit (ILIM) pin can do the over-current shutdown in place of a sense resistor. Plugging two sources together must never back-feed, because a dumb 5 V barrel-style output on a USB-C receptacle is non-compliant and dangerous.
 
 ### 4.4 Protection on CC
 

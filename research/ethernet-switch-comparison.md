@@ -2,7 +2,7 @@
 
 Prices and stock were read from LCSC product pages on 2026-10-22 (JLCPCB assembly uses the same C-numbers and LCSC stock). The table holds the data of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
 
-Google Sheet: https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=1
+The sheet is the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=1).
 
 ## TL;DR
 
@@ -34,7 +34,7 @@ Google Sheet: https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_i
 
 * **RTL8367S-CG (Candidate)**: Cheapest gigabit switch at 100 pcs ($1.67 vs $1.96 for the RTL8363NB). Same driver family as the RTL8363NB, so firmware carries over. Its spare copper PHYs allow a cap-coupled MCU port (e.g. CH32V208 built-in PHY or PIO 10BASE-T). Loses on size and idle power: 3 unused PHYs and LQFP-128.
 * **RTL8363NB-VB-CG (Pick)**: Exact port count: 2 GbE PHYs + 1 MAC, no wasted PHYs. Smallest package (QFN-76 9×9) and a single 3.3 V rail. Cheapest gigabit option at 1k ($1.48). RMII or MII to the MCU, so a CH32V307 MAC or RP2040 PIO RMII plugs straight in. Well stocked (1,562) and in the JLCPCB library.
-* **YT9215S (Candidate)**: The only Chinese gigabit switch you can buy at LCSC and JLCPCB today: a second source to Realtek. Upstream Linux yt921x driver. If Motorcomm provides an SDK, its RISC-V core could do the networking and drop the separate network MCU. Loses on size (LQFP-128), price at 100 and stock (57).
+* **YT9215S (Candidate)**: The only Chinese gigabit switch you can buy at LCSC and JLCPCB: a second source to Realtek. Upstream Linux yt921x driver. If Motorcomm provides an SDK, its RISC-V core could do the networking and drop the separate network MCU. Loses on size (LQFP-128), price at 100 and stock (57).
 
 ## Per-part notes
 

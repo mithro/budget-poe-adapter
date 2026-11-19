@@ -151,6 +151,7 @@ Notes on the rows of this table:
 - **Switch SKU with RP2040**, second reason: It also serves a USB-only device.
 - **Switch SKU with CH32V307**, reason: Already in that BOM at $2.15 @1k.
 - **Switch SKU with CH32V307**, second reason: The RP2040 swap saves ~$0.40.
+- **Switch SKU with CH32V307**: the MAC reaches the switch over RGMII or RMII, and the firmware is TinyUSB NCM on the WCH USB stack plus a bridge.
 - **CH32X035 with CH390H**, reason: Slower than the CH397A.
 - **CH32X035 with CH390H**, second reason: More work than the CH397A.
 - **RP2040 with PIO 10BASE-T**, reason: 5–7 Mbit/s TCP.
@@ -192,8 +193,8 @@ CH335, not priced here) or the CH397A alone (power info then only via PD).
 | Android phone | Device | PD `DR_Swap` | – | Generally supported | No |
 | Android tablet | Device | PD `DR_Swap` | – | Generally supported | No |
 | iPad (iPadOS) | Device | PD `DR_Swap` | – | USB Ethernet as host | No |
-| Pi Zero | Device (micro-USB OTG) | Needs an OTG-host adapter cable | – | Out of scope | – |
-| Other micro-USB boards | Device (micro-USB OTG) | Needs an OTG-host adapter cable | – | Out of scope | – |
+| Pi Zero | Device (micro-USB OTG) | OTG-host adapter cable | – | Out of scope | – |
+| Other micro-USB boards | Device (micro-USB OTG) | OTG-host adapter cable | – | Out of scope | – |
 
 A `DR_Swap` towards a laptop is what docks do.
 

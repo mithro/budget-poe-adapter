@@ -329,8 +329,8 @@ The 5 V output assumes ~90 % efficiency, including bridge losses.
 
 So the adapter should request **Class 5 or 6**, count events, and tell the
 USB-PD side whether it may offer 5 V at 5 A or only 5 V at 3 A (or a ~4.5 A
-custom limit). The 5 V at 5 A negotiation itself is covered by the USB-PD
-research thread.
+custom limit). The 5 V at 5 A negotiation itself is covered in
+[`usb-c-pd.md`](usb-c-pd.md).
 
 ---
 

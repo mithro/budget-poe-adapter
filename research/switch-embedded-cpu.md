@@ -260,7 +260,7 @@ Evidence code for this section: [**I**](#evidence-codes).
 - **Vendor API (GPL).**
   - Realtek "rtl8367c" API, in OpenWrt and ImmortalWrt trees, for example [hanwckf/immortalwrt-mt798x …/rtk/rtl8367c](https://github.com/hanwckf/immortalwrt-mt798x/tree/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c).
   - The full register header has about 22,800 lines.
-  - [`rtl8367c_asicdrv_port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/rtl8367c_asicdrv_port.c) and [`port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/port.c) contain the 8051 programs `Sgmii_Init` (1,183 B), `Fiber2_Auto`/`Fiber2_1G`/`Fiber2_100M` (about 2 KB each) and `Fiber` (1,507 B), with their loader.
+  - [`rtl8367c_asicdrv_port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/rtl8367c_asicdrv_port.c) and [`port.c`](https://github.com/hanwckf/immortalwrt-mt798x/blob/openwrt-21.02/target/linux/mediatek/files-5.4/drivers/net/phy/rtk/rtl8367c/port.c) contain the 8051 programs `Sgmii_Init` (1,183 B), `Fiber2_Auto`, `Fiber2_1G` and `Fiber2_100M` (about 2 KB each) and `Fiber` (1,507 B), with their loader.
   - The [Mercusys MR80X v2 GPL drop](https://ratatoskr.run/linux-firmware/2026/06/17116216/t) is cited as the source of the 1,233-byte variant.
 - **Linux.**
   - Upstream `rtl8365mb` gained RTL8367S SGMII or HSGMII support in commit fcaf2221b970 (2026-07-22) ([cover letter thread](https://ratatoskr.run/lkml/2026/07/17247411/t)).

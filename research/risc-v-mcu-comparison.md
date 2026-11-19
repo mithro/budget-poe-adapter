@@ -5,8 +5,7 @@ Prices and stock were read live from LCSC product pages on 2026-10-21 and 2026-1
 at **$0.786 @100**. Anything dearer than that is marked **Over RP2040** (ruled out).
 Non-RISC-V parts are included where the price is competitive.
 
-Google Sheet (same data, with per-column notes):
-https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=0
+The same data, with per-column notes, is in the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=0).
 
 ## TL;DR
 
@@ -110,11 +109,11 @@ way the MAC is exposed; Ext flash = needs an external flash chip. ? = not confir
 * **RP2354A**: RP2350A with 2 MB flash stacked in the package, so no external flash.
 * **CH570Q**: Only 5 GPIO and no ADC (one comparator with a 16-step reference). 5 V input range is specified for the QFN20 'D' parts; unclear for Q. CH570 has the 2.4 GHz radio but no BLE. Needs a 32 MHz crystal.
 * **CH32V003F4P6**: No USB hardware. Low-speed USB can be bit-banged (rv003usb), but USB-PD BMC would also be bit-banged. Good as a PoE cold-start helper (low current, 5 V tolerant supply, TIM1 complementary PWM with dead time).
-* **CH572D**: Cheapest part here with both USB FS (host + device) and BLE 5.0. No ADC: PoE voltage and class sensing would need the comparator plus its 16-step reference. Only 230 in stock at LCSC today. Needs 32 MHz crystal and antenna matching. Bluetooth only, so no Ethernet or Wi-Fi network on its own.
+* **CH572D**: Cheapest part here with both USB FS (host + device) and BLE 5.0. No ADC: PoE voltage and class sensing would need the comparator plus its 16-step reference. Only 230 in stock at LCSC. Needs 32 MHz crystal and antenna matching. Bluetooth only, so no Ethernet or Wi-Fi network on its own.
 * **CH32X033F8P6**: Same die family as CH32X035 but no USB-PD and Type-C block (no CC pins). Crystal-less USB.
 * **CH32X035G8U6**: Hardware USB-PD PHY (BMC + CRC), Rp current sources, crystal-less USB, 5 V supply, op-amps and comparator for PoE sensing, TIM1 complementary PWM with dead time for an MCU-driven buck. 27 GPIO. Network: via the USB host relay (the Pi speaks for it on Ethernet), or pair with a BK7238 for Wi-Fi (~$0.98 together @100).
 * **CH32X035F8U6**: The part [`cost-reduction.md`](cost-reduction.md) chose. 19 GPIO. The datasheet ordering table lists no comparator for this package (the QFN28 has 1, LQFP48 has 3); check before relying on comparator-based current limit. Network: as CH32X035G8U6.
-* **CH32L103K8U6**: USB FS device + USB-PD PHY, low-power. Out of stock at LCSC today (reference price only). 3.3 V supply; whether USB runs crystal-less is not confirmed.
+* **CH32L103K8U6**: USB FS device + USB-PD PHY, low-power. Out of stock at LCSC (reference price only). 3.3 V supply; whether USB runs crystal-less is not confirmed.
 * **CH32V203F6P6**: Current BOM's MCU family. No PD PHY (PD must be bit-banged). USB normally uses an 8 MHz crystal.
 * **CH32V203G6U6**: As CH32V203F6P6 in QFN-28.
 * **CH592F**: BLE 5.4 + USB FS, internal DC-DC (needs an inductor), 32 MHz crystal. Good stock. Cheapest well-stocked BLE option. Bluetooth only, so no Ethernet or Wi-Fi network on its own.

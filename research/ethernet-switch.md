@@ -187,12 +187,12 @@ Short answer: **none of them is cheaper than the RTL8363NB at JLCPCB or LCSC.** 
 | JLSemi | JL5104 | 100M | 4–5 | – | – | – | – | – | Yes | Yes | – | – | – |
 | JLSemi | JL5106C | 100M | 4–5 | – | – | – | – | – | Yes | Yes | – | – | – |
 
-The YT9213NB is in the same family as the YT9215.
+The YT9213NB is in the same family as the YT9215. It is listed neither at LCSC nor at szlcsc.
 
 | Vendor | Part | At LCSC | LCSC part | $ @1 | $ @90 | $ @900 | Verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Motorcomm | YT9215S | Yes | C5899183 | $3.98 | $2.12 | $1.92 | Cheapest buyable Chinese option |
-| Motorcomm | YT9213NB | No (nor at szlcsc) | – | – | – | – | The exact RTL8363NB equivalent |
+| Motorcomm | YT9213NB | No | – | – | – | – | The exact RTL8363NB equivalent |
 | Motorcomm | YT9214NB | No | – | – | – | – | YT9213NB with a second MAC |
 | JLSemi | JL6107 family | No | – | – | – | – | Pin compatibility claims unverified |
 | JLSemi | JL6105-NC | No | – | – | – | – | Useless here |
@@ -218,7 +218,7 @@ RTL8363NB equivalent.
 
 Takeaways:
 * **For JLCPCB assembly, RTL8363NB is the cheapest and smallest choice.**
-  YT9215S is the only Chinese part you can buy there today. It's a reasonable
+  YT9215S is the only Chinese part you can buy there. It's a reasonable
   second source if a single‑vendor Realtek BOM is a concern.
 * Unit price for YT9213NB or a JLSemi 3+1 part could come in below
   $1.4. That would need direct quotes (Motorcomm and VOOHU for JLSemi), and they

@@ -3,9 +3,10 @@
 LEDs
 ====
 
-Each port has up to three LEDs (:const:`LED_GROUP_NUM`), called LED 0, 1 and 2. For every LED
-the driver picks the conditions that light or blink it, or forces it on or off. The registers
-are in the :blk:`led` block.
+Each port has up to :const:`LED_GROUP_NUM` (3) LEDs, numbered 0 to 2. The registers call the
+number of a LED its group, and the index ``grp`` of an array field is that number. For every
+LED the driver picks the conditions that light or blink it, or forces it on or off. The
+registers are in the :blk:`led` block.
 
 .. _leds-behaviour:
 
@@ -18,18 +19,26 @@ set.
 
 .. yt-bitfield:: LED0_PORT
 
-A common choice is link plus activity. To light the LED while the link is up at any speed,
-set :field:`LED0_PORT.ACT_1000M`, :field:`LED0_PORT.ACT_100M` and :field:`LED0_PORT.ACT_10M`.
-To blink it on traffic, set :field:`LED0_PORT.ACT_TX_BLINK` and
-:field:`LED0_PORT.ACT_RX_BLINK`; all five bits are confirmed by the :ref:`Linux driver <sources-list>`. For LED 0 of
-port 3 that is one write:
+The table gives the bits for a LED that shows link and activity. Write all five bits in one
+write to :reg:`LED0_PORT` of the port. The five bits are :ev:`confirmed` by
+:lx:`yt921x_led_trigger_set` of the :ref:`Linux driver <sources-list>`.
 
-.. code-block:: c
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
 
-   yt921x_reg_write(dev, YT921X_LED0_PORT(3),
-                    YT921X_LED0_PORT_ACT_1000M_M | YT921X_LED0_PORT_ACT_100M_M |
-                    YT921X_LED0_PORT_ACT_10M_M | YT921X_LED0_PORT_ACT_TX_BLINK_M |
-                    YT921X_LED0_PORT_ACT_RX_BLINK_M);
+   * - Wanted behaviour
+     - Field to set
+   * - On while the link is up at 1000 Mbit/s
+     - :field:`LED0_PORT.ACT_1000M`
+   * - On while the link is up at 100 Mbit/s
+     - :field:`LED0_PORT.ACT_100M`
+   * - On while the link is up at 10 Mbit/s
+     - :field:`LED0_PORT.ACT_10M`
+   * - Blink on sent frames
+     - :field:`LED0_PORT.ACT_TX_BLINK`
+   * - Blink on received frames
+     - :field:`LED0_PORT.ACT_RX_BLINK`
 
 .. _leds-force:
 
@@ -37,6 +46,8 @@ Forcing a LED
 -------------
 
 The forced state of all three LEDs of a port is in :reg:`LED2_PORT`.
+:lx:`yt921x_led_force_set` writes the values :val:`LED2_PORT.FORCE.ON` and
+:val:`LED2_PORT.FORCE.OFF`.
 
 .. yt-bitfield:: LED2_PORT
 
@@ -46,31 +57,51 @@ The forced state of all three LEDs of a port is in :reg:`LED2_PORT`.
 
    * - Value
      - Element *n* of :field:`LED2_PORT.FORCE`
-     - LED *n* of the port
+     - State of LED *n* of the port
    * - 0
      - :val:`LED2_PORT.FORCE.DONTCARE`
-     - Follows its behaviour bits
+     - :ref:`behaviour bits <leds-behaviour>`
    * - 1
      - :val:`LED2_PORT.FORCE.BLINK`
-     - Blinks with the cycle in :ref:`leds-blink`
+     - :ref:`blinking <leds-blink>`
    * - 2
      - :val:`LED2_PORT.FORCE.ON`
-     - On
+     - on
    * - 3
      - :val:`LED2_PORT.FORCE.OFF`
-     - Off
+     - off
 
 .. _leds-blink:
 
 Blink timing
 ------------
 
-The blink cycle of a forced LED is 512 ms shifted left by its element of
-:field:`LED2_PORT.FORCE_BLINK`: 512 ms, 1024 ms
-or 2048 ms for the values 0 to 2. The value 3 selects the alternative cycle of
-:field:`LED1_PORT.OTHER_BLINK`, which is 512 ms shifted right and reaches down to 64 ms
-(:const:`LED_BLINK_MIN`, :const:`LED_BLINK_DEF`, :const:`LED_BLINK_MAX`).
-:field:`LED1_PORT.BLINK_DUTY` sets the on fraction for all LEDs of the port.
+The blink cycle of a forced LED depends on its element of :field:`LED2_PORT.FORCE_BLINK`.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - :field:`LED2_PORT.FORCE_BLINK`
+     - Cycle
+     - Constant
+   * - 0
+     - 512 ms
+     - :const:`LED_BLINK_DEF`
+   * - 1
+     - 1024 ms
+     - none
+   * - 2
+     - 2048 ms
+     - :const:`LED_BLINK_MAX`
+   * - 3
+     - cycle of :field:`LED1_PORT.OTHER_BLINK`
+     - none
+
+The cycle of :field:`LED1_PORT.OTHER_BLINK` is 512 ms shifted right by the field value, so its
+shortest cycle is 64 ms (:const:`LED_BLINK_MIN`). :field:`LED1_PORT.BLINK_DUTY` sets the on
+fraction for all LEDs of the port. The two shift rules are the comments on the two fields in
+:lx:`leds.h:29` and :lx:`leds.h:47`, and :lx:`yt921x_led_blink_set` writes the fields.
 
 .. _leds-output:
 
@@ -79,9 +110,23 @@ Output pins
 
 :field:`LED_CTRL.MODE` selects how the LED states leave the chip: on parallel pins, one per
 LED, or as a serial stream for an external shift register. :reg:`LED_PAR_INV` sets the
-polarity of single parallel outputs: with its bit clear a pin is low while the LED is on,
-which suits a LED wired active low, and with the bit set the pin is high while the LED is on.
-:reg:`LED_PAR_MAP` and :reg:`LED_SER_MAP` choose which LED appears at which pin or stream
-position. The :ref:`Linux driver <sources-list>` uses the
-behaviour, force and inversion registers; the mapping and serial registers are described from
-the definitions in its header.
+polarity of single parallel outputs. :reg:`LED_PAR_MAP` and :reg:`LED_SER_MAP` choose which
+LED appears at which pin or stream position.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - Bit of the LED in :reg:`LED_PAR_INV`
+     - Pin while the LED is on
+     - LED wiring it suits
+   * - 0
+     - low
+     - active low
+   * - 1
+     - high
+     - active high
+
+:lx:`yt921x_led_setup` writes :reg:`LED_PAR_INV`. The registers :reg:`LED_CTRL`,
+:reg:`LED_PAR_MAP`, :reg:`LED_SER_CTRL` and :reg:`LED_SER_MAP` have the level :ev:`header`:
+:lx:`leds.h` defines them and no function of the Linux driver uses them.

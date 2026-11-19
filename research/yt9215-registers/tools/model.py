@@ -7,7 +7,7 @@ import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-ROLE_RE = re.compile(r":(?:reg|field|blk|enum|counter|const|chip|sdk|val):`([^`<]+?)(?: <[^`]+>)?`")
+ROLE_RE = re.compile(r":(?:reg|field|blk|enum|counter|const|chip|sdk|val|lx|ev):`([^`<]+?)(?: <[^`]+>)?`")
 REF_RE = re.compile(r":(?:ref|doc):`([^`<]+?) <[^`]+>`")
 
 
@@ -15,7 +15,7 @@ def plain(text):
     """Description text without documentation roles or inline markup."""
     text = ROLE_RE.sub(r"\1", text)
     text = REF_RE.sub(r"\1", text)
-    text = text.replace("``", "")
+    text = text.replace("``", "").replace("|ds|", "YT9215SCH datasheet")
     return " ".join(text.split())
 
 

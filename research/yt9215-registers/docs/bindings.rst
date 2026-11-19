@@ -3,11 +3,13 @@
 Code bindings
 =============
 
-The register map is available as source code for four environments. In each, one file of
-register definitions is generated from the same description as this manual
-(:doc:`description-files`), and a small hand-written access layer implements the procedures of
-:doc:`access`, :doc:`bringup`, :doc:`phy` and :doc:`mib`. All code is under the Apache-2.0
-licence.
+The register map is available as source code for four environments. The register
+definitions of C, Rust and MicroPython are generated from
+:download:`yt921x.yaml <../yt921x.yaml>`, the description that this manual is generated from
+and that :doc:`description-files` explains. Zephyr uses the C definitions. A small
+hand-written access layer per environment implements the procedures of :doc:`access`,
+:doc:`bringup`, :doc:`phy` and :doc:`mib`. Every source file carries an Apache-2.0 licence
+identifier.
 
 .. list-table::
    :header-rows: 1
@@ -34,7 +36,8 @@ licence.
 What the access layer does
 --------------------------
 
-The same operations exist in every language.
+The same operations exist in every language. Each C function of the table is a link to
+:download:`yt921x.h <../bindings/c/yt921x.h>`, which declares it.
 
 .. list-table::
    :header-rows: 1
@@ -44,44 +47,46 @@ The same operations exist in every language.
      - C function
      - Procedure
    * - Read a register
-     - ``yt921x_reg_read()``
+     - :download:`yt921x_reg_read() <../bindings/c/yt921x.h>`
      - :ref:`access-smi`
    * - Write a register
-     - ``yt921x_reg_write()``
+     - :download:`yt921x_reg_write() <../bindings/c/yt921x.h>`
      - :ref:`access-smi`
    * - Change some bits of a register
-     - ``yt921x_reg_update()``
+     - :download:`yt921x_reg_update() <../bindings/c/yt921x.h>`
      - :ref:`access-smi`
    * - Read a wide register
-     - ``yt921x_reg_read_words()``
+     - :download:`yt921x_reg_read_words() <../bindings/c/yt921x.h>`
      - :ref:`access-wide`
    * - Write a wide register
-     - ``yt921x_reg_write_words()``
+     - :download:`yt921x_reg_write_words() <../bindings/c/yt921x.h>`
      - :ref:`access-wide`
    * - Wait for a bit pattern
-     - ``yt921x_reg_wait()``
+     - :download:`yt921x_reg_wait() <../bindings/c/yt921x.h>`
      - :ref:`access-wait`
    * - Reset the switch
-     - ``yt921x_reset()``
+     - :download:`yt921x_reset() <../bindings/c/yt921x.h>`
      - :ref:`bringup-reset`
    * - Read a configuration byte
-     - ``yt921x_edata_read()``
+     - :download:`yt921x_edata_read() <../bindings/c/yt921x.h>`
      - :ref:`bringup-identify`
    * - Identify the part
-     - ``yt921x_identify()``
+     - :download:`yt921x_identify() <../bindings/c/yt921x.h>`
      - :ref:`bringup-identify`
    * - Read a PHY register
-     - ``yt921x_phy_read()``
+     - :download:`yt921x_phy_read() <../bindings/c/yt921x.h>`
      - :ref:`phy-mbus`
    * - Write a PHY register
-     - ``yt921x_phy_write()``
+     - :download:`yt921x_phy_write() <../bindings/c/yt921x.h>`
      - :ref:`phy-mbus`
    * - Read a port counter
-     - ``yt921x_mib_read()``
+     - :download:`yt921x_mib_read() <../bindings/c/yt921x.h>`
      - :ref:`mib-counters`
 
-The Rust and MicroPython layers use the same names without the ``yt921x_`` prefix, as methods
-of ``Yt921x`` and ``YT921x``.
+The Rust and MicroPython layers use the same names without the ``yt921x_`` prefix. In Rust
+they are methods of the type ``Yt921x`` in :download:`lib.rs <../bindings/rust/src/lib.rs>`,
+in MicroPython methods of the class ``YT921x`` in
+:download:`yt921x.py <../bindings/micropython/yt921x.py>`.
 
 .. _bindings-naming:
 
@@ -142,8 +147,9 @@ that name in a fixed way. The examples are for :reg:`PORT_CTRL`, its field
      - ``regs::PORT_NUM``
      - ``PORT_NUM``
 
-A value name that would start with a digit has a ``V`` in front, as in ``V1000``. Values are
-plain numbers; shift them into place with these helpers.
+A value name that would start with a digit has a ``V`` in front, as in
+:val:`speed.V1000`. Values are plain numbers. The helpers of the three register definition
+files shift them into place.
 
 .. list-table::
    :header-rows: 1
@@ -179,8 +185,9 @@ plain numbers; shift them into place with these helpers.
 C
 -
 
-Portable C99 without dependencies. The caller supplies three functions in a
-``struct yt921x_bus``: clause 22 MDIO read, MDIO write and a delay.
+Portable C99 without dependencies. The caller supplies three functions in the structure
+``struct yt921x_bus`` of :download:`yt921x.h <../bindings/c/yt921x.h>`: clause 22 MDIO read,
+MDIO write and a delay.
 
 .. list-table::
    :header-rows: 1
@@ -217,7 +224,7 @@ Rust
 ----
 
 A ``no_std`` crate without dependencies and without ``unsafe``. The board implements the
-traits ``Mdio`` and ``Delay``.
+traits ``Mdio`` and ``Delay`` of :download:`lib.rs <../bindings/rust/src/lib.rs>`.
 
 .. list-table::
    :header-rows: 1
@@ -232,7 +239,7 @@ traits ``Mdio`` and ``Delay``.
    * - :download:`lib.rs <../bindings/rust/src/lib.rs>`
      - Access layer
    * - :download:`guide.rs <../bindings/rust/examples/guide.rs>`
-     - Example: bus traits and bring-up
+     - Bring-up example
    * - :download:`mock.rs <../bindings/rust/tests/mock.rs>`
      - Tests against a software model of the switch
 
@@ -247,8 +254,10 @@ traits ``Mdio`` and ``Delay``.
 MicroPython
 -----------
 
-Two modules that also run under CPython. The bus is any object with ``read(phy, reg)`` and
-``write(phy, reg, value)``; ``BitBangMDIO`` provides one on two ``machine.Pin`` objects.
+Two modules that also run under CPython. The bus is any object with the methods
+``read(phy, reg)`` and ``write(phy, reg, value)``. The class ``BitBangMDIO`` of
+:download:`yt921x.py <../bindings/micropython/yt921x.py>` provides one on two
+``machine.Pin`` objects.
 
 .. list-table::
    :header-rows: 1
@@ -259,11 +268,11 @@ Two modules that also run under CPython. The bus is any object with ``read(phy, 
    * - :download:`yt921x_regs.py <../bindings/micropython/yt921x_regs.py>`
      - Generated register definitions
    * - :download:`yt921x.py <../bindings/micropython/yt921x.py>`
-     - Access layer and bit-banged MDIO
+     - Access layer
    * - :download:`guide.py <../bindings/micropython/examples/guide.py>`
      - The examples of this manual
    * - :download:`mock_switch.py <../bindings/micropython/tests/mock_switch.py>`
-     - Software model of the switch and of two MDIO pins
+     - Software model of the switch
    * - :download:`test_yt921x.py <../bindings/micropython/tests/test_yt921x.py>`
      - Tests of the access layer
    * - :download:`test_guide.py <../bindings/micropython/tests/test_guide.py>`
@@ -297,9 +306,9 @@ lock.
    * - :download:`module.yml <../bindings/zephyr/zephyr/module.yml>`
      - Module description
    * - :download:`CMakeLists.txt <../bindings/zephyr/CMakeLists.txt>`
-     - Build rules; compiles the C binding
+     - Build rules
    * - :download:`Kconfig <../bindings/zephyr/Kconfig>`
-     - ``CONFIG_YT921X`` and the init priority
+     - Configuration options
    * - :download:`motorcomm,yt921x.yaml <../bindings/zephyr/dts/bindings/ethernet/motorcomm,yt921x.yaml>`
      - Devicetree binding
    * - :download:`yt921x_zephyr.h <../bindings/zephyr/include/yt921x/yt921x_zephyr.h>`
@@ -323,8 +332,11 @@ lock.
    :caption: Using the device, from
              :download:`main.c <../bindings/zephyr/samples/identify/src/main.c>`
 
-Add the module to a build with ``-DZEPHYR_EXTRA_MODULES=<path to bindings/zephyr>`` or list it
-in the west manifest.
+The module is the directory
+`bindings/zephyr <https://github.com/mithro/budget-poe-adapter/tree/main/research/yt9215-registers/bindings/zephyr>`__.
+Add it to a build by passing its path in the CMake variable ``ZEPHYR_EXTRA_MODULES``, or list
+it in the west manifest. The option ``CONFIG_YT921X`` of
+:download:`Kconfig <../bindings/zephyr/Kconfig>` enables the driver.
 
 .. _bindings-tests:
 
@@ -340,13 +352,15 @@ How the code is checked
    * - C
      - Compiled with ``gcc -std=c99 -Wall -Wextra -Werror -pedantic``
    * - C
-     - Access layer and every example run against the software model
+     - Access layer run against the software model
+   * - C
+     - Every example run against the software model
    * - Rust
      - ``cargo test`` on the host
    * - Rust
      - Built for ``thumbv7em-none-eabihf``
    * - MicroPython
-     - Run under CPython against the software model, with the bit-banged bus
+     - Run under CPython against the software model
    * - MicroPython
      - Compiled with ``mpy-cross``
    * - Zephyr
@@ -354,7 +368,11 @@ How the code is checked
    * - All
      - Every generated address and field position compared with the description file
 
-None of the code has been run against a real YT921x by this project. The software model
-implements this manual's understanding of the chip, so the tests show that code and manual
-agree with each other, not that both are right. :download:`Makefile <../Makefile>` runs all
-checks.
+None of the code has been run against a YT921x. The software model is
+:download:`mock_switch.h <../bindings/c/tests/mock_switch.h>` for C,
+:download:`mock.rs <../bindings/rust/tests/mock.rs>` for Rust and
+:download:`mock_switch.py <../bindings/micropython/tests/mock_switch.py>` for MicroPython.
+Each implements the behaviour that this manual describes, so the tests show that code and
+manual agree with each other, not that both are right. The description file of the last row
+is :download:`yt921x.yaml <../yt921x.yaml>`. :download:`Makefile <../Makefile>` runs all
+checks with the command ``make check``.

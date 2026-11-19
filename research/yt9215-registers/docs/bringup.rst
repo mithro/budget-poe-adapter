@@ -12,8 +12,9 @@ Find the switch
 ---------------
 
 Read :reg:`CHIP_ID` at PHY address ``0x1d`` and, if the family code is not one of the two
-known values, at ``0x00``. The read changes nothing in the switch. On a board that straps a
-switch ID other than 0, use that ID in every access; :ref:`access-straps` lists the pins.
+known values, at ``0x00``. On a board that straps a switch ID other than 0, use that ID in
+every access. :ref:`access-straps` lists the pins. :lx:`yt921x_chip_detect` of the
+:ref:`Linux driver <sources-list>` reads :reg:`CHIP_ID` in the same way before the reset.
 
 .. list-table::
    :header-rows: 1
@@ -24,13 +25,12 @@ switch ID other than 0, use that ID in every access; :ref:`access-straps` lists 
      - Family
    * - ``0x9002``
      - :const:`MAJOR_YT9215`
-     - YT9215 family
+     - :ref:`YT9215 family <reference-parts>`
    * - ``0x9001``
      - :const:`MAJOR_YT9218`
-     - YT9218 family
+     - :ref:`YT9218 family <reference-parts>`
 
-The YT9215 family is the YT9215, YT9214 and YT9213 parts; :ref:`reference-parts` lists every
-part.
+:ref:`reference-parts` lists the parts of each family.
 
 .. _bringup-reset:
 
@@ -40,16 +40,26 @@ Reset
 .. yt-diagram:: reset-sequence
    :caption: Reset followed by identification.
 
-1. Write :reg:`RST` with only :field:`RST.HW` set. The :ref:`Linux driver <sources-list>` describes this as almost the
-   same as a reset through the reset pin. That every register returns to its default is
-   inferred from that description.
-2. Wait 10 ms (:const:`RST_DELAY_US`), as the :ref:`Linux driver <sources-list>` does before it touches the switch
-   again.
-3. Read :reg:`RST` until the whole register is 0, as described in :ref:`access-wait`.
-4. Read :reg:`CPU_TAG_TPID` and check for ``0x9988``, as described in :ref:`access-check`.
+1. Write :reg:`RST` with only :field:`RST.HW` set.
+2. Wait 10 ms (:const:`RST_DELAY_US`).
+3. Read :reg:`RST` until the whole register is 0, with the loop of :ref:`access-wait`.
+4. Read :reg:`CPU_TAG_TPID` and check for ``0x9988``, the test of :ref:`access-check`.
 
-A board can wire a GPIO to the reset pin as well; the register reset makes that optional.
-:field:`RST.SW` is a second reset bit that no public driver uses.
+The four steps are :ev:`confirmed` by :lx:`yt921x_chip_reset` of the
+:ref:`Linux driver <sources-list>`, which performs them in this order.
+
+Section 4.1.2.1 of the |ds| calls :field:`RST.HW` CHIP_RESET and lists what it does: all
+digital and analog circuits return to their defaults, the lookup and VLAN tables are cleared,
+a configuration is loaded again from an EEPROM or from flash where the strap pins ask for it,
+and the PHYs restart auto-negotiation. The bit clears itself.
+
+Section 4.1.2.2 calls :field:`RST.SW` SW_RESET and states that it does the same except that
+the analog circuits of the PHYs are not reset. The Linux driver does not use
+:field:`RST.SW`.
+
+The reset pin is nRESET, pin 89 of the YT9215SCH in table 23 of the |ds|. Section 4.1.1
+requires it to be low for at least 10 ms. A board that uses the register reset can leave the
+pin on its pull-up resistor.
 
 .. _bringup-identify:
 
@@ -62,20 +72,23 @@ mode. :ref:`reference-parts` has the value of each for every part and
 :ref:`reference-parts-ports` the ports each part has. A driver needs the part to know which
 of ports 8 and 9 exist and whether they have a SerDes or xMII pins.
 
-The configuration byte store (this manual's name for what the :ref:`Linux driver <sources-list>` calls EDATA) is a
-256-byte (:const:`EDATA_LEN`) memory inside the chip. Only reading it is known. The extended
-mode is the byte at address ``0xfb`` (:const:`EDATA_EXTMODE`).
+The configuration byte store is this manual's name for what the
+:ref:`Linux driver <sources-list>` calls EDATA. It is a memory of :const:`EDATA_LEN` (256)
+bytes inside the chip. The extended mode is the byte at address ``0xfb``
+(:const:`EDATA_EXTMODE`). The Linux driver only reads the store, in :lx:`yt921x_edata_read`,
+and no source describes a write.
 
 .. yt-diagram:: edata-sequence
    :caption: Reading one byte of the configuration byte store.
 
-1. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is :val:`EDATA_DATA.STATUS.IDLE`
-   (3).
+1. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is
+   :val:`EDATA_DATA.STATUS.IDLE`.
 2. Write :reg:`EDATA_CTRL` with the byte address in :field:`EDATA_CTRL.ADDR` and
-   :val:`EDATA_CTRL.OP.READ` (5) in :field:`EDATA_CTRL.OP`.
-3. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is :val:`EDATA_DATA.STATUS.IDLE` again;
-   :field:`EDATA_DATA.DATA` then holds the
-   byte.
+   :val:`EDATA_CTRL.OP.READ` in :field:`EDATA_CTRL.OP`.
+3. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is
+   :val:`EDATA_DATA.STATUS.IDLE` again. :field:`EDATA_DATA.DATA` then holds the byte.
+
+The three steps are :ev:`confirmed` by :lx:`yt921x_edata_read`.
 
 .. tab-set::
 
@@ -99,11 +112,17 @@ mode is the byte at address ``0xfb`` (:const:`EDATA_EXTMODE`).
            :start-after: # [bringup]
            :end-before: # [bringup end]
 
-``yt921x_reset()`` and ``yt921x_identify()`` are in
+The functions ``yt921x_reset()`` and ``yt921x_identify()`` are in
 :download:`yt921x.c <../bindings/c/yt921x.c>`.
 
-The YT9215SCH is not in the part table of the :ref:`Linux driver <sources-list>`. It is expected to report the
-values of the :chip:`YT9215SC`; this has not been checked on hardware.
+.. _bringup-sch:
+
+The part table of the Linux driver, which :lx:`yt921x_chip_detect` searches, has no entry
+for the :chip:`YT9215SCH`. No source gives the identification values of that part. This
+manual assumes the values of the :chip:`YT9215SC`, because the |ds| gives the YT9215SCH the
+package and pin numbers that the
+:doc:`debug pin note </research/motorcomm-debug-pins>` records for the YT9215SC. The
+assumption is :ev:`inferred`.
 
 .. _bringup-clock:
 
@@ -111,8 +130,12 @@ Core clock
 ----------
 
 :field:`SYS_CLK.SEL` shows which core clock the part runs from. Only the meters and shapers
-need it, because their time slots count core clock periods; :ref:`rate-tokens` uses the
-period from this table.
+need it, because their time slots count core clock periods. :ref:`rate-tokens` uses the
+period of the :ref:`clock table <bringup-clock-table>`. The periods are those that
+:lx:`yt921x_chip_detect` assigns for each value. The frequencies are the names of the values
+in :lx:`chip.h:178`.
+
+.. _bringup-clock-table:
 
 .. list-table::
    :header-rows: 1
@@ -122,31 +145,33 @@ period from this table.
      - :field:`SYS_CLK.SEL`
      - Core clock
      - Period
-   * - YT9215
+   * - :ref:`YT9215 <reference-parts>`
      - 0
      - 125 MHz
      - 8 ns
-   * - YT9218
+   * - :ref:`YT9218 <reference-parts>`
      - 0
      - 167 MHz
      - 6 ns
-   * - YT9215
+   * - :ref:`YT9215 <reference-parts>`
      - 1
      - 143 MHz
      - 7 ns
-   * - YT9218
+   * - :ref:`YT9218 <reference-parts>`
      - 1
      - 143 MHz
      - 7 ns
+
+For the values 2 and 3 the function assumes 8 ns. No source names a clock for them.
 
 .. _bringup-features:
 
 Turn on function blocks
 -----------------------
 
-Three function blocks work only while their bit in :reg:`FUNC` is set. The :ref:`Linux driver <sources-list>` sets
-each bit before it uses the block; that the bits are clear after reset is inferred from
-that.
+Three function blocks work only while their bit in :reg:`FUNC` is set.
+:lx:`yt921x_chip_setup` of the :ref:`Linux driver <sources-list>` sets the three bits before
+it uses the blocks. It is :ev:`inferred` from that code that the bits are clear after reset.
 
 .. list-table::
    :header-rows: 1
@@ -189,25 +214,48 @@ that.
 
 .. _bringup-straps:
 
-Strap overrides, I/O voltage and temperature
---------------------------------------------
+Other registers of the system block
+-----------------------------------
 
-Some settings are sampled from strap pins at power-on. :reg:`PON_STRAP_CAP` shows what was
-sampled. To override a strap, write the wanted value to :reg:`PON_STRAP_VAL` and set the same
-bit in :reg:`PON_STRAP_FUNC`; :ref:`ports-eee` uses this for Energy Efficient Ethernet, which is the one override the
-:ref:`Linux driver <sources-list>` confirms. :reg:`PON_STRAP_CAP` is inferred from its name.
+.. _bringup-strap-override:
+
+Strap overrides
+~~~~~~~~~~~~~~~
+
+Some settings are sampled from strap pins at power-on. To override a strap, write the wanted
+value to :reg:`PON_STRAP_VAL` and set the same bit in :reg:`PON_STRAP_FUNC`.
+:lx:`yt921x_set_eee` does this for Energy Efficient Ethernet, which :ref:`ports-eee`
+describes. That override is the only one that is :ev:`confirmed`. It is :ev:`inferred` from
+the name of :reg:`PON_STRAP_CAP` that the register shows the sampled levels.
+
+.. _bringup-io-level:
+
+I/O voltage
+~~~~~~~~~~~
 
 :reg:`IO_LEVEL` sets the signalling voltage of the digital pins and of each xMII interface.
 Its field positions differ between the two families, so a driver has to identify the part
-first. The fields come from the header of the :ref:`Linux driver <sources-list>`, which does
-not write them; :ref:`ports-xmii` shows the one known use.
+first. The fields have the level :ev:`header`: :lx:`chip.h` defines them and no function of
+the Linux driver writes them. :ref:`ports-xmii` shows the one use, in the
+:ref:`YT9215RB vendor driver <sources-list>`.
 
-Set :field:`SENSOR.TEMP` to start the temperature sensor and read :reg:`TEMP` for a raw value.
-The conversion to degrees is not known.
+.. _bringup-temp:
 
-:reg:`MAC_ADDR_HI2` and :reg:`MAC_ADDR_LO4` hold the MAC address the switch uses as the source
-of frames it generates itself, such as pause frames. This use is inferred from the register
-names; no public code writes them.
+Temperature sensor
+~~~~~~~~~~~~~~~~~~
+
+Set :field:`SENSOR.TEMP` to start the temperature sensor, as :lx:`yt921x_chip_setup` does,
+and read :reg:`TEMP` for a raw value. The conversion to degrees is :ev:`not known`.
+
+.. _bringup-mac:
+
+Switch MAC address
+~~~~~~~~~~~~~~~~~~
+
+:reg:`MAC_ADDR_HI2` and :reg:`MAC_ADDR_LO4` hold a MAC address of the switch itself. It is
+:ev:`inferred` from the register names that the switch uses it as the source address of
+frames it generates, such as pause frames. No function of the Linux driver writes the two
+registers.
 
 .. _bringup-next:
 

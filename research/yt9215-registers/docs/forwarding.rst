@@ -17,24 +17,38 @@ to. Setting bit *n* in the register of port *p* blocks the direction from *p* to
 
 .. yt-bitfield:: PORT_ISOLATION
 
-Isolation is how ports are separated into groups without VLANs:
+Isolation separates ports into groups without VLANs. The table gives the bits to clear in
+:reg:`PORT_ISOLATION`; every other bit of the register is set.
 
 .. list-table::
    :header-rows: 1
-   :widths: 34 66
+   :widths: 30 30 20 20
 
    * - Goal
-     - :reg:`PORT_ISOLATION` of each port
+     - Register of
+     - Bits of the group members
+     - Bit of the :ref:`CPU port <cpu-tag-port>`
    * - One switch of all ports
-     - 0
+     - every port
+     - clear
+     - clear
    * - Port talks to the CPU port only
-     - All ports except the CPU port
+     - that port
+     - set
+     - clear
    * - Group of ports plus the CPU port
-     - All ports except the other members of the group and the CPU port
+     - every member
+     - clear
+     - clear
    * - CPU port sends only where its tag says
-     - All ports
+     - the CPU port
+     - set
+     - set
 
-A port's own bit makes no difference, because a frame never leaves on the port it arrived on.
+:lx:`yt921x_userport_standalone` of the :ref:`Linux driver <sources-list>` writes the second
+row, :lx:`yt921x_bridge` the third and :lx:`yt921x_port_setup` the fourth. It is
+:ev:`inferred` that a port's own bit makes no difference, because a switch does not send a
+frame back to the port it arrived on.
 
 .. tab-set::
 
@@ -60,9 +74,10 @@ A port's own bit makes no difference, because a frame never leaves on the port i
 
 Isolation is applied after the destination lookup. If the forwarding database knows the
 destination on a blocked port, the frame is dropped; it is not flooded to the allowed ports.
-This matters when two groups learn into the same VLAN, because an address learned in one group
-then hides the same address in the other. Give each group its own VLAN, as in
-:ref:`vlan-port-based`, or have the host forward such frames as the :ref:`Linux driver <sources-list>` does.
+A comment in :lx:`yt921x_chip_setup_dsa` states this. It matters when two groups learn into
+the same VLAN, because an address learned in one group then hides the same address in the
+other. Give each group its own VLAN, with the steps of :ref:`vlan-port-based`, or trap such
+frames to the host and forward them there, as :lx:`yt921x_chip_setup_dsa` sets up.
 
 .. _forwarding-stp:
 
@@ -70,30 +85,37 @@ Spanning tree states
 --------------------
 
 :reg:`STP` holds a 2-bit state for every port. There are :const:`MSTI_NUM` such registers,
-one per spanning tree instance; a VLAN picks its instance with :field:`VLAN_CTRL.STP_ID`, and
-a switch with a single spanning tree uses instance 0 only.
+one per spanning tree instance. A VLAN picks its instance with :field:`VLAN_CTRL.STP_ID`, and
+a switch with a single spanning tree uses instance 0 only. The
+:ref:`state table <forwarding-stp-table>` is the mapping that
+:lx:`yt921x_dsa_port_mst_state_set` applies.
 
 .. yt-bitfield:: STP
 
+.. _forwarding-stp-table:
+
 .. list-table::
    :header-rows: 1
-   :widths: 14 22 64
+   :widths: 30 20 50
 
-   * - Value
+   * - IEEE 802.1D state
+     - Value
      - Name
-     - Use for the 802.1D state
-   * - 0
+   * - Disabled
+     - 0
      - :val:`STP.PORT.DISABLED`
-     - Disabled
-   * - 1
+   * - Listening
+     - 1
      - :val:`STP.PORT.LEARNING`
-     - Listening and learning
-   * - 2
+   * - Learning
+     - 1
+     - :val:`STP.PORT.LEARNING`
+   * - Blocking
+     - 2
      - :val:`STP.PORT.BLOCKING`
-     - Blocking
-   * - 3
+   * - Forwarding
+     - 3
      - :val:`STP.PORT.FORWARD`
-     - Forwarding
 
 .. _forwarding-learning:
 
@@ -101,28 +123,34 @@ Address learning
 ----------------
 
 The switch learns the source address of received frames into the forwarding database by
-itself. :reg:`PORT_LEARN` controls this per port:
+itself. :reg:`PORT_LEARN` controls this per port.
 
 .. list-table::
    :header-rows: 1
-   :widths: 36 64
+   :widths: 40 36 24
 
    * - Goal
      - Field to set
+     - :ref:`Evidence <evidence>`
    * - No learning on a port
      - :field:`PORT_LEARN.DIS`
+     - :ev:`confirmed`
    * - Limit the number of learned addresses
      - :field:`PORT_LEARN.LIMIT`
-   * -
+     - :ev:`inferred`
+   * - Limit the number of learned addresses
      - :field:`PORT_LEARN.LIMIT_EN`
-   * - Drop frames from new addresses beyond the limit
+     - :ev:`inferred`
+   * - Drop frames from addresses over the limit
      - :field:`PORT_LEARN.DROP_ON_EXCEEDED`
+     - :ev:`inferred`
    * - No learning in one VLAN
      - :field:`VLAN_CTRL.LEARN_DIS`
+     - :ev:`confirmed`
 
-:field:`PORT_LEARN.DIS` and :field:`VLAN_CTRL.LEARN_DIS` are confirmed by the :ref:`Linux driver <sources-list>`;
-the other fields are inferred from their names. Learned entries age out after the time in
-:reg:`AGEING`, counted in units of 5 seconds; see :ref:`fdb-ageing`.
+:lx:`yt921x_bridge_flags` sets :field:`PORT_LEARN.DIS` and :lx:`yt921x_chip_setup_dsa` sets
+:field:`VLAN_CTRL.LEARN_DIS`. The inferred rows follow the field names in :lx:`chip.h`.
+Learned entries age out after the time in :reg:`AGEING`, which :ref:`fdb-ageing` describes.
 
 .. _forwarding-flood:
 
@@ -132,27 +160,12 @@ Unknown destinations
 When the destination address is not in the forwarding database, two sets of registers decide
 what happens.
 
-The action registers choose, per receiving port, between four actions:
+The :ref:`register table <forwarding-flood-registers>` names the two sets. An action
+register chooses, per receiving port, one of the four actions of the
+:ref:`action table <forwarding-flood-actions>`. :reg:`ACT_UNK_MCAST` has the same four values
+as :reg:`ACT_UNK_UCAST`.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 12 20 68
-
-   * - Value
-     - Name
-     - Effect
-   * - 0
-     - :val:`ACT_UNK_UCAST.ACT.FORWARD`
-     - Flood the frame to the ports its flood filter register allows.
-   * - 1
-     - :val:`ACT_UNK_UCAST.ACT.TRAP`
-     - Send the frame to the CPU only.
-   * - 2
-     - :val:`ACT_UNK_UCAST.ACT.DROP`
-     - Discard the frame.
-   * - 3
-     - :val:`ACT_UNK_UCAST.ACT.COPY`
-     - Flood the frame and also send it to the CPU.
+.. _forwarding-flood-registers:
 
 .. list-table::
    :header-rows: 1
@@ -168,25 +181,59 @@ The action registers choose, per receiving port, between four actions:
      - :reg:`ACT_UNK_MCAST`
      - :reg:`FILTER_UNK_MCAST`
    * - Any multicast
-     -
+     - none
      - :reg:`FILTER_MCAST`
    * - Broadcast
-     -
+     - none
      - :reg:`FILTER_BCAST`
+
+.. _forwarding-flood-actions:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 10 34 28 28
+
+   * - Value
+     - Name
+     - Frame is flooded
+     - Frame is sent to the CPU
+   * - 0
+     - :val:`ACT_UNK_UCAST.ACT.FORWARD`
+     - yes
+     - no
+   * - 1
+     - :val:`ACT_UNK_UCAST.ACT.TRAP`
+     - no
+     - yes
+   * - 2
+     - :val:`ACT_UNK_UCAST.ACT.DROP`
+     - no
+     - no
+   * - 3
+     - :val:`ACT_UNK_UCAST.ACT.COPY`
+     - yes
+     - yes
+
+A flooded frame goes to the ports that the flood filter register of its kind allows.
 
 .. warning::
 
    The CPU tag carries the same :ref:`code <cpu-tag-codes>` for a trapped and for a copied
    unknown frame. A host that forwards trapped frames itself must not use
-   :val:`ACT_UNK_UCAST.ACT.COPY` or :val:`ACT_UNK_MCAST.ACT.COPY`, or those frames are sent twice. The
-   :ref:`Linux driver <sources-list>` states this.
+   :val:`ACT_UNK_UCAST.ACT.COPY` or :val:`ACT_UNK_MCAST.ACT.COPY`, or those frames are sent
+   twice. A comment in :lx:`yt921x_tag_rcv` states this.
 
 A set bit in a filter register keeps flooded frames of that kind away from the port. This
-polarity is inferred from the register names and from the values the :ref:`Linux driver <sources-list>` writes.
+polarity is :ev:`inferred` from the word "filter" in the register names. The only value that
+the Linux driver writes, ``0x7ff`` in :lx:`yt921x_chip_setup_dsa` together with trapping every
+unknown frame, is consistent with it.
 
 .. yt-bitfield:: ACT_UNK_UCAST
 
-There are two usual configurations:
+The :ref:`configuration table <forwarding-flood-config>` gives the register values for a
+switch that floods by itself and for a host that forwards unknown frames in software.
+
+.. _forwarding-flood-config:
 
 .. list-table::
    :header-rows: 1
@@ -221,7 +268,9 @@ There are two usual configurations:
      - 0
      - ``0x7ff``
 
-The host-forwarding column is confirmed by the :ref:`Linux driver <sources-list>`: every unknown frame is trapped
-to the host, which floods it in software to the right group of ports. The hardware-switch
-column lets the switch flood by itself, within the limits of
-:ref:`port isolation <forwarding-isolation>`; it is inferred from the register descriptions.
+The column "Host forwards unknown frames" is :ev:`confirmed` by
+:lx:`yt921x_chip_setup_dsa`: every unknown frame is trapped to the host, which floods it in
+software to the right group of ports. The column "Hardware switch" lets the switch flood by
+itself, within the limits of :ref:`port isolation <forwarding-isolation>`. It is
+:ev:`inferred` from the meaning of :val:`ACT_UNK_UCAST.ACT.FORWARD` and from the filter
+polarity.

@@ -57,6 +57,8 @@ class Hex(int):
     """An int that is written to YAML in hexadecimal."""
 
 
+yaml.SafeDumper.ignore_aliases = lambda self, data: True
+
 yaml.SafeDumper.add_representer(
     Hex, lambda d, v: d.represent_scalar("tag:yaml.org,2002:int", "0x%x" % v))
 
@@ -197,6 +199,27 @@ def parse_enums(text, hdr):
     return out
 
 
+FUNCS = {}
+USES = {}
+
+
+def first_use(lx, funcs, *more):
+    """Record where the driver first uses an item, trying its macro and then the others.
+
+    A use inside one of ``funcs`` (the functions that touch the register of a field) is
+    preferred, because a macro can be shared by the fields of several registers.
+    """
+    names = [lx["macro"].split("(")[0]]
+    names.append(re.sub(r"_M$", "", names[0]))
+    found = [u for n in names + [x.split("(")[0] for x in more if x] for u in USES.get(n, [])]
+    lx.pop("use", None)
+    if not found:
+        return False
+    near = [u for u in found if u[1] and u[1] in funcs]
+    lx["use"] = Flow((near or found)[0])
+    return True
+
+
 def parse_linux(ldir, overlay):
     macros = Macros()
     regs, consts, mibs, enums = [], [], [], {}
@@ -210,10 +233,32 @@ def parse_linux(ldir, overlay):
             with open(os.path.join(ldir, fn)) as f:
                 csrc[fn] = f.read()
 
+    funcs = {}   # function name -> [file, line of its definition]
+    owner = {}   # file -> function that contains each line
+    for fn, text in csrc.items():
+        cur, cand, own = None, None, []
+        for no, line in enumerate(text.split("\n"), 1):
+            mo = re.match(r"(?:[A-Za-z_][\w\s\*]*?[\s\*])?([A-Za-z_]\w*)\(", line)
+            if mo and not line.rstrip().endswith(";"):
+                cand = (mo.group(1), no)
+            if line.startswith("{") and cand:
+                cur = cand[0]
+                funcs.setdefault(cur, [fn, cand[1]])
+            own.append(cur)
+            if line.startswith("}"):
+                cur = cand = None
+        owner[fn] = own
+    FUNCS.update(funcs)
+
     def used(cname):
         """True when a driver source file (not a header) uses the macro."""
-        pat = re.compile(r"\b%s\b" % re.escape(cname.split("(")[0]))
-        return any(pat.search(t) for t in csrc.values())
+        name = cname.split("(")[0]
+        if name not in USES:
+            pat = re.compile(r"\b%s\b" % re.escape(name))
+            USES[name] = [[fn, owner[fn][no - 1] or "", no]
+                          for fn, text in csrc.items()
+                          for no, line in enumerate(text.split("\n"), 1) if pat.search(line)]
+        return bool(USES[name])
 
     for hdr in HEADERS:
         with open(os.path.join(ldir, hdr)) as f:
@@ -655,6 +700,37 @@ def main():
             for x in r["layouts"]:
                 x["name"] = lo[x.pop("linux_name")].get("name", x["name"])
 
+        # ---- where the driver uses each item
+        allf = r["fields"] + [f for l in r.get("layouts", []) for f in l["fields"]]
+        r["linux"]["used"] = first_use(r["linux"], ())
+        rname = r["linux"]["macro"].split("(")[0]
+        rfuncs = {u[1] for u in USES.get(rname, [])}
+        for fld in allf:
+            lx = fld.get("linux")
+            if not lx:
+                continue
+            vals = [v["linux"]["macro"] for v in fld.get("values", []) if v.get("linux")]
+            arr = (fld.get("array") or {}).get("macro")
+            # a field counts as used only in a register the driver touches
+            lx["used"] = first_use(lx, rfuncs, arr, *vals) and r["linux"]["used"]
+            if not lx["used"]:
+                lx.pop("use", None)
+        if len(allf) == 1 and not allf[0].get("linux", {}).get("used") \
+                and "inferred" not in ofl.get(allf[0]["name"], {}):
+            # the only field of a register shares the evidence of the register
+            keep = allf[0].get("linux") or dict(macro="", src=None)
+            keep["used"] = r["linux"]["used"]
+            if r["linux"].get("use"):
+                keep["use"] = r["linux"]["use"]
+            if not keep["src"]:
+                keep = dict(r["linux"])
+                keep.pop("macro"); keep = dict(macro="", **keep)
+            allf[0]["linux"] = keep
+            if not r.get("inferred"):
+                allf[0].pop("inferred", None)
+        if len(allf) == 1 and r.get("inferred"):
+            allf[0]["inferred"] = True
+
         # ---- vendor SDK cross-check
         t = sdk_lookup(tables, r["address"])
         if t:
@@ -723,6 +799,7 @@ def main():
                        paths=LINUX_PATHS),
             sdk=dict(repo="https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk",
                      commit=args.sdk_sha)),
+        linux_functions={k: Flow(v) for k, v in sorted(FUNCS.items())},
         chips=overlay["chips"],
         regions=[dict(name=x["name"], base=Hex(x["base"]), title=x["title"])
                  for x in overlay["regions"]],

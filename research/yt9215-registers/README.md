@@ -5,25 +5,29 @@ Everything needed to write a driver for the Motorcomm YT921x Gigabit Ethernet sw
 machine-readable register description, and register definitions with a small access layer
 for C, Rust, MicroPython and Zephyr.
 
-The vendor publishes no register documentation. The content is derived from the Linux
-driver and the vendor SDK; [`docs/sources.rst`](docs/sources.rst) explains what comes from
-where and how far it can be trusted. Nothing here has been run on a real YT921x.
+The vendor publishes no register documentation. The content is derived from the
+[Linux driver](https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm)
+and the [vendor SDK](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e).
+[`docs/sources.rst`](docs/sources.rst) lists the sources and the evidence behind each
+register. No part of the manual or the code has been run on a YT921x.
 
 ## Manual
 
-The manual is a Sphinx project and reads best when built (`make docs`, or on Read the Docs with the [`.readthedocs.yaml`](../../.readthedocs.yaml) of this repository).
+The manual is a Sphinx project and reads best when built. `make docs` builds it, and Read
+the Docs builds it with the [`.readthedocs.yaml`](../../.readthedocs.yaml) of this
+repository.
 The pages are also readable as source:
 
 | Page | Topic |
 | --- | --- |
 | [`docs/index.rst`](docs/index.rst) | Start page |
 | [`docs/overview.rst`](docs/overview.rst) | What the chip contains and what a driver has to do |
-| [`docs/access.rst`](docs/access.rst) | Register access over MDIO, with timing |
-| [`docs/bringup.rst`](docs/bringup.rst) | Reset, identification, function enables |
-| [`docs/ports.rst`](docs/ports.rst) | Port MACs, SerDes and xMII ports, frame size |
+| [`docs/access.rst`](docs/access.rst) | Register access over MDIO |
+| [`docs/bringup.rst`](docs/bringup.rst) | Reset and identification |
+| [`docs/ports.rst`](docs/ports.rst) | Port configuration |
 | [`docs/phy.rst`](docs/phy.rst) | PHY access through the MDIO masters of the switch |
 | [`docs/cpu-tag.rst`](docs/cpu-tag.rst) | CPU port and the 8-byte frame tag |
-| [`docs/forwarding.rst`](docs/forwarding.rst) | Port isolation, spanning tree, learning, flooding |
+| [`docs/forwarding.rst`](docs/forwarding.rst) | Forwarding between ports |
 | [`docs/vlan.rst`](docs/vlan.rst) | VLANs |
 | [`docs/fdb.rst`](docs/fdb.rst) | Forwarding database |
 | [`docs/mib.rst`](docs/mib.rst) | Port counters |
@@ -34,22 +38,25 @@ The pages are also readable as source:
 | [`docs/mirror.rst`](docs/mirror.rst) | Port mirroring |
 | [`docs/leds.rst`](docs/leds.rst) | LEDs |
 | [`docs/bindings.rst`](docs/bindings.rst) | The code bindings |
-| [`docs/description-files.rst`](docs/description-files.rst) | The register description files and how to regenerate them |
-| [`docs/sources.rst`](docs/sources.rst) | Sources and confidence |
+| [`docs/description-files.rst`](docs/description-files.rst) | Register description files |
+| [`docs/sources.rst`](docs/sources.rst) | Sources and evidence |
 
 The register reference (one section per register with address, bit diagram, field table and
 sources) is generated during the build by [`tools/gen_docs.py`](tools/gen_docs.py).
 
 ## Register description
 
-| File | Format |
-| --- | --- |
-| [`yt921x.yaml`](yt921x.yaml) | The source of everything else: 101 registers, 467 fields |
-| [`sdk-tables.yaml`](sdk-tables.yaml) | All 237 register tables of the vendor SDK, names and bits only |
-| [`svd/yt9215.svd`](svd/yt9215.svd) | CMSIS-SVD, YT9215 family |
-| [`svd/yt9218.svd`](svd/yt9218.svd) | CMSIS-SVD, YT9218 family |
-| [`rdl/yt9215.rdl`](rdl/yt9215.rdl) | SystemRDL, YT9215 family |
-| [`rdl/yt9218.rdl`](rdl/yt9218.rdl) | SystemRDL, YT9218 family |
+| File | Format | Content |
+| --- | --- | --- |
+| [`yt921x.yaml`](yt921x.yaml) | YAML | 101 registers with 467 fields |
+| [`sdk-tables.yaml`](sdk-tables.yaml) | YAML | 237 register tables of the vendor SDK |
+| [`svd/yt9215.svd`](svd/yt9215.svd) | CMSIS-SVD | YT9215 family |
+| [`svd/yt9218.svd`](svd/yt9218.svd) | CMSIS-SVD | YT9218 family |
+| [`rdl/yt9215.rdl`](rdl/yt9215.rdl) | SystemRDL | YT9215 family |
+| [`rdl/yt9218.rdl`](rdl/yt9218.rdl) | SystemRDL | YT9218 family |
+
+[`yt921x.yaml`](yt921x.yaml) is the source that every other file is generated from.
+[`sdk-tables.yaml`](sdk-tables.yaml) holds names and bit positions only.
 
 ## Bindings
 
@@ -62,7 +69,16 @@ sources) is generated during the build by [`tools/gen_docs.py`](tools/gen_docs.p
 
 ## Working on it
 
-[`Makefile`](Makefile) has the commands: `make generate` rewrites the generated files from
-[`yt921x.yaml`](yt921x.yaml), `make check` runs every test, `make docs` builds the manual.
-Descriptions are edited in [`tools/overlay.yaml`](tools/overlay.yaml) and merged with the
-upstream sources by [`tools/extract.py`](tools/extract.py).
+[`Makefile`](Makefile) has the commands.
+
+| Command | Effect |
+| --- | --- |
+| `make generate` | Rewrites the generated files from [`yt921x.yaml`](yt921x.yaml) |
+| `make check` | Runs every test |
+| `make docs` | Builds the manual |
+
+Descriptions are edited in [`tools/overlay.yaml`](tools/overlay.yaml).
+[`tools/extract.py`](tools/extract.py) merges them with the
+[Linux driver](https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm)
+and the
+[vendor SDK](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e).

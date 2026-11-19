@@ -3,18 +3,16 @@
 YT921x switch programmer's guide
 ================================
 
-The Motorcomm YT921x parts (:chip:`YT9215S`, :chip:`YT9215SC`, YT9215SCH, :chip:`YT9215RB`,
-:chip:`YT9214NB`, :chip:`YT9213NB`, :chip:`YT9218N` and :chip:`YT9218MB`) are Gigabit Ethernet
-switches with built-in copper PHYs. The YT9215SCH is :ref:`taken to behave <bringup-identify>`
-as the :chip:`YT9215SC`. This manual is
-for someone who writes a driver for one of them from scratch, for example for Zephyr or
-MicroPython: it explains how to reach the registers, how to bring the switch up, how to use
-each function, and it lists every known register bit by bit.
+The Motorcomm YT921x parts are Gigabit Ethernet switches with built-in copper PHYs.
+:ref:`reference-parts` lists the eight parts this manual covers. The manual is for someone who
+writes a driver for one of them from scratch, for example for Zephyr or MicroPython. It
+explains how to reach the registers, how to bring the switch up and how to use each function,
+and it lists every known register bit by bit.
 
-The vendor datasheets describe the pins and the electrical side but contain no register
-addresses. Everything here is derived from the two public sources that do, the :ref:`Linux driver <sources-list>`
-and the :ref:`vendor SDK <sources-list>`; :doc:`sources` says what comes from where and how far each
-statement can be trusted.
+The |ds| describes the pins and the electrical side and gives the address of one register,
+:reg:`RST`. All other register content is derived from the :ref:`Linux driver <sources-list>`
+and the :ref:`vendor SDK <sources-list>`. :doc:`sources` lists the sources and defines the
+evidence level that every register, field and procedure carries.
 
 .. toctree::
    :maxdepth: 1

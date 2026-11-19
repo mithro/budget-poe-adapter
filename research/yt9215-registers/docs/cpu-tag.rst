@@ -18,9 +18,12 @@ port are to carry :ref:`the tag <cpu-tag-format>`.
 
 .. yt-bitfield:: EXT_CPU_PORT
 
-:reg:`CPU_COPY` chooses where the switch sends the frames it traps or copies "to the CPU":
-set :field:`CPU_COPY.TO_EXT_CPU` for the port in :reg:`EXT_CPU_PORT`. The other two bits direct such
-frames to the internal microcontroller on port 10.
+:reg:`CPU_COPY` chooses where the switch sends the frames it traps or copies "to the CPU".
+Set :field:`CPU_COPY.TO_EXT_CPU` for the port in :reg:`EXT_CPU_PORT`.
+:lx:`yt921x_chip_setup_dsa` of the :ref:`Linux driver <sources-list>` writes both registers
+in this way. It is :ev:`inferred` from their names that :field:`CPU_COPY.TO_INT_CPU` and
+:field:`CPU_COPY.FORCE_INT_PORT` direct such frames to the internal microcontroller on
+port 10.
 
 .. tab-set::
 
@@ -44,7 +47,7 @@ frames to the internal microcontroller on port 10.
            :start-after: # [cpu-port]
            :end-before: # [cpu-port end]
 
-Remember that a tagged CPU port needs 8 more bytes of frame size; see :ref:`ports-mtu`.
+A tagged CPU port needs 8 more bytes of frame size, which :ref:`ports-mtu` sets.
 
 .. _cpu-tag-format:
 
@@ -55,8 +58,10 @@ The tag is 8 bytes (:const:`TAG_LEN`) placed after the source address, where a V
 be. It begins with the EtherType in :reg:`CPU_TAG_TPID`, ``0x9988`` after reset. The 16-bit
 words are sent most significant byte first.
 
-Word 1 (bytes 2 and 3) holds the VLAN tag of a frame the switch sends to the host; do not
-expect it to be zero. In a frame from the host the switch ignores it, so send 0.
+Word 1 (bytes 2 and 3) holds a VLAN tag in a frame that the switch sends to the host. In a
+frame from the host, send 0. The layout of the four words is the header comment of
+:lx:`tag_yt921x.c:7`, and :lx:`yt921x_tag_xmit` writes 0 to word 1 with the comment that the
+VLAN tag is unrelated on transmit.
 
 .. yt-diagram:: tagged-frame
    :caption: A frame on the CPU port and the four 16-bit words of the tag.
@@ -77,67 +82,132 @@ Word 2 tells the host where the frame came from and why it was sent to the CPU.
 
    * - Bits
      - Field
-     - Meaning
+     - Content
    * - 15
-     - PORT_EN
-     - RX_PORT is valid.
+     - .. _tag-rx-port-en:
+
+       PORT_EN
+     - 1 when RX_PORT is valid
    * - 14:11
-     - RX_PORT
-     - Port the frame was received on.
+     - .. _tag-rx-port:
+
+       RX_PORT
+     - receiving port
    * - 10:8
-     - PRIO
-     - Priority of the frame, 0 to 7.
+     - .. _tag-prio:
+
+       PRIO
+     - priority of the frame
    * - 7
-     - CODE_EN
-     - CODE is valid.
+     - .. _tag-code-en:
+
+       CODE_EN
+     - 1 when CODE is valid
    * - 6:1
-     - CODE
-     - Reason the frame reached the CPU, a :ref:`code <cpu-tag-codes>`.
+     - .. _tag-code:
+
+       CODE
+     - :ref:`reason code <cpu-tag-codes>`
+   * - 0
+     - none
+     - :ev:`not known`
 
 .. _cpu-tag-codes:
 
+Reason codes
+~~~~~~~~~~~~
+
 .. list-table::
    :header-rows: 1
-   :widths: 14 30 56
+   :widths: 12 20 34 34
 
    * - CODE
      - Name
      - Reason
+     - Register that causes it
    * - ``0x00``
-     - FORWARD
-     - Normal forwarding.
-   * - ``0x17``
-     - ACL
-     - An ACL rule trapped the frame (:field:`ACL_ACT.FWD`).
-   * - ``0x19``
-     - UNK_UCAST
-     - Unknown unicast destination, trapped by :reg:`ACT_UNK_UCAST`.
-   * - ``0x1a``
-     - UNK_MCAST
-     - Unknown multicast destination, trapped by :reg:`ACT_UNK_MCAST`.
-   * - ``0x1b``
-     - PORT_COPY
-     - Copied to the CPU by a port setting.
-   * - ``0x1c``
-     - FDB_COPY
-     - Copied to the CPU by a forwarding database entry (:field:`FDB_IN2.COPY_TO_CPU`).
+     - .. _tag-code-forward:
 
-A frame with the code FORWARD, PORT_COPY or FDB_COPY has also been sent by the switch to its
-other destinations. A frame that was trapped (ACL, UNK_UCAST, UNK_MCAST) has not, so the host
-must forward it if it should go anywhere. The codes UNK_UCAST and UNK_MCAST do not tell a
-trapped frame from a copied one, so do not combine the copy action of
-:ref:`forwarding-flood` with forwarding in the host. Discard a received frame whose PORT_EN bit is
-clear, as the :ref:`Linux driver <sources-list>` does. Other codes exist; these are the ones the :ref:`Linux driver <sources-list>`
-names, and the meanings of PORT_COPY and FDB_COPY are inferred from the names.
+       FORWARD
+     - normal forwarding
+     - none
+   * - ``0x17``
+     - .. _tag-code-acl:
+
+       ACL
+     - trapped by an ACL rule
+     - :field:`ACL_ACT.FWD`
+   * - ``0x19``
+     - .. _tag-code-unk-ucast:
+
+       UNK_UCAST
+     - unknown unicast destination
+     - :reg:`ACT_UNK_UCAST`
+   * - ``0x1a``
+     - .. _tag-code-unk-mcast:
+
+       UNK_MCAST
+     - unknown multicast destination
+     - :reg:`ACT_UNK_MCAST`
+   * - ``0x1b``
+     - .. _tag-code-port-copy:
+
+       PORT_COPY
+     - copied by a port setting
+     - :ev:`not known`
+   * - ``0x1c``
+     - .. _tag-code-fdb-copy:
+
+       FDB_COPY
+     - copied by a forwarding database entry
+     - :field:`FDB_IN2.COPY_TO_CPU`
+
+The six codes are the list ``enum yt921x_tag_code`` of :lx:`tag_yt921x.c:50`, whose comment
+calls the list incomplete. The reasons of :ref:`PORT_COPY <tag-code-port-copy>` and
+:ref:`FDB_COPY <tag-code-fdb-copy>` are :ev:`inferred` from the two names.
+
+:lx:`yt921x_tag_rcv` treats the codes in two groups.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 35 35
+
+   * - Code
+     - Switch has forwarded the frame
+     - Host has to forward the frame
+   * - :ref:`FORWARD <tag-code-forward>`
+     - yes
+     - no
+   * - :ref:`PORT_COPY <tag-code-port-copy>`
+     - yes
+     - no
+   * - :ref:`FDB_COPY <tag-code-fdb-copy>`
+     - yes
+     - no
+   * - :ref:`ACL <tag-code-acl>`
+     - no
+     - yes
+   * - :ref:`UNK_UCAST <tag-code-unk-ucast>`
+     - no
+     - yes
+   * - :ref:`UNK_MCAST <tag-code-unk-mcast>`
+     - no
+     - yes
+
+The codes :ref:`UNK_UCAST <tag-code-unk-ucast>` and :ref:`UNK_MCAST <tag-code-unk-mcast>` do
+not tell a trapped frame from a copied one, so do not combine the copy action of
+:ref:`forwarding-flood` with forwarding in the host. Discard a received frame whose
+:ref:`PORT_EN <tag-rx-port-en>` bit is clear, as :lx:`yt921x_tag_rcv` does.
 
 .. _cpu-tag-tx:
 
 Frames from the host to the switch
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The host sets word 2 to CODE_EN with CODE 0 and the wanted priority in PRIO, and puts the
-destination ports in word 3. The switch sends the frame to exactly those ports and removes the
-tag.
+The host sets :ref:`CODE_EN <tag-code-en>` in word 2 with :ref:`CODE <tag-code>` 0 and the
+wanted priority in :ref:`PRIO <tag-prio>`, and puts the destination ports in word 3.
+:lx:`yt921x_tag_xmit` builds the tag in this way. It is :ev:`inferred` from that use that the
+switch sends the frame to exactly the ports of word 3 and removes the tag.
 
 .. yt-diagram:: tag-word3
    :caption: Tag word 3 (bytes 6 and 7).
@@ -148,13 +218,17 @@ tag.
 
    * - Bits
      - Field
-     - Meaning
+     - Content
    * - 15
-     - PORT_EN
-     - TX_PORTS is valid.
+     - .. _tag-tx-port-en:
+
+       PORT_EN
+     - 1 when TX_PORTS is valid
    * - 10:0
-     - TX_PORTS
-     - Ports to send the frame to, one bit per port.
+     - .. _tag-tx-ports:
+
+       TX_PORTS
+     - mask of the destination ports
 
 .. tab-set::
 
@@ -178,7 +252,6 @@ tag.
            :start-after: # [tag]
            :end-before: # [tag end]
 
-Set the action for unknown destinations to drop on the CPU port itself
-(:ref:`forwarding-flood`), so that an untagged frame from the host is not flooded; the :ref:`Linux driver <sources-list>`
-confirms this setting. That the switch sends a tagged frame to exactly the ports of
-word 3 is how the :ref:`Linux driver <sources-list>` uses the tag.
+Set the action for unknown destinations to drop on the CPU port itself, with the registers
+of :ref:`forwarding-flood`, so that an untagged frame from the host is not flooded.
+:lx:`yt921x_chip_setup_dsa` writes this setting.

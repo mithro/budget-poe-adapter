@@ -3,11 +3,14 @@
 Link aggregation
 ================
 
-Two groups of up to four ports each (:const:`LAG_NUM`, :const:`LAG_PORT_NUM`) can act as one
-logical link. The registers are in the :blk:`lag` block. The set-up sequence and the hash
-bits are confirmed by the :ref:`Linux driver <sources-list>`. How a group interacts with
-:ref:`port isolation <forwarding-isolation>` and with learned addresses is not known; give
-all members of a group the same isolation mask, VLAN membership and spanning tree state.
+The switch has :const:`LAG_NUM` (2) groups of up to :const:`LAG_PORT_NUM` (4) ports. The
+ports of a group act as one logical link. The registers are in the :blk:`lag` block.
+
+The :ref:`set-up sequence <lag-group>` is :ev:`confirmed` by :lx:`yt921x_lag_set` of the
+:ref:`Linux driver <sources-list>` and the :ref:`hash bits <lag-hash>` by
+:lx:`yt921x_lag_hash`. It is :ev:`not known` how a group interacts with
+:ref:`port isolation <forwarding-isolation>` and with learned addresses. Give all members of
+a group the same isolation mask, VLAN membership and spanning tree state.
 
 .. _lag-group:
 
@@ -21,8 +24,8 @@ Set up a group
 
 .. yt-bitfield:: LAG_GROUP
 
-The slot register of group *g*, slot *s* is at ``0x1805b0 + 16 × g + 4 × s``. To remove a
-port, write the slots and the group again without it; a group with no ports has
+The reference entry of :reg:`LAG_MEMBER` gives the address of each slot register. To remove
+a port, write the slots and the group again without it. A group with no ports has
 :reg:`LAG_GROUP` equal to 0.
 
 .. _lag-hash:
@@ -35,5 +38,5 @@ register is shared by both groups.
 
 .. yt-bitfield:: LAG_HASH
 
-For a layer 2 hash set :field:`LAG_HASH.MAC_SA` and :field:`LAG_HASH.MAC_DA`; add the IP and
-layer 4 bits for a layer 3 and 4 hash.
+The field table of :reg:`LAG_HASH` lists the hash inputs. For a layer 2 hash
+set :field:`LAG_HASH.MAC_SA` and :field:`LAG_HASH.MAC_DA`.

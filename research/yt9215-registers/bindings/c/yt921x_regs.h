@@ -73,7 +73,7 @@ static inline void yt921x_bits_set(uint32_t *words, unsigned int lsb,
 #define YT921X_FDB_NUM 4096
 /** Number of spanning tree instances. */
 #define YT921X_MSTI_NUM 16
-/** Number of general-purpose meters; the 11 per-port meters follow them. */
+/** Number of general-purpose meters. The 11 per-port meters follow them. */
 #define YT921X_METER_NUM 64
 /** Number of link aggregation groups. */
 #define YT921X_LAG_NUM 2
@@ -99,7 +99,7 @@ static inline void yt921x_bits_set(uint32_t *words, unsigned int lsb,
 #define YT921X_LED_GROUP_NUM 3
 /** Ports that have LED outputs. */
 #define YT921X_LED_PORT_NUM 10
-/** Number of switch ports including the internal microcontroller port 10. */
+/** Number of switch ports. The count includes port 10 of the built-in microcontroller. */
 #define YT921X_PORT_NUM 11
 /** Shortest LED blink cycle in milliseconds. */
 #define YT921X_LED_BLINK_MIN 64
@@ -107,9 +107,9 @@ static inline void yt921x_bits_set(uint32_t *words, unsigned int lsb,
 #define YT921X_LED_BLINK_DEF 512
 /** Longest LED blink cycle in milliseconds. */
 #define YT921X_LED_BLINK_MAX 2048
-/** Token scale exponent in byte mode; one token is 2^1 bytes at unit 0. */
+/** Token scale exponent in byte mode. One token is 2^1 bytes at unit 0. */
 #define YT921X_TOKEN_BYTE_C 1
-/** Token scale exponent in packet mode; one token is 2^-6 packets at unit 0. */
+/** Token scale exponent in packet mode. One token is 2^-6 packets at unit 0. */
 #define YT921X_TOKEN_PKT_C -6
 /** Extra exponent applied to rate tokens. */
 #define YT921X_TOKEN_RATE_C -15

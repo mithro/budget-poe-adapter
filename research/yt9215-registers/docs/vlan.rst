@@ -3,50 +3,49 @@
 VLANs
 =====
 
-The switch implements IEEE 802.1Q VLANs with a full table of 4096 entries. The registers are in
-the :blk:`vlan` block. Three things have to be set up: how a port recognises and classifies
-tags, what each VLAN contains, and how frames leave.
+The switch implements IEEE 802.1Q VLANs with a table of 4096 entries. The registers are in
+the :blk:`vlan` block. The table names the register that answers each question about a frame.
 
 .. list-table::
    :header-rows: 1
-   :widths: 34 33 33
+   :widths: 44 28 28
 
    * - Question
      - Register
      - Section
-   * - Which tags does a port recognise?
+   * - Which identifiers mark a tag?
      - :reg:`TPID_IGR`
      - :ref:`vlan-aware`
-   * -
+   * - Which tags does a port recognise?
      - :reg:`PORT_IGR_TPID`
      - :ref:`vlan-aware`
    * - Which VLAN does an untagged frame join?
      - :reg:`PORT_VLAN_CTRL`
      - :ref:`vlan-pvid`
-   * - Which frames does a port refuse?
+   * - Which frames does a port refuse by tag?
      - :reg:`PORT_VLAN_CTRL1`
      - :ref:`vlan-filter`
-   * -
+   * - Which ports check VLAN membership?
      - :reg:`VLAN_IGR_FILTER`
      - :ref:`vlan-filter`
    * - Which ports belong to a VLAN?
      - :reg:`VLAN_CTRL`
      - :ref:`vlan-table`
-   * - Does a frame leave with a tag?
+   * - Which members send without a tag?
      - :reg:`VLAN_CTRL`
      - :ref:`vlan-egress`
-   * -
+   * - Which identifier does a port send?
      - :reg:`PORT_EGR`
      - :ref:`vlan-egress`
-   * -
+   * - Which identifiers can be sent?
      - :reg:`TPID_EGR`
      - :ref:`vlan-egress`
-   * -
+   * - Which ports send to members only?
      - :reg:`VLAN_EGR_FILTER`
      - :ref:`vlan-egress`
 
-The switch knows two kinds of tag, the customer tag (C-tag, the ordinary 802.1Q tag) and the
-service tag (S-tag, the outer tag of 802.1ad). A plain 802.1Q setup uses customer tags only.
+The switch knows two kinds of tag. The customer tag is the ordinary 802.1Q tag. The service
+tag is the outer tag of 802.1ad. A plain 802.1Q set-up uses customer tags only.
 
 .. _vlan-aware:
 
@@ -54,29 +53,36 @@ VLAN-aware and VLAN-unaware ports
 ---------------------------------
 
 :reg:`TPID_IGR` holds four tag protocol identifiers. :reg:`PORT_IGR_TPID` says, for each port,
-which of the four mark a customer tag and which a service tag.
+which of the four mark a customer tag and which mark a service tag.
 
 .. yt-bitfield:: PORT_IGR_TPID
 
+.. _vlan-aware-table:
+
 .. list-table::
    :header-rows: 1
-   :widths: 24 30 46
+   :widths: 22 30 24 24
 
    * - Port behaviour
-     - :reg:`PORT_IGR_TPID`
-     - Effect
+     - Field written with 1
+     - VLAN of a tagged frame
+     - Priority bits of the tag
    * - VLAN-aware
-     - Element 0 of :field:`PORT_IGR_TPID.CTAG` set
-     - A tag with the identifier in element 0 of :reg:`TPID_IGR` selects the VLAN of the frame.
+     - :field:`PORT_IGR_TPID.CTAG`
+     - VLAN ID of the tag
+     - read
    * - VLAN-unaware
-     - Element 0 of :field:`PORT_IGR_TPID.STAG` set
-     - The same tag is seen as a service tag. It does not select the VLAN, so every frame
-       joins the port VLAN, but its priority bits are still read.
+     - :field:`PORT_IGR_TPID.STAG`
+     - :ref:`port VLAN ID <vlan-pvid>`
+     - read
 
-Both rows are confirmed by the :ref:`Linux driver <sources-list>`, which notes that the second works although
-:field:`VLAN_CTRL.SVLAN_EN` is never set. Write ``0x8100`` to element 0 of :reg:`TPID_IGR`
-first: the :ref:`Linux driver <sources-list>` relies on that value being there after reset, which is not
-confirmed.
+The value 1 sets element 0 of the field, which stands for the identifier in element 0 of
+:reg:`TPID_IGR`. Both rows are :ev:`confirmed` by :lx:`yt921x_vlan_aware_set`. Its comment
+says that the second row works although :field:`VLAN_CTRL.SVLAN_EN` is never set.
+
+Write ``0x8100`` to element 0 of :reg:`TPID_IGR` before the first frame arrives. The
+:ref:`Linux driver <sources-list>` never writes :reg:`TPID_IGR`, so it is :ev:`inferred` that
+the element holds ``0x8100`` after reset.
 
 .. _vlan-pvid:
 
@@ -84,49 +90,58 @@ Port VLAN ID
 ------------
 
 A frame without a customer tag joins the VLAN in :field:`PORT_VLAN_CTRL.CVID`, the port VLAN
-ID. A frame tagged with VLAN ID 0 (a priority tag) should be handled as untagged, but the
-switch looks it up in entry 0 of the table; see :ref:`vlan-zero`.
+ID. :lx:`yt921x_port_set_pvid` writes the field. The switch looks up a frame tagged with VLAN
+ID 0 in entry 0 of the table, as :ref:`vlan-zero` describes.
 
 .. yt-bitfield:: PORT_VLAN_CTRL
 
-Give a VLAN-unaware port a port VLAN ID that no tagged traffic uses; the :ref:`Linux driver <sources-list>` uses
-4095.
+Give a VLAN-unaware port a port VLAN ID that no tagged traffic uses.
+:lx:`yt921x_vlan_filtering` uses :lx:`4095 <chip.h:82>` for such a port.
 
 .. _vlan-filter:
 
 Ingress filtering
 -----------------
 
+.. _vlan-filter-table:
+
 .. list-table::
    :header-rows: 1
-   :widths: 44 56
+   :widths: 34 44 22
 
-   * - Goal
-     - Setting
-   * - Drop frames whose VLAN does not include the receiving port
-     - Set the port's bit in :field:`VLAN_IGR_FILTER.PORT`
-   * - Drop untagged frames (a port with no port VLAN)
-     - Set :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED`
-   * - Drop tagged frames (an access port)
-     - Set :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`
+   * - Frames to drop
+     - Field to set
+     - Evidence
+   * - VLAN does not include the receiving port
+     - :field:`VLAN_IGR_FILTER.PORT`
+     - :ev:`confirmed`
+   * - Untagged
+     - :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED`
+     - :ev:`confirmed`
+   * - Tagged
+     - :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`
+     - :ev:`inferred`
 
-The first two settings are confirmed by the :ref:`Linux driver <sources-list>`. It does not use the third and
-leaves the dropping of unwanted tagged frames to the membership check, so the third is
-inferred from the field name.
+:lx:`yt921x_vlan_filtering` sets the fields of the rows "VLAN does not include the receiving
+port" and "Untagged". It sets :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED` for a VLAN-aware
+port that has no port VLAN. It always clears :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`, and
+its comment leaves the dropping of tagged frames to :reg:`VLAN_IGR_FILTER`. The effect of
+setting that field is read from its name. An access port is a use for it.
 
 .. _vlan-table:
 
 VLAN table
 ----------
 
-:reg:`VLAN_CTRL` has one 64-bit entry per VLAN ID, at ``0x188000 + 8 × vid``.
+:reg:`VLAN_CTRL` has one 64-bit entry per VLAN ID.
 
 .. yt-bitfield:: VLAN_CTRL
 
-For a basic VLAN only two fields matter: :field:`VLAN_CTRL.PORTS`, the member ports, and
-:field:`VLAN_CTRL.UNTAG_PORTS`, the members that send the VLAN's frames without a tag. Include
-the CPU port in the members if the host is to see the VLAN. The entry is two words; write the
-low word first, as :ref:`access-wide` explains.
+A basic VLAN needs two fields. :field:`VLAN_CTRL.PORTS` holds the member ports.
+:field:`VLAN_CTRL.UNTAG_PORTS` holds the members that send the frames of the VLAN without a
+tag. :lx:`yt921x_vlan_add` sets both and :lx:`yt921x_vlan_del` clears both. Include the
+:ref:`CPU port <cpu-tag-port>` in the members if the host is to see the VLAN. The entry is
+two words. Write the low word first, as :ref:`access-wide` explains.
 
 .. tab-set::
 
@@ -150,34 +165,43 @@ low word first, as :ref:`access-wide` explains.
            :start-after: # [vlan]
            :end-before: # [vlan end]
 
-Other fields of the entry:
+The table lists the other fields of the entry that the guide uses.
+
+.. _vlan-table-fields:
 
 .. list-table::
    :header-rows: 1
-   :widths: 34 66
+   :widths: 34 33 33
 
    * - Field
-     - Use
+     - Content
+     - Section
    * - :field:`VLAN_CTRL.STP_ID`
-     - Spanning tree instance; see :ref:`forwarding-stp`.
+     - Spanning tree instance
+     - :ref:`forwarding-stp`
    * - :field:`VLAN_CTRL.LEARN_DIS`
-     - No address learning in this VLAN; see :ref:`forwarding-learning`.
+     - Address learning off
+     - :ref:`forwarding-learning`
    * - :field:`VLAN_CTRL.FID`
-     - Filtering ID; not used by any public driver.
+     - Filtering ID
+     - :ref:`sources-open`
    * - :field:`VLAN_CTRL.PRIO`
-     - Priority of the VLAN; see :ref:`qos-sources`.
+     - Priority of the VLAN
+     - :ref:`qos-sources`
    * - :field:`VLAN_CTRL.METER_ID`
-     - Meter for the VLAN; see :ref:`rate-meter`.
+     - Meter of the VLAN
+     - :ref:`rate-meter`
 
 .. _vlan-zero:
 
 VLAN 0
 ~~~~~~
 
-The switch does not treat a tag with VLAN ID 0 as "untagged" by itself. Write entry 0 once
-at start-up with all ports as members and :field:`VLAN_CTRL.LEARN_DIS` set, and do not use
-VLAN 0 otherwise. The :ref:`Linux driver <sources-list>` confirms the need: its comment says such frames otherwise
-"confuse the hardware".
+The switch looks up a tag with VLAN ID 0 in entry 0 of :reg:`VLAN_CTRL`. Write entry 0 once
+at start-up with all ports in :field:`VLAN_CTRL.PORTS` and with :field:`VLAN_CTRL.LEARN_DIS`
+set, and use VLAN 0 for nothing else. :lx:`yt921x_chip_setup_dsa` writes this entry. Its
+:lx:`comment <chip.c:2334>` says that a frame tagged with VLAN ID 0 should be treated as
+untagged and that this "confuses the hardware a lot".
 
 .. _vlan-egress:
 
@@ -185,31 +209,51 @@ Egress
 ------
 
 A frame leaves with a customer tag unless the sending port is in
-:field:`VLAN_CTRL.UNTAG_PORTS` of its VLAN. The tag protocol identifier written is one of the
-four in :reg:`TPID_EGR`, chosen per port by :field:`PORT_EGR.TPID_CTAG`.
-:reg:`VLAN_EGR_FILTER` stops a port from sending frames of VLANs it is not a member of.
-:reg:`PVID_SEL` makes a port classify by the service tag instead; it belongs to 802.1ad
-setups that no public driver exercises.
+:field:`VLAN_CTRL.UNTAG_PORTS` of its VLAN. :lx:`yt921x_vlan_add` :ev:`confirms <confirmed>`
+this field. No function of the :ref:`Linux driver <sources-list>` uses the registers of the
+table, so their functions are :ev:`inferred` from their names and from the names of the
+:ref:`vendor SDK <sources-list>` tables at the same addresses.
 
-Of this section the :ref:`Linux driver <sources-list>` confirms
-:field:`VLAN_CTRL.UNTAG_PORTS`. The behaviour of :reg:`TPID_EGR`, :reg:`PORT_EGR`,
-:reg:`VLAN_EGR_FILTER` and :reg:`PVID_SEL` is inferred from their names and from the names
-the vendor SDK gives the same bits.
+.. _vlan-egress-table:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 46 24
+
+   * - Register
+     - Inferred function
+     - Vendor SDK table
+   * - :reg:`TPID_EGR`
+     - Four tag protocol identifiers to send
+     - :sdk:`EGR_TPID_PROFILE`
+   * - :reg:`PORT_EGR`
+     - Choice among the four for each port
+     - :sdk:`EGR_PORT_CTRLN`
+   * - :reg:`VLAN_EGR_FILTER`
+     - Ports that send to member ports only
+     - :sdk:`L2_EGR_VLAN_FILTER_EN`
+   * - :reg:`PVID_SEL`
+     - Ports that classify by the service tag
+     - :sdk:`LOOK_UP_VLAN_SEL`
+
+:field:`PORT_EGR.TPID_CTAG` chooses the identifier of the customer tag.
 
 .. _vlan-port-based:
 
 Port-based VLANs
 ----------------
 
-To split the ports into groups that cannot see each other, without any tags on the wire:
+The steps split the ports into groups that cannot see each other, without any tag on the
+wire.
 
-1. Pick an unused VLAN ID per group.
-2. Write its :reg:`VLAN_CTRL` entry with the group's ports (and the CPU port) in both
-   :field:`VLAN_CTRL.PORTS` and :field:`VLAN_CTRL.UNTAG_PORTS`.
+1. Pick an unused VLAN ID for each group.
+2. Write the :reg:`VLAN_CTRL` entry of that ID with the ports of the group and the
+   :ref:`CPU port <cpu-tag-port>` in both :field:`VLAN_CTRL.PORTS` and
+   :field:`VLAN_CTRL.UNTAG_PORTS`.
 3. Set :field:`PORT_VLAN_CTRL.CVID` of every port of the group to that ID.
-4. Leave the ports VLAN-unaware, or make them VLAN-aware and set
-   :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`.
+4. Leave the ports :ref:`VLAN-unaware <vlan-aware-table>`.
 
 Each group then learns addresses under its own VLAN ID, which avoids the lookup problem
-described in :ref:`forwarding-isolation`. The steps use only registers the :ref:`Linux driver <sources-list>`
-exercises, but this combination has not been run on hardware by this project.
+that :ref:`forwarding-isolation` describes. Every field of the steps is :ev:`confirmed`, but
+the :ref:`Linux driver <sources-list>` does not use this combination, and
+:ref:`no code of this manual has run on hardware <sources-open>`.

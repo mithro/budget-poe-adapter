@@ -3,8 +3,11 @@
 Priorities
 ==========
 
-Every frame gets an internal priority from 0 to 7 on receive. The priority selects the
-transmit queue and is what the CPU tag reports. The registers are in the :blk:`qos` block.
+Every frame gets an internal priority from 0 to 7 on receive. The field
+:ref:`PRIO <tag-prio>` of the :ref:`CPU tag <cpu-tag-format>` reports it. It is
+:ev:`inferred` that the priority selects the transmit queue; the queue registers are among
+the :ref:`vendor SDK tables <reference-sdk>` that this manual does not describe. The
+registers of this page are in the :blk:`qos` block.
 
 .. _qos-sources:
 
@@ -13,45 +16,69 @@ Priority sources
 
 Up to eight sources can supply the priority of a frame. :reg:`PORT_PRIO_ORD` ranks them per
 port: each source has a 3-bit weight, and of the sources that apply to a frame the one with
-the highest weight wins. Weight 0 turns a source off, except the port default priority (:field:`PORT_QOS.PRIO`), which
-then still applies when no other source does.
+the highest weight wins. :lx:`yt921x_dsa_port_set_apptrust` of the
+:ref:`Linux driver <sources-list>` gives the most trusted source weight 7 and each next one a
+weight that is 1 lower. :lx:`yt921x_port_setup` writes 0 to the register to turn all sources
+off. It is :ev:`inferred` that the port default priority (:field:`PORT_QOS.PRIO`) still
+applies with weight 0 when no other source does, because :field:`PORT_QOS.PRIO_EN` enables it
+separately.
 
 .. yt-bitfield:: PORT_PRIO_ORD
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 22 68
+   :widths: 8 22 30 24 16
 
    * - Index
      - Source (:enum:`app_selector`)
      - Priority comes from
+     - Register that holds it
+     - :ref:`Evidence <evidence>`
    * - 0
      - :val:`app_selector.MAC_SA`
-     - The forwarding database entry of the source address (:field:`FDB_IN2.PRIO`)
+     - database entry of the source address
+     - :field:`FDB_IN2.PRIO`
+     - :ev:`inferred`
    * - 1
      - :val:`app_selector.MAC_DA`
-     - The forwarding database entry of the destination address
+     - database entry of the destination address
+     - :field:`FDB_IN2.PRIO`
+     - :ev:`inferred`
    * - 2
      - :val:`app_selector.VID`
-     - The VLAN table entry (:field:`VLAN_CTRL.PRIO`)
+     - VLAN table entry
+     - :field:`VLAN_CTRL.PRIO`
+     - :ev:`inferred`
    * - 3
      - :val:`app_selector.ACL`
-     - An ACL rule (:field:`ACL_ACT.PRIO`)
+     - ACL rule
+     - :field:`ACL_ACT.PRIO`
+     - :ev:`inferred`
    * - 4
      - :val:`app_selector.DSCP`
-     - The IP DSCP value, mapped by :reg:`IPM_DSCP`
+     - IP DSCP value
+     - :reg:`IPM_DSCP`
+     - :ev:`confirmed`
    * - 5
      - :val:`app_selector.CVLAN_PCP`
-     - The customer tag priority, mapped by :reg:`IPM_PCP`
+     - customer tag priority
+     - :reg:`IPM_PCP`
+     - :ev:`confirmed`
    * - 6
      - :val:`app_selector.SVLAN_PCP`
-     - The service tag priority, mapped by :reg:`IPM_PCP`
+     - service tag priority
+     - :reg:`IPM_PCP`
+     - :ev:`confirmed`
    * - 7
      - :val:`app_selector.PORT`
-     - The port default in :field:`PORT_QOS.PRIO`
+     - port default
+     - :field:`PORT_QOS.PRIO`
+     - :ev:`inferred`
 
-To trust DSCP first and the tag priority second, give :val:`app_selector.DSCP` weight 7 and both :val:`app_selector.CVLAN_PCP` and :val:`app_selector.SVLAN_PCP` weight 6. These three sources are confirmed by the
-:ref:`Linux driver <sources-list>`; the others are inferred from the names in its header.
+To trust DSCP first and the tag priority second, give :val:`app_selector.DSCP` weight 7 and
+both :val:`app_selector.CVLAN_PCP` and :val:`app_selector.SVLAN_PCP` weight 6. The confirmed
+rows are the three sources that :lx:`yt921x_dsa_port_set_apptrust` writes. The inferred rows
+follow the names of the list ``enum yt921x_app_selector`` in :lx:`chip.h`.
 
 .. _qos-maps:
 
@@ -59,19 +86,21 @@ Mapping tables
 --------------
 
 :reg:`IPM_DSCP` has one entry per DSCP value and :reg:`IPM_PCP` one per tag priority and drop
-eligible bit. Each entry gives the internal priority and a colour that the
-:doc:`meters <rate>` use.
+eligible bit. Each entry gives the internal priority in :field:`IPM_PCP.PRIO` and, in
+:field:`IPM_PCP.COLOR`, a colour that the :ref:`meters <rate-meter>` use.
 
 .. yt-bitfield:: IPM_PCP
 
-There are two :reg:`IPM_PCP` maps; :field:`PORT_QOS.CVLAN_PRIO_MAP_ID` and
-:field:`PORT_QOS.SVLAN_PRIO_MAP_ID` choose the one a port uses for each tag kind. The address
-of an entry is ``0x180100 + 64 × map + 32 × dei + 4 × pcp``.
+There are two :reg:`IPM_PCP` maps. :field:`PORT_QOS.CVLAN_PRIO_MAP_ID` and
+:field:`PORT_QOS.SVLAN_PRIO_MAP_ID` choose the one a port uses for each tag kind. The
+reference entry of :reg:`IPM_PCP` gives the address of each map entry.
 
-Fill the tables once at start-up. The :ref:`Linux driver <sources-list>` gives every DSCP value the priority that
-IETF RFC 8325 assigns to it and maps every tag priority to itself, with colour yellow when
-the drop eligible bit is set, and writes both :reg:`IPM_PCP` maps alike. Which map a tag
-kind uses by default is therefore not confirmed.
+Fill the tables once at start-up, as :lx:`yt921x_chip_setup_qos` does. That function gives
+every DSCP value the priority that the kernel function ``ietf_dscp_to_ieee8021q_tt()``
+assigns to it, which follows `RFC 8325 <https://www.rfc-editor.org/rfc/rfc8325>`__. It maps
+every tag priority to itself, with the colour :val:`IPM_PCP.COLOR.YELLOW` when the drop
+eligible bit is set, and it writes both :reg:`IPM_PCP` maps alike. It is therefore
+:ev:`not known` which map a tag kind uses by default.
 
 .. _qos-port:
 
@@ -79,4 +108,5 @@ Port default priority
 ---------------------
 
 Set :field:`PORT_QOS.PRIO` and :field:`PORT_QOS.PRIO_EN` to give all frames of a port one
-priority when no better source applies.
+priority when no better source applies. :lx:`yt921x_dsa_port_set_default_prio` writes the
+two fields.

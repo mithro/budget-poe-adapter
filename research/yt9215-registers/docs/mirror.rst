@@ -13,15 +13,16 @@ register :reg:`MIRROR` in the :blk:`mirror` block.
    :widths: 30 70
 
    * - Field
-     - Set to
+     - Content
    * - :field:`MIRROR.PORT`
-     - The monitor port number
+     - number of the monitor port
    * - :field:`MIRROR.IGR_PORTS`
-     - Ports whose received frames are copied
+     - mask of the ports whose received frames are copied
    * - :field:`MIRROR.EGR_PORTS`
-     - Ports whose sent frames are copied
+     - mask of the ports whose sent frames are copied
 
-The three fields are confirmed by the :ref:`Linux driver <sources-list>`. There is one monitor port for the whole
-switch. When adding a source port, keep the monitor
-port unchanged if other sources are already set. An ACL rule can mirror selected frames to the
-same monitor port; see :ref:`acl-action`.
+The three fields are :ev:`confirmed` by :lx:`yt921x_mirror_add` of the
+:ref:`Linux driver <sources-list>`. There is one monitor port for the whole switch. When
+adding a source port, keep the monitor port unchanged if other sources are already set, as
+:lx:`yt921x_mirror_add` does. An ACL rule can mirror selected frames to the same monitor
+port with the field :field:`ACL_ACT.MIRROR_EN` of :ref:`acl-action`.

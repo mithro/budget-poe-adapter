@@ -1,8 +1,8 @@
 Budget PoE to USB-C adapter
 ===========================
 
-Notes, research and design material for an open source PoE to USB-C adapter. The project
-overview is the first page below.
+Notes, research and design material for an open source PoE to USB-C adapter. The
+:doc:`project overview <README>` describes the project and lists every document.
 
 .. toctree::
    :maxdepth: 1

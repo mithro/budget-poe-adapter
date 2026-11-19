@@ -21,9 +21,10 @@ and 16 bits of data.
    :caption: Clause 22 MDIO frames. Bits are sent from left to right; green parts are driven
              by the switch.
 
-The switch answers on one PHY address, ``0x1d`` or ``0x00``, selected by a :ref:`strap pin <access-straps>` at
-power-on. Any MDIO master will do: a hardware MDIO controller, or two GPIO pins as in
-``BitBangMDIO`` of the :ref:`MicroPython binding <bindings-micropython>`.
+The switch answers on one PHY address, ``0x1d`` or ``0x00``, selected by a
+:ref:`strap pin <access-straps>` at power-on. Any MDIO master will do: a hardware MDIO controller,
+or two GPIO pins as in the class ``BitBangMDIO`` of
+:download:`yt921x.py <../bindings/micropython/yt921x.py>`.
 
 .. _access-timing:
 
@@ -46,39 +47,39 @@ Timing
    * - t1
      - MDC period
      - 250
-     -
+     - none
      - ns
    * - t2
      - MDC high time
      - 80
-     -
+     - none
      - ns
    * - t3
      - MDC low time
      - 80
-     -
+     - none
      - ns
    * - t4
-     - MDIO setup time before the rising edge of MDC, host driving
+     - MDIO setup time before the rising edge of MDC
      - 10
-     -
+     - none
      - ns
    * - t5
-     - MDIO hold time after the rising edge of MDC, host driving
+     - MDIO hold time after the rising edge of MDC
      - 10
-     -
+     - none
      - ns
    * - t6
-     - MDIO valid after the rising edge of MDC, switch driving
+     - MDIO valid after the rising edge of MDC
      - 5
      - 125
      - ns
 
-The values are those of the slave management interface in table 38 of the
-:download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`.
-The datasheet draws MDIO with a 1 kΩ pull-up resistor. The minimum of t1 and the maximum of
-t6 depend on that resistor, because the line rises only as fast as the resistor charges it. A clock of 1 MHz or less is a safe choice for a
-bit-banged bus.
+The values are those of table 38 of the |ds|, "Slave SMI Timing Parameter". The host drives
+MDIO for t4 and t5 and the switch drives it for t6. The note under table 38 states that the
+values hold with a 1 kΩ pull-up resistor on MDIO, and that the minimum of t1 and the maximum
+of t6 depend on that resistor. The smallest period of 250 ns is a clock of 4 MHz. The
+:ref:`bindings <bindings>` have not been run at any clock rate on a YT921x.
 
 .. _access-straps:
 
@@ -86,37 +87,57 @@ Strap pins
 ----------
 
 Five strap pins, read at power-on or reset, decide how a host reaches the switch. The pin
-names are those of the :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`.
+names, the levels and the internal resistors are those of table 20 of the |ds|,
+"Configuration Pins".
 
 .. list-table::
    :header-rows: 1
-   :widths: 24 38 38
+   :widths: 20 16 32 32
 
    * - Strap pin
+     - Internal resistor
      - Pulled up
      - Pulled down
-   * - ``MID29``
+   * - .. _strap-mid29:
+
+       ``MID29``
+     - pull-up
      - PHY address ``0x1d``
      - PHY address ``0x00``
-   * - ``SWITCH_ID_1``
+   * - .. _strap-switch-id-1:
+
+       ``SWITCH_ID_1``
+     - pull-down
      - Bit 1 of the switch ID is 1
      - Bit 1 of the switch ID is 0
-   * - ``SWITCH_ID_0``
+   * - .. _strap-switch-id-0:
+
+       ``SWITCH_ID_0``
+     - pull-down
      - Bit 0 of the switch ID is 1
      - Bit 0 of the switch ID is 0
-   * - ``DIS_SPIS``
-     - SPI host interface off; ``SMI_SEL`` applies
+   * - .. _strap-dis-spis:
+
+       ``DIS_SPIS``
+     - pull-up
+     - SPI host interface off
      - SPI host interface on
-   * - ``SMI_SEL``
+   * - .. _strap-smi-sel:
+
+       ``SMI_SEL``
+     - pull-up
      - I2C host interface
      - MDIO host interface
 
-``MID29``, ``DIS_SPIS`` and ``SMI_SEL`` have internal pull-ups and the switch ID pins internal
-pull-downs. For MDIO, leave ``DIS_SPIS`` high and pull ``SMI_SEL`` low: a chip with neither
-pin strapped selects the I2C host interface. The ``SMI_SEL`` row follows the pin table and
-the I2C section of the datasheet; its MDIO section says the pin may be "low or high", which
-contradicts them. The SPI and I2C host interfaces reach the same registers; this manual does
-not cover them.
+:ref:`SMI_SEL <strap-smi-sel>` applies only while :ref:`DIS_SPIS <strap-dis-spis>` is high.
+For MDIO, leave :ref:`DIS_SPIS <strap-dis-spis>` high and pull
+:ref:`SMI_SEL <strap-smi-sel>` low. A chip with neither pin strapped selects the I2C host
+interface.
+
+The levels of :ref:`SMI_SEL <strap-smi-sel>` are those of table 20 and of section 5.5.1 of
+the |ds|, "Slave I2C Interface for External CPU". Section 5.5.2, "Slave SMI Interface for
+External CPU", says that the pin may be "low or high" for MDIO, which contradicts both.
+The SPI and I2C host interfaces reach the same registers. This manual does not cover them.
 
 .. _access-smi:
 
@@ -131,25 +152,35 @@ what the 16 data bits of the frame are:
 
 .. list-table::
    :header-rows: 1
-   :widths: 14 20 66
+   :widths: 10 22 34 34
 
-   * - Bits
+   * - Bit
      - Name
-     - Meaning
+     - Value 1
+     - Value 0
    * - 4
-     - 0
-     - Always 0.
-   * - 3:2
-     - Switch ID
-     - Selects one of up to :const:`SWITCHID_NUM` switches that share the PHY address; see
-       :ref:`access-straps`.
+     - none
+     - not used
+     - always
+   * - 3
+     - Switch ID bit 1
+     - :ref:`SWITCH_ID_1 <strap-switch-id-1>` is high
+     - :ref:`SWITCH_ID_1 <strap-switch-id-1>` is low
+   * - 2
+     - Switch ID bit 0
+     - :ref:`SWITCH_ID_0 <strap-switch-id-0>` is high
+     - :ref:`SWITCH_ID_0 <strap-switch-id-0>` is low
    * - 1
      - DATA
-     - Set when the frame carries half of a register value, clear when it carries half of a
-       register address.
+     - half of a register value
+     - half of a register address
    * - 0
      - READ
-     - Set for a register read, clear for a register write.
+     - register read
+     - register write
+
+The switch ID lets up to :const:`SWITCHID_NUM` switches share one PHY address. A switch
+answers only the frames whose switch ID bits match its :ref:`strap pins <access-straps>`.
 
 An access is two frames that set the address, high half first, and two frames that move the
 value, high half first. The READ bit has the same value in all four frames.
@@ -224,14 +255,33 @@ address holds bits 31 to 0, the next word (address + 4) bits 63 to 32, and so on
 reference numbers the bits of the whole register, so a field can cross a word boundary, as
 :field:`VLAN_CTRL.FID` does.
 
-Write the words in rising address order, as the :ref:`Linux driver <sources-list>` does. That a table entry takes
-effect only when its last word is written, so that the switch never uses a half-written
-entry, is inferred from that order and is not confirmed. To change one field, read all words,
-change the field and write all words back.
+Write the words in rising address order, as :lx:`yt921x_regs_write` of the
+:ref:`Linux driver <sources-list>` does. It is :ev:`not known` when the switch starts to use
+an entry of which only some words are written. To change one field, read all words, change
+the field and write all words back.
 
-The bindings carry helpers for this: ``yt921x_bits_get()`` and ``yt921x_bits_set()`` in C,
-``Field::get_words()`` and ``Field::set_words()`` in Rust and ``bits_get()`` and ``bits_set()`` in
-MicroPython; :ref:`bindings-naming` lists them.
+The :ref:`bindings <bindings-naming>` carry helpers for fields that cross a word boundary.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 25 25 25
+
+   * - Environment
+     - Read a field
+     - Write a field
+     - File
+   * - C
+     - ``yt921x_bits_get()``
+     - ``yt921x_bits_set()``
+     - :download:`yt921x_regs.h <../bindings/c/yt921x_regs.h>`
+   * - Rust
+     - ``Field::get_words()``
+     - ``Field::set_words()``
+     - :download:`regs.rs <../bindings/rust/src/regs.rs>`
+   * - MicroPython
+     - ``bits_get()``
+     - ``bits_set()``
+     - :download:`yt921x_regs.py <../bindings/micropython/yt921x_regs.py>`
 
 .. _access-wait:
 
@@ -239,20 +289,44 @@ Waiting for the switch
 ----------------------
 
 Several functions are commands: the driver writes a start bit and the switch clears it, or
-sets a done bit, when it has finished. The reset (:field:`RST.HW`), the MDIO masters
-(:field:`INT_MBUS_OP.START`), the forwarding database (:field:`FDB_RESULT.DONE`) and the
-configuration byte store (:field:`EDATA_DATA.STATUS`) work this way.
+sets a done bit, when it has finished.
 
-The :ref:`Linux driver <sources-list>` polls such a bit every 10 ms and gives up after 100 ms. Those numbers are a
-safe starting point; none of the public sources states how long a command really takes.
-``yt921x_reg_wait()`` in the bindings implements the loop.
+.. list-table::
+   :header-rows: 1
+   :widths: 40 30 30
+
+   * - Command
+     - Bit to poll
+     - Described in
+   * - Reset
+     - :field:`RST.HW`
+     - :ref:`bringup-reset`
+   * - Transfer on the internal MDIO master
+     - :field:`INT_MBUS_OP.START`
+     - :ref:`phy-mbus`
+   * - Transfer on the external MDIO master
+     - :field:`EXT_MBUS_OP.START`
+     - :ref:`phy-mbus`
+   * - Forwarding database command
+     - :field:`FDB_RESULT.DONE`
+     - :ref:`fdb-command`
+   * - Read of a configuration byte
+     - :field:`EDATA_DATA.STATUS`
+     - :ref:`bringup-identify`
+
+:lx:`yt921x_reg_wait` of the :ref:`Linux driver <sources-list>` polls such a bit every 10 ms
+and gives up after 100 ms; :lx:`smi.c:11` defines both times. It is :ev:`not known` how long
+a command takes. The function
+``yt921x_reg_wait()`` of :download:`yt921x.c <../bindings/c/yt921x.c>` implements the same
+loop.
 
 .. _access-check:
 
 Checking that access works
 --------------------------
 
-:reg:`CPU_TAG_TPID` reads ``0x9988`` after reset on every part. A driver that reads anything
+:reg:`CPU_TAG_TPID` reads ``0x9988`` after reset, which is one of the three
+:ref:`reset values <sources-reset>` that the Linux driver states. A driver that reads anything
 else is not talking to a YT921x, has the wrong PHY address, or has a wiring fault. A read from
 an address nobody answers returns ``0xffff`` in each half, because the pull-up keeps the line
 high.

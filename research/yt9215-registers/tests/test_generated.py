@@ -254,8 +254,12 @@ class ReferenceNames(unittest.TestCase):
                          gen_docs.pages(M, os.path.join(ROOT, "docs")).values())
         # The source tables print Linux names, which are not binding names.
         text = re.sub(r":class: yt-sources\n(\n|   .*\n)*", "", text)
+        # The row "Linux name" of a register prints a Linux name too.
+        linux = {r["linux"]["macro"].split("(")[0] for r in M.regs if r.get("linux")}
         seen = {"c": 0, "rust": 0, "py": 0}
         for name in re.findall(r"``(YT921X_\w*[^\W_])(?!\w)", text):  # not the bare prefixes
+            if name in linux and name not in c_names:
+                continue
             self.assertIn(name, c_names)
             seen["c"] += 1
         for name in re.findall(r"``regs::(\w+)", text):

@@ -3,9 +3,10 @@
 Ports
 =====
 
-Each port has a MAC with its own control and status registers. Ports with a built-in PHY need
-little more than that; ports 8 and 9 also need their interface selected. The registers are in
-the :blk:`port` and :blk:`eee` blocks.
+Each port has a MAC with its own control and status registers. A port with a built-in PHY
+needs only :ref:`its MAC enabled <ports-up>`. Ports 8 and 9 also need
+:ref:`their interface selected <ports-external>`. The registers are in the :blk:`port` and
+:blk:`eee` blocks.
 
 .. _ports-up:
 
@@ -18,33 +19,37 @@ runs with. The low eight bits of the two registers have the same layout.
 .. yt-bitfield:: PORT_CTRL
 
 There are two ways to run a MAC. With :field:`PORT_CTRL.LINK_AN` set, the MAC takes speed,
-duplex and pause from the built-in PHY or from in-band SGMII status. With it clear, the MAC
-is forced and uses these fields:
+duplex and pause from in-band SGMII status. With it clear, the MAC is forced and uses the
+fields of the :ref:`forced-mode table <ports-forced>`.
+
+.. _ports-forced:
 
 .. list-table::
    :header-rows: 1
    :widths: 40 60
 
    * - Field
-     - Sets
+     - Content
    * - :field:`PORT_CTRL.SPEED`
-     - Speed, a code of the :enum:`speed` list
+     - speed code of the :enum:`speed` list
    * - :field:`PORT_CTRL.DUPLEX_FULL`
-     - Full duplex
+     - 1 for full duplex
    * - :field:`PORT_CTRL.RX_PAUSE`
-     - Obey received pause frames
+     - 1 to obey received pause frames
    * - :field:`PORT_CTRL.TX_PAUSE`
-     - Send pause frames
+     - 1 to send pause frames
 
 In both modes the MAC passes frames only while :field:`PORT_CTRL.RX_MAC_EN` and
-:field:`PORT_CTRL.TX_MAC_EN` are set. To take a port down, clear those two bits and
-:field:`PORT_CTRL.LINK_AN`.
+:field:`PORT_CTRL.TX_MAC_EN` are set. To take a port down, clear
+:field:`PORT_CTRL.RX_MAC_EN`, :field:`PORT_CTRL.TX_MAC_EN` and :field:`PORT_CTRL.LINK_AN`, as
+:lx:`yt921x_port_down` of the :ref:`Linux driver <sources-list>` does.
 
-Forcing is the confirmed way for a port with a built-in PHY: the :ref:`Linux driver <sources-list>` watches the PHY
-itself and, on a link change, writes the negotiated speed, duplex and pause into
-:reg:`PORT_CTRL`. It sets :field:`PORT_CTRL.LINK_AN` and :field:`PORT_CTRL.PAUSE_AN` only for
-a SerDes with in-band status. That the same bits make a copper port follow its built-in PHY
-is inferred from their names.
+Forcing is the :ev:`confirmed` way for a port with a built-in PHY. The Linux kernel watches
+the PHY and, on a link change, :lx:`yt921x_port_up` writes the negotiated speed, duplex and
+pause into :reg:`PORT_CTRL`. That function sets :field:`PORT_CTRL.LINK_AN` only for a SerDes
+with in-band status. It is :ev:`inferred` from the names of :field:`PORT_CTRL.LINK_AN` and
+:field:`PORT_CTRL.PAUSE_AN` that the two bits also make a copper port follow its built-in
+PHY.
 
 .. tab-set::
 
@@ -75,8 +80,10 @@ Read the link state
 
 Read :reg:`PORT_STATUS` to learn what a MAC runs with: :field:`PORT_STATUS.LINK` is the link
 state, :field:`PORT_STATUS.SPEED` a code of the :enum:`speed` list and
-:field:`PORT_STATUS.DUPLEX_FULL` the duplex. On a forced port the register repeats what the
-driver wrote to :reg:`PORT_CTRL`.
+:field:`PORT_STATUS.DUPLEX_FULL` the duplex. The register has the level :ev:`header`:
+:lx:`chip.h:96` defines it with the field layout of :reg:`PORT_CTRL`, and no function of the
+Linux driver reads it. It is :ev:`inferred` that on a forced port the register repeats what
+the driver wrote to :reg:`PORT_CTRL`.
 
 .. yt-bitfield:: PORT_STATUS
 
@@ -102,7 +109,8 @@ driver wrote to :reg:`PORT_CTRL`.
            :start-after: # [port-status]
            :end-before: # [port-status end]
 
-The link state of a built-in PHY can also be read from the PHY itself; see :ref:`phy-mbus`.
+The link state of a built-in PHY can also be read from register 1 of the PHY, with the
+transfer of :ref:`phy-mbus`.
 
 .. _ports-external:
 
@@ -110,7 +118,9 @@ External ports 8 and 9
 ----------------------
 
 An external port uses either its SerDes or its xMII pins. :ref:`reference-parts-ports` shows
-which of the two each part has. Select one before enabling the MAC:
+which of the two each part has. Select one before enabling the MAC.
+:lx:`yt921x_port_config` writes the SerDes row of the table. The xMII row is :ev:`inferred`
+as its mirror image.
 
 .. list-table::
    :header-rows: 1
@@ -126,8 +136,9 @@ which of the two each part has. Select one before enabling the MAC:
      - :field:`XMII_CTRL.PORT` of the port
      - :field:`SERDES_CTRL.PORT` of the port
 
-The two enable fields are indexed differently: port 8 is bit 0 of :reg:`SERDES_CTRL` but bit 1
-of :reg:`XMII_CTRL`. The field macros of the bindings take the port number and hide this.
+The two enable fields are indexed differently: port 8 is bit 0 of :reg:`SERDES_CTRL` but
+bit 1 of :reg:`XMII_CTRL`. The field macros of the :ref:`bindings <bindings-naming>` take the
+port number and hide this.
 
 .. _ports-serdes:
 
@@ -145,30 +156,48 @@ SerDes
    :field:`SERDES.SPEED`, :field:`SERDES.DUPLEX_FULL`, :field:`SERDES.RX_PAUSE` and
    :field:`SERDES.TX_PAUSE` and set
    :field:`SERDES.LINK`, then force :reg:`PORT_CTRL` to the same values.
-5. Enable the MAC as in :ref:`ports-up`.
+5. Enable the MAC with the fields of :ref:`ports-up`.
+
+Step 1 is :ev:`confirmed` by :lx:`yt921x_port_config`, step 2 by :lx:`yt921x_serdes_config`
+and steps 3 to 5 by :lx:`yt921x_port_up`.
 
 .. list-table::
    :header-rows: 1
-   :widths: 30 20 50
+   :widths: 30 12 24 18 16
 
    * - :field:`SERDES.MODE`
      - Value
-     - Use
+     - Protocol
+     - Role of the switch
+     - :ref:`Evidence <evidence>`
    * - :val:`SERDES.MODE.SGMII`
      - 0
-     - SGMII, the switch on the MAC side
+     - SGMII
+     - MAC side
+     - :ev:`confirmed`
    * - :val:`SERDES.MODE.REVSGMII`
      - 1
-     - SGMII, the switch on the PHY side
+     - SGMII
+     - PHY side
+     - :ev:`header`
    * - :val:`SERDES.MODE.V1000BASEX`
      - 2
      - 1000BASE-X
+     - none
+     - :ev:`confirmed`
    * - :val:`SERDES.MODE.V100BASEX`
      - 3
      - 100BASE-FX
+     - none
+     - :ev:`confirmed`
    * - :val:`SERDES.MODE.V2500BASEX`
      - 4
      - 2500BASE-X
+     - none
+     - :ev:`confirmed`
+
+The Linux driver names value 3 100BASEX and the |ds| lists the fibre mode of the extension
+ports as 100BASE-FX in the section "Extension Ports Fiber Mode".
 
 .. _ports-xmii:
 
@@ -184,13 +213,19 @@ xMII
 4. No PHY reports the link of a MAC-to-MAC connection, so tell the switch: write speed and
    duplex and :field:`MDIO_POLLING.LINK` to :reg:`MDIO_POLLING` of the port and set
    :field:`XMII.LINK`.
-5. Force :reg:`PORT_CTRL` to the same speed and duplex as in :ref:`ports-up`.
+5. Force :reg:`PORT_CTRL` to the same speed and duplex, with the fields of the
+   :ref:`forced-mode table <ports-forced>`.
 
-The :ref:`Linux driver <sources-list>` writes :reg:`MDIO_POLLING` and :field:`XMII.LINK` as in step 4 and :reg:`PORT_CTRL` as in step 5, but
-configures no xMII mode. Steps 1 to 3 largely match the
-`vendor driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__, which brings up
-RGMII on port 8 with the writes of this table. Other modes follow the field definitions only. RGMII
-delays need checking on the board.
+Steps 4 and 5 are :ev:`confirmed` by :lx:`yt921x_port_up`. The Linux driver configures no
+xMII mode: :lx:`yt921x_port_config` accepts SerDes modes only. Steps 1 to 3 for RGMII follow
+the function
+`yt9215rb_init() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__
+of the :ref:`YT9215RB vendor driver <sources-list>`, which brings up RGMII on port 8 with the
+writes of the :ref:`RGMII table <ports-rgmii-table>`. The modes MII and RMII are
+:ev:`inferred` from the field definitions in :lx:`chip.h`. The three delay fields of the
+table depend on the board, and the vendor driver takes them from its configuration.
+
+.. _ports-rgmii-table:
 
 .. list-table::
    :header-rows: 1
@@ -206,11 +241,11 @@ delays need checking on the board.
      - :field:`RGMII1 <IO_LEVEL.YT9215_RGMII1>`
      - 3
    * - :reg:`XMII_CTRL`
-     - Bit of port 8 in :field:`XMII_CTRL.PORT`
+     - :field:`XMII_CTRL.PORT` element 8
      - 1
    * - :reg:`XMII` of port 8
      - :field:`XMII.MODE`
-     - :val:`XMII.MODE.RGMII` (4)
+     - :val:`XMII.MODE.RGMII`
    * - :reg:`XMII` of port 8
      - :field:`XMII.LINK`
      - 1
@@ -218,23 +253,23 @@ delays need checking on the board.
      - :field:`XMII.EN`
      - 1
    * - :reg:`XMII` of port 8
-     - Bit 26
+     - bit 26, no name
      - 1
    * - :reg:`XMII` of port 8
-     - Bit 20
+     - bit 20, no name
      - 1
    * - :reg:`XMII` of port 8
      - :field:`XMII.RGMII_RX_DELAY_150PS`
-     - From the board description
+     - board specific
    * - :reg:`XMII` of port 8
      - :field:`XMII.RGMII_TX_DELAY_150PS`
-     - From the board description
+     - board specific
    * - :reg:`XMII` of port 8
      - :field:`XMII.RGMII_TX_DELAY_2NS`
-     - From the board description
+     - board specific
    * - :reg:`PORT_CTRL` of port 8
      - :field:`PORT_CTRL.SPEED`
-     - :val:`speed.V1000` (2)
+     - :val:`speed.V1000`
    * - :reg:`PORT_CTRL` of port 8
      - :field:`PORT_CTRL.DUPLEX_FULL`
      - 1
@@ -254,12 +289,28 @@ delays need checking on the board.
      - :field:`PORT_CTRL.TX_MAC_EN`
      - 1
 
-The register values are ``0x0000000f`` for :reg:`IO_LEVEL`, ``0x00000002`` for
-:reg:`XMII_CTRL`, ``0x841c0000`` for :reg:`XMII` before the delays and ``0x000001fa`` for
-:reg:`PORT_CTRL`. The vendor driver writes :reg:`IO_LEVEL` only for 1.8 V RGMII pins, and its
-value 3 disagrees with the Linux header, which gives 1.8 V as 2 in these two fields and has
-no value 3; which is right is not known. Bits 26 and 20 of :reg:`XMII` have no known name.
-The vendor driver does not write :reg:`SERDES_CTRL` or :reg:`MDIO_POLLING`.
+The vendor driver writes four register values.
+
+.. list-table::
+   :header-rows: 1
+   :widths: 50 50
+
+   * - Register
+     - Value written
+   * - :reg:`IO_LEVEL`
+     - ``0x0000000f``
+   * - :reg:`XMII_CTRL`
+     - ``0x00000002``
+   * - :reg:`XMII` of port 8, without the delay fields
+     - ``0x841c0000``
+   * - :reg:`PORT_CTRL` of port 8
+     - ``0x000001fa``
+
+The vendor driver writes :reg:`IO_LEVEL` only for 1.8 V RGMII pins. Its value 3 disagrees
+with :lx:`chip.h`, which gives 1.8 V as 2 in :field:`IO_LEVEL.YT9215_RGMII0` and
+:field:`IO_LEVEL.YT9215_RGMII1` and has no value 3. It is :ev:`not known` which is right. No
+source names bits 26 and 20 of :reg:`XMII`. The vendor driver does not write
+:reg:`SERDES_CTRL` or :reg:`MDIO_POLLING`.
 
 .. _ports-mtu:
 
@@ -267,22 +318,23 @@ Frame size
 ----------
 
 :field:`MAC_FRAME.SIZE` is the longest frame a port accepts, counted from the destination
-address to the frame check sequence. For an IP MTU of *m* bytes write *m* + 18, and 8 more
-(:const:`TAG_LEN`) on a CPU port that carries tags. The largest value is 9216
-(:const:`FRAME_SIZE_MAX`). A comment in the :ref:`Linux driver <sources-list>` gives it as
-the value after reset too; like the other :ref:`reset values <sources-reset>` this is not
-confirmed by a read from hardware.
+address to the frame check sequence. For an IP MTU of *m* bytes write *m* + 18, and
+:const:`TAG_LEN` (8) more on a CPU port that carries tags. :lx:`yt921x_dsa_port_change_mtu`
+computes the value in this way. The largest value is :const:`FRAME_SIZE_MAX` (9216). A
+comment in the same function states that the field holds the largest value after reset, which
+:ref:`sources-reset` records.
 
 .. _ports-eee:
 
 Energy Efficient Ethernet
 -------------------------
 
-Energy Efficient Ethernet has one switch for the whole chip and one per port.
+Energy Efficient Ethernet has one enable for the whole chip and one per port.
 
-1. Chip: set :field:`PON_STRAP_FUNC.EEE` and :field:`PON_STRAP_VAL.EEE`. This overrides the
-   strap pin, as described in :ref:`bringup-straps`. Clear both when no port uses it.
+1. Chip: set :field:`PON_STRAP_FUNC.EEE` and :field:`PON_STRAP_VAL.EEE`. This is the strap
+   override of :ref:`bringup-strap-override`. Clear both when no port uses the function.
 2. Port: set the port's :field:`EEE_CTRL.EN` bit and :field:`EEE_VAL.DATA` of the port.
 
-The sequence is confirmed by the :ref:`Linux driver <sources-list>`, whose author notes that the vendor
-documentation on it is poor; treat it as known to work but not understood in detail.
+The sequence is :ev:`confirmed` by :lx:`yt921x_set_eee`. A comment in that function calls the
+datasheet poor on this function, and no source explains what the four bits do
+individually.

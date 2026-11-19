@@ -32,6 +32,195 @@ sources:
   sdk:
     repo: https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk
     commit: d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e
+linux_functions:
+  appprios_cmp: [chip.c, 1582]
+  burst2token: [tc.c, 39]
+  ldexpu64: [tc.c, 18]
+  rate2token: [tc.c, 24]
+  token2burst: [tc.c, 44]
+  token2rate: [tc.c, 31]
+  yt921x_acl_activated_ports: [tc.c, 1216]
+  yt921x_acl_add: [tc.c, 1429]
+  yt921x_acl_commit: [tc.c, 1285]
+  yt921x_acl_del: [tc.c, 1369]
+  yt921x_acl_entries_find: [tc.c, 524]
+  yt921x_acl_entries_new: [tc.c, 508]
+  yt921x_acl_entries_set_first_frag: [tc.c, 407]
+  yt921x_acl_entries_set_is_fragment: [tc.c, 370]
+  yt921x_acl_entries_set_l3_type: [tc.c, 437]
+  yt921x_acl_entries_set_l4_type: [tc.c, 465]
+  yt921x_acl_entry_set: [tc.c, 361]
+  yt921x_acl_find: [tc.c, 1228]
+  yt921x_acl_reserve: [tc.c, 1250]
+  yt921x_acl_rule_ext_parse_flow: [tc.c, 1151]
+  yt921x_acl_rule_ext_parse_flow_action: [tc.c, 1026]
+  yt921x_acl_rule_ext_parse_flow_entries: [tc.c, 571]
+  yt921x_acl_rule_set_ports: [tc.c, 535]
+  yt921x_bridge: [chip.c, 1228]
+  yt921x_bridge_flags: [chip.c, 1300]
+  yt921x_bridge_join: [chip.c, 1284]
+  yt921x_bridge_leave: [chip.c, 1268]
+  yt921x_chip_detect: [chip.c, 2161]
+  yt921x_chip_reset: [chip.c, 2228]
+  yt921x_chip_setup: [chip.c, 2387]
+  yt921x_chip_setup_acl: [tc.c, 1694]
+  yt921x_chip_setup_dsa: [chip.c, 2272]
+  yt921x_chip_setup_qos: [chip.c, 2346]
+  yt921x_chip_setup_tc: [tc.c, 1670]
+  yt921x_cled_blink_set: [leds.c, 332]
+  yt921x_cled_brightness_set_blocking: [leds.c, 316]
+  yt921x_cled_hw_control_get: [leds.c, 382]
+  yt921x_cled_hw_control_get_device: [leds.c, 349]
+  yt921x_cled_hw_control_is_supported: [leds.c, 369]
+  yt921x_cled_hw_control_set: [leds.c, 397]
+  yt921x_dsa_cls_flower_add: [tc.c, 1566]
+  yt921x_dsa_cls_flower_del: [tc.c, 1552]
+  yt921x_dsa_get_eth_ctrl_stats: [mib.c, 283]
+  yt921x_dsa_get_eth_mac_stats: [mib.c, 240]
+  yt921x_dsa_get_ethtool_stats: [mib.c, 192]
+  yt921x_dsa_get_pause_stats: [mib.c, 411]
+  yt921x_dsa_get_rmon_stats: [mib.c, 318]
+  yt921x_dsa_get_sset_count: [mib.c, 222]
+  yt921x_dsa_get_stats64: [mib.c, 362]
+  yt921x_dsa_get_strings: [mib.c, 177]
+  yt921x_dsa_get_tag_protocol: [chip.c, 1993]
+  yt921x_dsa_phylink_get_caps: [chip.c, 1907]
+  yt921x_dsa_port_add_dscp_prio: [chip.c, 2092]
+  yt921x_dsa_port_bridge_flags: [chip.c, 1365]
+  yt921x_dsa_port_bridge_join: [chip.c, 1403]
+  yt921x_dsa_port_bridge_leave: [chip.c, 1383]
+  yt921x_dsa_port_change_mtu: [chip.c, 239]
+  yt921x_dsa_port_del_dscp_prio: [chip.c, 2067]
+  yt921x_dsa_port_fast_age: [chip.c, 826]
+  yt921x_dsa_port_fdb_add: [chip.c, 873]
+  yt921x_dsa_port_fdb_del: [chip.c, 859]
+  yt921x_dsa_port_fdb_dump: [chip.c, 810]
+  yt921x_dsa_port_get_apptrust: [chip.c, 1588]
+  yt921x_dsa_port_get_default_prio: [chip.c, 1546]
+  yt921x_dsa_port_get_dscp_prio: [chip.c, 2050]
+  yt921x_dsa_port_lag_check: [chip.c, 347]
+  yt921x_dsa_port_lag_join: [chip.c, 386]
+  yt921x_dsa_port_lag_leave: [chip.c, 325]
+  yt921x_dsa_port_max_mtu: [chip.c, 263]
+  yt921x_dsa_port_mdb_add: [chip.c, 904]
+  yt921x_dsa_port_mdb_del: [chip.c, 887]
+  yt921x_dsa_port_mirror_add: [tc.c, 1655]
+  yt921x_dsa_port_mirror_del: [tc.c, 1638]
+  yt921x_dsa_port_mst_state_set: [chip.c, 1433]
+  yt921x_dsa_port_policer_add: [tc.c, 258]
+  yt921x_dsa_port_policer_del: [tc.c, 242]
+  yt921x_dsa_port_pre_bridge_flags: [chip.c, 1354]
+  yt921x_dsa_port_set_apptrust: [chip.c, 1622]
+  yt921x_dsa_port_set_default_prio: [chip.c, 1563]
+  yt921x_dsa_port_setup: [chip.c, 2012]
+  yt921x_dsa_port_setup_tc: [tc.c, 341]
+  yt921x_dsa_port_setup_tc_tbf_port: [tc.c, 289]
+  yt921x_dsa_port_stp_state_set: [chip.c, 1494]
+  yt921x_dsa_port_teardown: [chip.c, 1999]
+  yt921x_dsa_port_vlan_add: [chip.c, 1120]
+  yt921x_dsa_port_vlan_del: [chip.c, 1087]
+  yt921x_dsa_port_vlan_filtering: [chip.c, 1069]
+  yt921x_dsa_set_ageing_time: [chip.c, 842]
+  yt921x_dsa_set_mac_eee: [chip.c, 226]
+  yt921x_dsa_setup: [chip.c, 2428]
+  yt921x_dsa_teardown: [chip.c, 2152]
+  yt921x_dsa_vlan_msti_set: [chip.c, 1467]
+  yt921x_edata_read: [chip.c, 2141]
+  yt921x_edata_read_cont: [chip.c, 2123]
+  yt921x_edata_wait: [chip.c, 2108]
+  yt921x_extif_read: [mdio_bus.c, 180]
+  yt921x_extif_wait: [mdio_bus.c, 171]
+  yt921x_extif_write: [mdio_bus.c, 219]
+  yt921x_fdb_add: [chip.c, 706]
+  yt921x_fdb_add_index_in12: [chip.c, 682]
+  yt921x_fdb_dump: [chip.c, 574]
+  yt921x_fdb_flush_port: [chip.c, 676]
+  yt921x_fdb_flush_raw: [chip.c, 638]
+  yt921x_fdb_has: [chip.c, 485]
+  yt921x_fdb_in01: [chip.c, 469]
+  yt921x_fdb_join: [chip.c, 775]
+  yt921x_fdb_leave: [chip.c, 732]
+  yt921x_fdb_read: [chip.c, 519]
+  yt921x_fdb_wait: [chip.c, 451]
+  yt921x_intif_modify_changed: [mdio_bus.c, 86]
+  yt921x_intif_read: [mdio_bus.c, 20]
+  yt921x_intif_wait: [mdio_bus.c, 12]
+  yt921x_intif_write: [mdio_bus.c, 58]
+  yt921x_isolate: [chip.c, 1206]
+  yt921x_lag_hash: [chip.c, 269]
+  yt921x_lag_set: [chip.c, 300]
+  yt921x_led_blink_select: [leds.c, 48]
+  yt921x_led_blink_set: [leds.c, 89]
+  yt921x_led_force_set: [leds.c, 30]
+  yt921x_led_regaddr: [leds.c, 16]
+  yt921x_led_setup: [leds.c, 412]
+  yt921x_led_trigger_get: [leds.c, 231]
+  yt921x_led_trigger_is_supported: [leds.c, 211]
+  yt921x_led_trigger_set: [leds.c, 267]
+  yt921x_leds_remove: [leds.c, 629]
+  yt921x_leds_remove_port: [leds.c, 583]
+  yt921x_leds_setup: [leds.c, 635]
+  yt921x_leds_setup_port: [leds.c, 602]
+  yt921x_marker_tfm: [tc.c, 61]
+  yt921x_marker_tfm_police: [tc.c, 151]
+  yt921x_marker_tfm_shape: [tc.c, 172]
+  yt921x_mbus_ext_init: [mdio_bus.c, 274]
+  yt921x_mbus_ext_read: [mdio_bus.c, 246]
+  yt921x_mbus_ext_write: [mdio_bus.c, 262]
+  yt921x_mbus_int_init: [mdio_bus.c, 144]
+  yt921x_mbus_int_read: [mdio_bus.c, 110]
+  yt921x_mbus_int_write: [mdio_bus.c, 129]
+  yt921x_mdio_probe: [chip.c, 2621]
+  yt921x_mdio_remove: [chip.c, 2595]
+  yt921x_mdio_shutdown: [chip.c, 2585]
+  yt921x_meter_config: [tc.c, 219]
+  yt921x_mib_poll: [mib.c, 157]
+  yt921x_mib_read: [mib.c, 88]
+  yt921x_mirror_add: [tc.c, 1599]
+  yt921x_mirror_del: [tc.c, 1587]
+  yt921x_mtu_fetch: [tc.c, 10]
+  yt921x_phylink_mac_config: [chip.c, 1889]
+  yt921x_phylink_mac_link_down: [chip.c, 1839]
+  yt921x_phylink_mac_link_up: [chip.c, 1863]
+  yt921x_phylink_mac_select_pcs: [chip.c, 1816]
+  yt921x_phylink_pcs_an_restart: [pcs-921x.c, 152]
+  yt921x_phylink_pcs_config: [pcs-921x.c, 220]
+  yt921x_phylink_pcs_disable: [pcs-921x.c, 178]
+  yt921x_phylink_pcs_enable: [pcs-921x.c, 195]
+  yt921x_phylink_pcs_get_state: [pcs-921x.c, 112]
+  yt921x_phylink_pcs_inband_caps: [pcs-921x.c, 102]
+  yt921x_police_validate: [tc.c, 183]
+  yt921x_port_config: [chip.c, 1763]
+  yt921x_port_down: [chip.c, 1661]
+  yt921x_port_set_pvid: [chip.c, 936]
+  yt921x_port_setup: [chip.c, 1951]
+  yt921x_port_up: [chip.c, 1690]
+  yt921x_pvid_clear: [chip.c, 1019]
+  yt921x_pvid_set: [chip.c, 1045]
+  yt921x_reg64_clear_bits: [smi.c, 171]
+  yt921x_reg64_update_bits: [smi.c, 164]
+  yt921x_reg64_write: [smi.c, 158]
+  yt921x_reg96_write: [smi.c, 177]
+  yt921x_reg_mdio_read: [chip.c, 101]
+  yt921x_reg_mdio_write: [chip.c, 142]
+  yt921x_reg_read: [smi.c, 14]
+  yt921x_reg_update_bits: [smi.c, 47]
+  yt921x_reg_wait: [smi.c, 28]
+  yt921x_reg_write: [smi.c, 21]
+  yt921x_regs_clear_bits: [smi.c, 128]
+  yt921x_regs_read: [smi.c, 67]
+  yt921x_regs_update_bits: [smi.c, 97]
+  yt921x_regs_write: [smi.c, 82]
+  yt921x_serdes_config: [pcs-921x.c, 12]
+  yt921x_set_eee: [chip.c, 186]
+  yt921x_tag_rcv: [tag_yt921x.c, 84]
+  yt921x_tag_xmit: [tag_yt921x.c, 60]
+  yt921x_userport_bridge: [chip.c, 1193]
+  yt921x_userport_standalone: [chip.c, 1161]
+  yt921x_vlan_add: [chip.c, 1002]
+  yt921x_vlan_aware_set: [chip.c, 921]
+  yt921x_vlan_del: [chip.c, 991]
+  yt921x_vlan_filtering: [chip.c, 948]
 chips:
 - name: YT9215SC
   family: yt9215
@@ -313,7 +502,7 @@ constants:
     - 422
 - name: METER_NUM
   value: 64
-  desc: Number of general-purpose meters; the 11 per-port meters follow them
+  desc: Number of general-purpose meters. The 11 per-port meters follow them
   linux:
     macro: YT921X_METER_NUM
     src:
@@ -345,7 +534,7 @@ constants:
     - 430
 - name: MAJOR_YT9215
   value: 36866
-  desc: CHIP_ID.MAJOR of the YT9215 family
+  desc: :field:`CHIP_ID.MAJOR` of the YT9215 family
   linux:
     macro: YT9215_MAJOR
     src:
@@ -353,7 +542,7 @@ constants:
     - 432
 - name: MAJOR_YT9218
   value: 36865
-  desc: CHIP_ID.MAJOR of the YT9218 family
+  desc: :field:`CHIP_ID.MAJOR` of the YT9218 family
   linux:
     macro: YT9218_MAJOR
     src:
@@ -369,7 +558,7 @@ constants:
     - 436
 - name: FRAME_SIZE_MAX
   value: 9216
-  desc: Largest value of MAC_FRAME.SIZE in bytes
+  desc: Largest value of :field:`MAC_FRAME.SIZE` in bytes
   linux:
     macro: YT921X_FRAME_SIZE_MAX
     src:
@@ -417,7 +606,7 @@ constants:
     - 446
 - name: PORT_NUM
   value: 11
-  desc: Number of switch ports including the internal microcontroller port 10
+  desc: Number of switch ports. The count includes port 10 of the built-in microcontroller
   linux:
     macro: YT921X_PORT_NUM
     src:
@@ -449,7 +638,7 @@ constants:
     - 88
 - name: TOKEN_BYTE_C
   value: 1
-  desc: Token scale exponent in byte mode; one token is 2^1 bytes at unit 0
+  desc: Token scale exponent in byte mode. One token is 2^1 bytes at unit 0
   linux:
     macro: YT921X_TOKEN_BYTE_C
     src:
@@ -457,7 +646,7 @@ constants:
     - 326
 - name: TOKEN_PKT_C
   value: -6
-  desc: Token scale exponent in packet mode; one token is 2^-6 packets at unit 0
+  desc: Token scale exponent in packet mode. One token is 2^-6 packets at unit 0
   linux:
     macro: YT921X_TOKEN_PKT_C
     src:
@@ -473,7 +662,7 @@ constants:
     - 328
 - name: METER_SLOT_MIN
   value: 80
-  desc: Smallest allowed METER_SLOT.SLOT
+  desc: Smallest allowed :field:`METER_SLOT.SLOT`
   linux:
     macro: YT921X_METER_SLOT_MIN
     src:
@@ -481,7 +670,7 @@ constants:
     - 329
 - name: PORT_SHAPE_SLOT_MIN
   value: 80
-  desc: Smallest allowed PORT_SHAPE_SLOT.SLOT
+  desc: Smallest allowed :field:`PORT_SHAPE_SLOT.SLOT`
   linux:
     macro: YT921X_PORT_SHAPE_SLOT_MIN
     src:
@@ -547,7 +736,7 @@ enums:
       - 119
   - name: V10000
     value: 3
-    desc: 10 Gbit/s code; no YT921x port runs at this speed
+    desc: 10 Gbit/s code. No YT921x port runs at this speed
     linux:
       macro: YT921X_SPEED_10000
       src:
@@ -1089,6 +1278,7 @@ registers:
     - chip.h
     - 22
     used: true
+    use: [chip.c, yt921x_chip_reset, 2240]
   fields:
   - name: HW
     linux:
@@ -1097,10 +1287,11 @@ registers:
       - chip.h
       - 23
       used: true
+      use: [chip.c, yt921x_chip_reset, 2240]
     lsb: 31
     width: 1
-    desc: Write 1 to reset the whole chip, as the reset pin does. The bit clears itself when the reset
-      is complete.
+    desc: Write 1 to reset the whole chip. The bit clears itself when the reset is complete. Section 4.1.2.1
+      of the |ds| calls the bit CHIP_RESET.
     access: rw
     sdk:
       status: not in SDK
@@ -1113,10 +1304,10 @@ registers:
       used: false
     lsb: 1
     width: 1
-    desc: Write 1 for a software reset. No public driver uses this bit, so what it leaves untouched is
-      not known.
+    desc: Write 1 for a software reset. Section 4.1.2.2 of the |ds| calls the bit SW_RESET. It states
+      that the bit clears itself and resets what :field:`RST.HW` resets except the analog circuit of the
+      built-in PHYs. No function of the Linux driver uses the bit.
     access: rw
-    inferred: true
     sdk:
       status: same bits
       fields: [CHIP_SW_RST]
@@ -1143,6 +1334,7 @@ registers:
     - chip.h
     - 25
     used: true
+    use: [chip.c, yt921x_chip_setup, 2393]
   fields:
   - name: METER
     linux:
@@ -1151,6 +1343,7 @@ registers:
       - chip.h
       - 26
       used: true
+      use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 4
     width: 1
     desc: Enables the meters (:reg:`METER_CTRL`, :reg:`PORT_METER`).
@@ -1165,6 +1358,7 @@ registers:
       - chip.h
       - 27
       used: true
+      use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 2
     width: 1
     desc: Enables the access control list (:reg:`ACL_KEY`, :reg:`ACL_ACT`).
@@ -1179,6 +1373,7 @@ registers:
       - chip.h
       - 28
       used: true
+      use: [chip.c, yt921x_chip_setup, 2392]
     lsb: 1
     width: 1
     desc: Enables the port counters (:reg:`MIB_DATA`).
@@ -1207,6 +1402,7 @@ registers:
     - chip.h
     - 29
     used: true
+    use: [chip.c, yt921x_chip_detect, 2172]
   fields:
   - name: MAJOR
     linux:
@@ -1215,6 +1411,7 @@ registers:
       - chip.h
       - 30
       used: true
+      use: [chip.c, yt921x_chip_detect, 2176]
     lsb: 16
     width: 16
     desc: Family code. 0x9002 is the YT9215 family and 0x9001 the YT9218 family.
@@ -1526,7 +1723,7 @@ registers:
   - name: ADDR
     lsb: 0
     width: 16
-    desc: MAC address bytes 0 and 1, byte 0 in bits 15 to 8.
+    desc: MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8.
     access: rw
     inferred: true
     sdk:
@@ -1560,7 +1757,7 @@ registers:
   - name: ADDR
     lsb: 0
     width: 32
-    desc: MAC address bytes 2 to 5, byte 2 in bits 31 to 24.
+    desc: MAC address bytes 2 to 5. Byte 2 is in bits 31 to 24.
     access: rw
     inferred: true
     sdk:
@@ -1588,6 +1785,7 @@ registers:
     - chip.h
     - 105
     used: true
+    use: [chip.c, yt921x_set_eee, 200]
   fields:
   - name: EEE
     linux:
@@ -1596,6 +1794,7 @@ registers:
       - chip.h
       - 108
       used: true
+      use: [chip.c, yt921x_set_eee, 201]
     lsb: 16
     width: 1
     desc: Take the Energy Efficient Ethernet setting from :field:`PON_STRAP_VAL.EEE`.
@@ -1639,6 +1838,7 @@ registers:
     - chip.h
     - 106
     used: true
+    use: [chip.c, yt921x_set_eee, 204]
   fields:
   - name: EEE
     linux:
@@ -1647,6 +1847,7 @@ registers:
       - chip.h
       - 108
       used: true
+      use: [chip.c, yt921x_set_eee, 201]
     lsb: 16
     width: 1
     desc: 1 turns Energy Efficient Ethernet on for the built-in PHYs.
@@ -1697,7 +1898,7 @@ registers:
       src:
       - chip.h
       - 108
-      used: true
+      used: false
     lsb: 16
     width: 1
     desc: Captured Energy Efficient Ethernet strap.
@@ -1741,6 +1942,7 @@ registers:
     - chip.h
     - 125
     used: true
+    use: [chip.c, yt921x_chip_setup, 2416]
   fields:
   - name: TEMP
     linux:
@@ -1749,6 +1951,7 @@ registers:
       - chip.h
       - 126
       used: true
+      use: [chip.c, yt921x_chip_setup, 2416]
     lsb: 18
     width: 1
     desc: Enables the temperature sensor that :reg:`TEMP` reads.
@@ -1778,14 +1981,14 @@ registers:
   - name: VALUE
     lsb: 0
     width: 32
-    desc: Raw sensor value; scale and offset are not known.
+    desc: Raw sensor value. Its scale and offset are not known.
     access: ro
     inferred: true
     sdk:
       status: no SDK table
   block: system
   title: Temperature sensor reading
-  desc: Raw reading of the die temperature sensor. The conversion to degrees is not documented.
+  desc: Raw reading of the die temperature sensor. No source gives the conversion to degrees.
   access: ro
   words: 1
   inferred: true
@@ -1803,6 +2006,7 @@ registers:
     - chip.h
     - 128
     used: true
+    use: [chip.c, yt921x_chip_detect, 2186]
   fields:
   - name: MODE
     linux:
@@ -1810,7 +2014,8 @@ registers:
       src:
       - chip.h
       - 129
-      used: false
+      used: true
+      use: [chip.c, yt921x_chip_detect, 2186]
     lsb: 0
     width: 2
     desc: Package variant code.
@@ -1819,9 +2024,9 @@ registers:
       status: no SDK table
   block: system
   title: Package variant
-  desc: 'Tells the parts of one family apart. The meaning of each value is listed in
+  desc: 'Tells the parts of one family apart. :ref:`reference-parts` lists the value of each
 
-    :ref:`Identify the part <bringup-identify>`.'
+    part.'
   access: ro
   words: 1
   sdk:
@@ -1838,6 +2043,7 @@ registers:
     - chip.h
     - 166
     used: true
+    use: [chip.c, yt921x_edata_read_cont, 2130]
   fields:
   - name: ADDR
     linux:
@@ -1846,9 +2052,10 @@ registers:
       - chip.h
       - 167
       used: true
+      use: [chip.c, yt921x_edata_read_cont, 2129]
     lsb: 8
     width: 8
-    desc: Byte address, 0 to 255.
+    desc: Byte address from 0 to 255.
     access: rw
     sdk:
       status: no SDK table
@@ -1859,6 +2066,7 @@ registers:
       - chip.h
       - 169
       used: true
+      use: [chip.c, yt921x_edata_read_cont, 2129]
     values:
     - name: READ
       value: 5
@@ -1896,6 +2104,7 @@ registers:
     - chip.h
     - 172
     used: true
+    use: [chip.c, yt921x_edata_wait, 2113]
   fields:
   - name: DATA
     linux:
@@ -1904,6 +2113,7 @@ registers:
       - chip.h
       - 173
       used: true
+      use: [chip.c, yt921x_edata_read_cont, 2137]
     lsb: 24
     width: 8
     desc: Byte that was read.
@@ -1917,6 +2127,7 @@ registers:
       - chip.h
       - 174
       used: true
+      use: [chip.c, yt921x_edata_wait, 2114]
     values:
     - name: IDLE
       value: 3
@@ -1926,7 +2137,7 @@ registers:
         - chip.h
         - 176
         used: true
-      desc: No command is running; DATA is valid
+      desc: No command is running. DATA is valid
     lsb: 0
     width: 4
     desc: State of the store.
@@ -1952,6 +2163,7 @@ registers:
     - chip.h
     - 177
     used: true
+    use: [chip.c, yt921x_chip_detect, 2204]
   fields:
   - name: SEL
     linux:
@@ -1960,6 +2172,7 @@ registers:
       - chip.h
       - 178
       used: true
+      use: [chip.c, yt921x_chip_detect, 2207]
     values:
     - name: V125M
       value: 0
@@ -1992,8 +2205,8 @@ registers:
       desc: 143 MHz core clock
     lsb: 0
     width: 2
-    desc: Core clock selection. Value 0 means 125 MHz on the YT9215 family and 167 MHz on the YT9218 family;
-      :ref:`Core clock <bringup-clock>` lists the clock periods.
+    desc: Core clock selection. Value 0 selects 125 MHz in the YT9215 family and 167 MHz in the YT9218
+      family. The :ref:`core clock table <bringup-clock-table>` lists the clock periods.
     access: rw
     sdk:
       status: no SDK table
@@ -2018,6 +2231,7 @@ registers:
     - chip.h
     - 31
     used: true
+    use: [chip.c, yt921x_chip_setup_dsa, 2286]
   fields:
   - name: TAG_EN
     linux:
@@ -2026,6 +2240,7 @@ registers:
       - chip.h
       - 32
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2284]
     lsb: 15
     width: 1
     desc: Frames to and from the CPU port carry the 8-byte CPU tag.
@@ -2040,6 +2255,7 @@ registers:
       - chip.h
       - 33
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2284]
     lsb: 14
     width: 1
     desc: PORT is valid and that port is treated as the CPU port.
@@ -2054,9 +2270,10 @@ registers:
       - chip.h
       - 34
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2285]
     lsb: 0
     width: 4
-    desc: Number of the CPU port, 0 to 10.
+    desc: Number of the CPU port from 0 to 10.
     access: rw
     sdk:
       status: same bits
@@ -2084,6 +2301,7 @@ registers:
     - chip.h
     - 36
     used: true
+    use: [chip.c, yt921x_chip_reset, 2255]
   fields:
   - name: TPID
     linux:
@@ -2092,6 +2310,7 @@ registers:
       - chip.h
       - 37
       used: true
+      use: [chip.c, yt921x_chip_reset, 2258]
     lsb: 0
     width: 16
     desc: EtherType of the CPU tag.
@@ -2124,6 +2343,7 @@ registers:
     - chip.h
     - 332
     used: true
+    use: [chip.c, yt921x_chip_setup_dsa, 2292]
   fields:
   - name: FORCE_INT_PORT
     linux:
@@ -2161,6 +2381,7 @@ registers:
       - chip.h
       - 335
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2291]
     lsb: 0
     width: 1
     desc: Send such frames to the external CPU port set in :reg:`EXT_CPU_PORT`.
@@ -2189,6 +2410,7 @@ registers:
     - chip.h
     - 44
     used: true
+    use: [chip.c, yt921x_port_config, 1788]
   fields:
   - name: TEST
     linux:
@@ -2197,6 +2419,7 @@ registers:
       - chip.h
       - 45
       used: true
+      use: [chip.c, yt921x_chip_setup, 2421]
     lsb: 6
     width: 1
     desc: SerDes test mode. Clear it before use.
@@ -2210,6 +2433,7 @@ registers:
       - chip.h
       - 46
       used: true
+      use: [chip.c, yt921x_port_config, 1787]
     lsb: 0
     width: 2
     array:
@@ -2220,7 +2444,7 @@ registers:
         step: 1
       lsb: 0
       width: 1
-    desc: Enables the SerDes of port 8 (bit 0) or port 9 (bit 1).
+    desc: Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9.
     access: rw
     sdk:
       status: no SDK table
@@ -2249,6 +2473,7 @@ registers:
     - chip.h
     - 78
     used: true
+    use: [chip.c, yt921x_port_down, 1675]
   fields:
   - name: MODE
     linux:
@@ -2257,6 +2482,7 @@ registers:
       - chip.h
       - 79
       used: true
+      use: [pcs-921x.c, yt921x_serdes_config, 44]
     values:
     - name: SGMII
       value: 0
@@ -2266,7 +2492,7 @@ registers:
         - chip.h
         - 81
         used: true
-      desc: SGMII, the switch is the MAC side
+      desc: SGMII as the MAC side
     - name: REVSGMII
       value: 1
       linux:
@@ -2275,7 +2501,7 @@ registers:
         - chip.h
         - 82
         used: false
-      desc: SGMII, the switch is the PHY side
+      desc: SGMII as the PHY side
     - name: V1000BASEX
       value: 2
       linux:
@@ -2293,7 +2519,7 @@ registers:
         - chip.h
         - 84
         used: true
-      desc: 100BASE-FX
+      desc: 100BASE-FX fibre mode
     - name: V2500BASEX
       value: 4
       linux:
@@ -2317,6 +2543,7 @@ registers:
       - chip.h
       - 86
       used: true
+      use: [chip.c, yt921x_port_up, 1734]
     lsb: 6
     width: 1
     desc: Forced receive pause.
@@ -2331,6 +2558,7 @@ registers:
       - chip.h
       - 87
       used: true
+      use: [chip.c, yt921x_port_up, 1731]
     lsb: 5
     width: 1
     desc: Forced transmit pause.
@@ -2345,6 +2573,7 @@ registers:
       - chip.h
       - 88
       used: true
+      use: [chip.c, yt921x_port_down, 1674]
     lsb: 4
     width: 1
     desc: Forces the link up.
@@ -2359,9 +2588,10 @@ registers:
       - chip.h
       - 89
       used: true
+      use: [chip.c, yt921x_port_up, 1728]
     lsb: 3
     width: 1
-    desc: 'Forced duplex: 1 is full duplex.'
+    desc: Forced full duplex.
     access: rw
     sdk:
       status: same bits
@@ -2373,6 +2603,7 @@ registers:
       - chip.h
       - 90
       used: true
+      use: [chip.c, yt921x_port_up, 1726]
     lsb: 0
     width: 3
     desc: Forced speed.
@@ -2410,6 +2641,7 @@ registers:
     - chip.h
     - 92
     used: true
+    use: [chip.c, yt921x_port_down, 1669]
   fields:
   - name: PAUSE_AN
     linux:
@@ -2418,6 +2650,7 @@ registers:
       - chip.h
       - 93
       used: true
+      use: [pcs-921x.c, yt921x_serdes_config, 48]
     lsb: 10
     width: 1
     desc: Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE.
@@ -2432,9 +2665,10 @@ registers:
       - chip.h
       - 94
       used: true
+      use: [chip.c, yt921x_port_down, 1667]
     lsb: 9
     width: 1
-    desc: Take speed and duplex from the attached PHY or in-band status and ignore the forced bits.
+    desc: Take speed and duplex from the attached PHY or in-band status. The forced bits are ignored.
     access: rw
     sdk:
       status: same bits
@@ -2460,9 +2694,10 @@ registers:
       - chip.h
       - 98
       used: true
+      use: [chip.c, yt921x_port_up, 1706]
     lsb: 7
     width: 1
-    desc: 'Forced duplex: 1 is full duplex.'
+    desc: Forced full duplex.
     access: rw
     sdk:
       status: same bits
@@ -2474,6 +2709,7 @@ registers:
       - chip.h
       - 99
       used: true
+      use: [chip.c, yt921x_port_up, 1706]
     lsb: 6
     width: 1
     desc: Honour received pause frames.
@@ -2488,6 +2724,7 @@ registers:
       - chip.h
       - 100
       used: true
+      use: [chip.c, yt921x_port_up, 1705]
     lsb: 5
     width: 1
     desc: Send pause frames when the port is congested.
@@ -2502,6 +2739,7 @@ registers:
       - chip.h
       - 101
       used: true
+      use: [chip.c, yt921x_port_down, 1667]
     lsb: 4
     width: 1
     desc: Enables the receive side of the MAC.
@@ -2516,6 +2754,7 @@ registers:
       - chip.h
       - 102
       used: true
+      use: [chip.c, yt921x_port_down, 1668]
     lsb: 3
     width: 1
     desc: Enables the transmit side of the MAC.
@@ -2530,6 +2769,7 @@ registers:
       - chip.h
       - 103
       used: true
+      use: [chip.c, yt921x_port_up, 1704]
     lsb: 0
     width: 3
     desc: Forced speed.
@@ -2588,7 +2828,7 @@ registers:
       src:
       - chip.h
       - 98
-      used: true
+      used: false
     lsb: 7
     width: 1
     desc: 1 for full duplex.
@@ -2602,7 +2842,7 @@ registers:
       src:
       - chip.h
       - 99
-      used: true
+      used: false
     lsb: 6
     width: 1
     desc: Receive pause is active.
@@ -2616,7 +2856,7 @@ registers:
       src:
       - chip.h
       - 100
-      used: true
+      used: false
     lsb: 5
     width: 1
     desc: Transmit pause is active.
@@ -2630,7 +2870,7 @@ registers:
       src:
       - chip.h
       - 101
-      used: true
+      used: false
     lsb: 4
     width: 1
     desc: The receive side of the MAC is enabled.
@@ -2644,7 +2884,7 @@ registers:
       src:
       - chip.h
       - 102
-      used: true
+      used: false
     lsb: 3
     width: 1
     desc: The transmit side of the MAC is enabled.
@@ -2658,7 +2898,7 @@ registers:
       src:
       - chip.h
       - 103
-      used: true
+      used: false
     lsb: 0
     width: 3
     desc: Current speed.
@@ -2692,6 +2932,7 @@ registers:
     - chip.h
     - 110
     used: true
+    use: [chip.c, yt921x_port_up, 1754]
   fields:
   - name: DUPLEX_FULL
     linux:
@@ -2700,6 +2941,7 @@ registers:
       - chip.h
       - 111
       used: true
+      use: [chip.c, yt921x_port_up, 1752]
     lsb: 4
     width: 1
     desc: 1 for full duplex.
@@ -2714,6 +2956,7 @@ registers:
       - chip.h
       - 112
       used: true
+      use: [chip.c, yt921x_port_up, 1753]
     lsb: 3
     width: 1
     desc: 1 for link up.
@@ -2728,6 +2971,7 @@ registers:
       - chip.h
       - 113
       used: true
+      use: [chip.c, yt921x_port_up, 1750]
     lsb: 0
     width: 3
     desc: Link speed.
@@ -2761,6 +3005,7 @@ registers:
     - chip.h
     - 130
     used: true
+    use: [chip.c, yt921x_port_config, 1793]
   fields:
   - name: PORT
     linux:
@@ -2769,6 +3014,7 @@ registers:
       - chip.h
       - 131
       used: true
+      use: [chip.c, yt921x_port_config, 1792]
     lsb: 0
     width: 2
     array:
@@ -2779,7 +3025,7 @@ registers:
         step: -1
       lsb: 1
       width: 1
-    desc: Enables the xMII pins of port 8 (bit 1) or port 9 (bit 0).
+    desc: Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9.
     access: rw
     sdk:
       status: no SDK table
@@ -2808,6 +3054,7 @@ registers:
     - chip.h
     - 132
     used: true
+    use: [chip.c, yt921x_port_down, 1681]
   fields:
   - name: MODE
     linux:
@@ -2825,7 +3072,7 @@ registers:
         - chip.h
         - 135
         used: false
-      desc: MII, the switch is the MAC side
+      desc: MII as the MAC side
     - name: REVMII
       value: 1
       linux:
@@ -2834,7 +3081,7 @@ registers:
         - chip.h
         - 136
         used: false
-      desc: MII, the switch is the PHY side
+      desc: MII as the PHY side
     - name: RMII
       value: 2
       linux:
@@ -2843,7 +3090,7 @@ registers:
         - chip.h
         - 137
         used: false
-      desc: RMII, the switch is the MAC side
+      desc: RMII as the MAC side
     - name: REVRMII
       value: 3
       linux:
@@ -2852,7 +3099,7 @@ registers:
         - chip.h
         - 138
         used: false
-      desc: RMII, the switch is the PHY side
+      desc: RMII as the PHY side
     - name: RGMII
       value: 4
       linux:
@@ -2885,6 +3132,7 @@ registers:
       - chip.h
       - 141
       used: true
+      use: [chip.c, yt921x_port_down, 1680]
     lsb: 19
     width: 1
     desc: Forces the link of the interface up.
@@ -3082,6 +3330,7 @@ registers:
     - chip.h
     - 156
     used: true
+    use: [chip.c, yt921x_dsa_port_change_mtu, 255]
   fields:
   - name: SIZE
     linux:
@@ -3090,10 +3339,11 @@ registers:
       - chip.h
       - 157
       used: true
+      use: [chip.c, yt921x_dsa_port_change_mtu, 256]
     lsb: 8
     width: 14
-    desc: Maximum frame length in bytes, counted from the destination address to the frame check sequence.
-      The largest value is 0x2400 (9216).
+    desc: Maximum frame length in bytes. The length counts from the destination address to the frame check
+      sequence. The largest value is 0x2400 (9216).
     access: rw
     unit: bytes
     sdk:
@@ -3117,6 +3367,7 @@ registers:
     - mdio_bus.h
     - 13
     used: true
+    use: [mdio_bus.c, yt921x_extif_wait, 175]
   fields:
   - name: START
     linux:
@@ -3125,6 +3376,7 @@ registers:
       - mdio_bus.h
       - 15
       used: true
+      use: [mdio_bus.c, yt921x_extif_wait, 175]
     lsb: 0
     width: 1
     desc: Write 1 to start the transfer set up in :reg:`EXT_MBUS_CTRL`. Reads 1 until the transfer is
@@ -3153,6 +3405,7 @@ registers:
     - mdio_bus.h
     - 16
     used: true
+    use: [mdio_bus.c, yt921x_extif_read, 196]
   fields:
   - name: PORT
     linux:
@@ -3161,9 +3414,10 @@ registers:
       - mdio_bus.h
       - 18
       used: true
+      use: [mdio_bus.c, yt921x_extif_read, 192]
     lsb: 21
     width: 5
-    desc: PHY address, 0 to 31. On the internal bus it equals the port number.
+    desc: PHY address from 0 to 31. On the internal bus it equals the port number.
     access: rw
     sdk:
       status: no SDK table
@@ -3174,9 +3428,10 @@ registers:
       - mdio_bus.h
       - 20
       used: true
+      use: [mdio_bus.c, yt921x_extif_read, 192]
     lsb: 16
     width: 5
-    desc: PHY register number, 0 to 31.
+    desc: PHY register number from 0 to 31.
     access: rw
     sdk:
       status: no SDK table
@@ -3187,6 +3442,7 @@ registers:
       - mdio_bus.h
       - 22
       used: true
+      use: [mdio_bus.c, yt921x_extif_read, 193]
     values:
     - name: C22
       value: 4
@@ -3199,7 +3455,7 @@ registers:
       desc: IEEE 802.3 clause 22 frame
     lsb: 8
     width: 4
-    desc: Frame format. The field position is a guess of the upstream Linux driver author.
+    desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess".
     access: rw
     inferred: true
     sdk:
@@ -3211,6 +3467,7 @@ registers:
       - mdio_bus.h
       - 25
       used: true
+      use: [mdio_bus.c, yt921x_extif_read, 193]
     values:
     - name: WRITE
       value: 1
@@ -3232,7 +3489,7 @@ registers:
       desc: Read the register
     lsb: 2
     width: 2
-    desc: Direction. The field position is a guess of the upstream Linux driver author.
+    desc: Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads "wild guess".
     access: rw
     inferred: true
     sdk:
@@ -3256,6 +3513,7 @@ registers:
     - mdio_bus.h
     - 29
     used: true
+    use: [mdio_bus.c, yt921x_extif_write, 236]
   fields:
   - name: DATA
     lsb: 0
@@ -3284,6 +3542,7 @@ registers:
     - mdio_bus.h
     - 31
     used: true
+    use: [mdio_bus.c, yt921x_extif_read, 206]
   fields:
   - name: DATA
     lsb: 0
@@ -3312,6 +3571,7 @@ registers:
     - mdio_bus.h
     - 14
     used: true
+    use: [mdio_bus.c, yt921x_intif_wait, 16]
   fields:
   - name: START
     linux:
@@ -3320,6 +3580,7 @@ registers:
       - mdio_bus.h
       - 15
       used: true
+      use: [mdio_bus.c, yt921x_intif_wait, 16]
     lsb: 0
     width: 1
     desc: Write 1 to start the transfer set up in :reg:`INT_MBUS_CTRL`. Reads 1 until the transfer is
@@ -3348,6 +3609,7 @@ registers:
     - mdio_bus.h
     - 17
     used: true
+    use: [mdio_bus.c, yt921x_intif_read, 36]
   fields:
   - name: PORT
     linux:
@@ -3356,9 +3618,10 @@ registers:
       - mdio_bus.h
       - 18
       used: true
+      use: [mdio_bus.c, yt921x_intif_read, 32]
     lsb: 21
     width: 5
-    desc: PHY address, 0 to 31. On the internal bus it equals the port number.
+    desc: PHY address from 0 to 31. On the internal bus it equals the port number.
     access: rw
     sdk:
       status: no SDK table
@@ -3369,9 +3632,10 @@ registers:
       - mdio_bus.h
       - 20
       used: true
+      use: [mdio_bus.c, yt921x_intif_read, 32]
     lsb: 16
     width: 5
-    desc: PHY register number, 0 to 31.
+    desc: PHY register number from 0 to 31.
     access: rw
     sdk:
       status: no SDK table
@@ -3382,6 +3646,7 @@ registers:
       - mdio_bus.h
       - 22
       used: true
+      use: [mdio_bus.c, yt921x_extif_read, 193]
     values:
     - name: C22
       value: 4
@@ -3394,7 +3659,7 @@ registers:
       desc: IEEE 802.3 clause 22 frame
     lsb: 8
     width: 4
-    desc: Frame format. The field position is a guess of the upstream Linux driver author.
+    desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess".
     access: rw
     inferred: true
     sdk:
@@ -3406,6 +3671,7 @@ registers:
       - mdio_bus.h
       - 25
       used: true
+      use: [mdio_bus.c, yt921x_intif_read, 33]
     values:
     - name: WRITE
       value: 1
@@ -3427,7 +3693,7 @@ registers:
       desc: Read the register
     lsb: 2
     width: 2
-    desc: Direction. The field position is a guess of the upstream Linux driver author.
+    desc: Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads "wild guess".
     access: rw
     inferred: true
     sdk:
@@ -3451,6 +3717,7 @@ registers:
     - mdio_bus.h
     - 30
     used: true
+    use: [mdio_bus.c, yt921x_intif_write, 75]
   fields:
   - name: DATA
     lsb: 0
@@ -3479,6 +3746,7 @@ registers:
     - mdio_bus.h
     - 32
     used: true
+    use: [mdio_bus.c, yt921x_intif_read, 46]
   fields:
   - name: DATA
     lsb: 0
@@ -3511,6 +3779,7 @@ registers:
     - chip.h
     - 160
     used: true
+    use: [chip.c, yt921x_set_eee, 217]
   fields:
   - name: DATA
     linux:
@@ -3519,6 +3788,7 @@ registers:
       - chip.h
       - 161
       used: true
+      use: [chip.c, yt921x_set_eee, 218]
     lsb: 1
     width: 1
     desc: 1 enables low power idle on the port.
@@ -3544,6 +3814,7 @@ registers:
     - chip.h
     - 163
     used: true
+    use: [chip.c, yt921x_set_eee, 213]
   fields:
   - name: EN
     linux:
@@ -3552,6 +3823,7 @@ registers:
       - chip.h
       - 164
       used: true
+      use: [chip.c, yt921x_set_eee, 214]
     lsb: 0
     width: 11
     array:
@@ -3562,7 +3834,7 @@ registers:
         step: 1
       lsb: 0
       width: 1
-    desc: Enables Energy Efficient Ethernet on port n.
+    desc: Enables Energy Efficient Ethernet on port ``port``.
     access: rw
     sdk:
       status: no SDK table
@@ -3666,11 +3938,12 @@ registers:
     - mib.h
     - 19
     used: true
+    use: [mib.c, yt921x_mib_read, 104]
   fields:
   - name: COUNT
     lsb: 0
     width: 32
-    desc: Counter value, or the low 32 bits of a 64-bit counter.
+    desc: Counter value. For a 64-bit counter it is the low 32 bits.
     access: ro
     inferred: false
     sdk:
@@ -3720,7 +3993,7 @@ registers:
       used: false
     lsb: 19
     width: 2
-    desc: 'Blink cycle used to signal a detected loop: 512 ms times the field value.'
+    desc: Blink cycle that signals a detected loop. The cycle is 512 ms times the field value.
     access: rw
     inferred: true
     sdk:
@@ -3796,6 +4069,7 @@ registers:
     - leds.h
     - 24
     used: true
+    use: [leds.c, yt921x_led_regaddr, 21]
   fields:
   - name: ACT_LINK_TRY_DIS
     linux:
@@ -3806,7 +4080,7 @@ registers:
       used: false
     lsb: 17
     width: 1
-    desc: Function not known; only present for LED 0.
+    desc: Function not known. Only LED 0 has the field.
     access: rw
     inferred: true
     sdk:
@@ -3820,7 +4094,7 @@ registers:
       used: false
     lsb: 16
     width: 1
-    desc: Function not known; only present for LED 0.
+    desc: Function not known. Only LED 0 has the field.
     access: rw
     inferred: true
     sdk:
@@ -3874,6 +4148,7 @@ registers:
       - leds.h
       - 54
       used: true
+      use: [leds.c, '', 198]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -3887,6 +4162,7 @@ registers:
       - leds.h
       - 55
       used: true
+      use: [leds.c, '', 198]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -3900,6 +4176,7 @@ registers:
       - leds.h
       - 56
       used: true
+      use: [leds.c, '', 204]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -3913,6 +4190,7 @@ registers:
       - leds.h
       - 57
       used: true
+      use: [leds.c, '', 205]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -3954,6 +4232,7 @@ registers:
       - leds.h
       - 60
       used: true
+      use: [leds.c, '', 201]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -3967,6 +4246,7 @@ registers:
       - leds.h
       - 61
       used: true
+      use: [leds.c, '', 200]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -3980,6 +4260,7 @@ registers:
       - leds.h
       - 62
       used: true
+      use: [leds.c, '', 199]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -3993,6 +4274,7 @@ registers:
       - leds.h
       - 63
       used: true
+      use: [leds.c, '', 207]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -4034,6 +4316,7 @@ registers:
       - leds.h
       - 25
       used: true
+      use: [leds.c, yt921x_led_trigger_set, 293]
     lsb: 0
     width: 18
     desc: All behaviour bits of this LED as one mask.
@@ -4080,6 +4363,7 @@ registers:
     - leds.h
     - 28
     used: true
+    use: [leds.c, yt921x_led_regaddr, 23]
   fields:
   - name: OTHER_BLINK
     linux:
@@ -4088,10 +4372,11 @@ registers:
       - leds.h
       - 29
       used: true
+      use: [leds.c, yt921x_led_blink_set, 161]
     lsb: 30
     width: 2
-    desc: Alternative blink cycle, 512 ms shifted right by the field value. An LED uses it when its :field:`LED2_PORT.FORCE_BLINK`
-      field is 3.
+    desc: Alternative blink cycle. The cycle is 512 ms shifted right by the field value. An LED uses it
+      when its :field:`LED2_PORT.FORCE_BLINK` field is 3.
     access: rw
     sdk:
       status: no SDK table
@@ -4104,7 +4389,8 @@ registers:
       used: false
     lsb: 28
     width: 2
-    desc: Blink cycle for the low power idle indication, 512 ms shifted right by the field value.
+    desc: Blink cycle of the low power idle indication. The cycle is 512 ms shifted right by the field
+      value.
     access: rw
     inferred: true
     sdk:
@@ -4116,9 +4402,10 @@ registers:
       - leds.h
       - 33
       used: true
+      use: [leds.c, yt921x_led_blink_set, 139]
     lsb: 27
     width: 1
-    desc: Swaps the on and off parts of the blink cycle, so that BLINK_DUTY gives the off fraction.
+    desc: Swaps the on and off parts of the blink cycle. BLINK_DUTY then gives the off fraction.
     access: rw
     sdk:
       status: no SDK table
@@ -4129,6 +4416,7 @@ registers:
       - leds.h
       - 34
       used: true
+      use: [leds.c, yt921x_led_blink_set, 139]
     values:
     - name: V1_2
       value: 0
@@ -4221,6 +4509,7 @@ registers:
       - leds.h
       - 54
       used: true
+      use: [leds.c, '', 198]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -4234,6 +4523,7 @@ registers:
       - leds.h
       - 55
       used: true
+      use: [leds.c, '', 198]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -4247,6 +4537,7 @@ registers:
       - leds.h
       - 56
       used: true
+      use: [leds.c, '', 204]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -4260,6 +4551,7 @@ registers:
       - leds.h
       - 57
       used: true
+      use: [leds.c, '', 205]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -4301,6 +4593,7 @@ registers:
       - leds.h
       - 60
       used: true
+      use: [leds.c, '', 201]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -4314,6 +4607,7 @@ registers:
       - leds.h
       - 61
       used: true
+      use: [leds.c, '', 200]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -4327,6 +4621,7 @@ registers:
       - leds.h
       - 62
       used: true
+      use: [leds.c, '', 199]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -4340,6 +4635,7 @@ registers:
       - leds.h
       - 63
       used: true
+      use: [leds.c, '', 207]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -4381,6 +4677,7 @@ registers:
       - leds.h
       - 50
       used: true
+      use: [leds.c, yt921x_led_trigger_set, 293]
     lsb: 0
     width: 16
     desc: All behaviour bits of this LED as one mask.
@@ -4427,6 +4724,7 @@ registers:
     - leds.h
     - 40
     used: true
+    use: [leds.c, yt921x_led_regaddr, 25]
   fields:
   - name: FORCE
     linux:
@@ -4435,6 +4733,7 @@ registers:
       - leds.h
       - 41
       used: true
+      use: [leds.c, yt921x_led_force_set, 40]
     values:
     - name: DONTCARE
       value: 0
@@ -4444,7 +4743,7 @@ registers:
         - leds.h
         - 43
         used: true
-      desc: Not forced; the LED follows its behaviour bits
+      desc: Not forced. The LED follows its behaviour bits
     - name: BLINK
       value: 1
       linux:
@@ -4482,7 +4781,7 @@ registers:
         step: 4
       lsb: 18
       width: 2
-    desc: Forced state of LED n of this port.
+    desc: Forced state of LED group ``grp`` of this port.
     access: rw
     sdk:
       status: no SDK table
@@ -4493,6 +4792,7 @@ registers:
       - leds.h
       - 47
       used: true
+      use: [leds.c, yt921x_led_blink_set, 169]
     values:
     - name: OTHER
       value: 3
@@ -4513,7 +4813,8 @@ registers:
         step: 4
       lsb: 16
       width: 2
-    desc: 'Blink cycle of LED n when it is forced to blink: 512 ms shifted left by the field value.'
+    desc: Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field
+      value.
     access: rw
     sdk:
       status: no SDK table
@@ -4566,6 +4867,7 @@ registers:
       - leds.h
       - 54
       used: true
+      use: [leds.c, '', 198]
     lsb: 12
     width: 1
     desc: On while the link is up in full duplex.
@@ -4579,6 +4881,7 @@ registers:
       - leds.h
       - 55
       used: true
+      use: [leds.c, '', 198]
     lsb: 11
     width: 1
     desc: On while the link is up in half duplex.
@@ -4592,6 +4895,7 @@ registers:
       - leds.h
       - 56
       used: true
+      use: [leds.c, '', 204]
     lsb: 10
     width: 1
     desc: Blink while frames are sent.
@@ -4605,6 +4909,7 @@ registers:
       - leds.h
       - 57
       used: true
+      use: [leds.c, '', 205]
     lsb: 9
     width: 1
     desc: Blink while frames are received.
@@ -4646,6 +4951,7 @@ registers:
       - leds.h
       - 60
       used: true
+      use: [leds.c, '', 201]
     lsb: 6
     width: 1
     desc: On while the link is up at 1000 Mbit/s.
@@ -4659,6 +4965,7 @@ registers:
       - leds.h
       - 61
       used: true
+      use: [leds.c, '', 200]
     lsb: 5
     width: 1
     desc: On while the link is up at 100 Mbit/s.
@@ -4672,6 +4979,7 @@ registers:
       - leds.h
       - 62
       used: true
+      use: [leds.c, '', 199]
     lsb: 4
     width: 1
     desc: On while the link is up at 10 Mbit/s.
@@ -4685,6 +4993,7 @@ registers:
       - leds.h
       - 63
       used: true
+      use: [leds.c, '', 207]
     lsb: 3
     width: 1
     desc: Blink on collisions.
@@ -4726,6 +5035,7 @@ registers:
       - leds.h
       - 50
       used: true
+      use: [leds.c, yt921x_led_trigger_set, 293]
     lsb: 0
     width: 16
     desc: All behaviour bits of this LED as one mask.
@@ -4778,7 +5088,7 @@ registers:
       used: false
     lsb: 24
     width: 2
-    desc: Function not known; possibly a delay.
+    desc: Function not known. The :lx:`comment on the field <leds.h:68>` reads "delay?".
     access: rw
     inferred: true
     sdk:
@@ -4806,7 +5116,7 @@ registers:
       used: false
     lsb: 0
     width: 2
-    desc: Number of LED groups shifted out per port, minus one.
+    desc: Number of LED groups shifted out per port minus one.
     access: rw
     inferred: true
     sdk:
@@ -4857,7 +5167,7 @@ registers:
         step: 6
       lsb: 2
       width: 4
-    desc: Port whose LED is shown at position n.
+    desc: Port whose LED is shown at position ``slot``.
     access: rw
     inferred: true
     sdk:
@@ -4879,7 +5189,7 @@ registers:
         step: 6
       lsb: 0
       width: 2
-    desc: LED group shown at position n.
+    desc: LED group shown at position ``slot``.
     access: rw
     inferred: true
     sdk:
@@ -4930,6 +5240,7 @@ registers:
     - leds.h
     - 78
     used: true
+    use: [leds.c, yt921x_led_setup, 477]
   fields:
   - name: INV
     linux:
@@ -4938,6 +5249,7 @@ registers:
       - leds.h
       - 79
       used: true
+      use: [leds.c, yt921x_led_setup, 481]
     lsb: 0
     width: 30
     array:
@@ -4952,7 +5264,7 @@ registers:
         step: 1
       lsb: 0
       width: 1
-    desc: Inverts the output of LED group ``grp`` of port ``port``; the bit number is 10 × grp + port.
+    desc: Inverts the output of one LED group of one port. The bit number is 10 × grp + port.
     access: rw
     sdk:
       status: no SDK table
@@ -4998,7 +5310,7 @@ registers:
         step: 6
       lsb: 2
       width: 4
-    desc: Port whose LED is shown on pin group n.
+    desc: Port whose LED is shown on pin group ``grp``.
     access: rw
     inferred: true
     sdk:
@@ -5020,7 +5332,7 @@ registers:
         step: 6
       lsb: 0
       width: 2
-    desc: LED group shown on pin group n.
+    desc: LED group shown on pin group ``grp``.
     access: rw
     inferred: true
     sdk:
@@ -5063,7 +5375,7 @@ registers:
         step: 1
       lsb: 0
       width: 1
-    desc: Port n looks frames up by the service VLAN ID in place of the customer VLAN ID.
+    desc: Port ``port`` looks frames up by the service VLAN ID. It does not use the customer VLAN ID.
     access: rw
     inferred: true
     sdk:
@@ -5162,7 +5474,7 @@ registers:
       used: false
     lsb: 0
     width: 16
-    desc: Tag protocol identifier, for example 0x8100.
+    desc: Tag protocol identifier. An example is ``0x8100``.
     access: rw
     inferred: true
     sdk:
@@ -5190,6 +5502,7 @@ registers:
     - chip.h
     - 223
     used: true
+    use: [chip.c, yt921x_vlan_filtering, 978]
   fields:
   - name: PORT_BYPASS_IGMP
     linux:
@@ -5208,7 +5521,7 @@ registers:
         step: 1
       lsb: 11
       width: 1
-    desc: IGMP frames received on port n skip the ingress membership check.
+    desc: IGMP frames received on port ``port`` skip the ingress membership check.
     access: rw
     inferred: true
     sdk:
@@ -5221,6 +5534,7 @@ registers:
       - chip.h
       - 225
       used: true
+      use: [chip.c, yt921x_vlan_filtering, 979]
     lsb: 0
     width: 11
     array:
@@ -5231,7 +5545,7 @@ registers:
         step: 1
       lsb: 0
       width: 1
-    desc: Port n drops received frames whose VLAN does not list the port as a member.
+    desc: Port ``port`` receives frames only of VLANs that list it.
     access: rw
     sdk:
       status: same bits
@@ -5275,7 +5589,7 @@ registers:
         step: 1
       lsb: 0
       width: 1
-    desc: Port n does not send frames whose VLAN does not list the port as a member.
+    desc: Port ``port`` sends frames only of VLANs that list it.
     access: rw
     inferred: true
     sdk:
@@ -5307,6 +5621,7 @@ registers:
     - chip.h
     - 354
     used: true
+    use: [chip.c, yt921x_vlan_del, 998]
   fields:
   - name: UNTAG_PORTS
     linux:
@@ -5315,6 +5630,7 @@ registers:
       - chip.h
       - 355
       used: true
+      use: [chip.c, yt921x_vlan_del, 996]
     lsb: 40
     width: 11
     array:
@@ -5329,7 +5645,7 @@ registers:
       src:
       - chip.h
       - 357
-    desc: Ports that send frames of this VLAN without a tag, one bit per port.
+    desc: Ports that send frames of this VLAN without a tag. Each port has one bit.
     access: rw
     sdk:
       status: same bits
@@ -5341,9 +5657,10 @@ registers:
       - chip.h
       - 358
       used: true
+      use: [chip.c, yt921x_dsa_vlan_msti_set, 1482]
     lsb: 36
     width: 4
-    desc: Spanning tree instance of this VLAN; selects the :reg:`STP` register.
+    desc: Spanning tree instance of this VLAN. It selects the :reg:`STP` register.
     access: rw
     sdk:
       status: same bits
@@ -5357,9 +5674,10 @@ registers:
       used: false
     lsb: 35
     width: 1
-    desc: Meaning uncertain; no public driver sets it. The Linux driver names the bit as a service VLAN
-      enable. The vendor SDK names it SVL_EN, which suggests shared VLAN learning, that is, learning by
-      FID in place of the VLAN ID.
+    desc: 'Meaning not known. No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set`
+      states. The Linux name suggests a service VLAN enable. The :ref:`vendor SDK <sources-list>` names
+      the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the
+      VLAN ID.'
     access: rw
     inferred: true
     sdk:
@@ -5374,9 +5692,10 @@ registers:
       used: false
     lsb: 23
     width: 12
-    desc: Filtering ID for address learning and lookup. No public driver writes it; the Linux driver leaves
-      it 0 and addresses the forwarding database by VLAN ID, so when the field takes effect is not known
-      (see SVLAN_EN). The field crosses the boundary between the two words.
+    desc: Filtering ID for address learning and lookup. No function of the Linux driver writes it. :lx:`yt921x_fdb_in01`
+      writes the VLAN ID to :field:`FDB_IN1.FID`, so the Linux driver addresses the forwarding database
+      by VLAN ID. It is not known when the field takes effect. :field:`VLAN_CTRL.SVLAN_EN` is a candidate.
+      The field crosses the boundary between the two words.
     access: rw
     inferred: true
     sdk:
@@ -5389,6 +5708,7 @@ registers:
       - chip.h
       - 363
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2337]
     lsb: 22
     width: 1
     desc: Source addresses of frames in this VLAN are not learned.
@@ -5420,7 +5740,7 @@ registers:
       used: false
     lsb: 18
     width: 3
-    desc: VLAN priority, a source for :reg:`PORT_PRIO_ORD`.
+    desc: VLAN priority. It is a source for :reg:`PORT_PRIO_ORD`.
     access: rw
     inferred: true
     sdk:
@@ -5433,6 +5753,7 @@ registers:
       - chip.h
       - 367
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2337]
     lsb: 7
     width: 11
     array:
@@ -5447,7 +5768,7 @@ registers:
       src:
       - chip.h
       - 369
-    desc: Member ports, one bit per port.
+    desc: Member ports. Each port has one bit.
     access: rw
     sdk:
       status: same bits
@@ -5491,7 +5812,7 @@ registers:
       used: false
     lsb: 0
     width: 5
-    desc: Meter number, an index of :reg:`METER_CTRL`.
+    desc: Meter number. It is an index of :reg:`METER_CTRL`.
     access: rw
     inferred: true
     sdk:
@@ -5534,7 +5855,7 @@ registers:
       used: false
     lsb: 0
     width: 16
-    desc: Tag protocol identifier, for example 0x8100.
+    desc: Tag protocol identifier. An example is ``0x8100``.
     access: rw
     inferred: true
     sdk:
@@ -5567,6 +5888,7 @@ registers:
     - chip.h
     - 376
     used: true
+    use: [chip.c, yt921x_vlan_aware_set, 932]
   fields:
   - name: STAG
     linux:
@@ -5575,6 +5897,7 @@ registers:
       - chip.h
       - 377
       used: true
+      use: [chip.c, yt921x_vlan_aware_set, 929]
     lsb: 4
     width: 4
     array:
@@ -5589,7 +5912,7 @@ registers:
       src:
       - chip.h
       - 378
-    desc: 'Bit n set: :reg:`TPID_IGR` entry n marks a service tag on this port.'
+    desc: Entry ``n`` of :reg:`TPID_IGR` marks a service tag on this port.
     access: rw
     sdk:
       status: same bits
@@ -5601,6 +5924,7 @@ registers:
       - chip.h
       - 379
       used: true
+      use: [chip.c, yt921x_vlan_aware_set, 931]
     lsb: 0
     width: 4
     array:
@@ -5615,7 +5939,7 @@ registers:
       src:
       - chip.h
       - 380
-    desc: 'Bit n set: :reg:`TPID_IGR` entry n marks a customer tag on this port.'
+    desc: Entry ``n`` of :reg:`TPID_IGR` marks a customer tag on this port.
     access: rw
     sdk:
       status: same bits
@@ -5649,6 +5973,7 @@ registers:
     - chip.h
     - 391
     used: true
+    use: [chip.c, yt921x_port_set_pvid, 943]
   fields:
   - name: SVLAN_PRIO_EN
     linux:
@@ -5701,6 +6026,7 @@ registers:
       - chip.h
       - 396
       used: true
+      use: [chip.c, yt921x_port_set_pvid, 941]
     lsb: 6
     width: 12
     desc: Default customer VLAN ID (the port VLAN ID).
@@ -5763,6 +6089,7 @@ registers:
     - chip.h
     - 400
     used: true
+    use: [chip.c, yt921x_vlan_filtering, 973]
   fields:
   - name: VLAN_RANGE_EN
     linux:
@@ -5831,6 +6158,7 @@ registers:
       - chip.h
       - 405
       used: true
+      use: [chip.c, yt921x_vlan_filtering, 967]
     lsb: 1
     width: 1
     desc: Drop received frames that carry a customer tag.
@@ -5845,6 +6173,7 @@ registers:
       - chip.h
       - 406
       used: true
+      use: [chip.c, yt921x_vlan_filtering, 968]
     lsb: 0
     width: 1
     desc: Drop received frames that carry no customer tag.
@@ -5877,6 +6206,7 @@ registers:
     - chip.h
     - 191
     used: true
+    use: [chip.c, yt921x_dsa_port_get_dscp_prio, 2057]
   fields:
   - name: PRIO
     linux:
@@ -5885,9 +6215,10 @@ registers:
       - chip.h
       - 193
       used: true
+      use: [chip.c, yt921x_dsa_port_get_dscp_prio, 2063]
     lsb: 2
     width: 3
-    desc: Internal priority, 0 to 7.
+    desc: Internal priority from 0 to 7.
     access: rw
     sdk:
       status: same bits
@@ -5899,6 +6230,7 @@ registers:
       - chip.h
       - 195
       used: true
+      use: [chip.c, yt921x_chip_setup_qos, 2373]
     values:
     - name: GREEN
       value: 0
@@ -5908,7 +6240,7 @@ registers:
         - chip.h
         - 197
         used: false
-      desc: Green, lowest drop precedence
+      desc: Lowest drop precedence
     - name: YELLOW
       value: 1
       linux:
@@ -5926,7 +6258,7 @@ registers:
         - chip.h
         - 199
         used: false
-      desc: Red, highest drop precedence
+      desc: Highest drop precedence
     lsb: 0
     width: 2
     desc: Drop precedence colour used by the meters.
@@ -5967,6 +6299,7 @@ registers:
     - chip.h
     - 192
     used: true
+    use: [chip.c, yt921x_chip_setup_qos, 2376]
   fields:
   - name: PRIO
     linux:
@@ -5975,9 +6308,10 @@ registers:
       - chip.h
       - 193
       used: true
+      use: [chip.c, yt921x_dsa_port_get_dscp_prio, 2063]
     lsb: 2
     width: 3
-    desc: Internal priority, 0 to 7.
+    desc: Internal priority from 0 to 7.
     access: rw
     sdk:
       status: same bits
@@ -5989,6 +6323,7 @@ registers:
       - chip.h
       - 195
       used: true
+      use: [chip.c, yt921x_chip_setup_qos, 2373]
     values:
     - name: GREEN
       value: 0
@@ -5998,7 +6333,7 @@ registers:
         - chip.h
         - 197
         used: false
-      desc: Green, lowest drop precedence
+      desc: Lowest drop precedence
     - name: YELLOW
       value: 1
       linux:
@@ -6016,7 +6351,7 @@ registers:
         - chip.h
         - 199
         used: false
-      desc: Red, highest drop precedence
+      desc: Highest drop precedence
     lsb: 0
     width: 2
     desc: Drop precedence colour used by the meters.
@@ -6053,6 +6388,7 @@ registers:
     - chip.h
     - 200
     used: true
+    use: [chip.c, yt921x_dsa_port_get_default_prio, 1553]
   fields:
   - name: CVLAN_PRIO_MAP_ID
     linux:
@@ -6091,9 +6427,10 @@ registers:
       - chip.h
       - 203
       used: true
+      use: [chip.c, yt921x_dsa_port_get_default_prio, 1559]
     lsb: 1
     width: 3
-    desc: Port default priority, 0 to 7.
+    desc: Port default priority from 0 to 7.
     access: rw
     sdk:
       status: same bits
@@ -6105,6 +6442,7 @@ registers:
       - chip.h
       - 205
       used: true
+      use: [chip.c, yt921x_dsa_port_set_default_prio, 1574]
     lsb: 0
     width: 1
     desc: Enables the port default priority.
@@ -6137,6 +6475,7 @@ registers:
     - chip.h
     - 206
     used: true
+    use: [chip.c, yt921x_dsa_port_get_apptrust, 1598]
   fields:
   - name: APP
     linux:
@@ -6145,6 +6484,7 @@ registers:
       - chip.h
       - 207
       used: true
+      use: [chip.c, yt921x_dsa_port_set_apptrust, 1637]
     lsb: 0
     width: 24
     array:
@@ -6191,6 +6531,7 @@ registers:
     - chip.h
     - 226
     used: true
+    use: [chip.c, yt921x_userport_standalone, 1168]
   fields:
   - name: BLOCK
     linux:
@@ -6198,7 +6539,8 @@ registers:
       src:
       - chip.h
       - 227
-      used: false
+      used: true
+      use: [chip.c, yt921x_userport_standalone, 1168]
     lsb: 0
     width: 11
     array:
@@ -6209,7 +6551,7 @@ registers:
         step: 1
       lsb: 0
       width: 1
-    desc: Frames received on this port are never sent to port n.
+    desc: Frames received on this port are never sent to port ``port``.
     access: rw
     sdk:
       status: same bits
@@ -6241,6 +6583,7 @@ registers:
     - chip.h
     - 228
     used: true
+    use: [chip.c, yt921x_dsa_port_mst_state_set, 1460]
   fields:
   - name: PORT
     linux:
@@ -6249,6 +6592,7 @@ registers:
       - chip.h
       - 229
       used: true
+      use: [chip.c, yt921x_dsa_port_mst_state_set, 1441]
     values:
     - name: DISABLED
       value: 0
@@ -6276,7 +6620,7 @@ registers:
         - chip.h
         - 233
         used: true
-      desc: Port neither forwards nor learns; it still receives bridge protocol frames
+      desc: Port neither forwards nor learns. It still receives bridge protocol frames
     - name: FORWARD
       value: 3
       linux:
@@ -6296,7 +6640,7 @@ registers:
         step: 2
       lsb: 0
       width: 2
-    desc: State of port n in this instance.
+    desc: State of port ``port`` in this instance.
     access: rw
     sdk:
       status: same bits
@@ -6328,6 +6672,7 @@ registers:
     - chip.h
     - 235
     used: true
+    use: [chip.c, yt921x_userport_standalone, 1174]
   fields:
   - name: VID_LEARN_MULTI_EN
     linux:
@@ -6411,6 +6756,7 @@ registers:
       - chip.h
       - 241
       used: true
+      use: [chip.c, yt921x_userport_standalone, 1173]
     lsb: 17
     width: 1
     desc: Disables address learning on the port.
@@ -6528,6 +6874,7 @@ registers:
     - chip.h
     - 251
     used: true
+    use: [chip.c, yt921x_dsa_set_ageing_time, 852]
   fields:
   - name: INTERVAL
     linux:
@@ -6535,7 +6882,8 @@ registers:
       src:
       - chip.h
       - 252
-      used: false
+      used: true
+      use: [chip.c, yt921x_dsa_set_ageing_time, 852]
     lsb: 0
     width: 16
     desc: Ageing time in units of 5 seconds.
@@ -6565,6 +6913,7 @@ registers:
     - chip.h
     - 253
     used: true
+    use: [chip.c, yt921x_fdb_in01, 476]
   fields:
   - name: ADDR_HI4
     linux:
@@ -6572,10 +6921,11 @@ registers:
       src:
       - chip.h
       - 289
-      used: false
+      used: true
+      use: [chip.c, yt921x_fdb_in01, 476]
     lsb: 0
     width: 32
-    desc: MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+    desc: MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
     access: rw
     sdk:
       status: same bits
@@ -6603,6 +6953,7 @@ registers:
     - chip.h
     - 254
     used: true
+    use: [chip.c, yt921x_fdb_in01, 481]
   fields:
   - name: EGR_PRIO_EN
     linux:
@@ -6626,6 +6977,7 @@ registers:
       - chip.h
       - 292
       used: true
+      use: [chip.c, yt921x_fdb_read, 542]
     values:
     - name: INVALID
       value: 0
@@ -6680,7 +7032,7 @@ registers:
         - chip.h
         - 299
         used: true
-      desc: Static entry; never ages out
+      desc: Static entry that never ages out
     lsb: 28
     width: 3
     desc: State of the entry.
@@ -6695,6 +7047,7 @@ registers:
       - chip.h
       - 300
       used: true
+      use: [chip.c, yt921x_fdb_read, 561]
     lsb: 16
     width: 12
     desc: Filtering ID of the entry. The Linux driver writes the VLAN ID here.
@@ -6711,7 +7064,7 @@ registers:
       used: false
     lsb: 0
     width: 16
-    desc: MAC address bytes 4 and 5, byte 4 in bits 15 to 8.
+    desc: MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
     access: rw
     sdk:
       status: same bits
@@ -6737,6 +7090,7 @@ registers:
     - chip.h
     - 255
     used: true
+    use: [chip.c, yt921x_fdb_has, 497]
   fields:
   - name: MOVE_AGING_STATUS
     linux:
@@ -6775,9 +7129,10 @@ registers:
       - chip.h
       - 306
       used: true
+      use: [chip.c, yt921x_fdb_read, 563]
     lsb: 18
     width: 11
-    desc: Ports that frames to this address are sent to, one bit per port.
+    desc: Ports that frames to this address are sent to. Each port has one bit.
     access: rw
     sdk:
       status: same bits
@@ -6836,7 +7191,7 @@ registers:
       used: false
     lsb: 12
     width: 3
-    desc: Priority given by this entry, a source for :reg:`PORT_PRIO_ORD`.
+    desc: Priority given by this entry. It is a source for :reg:`PORT_PRIO_ORD`.
     access: rw
     inferred: true
     sdk:
@@ -6878,6 +7233,7 @@ registers:
     - chip.h
     - 256
     used: true
+    use: [chip.c, yt921x_fdb_has, 502]
   fields:
   - name: INDEX
     linux:
@@ -6886,9 +7242,10 @@ registers:
       - chip.h
       - 257
       used: true
+      use: [chip.c, yt921x_fdb_dump, 585]
     lsb: 11
     width: 12
-    desc: Entry index, 0 to 4095, used when MODE_INDEX is set.
+    desc: Entry index from 0 to 4095. It is used when MODE_INDEX is set.
     access: rw
     sdk:
       status: same bits
@@ -6900,9 +7257,10 @@ registers:
       - chip.h
       - 259
       used: true
+      use: [chip.c, yt921x_fdb_dump, 585]
     lsb: 10
     width: 1
-    desc: 0 addresses the entry by MAC address and filtering ID; 1 addresses it by INDEX.
+    desc: Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID.
     access: rw
     sdk:
       status: same bits
@@ -6929,6 +7287,7 @@ registers:
       - chip.h
       - 261
       used: true
+      use: [chip.c, yt921x_fdb_flush_raw, 659]
     values:
     - name: ALL
       value: 0
@@ -6956,7 +7315,7 @@ registers:
         - chip.h
         - 265
         used: true
-      desc: Entries of those ports with the filtering ID in :field:`FDB_IN1.FID`
+      desc: Entries of the ports in :field:`FDB_IN2.EGR_PORTS` with the filtering ID in :field:`FDB_IN1.FID`
     - name: VID
       value: 3
       linux:
@@ -6980,6 +7339,7 @@ registers:
       - chip.h
       - 267
       used: true
+      use: [chip.c, yt921x_fdb_flush_raw, 663]
     lsb: 6
     width: 1
     desc: A flush also removes static entries.
@@ -6994,6 +7354,7 @@ registers:
       - chip.h
       - 268
       used: true
+      use: [chip.c, yt921x_fdb_dump, 608]
     values:
     - name: UCAST_PORT
       value: 0
@@ -7045,6 +7406,7 @@ registers:
       - chip.h
       - 274
       used: true
+      use: [chip.c, yt921x_fdb_add_index_in12, 697]
     values:
     - name: ADD
       value: 0
@@ -7105,6 +7467,7 @@ registers:
       - chip.h
       - 281
       used: true
+      use: [chip.c, yt921x_fdb_has, 501]
     lsb: 0
     width: 1
     desc: Write 1 to start the command.
@@ -7135,6 +7498,7 @@ registers:
     - chip.h
     - 282
     used: true
+    use: [chip.c, yt921x_fdb_wait, 457]
   fields:
   - name: DONE
     linux:
@@ -7143,6 +7507,7 @@ registers:
       - chip.h
       - 283
       used: true
+      use: [chip.c, yt921x_fdb_wait, 454]
     lsb: 15
     width: 1
     desc: 1 when the command has finished.
@@ -7157,6 +7522,7 @@ registers:
       - chip.h
       - 284
       used: true
+      use: [chip.c, yt921x_fdb_has, 509]
     lsb: 14
     width: 1
     desc: No entry matched.
@@ -7186,6 +7552,7 @@ registers:
       - chip.h
       - 286
       used: true
+      use: [chip.c, yt921x_fdb_has, 514]
     lsb: 0
     width: 12
     desc: Index of the entry the command acted on.
@@ -7214,6 +7581,7 @@ registers:
     - chip.h
     - 288
     used: true
+    use: [chip.c, yt921x_fdb_read, 548]
   fields:
   - name: ADDR_HI4
     linux:
@@ -7221,10 +7589,11 @@ registers:
       src:
       - chip.h
       - 289
-      used: false
+      used: true
+      use: [chip.c, yt921x_fdb_read, 548]
     lsb: 0
     width: 32
-    desc: MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+    desc: MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
     access: ro
     sdk:
       status: same bits
@@ -7250,6 +7619,7 @@ registers:
     - chip.h
     - 290
     used: true
+    use: [chip.c, yt921x_fdb_read, 539]
   fields:
   - name: EGR_PRIO_EN
     linux:
@@ -7273,6 +7643,7 @@ registers:
       - chip.h
       - 292
       used: true
+      use: [chip.c, yt921x_fdb_read, 542]
     values:
     - name: INVALID
       value: 0
@@ -7327,7 +7698,7 @@ registers:
         - chip.h
         - 299
         used: true
-      desc: Static entry; never ages out
+      desc: Static entry that never ages out
     lsb: 28
     width: 3
     desc: State of the entry.
@@ -7342,6 +7713,7 @@ registers:
       - chip.h
       - 300
       used: true
+      use: [chip.c, yt921x_fdb_read, 561]
     lsb: 16
     width: 12
     desc: Filtering ID of the entry. The Linux driver writes the VLAN ID here.
@@ -7358,7 +7730,7 @@ registers:
       used: false
     lsb: 0
     width: 16
-    desc: MAC address bytes 4 and 5, byte 4 in bits 15 to 8.
+    desc: MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
     access: ro
     sdk:
       status: same bits
@@ -7384,6 +7756,7 @@ registers:
     - chip.h
     - 303
     used: true
+    use: [chip.c, yt921x_fdb_read, 551]
   fields:
   - name: MOVE_AGING_STATUS
     linux:
@@ -7422,9 +7795,10 @@ registers:
       - chip.h
       - 306
       used: true
+      use: [chip.c, yt921x_fdb_read, 563]
     lsb: 18
     width: 11
-    desc: Ports that frames to this address are sent to, one bit per port.
+    desc: Ports that frames to this address are sent to. Each port has one bit.
     access: ro
     sdk:
       status: same bits
@@ -7483,7 +7857,7 @@ registers:
       used: false
     lsb: 12
     width: 3
-    desc: Priority given by this entry, a source for :reg:`PORT_PRIO_ORD`.
+    desc: Priority given by this entry. It is a source for :reg:`PORT_PRIO_ORD`.
     access: ro
     inferred: true
     sdk:
@@ -7563,6 +7937,7 @@ registers:
     - chip.h
     - 315
     used: true
+    use: [chip.c, yt921x_chip_setup_dsa, 2297]
   fields:
   - name: PORTS
     linux:
@@ -7570,7 +7945,8 @@ registers:
       src:
       - chip.h
       - 319
-      used: false
+      used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2297]
     lsb: 0
     width: 11
     array:
@@ -7585,7 +7961,7 @@ registers:
       src:
       - chip.h
       - 321
-    desc: 'Bit n set: frames of this class are not flooded to port n.'
+    desc: Frames of this class are not flooded to port ``port``.
     access: rw
     sdk:
       status: same bits
@@ -7611,6 +7987,7 @@ registers:
     - chip.h
     - 316
     used: true
+    use: [chip.c, yt921x_chip_setup_dsa, 2300]
   fields:
   - name: PORTS
     linux:
@@ -7618,7 +7995,8 @@ registers:
       src:
       - chip.h
       - 319
-      used: false
+      used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2300]
     lsb: 0
     width: 11
     array:
@@ -7633,7 +8011,7 @@ registers:
       src:
       - chip.h
       - 321
-    desc: 'Bit n set: frames of this class are not flooded to port n.'
+    desc: Frames of this class are not flooded to port ``port``.
     access: rw
     sdk:
       status: same bits
@@ -7681,8 +8059,9 @@ registers:
       src:
       - chip.h
       - 321
-    desc: 'Bit n set: frames of this class are not flooded to port n.'
+    desc: Frames of this class are not flooded to port ``port``.
     access: rw
+    inferred: true
     sdk:
       status: same bits
       fields: [MCAST_FILTER_MASK]
@@ -7730,8 +8109,9 @@ registers:
       src:
       - chip.h
       - 321
-    desc: 'Bit n set: frames of this class are not flooded to port n.'
+    desc: Frames of this class are not flooded to port ``port``.
     access: rw
+    inferred: true
     sdk:
       status: same bits
       fields: [BCAST_FILTER_MASK]
@@ -7757,6 +8137,7 @@ registers:
     - chip.h
     - 340
     used: true
+    use: [chip.c, yt921x_chip_setup_dsa, 2327]
   fields:
   - name: ACT
     linux:
@@ -7765,6 +8146,7 @@ registers:
       - chip.h
       - 344
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2324]
     values:
     - name: FORWARD
       value: 0
@@ -7801,7 +8183,7 @@ registers:
         - chip.h
         - 350
         used: false
-      desc: Flood the frame and copy it to the CPU. The copy carries no usable source port; do not use
+      desc: Flood the frame and copy it to the CPU
     lsb: 0
     width: 22
     array:
@@ -7812,7 +8194,7 @@ registers:
         step: 2
       lsb: 0
       width: 2
-    desc: Action for frames received on port n.
+    desc: Action for frames received on port ``port``.
     access: rw
     sdk:
       status: same bits
@@ -7840,6 +8222,7 @@ registers:
     - chip.h
     - 341
     used: true
+    use: [chip.c, yt921x_chip_setup_dsa, 2330]
   fields:
   - name: BYPASS_DROP_RMA
     linux:
@@ -7878,6 +8261,7 @@ registers:
       - chip.h
       - 344
       used: true
+      use: [chip.c, yt921x_chip_setup_dsa, 2324]
     values:
     - name: FORWARD
       value: 0
@@ -7914,7 +8298,7 @@ registers:
         - chip.h
         - 350
         used: false
-      desc: Flood the frame and copy it to the CPU. The copy carries no usable source port; do not use
+      desc: Flood the frame and copy it to the CPU
     lsb: 0
     width: 22
     array:
@@ -7925,7 +8309,7 @@ registers:
         step: 2
       lsb: 0
       width: 2
-    desc: Action for frames received on port n.
+    desc: Action for frames received on port ``port``.
     access: rw
     sdk:
       status: same bits
@@ -7957,6 +8341,7 @@ registers:
     - chip.h
     - 324
     used: true
+    use: [chip.c, yt921x_lag_set, 321]
   fields:
   - name: PORTS
     linux:
@@ -7965,9 +8350,10 @@ registers:
       - chip.h
       - 325
       used: true
+      use: [chip.c, yt921x_lag_set, 319]
     lsb: 3
     width: 11
-    desc: Member ports, one bit per port.
+    desc: Member ports. Each port has one bit.
     access: rw
     sdk:
       status: same bits
@@ -7979,6 +8365,7 @@ registers:
       - chip.h
       - 327
       used: true
+      use: [chip.c, yt921x_lag_set, 320]
     lsb: 0
     width: 3
     desc: Number of valid :reg:`LAG_MEMBER` slots of the group.
@@ -8015,6 +8402,7 @@ registers:
     - chip.h
     - 329
     used: true
+    use: [chip.c, yt921x_lag_set, 311]
   fields:
   - name: PORT
     linux:
@@ -8023,6 +8411,7 @@ registers:
       - chip.h
       - 330
       used: true
+      use: [chip.c, yt921x_lag_set, 310]
     lsb: 0
     width: 4
     desc: Port number in this slot.
@@ -8051,6 +8440,7 @@ registers:
     - chip.h
     - 381
     used: true
+    use: [chip.c, yt921x_lag_hash, 282]
   fields:
   - name: L4_SPORT
     linux:
@@ -8059,6 +8449,7 @@ registers:
       - chip.h
       - 382
       used: true
+      use: [chip.c, yt921x_dsa_port_lag_join, 409]
     lsb: 7
     width: 1
     desc: Include the layer 4 source port.
@@ -8073,6 +8464,7 @@ registers:
       - chip.h
       - 383
       used: true
+      use: [chip.c, yt921x_dsa_port_lag_join, 408]
     lsb: 6
     width: 1
     desc: Include the layer 4 destination port.
@@ -8087,6 +8479,7 @@ registers:
       - chip.h
       - 384
       used: true
+      use: [chip.c, yt921x_dsa_port_lag_join, 406]
     lsb: 5
     width: 1
     desc: Include the IP protocol number.
@@ -8101,6 +8494,7 @@ registers:
       - chip.h
       - 385
       used: true
+      use: [chip.c, yt921x_dsa_port_lag_join, 405]
     lsb: 4
     width: 1
     desc: Include the IP source address.
@@ -8115,6 +8509,7 @@ registers:
       - chip.h
       - 386
       used: true
+      use: [chip.c, yt921x_dsa_port_lag_join, 404]
     lsb: 3
     width: 1
     desc: Include the IP destination address.
@@ -8129,6 +8524,7 @@ registers:
       - chip.h
       - 387
       used: true
+      use: [chip.c, yt921x_dsa_port_lag_join, 413]
     lsb: 2
     width: 1
     desc: Include the source MAC address.
@@ -8143,6 +8539,7 @@ registers:
       - chip.h
       - 388
       used: true
+      use: [chip.c, yt921x_dsa_port_lag_join, 412]
     lsb: 1
     width: 1
     desc: Include the destination MAC address.
@@ -8185,6 +8582,7 @@ registers:
     - chip.h
     - 336
     used: true
+    use: [tc.c, yt921x_chip_setup_acl, 1700]
   fields:
   - name: PORTS
     linux:
@@ -8193,6 +8591,7 @@ registers:
       - chip.h
       - 337
       used: true
+      use: [tc.c, yt921x_chip_setup_acl, 1699]
     lsb: 0
     width: 11
     array:
@@ -8207,7 +8606,7 @@ registers:
       src:
       - chip.h
       - 339
-    desc: 'Bit n set: frames received on port n that match no rule are forwarded.'
+    desc: Port ``port`` forwards received frames that match no rule.
     access: rw
     sdk:
       status: same bits
@@ -8237,6 +8636,7 @@ registers:
     - tc.h
     - 12
     used: true
+    use: [tc.c, yt921x_acl_commit, 1304]
   fields:
   - name: STAG
     linux:
@@ -8349,6 +8749,7 @@ registers:
       - tc.h
       - 25
       used: true
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1135]
     values:
     - name: FWD
       value: 0
@@ -8388,7 +8789,7 @@ registers:
       desc: Send only to the CPU
     lsb: 85
     width: 2
-    desc: Forwarding action, used when FWD_EN is set.
+    desc: Forwarding action. It is used when FWD_EN is set.
     access: rw
     sdk:
       status: same bits
@@ -8400,6 +8801,7 @@ registers:
       - tc.h
       - 31
       used: true
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1134]
     lsb: 74
     width: 11
     array:
@@ -8414,7 +8816,8 @@ registers:
       src:
       - tc.h
       - 33
-    desc: Destination ports for COPY and REDIR, one bit per port. REDIR with no port set drops the frame.
+    desc: Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the
+      frame.
     access: rw
     sdk:
       status: same bits
@@ -8426,6 +8829,7 @@ registers:
       - tc.h
       - 34
       used: true
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1057]
     lsb: 73
     width: 1
     desc: Enables the forwarding action.
@@ -8608,9 +9012,10 @@ registers:
       - tc.h
       - 51
       used: true
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1084]
     lsb: 32
     width: 3
-    desc: Internal priority given to the frame, a source for :reg:`PORT_PRIO_ORD`.
+    desc: Internal priority given to the frame. It is a source for :reg:`PORT_PRIO_ORD`.
     access: rw
     sdk:
       status: spans SDK fields
@@ -8622,6 +9027,7 @@ registers:
       - tc.h
       - 53
       used: true
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1083]
     lsb: 31
     width: 1
     desc: Enables PRIO.
@@ -8724,9 +9130,10 @@ registers:
       - tc.h
       - 63
       used: true
+      use: [tc.c, yt921x_acl_del, 1416]
     lsb: 15
     width: 6
-    desc: Meter that rate limits matching frames, an index of :reg:`METER_CTRL`.
+    desc: Meter that rate limits matching frames. It is an index of :reg:`METER_CTRL`.
     access: rw
     sdk:
       status: same bits
@@ -8738,6 +9145,7 @@ registers:
       - tc.h
       - 65
       used: true
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1103]
     lsb: 14
     width: 1
     desc: Enables METER_ID.
@@ -8837,7 +9245,7 @@ registers:
       fields: [INTR_EN]
   block: acl
   title: ACL action entry
-  desc: '96-bit action of one rule. The entry index is 8 × block + slot of the rule''s group.
+  desc: '96-bit action of one rule. The entry index is 8 × ``blk`` + the group number of the rule in :field:`ACL_ENTRY.GRPID`.
 
     Write the three words in rising address order.'
   access: rw
@@ -8858,6 +9266,7 @@ registers:
     - tc.h
     - 74
     used: true
+    use: [tc.c, yt921x_acl_commit, 1339]
   fields:
   - name: GRPID
     linux:
@@ -8876,7 +9285,7 @@ registers:
         step: 4
       lsb: 1
       width: 3
-    desc: Group number for slot n during the commit.
+    desc: Group number for slot ``bin`` during the commit.
     access: rw
     inferred: true
     sdk:
@@ -8889,6 +9298,7 @@ registers:
       - tc.h
       - 77
       used: true
+      use: [tc.c, yt921x_acl_commit, 1318]
     lsb: 0
     width: 29
     array:
@@ -8899,7 +9309,7 @@ registers:
         step: 4
       lsb: 0
       width: 1
-    desc: Slot n keeps its current key and mask.
+    desc: Slot ``bin`` keeps its current key and mask.
     access: rw
     sdk:
       status: same bits
@@ -8925,6 +9335,7 @@ registers:
     - tc.h
     - 78
     used: true
+    use: [tc.c, yt921x_acl_del, 1410]
   fields:
   - name: PORTS
     linux:
@@ -8933,6 +9344,7 @@ registers:
       - tc.h
       - 79
       used: true
+      use: [tc.c, yt921x_acl_add, 1516]
     lsb: 0
     width: 11
     array:
@@ -8947,7 +9359,7 @@ registers:
       src:
       - tc.h
       - 81
-    desc: 'Bit n set: the access control list is applied to port n.'
+    desc: The access control list is applied to port ``port``.
     access: rw
     sdk:
       status: same bits
@@ -8973,6 +9385,7 @@ registers:
     - tc.h
     - 82
     used: true
+    use: [tc.c, yt921x_acl_commit, 1311]
   fields:
   - name: BLKID
     linux:
@@ -8981,9 +9394,10 @@ registers:
       - tc.h
       - 83
       used: true
+      use: [tc.c, yt921x_acl_commit, 1310]
     lsb: 1
     width: 6
-    desc: Block number, 0 to 47.
+    desc: Block number from 0 to 47.
     access: rw
     sdk:
       status: same bits
@@ -8995,9 +9409,10 @@ registers:
       - tc.h
       - 85
       used: true
+      use: [tc.c, yt921x_acl_commit, 1310]
     lsb: 0
     width: 1
-    desc: 1 opens the block for writing; writing 0 commits the changes.
+    desc: Write 1 to open the block for writing. Write 0 to commit the changes.
     access: rw
     sdk:
       status: same bits
@@ -9029,6 +9444,7 @@ registers:
     - tc.h
     - 86
     used: true
+    use: [tc.c, yt921x_acl_commit, 1355]
   fields:
   - name: GRPID
     linux:
@@ -9037,6 +9453,7 @@ registers:
       - tc.h
       - 87
       used: true
+      use: [tc.c, yt921x_acl_commit, 1353]
     lsb: 1
     width: 31
     array:
@@ -9047,7 +9464,7 @@ registers:
         step: 4
       lsb: 1
       width: 3
-    desc: 'Group number of slot m: the slot number that names the rule.'
+    desc: Group number of slot ``bin``. It is the slot number that names the rule.
     access: rw
     sdk:
       status: same bits
@@ -9059,6 +9476,7 @@ registers:
       - tc.h
       - 89
       used: true
+      use: [tc.c, yt921x_acl_commit, 1352]
     lsb: 0
     width: 29
     array:
@@ -9069,7 +9487,7 @@ registers:
         step: 4
       lsb: 0
       width: 1
-    desc: Slot m is in use.
+    desc: Slot ``bin`` is in use.
     access: rw
     sdk:
       status: same bits
@@ -9107,6 +9525,7 @@ registers:
     - tc.h
     - 90
     used: true
+    use: [tc.c, yt921x_acl_commit, 1323]
   fields:
   - name: ORD
     linux:
@@ -9115,9 +9534,10 @@ registers:
       - tc.h
       - 91
       used: true
+      use: [tc.c, yt921x_acl_rule_set_ports, 542]
     lsb: 53
     width: 9
-    desc: Order of the rule; when several rules match, the highest value wins.
+    desc: Order of the rule. When several rules match, the highest value wins.
     access: rw
     sdk:
       status: SDK lists no fields
@@ -9128,6 +9548,7 @@ registers:
       - tc.h
       - 93
       used: true
+      use: [tc.c, yt921x_acl_find, 1240]
     lsb: 42
     width: 11
     array:
@@ -9142,7 +9563,7 @@ registers:
       src:
       - tc.h
       - 95
-    desc: Receiving ports the rule applies to, one bit per port.
+    desc: Receiving ports the rule applies to. Each port has one bit.
     access: rw
     sdk:
       status: SDK lists no fields
@@ -9166,9 +9587,10 @@ registers:
       - tc.h
       - 97
       used: true
+      use: [tc.c, yt921x_acl_entries_set_is_fragment, 374]
     lsb: 36
     width: 5
-    desc: Key type; selects the layout of the rest of the slot.
+    desc: Key type. It selects the layout of the rest of the slot.
     access: rw
     enum: acl_type
     sdk:
@@ -9185,6 +9607,7 @@ registers:
         - tc.h
         - 138
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l3_type, 445]
       lsb: 32
       width: 4
       desc: Layer 3 protocol class.
@@ -9201,7 +9624,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+      desc: MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9263,7 +9686,7 @@ registers:
       lsb: 63
       width: 1
       key_only: true
-      desc: 'Match the service VLAN ID as a range: the key holds the lowest and the mask the highest value.'
+      desc: Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9277,8 +9700,7 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: 'Match the customer VLAN ID as a range: the key holds the lowest and the mask the highest
-        value.'
+      desc: Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9317,7 +9739,7 @@ registers:
         used: false
       lsb: 30
       width: 2
-      desc: Customer tag format of the frame; the codes are not documented.
+      desc: Customer tag format of the frame. No source gives the codes.
       access: rw
       inferred: true
       sdk:
@@ -9357,7 +9779,7 @@ registers:
         used: false
       lsb: 24
       width: 2
-      desc: Service tag format of the frame; the codes are not documented.
+      desc: Service tag format of the frame. No source gives the codes.
       access: rw
       inferred: true
       sdk:
@@ -9402,7 +9824,7 @@ registers:
       lsb: 63
       width: 1
       key_only: true
-      desc: 'Match the service VLAN ID as a range: the key holds the lowest and the mask the highest value.'
+      desc: Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9416,8 +9838,7 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: 'Match the customer VLAN ID as a range: the key holds the lowest and the mask the highest
-        value.'
+      desc: Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9513,7 +9934,7 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: 'Match the address as a range: the key holds the lowest and the mask the highest value.'
+      desc: Match the address as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9524,6 +9945,7 @@ registers:
         - tc.h
         - 178
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 378]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -9537,6 +9959,7 @@ registers:
         - tc.h
         - 179
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 473]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -9553,7 +9976,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: IPv4 address, first byte in bits 31 to 24.
+      desc: IPv4 address. The first byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9568,6 +9991,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -9584,7 +10008,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9612,6 +10036,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -9628,7 +10053,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9643,6 +10068,7 @@ registers:
         - tc.h
         - 189
         used: true
+        use: [tc.c, yt921x_acl_entries_set_first_frag, 415]
       lsb: 35
       width: 1
       desc: The packet is the first fragment.
@@ -9656,6 +10082,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -9672,7 +10099,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9690,7 +10117,7 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: 'Match the address as a range: the key holds the lowest and the mask the highest value.'
+      desc: Match the address as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9701,6 +10128,7 @@ registers:
         - tc.h
         - 192
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 383]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -9714,6 +10142,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -9730,7 +10159,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9745,6 +10174,7 @@ registers:
         - tc.h
         - 194
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 388]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -9758,6 +10188,7 @@ registers:
         - tc.h
         - 195
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 492]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -9785,6 +10216,7 @@ registers:
         - tc.h
         - 198
         used: true
+        use: [tc.c, yt921x_acl_entries_set_first_frag, 420]
       lsb: 29
       width: 1
       desc: The packet is the first fragment.
@@ -9811,6 +10243,7 @@ registers:
         - tc.h
         - 200
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 931]
       lsb: 20
       width: 8
       desc: TCP flags byte.
@@ -9824,6 +10257,7 @@ registers:
         - tc.h
         - 202
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 846]
       lsb: 12
       width: 8
       desc: IP protocol number.
@@ -9837,6 +10271,7 @@ registers:
         - tc.h
         - 204
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 911]
       lsb: 4
       width: 8
       desc: IPv4 type of service or IPv6 traffic class byte.
@@ -9850,6 +10285,7 @@ registers:
         - tc.h
         - 206
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l3_type, 449]
       lsb: 0
       width: 4
       desc: Layer 3 protocol class.
@@ -9868,11 +10304,11 @@ registers:
         - tc.h
         - 209
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 705]
       lsb: 63
       width: 1
       key_only: true
-      desc: 'Match the destination port as a range: the key holds the lowest and the mask the highest
-        value.'
+      desc: Match the destination port as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9883,10 +10319,11 @@ registers:
         - tc.h
         - 210
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 711]
       lsb: 62
       width: 1
       key_only: true
-      desc: 'Match the source port as a range: the key holds the lowest and the mask the highest value.'
+      desc: Match the source port as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -9897,6 +10334,7 @@ registers:
         - tc.h
         - 211
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 392]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -9910,6 +10348,7 @@ registers:
         - tc.h
         - 212
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 488]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10000,7 +10439,7 @@ registers:
       lsb: 62
       width: 1
       key_only: true
-      desc: 'Match the EtherType as a range: the key holds the lowest and the mask the highest value.'
+      desc: Match the EtherType as a range. The key holds the lowest and the mask the highest value.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10064,6 +10503,7 @@ registers:
     - tc.h
     - 100
     used: true
+    use: [tc.c, yt921x_acl_commit, 1329]
   fields: []
   layouts:
   - name: MAC_ADDR0
@@ -10077,6 +10517,7 @@ registers:
         - tc.h
         - 138
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l3_type, 445]
       lsb: 32
       width: 4
       desc: Layer 3 protocol class.
@@ -10093,7 +10534,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+      desc: MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10180,7 +10621,7 @@ registers:
         used: false
       lsb: 30
       width: 2
-      desc: Customer tag format of the frame; the codes are not documented.
+      desc: Customer tag format of the frame. No source gives the codes.
       access: rw
       inferred: true
       sdk:
@@ -10220,7 +10661,7 @@ registers:
         used: false
       lsb: 24
       width: 2
-      desc: Service tag format of the frame; the codes are not documented.
+      desc: Service tag format of the frame. No source gives the codes.
       access: rw
       inferred: true
       sdk:
@@ -10344,6 +10785,7 @@ registers:
         - tc.h
         - 178
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 378]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -10357,6 +10799,7 @@ registers:
         - tc.h
         - 179
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 473]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10373,7 +10816,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: IPv4 address, first byte in bits 31 to 24.
+      desc: IPv4 address. The first byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10388,6 +10831,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10404,7 +10848,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10432,6 +10876,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10448,7 +10893,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10463,6 +10908,7 @@ registers:
         - tc.h
         - 189
         used: true
+        use: [tc.c, yt921x_acl_entries_set_first_frag, 415]
       lsb: 35
       width: 1
       desc: The packet is the first fragment.
@@ -10476,6 +10922,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10492,7 +10939,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10507,6 +10954,7 @@ registers:
         - tc.h
         - 192
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 383]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -10520,6 +10968,7 @@ registers:
         - tc.h
         - 183
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 484]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10536,7 +10985,7 @@ registers:
         used: false
       lsb: 0
       width: 32
-      desc: 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+      desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
       access: rw
       sdk:
         status: SDK lists no fields
@@ -10551,6 +11000,7 @@ registers:
         - tc.h
         - 194
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 388]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -10564,6 +11014,7 @@ registers:
         - tc.h
         - 195
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 492]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10591,6 +11042,7 @@ registers:
         - tc.h
         - 198
         used: true
+        use: [tc.c, yt921x_acl_entries_set_first_frag, 420]
       lsb: 29
       width: 1
       desc: The packet is the first fragment.
@@ -10617,6 +11069,7 @@ registers:
         - tc.h
         - 200
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 931]
       lsb: 20
       width: 8
       desc: TCP flags byte.
@@ -10630,6 +11083,7 @@ registers:
         - tc.h
         - 202
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 846]
       lsb: 12
       width: 8
       desc: IP protocol number.
@@ -10643,6 +11097,7 @@ registers:
         - tc.h
         - 204
         used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 911]
       lsb: 4
       width: 8
       desc: IPv4 type of service or IPv6 traffic class byte.
@@ -10656,6 +11111,7 @@ registers:
         - tc.h
         - 206
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l3_type, 449]
       lsb: 0
       width: 4
       desc: Layer 3 protocol class.
@@ -10674,6 +11130,7 @@ registers:
         - tc.h
         - 211
         used: true
+        use: [tc.c, yt921x_acl_entries_set_is_fragment, 392]
       lsb: 35
       width: 1
       desc: The packet is an IP fragment.
@@ -10687,6 +11144,7 @@ registers:
         - tc.h
         - 212
         used: true
+        use: [tc.c, yt921x_acl_entries_set_l4_type, 488]
       lsb: 32
       width: 3
       desc: Layer 4 protocol class.
@@ -10823,6 +11281,7 @@ registers:
     - tc.h
     - 258
     used: true
+    use: [tc.c, yt921x_chip_setup_acl, 1711]
   fields:
   - name: UDF_TYPE
     linux:
@@ -10831,6 +11290,7 @@ registers:
       - tc.h
       - 259
       used: true
+      use: [tc.c, yt921x_chip_setup_acl, 1710]
     lsb: 7
     width: 2
     desc: Header the offset is counted from.
@@ -10846,9 +11306,10 @@ registers:
       - tc.h
       - 261
       used: true
+      use: [tc.c, yt921x_chip_setup_acl, 1709]
     lsb: 0
     width: 7
-    desc: Offset of the two-byte window from the start of that header, in bytes.
+    desc: Offset in bytes of the two-byte window from the start of that header.
     access: rw
     sdk:
       status: same bits
@@ -10890,8 +11351,8 @@ registers:
       used: false
     lsb: 0
     width: 5
-    desc: Bytes added per frame for preamble and inter-frame gap when a meter has BYTE_MODE_INCLUDE_GAP
-      set.
+    desc: Bytes added per frame for preamble and inter-frame gap. A meter adds them when BYTE_MODE_INCLUDE_GAP
+      is set.
     access: rw
     reset: 20
     unit: bytes
@@ -10921,6 +11382,7 @@ registers:
     - tc.h
     - 272
     used: true
+    use: [tc.c, yt921x_chip_setup_tc, 1679]
   fields:
   - name: SLOT
     linux:
@@ -10928,7 +11390,8 @@ registers:
       src:
       - tc.h
       - 273
-      used: false
+      used: true
+      use: [tc.c, yt921x_chip_setup_tc, 1679]
     lsb: 0
     width: 12
     desc: Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed
@@ -10962,6 +11425,7 @@ registers:
     - tc.h
     - 274
     used: true
+    use: [tc.c, yt921x_dsa_port_policer_del, 249]
   fields:
   - name: EN
     linux:
@@ -10970,6 +11434,7 @@ registers:
       - tc.h
       - 275
       used: true
+      use: [tc.c, yt921x_dsa_port_policer_add, 280]
     lsb: 4
     width: 1
     desc: Enables ingress rate limiting on the port.
@@ -10984,9 +11449,10 @@ registers:
       - tc.h
       - 276
       used: true
+      use: [tc.c, yt921x_dsa_port_policer_add, 280]
     lsb: 0
     width: 4
-    desc: Port meter number n; the meter is entry 64 + n of :reg:`METER_CTRL`.
+    desc: Port meter number n. The meter is entry 64 + n of :reg:`METER_CTRL`.
     access: rw
     sdk:
       status: same bits
@@ -11016,6 +11482,7 @@ registers:
     - tc.h
     - 278
     used: true
+    use: [tc.c, yt921x_meter_config, 239]
   fields:
   - name: METER_EN
     linux:
@@ -11024,6 +11491,7 @@ registers:
       - tc.h
       - 279
       used: true
+      use: [tc.c, yt921x_meter_config, 229]
     lsb: 78
     width: 1
     desc: Enables the meter.
@@ -11038,9 +11506,11 @@ registers:
       - tc.h
       - 280
       used: true
+      use: [tc.c, yt921x_meter_config, 228]
     lsb: 77
     width: 1
-    desc: Tokens that overflow the committed bucket spill into the excess bucket (RFC 4115 coupling).
+    desc: 'Tokens that overflow the committed bucket spill into the excess bucket. The :lx:`comment on
+      the field <tc.h:280>` reads "RFC4115: yellow use unused green bw".'
     access: rw
     sdk:
       status: same bits
@@ -11052,6 +11522,7 @@ registers:
       - tc.h
       - 281
       used: true
+      use: [tc.c, yt921x_meter_config, 227]
     values:
     - name: GYR
       value: 0
@@ -11088,7 +11559,7 @@ registers:
         - tc.h
         - 286
         used: false
-      desc: Drop nothing; only colour the frame
+      desc: Drop nothing and only colour the frame
     lsb: 75
     width: 2
     desc: Colours that are dropped.
@@ -11118,9 +11589,10 @@ registers:
       - tc.h
       - 288
       used: true
+      use: [tc.c, yt921x_meter_config, 226]
     lsb: 71
     width: 3
-    desc: 'Token scale: every token value is multiplied by 4 to the power of UNIT.'
+    desc: Token scale. Every token value is multiplied by 4 to the power of UNIT.
     access: rw
     sdk:
       status: same bits
@@ -11134,7 +11606,7 @@ registers:
       used: false
     lsb: 70
     width: 1
-    desc: In byte mode, add :field:`PORT_RATE.GAP_VALUE` bytes to each frame.
+    desc: Add :field:`PORT_RATE.GAP_VALUE` bytes to each frame in byte mode.
     access: rw
     inferred: true
     sdk:
@@ -11147,9 +11619,10 @@ registers:
       - tc.h
       - 291
       used: true
+      use: [tc.c, yt921x_meter_config, 231]
     lsb: 69
     width: 1
-    desc: 0 meters bytes; 1 meters packets.
+    desc: Meter packets. Value 0 meters bytes.
     access: rw
     sdk:
       status: same bits
@@ -11163,7 +11636,7 @@ registers:
       used: false
     lsb: 68
     width: 1
-    desc: 0 selects the RFC 4115 algorithm; 1 selects RFC 2698.
+    desc: Select the RFC 2698 algorithm. Value 0 selects the RFC 4115 algorithm.
     access: rw
     inferred: true
     sdk:
@@ -11176,6 +11649,7 @@ registers:
       - tc.h
       - 293
       used: true
+      use: [tc.c, yt921x_meter_config, 236]
     lsb: 52
     width: 16
     desc: Committed burst size in tokens. The field crosses the boundary between words 1 and 2.
@@ -11190,6 +11664,7 @@ registers:
       - tc.h
       - 295
       used: true
+      use: [tc.c, yt921x_meter_config, 225]
     lsb: 34
     width: 18
     desc: Committed information rate in tokens per time slot.
@@ -11204,6 +11679,7 @@ registers:
       - tc.h
       - 297
       used: true
+      use: [tc.c, yt921x_meter_config, 233]
     lsb: 18
     width: 16
     desc: Excess burst size in tokens. The field crosses the boundary between words 0 and 1.
@@ -11285,6 +11761,7 @@ registers:
     - tc.h
     - 313
     used: true
+    use: [tc.c, yt921x_chip_setup_tc, 1686]
   fields:
   - name: SLOT
     linux:
@@ -11292,7 +11769,8 @@ registers:
       src:
       - tc.h
       - 314
-      used: false
+      used: true
+      use: [tc.c, yt921x_chip_setup_tc, 1686]
     lsb: 0
     width: 12
     desc: Slot length in units of eight core clock periods (see :reg:`SYS_CLK`). The smallest allowed
@@ -11326,6 +11804,7 @@ registers:
     - tc.h
     - 315
     used: true
+    use: [tc.c, yt921x_dsa_port_setup_tc_tbf_port, 334]
   fields:
   - name: EN
     linux:
@@ -11334,6 +11813,7 @@ registers:
       - tc.h
       - 316
       used: true
+      use: [tc.c, yt921x_dsa_port_setup_tc_tbf_port, 326]
     lsb: 36
     width: 1
     desc: Enables the shaper.
@@ -11350,7 +11830,7 @@ registers:
       used: false
     lsb: 35
     width: 1
-    desc: 0 shapes bytes; 1 shapes packets.
+    desc: Shape packets. Value 0 shapes bytes.
     access: rw
     sdk:
       status: same bits
@@ -11362,9 +11842,10 @@ registers:
       - tc.h
       - 318
       used: true
+      use: [tc.c, yt921x_dsa_port_setup_tc_tbf_port, 325]
     lsb: 32
     width: 3
-    desc: 'Token scale: every token value is multiplied by 4 to the power of UNIT.'
+    desc: Token scale. Every token value is multiplied by 4 to the power of UNIT.
     access: rw
     sdk:
       status: same bits
@@ -11376,6 +11857,7 @@ registers:
       - tc.h
       - 320
       used: true
+      use: [tc.c, yt921x_dsa_port_setup_tc_tbf_port, 324]
     lsb: 18
     width: 14
     desc: Burst size in tokens.
@@ -11390,6 +11872,7 @@ registers:
       - tc.h
       - 322
       used: true
+      use: [tc.c, yt921x_dsa_port_setup_tc_tbf_port, 323]
     lsb: 0
     width: 18
     desc: Rate in tokens per time slot.
@@ -11448,6 +11931,7 @@ registers:
     - tc.h
     - 303
     used: true
+    use: [tc.c, yt921x_mirror_del, 1595]
   fields:
   - name: IGR_PORTS
     linux:
@@ -11456,6 +11940,7 @@ registers:
       - tc.h
       - 304
       used: true
+      use: [tc.c, yt921x_mirror_add, 1620]
     lsb: 16
     width: 11
     array:
@@ -11470,7 +11955,7 @@ registers:
       src:
       - tc.h
       - 306
-    desc: Ports whose received frames are copied to the monitor port, one bit per port.
+    desc: Ports whose received frames are copied to the monitor port. Each port has one bit.
     access: rw
     sdk:
       status: same bits
@@ -11482,6 +11967,7 @@ registers:
       - tc.h
       - 307
       used: true
+      use: [tc.c, yt921x_mirror_add, 1619]
     lsb: 4
     width: 11
     array:
@@ -11496,7 +11982,7 @@ registers:
       src:
       - tc.h
       - 309
-    desc: Ports whose sent frames are copied to the monitor port, one bit per port.
+    desc: Ports whose sent frames are copied to the monitor port. Each port has one bit.
     access: rw
     sdk:
       status: same bits
@@ -11508,6 +11994,7 @@ registers:
       - tc.h
       - 310
       used: true
+      use: [tc.c, yt921x_mirror_add, 1621]
     lsb: 0
     width: 4
     desc: Monitor port number.

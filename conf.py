@@ -22,6 +22,9 @@ exclude_patterns = [
 ]
 
 nitpicky = True
+rst_prolog = """
+.. |ds| replace:: :download:`YT9215SCH datasheet </datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`
+"""
 primary_domain = None
 myst_heading_anchors = 4
 

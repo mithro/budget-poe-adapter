@@ -85,7 +85,7 @@ pub const EDATA_LEN: i32 = 256;
 pub const FDB_NUM: i32 = 4096;
 /// Number of spanning tree instances.
 pub const MSTI_NUM: i32 = 16;
-/// Number of general-purpose meters; the 11 per-port meters follow them.
+/// Number of general-purpose meters. The 11 per-port meters follow them.
 pub const METER_NUM: i32 = 64;
 /// Number of link aggregation groups.
 pub const LAG_NUM: i32 = 2;
@@ -111,7 +111,7 @@ pub const UDF_NUM: i32 = 16;
 pub const LED_GROUP_NUM: i32 = 3;
 /// Ports that have LED outputs.
 pub const LED_PORT_NUM: i32 = 10;
-/// Number of switch ports including the internal microcontroller port 10.
+/// Number of switch ports. The count includes port 10 of the built-in microcontroller.
 pub const PORT_NUM: i32 = 11;
 /// Shortest LED blink cycle in milliseconds.
 pub const LED_BLINK_MIN: i32 = 64;
@@ -119,9 +119,9 @@ pub const LED_BLINK_MIN: i32 = 64;
 pub const LED_BLINK_DEF: i32 = 512;
 /// Longest LED blink cycle in milliseconds.
 pub const LED_BLINK_MAX: i32 = 2048;
-/// Token scale exponent in byte mode; one token is 2^1 bytes at unit 0.
+/// Token scale exponent in byte mode. One token is 2^1 bytes at unit 0.
 pub const TOKEN_BYTE_C: i32 = 1;
-/// Token scale exponent in packet mode; one token is 2^-6 packets at unit 0.
+/// Token scale exponent in packet mode. One token is 2^-6 packets at unit 0.
 pub const TOKEN_PKT_C: i32 = -6;
 /// Extra exponent applied to rate tokens.
 pub const TOKEN_RATE_C: i32 = -15;
@@ -143,7 +143,7 @@ pub const SPEED_V10: u32 = 0;
 pub const SPEED_V100: u32 = 1;
 /// Link speed codes: 1000 Mbit/s.
 pub const SPEED_V1000: u32 = 2;
-/// Link speed codes: 10 Gbit/s code; no YT921x port runs at this speed.
+/// Link speed codes: 10 Gbit/s code. No YT921x port runs at this speed.
 pub const SPEED_V10000: u32 = 3;
 /// Link speed codes: 2500 Mbit/s.
 pub const SPEED_V2500: u32 = 4;
@@ -268,9 +268,9 @@ pub const UDF_TYPE_L4: u32 = 2;
 
 /// Reset control.
 pub const RST: u32 = 0x80000;
-/// Write 1 to reset the whole chip, as the reset pin does. The bit clears itself when the reset is complete.
+/// Write 1 to reset the whole chip. The bit clears itself when the reset is complete. Section 4.1.2.1 of the YT9215SCH datasheet calls the bit CHIP_RESET.
 pub const RST_HW: Field = Field { lsb: 31, width: 1 };
-/// Write 1 for a software reset. No public driver uses this bit, so what it leaves untouched is not known.
+/// Write 1 for a software reset. Section 4.1.2.2 of the YT9215SCH datasheet calls the bit SW_RESET. It states that the bit clears itself and resets what RST.HW resets except the analog circuit of the built-in PHYs. No function of the Linux driver uses the bit.
 pub const RST_SW: Field = Field { lsb: 1, width: 1 };
 
 /// Function enables.
@@ -338,12 +338,12 @@ pub const IO_LEVEL_YT9218_NORMAL_V1V8: u32 = 3;
 
 /// Switch MAC address, high part.
 pub const MAC_ADDR_HI2: u32 = 0x80080;
-/// MAC address bytes 0 and 1, byte 0 in bits 15 to 8.
+/// MAC address bytes 0 and 1. Byte 0 is in bits 15 to 8.
 pub const MAC_ADDR_HI2_ADDR: Field = Field { lsb: 0, width: 16 };
 
 /// Switch MAC address, low part.
 pub const MAC_ADDR_LO4: u32 = 0x80084;
-/// MAC address bytes 2 to 5, byte 2 in bits 31 to 24.
+/// MAC address bytes 2 to 5. Byte 2 is in bits 31 to 24.
 pub const MAC_ADDR_LO4_ADDR: Field = Field { lsb: 0, width: 32 };
 
 /// Pin strap override enable.
@@ -374,7 +374,7 @@ pub const SENSOR_TEMP: Field = Field { lsb: 18, width: 1 };
 
 /// Temperature sensor reading.
 pub const TEMP: u32 = 0x80374;
-/// Raw sensor value; scale and offset are not known.
+/// Raw sensor value. Its scale and offset are not known.
 pub const TEMP_VALUE: Field = Field { lsb: 0, width: 32 };
 
 /// Package variant.
@@ -384,7 +384,7 @@ pub const CHIP_MODE_MODE: Field = Field { lsb: 0, width: 2 };
 
 /// Configuration byte store command.
 pub const EDATA_CTRL: u32 = 0xe0000;
-/// Byte address, 0 to 255.
+/// Byte address from 0 to 255.
 pub const EDATA_CTRL_ADDR: Field = Field { lsb: 8, width: 8 };
 /// Command.
 pub const EDATA_CTRL_OP: Field = Field { lsb: 0, width: 4 };
@@ -397,12 +397,12 @@ pub const EDATA_DATA: u32 = 0xe0004;
 pub const EDATA_DATA_DATA: Field = Field { lsb: 24, width: 8 };
 /// State of the store.
 pub const EDATA_DATA_STATUS: Field = Field { lsb: 0, width: 4 };
-/// No command is running; DATA is valid
+/// No command is running. DATA is valid
 pub const EDATA_DATA_STATUS_IDLE: u32 = 3;
 
 /// System clock select.
 pub const SYS_CLK: u32 = 0xe0040;
-/// Core clock selection. Value 0 means 125 MHz on the YT9215 family and 167 MHz on the YT9218 family; Core clock lists the clock periods.
+/// Core clock selection. Value 0 selects 125 MHz in the YT9215 family and 167 MHz in the YT9218 family. The core clock table lists the clock periods.
 pub const SYS_CLK_SEL: Field = Field { lsb: 0, width: 2 };
 /// 125 MHz core clock
 pub const SYS_CLK_SEL_V125M: u32 = 0;
@@ -419,7 +419,7 @@ pub const EXT_CPU_PORT: u32 = 0x8000c;
 pub const EXT_CPU_PORT_TAG_EN: Field = Field { lsb: 15, width: 1 };
 /// PORT is valid and that port is treated as the CPU port.
 pub const EXT_CPU_PORT_PORT_EN: Field = Field { lsb: 14, width: 1 };
-/// Number of the CPU port, 0 to 10.
+/// Number of the CPU port from 0 to 10.
 pub const EXT_CPU_PORT_PORT: Field = Field { lsb: 0, width: 4 };
 
 /// CPU tag EtherType.
@@ -446,7 +446,7 @@ pub const CPU_COPY_TO_EXT_CPU: Field = Field { lsb: 0, width: 1 };
 pub const SERDES_CTRL: u32 = 0x80028;
 /// SerDes test mode. Clear it before use.
 pub const SERDES_CTRL_TEST: Field = Field { lsb: 6, width: 1 };
-/// Enables the SerDes of port 8 (bit 0) or port 9 (bit 1).
+/// Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9.
 pub const fn serdes_ctrl_port(port: u32) -> Field {
     Field { lsb: ((port - 8)) as u8, width: 1 }
 }
@@ -463,13 +463,13 @@ pub const SERDES_PORT_FIRST: u32 = 8;
 pub const SERDES_PORT_COUNT: u32 = 2;
 /// SerDes protocol.
 pub const SERDES_MODE: Field = Field { lsb: 7, width: 3 };
-/// SGMII, the switch is the MAC side
+/// SGMII as the MAC side
 pub const SERDES_MODE_SGMII: u32 = 0;
-/// SGMII, the switch is the PHY side
+/// SGMII as the PHY side
 pub const SERDES_MODE_REVSGMII: u32 = 1;
 /// 1000BASE-X
 pub const SERDES_MODE_V1000BASEX: u32 = 2;
-/// 100BASE-FX
+/// 100BASE-FX fibre mode
 pub const SERDES_MODE_V100BASEX: u32 = 3;
 /// 2500BASE-X
 pub const SERDES_MODE_V2500BASEX: u32 = 4;
@@ -479,7 +479,7 @@ pub const SERDES_RX_PAUSE: Field = Field { lsb: 6, width: 1 };
 pub const SERDES_TX_PAUSE: Field = Field { lsb: 5, width: 1 };
 /// Forces the link up.
 pub const SERDES_LINK: Field = Field { lsb: 4, width: 1 };
-/// Forced duplex: 1 is full duplex.
+/// Forced full duplex.
 pub const SERDES_DUPLEX_FULL: Field = Field { lsb: 3, width: 1 };
 /// Forced speed.
 pub const SERDES_SPEED: Field = Field { lsb: 0, width: 3 };
@@ -494,11 +494,11 @@ pub const PORT_CTRL_PORT_FIRST: u32 = 0;
 pub const PORT_CTRL_PORT_COUNT: u32 = 11;
 /// Take the pause settings from auto-negotiation and ignore RX_PAUSE and TX_PAUSE.
 pub const PORT_CTRL_PAUSE_AN: Field = Field { lsb: 10, width: 1 };
-/// Take speed and duplex from the attached PHY or in-band status and ignore the forced bits.
+/// Take speed and duplex from the attached PHY or in-band status. The forced bits are ignored.
 pub const PORT_CTRL_LINK_AN: Field = Field { lsb: 9, width: 1 };
 /// Use back pressure for flow control in half duplex.
 pub const PORT_CTRL_HALF_PAUSE: Field = Field { lsb: 8, width: 1 };
-/// Forced duplex: 1 is full duplex.
+/// Forced full duplex.
 pub const PORT_CTRL_DUPLEX_FULL: Field = Field { lsb: 7, width: 1 };
 /// Honour received pause frames.
 pub const PORT_CTRL_RX_PAUSE: Field = Field { lsb: 6, width: 1 };
@@ -551,7 +551,7 @@ pub const MDIO_POLLING_SPEED: Field = Field { lsb: 0, width: 3 };
 
 /// xMII enable.
 pub const XMII_CTRL: u32 = 0x80394;
-/// Enables the xMII pins of port 8 (bit 1) or port 9 (bit 0).
+/// Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9.
 pub const fn xmii_ctrl_port(port: u32) -> Field {
     Field { lsb: (1 - (port - 8)) as u8, width: 1 }
 }
@@ -568,13 +568,13 @@ pub const XMII_PORT_FIRST: u32 = 8;
 pub const XMII_PORT_COUNT: u32 = 2;
 /// Interface type.
 pub const XMII_MODE: Field = Field { lsb: 29, width: 3 };
-/// MII, the switch is the MAC side
+/// MII as the MAC side
 pub const XMII_MODE_MII: u32 = 0;
-/// MII, the switch is the PHY side
+/// MII as the PHY side
 pub const XMII_MODE_REVMII: u32 = 1;
-/// RMII, the switch is the MAC side
+/// RMII as the MAC side
 pub const XMII_MODE_RMII: u32 = 2;
-/// RMII, the switch is the PHY side
+/// RMII as the PHY side
 pub const XMII_MODE_REVRMII: u32 = 3;
 /// RGMII
 pub const XMII_MODE_RGMII: u32 = 4;
@@ -613,7 +613,7 @@ pub const fn mac_frame(port: u32) -> u32 {
 pub const MAC_FRAME_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`mac_frame`].
 pub const MAC_FRAME_PORT_COUNT: u32 = 11;
-/// Maximum frame length in bytes, counted from the destination address to the frame check sequence. The largest value is 0x2400 (9216).
+/// Maximum frame length in bytes. The length counts from the destination address to the frame check sequence. The largest value is 0x2400 (9216).
 pub const MAC_FRAME_SIZE: Field = Field { lsb: 8, width: 14 };
 
 // ==== MDIO master buses ====
@@ -625,15 +625,15 @@ pub const EXT_MBUS_OP_START: Field = Field { lsb: 0, width: 1 };
 
 /// External MDIO master command.
 pub const EXT_MBUS_CTRL: u32 = 0x6a004;
-/// PHY address, 0 to 31. On the internal bus it equals the port number.
+/// PHY address from 0 to 31. On the internal bus it equals the port number.
 pub const EXT_MBUS_CTRL_PORT: Field = Field { lsb: 21, width: 5 };
-/// PHY register number, 0 to 31.
+/// PHY register number from 0 to 31.
 pub const EXT_MBUS_CTRL_REG: Field = Field { lsb: 16, width: 5 };
-/// Frame format. The field position is a guess of the upstream Linux driver author.
+/// Frame format. The comment on the field reads "wild guess".
 pub const EXT_MBUS_CTRL_TYPE: Field = Field { lsb: 8, width: 4 };
 /// IEEE 802.3 clause 22 frame
 pub const EXT_MBUS_CTRL_TYPE_C22: u32 = 4;
-/// Direction. The field position is a guess of the upstream Linux driver author.
+/// Direction. The comment on the field reads "wild guess".
 pub const EXT_MBUS_CTRL_OP: Field = Field { lsb: 2, width: 2 };
 /// Write the register
 pub const EXT_MBUS_CTRL_OP_WRITE: u32 = 1;
@@ -657,15 +657,15 @@ pub const INT_MBUS_OP_START: Field = Field { lsb: 0, width: 1 };
 
 /// Internal MDIO master command.
 pub const INT_MBUS_CTRL: u32 = 0xf0004;
-/// PHY address, 0 to 31. On the internal bus it equals the port number.
+/// PHY address from 0 to 31. On the internal bus it equals the port number.
 pub const INT_MBUS_CTRL_PORT: Field = Field { lsb: 21, width: 5 };
-/// PHY register number, 0 to 31.
+/// PHY register number from 0 to 31.
 pub const INT_MBUS_CTRL_REG: Field = Field { lsb: 16, width: 5 };
-/// Frame format. The field position is a guess of the upstream Linux driver author.
+/// Frame format. The comment on the field reads "wild guess".
 pub const INT_MBUS_CTRL_TYPE: Field = Field { lsb: 8, width: 4 };
 /// IEEE 802.3 clause 22 frame
 pub const INT_MBUS_CTRL_TYPE_C22: u32 = 4;
-/// Direction. The field position is a guess of the upstream Linux driver author.
+/// Direction. The comment on the field reads "wild guess".
 pub const INT_MBUS_CTRL_OP: Field = Field { lsb: 2, width: 2 };
 /// Write the register
 pub const INT_MBUS_CTRL_OP_WRITE: u32 = 1;
@@ -697,7 +697,7 @@ pub const EEE_VAL_DATA: Field = Field { lsb: 1, width: 1 };
 
 /// EEE port enable.
 pub const EEE_CTRL: u32 = 0xb0000;
-/// Enables Energy Efficient Ethernet on port n.
+/// Enables Energy Efficient Ethernet on port port.
 pub const fn eee_ctrl_en(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -725,7 +725,7 @@ pub const fn mib_data(port: u32) -> u32 {
 pub const MIB_DATA_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`mib_data`].
 pub const MIB_DATA_PORT_COUNT: u32 = 11;
-/// Counter value, or the low 32 bits of a 64-bit counter.
+/// Counter value. For a 64-bit counter it is the low 32 bits.
 pub const MIB_DATA_COUNT: Field = Field { lsb: 0, width: 32 };
 
 // ==== LEDs ====
@@ -734,7 +734,7 @@ pub const MIB_DATA_COUNT: Field = Field { lsb: 0, width: 32 };
 pub const LED_CTRL: u32 = 0xd0000;
 /// Function not known.
 pub const LED_CTRL_UNK: Field = Field { lsb: 21, width: 1 };
-/// Blink cycle used to signal a detected loop: 512 ms times the field value.
+/// Blink cycle that signals a detected loop. The cycle is 512 ms times the field value.
 pub const LED_CTRL_LOOPDETECT_BLINK: Field = Field { lsb: 19, width: 2 };
 /// Number of ports shifted out in serial mode.
 pub const LED_CTRL_PORT_NUM: Field = Field { lsb: 13, width: 4 };
@@ -753,9 +753,9 @@ pub const fn led0_port(port: u32) -> u32 {
 pub const LED0_PORT_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`led0_port`].
 pub const LED0_PORT_PORT_COUNT: u32 = 10;
-/// Function not known; only present for LED 0.
+/// Function not known. Only LED 0 has the field.
 pub const LED0_PORT_ACT_LINK_TRY_DIS: Field = Field { lsb: 17, width: 1 };
-/// Function not known; only present for LED 0.
+/// Function not known. Only LED 0 has the field.
 pub const LED0_PORT_ACT_COLLISION_BLINK_INDI: Field = Field { lsb: 16, width: 1 };
 /// Blink while the port is in low power idle.
 pub const LED0_PORT_ACT_EEE_BLINK: Field = Field { lsb: 15, width: 1 };
@@ -800,11 +800,11 @@ pub const fn led1_port(port: u32) -> u32 {
 pub const LED1_PORT_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`led1_port`].
 pub const LED1_PORT_PORT_COUNT: u32 = 10;
-/// Alternative blink cycle, 512 ms shifted right by the field value. An LED uses it when its LED2_PORT.FORCE_BLINK field is 3.
+/// Alternative blink cycle. The cycle is 512 ms shifted right by the field value. An LED uses it when its LED2_PORT.FORCE_BLINK field is 3.
 pub const LED1_PORT_OTHER_BLINK: Field = Field { lsb: 30, width: 2 };
-/// Blink cycle for the low power idle indication, 512 ms shifted right by the field value.
+/// Blink cycle of the low power idle indication. The cycle is 512 ms shifted right by the field value.
 pub const LED1_PORT_EEE_BLINK: Field = Field { lsb: 28, width: 2 };
-/// Swaps the on and off parts of the blink cycle, so that BLINK_DUTY gives the off fraction.
+/// Swaps the on and off parts of the blink cycle. BLINK_DUTY then gives the off fraction.
 pub const LED1_PORT_BLINK_DUTY_COMP: Field = Field { lsb: 27, width: 1 };
 /// Fraction of the blink cycle the LED is on.
 pub const LED1_PORT_BLINK_DUTY: Field = Field { lsb: 25, width: 2 };
@@ -859,11 +859,11 @@ pub const fn led2_port(port: u32) -> u32 {
 pub const LED2_PORT_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`led2_port`].
 pub const LED2_PORT_PORT_COUNT: u32 = 10;
-/// Forced state of LED n of this port.
+/// Forced state of LED group grp of this port.
 pub const fn led2_port_force(grp: u32) -> Field {
     Field { lsb: (18 + 4 * grp) as u8, width: 2 }
 }
-/// Not forced; the LED follows its behaviour bits
+/// Not forced. The LED follows its behaviour bits
 pub const LED2_PORT_FORCE_DONTCARE: u32 = 0;
 /// Blink at the rate in FORCE_BLINK
 pub const LED2_PORT_FORCE_BLINK: u32 = 1;
@@ -871,7 +871,7 @@ pub const LED2_PORT_FORCE_BLINK: u32 = 1;
 pub const LED2_PORT_FORCE_ON: u32 = 2;
 /// Off
 pub const LED2_PORT_FORCE_OFF: u32 = 3;
-/// Blink cycle of LED n when it is forced to blink: 512 ms shifted left by the field value.
+/// Blink cycle of a LED that is forced to blink. The cycle is 512 ms shifted left by the field value.
 pub const fn led2_port_force_blink(grp: u32) -> Field {
     Field { lsb: (16 + 4 * grp) as u8, width: 2 }
 }
@@ -914,11 +914,11 @@ pub const LED2_PORT_ACT_10M_BLINK: Field = Field { lsb: 0, width: 1 };
 
 /// Serial LED control.
 pub const LED_SER_CTRL: u32 = 0xd0100;
-/// Function not known; possibly a delay.
+/// Function not known. The comment on the field reads "delay?".
 pub const LED_SER_CTRL_UNK: Field = Field { lsb: 24, width: 2 };
 /// Serial LED data is active low.
 pub const LED_SER_CTRL_ACTIVE_LOW: Field = Field { lsb: 4, width: 1 };
-/// Number of LED groups shifted out per port, minus one.
+/// Number of LED groups shifted out per port minus one.
 pub const LED_SER_CTRL_GRP_NUM: Field = Field { lsb: 0, width: 2 };
 
 /// Serial LED position map. `grp` = 0..=2, `half` = 0..=1.
@@ -933,11 +933,11 @@ pub const LED_SER_MAP_GRP_COUNT: u32 = 3;
 pub const LED_SER_MAP_HALF_FIRST: u32 = 0;
 /// Number of valid `half` values of [`led_ser_map`].
 pub const LED_SER_MAP_HALF_COUNT: u32 = 2;
-/// Port whose LED is shown at position n.
+/// Port whose LED is shown at position slot.
 pub const fn led_ser_map_dst_port(slot: u32) -> Field {
     Field { lsb: (2 + 6 * slot) as u8, width: 4 }
 }
-/// LED group shown at position n.
+/// LED group shown at position slot.
 pub const fn led_ser_map_dst_led(slot: u32) -> Field {
     Field { lsb: (6 * slot) as u8, width: 2 }
 }
@@ -949,7 +949,7 @@ pub const LED_PAR_PORTS_VALUE: Field = Field { lsb: 0, width: 32 };
 
 /// Parallel LED polarity.
 pub const LED_PAR_INV: u32 = 0xd01c8;
-/// Inverts the output of LED group grp of port port; the bit number is 10 × grp + port.
+/// Inverts the output of one LED group of one port. The bit number is 10 × grp + port.
 pub const fn led_par_inv_inv(grp: u32, port: u32) -> Field {
     Field { lsb: (10 * grp + port) as u8, width: 1 }
 }
@@ -964,11 +964,11 @@ pub const fn led_par_map(port: u32) -> u32 {
 pub const LED_PAR_MAP_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`led_par_map`].
 pub const LED_PAR_MAP_PORT_COUNT: u32 = 10;
-/// Port whose LED is shown on pin group n.
+/// Port whose LED is shown on pin group grp.
 pub const fn led_par_map_dst_port(grp: u32) -> Field {
     Field { lsb: (2 + 6 * grp) as u8, width: 4 }
 }
-/// LED group shown on pin group n.
+/// LED group shown on pin group grp.
 pub const fn led_par_map_dst_led(grp: u32) -> Field {
     Field { lsb: (6 * grp) as u8, width: 2 }
 }
@@ -977,7 +977,7 @@ pub const fn led_par_map_dst_led(grp: u32) -> Field {
 
 /// Lookup VLAN select.
 pub const PVID_SEL: u32 = 0x80014;
-/// Port n looks frames up by the service VLAN ID in place of the customer VLAN ID.
+/// Port port looks frames up by the service VLAN ID. It does not use the customer VLAN ID.
 pub const fn pvid_sel_svid_port(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1005,18 +1005,18 @@ pub const fn tpid_egr(n: u32) -> u32 {
 pub const TPID_EGR_N_FIRST: u32 = 0;
 /// Number of valid `n` values of [`tpid_egr`].
 pub const TPID_EGR_N_COUNT: u32 = 4;
-/// Tag protocol identifier, for example 0x8100.
+/// Tag protocol identifier. An example is 0x8100.
 pub const TPID_EGR_TPID: Field = Field { lsb: 0, width: 16 };
 
 /// Ingress VLAN filter.
 pub const VLAN_IGR_FILTER: u32 = 0x180280;
-/// IGMP frames received on port n skip the ingress membership check.
+/// IGMP frames received on port port skip the ingress membership check.
 pub const fn vlan_igr_filter_port_bypass_igmp(port: u32) -> Field {
     Field { lsb: (11 + port) as u8, width: 1 }
 }
 /// All elements of [`vlan_igr_filter_port_bypass_igmp`] as one field.
 pub const VLAN_IGR_FILTER_PORT_BYPASS_IGMP_ALL: Field = Field { lsb: 11, width: 11 };
-/// Port n drops received frames whose VLAN does not list the port as a member.
+/// Port port receives frames only of VLANs that list it.
 pub const fn vlan_igr_filter_port(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1025,7 +1025,7 @@ pub const VLAN_IGR_FILTER_PORT_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Egress VLAN filter.
 pub const VLAN_EGR_FILTER: u32 = 0x180598;
-/// Port n does not send frames whose VLAN does not list the port as a member.
+/// Port port sends frames only of VLANs that list it.
 pub const fn vlan_egr_filter_port(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1042,25 +1042,25 @@ pub const VLAN_CTRL_VID_FIRST: u32 = 0;
 pub const VLAN_CTRL_VID_COUNT: u32 = 4096;
 /// Number of 32-bit words of one VLAN_CTRL entry.
 pub const VLAN_CTRL_WORDS: usize = 2;
-/// Ports that send frames of this VLAN without a tag, one bit per port.
+/// Ports that send frames of this VLAN without a tag. Each port has one bit.
 pub const fn vlan_ctrl_untag_ports(port: u32) -> Field {
     Field { lsb: (40 + port) as u8, width: 1 }
 }
 /// All elements of [`vlan_ctrl_untag_ports`] as one field.
 pub const VLAN_CTRL_UNTAG_PORTS_ALL: Field = Field { lsb: 40, width: 11 };
-/// Spanning tree instance of this VLAN; selects the STP register.
+/// Spanning tree instance of this VLAN. It selects the STP register.
 pub const VLAN_CTRL_STP_ID: Field = Field { lsb: 36, width: 4 };
-/// Meaning uncertain; no public driver sets it. The Linux driver names the bit as a service VLAN enable. The vendor SDK names it SVL_EN, which suggests shared VLAN learning, that is, learning by FID in place of the VLAN ID.
+/// Meaning not known. No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name suggests a service VLAN enable. The vendor SDK names the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the VLAN ID.
 pub const VLAN_CTRL_SVLAN_EN: Field = Field { lsb: 35, width: 1 };
-/// Filtering ID for address learning and lookup. No public driver writes it; the Linux driver leaves it 0 and addresses the forwarding database by VLAN ID, so when the field takes effect is not known (see SVLAN_EN). The field crosses the boundary between the two words.
+/// Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. It is not known when the field takes effect. VLAN_CTRL.SVLAN_EN is a candidate. The field crosses the boundary between the two words.
 pub const VLAN_CTRL_FID: Field = Field { lsb: 23, width: 12 };
 /// Source addresses of frames in this VLAN are not learned.
 pub const VLAN_CTRL_LEARN_DIS: Field = Field { lsb: 22, width: 1 };
 /// Frames of this VLAN get the priority in PRIO.
 pub const VLAN_CTRL_PRIO_EN: Field = Field { lsb: 21, width: 1 };
-/// VLAN priority, a source for PORT_PRIO_ORD.
+/// VLAN priority. It is a source for PORT_PRIO_ORD.
 pub const VLAN_CTRL_PRIO: Field = Field { lsb: 18, width: 3 };
-/// Member ports, one bit per port.
+/// Member ports. Each port has one bit.
 pub const fn vlan_ctrl_ports(port: u32) -> Field {
     Field { lsb: (7 + port) as u8, width: 1 }
 }
@@ -1070,7 +1070,7 @@ pub const VLAN_CTRL_PORTS_ALL: Field = Field { lsb: 7, width: 11 };
 pub const VLAN_CTRL_BYPASS_1X_AC: Field = Field { lsb: 6, width: 1 };
 /// Frames of this VLAN are rate limited by the meter in METER_ID.
 pub const VLAN_CTRL_METER_EN: Field = Field { lsb: 5, width: 1 };
-/// Meter number, an index of METER_CTRL.
+/// Meter number. It is an index of METER_CTRL.
 pub const VLAN_CTRL_METER_ID: Field = Field { lsb: 0, width: 5 };
 
 /// Ingress tag protocol identifiers. `n` = 0..=3.
@@ -1081,7 +1081,7 @@ pub const fn tpid_igr(n: u32) -> u32 {
 pub const TPID_IGR_N_FIRST: u32 = 0;
 /// Number of valid `n` values of [`tpid_igr`].
 pub const TPID_IGR_N_COUNT: u32 = 4;
-/// Tag protocol identifier, for example 0x8100.
+/// Tag protocol identifier. An example is 0x8100.
 pub const TPID_IGR_TPID: Field = Field { lsb: 0, width: 16 };
 
 /// Port ingress tag recognition. `port` = 0..=10.
@@ -1092,13 +1092,13 @@ pub const fn port_igr_tpid(port: u32) -> u32 {
 pub const PORT_IGR_TPID_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_igr_tpid`].
 pub const PORT_IGR_TPID_PORT_COUNT: u32 = 11;
-/// Bit n set: TPID_IGR entry n marks a service tag on this port.
+/// Entry n of TPID_IGR marks a service tag on this port.
 pub const fn port_igr_tpid_stag(n: u32) -> Field {
     Field { lsb: (4 + n) as u8, width: 1 }
 }
 /// All elements of [`port_igr_tpid_stag`] as one field.
 pub const PORT_IGR_TPID_STAG_ALL: Field = Field { lsb: 4, width: 4 };
-/// Bit n set: TPID_IGR entry n marks a customer tag on this port.
+/// Entry n of TPID_IGR marks a customer tag on this port.
 pub const fn port_igr_tpid_ctag(n: u32) -> Field {
     Field { lsb: (n) as u8, width: 1 }
 }
@@ -1157,15 +1157,15 @@ pub const fn ipm_dscp(dscp: u32) -> u32 {
 pub const IPM_DSCP_DSCP_FIRST: u32 = 0;
 /// Number of valid `dscp` values of [`ipm_dscp`].
 pub const IPM_DSCP_DSCP_COUNT: u32 = 64;
-/// Internal priority, 0 to 7.
+/// Internal priority from 0 to 7.
 pub const IPM_DSCP_PRIO: Field = Field { lsb: 2, width: 3 };
 /// Drop precedence colour used by the meters.
 pub const IPM_DSCP_COLOR: Field = Field { lsb: 0, width: 2 };
-/// Green, lowest drop precedence
+/// Lowest drop precedence
 pub const IPM_DSCP_COLOR_GREEN: u32 = 0;
 /// Yellow
 pub const IPM_DSCP_COLOR_YELLOW: u32 = 1;
-/// Red, highest drop precedence
+/// Highest drop precedence
 pub const IPM_DSCP_COLOR_RED: u32 = 2;
 
 /// VLAN priority to internal priority map. `map` = 0..=1, `dei` = 0..=1, `pcp` = 0..=7.
@@ -1184,15 +1184,15 @@ pub const IPM_PCP_DEI_COUNT: u32 = 2;
 pub const IPM_PCP_PCP_FIRST: u32 = 0;
 /// Number of valid `pcp` values of [`ipm_pcp`].
 pub const IPM_PCP_PCP_COUNT: u32 = 8;
-/// Internal priority, 0 to 7.
+/// Internal priority from 0 to 7.
 pub const IPM_PCP_PRIO: Field = Field { lsb: 2, width: 3 };
 /// Drop precedence colour used by the meters.
 pub const IPM_PCP_COLOR: Field = Field { lsb: 0, width: 2 };
-/// Green, lowest drop precedence
+/// Lowest drop precedence
 pub const IPM_PCP_COLOR_GREEN: u32 = 0;
 /// Yellow
 pub const IPM_PCP_COLOR_YELLOW: u32 = 1;
-/// Red, highest drop precedence
+/// Highest drop precedence
 pub const IPM_PCP_COLOR_RED: u32 = 2;
 
 /// Port priority. `port` = 0..=10.
@@ -1207,7 +1207,7 @@ pub const PORT_QOS_PORT_COUNT: u32 = 11;
 pub const PORT_QOS_CVLAN_PRIO_MAP_ID: Field = Field { lsb: 5, width: 1 };
 /// Index map of the IPM_PCP map used for service tags.
 pub const PORT_QOS_SVLAN_PRIO_MAP_ID: Field = Field { lsb: 4, width: 1 };
-/// Port default priority, 0 to 7.
+/// Port default priority from 0 to 7.
 pub const PORT_QOS_PRIO: Field = Field { lsb: 1, width: 3 };
 /// Enables the port default priority.
 pub const PORT_QOS_PRIO_EN: Field = Field { lsb: 0, width: 1 };
@@ -1237,7 +1237,7 @@ pub const fn port_isolation(port: u32) -> u32 {
 pub const PORT_ISOLATION_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_isolation`].
 pub const PORT_ISOLATION_PORT_COUNT: u32 = 11;
-/// Frames received on this port are never sent to port n.
+/// Frames received on this port are never sent to port port.
 pub const fn port_isolation_block(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1252,7 +1252,7 @@ pub const fn stp(inst: u32) -> u32 {
 pub const STP_INST_FIRST: u32 = 0;
 /// Number of valid `inst` values of [`stp`].
 pub const STP_INST_COUNT: u32 = 16;
-/// State of port n in this instance.
+/// State of port port in this instance.
 pub const fn stp_port(port: u32) -> Field {
     Field { lsb: (2 * port) as u8, width: 2 }
 }
@@ -1262,7 +1262,7 @@ pub const STP_PORT_ALL: Field = Field { lsb: 0, width: 22 };
 pub const STP_PORT_DISABLED: u32 = 0;
 /// Port learns addresses but does not forward
 pub const STP_PORT_LEARNING: u32 = 1;
-/// Port neither forwards nor learns; it still receives bridge protocol frames
+/// Port neither forwards nor learns. It still receives bridge protocol frames
 pub const STP_PORT_BLOCKING: u32 = 2;
 /// Port forwards and learns
 pub const STP_PORT_FORWARD: u32 = 3;
@@ -1311,7 +1311,7 @@ pub const AGEING_INTERVAL: Field = Field { lsb: 0, width: 16 };
 
 /// Forwarding database command data 0.
 pub const FDB_IN0: u32 = 0x180454;
-/// MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+/// MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
 pub const FDB_IN0_ADDR_HI4: Field = Field { lsb: 0, width: 32 };
 
 /// Forwarding database command data 1.
@@ -1330,11 +1330,11 @@ pub const FDB_IN1_STATUS_MOVE_AGING_MAX_TIME: u32 = 3;
 pub const FDB_IN1_STATUS_MAX_TIME: u32 = 5;
 /// Entry waiting for the CPU to confirm it
 pub const FDB_IN1_STATUS_PENDING: u32 = 6;
-/// Static entry; never ages out
+/// Static entry that never ages out
 pub const FDB_IN1_STATUS_STATIC: u32 = 7;
 /// Filtering ID of the entry. The Linux driver writes the VLAN ID here.
 pub const FDB_IN1_FID: Field = Field { lsb: 16, width: 12 };
-/// MAC address bytes 4 and 5, byte 4 in bits 15 to 8.
+/// MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
 pub const FDB_IN1_ADDR_LO2: Field = Field { lsb: 0, width: 16 };
 
 /// Forwarding database command data 2.
@@ -1343,7 +1343,7 @@ pub const FDB_IN2: u32 = 0x18045c;
 pub const FDB_IN2_MOVE_AGING_STATUS: Field = Field { lsb: 30, width: 2 };
 /// Drop frames received from this address.
 pub const FDB_IN2_IGR_DROP: Field = Field { lsb: 29, width: 1 };
-/// Ports that frames to this address are sent to, one bit per port.
+/// Ports that frames to this address are sent to. Each port has one bit.
 pub const FDB_IN2_EGR_PORTS: Field = Field { lsb: 18, width: 11 };
 /// Drop frames sent to this address.
 pub const FDB_IN2_EGR_DROP: Field = Field { lsb: 17, width: 1 };
@@ -1351,16 +1351,16 @@ pub const FDB_IN2_EGR_DROP: Field = Field { lsb: 17, width: 1 };
 pub const FDB_IN2_COPY_TO_CPU: Field = Field { lsb: 16, width: 1 };
 /// Apply PRIO to frames received from this address.
 pub const FDB_IN2_IGR_PRIO_EN: Field = Field { lsb: 15, width: 1 };
-/// Priority given by this entry, a source for PORT_PRIO_ORD.
+/// Priority given by this entry. It is a source for PORT_PRIO_ORD.
 pub const FDB_IN2_PRIO: Field = Field { lsb: 12, width: 3 };
 /// Replacement VLAN ID for frames matching the entry.
 pub const FDB_IN2_NEW_VID: Field = Field { lsb: 0, width: 12 };
 
 /// Forwarding database command.
 pub const FDB_OP: u32 = 0x180460;
-/// Entry index, 0 to 4095, used when MODE_INDEX is set.
+/// Entry index from 0 to 4095. It is used when MODE_INDEX is set.
 pub const FDB_OP_INDEX: Field = Field { lsb: 11, width: 12 };
-/// 0 addresses the entry by MAC address and filtering ID; 1 addresses it by INDEX.
+/// Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID.
 pub const FDB_OP_MODE_INDEX: Field = Field { lsb: 10, width: 1 };
 /// A flush removes multicast entries in place of unicast entries.
 pub const FDB_OP_FLUSH_MCAST: Field = Field { lsb: 9, width: 1 };
@@ -1370,7 +1370,7 @@ pub const FDB_OP_FLUSH: Field = Field { lsb: 7, width: 2 };
 pub const FDB_OP_FLUSH_ALL: u32 = 0;
 /// Entries of the ports in FDB_IN2.EGR_PORTS
 pub const FDB_OP_FLUSH_PORT: u32 = 1;
-/// Entries of those ports with the filtering ID in FDB_IN1.FID
+/// Entries of the ports in FDB_IN2.EGR_PORTS with the filtering ID in FDB_IN1.FID
 pub const FDB_OP_FLUSH_PORT_VID: u32 = 2;
 /// Entries with the filtering ID in FDB_IN1.FID
 pub const FDB_OP_FLUSH_VID: u32 = 3;
@@ -1414,7 +1414,7 @@ pub const FDB_RESULT_INDEX: Field = Field { lsb: 0, width: 12 };
 
 /// Forwarding database result data 0.
 pub const FDB_OUT0: u32 = 0x1804b0;
-/// MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+/// MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
 pub const FDB_OUT0_ADDR_HI4: Field = Field { lsb: 0, width: 32 };
 
 /// Forwarding database result data 1.
@@ -1433,11 +1433,11 @@ pub const FDB_OUT1_STATUS_MOVE_AGING_MAX_TIME: u32 = 3;
 pub const FDB_OUT1_STATUS_MAX_TIME: u32 = 5;
 /// Entry waiting for the CPU to confirm it
 pub const FDB_OUT1_STATUS_PENDING: u32 = 6;
-/// Static entry; never ages out
+/// Static entry that never ages out
 pub const FDB_OUT1_STATUS_STATIC: u32 = 7;
 /// Filtering ID of the entry. The Linux driver writes the VLAN ID here.
 pub const FDB_OUT1_FID: Field = Field { lsb: 16, width: 12 };
-/// MAC address bytes 4 and 5, byte 4 in bits 15 to 8.
+/// MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
 pub const FDB_OUT1_ADDR_LO2: Field = Field { lsb: 0, width: 16 };
 
 /// Forwarding database result data 2.
@@ -1446,7 +1446,7 @@ pub const FDB_OUT2: u32 = 0x1804b8;
 pub const FDB_OUT2_MOVE_AGING_STATUS: Field = Field { lsb: 30, width: 2 };
 /// Drop frames received from this address.
 pub const FDB_OUT2_IGR_DROP: Field = Field { lsb: 29, width: 1 };
-/// Ports that frames to this address are sent to, one bit per port.
+/// Ports that frames to this address are sent to. Each port has one bit.
 pub const FDB_OUT2_EGR_PORTS: Field = Field { lsb: 18, width: 11 };
 /// Drop frames sent to this address.
 pub const FDB_OUT2_EGR_DROP: Field = Field { lsb: 17, width: 1 };
@@ -1454,7 +1454,7 @@ pub const FDB_OUT2_EGR_DROP: Field = Field { lsb: 17, width: 1 };
 pub const FDB_OUT2_COPY_TO_CPU: Field = Field { lsb: 16, width: 1 };
 /// Apply PRIO to frames received from this address.
 pub const FDB_OUT2_IGR_PRIO_EN: Field = Field { lsb: 15, width: 1 };
-/// Priority given by this entry, a source for PORT_PRIO_ORD.
+/// Priority given by this entry. It is a source for PORT_PRIO_ORD.
 pub const FDB_OUT2_PRIO: Field = Field { lsb: 12, width: 3 };
 /// Replacement VLAN ID for frames matching the entry.
 pub const FDB_OUT2_NEW_VID: Field = Field { lsb: 0, width: 12 };
@@ -1468,7 +1468,7 @@ pub const FDB_HW_FLUSH_ON_LINKDOWN: Field = Field { lsb: 0, width: 1 };
 
 /// Unknown unicast flood filter.
 pub const FILTER_UNK_UCAST: u32 = 0x180508;
-/// Bit n set: frames of this class are not flooded to port n.
+/// Frames of this class are not flooded to port port.
 pub const fn filter_unk_ucast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1477,7 +1477,7 @@ pub const FILTER_UNK_UCAST_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Unknown multicast flood filter.
 pub const FILTER_UNK_MCAST: u32 = 0x18050c;
-/// Bit n set: frames of this class are not flooded to port n.
+/// Frames of this class are not flooded to port port.
 pub const fn filter_unk_mcast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1486,7 +1486,7 @@ pub const FILTER_UNK_MCAST_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Multicast flood filter.
 pub const FILTER_MCAST: u32 = 0x180510;
-/// Bit n set: frames of this class are not flooded to port n.
+/// Frames of this class are not flooded to port port.
 pub const fn filter_mcast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1495,7 +1495,7 @@ pub const FILTER_MCAST_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Broadcast flood filter.
 pub const FILTER_BCAST: u32 = 0x180514;
-/// Bit n set: frames of this class are not flooded to port n.
+/// Frames of this class are not flooded to port port.
 pub const fn filter_bcast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1504,7 +1504,7 @@ pub const FILTER_BCAST_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Unknown unicast action.
 pub const ACT_UNK_UCAST: u32 = 0x180734;
-/// Action for frames received on port n.
+/// Action for frames received on port port.
 pub const fn act_unk_ucast_act(port: u32) -> Field {
     Field { lsb: (2 * port) as u8, width: 2 }
 }
@@ -1516,7 +1516,7 @@ pub const ACT_UNK_UCAST_ACT_FORWARD: u32 = 0;
 pub const ACT_UNK_UCAST_ACT_TRAP: u32 = 1;
 /// Discard the frame
 pub const ACT_UNK_UCAST_ACT_DROP: u32 = 2;
-/// Flood the frame and copy it to the CPU. The copy carries no usable source port; do not use
+/// Flood the frame and copy it to the CPU
 pub const ACT_UNK_UCAST_ACT_COPY: u32 = 3;
 
 /// Unknown multicast action.
@@ -1525,7 +1525,7 @@ pub const ACT_UNK_MCAST: u32 = 0x180738;
 pub const ACT_UNK_MCAST_BYPASS_DROP_RMA: Field = Field { lsb: 23, width: 1 };
 /// IGMP frames are exempt from the DROP action.
 pub const ACT_UNK_MCAST_BYPASS_DROP_IGMP: Field = Field { lsb: 22, width: 1 };
-/// Action for frames received on port n.
+/// Action for frames received on port port.
 pub const fn act_unk_mcast_act(port: u32) -> Field {
     Field { lsb: (2 * port) as u8, width: 2 }
 }
@@ -1537,7 +1537,7 @@ pub const ACT_UNK_MCAST_ACT_FORWARD: u32 = 0;
 pub const ACT_UNK_MCAST_ACT_TRAP: u32 = 1;
 /// Discard the frame
 pub const ACT_UNK_MCAST_ACT_DROP: u32 = 2;
-/// Flood the frame and copy it to the CPU. The copy carries no usable source port; do not use
+/// Flood the frame and copy it to the CPU
 pub const ACT_UNK_MCAST_ACT_COPY: u32 = 3;
 
 // ==== Link aggregation ====
@@ -1550,7 +1550,7 @@ pub const fn lag_group(lag: u32) -> u32 {
 pub const LAG_GROUP_LAG_FIRST: u32 = 0;
 /// Number of valid `lag` values of [`lag_group`].
 pub const LAG_GROUP_LAG_COUNT: u32 = 2;
-/// Member ports, one bit per port.
+/// Member ports. Each port has one bit.
 pub const LAG_GROUP_PORTS: Field = Field { lsb: 3, width: 11 };
 /// Number of valid LAG_MEMBER slots of the group.
 pub const LAG_GROUP_MEMBER_NUM: Field = Field { lsb: 0, width: 3 };
@@ -1593,7 +1593,7 @@ pub const LAG_HASH_SRC_PORT: Field = Field { lsb: 0, width: 1 };
 
 /// ACL unmatched frame permit.
 pub const ACL_PERMIT_UNMATCH: u32 = 0x1806a0;
-/// Bit n set: frames received on port n that match no rule are forwarded.
+/// Port port forwards received frames that match no rule.
 pub const fn acl_permit_unmatch_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1630,7 +1630,7 @@ pub const ACL_ACT_CTAG_UNTAG: u32 = 1;
 pub const ACL_ACT_CTAG_TAG: u32 = 2;
 /// Send as received
 pub const ACL_ACT_CTAG_KEEP: u32 = 3;
-/// Forwarding action, used when FWD_EN is set.
+/// Forwarding action. It is used when FWD_EN is set.
 pub const ACL_ACT_FWD: Field = Field { lsb: 85, width: 2 };
 /// Forward normally
 pub const ACL_ACT_FWD_FWD: u32 = 0;
@@ -1640,7 +1640,7 @@ pub const ACL_ACT_FWD_COPY: u32 = 1;
 pub const ACL_ACT_FWD_REDIR: u32 = 2;
 /// Send only to the CPU
 pub const ACL_ACT_FWD_TRAP: u32 = 3;
-/// Destination ports for COPY and REDIR, one bit per port. REDIR with no port set drops the frame.
+/// Destination ports for COPY and REDIR. Each port has one bit. REDIR with no port set drops the frame.
 pub const fn acl_act_fwd_redir_dports(port: u32) -> Field {
     Field { lsb: (74 + port) as u8, width: 1 }
 }
@@ -1672,7 +1672,7 @@ pub const ACL_ACT_CPRI_REPLACE: Field = Field { lsb: 48, width: 1 };
 pub const ACL_ACT_CVID: Field = Field { lsb: 36, width: 12 };
 /// Replace the customer VLAN ID.
 pub const ACL_ACT_CVID_REPLACE: Field = Field { lsb: 35, width: 1 };
-/// Internal priority given to the frame, a source for PORT_PRIO_ORD.
+/// Internal priority given to the frame. It is a source for PORT_PRIO_ORD.
 pub const ACL_ACT_PRIO: Field = Field { lsb: 32, width: 3 };
 /// Enables PRIO.
 pub const ACL_ACT_PRIO_EN: Field = Field { lsb: 31, width: 1 };
@@ -1690,7 +1690,7 @@ pub const ACL_ACT_COLOR_EN: Field = Field { lsb: 28, width: 1 };
 pub const ACL_ACT_DSCP: Field = Field { lsb: 22, width: 6 };
 /// Replace the IP DSCP value.
 pub const ACL_ACT_DSCP_REPLACE: Field = Field { lsb: 21, width: 1 };
-/// Meter that rate limits matching frames, an index of METER_CTRL.
+/// Meter that rate limits matching frames. It is an index of METER_CTRL.
 pub const ACL_ACT_METER_ID: Field = Field { lsb: 15, width: 6 };
 /// Enables METER_ID.
 pub const ACL_ACT_METER_EN: Field = Field { lsb: 14, width: 1 };
@@ -1709,18 +1709,18 @@ pub const ACL_ACT_INTR_EN: Field = Field { lsb: 0, width: 1 };
 
 /// ACL block keep mask.
 pub const ACL_BLK_KEEP: u32 = 0x201000;
-/// Group number for slot n during the commit.
+/// Group number for slot bin during the commit.
 pub const fn acl_blk_keep_grpid(bin: u32) -> Field {
     Field { lsb: (1 + 4 * bin) as u8, width: 3 }
 }
-/// Slot n keeps its current key and mask.
+/// Slot bin keeps its current key and mask.
 pub const fn acl_blk_keep_keep(bin: u32) -> Field {
     Field { lsb: (4 * bin) as u8, width: 1 }
 }
 
 /// ACL port enable.
 pub const ACL_PORT: u32 = 0x202000;
-/// Bit n set: the access control list is applied to port n.
+/// The access control list is applied to port port.
 pub const fn acl_port_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1729,9 +1729,9 @@ pub const ACL_PORT_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// ACL block command.
 pub const ACL_BLK_CMD: u32 = 0x202004;
-/// Block number, 0 to 47.
+/// Block number from 0 to 47.
 pub const ACL_BLK_CMD_BLKID: Field = Field { lsb: 1, width: 6 };
-/// 1 opens the block for writing; writing 0 commits the changes.
+/// Write 1 to open the block for writing. Write 0 to commit the changes.
 pub const ACL_BLK_CMD_MODIFY: Field = Field { lsb: 0, width: 1 };
 
 /// ACL block slot enables. `blk` = 0..=47.
@@ -1742,11 +1742,11 @@ pub const fn acl_entry(blk: u32) -> u32 {
 pub const ACL_ENTRY_BLK_FIRST: u32 = 0;
 /// Number of valid `blk` values of [`acl_entry`].
 pub const ACL_ENTRY_BLK_COUNT: u32 = 48;
-/// Group number of slot m: the slot number that names the rule.
+/// Group number of slot bin. It is the slot number that names the rule.
 pub const fn acl_entry_grpid(bin: u32) -> Field {
     Field { lsb: (1 + 4 * bin) as u8, width: 3 }
 }
-/// Slot m is in use.
+/// Slot bin is in use.
 pub const fn acl_entry_en(bin: u32) -> Field {
     Field { lsb: (4 * bin) as u8, width: 1 }
 }
@@ -1765,9 +1765,9 @@ pub const ACL_KEY_BIN_FIRST: u32 = 0;
 pub const ACL_KEY_BIN_COUNT: u32 = 8;
 /// Number of 32-bit words of one ACL_KEY entry.
 pub const ACL_KEY_WORDS: usize = 2;
-/// Order of the rule; when several rules match, the highest value wins.
+/// Order of the rule. When several rules match, the highest value wins.
 pub const ACL_KEY_ORD: Field = Field { lsb: 53, width: 9 };
-/// Receiving ports the rule applies to, one bit per port.
+/// Receiving ports the rule applies to. Each port has one bit.
 pub const fn acl_key_sports(port: u32) -> Field {
     Field { lsb: (42 + port) as u8, width: 1 }
 }
@@ -1775,11 +1775,11 @@ pub const fn acl_key_sports(port: u32) -> Field {
 pub const ACL_KEY_SPORTS_ALL: Field = Field { lsb: 42, width: 11 };
 /// The slot matches when the frame does not match the key.
 pub const ACL_KEY_REVERSE: Field = Field { lsb: 41, width: 1 };
-/// Key type; selects the layout of the rest of the slot.
+/// Key type. It selects the layout of the rest of the slot.
 pub const ACL_KEY_TYPE: Field = Field { lsb: 36, width: 5 };
 /// Layer 3 protocol class.
 pub const ACL_KEY_MAC_ADDR0_L3_TYPE: Field = Field { lsb: 32, width: 4 };
-/// MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+/// MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
 pub const ACL_KEY_MAC_ADDR0_ADDR: Field = Field { lsb: 0, width: 32 };
 /// Frame encapsulation.
 pub const ACL_KEY_MAC_DA1_SA1_L2_TYPE: Field = Field { lsb: 32, width: 3 };
@@ -1787,29 +1787,29 @@ pub const ACL_KEY_MAC_DA1_SA1_L2_TYPE: Field = Field { lsb: 32, width: 3 };
 pub const ACL_KEY_MAC_DA1_SA1_MAC_DA1: Field = Field { lsb: 16, width: 16 };
 /// Source MAC address bytes 4 and 5.
 pub const ACL_KEY_MAC_DA1_SA1_MAC_SA1: Field = Field { lsb: 0, width: 16 };
-/// Match the service VLAN ID as a range: the key holds the lowest and the mask the highest value.
+/// Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VLAN_SVID_RANGE_EN: Field = Field { lsb: 63, width: 1 };
-/// Match the customer VLAN ID as a range: the key holds the lowest and the mask the highest value.
+/// Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VLAN_CVID_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// Drop eligible bit of the customer tag.
 pub const ACL_KEY_VLAN_CDEI: Field = Field { lsb: 35, width: 1 };
 /// Priority of the customer tag.
 pub const ACL_KEY_VLAN_CPRI: Field = Field { lsb: 32, width: 3 };
-/// Customer tag format of the frame; the codes are not documented.
+/// Customer tag format of the frame. No source gives the codes.
 pub const ACL_KEY_VLAN_CTAG_FMT: Field = Field { lsb: 30, width: 2 };
 /// Drop eligible bit of the service tag.
 pub const ACL_KEY_VLAN_SDEI: Field = Field { lsb: 29, width: 1 };
 /// Priority of the service tag.
 pub const ACL_KEY_VLAN_SPRI: Field = Field { lsb: 26, width: 3 };
-/// Service tag format of the frame; the codes are not documented.
+/// Service tag format of the frame. No source gives the codes.
 pub const ACL_KEY_VLAN_STAG_FMT: Field = Field { lsb: 24, width: 2 };
 /// Service VLAN ID.
 pub const ACL_KEY_VLAN_SVID: Field = Field { lsb: 12, width: 12 };
 /// Customer VLAN ID.
 pub const ACL_KEY_VLAN_CVID: Field = Field { lsb: 0, width: 12 };
-/// Match the service VLAN ID as a range: the key holds the lowest and the mask the highest value.
+/// Match the service VLAN ID as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VTAG_SVID_RANGE_EN: Field = Field { lsb: 63, width: 1 };
-/// Match the customer VLAN ID as a range: the key holds the lowest and the mask the highest value.
+/// Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_VTAG_CVID_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// Drop eligible bit of the customer tag.
 pub const ACL_KEY_VTAG_CDEI: Field = Field { lsb: 31, width: 1 };
@@ -1823,37 +1823,37 @@ pub const ACL_KEY_VTAG_SPRI: Field = Field { lsb: 24, width: 3 };
 pub const ACL_KEY_VTAG_SVID: Field = Field { lsb: 12, width: 12 };
 /// Customer VLAN ID.
 pub const ACL_KEY_VTAG_CVID: Field = Field { lsb: 0, width: 12 };
-/// Match the address as a range: the key holds the lowest and the mask the highest value.
+/// Match the address as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_IPV4_ADDR_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// The packet is an IP fragment.
 pub const ACL_KEY_IPV4_FRAG: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_KEY_IPV4_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// IPv4 address, first byte in bits 31 to 24.
+/// IPv4 address. The first byte is in bits 31 to 24.
 pub const ACL_KEY_IPV4_ADDR: Field = Field { lsb: 0, width: 32 };
 /// Layer 4 protocol class.
 pub const ACL_KEY_IPV6_ADDR0_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_KEY_IPV6_ADDR0_ADDR: Field = Field { lsb: 0, width: 32 };
 /// The packet has IP options or extension headers.
 pub const ACL_KEY_IPV6_ADDR1_IP_OPTION: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_KEY_IPV6_ADDR1_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_KEY_IPV6_ADDR1_ADDR: Field = Field { lsb: 0, width: 32 };
 /// The packet is the first fragment.
 pub const ACL_KEY_IPV6_ADDR2_FIRST_FRAG: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_KEY_IPV6_ADDR2_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_KEY_IPV6_ADDR2_ADDR: Field = Field { lsb: 0, width: 32 };
-/// Match the address as a range: the key holds the lowest and the mask the highest value.
+/// Match the address as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_IPV6_ADDR3_ADDR_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// The packet is an IP fragment.
 pub const ACL_KEY_IPV6_ADDR3_FRAG: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_KEY_IPV6_ADDR3_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_KEY_IPV6_ADDR3_ADDR: Field = Field { lsb: 0, width: 32 };
 /// The packet is an IP fragment.
 pub const ACL_KEY_MISC_FRAG: Field = Field { lsb: 35, width: 1 };
@@ -1873,9 +1873,9 @@ pub const ACL_KEY_MISC_IP_PROTO: Field = Field { lsb: 12, width: 8 };
 pub const ACL_KEY_MISC_TOS: Field = Field { lsb: 4, width: 8 };
 /// Layer 3 protocol class.
 pub const ACL_KEY_MISC_L3_TYPE: Field = Field { lsb: 0, width: 4 };
-/// Match the destination port as a range: the key holds the lowest and the mask the highest value.
+/// Match the destination port as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_L4_DPORT_RANGE_EN: Field = Field { lsb: 63, width: 1 };
-/// Match the source port as a range: the key holds the lowest and the mask the highest value.
+/// Match the source port as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_L4_SPORT_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// The packet is an IP fragment.
 pub const ACL_KEY_L4_FRAG: Field = Field { lsb: 35, width: 1 };
@@ -1891,7 +1891,7 @@ pub const ACL_KEY_UDF_IS_IGMP: Field = Field { lsb: 32, width: 1 };
 pub const ACL_KEY_UDF_UDF0: Field = Field { lsb: 16, width: 16 };
 /// Two bytes from the odd-numbered user-defined field window of the pair.
 pub const ACL_KEY_UDF_UDF1: Field = Field { lsb: 0, width: 16 };
-/// Match the EtherType as a range: the key holds the lowest and the mask the highest value.
+/// Match the EtherType as a range. The key holds the lowest and the mask the highest value.
 pub const ACL_KEY_ETHERTYPE_ETHERTYPE_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_KEY_ETHERTYPE_L4_TYPE: Field = Field { lsb: 32, width: 3 };
@@ -1914,7 +1914,7 @@ pub const ACL_MASK_BIN_COUNT: u32 = 8;
 pub const ACL_MASK_WORDS: usize = 2;
 /// Layer 3 protocol class.
 pub const ACL_MASK_MAC_ADDR0_L3_TYPE: Field = Field { lsb: 32, width: 4 };
-/// MAC address bytes 0 to 3, byte 0 in bits 31 to 24.
+/// MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
 pub const ACL_MASK_MAC_ADDR0_ADDR: Field = Field { lsb: 0, width: 32 };
 /// Frame encapsulation.
 pub const ACL_MASK_MAC_DA1_SA1_L2_TYPE: Field = Field { lsb: 32, width: 3 };
@@ -1926,13 +1926,13 @@ pub const ACL_MASK_MAC_DA1_SA1_MAC_SA1: Field = Field { lsb: 0, width: 16 };
 pub const ACL_MASK_VLAN_CDEI: Field = Field { lsb: 35, width: 1 };
 /// Priority of the customer tag.
 pub const ACL_MASK_VLAN_CPRI: Field = Field { lsb: 32, width: 3 };
-/// Customer tag format of the frame; the codes are not documented.
+/// Customer tag format of the frame. No source gives the codes.
 pub const ACL_MASK_VLAN_CTAG_FMT: Field = Field { lsb: 30, width: 2 };
 /// Drop eligible bit of the service tag.
 pub const ACL_MASK_VLAN_SDEI: Field = Field { lsb: 29, width: 1 };
 /// Priority of the service tag.
 pub const ACL_MASK_VLAN_SPRI: Field = Field { lsb: 26, width: 3 };
-/// Service tag format of the frame; the codes are not documented.
+/// Service tag format of the frame. No source gives the codes.
 pub const ACL_MASK_VLAN_STAG_FMT: Field = Field { lsb: 24, width: 2 };
 /// Service VLAN ID.
 pub const ACL_MASK_VLAN_SVID: Field = Field { lsb: 12, width: 12 };
@@ -1954,29 +1954,29 @@ pub const ACL_MASK_VTAG_CVID: Field = Field { lsb: 0, width: 12 };
 pub const ACL_MASK_IPV4_FRAG: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_MASK_IPV4_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// IPv4 address, first byte in bits 31 to 24.
+/// IPv4 address. The first byte is in bits 31 to 24.
 pub const ACL_MASK_IPV4_ADDR: Field = Field { lsb: 0, width: 32 };
 /// Layer 4 protocol class.
 pub const ACL_MASK_IPV6_ADDR0_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_MASK_IPV6_ADDR0_ADDR: Field = Field { lsb: 0, width: 32 };
 /// The packet has IP options or extension headers.
 pub const ACL_MASK_IPV6_ADDR1_IP_OPTION: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_MASK_IPV6_ADDR1_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_MASK_IPV6_ADDR1_ADDR: Field = Field { lsb: 0, width: 32 };
 /// The packet is the first fragment.
 pub const ACL_MASK_IPV6_ADDR2_FIRST_FRAG: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_MASK_IPV6_ADDR2_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_MASK_IPV6_ADDR2_ADDR: Field = Field { lsb: 0, width: 32 };
 /// The packet is an IP fragment.
 pub const ACL_MASK_IPV6_ADDR3_FRAG: Field = Field { lsb: 35, width: 1 };
 /// Layer 4 protocol class.
 pub const ACL_MASK_IPV6_ADDR3_L4_TYPE: Field = Field { lsb: 32, width: 3 };
-/// 32 bits of the IPv6 address, most significant byte in bits 31 to 24.
+/// 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
 pub const ACL_MASK_IPV6_ADDR3_ADDR: Field = Field { lsb: 0, width: 32 };
 /// The packet is an IP fragment.
 pub const ACL_MASK_MISC_FRAG: Field = Field { lsb: 35, width: 1 };
@@ -2025,7 +2025,7 @@ pub const UDF_CTRL_N_FIRST: u32 = 0;
 pub const UDF_CTRL_N_COUNT: u32 = 16;
 /// Header the offset is counted from.
 pub const UDF_CTRL_UDF_TYPE: Field = Field { lsb: 7, width: 2 };
-/// Offset of the two-byte window from the start of that header, in bytes.
+/// Offset in bytes of the two-byte window from the start of that header.
 pub const UDF_CTRL_UDF_OFFSET: Field = Field { lsb: 0, width: 7 };
 
 // ==== Meters and ingress rate limiting ====
@@ -2038,7 +2038,7 @@ pub const fn port_rate(port: u32) -> u32 {
 pub const PORT_RATE_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_rate`].
 pub const PORT_RATE_PORT_COUNT: u32 = 11;
-/// Bytes added per frame for preamble and inter-frame gap when a meter has BYTE_MODE_INCLUDE_GAP set.
+/// Bytes added per frame for preamble and inter-frame gap. A meter adds them when BYTE_MODE_INCLUDE_GAP is set.
 pub const PORT_RATE_GAP_VALUE: Field = Field { lsb: 0, width: 5 };
 /// Reset value of PORT_RATE_GAP_VALUE.
 pub const PORT_RATE_GAP_VALUE_RESET: u32 = 20;
@@ -2058,7 +2058,7 @@ pub const PORT_METER_PORT_FIRST: u32 = 0;
 pub const PORT_METER_PORT_COUNT: u32 = 11;
 /// Enables ingress rate limiting on the port.
 pub const PORT_METER_EN: Field = Field { lsb: 4, width: 1 };
-/// Port meter number n; the meter is entry 64 + n of METER_CTRL.
+/// Port meter number n. The meter is entry 64 + n of METER_CTRL.
 pub const PORT_METER_ID: Field = Field { lsb: 0, width: 4 };
 
 /// Meter configuration. `meter` = 0..=74.
@@ -2073,7 +2073,7 @@ pub const METER_CTRL_METER_COUNT: u32 = 75;
 pub const METER_CTRL_WORDS: usize = 3;
 /// Enables the meter.
 pub const METER_CTRL_METER_EN: Field = Field { lsb: 78, width: 1 };
-/// Tokens that overflow the committed bucket spill into the excess bucket (RFC 4115 coupling).
+/// Tokens that overflow the committed bucket spill into the excess bucket. The comment on the field reads "RFC4115: yellow use unused green bw".
 pub const METER_CTRL_TOKEN_OVERFLOW_EN: Field = Field { lsb: 77, width: 1 };
 /// Colours that are dropped.
 pub const METER_CTRL_DROP: Field = Field { lsb: 75, width: 2 };
@@ -2083,17 +2083,17 @@ pub const METER_CTRL_DROP_GYR: u32 = 0;
 pub const METER_CTRL_DROP_YR: u32 = 1;
 /// Drop red frames
 pub const METER_CTRL_DROP_R: u32 = 2;
-/// Drop nothing; only colour the frame
+/// Drop nothing and only colour the frame
 pub const METER_CTRL_DROP_NONE: u32 = 3;
 /// Ignore the colour the frame already has.
 pub const METER_CTRL_COLOR_BLIND: Field = Field { lsb: 74, width: 1 };
-/// Token scale: every token value is multiplied by 4 to the power of UNIT.
+/// Token scale. Every token value is multiplied by 4 to the power of UNIT.
 pub const METER_CTRL_UNIT: Field = Field { lsb: 71, width: 3 };
-/// In byte mode, add PORT_RATE.GAP_VALUE bytes to each frame.
+/// Add PORT_RATE.GAP_VALUE bytes to each frame in byte mode.
 pub const METER_CTRL_BYTE_MODE_INCLUDE_GAP: Field = Field { lsb: 70, width: 1 };
-/// 0 meters bytes; 1 meters packets.
+/// Meter packets. Value 0 meters bytes.
 pub const METER_CTRL_PKT_MODE: Field = Field { lsb: 69, width: 1 };
-/// 0 selects the RFC 4115 algorithm; 1 selects RFC 2698.
+/// Select the RFC 2698 algorithm. Value 0 selects the RFC 4115 algorithm.
 pub const METER_CTRL_RFC2698: Field = Field { lsb: 68, width: 1 };
 /// Committed burst size in tokens. The field crosses the boundary between words 1 and 2.
 pub const METER_CTRL_CBS: Field = Field { lsb: 52, width: 16 };
@@ -2136,9 +2136,9 @@ pub const PORT_SHAPE_CTRL_PORT_COUNT: u32 = 11;
 pub const PORT_SHAPE_CTRL_WORDS: usize = 2;
 /// Enables the shaper.
 pub const PORT_SHAPE_CTRL_EN: Field = Field { lsb: 36, width: 1 };
-/// 0 shapes bytes; 1 shapes packets.
+/// Shape packets. Value 0 shapes bytes.
 pub const PORT_SHAPE_CTRL_PKT_MODE: Field = Field { lsb: 35, width: 1 };
-/// Token scale: every token value is multiplied by 4 to the power of UNIT.
+/// Token scale. Every token value is multiplied by 4 to the power of UNIT.
 pub const PORT_SHAPE_CTRL_UNIT: Field = Field { lsb: 32, width: 3 };
 /// Burst size in tokens.
 pub const PORT_SHAPE_CTRL_CBS: Field = Field { lsb: 18, width: 14 };
@@ -2160,13 +2160,13 @@ pub const PORT_SHAPE_STAT_VALUE: Field = Field { lsb: 0, width: 32 };
 
 /// Port mirroring.
 pub const MIRROR: u32 = 0x300300;
-/// Ports whose received frames are copied to the monitor port, one bit per port.
+/// Ports whose received frames are copied to the monitor port. Each port has one bit.
 pub const fn mirror_igr_ports(port: u32) -> Field {
     Field { lsb: (16 + port) as u8, width: 1 }
 }
 /// All elements of [`mirror_igr_ports`] as one field.
 pub const MIRROR_IGR_PORTS_ALL: Field = Field { lsb: 16, width: 11 };
-/// Ports whose sent frames are copied to the monitor port, one bit per port.
+/// Ports whose sent frames are copied to the monitor port. Each port has one bit.
 pub const fn mirror_egr_ports(port: u32) -> Field {
     Field { lsb: (4 + port) as u8, width: 1 }
 }

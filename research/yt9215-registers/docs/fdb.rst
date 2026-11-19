@@ -4,7 +4,7 @@ Forwarding database
 ===================
 
 The forwarding database maps a MAC address and a filtering ID to destination ports. It has
-4096 entries (:const:`FDB_NUM`). The switch fills it by learning; the host reads and changes
+:const:`FDB_NUM` (4096) entries. The switch fills it by learning. The host reads and changes
 it through a command interface, the registers of the :blk:`fdb` block.
 
 .. _fdb-command:
@@ -17,34 +17,48 @@ Running a command
 
 1. Write the input registers :reg:`FDB_IN0`, :reg:`FDB_IN1` and :reg:`FDB_IN2`.
 2. Write :reg:`FDB_OP` with the command in :field:`FDB_OP.OP` and :field:`FDB_OP.START` set.
-3. Read :reg:`FDB_RESULT` until :field:`FDB_RESULT.DONE` is 1, as in :ref:`access-wait`.
-4. Check :field:`FDB_RESULT.NOTFOUND`; for a lookup, read the entry from :reg:`FDB_OUT0`,
+3. Read :reg:`FDB_RESULT` until :field:`FDB_RESULT.DONE` is 1, with the loop of
+   :ref:`access-wait`.
+4. Check :field:`FDB_RESULT.NOTFOUND`. For a lookup, read the entry from :reg:`FDB_OUT0`,
    :reg:`FDB_OUT1` and :reg:`FDB_OUT2`.
+
+The sequence is :ev:`confirmed` by :lx:`yt921x_fdb_add`, :lx:`yt921x_fdb_wait` and
+:lx:`yt921x_fdb_read` of the :ref:`Linux driver <sources-list>`.
 
 .. yt-bitfield:: FDB_OP
 
 .. list-table::
    :header-rows: 1
-   :widths: 10 18 72
+   :widths: 10 22 26 42
 
    * - Value
      - Command
      - Effect
+     - Entry is selected by
    * - 0
      - :val:`FDB_OP.OP.ADD`
-     - Write the entry in the input registers, replacing an entry with the same key.
+     - write one entry
+     - :ref:`key <fdb-entry>`
    * - 1
      - :val:`FDB_OP.OP.DEL`
-     - Remove the entry with the key in the input registers.
+     - remove one entry
+     - :ref:`key <fdb-entry>`
    * - 2
      - :val:`FDB_OP.OP.GET_ONE`
-     - Read the entry with that key, or the entry at :field:`FDB_OP.INDEX`.
+     - read one entry
+     - :ref:`key <fdb-entry>` or :field:`FDB_OP.INDEX`
    * - 3
      - :val:`FDB_OP.OP.GET_NEXT`
-     - Read the next entry after :field:`FDB_OP.INDEX` that matches :field:`FDB_OP.NEXT_TYPE`.
+     - read the next entry
+     - :field:`FDB_OP.INDEX` with :field:`FDB_OP.NEXT_TYPE`
    * - 4
      - :val:`FDB_OP.OP.FLUSH`
-     - Remove many entries, selected by :field:`FDB_OP.FLUSH`.
+     - remove many entries
+     - :field:`FDB_OP.FLUSH`
+
+:val:`FDB_OP.OP.ADD` replaces an entry that has the same key.
+:field:`FDB_OP.MODE_INDEX` decides whether :val:`FDB_OP.OP.GET_ONE` uses the key or the
+index.
 
 .. tab-set::
 
@@ -82,14 +96,16 @@ An entry is three words. The input registers and the output registers share one 
 .. yt-bitfield:: FDB_IN2
 
 The key is the MAC address, split over :field:`FDB_IN0.ADDR_HI4` and
-:field:`FDB_IN1.ADDR_LO2`, and the filtering ID in :field:`FDB_IN1.FID`, for which the :ref:`Linux driver <sources-list>`
-uses the VLAN ID. For the address ``02:11:22:33:44:55``, the first field is
-``0x02112233`` and the second is ``0x4455``.
+:field:`FDB_IN1.ADDR_LO2`, and the filtering ID in :field:`FDB_IN1.FID`.
+:lx:`yt921x_fdb_in01` writes the VLAN ID as the filtering ID. For the address
+``02:11:22:33:44:55``, :field:`FDB_IN0.ADDR_HI4` is ``0x02112233`` and
+:field:`FDB_IN1.ADDR_LO2` is ``0x4455``.
 
-:field:`FDB_IN1.STATUS` tells static from learned entries and carries the age of learned ones.
-Write :val:`FDB_IN1.STATUS.STATIC` (7) for an entry that must stay; :val:`FDB_IN1.STATUS.INVALID` (0) in a result means the slot
-is empty. :field:`FDB_IN2.EGR_PORTS` is the destination port mask: one bit for a unicast
-address, several for a multicast group.
+:field:`FDB_IN1.STATUS` tells static from learned entries and carries the age of learned
+ones. Write :val:`FDB_IN1.STATUS.STATIC` for an entry that must stay. The status
+:val:`FDB_IN1.STATUS.INVALID` in a result means that the entry is empty.
+:field:`FDB_IN2.EGR_PORTS` is the destination port mask: one bit for a unicast address,
+several for a multicast group.
 
 .. _fdb-add:
 
@@ -118,8 +134,9 @@ Add a static entry
            :start-after: # [fdb-add]
            :end-before: # [fdb-add end]
 
-To add a port to a multicast group, look the entry up first, set the port's bit in the port
-mask that comes back and add the entry again. To remove the last port, delete the entry.
+To add a port to a multicast group, :ref:`look the entry up <fdb-lookup>`, set the port's
+bit in the port mask that comes back and add the entry again. To remove the last port, delete
+the entry. :lx:`yt921x_fdb_join` and :lx:`yt921x_fdb_leave` work in this way.
 
 .. _fdb-lookup:
 
@@ -156,54 +173,71 @@ Walk the table
 To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put the index in
 :field:`FDB_OP.INDEX`.
 
-1. Run :val:`FDB_OP.OP.GET_ONE` with index 0 and handle the entry if its status is not :val:`FDB_IN1.STATUS.INVALID`.
-2. Run :val:`FDB_OP.OP.GET_NEXT` with the index of the last entry seen. :field:`FDB_OP.NEXT_TYPE` selects
-   what counts as next; for :val:`FDB_OP.NEXT_TYPE.UCAST_PORT` put the ports of interest in
-   :field:`FDB_IN2.EGR_PORTS` first.
-3. Take the new index from :field:`FDB_RESULT.INDEX` and repeat until the result is
+1. Run :val:`FDB_OP.OP.GET_ONE` with index 0 and handle the entry if its status is not
+   :val:`FDB_IN1.STATUS.INVALID`. 2. Run :val:`FDB_OP.OP.GET_NEXT` with the index of the last
+   entry seen. :field:`FDB_OP.NEXT_TYPE` selects what counts as next; for
+   :val:`FDB_OP.NEXT_TYPE.UCAST_PORT` put the ports of interest in :field:`FDB_IN2.EGR_PORTS`
+   first. 3. Take the new index from :field:`FDB_RESULT.INDEX` and repeat until the result is
    :field:`NOTFOUND <FDB_RESULT.NOTFOUND>` or the index reaches 4095 (:const:`FDB_NUM` − 1).
+
+The three steps are :ev:`confirmed` by :lx:`yt921x_fdb_dump`.
 
 .. warning::
 
-   Never run :val:`FDB_OP.OP.GET_NEXT` with index 4095. The :ref:`Linux driver <sources-list>` documents that the command then
-   never completes and the database stays stuck until the switch is reset.
+   Never run :val:`FDB_OP.OP.GET_NEXT` with index 4095. A comment in :lx:`chip.c:629`, inside
+   :lx:`yt921x_fdb_dump`, states that the command then hangs and the database stays unusable
+   until the switch is reset.
 
 .. _fdb-flush:
 
 Flush
 -----
 
-:val:`FDB_OP.OP.FLUSH` removes learned entries in bulk; with :field:`FDB_OP.FLUSH_STATIC` it removes static
-ones as well. It works on unicast entries, or on multicast entries when
+:val:`FDB_OP.OP.FLUSH` removes learned entries in bulk. With :field:`FDB_OP.FLUSH_STATIC` it
+removes static ones as well. The command and the rows :val:`FDB_OP.FLUSH.PORT` and
+:val:`FDB_OP.FLUSH.PORT_VID` of the :ref:`selection table <fdb-flush-table>` are
+:ev:`confirmed` by :lx:`yt921x_fdb_flush_raw`. The other two rows have the level
+:ev:`header`.
+
+The command works on unicast entries, or on multicast entries when
 :field:`FDB_OP.FLUSH_MCAST` is set, so emptying the table takes one flush of each kind. The
-multicast selector is not used by the :ref:`Linux driver <sources-list>`; it follows the
-comment in its header and the flush modes of the :ref:`vendor SDK <sources-list>`.
+field has the level :ev:`header`: the comment on its definition in :lx:`chip.h:260` reads
+"ucast / mcast", and no function of the Linux driver sets it.
+
+.. _fdb-flush-table:
 
 .. list-table::
    :header-rows: 1
-   :widths: 14 20 66
+   :widths: 10 24 33 33
 
    * - Value
      - :field:`FDB_OP.FLUSH`
-     - Entries removed
+     - Port filter
+     - Filtering ID filter
    * - 0
      - :val:`FDB_OP.FLUSH.ALL`
-     - Every entry of the selected kind
+     - none
+     - none
    * - 1
      - :val:`FDB_OP.FLUSH.PORT`
-     - Entries of the ports in :field:`FDB_IN2.EGR_PORTS`
+     - :field:`FDB_IN2.EGR_PORTS`
+     - none
    * - 2
      - :val:`FDB_OP.FLUSH.PORT_VID`
-     - Entries of those ports with the filtering ID in :field:`FDB_IN1.FID`
+     - :field:`FDB_IN2.EGR_PORTS`
+     - :field:`FDB_IN1.FID`
    * - 3
      - :val:`FDB_OP.FLUSH.VID`
-     - Entries with the filtering ID in :field:`FDB_IN1.FID`
+     - none
+     - :field:`FDB_IN1.FID`
 
-Flush the entries of a port when its link goes down or its spanning tree state changes, or
-set :field:`FDB_HW_FLUSH.ON_LINKDOWN` and let the switch do the first of these. The
-`vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_l2.c#L385>`__ refuses a flush command
-while that bit is set, so use one method or the other. The bit is not used by the
-:ref:`Linux driver <sources-list>`; its meaning follows its name and that SDK code.
+Flush the entries of a port when its link goes down or its spanning tree state changes.
+:field:`FDB_HW_FLUSH.ON_LINKDOWN` lets the switch flush on link-down by itself. The function
+`fal_tiger_l2_fdb_addr_flush() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_l2.c#L385>`__
+of the :ref:`vendor SDK <sources-list>` refuses a flush command while
+:field:`FDB_HW_FLUSH.ON_LINKDOWN` is set, so use one method or the other. The meaning of the
+bit is :ev:`inferred` from its name and from that SDK function. No function of the Linux
+driver sets it.
 
 .. _fdb-ageing:
 
@@ -211,4 +245,6 @@ Ageing
 ------
 
 :field:`AGEING.INTERVAL` is the ageing time of learned entries in units of 5 seconds, so 60
-stands for the usual 300 seconds.
+stands for 300 seconds, the default ageing time of IEEE 802.1Q. The unit is
+:ev:`confirmed` by :lx:`yt921x_dsa_set_ageing_time`, whose comment reads "AGEING reg is set in
+5s step".

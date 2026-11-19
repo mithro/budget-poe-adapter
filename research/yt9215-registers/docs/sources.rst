@@ -1,10 +1,11 @@
 .. _sources:
 
-Sources and confidence
-======================
+Sources and evidence
+====================
 
-Motorcomm publishes no register documentation for these parts. This manual combines three
-sources and marks how well each statement is supported.
+Motorcomm publishes no register documentation for these parts. This manual combines the four
+sources of the :ref:`source list <sources-list>` and marks every register, field and
+procedure with one of the :ref:`evidence levels <evidence>`.
 
 .. _sources-list:
 
@@ -13,141 +14,224 @@ Sources
 
 .. list-table::
    :header-rows: 1
-   :widths: 40 60
+   :widths: 24 30 18 28
 
    * - Source
-     - Version
-   * - `Vendor driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver>`__
-     - Same commit as the vendor SDK
+     - Repository
+     - Commit
+     - Provides
    * - `Linux driver <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__
-     - Commit ``20eef29b7c84`` of the mainline kernel
-   * - `Vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
-     - Commit ``d2c8d6fc721f`` of a public mirror
+     - `torvalds/linux <https://github.com/torvalds/linux>`__
+     - `20eef29b7c84 <https://github.com/torvalds/linux/commit/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca>`__
+     - Register names with working code
+   * - `Vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk>`__
+     - `OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk>`__
+     - `d2c8d6fc721f <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/commit/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
+     - Table names with bit positions
+   * - `YT9215RB vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver>`__
+     - `OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk>`__
+     - `d2c8d6fc721f <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/commit/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
+     - RGMII set-up code
    * - :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`
+     - none
      - V1.03
+     - Pins with interface timing
 
-The Linux driver provides the register and field names with their addresses, and working code
-that shows how they are used. It is in
-`drivers/net/dsa/motorcomm/ <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__, with the tag format in
-`net/dsa/tag_yt921x.c <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/net/dsa/tag_yt921x.c>`__. Where a guide page says a step is
-confirmed by the Linux driver, the reference entries of the registers involved link to the
-lines of the driver header.
+The Linux driver is the directory
+`drivers/net/dsa/motorcomm <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__
+of the mainline kernel together with the tag format in :lx:`tag_yt921x.c`. Its headers
+(:lx:`chip.h`, :lx:`tc.h`, :lx:`mdio_bus.h`, :lx:`mib.h`, :lx:`leds.h`) define the register
+and field names with their addresses. Every function of the driver that this manual names is
+a link to its definition at the commit of the :ref:`source list <sources-list>`.
 
-The vendor SDK provides a list of all register tables with field positions, and driver code
-that uses them, but no register descriptions. Its repository also contains a small
-`MDIO driver for the YT9215RB <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver>`__.
+The vendor SDK is the directory ``switch_sdk`` of a public copy of the Motorcomm SDK. It
+holds a list of all register tables with field positions, and driver code that uses them,
+but no register descriptions. :ref:`reference-sdk` lists every table.
 
-The datasheet provides the pins, the strap pins and the timing of the management interface.
-It contains no register addresses.
+The YT9215RB vendor driver is a single-file MDIO driver in the same repository as the vendor
+SDK.
+
+The datasheet gives the pins, the strap pins and the timing of the management interface. It
+contains no register addresses.
 
 .. _evidence:
 
 Evidence levels
 ---------------
 
-Every register and field in the reference has one of three levels.
+Every register and field in the :ref:`reference <reference>` has one of the levels driver,
+header and inferred. The guide pages use the words of the column "Word in the guide"; each
+use of such a word is a link to its row.
 
 .. list-table::
    :header-rows: 1
-   :widths: 16 84
+   :widths: 14 18 34 34
 
    * - Level
-     - Meaning
-   * - driver
-     - The Linux driver reads or writes the item. The description follows what the code does.
-   * - header
-     - The Linux driver header defines the item, with a name and values that leave little
-       doubt, but no code uses it.
-   * - inferred
-     - The description is deduced from the name of the item and from the name the vendor SDK
-       gives the same bits. It may be wrong.
+     - Word in the guide
+     - Source of the statement
+     - Where the source is cited
+   * - .. _evidence-driver:
+
+       driver
+     - confirmed
+     - Code of the Linux driver
+     - Row "First used in" of the register
+   * - .. _evidence-header:
+
+       header
+     - header
+     - Definition in a Linux driver header
+     - Row "Defined at" of the register
+   * - .. _evidence-inferred:
+
+       inferred
+     - inferred
+     - Names in the Linux driver and the vendor SDK
+     - Sentence that makes the statement
+   * - .. _evidence-datasheet:
+
+       datasheet
+     - datasheet
+     - Table or figure of the datasheet
+     - Sentence that makes the statement
+   * - .. _evidence-unknown:
+
+       none
+     - not known
+     - No source
+     - :ref:`sources-open`
+
+A statement with the level driver follows what the code does. A header definition that no
+code uses carries a name and often a list of values, which is taken at face value. An inferred
+statement is a reading of names and can be wrong. The level datasheet applies to pins and
+timing only, so it does not occur in the reference.
+
+The driver level of a field means that some function of the Linux driver reads or writes the
+field. The reference names the first such function in the column "First used in", as a link
+to the line of code. A field that is the only field of its register shares the level of the
+register.
 
 .. _sources-sdk:
 
 Comparison with the vendor SDK
 ------------------------------
 
-The Sources table of each register compares every field with the SDK table at the same
-address. For an array field whose elements are separated by other bits, the comparison is
-that of its first element.
+The reference compares every field with the vendor SDK table at the same address, in the
+second table under the heading "Sources of the fields" of each register. For an array field
+whose elements are separated by other bits, the comparison is that of element 0.
 
 .. list-table::
    :header-rows: 1
-   :widths: 28 72
+   :widths: 24 38 38
 
    * - SDK comparison
-     - Meaning
-   * - same bits
-     - The SDK has a field with the same position and width.
-   * - part of SDK field
-     - The field lies inside a wider SDK field.
-   * - spans SDK fields
-     - The field covers several SDK fields, which are listed one per row.
-   * - SDK lists no fields
-     - The SDK has the table but describes it as one opaque value.
-   * - no SDK table
-     - The SDK register list has no table at this address.
-   * - not in SDK
-     - The SDK has the table but no field at these bits.
+     - SDK table at the address
+     - SDK field at the bits
+   * - .. _sdk-same:
 
-What is not known
------------------
+       same bits
+     - present
+     - same position and width
+   * - .. _sdk-part:
 
-Nothing here has been run on a YT921x by this project; the code is tested against a software
-model. The topics of this table are open.
+       part of SDK field
+     - present
+     - wider than the field
+   * - .. _sdk-spans:
+
+       spans SDK fields
+     - present
+     - several inside the field
+   * - .. _sdk-notin:
+
+       not in SDK
+     - present
+     - none
+   * - .. _sdk-nofields:
+
+       SDK lists no fields
+     - present without fields
+     - none
+   * - .. _sdk-notable:
+
+       no SDK table
+     - absent
+     - none
+
+A field that spans several SDK fields has one row per SDK field. The row "SDK table" of a
+register names the table. Where the SDK has no table at the address but its code uses the
+address as a number, the row reads "address constant" and links to that line of the SDK.
+
+.. _sources-open:
+
+Open topics
+-----------
+
+No part of this manual and none of its code has been run on a YT921x. The code is tested
+against the :ref:`software model <bindings-tests>` only. No source settles the topics of this
+table.
 
 .. list-table::
    :header-rows: 1
    :widths: 40 60
 
    * - Topic
-     - Where it matters
-   * - Reset values
+     - Section that depends on it
+   * - Reset values of most registers
      - :ref:`sources-reset`
    * - YT9215SCH identification
      - :ref:`bringup-identify`
-   * - Registers beyond the reference
+   * - Registers outside the reference
      - :ref:`reference-sdk`
    * - Order of processing stages
      - :ref:`overview-frame-path`
-   * - Duration of reset and table commands
+   * - Duration of reset
+     - :ref:`access-wait`
+   * - Duration of table commands
      - :ref:`access-wait`
    * - xMII modes other than RGMII
      - :ref:`ports-xmii`
-   * - Filtering IDs
+   * - Effect of the filtering ID
      - :field:`VLAN_CTRL.FID`
-   * - Shared VLAN learning
+   * - Meaning of the SVLAN_EN bit
      - :field:`VLAN_CTRL.SVLAN_EN`
    * - Scale of the temperature reading
      - :reg:`TEMP`
    * - Clause 45 MDIO
      - :ref:`phy-mbus`
-   * - SPI and I2C host interfaces
+   * - SPI host interface
+     - :ref:`access-straps`
+   * - I2C host interface
      - :ref:`access-straps`
 
-The vendor SDK lists more than twice as many tables as this manual describes; the meaning of
-the others is known by name only. Functions that exist only there include interrupts, queue
-scheduling, storm control, loop detection, IGMP snooping and the handling of reserved
-multicast addresses such as spanning tree BPDUs.
+The vendor SDK lists 237 tables and the reference describes 101 registers. The other tables
+are known by name only. :ref:`reference-sdk` lists them by address region.
 
 .. _sources-reset:
 
 Reset values
-~~~~~~~~~~~~
+------------
 
-Three reset values are stated by the Linux driver: the first in its code, the others in
-comments. None has been read back from hardware by this project. Write every other register a function
-depends on.
+The Linux driver states the reset values of three fields. A driver writes every other
+register that a function depends on before it uses the function.
 
 .. list-table::
    :header-rows: 1
-   :widths: 60 40
+   :widths: 34 16 50
 
    * - Field
      - Reset value
+     - Stated in
    * - :field:`CPU_TAG_TPID.TPID`
      - ``0x9988``
+     - :lx:`Definition of the default value <chip.h:41>`
    * - :field:`PORT_RATE.GAP_VALUE`
-     - ``0x14``
+     - 20
+     - :lx:`Comment on the field <tc.h:271>`
    * - :field:`MAC_FRAME.SIZE`
      - 9216
+     - :lx:`Comment in yt921x_dsa_port_change_mtu() <chip.c:241>`
+
+The comment on :field:`MAC_FRAME.SIZE` says that the frame size is at its maximum after
+reset. The maximum is :const:`FRAME_SIZE_MAX`.

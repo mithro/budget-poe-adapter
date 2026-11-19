@@ -10,6 +10,9 @@ Roles, each a link to the generated reference:
   :const:`EDATA_LEN`        constant
   :chip:`YT9215S`           part
   :sdk:`PORT_CTRL`          vendor SDK table
+  :val:`FDB_OP.OP.ADD`      value of a field or of a shared value list
+  :lx:`yt921x_chip_reset`   function, file or ``file:line`` of the Linux driver
+  :ev:`inferred`            evidence word, linked to its definition
 
 Directives:
 
@@ -79,7 +82,8 @@ def resolve(kind, name):
         return gen_docs.counter_label(name), name, True
     if kind == "const" and any(c["name"] == name for c in m.constants):
         return gen_docs.const_label(name), name, True
-    if kind == "chip" and any(c["name"] == name for c in m.chips):
+    if kind == "chip" and (any(c["name"] == name for c in m.chips)
+                           or any(n == name for n, _ in gen_docs.ASSUMED_PARTS)):
         return gen_docs.chip_label(name), name, False
     if kind == "sdk" and gen_docs.sdk_label(name) in s["targets"]:
         return gen_docs.sdk_label(name), name, True
@@ -105,6 +109,45 @@ class YtRole(SphinxRole):
         ref = addnodes.pending_xref("", refdomain="yt", reftype="ref", reftarget=label,
                                     refexplicit=True, refwarn=True, refdoc=self.env.docname)
         ref += nodes.literal(text, text) if literal else nodes.Text(text)
+        return [ref], []
+
+
+class LinuxRole(SphinxRole):
+    """``:lx:`yt921x_chip_reset``` links a function of the Linux driver, ``:lx:`chip.h```
+    a file and ``:lx:`chip.h:22``` a line, all at the commit the description was taken from."""
+
+    def run(self):
+        explicit, title, name = split_explicit_title(self.text)
+        m = state()["model"]
+        funcs = m.d["linux_functions"]
+        paths = m.sources["linux"]["paths"]
+        fn, _, line = name.partition(":")
+        if name in funcs:
+            src, text = funcs[name], name + "()"
+        elif fn in paths and (not line or line.isdigit()):
+            src, text = [fn, int(line) if line else None], name
+        else:
+            msg = self.inliner.reporter.error(
+                "unknown Linux driver function or file: " + name, line=self.lineno)
+            return [self.inliner.problematic(self.rawtext, self.rawtext, msg)], [msg]
+        uri = gen_docs.linux_url(m, src)
+        ref = nodes.reference("", "", refuri=uri, classes=["external"])
+        ref += nodes.literal(text, title if explicit else text)
+        return [ref], []
+
+
+class EvidenceRole(SphinxRole):
+    """``:ev:`inferred``` links an evidence word to the list that defines it."""
+
+    def run(self):
+        explicit, title, name = split_explicit_title(self.text)
+        if name not in gen_docs.EVIDENCE_WORDS:
+            msg = self.inliner.reporter.error("unknown evidence word: " + name, line=self.lineno)
+            return [self.inliner.problematic(self.rawtext, self.rawtext, msg)], [msg]
+        ref = addnodes.pending_xref("", refdomain="yt", reftype="ref",
+                                    reftarget=gen_docs.EVIDENCE_WORDS[name],
+                                    refexplicit=True, refwarn=True, refdoc=self.env.docname)
+        ref += nodes.Text(title if explicit else name)
         return [ref], []
 
 
@@ -201,6 +244,8 @@ def setup(app):
     app.add_domain(YtDomain)
     for kind in ("reg", "field", "blk", "enum", "counter", "const", "chip", "sdk", "val"):
         app.add_role(kind, YtRole(kind))
+    app.add_role("lx", LinuxRole())
+    app.add_role("ev", EvidenceRole())
     app.add_directive("yt-bitfield", Bitfield)
     app.add_directive("yt-diagram", Diagram)
     app.add_css_file("yt921x.css")

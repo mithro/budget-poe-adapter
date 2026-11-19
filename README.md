@@ -1,6 +1,6 @@
 # Budget PoE to USB-C adapter
 
-Notes, research and design material for an open source, non-isolated, very cheap and
+Notes and research for an open source, non-isolated, very cheap and
 flexible PoE to USB-C adapter that passes Ethernet through at 1 Gbit/s or faster.
 
 The design uses only the Motorcomm YT9215 switch IC and its internal RISC-V CPU. The
@@ -15,7 +15,7 @@ The project is at the research stage. It has no schematic or PCB of the adapter.
 | [`research/`](research/) | Research notes | [Research: power](#research-power) |
 | [`research/`](research/) | Research notes | [Research: YT9215 switch IC](#research-yt9215-switch-ic) |
 | [`datasheets/`](datasheets/) | Switch IC documentation | [`datasheets/README.md`](datasheets/README.md) |
-| [`archive/`](archive/) | Notes that assume an external MCU or another switch IC | [Archive](#archive) |
+| [`archive/`](archive/) | Archived notes that are not part of the current design | [Archive](#archive) |
 
 The research notes cover these topics:
 
@@ -52,9 +52,14 @@ The research notes cover these topics:
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | UART pins of the YT9215 variants |
 | [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x switch programmer's guide with register reference |
 | [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x register bindings for C, Rust, MicroPython and Zephyr |
-| [`yt9215-boards.md`](research/yt9215-boards.md) | Boards and retail products that carry a YT9215 |
+| [`yt9215-boards.md`](research/yt9215-boards.md) | Boards and products that carry a YT9215 |
 | [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Annotated photos of a bought LX-IS601F V2.0 board |
 | [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Where the debug pins of its YT9215SCH come out |
+
+The register guide and its bindings describe access from an external host. How that
+carries over to firmware on the YT9215 CPU is an open question in
+[`yt9215-embedded-cpu.md`](research/yt9215-embedded-cpu.md#packet-path).
+
 
 ### Archive
 

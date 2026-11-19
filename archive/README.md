@@ -5,8 +5,8 @@ notes here assume something else: an external MCU, a switch IC from another vend
 no switch at all. They are kept for reference and are not part of the current design.
 The current notes are listed in the [repository README](../README.md).
 
-Each note is as it was written for the design it assumes. Its prices, picks and
-recommendations apply to that design only.
+Each note describes the design it assumes. Its prices, picks and recommendations apply
+to that design only.
 
 | Section | Contents |
 | --- | --- |
@@ -15,7 +15,7 @@ recommendations apply to that design only.
 | [Archived research: external MCU](#archived-research-external-mcu) | Choice of an external MCU |
 | [Archived research: external MCU](#archived-research-external-mcu) | Network link of an external MCU |
 | [Archived research: cost](#archived-research-cost) | Cost reduction of the archived design |
-| [Where the YT9215 parts went](#where-the-yt9215-parts-went) | Current notes that carry the YT9215 material of two archived notes |
+| [YT9215 material in current notes](#yt9215-material-in-current-notes) | Where the YT9215 material of mixed archived notes is |
 
 ## Archived design
 
@@ -62,8 +62,8 @@ The current design runs its firmware on the YT9215 CPU.
 | [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking a small device on a gigabit Ethernet link | External MCU |
 | [`bitbang-10mbit-ethernet.md`](research/bitbang-10mbit-ethernet.md) | Bit-banging 10 Mbit/s Ethernet | RP2040 |
 | [`bitbang-usb.md`](research/bitbang-usb.md) | Bit-banged (software) USB device | External MCU |
-| [`usb-network-card.md`](research/usb-network-card.md) | The adapter as a USB network card | CH32X035 |
-| [`usb-network-card.md`](research/usb-network-card.md) | The adapter as a USB network card | CH397A |
+| [`usb-network-card.md`](research/usb-network-card.md) | A virtual USB network card on the MCU | CH32X035 |
+| [`usb-network-card.md`](research/usb-network-card.md) | A USB network card that bridges Ethernet | CH397A |
 
 ## Archived research: cost
 
@@ -77,12 +77,13 @@ converter, the magnetics and the connectors. Those sections do not depend on the
 their totals are worked against [`bom-rough.csv`](design/bom-rough.csv), so the note stays
 with the archived design.
 
-## Where the YT9215 parts went
+## YT9215 material in current notes
 
-Two archived notes mix YT9215 material with material on other chips. The YT9215 material
-is also in current notes.
+Three archived notes mix YT9215 material with material on other chips. Current notes
+carry the YT9215 material of two of them.
 
 | Archived note | YT9215 material | Current note |
 | --- | --- | --- |
 | [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The RISC-V CPU | [`yt9215-embedded-cpu.md`](../research/yt9215-embedded-cpu.md) |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Boards and products | [`yt9215-boards.md`](../research/yt9215-boards.md) |
+| [`switch-detail-comparison.md`](research/switch-detail-comparison.md) | YT9215S chip data table | None |

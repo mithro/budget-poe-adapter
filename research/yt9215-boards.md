@@ -1,6 +1,6 @@
 # Boards and products that carry a YT9215
 
-Hardware on which the YT9215 and its RISC-V CPU can be studied: the boards already
+Hardware on which the YT9215 and its RISC-V CPU can be studied: the boards
 documented in this repository, and the retail products found to use the chip. The CPU
 itself is described in [`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md).
 
@@ -37,22 +37,26 @@ block automated fetches.
 
 No Motorcomm evaluation board for the YT9215 was found. The
 [Motorcomm product page](https://www.motor-comm.com/product/switching-chip) mentions none
-for the YT9215S, the YT9215SC or the YT9215RB, and none is listed at a distributor or
-marketplace [**V**](#evidence-codes).
+for the YT9215S, the YT9215SC or the YT9215RB [**V**](#evidence-codes). Searches of
+distributors and marketplaces found none listed [**I**](#evidence-codes).
 
 ## What Motorcomm says about the CPU for each part
 
 | Part | GE ports | SerDes ports | RGMII ports | CPU on the product page | CPU in the datasheet |
 | --- | --- | --- | --- | --- | --- |
 | YT9215S | 5 | 1 | 1 | No | Yes |
-| YT9215SC | 5 | 2 | – | Yes | Yes |
+| YT9215SC | 5 | 1 | 1 | Yes | Yes |
 | YT9215RB | 5 | – | 2 | No | Yes |
 | YT9218N | 8 | – | – | Yes | Not checked |
 | YT9218MB | 8 | – | – | Yes | Not checked |
 
-- The product page lists the CPU ("内置高性能RISC-V 核心CPU") and simple network
-  management ("支持简单网管") for the YT9215SC, the YT9218N and the YT9218MB only
+- The port counts of the YT9215 parts are those of their datasheets. The
+  [selection guide](../datasheets/motorcomm/Motorcomm_Product_Selection_Guide_2023-03-08.pdf)
+  also lists a YT9215SC configuration with two SerDes ports and no RGMII port
   [**V**](#evidence-codes).
+- The product page lists the CPU and simple network management for the YT9215SC, the
+  YT9218N and the YT9218MB only. Its wording for the YT9215SC is "内置高性能RISC-V
+  核心CPU" and "支持简单网管" [**V**](#evidence-codes).
 - The datasheets of the YT9215S, the YT9215SC and the YT9215RB all list an integrated
   RISC-V microprocessor [**V**](#evidence-codes). The evidence is in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#every-variant-has-the-risc-v-mcu).
@@ -80,12 +84,14 @@ run firmware on the switch CPU.
 | [Xiaomi CR881x](#product-cr881x) | Board | M79 |  |
 | [Xiaomi CR881x](#product-cr881x) | Switch CPU port | Port 8 | [**V**](#evidence-codes) |
 | [Xiaomi CR881x](#product-cr881x) | Switch reset | GPIO 35 | [**V**](#evidence-codes) |
-| [Xiaomi CR881x](#product-cr881x) | Evidence 1 | [OpenWrt forum](https://forum.openwrt.org/t/ipq5018-yt9215s-and-1000base-x-2500base-x/241325) |  |
-| [Xiaomi CR881x](#product-cr881x) | Evidence 2 | [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150) |  |
-| [Xiaomi CR881x](#product-cr881x) | Host UART | J1 (VCC-RX-GND-TX) |  |
+| [Xiaomi CR881x](#product-cr881x) | Source 1 | [OpenWrt forum](https://forum.openwrt.org/t/ipq5018-yt9215s-and-1000base-x-2500base-x/241325) |  |
+| [Xiaomi CR881x](#product-cr881x) | Source 2 | [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150) |  |
+| [Xiaomi CR881x](#product-cr881x) | Host UART header | J1 |  |
+| [Xiaomi CR881x](#product-cr881x) | Host UART pin order | VCC-RX-GND-TX |  |
 | [Xiaomi CR881x](#product-cr881x) | OpenWrt | [hzyitc/openwrt-redmi-ax3000](https://github.com/hzyitc/openwrt-redmi-ax3000) |  |
 | [Xiaomi CR881x](#product-cr881x) | Known issue | Switch probe flaky on some boards | [**V**](#evidence-codes) |
-| [Xiaomi CR881x](#product-cr881x) | Where sold | Mostly second-hand in China (Xianyu) |  |
+| [Xiaomi CR881x](#product-cr881x) | Where sold | Second-hand in China |  |
+| [Xiaomi CR881x](#product-cr881x) | Marketplace | Xianyu |  |
 | [Xiaomi CR881x](#product-cr881x) | AliExpress | Occasional listings |  |
 | [Xiaomi CR881x](#product-cr881x) | eBay | Occasional listings |  |
 | [Xiaomi CR881x](#product-cr881x) | Typical price | US$25–50 |  |
@@ -97,19 +103,22 @@ run firmware on the switch CPU.
 | [BDY-G98](#product-g98) | Type 2 | Router |  |
 | [BDY-G98](#product-g98) | LAN ports | 8 |  |
 | [BDY-G98](#product-g98) | Switch attach | Each YT9215S on an RK3588 GMAC | [**V**](#evidence-codes) |
-| [BDY-G98](#product-g98) | Evidence | [GitHub issue](https://github.com/yifengyou/BDY_G98_RK3588/issues/6) |  |
+| [BDY-G98](#product-g98) | Source | [GitHub issue](https://github.com/yifengyou/BDY_G98_RK3588/issues/6) |  |
 | [BDY-G98](#product-g98) | Known issue | Cross-chip forwarding lock-up bug reported | [**V**](#evidence-codes) |
 | [BDY-G98](#product-g98) | Where sold | China-market box |  |
 | [BDY-G98](#product-g98) | Amazon AU | Not found |  |
 | [BDY-G98](#product-g98) | eBay | Not found |  |
 | [BDY-G98](#product-g98) | AliExpress | Not found |  |
-| Unnamed industrial boards | Evidence | [CSDN write-up](https://blog.csdn.net/xuesong10210/article/details/135957672) |  |
+| Unnamed industrial boards | Source | [CSDN write-up](https://blog.csdn.net/xuesong10210/article/details/135957672) |  |
 | Unnamed industrial boards | Product names | Not given |  |
 
 Before buying a Xiaomi unit, check that the model is a CR881x: the other models in the
 table are not confirmed to carry a YT9215.
 
 ## Chips
+
+Prices and stock are the LCSC figures in the archived
+[switch IC comparison](../archive/research/ethernet-switch-comparison.md).
 
 | Part | LCSC part | Price | Stock | Read on |
 | --- | --- | --- | --- | --- |
@@ -130,6 +139,11 @@ Results change daily.
 - Does the CR881x's YT9215S have its CPU strapped off (pin
   [75](motorcomm-debug-pins.md#s-pin-75))? A photo of the board around the switch would
   answer it.
-- Does any retail product run firmware on the YT9215 CPU? None was identified. Motorcomm
+- Do the [LX-IS601F V2.0](#board-lx) boards run code on the CPU? The board carries a
+  24C08 EEPROM and a flash footprint beside its YT9215SCH
+  ([board schematic notes](lx-is601f-board/schematic/README.md)), and the
+  [boot table](motorcomm-debug-pins.md#boot-table) has a mode that loads CPU RAM from an
+  EEPROM. Reading the EEPROM and the strap levels would answer it.
+- Does any other retail product run firmware on the YT9215 CPU? None was identified. Motorcomm
   describes the CPU as being for simple network management, so a web-managed switch built
   on a YT9215SC or a YT9218 would be the place to look [**I**](#evidence-codes).

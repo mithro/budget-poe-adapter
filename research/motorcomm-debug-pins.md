@@ -282,7 +282,7 @@ The latched strap values can be read back over MDIO from the `PON_STRAP_VAL` reg
 
 ## Implications for the adapter
 
-The adapter runs its firmware on the switch's own MCU and has no external MCU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). On a YT9215S that means `DIS_MCU` (pin [75](#s-pin-75)) stays low, as on the [mirrored board](#how-the-mirrored-board-wires-these-pins). Running code from SPI flash also needs `EN_SPIF` (pin [74](#s-pin-74)) high, which the mirrored board pulls low. This reading takes the strap combinations from the [YT9215SCH boot table](#boot-table), because the S datasheet has no boot-mode table [**I**](#evidence-codes).
+The adapter runs its firmware on the switch's own MCU and has no external MCU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). On a YT9215S that means `DIS_MCU` (pin [75](#s-pin-75)) stays low, as on the [mirrored board](#how-the-mirrored-board-wires-these-pins). Running code from SPI flash also needs `EN_SPIF` (pin [74](#s-pin-74)) high and `DISAUTOLOAD` (pin [76](#s-pin-76)) low. The mirrored board pulls `EN_SPIF` low and `DISAUTOLOAD` high, and flash on SPF1 puts its CS# on the `DISAUTOLOAD` pin ([SPI flash on the YT9215S](#spi-flash-on-the-yt9215s)). This reading takes the strap combinations from the [YT9215SCH boot table](#boot-table), because the S datasheet has no boot-mode table [**I**](#evidence-codes).
 
 A debug option stays open cheaply with one 0402 pad on each of these YT9215S pins. Most already carry strap resistors, so a test pad per net costs almost nothing.
 

@@ -241,7 +241,8 @@ Strap overrides
 Some settings are sampled from strap pins at power-on. It is :ev:`inferred` from the register
 names that a bit in :reg:`PON_STRAP_FUNC` makes the switch use the same bit of
 :reg:`PON_STRAP_VAL` in place of the strap. :lx:`yt921x_set_eee` sets the EEE bit in both
-registers to turn Energy Efficient Ethernet on and clears both to turn it off, which
+registers when the first port turns Energy Efficient Ethernet on and clears both when no port
+uses it any more, which
 :ref:`ports-eee` describes. Writing both bits alike is the only use that is :ev:`confirmed`. It is :ev:`inferred` from
 the name of :reg:`PON_STRAP_CAP` that the register shows the sampled levels.
 

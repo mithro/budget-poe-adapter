@@ -60,7 +60,7 @@ int guide_init(struct yt921x *dev, unsigned int cpu_port)
 /* [features] */
 int guide_enable_features(struct yt921x *dev)
 {
-	/* Counters, ACL and meters work only while their bit is set. */
+	/* The Linux driver sets these bits before it uses counters, ACL and meters. */
 	uint32_t bits = YT921X_FUNC_MIB_M | YT921X_FUNC_ACL_M | YT921X_FUNC_METER_M;
 
 	return yt921x_reg_update(dev, YT921X_FUNC, bits, bits);

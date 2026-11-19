@@ -47,7 +47,8 @@ In both modes the MAC passes frames only while :field:`PORT_CTRL.RX_MAC_EN` and
 :field:`PORT_CTRL.TX_MAC_EN` are set. To take a port down, clear
 :field:`PORT_CTRL.RX_MAC_EN`, :field:`PORT_CTRL.TX_MAC_EN` and :field:`PORT_CTRL.LINK_AN`, as
 :lx:`yt921x_port_down` of the :ref:`Linux driver <sources-list>` does. For an external port
-that function also clears :field:`SERDES.LINK` and :field:`XMII.LINK`.
+that function also clears :field:`SERDES.LINK` if the part has a SerDes on the port and
+:field:`XMII.LINK` if it has xMII pins there.
 
 Forcing is the :ev:`confirmed` way for a port with a built-in PHY. The Linux kernel watches
 the PHY and, on a link change, :lx:`yt921x_port_up` writes the negotiated speed, duplex and

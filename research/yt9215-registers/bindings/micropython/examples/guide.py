@@ -49,7 +49,7 @@ def init(mdio, cpu_port_num):
 
 # [features]
 def enable_features(dev):
-    """Counters, ACL and meters work only while their bit is set."""
+    """The Linux driver sets these bits before it uses counters, ACL and meters."""
     bits = R.FUNC_MIB_M | R.FUNC_ACL_M | R.FUNC_METER_M
     dev.reg_update(R.FUNC, bits, bits)
 # [features end]

@@ -98,8 +98,9 @@ What a driver has to do
      - Read counters
      - :doc:`mib`
 
-Step 3 is
-needed for the counters, the ACL and the meters, step 4 for a host that sends and receives
+Step 3 turns
+on the counters, the ACL and the meters; :ref:`bringup-features` gives the evidence that they
+need it. Step 4 is needed for a host that sends and receives
 frames through the switch, step 6 for a part that uses port 8 or port 9, and steps 8 to 11
 only for the function they name.
 

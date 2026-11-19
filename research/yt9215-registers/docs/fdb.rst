@@ -200,7 +200,7 @@ To list entries, address them by index: set :field:`FDB_OP.MODE_INDEX` and put t
    :field:`NOTFOUND <FDB_RESULT.NOTFOUND>` or the index reaches 4095 (:const:`FDB_NUM` − 1).
 
 The three steps are :ev:`confirmed` by :lx:`yt921x_fdb_dump`, which reads each entry with
-:lx:`yt921x_fdb_read`. That function also stops at a result whose
+:lx:`yt921x_fdb_read`. :lx:`yt921x_fdb_dump` also stops at a result whose
 :field:`FDB_OUT1.STATUS` is :val:`FDB_OUT1.STATUS.INVALID` or whose port mask is 0.
 
 .. warning::

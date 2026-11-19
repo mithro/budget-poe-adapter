@@ -54,3 +54,7 @@ there, 32 to a side, and checked against these landmarks:
 
 Routing was traced from top-side photos only. Where the vias go on other layers, the
 strap levels, and what the far pads of R44, R89, R92 and R93 connect to are unknown.
+
+## Schematic
+
+A reverse-engineered KiCad schematic of the whole board, with each connection marked confirmed, seen, inferred or unknown, is in [`schematic/`](schematic/). Its [README](schematic/README.md) lists what is known about the board and the measurements that would settle the rest.

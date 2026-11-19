@@ -15,7 +15,7 @@ to that design only.
 | [Archived research: external MCU](#archived-research-external-mcu) | Choice of an external MCU |
 | [Archived research: external MCU](#archived-research-external-mcu) | Network link of an external MCU |
 | [Archived research: cost](#archived-research-cost) | Cost reduction of the archived design |
-| [YT9215 material in current notes](#yt9215-material-in-current-notes) | Where the YT9215 material of mixed archived notes is |
+| [YT9215 material in current notes](#yt9215-material-in-current-notes) | YT9215 material of the mixed notes |
 
 ## Archived design
 
@@ -45,7 +45,7 @@ to that design only.
 | [`switch-detail-comparison.md`](research/switch-detail-comparison.md) | Detail on the YT9215S | RTL8363NB as the pick |
 | [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The DW8051 CPU inside the RTL8367S | External MCU |
 | [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The RISC-V CPU inside the YT9215S | External MCU |
-| [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The RTL8363NB, which has no CPU | External MCU |
+| [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | Absence of a CPU in the RTL8363NB | External MCU |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Dev boards carrying the RTL8367S | RTL8367S as a candidate |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Off-the-shelf hardware carrying the RTL8367S | RTL8367S as a candidate |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Hardware carrying the YT9215S | RTL8367S as a candidate |
@@ -79,11 +79,14 @@ with the archived design.
 
 ## YT9215 material in current notes
 
-Three archived notes mix YT9215 material with material on other chips. Current notes
-carry the YT9215 material of two of them.
+Some archived notes mix YT9215 material with material on other chips. Current notes
+carry the YT9215 material of two of them. The switch IC comparisons also hold YT9215
+price, stock and chip data that no current note repeats in full.
 
 | Archived note | YT9215 material | Current note |
 | --- | --- | --- |
 | [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The RISC-V CPU | [`yt9215-embedded-cpu.md`](../research/yt9215-embedded-cpu.md) |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Boards and products | [`yt9215-boards.md`](../research/yt9215-boards.md) |
 | [`switch-detail-comparison.md`](research/switch-detail-comparison.md) | YT9215S chip data table | None |
+| [`ethernet-switch-comparison.md`](research/ethernet-switch-comparison.md) | YT9215 price and stock | [`yt9215-boards.md`](../research/yt9215-boards.md#chips) |
+| [`ethernet-switch.md`](research/ethernet-switch.md) | YT9215S as runner-up | None |

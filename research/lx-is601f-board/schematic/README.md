@@ -52,8 +52,7 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | [`lx-is601f-nets.csv`](lx-is601f-nets.csv) | One row per pin |
 | [`gen_schematic.py`](gen_schematic.py) | Board data model and sheet layout |
 | [`kisch.py`](kisch.py) | KiCad schematic file writer |
-| [`renders/`](renders/) | PNG of each sheet |
-| [`renders/`](renders/) | Detail PNGs of each sheet, named `N-name-detail-NN.png` |
+| [`renders/`](renders/) | PNG of each sheet, and detail PNGs named `N-name-detail-NN.png` |
 
 Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` or `(no trace seen)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF, the render of each sheet and the [detail images](#sheets), and lists the detail images in this file. It checks that each sheet keeps a clear 10 mm margin and that no detail image is cut through a symbol or text. Edit the scripts, not the `.kicad_sch` files.
 
@@ -153,7 +152,7 @@ A whole sheet scaled to the width of this page leaves its text too small to read
 
 [![Sheet 7, Port LED array (silk lines FX and POW, positions P1-P5 and one unlabelled)](renders/7-leds-detail-01.png)](renders/7-leds.png)
 
-[![Sheet 7, LED6 footprint (DNP), LED7, LED8](renders/7-leds-detail-02.png)](renders/7-leds.png)
+[![Sheet 7, LED6 footprint (DNP), LED7 and LED8 with R68](renders/7-leds-detail-02.png)](renders/7-leds.png)
 <!-- sheets:end -->
 
 ## Confidence codes

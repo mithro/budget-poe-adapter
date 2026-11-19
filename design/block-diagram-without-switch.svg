@@ -72,7 +72,7 @@
 <rect x="138" y="586.5" width="29.84" height="18" fill="#ffffff" opacity="0.92"/>
 <text x="142" y="600" font-size="14" fill="#1d4ed8" text-anchor="start" font-weight="400">MDI</text>
 <path d="M130,737 L130,798" fill="none" stroke="#1d4ed8" stroke-width="3.5" marker-start="url(#adata)" marker-end="url(#adata)"/>
-<path d="M242,285 L358,285" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<path d="M242,500 L270,500 L270,285 L358,285" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
 <rect x="245.04" y="242.5" width="109.92" height="18" fill="#ffffff" opacity="0.92"/>
 <text x="300" y="256" font-size="14" fill="#c2410c" text-anchor="middle" font-weight="400">4× centre taps</text>
 <rect x="248.68" y="259.5" width="102.64" height="18" fill="#ffffff" opacity="0.92"/>
@@ -120,11 +120,9 @@
 <line x1="20" y1="890" x2="920" y2="890" stroke="#cbd5e1" stroke-width="1"/>
 <path d="M20,918 L72,918" fill="none" stroke="#1d4ed8" stroke-width="3.5" marker-start="url(#adata)" marker-end="url(#adata)"/>
 <text x="84" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">Gigabit data (MDI)</text>
-<path d="M255,918 L307,918" fill="none" stroke="#1d4ed8" stroke-width="2" marker-start="url(#armii)" marker-end="url(#armii)"/>
-<text x="319" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">100 Mb/s RMII + MDIO</text>
-<path d="M515,918 L567,918" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
-<text x="579" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">Power</text>
-<path d="M670,918 L722,918" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
-<text x="734" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">MCU control / sense</text>
+<path d="M255,918 L307,918" fill="none" stroke="#c2410c" stroke-width="4" marker-end="url(#apwr)"/>
+<text x="319" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">Power</text>
+<path d="M410,918 L462,918" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
+<text x="474" y="923" font-size="14" fill="#0f172a" text-anchor="start" font-weight="400">MCU control / sense</text>
 <text x="20" y="950" font-size="14" fill="#475569" text-anchor="start" font-weight="400">Black tags are the cost of each block at 1k units.</text>
 </svg>

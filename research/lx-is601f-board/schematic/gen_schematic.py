@@ -310,7 +310,7 @@ xl = m(109.22)
 s.wire([uC.p('64'), (xl, uC.p('64')[1]), (xl, uC.p('63')[1])], 'V'); s.mark(uC, '64', 'SWR_LX', 'V')
 s.wire([l3.p('1'), (m(85), l3.p('1')[1])], 'V'); s.mark(l3, '1', '+1V15', 'V')
 s.power('+1V15', m(85), l3.p('1')[1], lib_name='+1V1'); s.power('PWR_FLAG', m(85), l3.p('1')[1], lib_name='PWR_FLAG', rot=180)
-s.textbox('RBIAS: 2.49 kOhm 1 % to GND per datasheet. The\nresistor and the reset RC are not located.', m(15), m(100), m(60), m(10))
+s.textbox('RBIAS: 2.49 kOhm 1 % to GND per datasheet. The\nresistor and the reset RC are not located.', m(146), m(234), m(60), m(10))
 # EEPROM
 u10 = s.place('Memory_EEPROM:24LC08', 'U10', 'HK 24C08', m(55), m(150), ref_at=(m(55) - 10.16, m(150) - 8.89), val_at=(m(55) + 2.54, m(150) - 8.89), center=set())
 s.route(u10.p('6'), uC.p('91'), 'I', xm=m(76.2)); s.mark(u10, '6', 'I2C_SCL', 'I'); s.mark(uC, '91', 'I2C_SCL', 'I')
@@ -552,7 +552,7 @@ s.textbox('- The 12 array LEDs carry the silk names RJ7-RJ18, one pair of names 
           '- The silk labels the positions P1 to P5; the unlabelled position (RJ7, RJ8) is\n  assumed to be the SFP (U4 P9LED0, pin 67).\n'
           '- No resistors sit inside the array. R2-R5, R103 and R110-R114 beside it may be\n  the LED resistors (not traced); the anode supply and the active-low drive from\n  U4 are inferred.\n'
           '- The POW LEDs are probably driven by the PoE module (not traced).', m(17.78), m(140), m(125), m(34), size=1.1)
-s.frame(m(185), m(15), m(284), m(130), 'LED6 footprint (DNP), LED7, LED8')
+s.frame(m(185), m(15), m(284), m(130), 'LED6 footprint (DNP), LED7 and LED8 with R68')
 hd = s.place('Connector_Generic:Conn_02x02_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), fields={'Silk': 'LED6'})
 for n in '1234':
     s.stub(hd, n, 'TBD_LED6_%s' % n, 'U', length=m(5.08))

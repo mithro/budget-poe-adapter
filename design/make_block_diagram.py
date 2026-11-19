@@ -129,7 +129,10 @@ def draw(v):
 
     # power path
     y = mid(2)
-    s.line([(r1, y), (l2, y)], 'power')
+    if v['switch']:
+        s.line([(r1, y), (l2, y)], 'power')                 # the magjack brings out the centre taps
+    else:
+        s.line([(r1, mid(3)), (r1 + 30, mid(3)), (r1 + 30, y), (l2, y)], 'power')   # the splitter transformer does
     s.label((r1 + l2) / 2, y - 29, ['4× centre taps', '(all 4 pairs)'], POWER)
     s.line([(r2, y), (l3, y)], 'power')
     s.label((r2 + l3) / 2, y - 12, ['36–57 V'], POWER)
@@ -178,6 +181,8 @@ def draw(v):
     x = 20
     for kind, name, both, w in (('data', 'Gigabit data (MDI)', True, 215), ('rmii', '100 Mb/s RMII + MDIO', True, 240),
                                 ('power', 'Power', False, 135), ('ctrl', 'MCU control / sense', False, 0)):
+        if kind == 'rmii' and not v['switch']:
+            continue
         s.line([(x - 2, y), (x + 54, y)], kind, both=both)
         s.text(x + 64, y + 5, name, anchor='start')
         x += w + 20

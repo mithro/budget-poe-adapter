@@ -331,7 +331,7 @@ Two bought 5-port switch boards with the silkscreen `LX-IS601F V2.0` were photog
 
 ### Annotated photos
 
-The three images are crops of one photo of board A. Names marked `*` are JTAG names from [Draft_07](#yt9215sc-and-yt9215sch). Label colours: orange for UART, cyan for SPI flash, pink for JTAG, yellow for straps, green for SCL and SDA, grey for clock and reset. The lilac rings are the vias of pins 80 and 85, which are LED pins (P1LED0 and P0LED0) with no debug function.
+The three images are crops of one photo of board B. Names marked `*` are JTAG names from [Draft_07](#yt9215sc-and-yt9215sch). Label colours: orange for UART, cyan for SPI flash, pink for JTAG, yellow for straps, green for SCL and SDA, grey for clock and reset. The lilac rings are the vias of pins 80 and 85, which are LED pins (P1LED0 and P0LED0) with no debug function.
 
 ![U4 with pin 1, the corner pin numbers and the pin range of each side marked](lx-is601f-board/u4-pin-numbering-annotated.png)
 

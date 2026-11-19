@@ -151,8 +151,8 @@ for lab, y in (('R44', 1825), ('R89', 1925), ('R92', 2025), ('R93', 2125)):
     c.text(2840, y, lab, fs, SPI, 'rm')
 c.save('u4-pins-right-edge-annotated.png')
 
-# ---------- U4 and the parts beside it, with their silkscreen names, on the second board ----------
-wide = Image.open(SP + 'photo-u4-wide.jpg').convert('RGB').crop((600, 885, 2210, 2790))
+# ---------- U4 and the parts beside it, with their silkscreen names, on board A ----------
+wide = Image.open(SP + 'photo-u4-wide.jpg').convert('RGB').crop((640, 825, 2300, 2790))
 wide = wide.resize((850, round(850 * wide.height / wide.width)), Image.LANCZOS)
 wide.save(SP + 'u4-surroundings.jpg', quality=88, optimize=True)
 print('wrote u4-surroundings.jpg %dx%d' % wide.size)

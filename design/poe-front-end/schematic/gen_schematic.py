@@ -351,7 +351,7 @@ r26 = f.part('R', 'v', 'R26', 88, 42)
 f.w_((q12, '3'), (r26, '1')); f.power('GND', (88, 45)); 
 f.w_((88, 34), (94, 34)); f.label('T2P', (94, 34), (1, 0), 'global', 'output')
 f.note('T2P is high (3.3 V) when the PSE ran two class events, which is its grant of 25.5 W. '
-       'C3 holds the result for at least 1.4 s after power-up; the firmware reads it at boot.', 6, 10, 44)
+       'C3 holds the result for at least 1.3 s after power-up; the firmware reads it at boot.', 6, 10, 44)
 
 
 # ---------------------------------------------------------------------------------------------

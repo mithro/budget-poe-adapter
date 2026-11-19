@@ -52,7 +52,7 @@ def parts_of(block):
 
 
 def block_cost(block, snap):
-    """(number of parts, cost in USD) of one block; R4 is priced as its Class 4 value."""
+    """(number of parts, cost in USD) of one block; R4 is priced as its value for Class 4 with two-event detection."""
     refs = parts_of(block)
     return len(refs), sum(price(snap, PARTS[r][4] or R4["4T"][1]) for r in refs)
 
@@ -72,7 +72,7 @@ def bom_table(snap, sheets):
             _, value, pkg, _, code = PARTS[ref]
             anchor = f'<a id="{ref.lower()}"></a>{ref}'
             if code is None:
-                out.append(f"| {anchor} | [{title}](#{block}-block) | [Class table](#class-resistor-r4) | – | {pkg} | – | – | – | – | 0.0016 |")
+                out.append(f"| {anchor} | [{title}](#{block}-block) | [Class table](#class-resistor-r4) | – | {pkg} | – | – | – | – | {price(snap, R4['4T'][1]):.4f} |")
                 continue
             p = snap[code]
             words = value.split(" ")
@@ -101,7 +101,7 @@ def cost_table(snap):
 
 VARIANTS = [
     ("Class 0", ("input", "hotswap")),
-    ("one class from 1 to 4", ("input", "hotswap", "class")),
+    ("fixed class with a class sink", ("input", "hotswap", "class")),
     ("Class 4 with two-event detection", ("input", "hotswap", "class", "mark", "twoevent")),
 ]
 

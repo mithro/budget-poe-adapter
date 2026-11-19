@@ -29,7 +29,7 @@ PARTS = dict(
     R24=220e3, R25=470e3, R26=100e3,  # T2P level shift
     C2=220e-9,    # arm capacitor
     C3=220e-9,    # hold capacitor
-    R27=750e3, R28=2e6,      # hot-swap gate network
+    R27=1e6, R28=2e6,      # hot-swap gate network
     C4=330e-9, C5=6.8e-9,    # hot-swap gate and slew capacitors
     R29=1e3, C7=4.7e-9,      # class loop compensation
     R32=47e3,     # bleed for the leakage of D2
@@ -87,10 +87,10 @@ def circuit(cls=4, t2p=True, vz1=10.0, vz2=22.0, vz3=24.0, vref=1.24, bf=150, vt
     # detection signature, TVS
     a(f"R1 vdd 0 {p['R1']}"); a(f"C1 vdd 0 {p['C1']}"); a("D1 0 vdd DTVS")
     # class window switch Q3 (N-MOSFET), gate divider, upper edge Q4
-    a("M3 css ng 0 MSIG"); a("Rcss css 0 1g"); a("Rcss2 vdd css 1g"); a("Cng ng 0 100p"); a("Ccss css 0 100p")   # stray leakage and capacitance
-    a(f"R5 vdd ng {p['R5']}"); a(f"R6 ng 0 {p['R6']}")
-    a("D3 nk vdd DZ22"); a(f"R7 nk nkb {p['R7']}"); a(f"R8 nkb 0 {p['R8']}"); a("Q4 ng nkb 0 QN")
-    if cls:
+    if cls:      # the Class 0 variant has no class block at all
+        a("M3 css ng 0 MSIG"); a("Rcss css 0 1g"); a("Rcss2 vdd css 1g"); a("Cng ng 0 100p"); a("Ccss css 0 100p")   # stray leakage and capacitance
+        a(f"R5 vdd ng {p['R5']}"); a(f"R6 ng 0 {p['R6']}")
+        a("D3 nk vdd DZ22"); a(f"R7 nk nkb {p['R7']}"); a(f"R8 nkb 0 {p['R8']}"); a("Q4 ng nkb 0 QN")
         a("D2 na vdd DZ10"); a(f"Rd2 na vdd {rd2}"); a(f"R2 na nb {p['R2']}")   # Rd2: zener leakage, 0.2 uA at 9 V by default
         a(f"R32 na css {p['R32']}")   # carries the zener leakage past Q1
         a("XU1 nb nr css TLV431"); a(f"R29 ns nr {p['R29']}"); a(f"C7 nb nr {p['C7']}")

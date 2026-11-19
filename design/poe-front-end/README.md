@@ -10,14 +10,14 @@ Terms used in this note:
 
 | Term | Meaning |
 | --- | --- |
-| Type 1 | PSE or PD of IEEE 802.3af, up to 12.95 W at the PD |
-| Type 2 | PSE or PD of IEEE 802.3at, up to 25.5 W at the PD |
-| Type 3 | PSE of IEEE 802.3bt, up to 51 W at the PD |
-| Type 4 | PSE of IEEE 802.3bt, up to 71.3 W at the PD |
+| Type 1 | PSE or PD of IEEE 802.3af |
+| Type 2 | PSE or PD of IEEE 802.3at |
+| Type 3 | PSE of IEEE 802.3bt with up to four class events |
+| Type 4 | PSE of IEEE 802.3bt with up to five class events |
 | Mode A | Power on the pairs of pins 1-2 and 3-6 |
 | Mode B | Power on the pairs of pins 4-5 and 7-8 |
-| Class event | Period in which the PSE applies 14.5 V to 20.5 V and measures the current of the PD |
-| Mark event | Period after a class event in which the PSE applies 6.9 V to 10 V |
+| Class event | Period in which the PSE applies the classification voltage and measures the current of the PD |
+| Mark event | Period after a class event in which the PSE applies the lower mark voltage |
 | T2P | "Type 2 PSE" signal: logic output that tells the firmware that the PSE granted 25.5 W |
 | LLDP | Link Layer Discovery Protocol, the Ethernet frames in which a PSE and a PD can agree on power |
 | Single-signature PD | PD that shows one detection signature for both pair sets together |
@@ -53,9 +53,9 @@ A mark after a number says where the number comes from. Each mark links to this 
 | IEEE draft | Read in an IEEE 802.3 task force document that quotes the text of the standard |
 | UNH-IOL test suite | Read in the conformance test suite for powered devices of the UNH InterOperability Laboratory |
 | TI datasheet | Read in the [TPS2378 datasheet](../../datasheets/components/TI_TPS2378.pdf) of Texas Instruments, which restates the limits of the standard |
-| TI application note | Read in the application note SLVA233A of Texas Instruments on transient immunity for PoE |
+| TI transient note | Read in the application note SLVA233A of Texas Instruments on transient immunity for PoE |
 | Ethernet Alliance | Read in the 802.3bt overview white paper of the Ethernet Alliance |
-| Part datasheet | Read in the datasheet of the part, stored in this repository |
+| Part datasheet | Read in the datasheet of the part that the [Bill of materials](#bill-of-materials) links |
 | LCSC | Price for 1,000 pieces read from lcsc.com |
 | Simulated | Result of the ngspice runs in [`sim/`](sim/) |
 | Calculated | Worked out from part values in this note |
@@ -75,7 +75,7 @@ IC; see [Discrete parts or a PD controller IC](#discrete-parts-or-a-pd-controlle
 | Variant | Parts | Cost (USD) |
 | --- | --- | --- |
 | Discrete: Class 0 | 13 | 0.22 |
-| Discrete: one class from 1 to 4 | 30 | 0.41 |
+| Discrete: fixed class with a class sink | 30 | 0.42 |
 | Discrete: Class 4 with two-event detection | 62 | 0.59 |
 | PD controller IC: [TMI7303B](#tmi7303b) with two-event detection | 8 | 0.33 |
 <!-- variants:end -->
@@ -104,8 +104,8 @@ All voltages are at the cable connector of the PD, in front of the bridges.
 
 | ID | Quantity | Minimum | Maximum | Unit | Source | Result minimum | Result maximum | Result from |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| <a id="req-1"></a>REQ-1 | Detection slope between 2.7 V and 10.1 V | 23.75 | 26.25 | kΩ | [UNH-IOL test suite](#evidence-marks) | 24.72 | 25.55 | [Simulated](#evidence-marks) |
-| <a id="req-2"></a>REQ-2 | Detection voltage offset | – | 1.9 | V | [UNH-IOL test suite](#evidence-marks) | 0.92 | 0.92 | [Simulated](#evidence-marks) |
+| <a id="req-1"></a>REQ-1 | Detection slope between 2.7 V and 10.1 V | 23.75 | 26.25 | kΩ | [UNH-IOL test suite](#evidence-marks) | 24.72 | 25.87 | [Simulated](#evidence-marks) |
+| <a id="req-2"></a>REQ-2 | Detection voltage offset | – | 1.9 | V | [UNH-IOL test suite](#evidence-marks) | 0.91 | 0.92 | [Simulated](#evidence-marks) |
 | <a id="req-3"></a>REQ-3 | Detection capacitance | 50 | 120 | nF | [TI datasheet](#evidence-marks) | 97 | 118 | [Calculated](#evidence-marks) |
 | <a id="req-4"></a>REQ-4 | Non-valid signature slope, low side | – | 12 | kΩ | [UNH-IOL test suite](#evidence-marks) | 7.1 | 7.1 | [Calculated](#evidence-marks) |
 | <a id="req-5"></a>REQ-5 | Class 0 current between 14.5 V and 20.5 V | 0 | 4 | mA | [UNH-IOL test suite](#evidence-marks) | 0.54 | 0.80 | [Simulated](#evidence-marks) |
@@ -118,9 +118,9 @@ All voltages are at the cable connector of the PD, in front of the bridges.
 | <a id="req-12"></a>REQ-12 | Voltage at which the PD turns on | – | 42 | V | [UNH-IOL test suite](#evidence-marks) | 39.7 | 39.8 | [Simulated](#evidence-marks) |
 | <a id="req-13"></a>REQ-13 | Voltage at which the PD turns off | 30 | 36 | V | [UNH-IOL test suite](#evidence-marks) | 34.3 | 34.4 | [Simulated](#evidence-marks) |
 | <a id="req-14"></a>REQ-14 | Input capacitance that lets the PSE limit the inrush current | – | 180 | µF | [IEEE draft](#evidence-marks) | 47 | 47 | [Part datasheet](#evidence-marks) |
-| <a id="req-15"></a>REQ-15 | Peak inrush current | – | 400 | mA | [TI datasheet](#evidence-marks) | 174 | 309 | [Simulated](#evidence-marks) |
+| <a id="req-15"></a>REQ-15 | Peak inrush current | – | 400 | mA | [TI datasheet](#evidence-marks) | 155 | 326 | [Simulated](#evidence-marks) |
 | <a id="req-16"></a>REQ-16 | Current that keeps the port powered | 10 | – | mA | [TI datasheet](#evidence-marks) | 15 | – | [Calculated](#evidence-marks) |
-| <a id="req-17"></a>REQ-17 | Isolation between the cable and accessible conductors | 1500 | – | V | [TI application note](#evidence-marks) | 0 | 0 | [Calculated](#evidence-marks) |
+| <a id="req-17"></a>REQ-17 | Isolation between the cable and accessible conductors | 1500 | – | V | [TI transient note](#evidence-marks) | 0 | 0 | [Calculated](#evidence-marks) |
 
 Notes on the rows:
 
@@ -134,7 +134,10 @@ Notes on the rows:
 - [REQ-12](#req-12) and [REQ-13](#req-13): [Q13](#q13) only connects the ground. The turn-on and turn-off points are set by
   the enable input of the 5 V converter; see [Interfaces](#interfaces).
 - [REQ-15](#req-15): a PSE limits the current to between 400 mA and 450 mA for up to 75 ms after power-up.
-  The front end stays under 400 mA so that the PSE never reaches its limit.
+  The front end aims to stay under 400 mA so that the PSE does not reach its limit. The higher
+  result is for [C6](#c6), [C5](#c5), [D6](#d6) and the threshold of [Q13](#q13) at the tolerances that raise the current.
+- The current offset of the detection test, at most 10 µA, is not evaluated. The leakage runs of
+  the [Simulation](#simulation) add 2 µA.
 - [REQ-16](#req-16): the YT9215SCH alone draws 0.66 W with no link
   ([Table 28 of its datasheet](../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)).
   Through a converter of 90 % efficiency that is 12.9 mA at 57 V, and with the front end's own
@@ -207,8 +210,10 @@ into the base of [Q1](#q1), be amplified by [Q1](#q1) and [Q2](#q2) and bend the
 ![Simulated current of the front end against the voltage at the cable connector](sim/signature.png)
 
 The left plot shows the current for each class, with the classification range shaded. The right
-plot shows the detection range, where all variants draw the same current as a 24.9 kΩ resistor
-behind a bridge.
+plot shows the detection range, where the variants draw the current of a 24.9 kΩ resistor behind
+a bridge. In the variants with a class sink, [R5](#r5) and [R6](#r6) lie in parallel with [R1](#r1) and lower the slope
+by about 0.3 kΩ. The Class 0 variant lacks them, so its slope lies higher: with [R1](#r1) at +1 % it
+reaches 26.13 kΩ against the limit of 26.25 kΩ ([Calculated](#evidence-marks)).
 
 <a id="mark-block"></a>
 
@@ -257,7 +262,7 @@ seen and at 0 V otherwise.
 than 4 V. The fraction of a millisecond in which a rising port voltage crosses the classification
 range charges it to about 0.3 V, which is under the gate threshold of [Q11](#q11).
 
-[C3](#c3) discharges through [R23](#r23). T2P stays valid for between 1.4 s and 5.1 s after power-up
+[C3](#c3) discharges through [R23](#r23). T2P stays valid for between 1.3 s and 5.1 s after power-up
 ([Simulated](#evidence-marks)); the time depends on the gate threshold of [Q11](#q11) and on the length of
 the class events. The firmware has to read T2P within that time.
 
@@ -270,7 +275,7 @@ the class events. The firmware has to read T2P within that time.
 [Q13](#q13) sits in the return path. Its gate is driven from VDD through [D6](#d6), [R27](#r27) and [R28](#r28), so it starts to
 conduct when VDD is about 26 V, above the classification range. [C5](#c5) feeds the falling drain
 voltage back to the gate. This sets the rate at which [C6](#c6) charges and with it the inrush current:
-about 31 µA of gate current through 6.8 nF gives 4.5 V per millisecond, which is 210 mA into
+about 23 µA of gate current through 6.8 nF gives 3.4 V per millisecond, which is 160 mA into
 47 µF ([Calculated](#evidence-marks)). [D7](#d7) limits the gate voltage to 12 V. [C4](#c4) delays the
 turn-on and filters the gate, and [R31](#r31) damps the feedback path.
 
@@ -280,13 +285,13 @@ the 5 V converter; see [Interfaces](#interfaces).
 ![Simulated start-up on a Type 2 PSE with two class events](sim/two-event-sequence.png)
 
 The plot shows one complete start: detection at 4 V and 8 V, two class events with a mark event
-after each, then power. The class current is 41 mA. [C6](#c6) charges with a peak current of 250 mA,
+after each, then power. The class current is 41 mA. [C6](#c6) charges with a peak current of 210 mA,
 after which the converter draws a 3 W load. T2P rises as soon as the 3.3 V rail is present. The
 short current spikes at the voltage steps are the charging current of [C1](#c1).
 
 ## Behaviour with each kind of PSE
 
-| PSE | Standard | Class events | Class 0 to 3 variant gets (W) | Class 4 variant gets (W) | T2P | Result from |
+| PSE | Standard | Class events | Variant with a lower class gets | Class 4 variant gets (W) | T2P | Result from |
 | --- | --- | --- | --- | --- | --- | --- |
 | Type 1 | 802.3af | 1 | Class power | 12.95 | Low | [Simulated](#evidence-marks) |
 | Type 2 that grants by class events | 802.3at | 2 | Class power | 25.5 | High | [Simulated](#evidence-marks) |
@@ -303,7 +308,7 @@ Notes on the rows:
   12.95 W at the PD.
 - **Type 2 that grants by LLDP.** Such a PSE supplies Class 3 power until the PD asks for more in
   an LLDP frame.
-- **Type 3 or Type 4.** A Class 4 PD is given at most Class 4. The front end does not present
+- **Type 3 or Type 4.** A Class 4 PD is given at most Class 4, after two or three class events. The front end does not present
   the Class 5 to 8 signatures of 802.3bt, which need a different class current in the third
   event.
 - **Passive 48 V supply.** The front end starts, because nothing in it waits for a detection.
@@ -318,7 +323,7 @@ either or both. The options are set side by side here; none is picked.
 | Option | Mark latch fitted | Two-event detector fitted | Parts | Cost (USD) | Needs firmware | 25.5 W from a PSE that grants by class events | 25.5 W from a PSE that grants by LLDP |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | <a id="option-a"></a>A: two-event detection in hardware | Yes | Yes | 62 | 0.59 | No | Yes | No |
-| <a id="option-b"></a>B: LLDP in firmware | No | No | 30 | 0.41 | Yes | No | Yes |
+| <a id="option-b"></a>B: LLDP in firmware | No | No | 30 | 0.42 | Yes | No | Yes |
 | <a id="option-c"></a>C: both | Yes | Yes | 62 | 0.59 | Yes | Yes | Yes |
 | <a id="option-d"></a>D: PD controller IC with a T2P output | Inside the IC | Inside the IC | 8 | 0.33 | No | Yes | No |
 
@@ -328,8 +333,9 @@ LLDP firmware added it covers both kinds of PSE in the same way as option C.
 
 What each option depends on:
 
-- [Option A](#option-a) works with no firmware at all. T2P is a hardware signal, so it can also gate
-  hardware directly. It cannot help with a PSE that runs one class event and waits for LLDP.
+- [Option A](#option-a) produces T2P with no firmware at all. T2P expires within seconds
+  ([Limits and open points](#limits-and-open-points)), so something has to store it: the firmware, or
+  a latch on the 3.3 V side when hardware is to be gated directly. It cannot help with a PSE that runs one class event and waits for LLDP.
 - [Option B](#option-b) adds no parts. With a PSE that grants by class events it leaves the
   adapter at 13 W, although the PSE has reserved 30 W, unless the PSE also reports its
   allocation over LLDP. The firmware has to receive and send LLDP frames. The switch can trap
@@ -371,7 +377,7 @@ Power left for the USB-C output, at the lowest voltage a PSE may deliver to the 
 | 25.5 | 42.5 | 1.02 | 0.15 | 24.33 | 21.9 | 2.0 | 19.9 | 4.0 |
 
 The table is [Calculated](#evidence-marks) from these inputs: 0.85 V per bridge diode
-([Assumed](#evidence-marks) from the 1.0 V at 2 A in the bridge datasheet), 0.1 Ω for [Q13](#q13)
+([Assumed](#evidence-marks) from the 1.0 V at 2 A in the bridge datasheet), a typical 0.1 Ω for [Q13](#q13)
 ([Part datasheet](#evidence-marks)), 2.7 mA for the front end itself ([Simulated](#evidence-marks)),
 90 % converter efficiency ([Assumed](#evidence-marks)) and
 2.0 W at the 5 V rail for the switch with its own regulators ([Assumed](#evidence-marks)).
@@ -389,6 +395,8 @@ A PD controller IC replaces the [Class sink](#class-block), the [Mark latch](#ma
 | Cost (USD) | 0.59 | 0.33 |
 | Detection and class current | Yes | Yes |
 | Two-event detection with T2P output | Yes | Yes |
+| T2P held for as long as the port is powered | No | Yes |
+| T2P level for a 25.5 W grant | High | Low |
 | Inrush current, lowest (mA) | 174 | 180 |
 | Inrush current, highest (mA) | 309 | 180 |
 | Current limit in operation | No | Yes |
@@ -402,7 +410,7 @@ A PD controller IC replaces the [Class sink](#class-block), the [Mark latch](#ma
 
 The TMI7303B column counts the input block, the IC, its class resistor and a pull-up resistor
 for its T2P output, which is open drain and active low. The discrete Class 0 variant costs
-0.22 USD and the discrete variant with one class from 1 to 4 costs 0.41 USD
+0.22 USD and the discrete variant with one class from 1 to 4 costs 0.42 USD
 ([Summary](#summary)). The [TMI7303B](#tmi7303b) figures are from its datasheet alone; the part
 is not simulated and not tested. The [TPS2378](#tps2378) of Texas Instruments is a part of the
 same kind whose datasheet restates the limits of the standard.
@@ -428,14 +436,15 @@ Each variant with a class sink is run at 32 corners and at the nominal point. Th
 variant has no sink and is run at the nominal point and at the two temperatures. The corners combine 0 °C
 and 70 °C, the 10 V zener at ±2 %, the 22 V zener at ±5 %, the reference at ±1.5 % and a
 transistor gain of 60 and 300. Two more runs per variant give [D2](#d2) a leakage of 2 µA at 70 °C,
-ten times its limit at 25 °C. Resistor tolerances are not varied.
+ten times its limit at 25 °C. Resistor and capacitor tolerances are not varied in these runs. One further run puts [C6](#c6), [C5](#c5), [D6](#d6)
+and the threshold of [Q13](#q13) at the tolerances that raise the inrush current.
 
 Detection signature, [REQ-1](#req-1) and [REQ-2](#req-2):
 
 <!-- results1:begin -->
 | Variant | Slope minimum (kΩ) | Slope maximum (kΩ) | Voltage offset (V) | Runs | Verdict |
 | --- | --- | --- | --- | --- | --- |
-| Class 0 | 24.83 | 25.55 | 0.92 | 3 | Pass |
+| Class 0 | 25.14 | 25.87 | 0.91 | 3 | Pass |
 | Class 1 | 24.73 | 25.51 | 0.92 | 35 | Pass |
 | Class 2 | 24.73 | 25.51 | 0.92 | 35 | Pass |
 | Class 3 | 24.73 | 25.51 | 0.92 | 35 | Pass |
@@ -448,7 +457,7 @@ Class current, [REQ-5](#req-5) to [REQ-9](#req-9):
 <!-- results2:begin -->
 | Variant | Current minimum (mA) | Current maximum (mA) | Limit minimum (mA) | Limit maximum (mA) | Verdict |
 | --- | --- | --- | --- | --- | --- |
-| Class 0 | 0.54 | 0.80 | 0 | 4 | Pass |
+| Class 0 | 0.54 | 0.79 | 0 | 4 | Pass |
 | Class 1 | 9.59 | 11.56 | 9 | 12 | Pass |
 | Class 2 | 17.53 | 19.75 | 17 | 20 | Pass |
 | Class 3 | 26.53 | 29.04 | 26 | 30 | Pass |
@@ -462,7 +471,7 @@ and off between 20.5 V and 30 V:
 <!-- results3:begin -->
 | Variant | Turn-on minimum (V) | Turn-on maximum (V) | Turn-off minimum (V) | Turn-off maximum (V) | Verdict |
 | --- | --- | --- | --- | --- | --- |
-| Class 1 | 11.6 | 12.1 | 22.4 | 25.2 | Pass |
+| Class 1 | 11.6 | 12.1 | 22.5 | 25.2 | Pass |
 | Class 2 | 11.4 | 11.9 | 22.5 | 25.3 | Pass |
 | Class 3 | 11.3 | 11.8 | 22.6 | 25.4 | Pass |
 | Class 4 | 11.2 | 11.8 | 22.7 | 25.5 | Pass |
@@ -474,17 +483,17 @@ Complete PSE sequences into the Class 4 variant with two-event detection and a 3
 <!-- results4:begin -->
 | Sequence | Cable loop (Ω) | T2P expected | T2P simulated | Mark current minimum (mA) | Mark current maximum (mA) | Peak inrush current (mA) | Verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Type 2 PSE with two events at mid values | 12.5 | High | High | 1.37 | 1.37 | 250 | Pass |
-| Type 2 PSE with two events at the shortest times and lowest voltages | 20 | High | High | 1.06 | 1.10 | 196 | Pass |
-| Type 2 PSE with two events at the longest times and highest voltages | 0.5 | High | High | 1.63 | 1.66 | 309 | Pass |
-| Type 3 PSE with a long first event and three events | 12.5 | High | High | 1.36 | 1.36 | 249 | Pass |
-| Type 1 PSE with one event then power | 20 | Low | Low | – | – | 174 | Pass |
-| Type 1 PSE with one event then 0 V for 20 ms | 20 | Low | Low | – | – | 174 | Pass |
-| Type 1 PSE with one event then 0 V for 3 ms | 0.5 | Low | Low | – | – | 309 | Pass |
-| Type 1 PSE with one event then 0 V for 3 ms and a 1 ms rise | 0.5 | Low | Low | – | – | 309 | Pass |
-| Type 1 PSE with one event then 8 V for 5 ms and a 1 ms rise | 12.5 | Low | Low | 1.35 | 1.35 | 192 | Pass |
-| Type 1 PSE with 1 µF at its output released for 3 ms and a 1 ms rise | 12.5 | Low | Low | – | – | 192 | Pass |
-| Passive 48 V supply applied at once | 2 | Low | Low | – | – | 221 | Pass |
+| Type 2 PSE with two events at mid values | 12.5 | High | High | 1.37 | 1.37 | 210 | Pass |
+| Type 2 PSE with two events at the shortest times and lowest voltages | 20 | High | High | 1.06 | 1.10 | 171 | Pass |
+| Type 2 PSE with two events at the longest times and highest voltages | 0.5 | High | High | 1.63 | 1.66 | 250 | Pass |
+| Type 3 PSE with a long first event and three events | 12.5 | High | High | 1.36 | 1.37 | 210 | Pass |
+| Type 1 PSE with one event then power | 20 | Low | Low | – | – | 155 | Pass |
+| Type 1 PSE with one event then 0 V for 20 ms | 20 | Low | Low | – | – | 155 | Pass |
+| Type 1 PSE with one event then 0 V for 3 ms | 0.5 | Low | Low | – | – | 250 | Pass |
+| Type 1 PSE with one event then 0 V for 3 ms and a 1 ms rise | 0.5 | Low | Low | – | – | 250 | Pass |
+| Type 1 PSE with one event then 8 V for 5 ms and a 1 ms rise | 12.5 | Low | Low | 1.35 | 1.35 | 168 | Pass |
+| Type 1 PSE with 1 µF at its output released for 3 ms and a 1 ms rise | 12.5 | Low | Low | – | – | 168 | Pass |
+| Passive 48 V supply applied at once | 2 | Low | Low | – | – | 187 | Pass |
 <!-- results4:end -->
 
 Other quantities. The part corners here are the gate threshold of the small MOSFETs at 1.0 V
@@ -498,11 +507,13 @@ sequences that have a 3 ms gap or a 1 ms rise:
 | Sequence runs decided correctly at the part corners | 48 | of 48 | 48 | 48 | Pass |
 | Mark latch release voltage at 0 °C | 4.14 | V | 2.81 | 6.9 | Pass |
 | Mark latch release voltage at 70 °C | 3.83 | V | 2.81 | 6.9 | Pass |
-| Front end current at 57 V | 2.70 | mA | – | – | Information |
+| Front end current at 57 V | 2.69 | mA | – | – | Information |
+| Peak inrush current with nominal parts | 250 | mA | – | 400 | Pass |
+| Peak inrush current at the part tolerances that raise it | 326 | mA | – | 400 | Pass |
 | T2P stays high after the mid sequence with a gate threshold of 1.0 V | 5.1 | s | – | – | Information |
-| T2P stays high after the mid sequence with a gate threshold of 2.5 V | 2.0 | s | – | – | Information |
+| T2P stays high after the mid sequence with a gate threshold of 2.5 V | 1.8 | s | – | – | Information |
 | T2P stays high after the shortest sequence with a gate threshold of 1.0 V | 4.0 | s | – | – | Information |
-| T2P stays high after the shortest sequence with a gate threshold of 2.5 V | 1.4 | s | – | – | Information |
+| T2P stays high after the shortest sequence with a gate threshold of 2.5 V | 1.3 | s | – | – | Information |
 <!-- results5:end -->
 
 Power-up, load step and brown-out. The load is 3 W at first and steps to the full value after
@@ -513,7 +524,7 @@ voltage, below the valid range, in which the converter starts and stops repeated
 | Case | PSE voltage (V) | Runs at that voltage | Converter stops at (V) | Restarts | Cycling from (V) | Cycling to (V) | [Q13](#q13) drop (mV) | Verdict |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 12.5 W converter load on a 20 Ω loop | 44 | Yes | 34.3 | Yes | 39.7 | 43.1 | 29 | Pass |
-| 24.5 W converter load on a 12.5 Ω loop | 50 | Yes | 34.4 | Yes | 39.8 | 45.8 | 47 | Pass |
+| 24.5 W converter load on a 12.5 Ω loop | 50 | Yes | 34.4 | Yes | 39.8 | 45.8 | 48 | Pass |
 <!-- results6:end -->
 
 ## Interfaces
@@ -548,7 +559,7 @@ With the bridge drop added, an enable threshold more than 4 % high puts the turn
 What the front end needs from the firmware, in order:
 
 1. Keep the downstream ports and the USB-C output off at reset.
-2. Read T2P within 1 s of the port reaching its operating voltage. T2P is valid for 1.4 s at the worst corner.
+2. Read T2P within 1 s of the port reaching its operating voltage. T2P is valid for 1.3 s in the shortest simulated case.
 3. With T2P high, use the 25.5 W budget.
 4. With T2P low, use the 12.95 W budget. A Class 1 or Class 2 variant has the budget of its class.
 5. With LLDP support, ask the PSE for more and follow its answer.
@@ -579,7 +590,7 @@ replaces [Q2](#q2).
 detection slope, the class currents, the sink window, the mark latch and the T2P decision on real
 Type 1 and Type 2 PSEs.
 
-**No thermal protection.** During a class event [Q2](#q2) dissipates up to 0.96 W. A class event lasts
+**No thermal protection.** During a class event [Q2](#q2) dissipates up to 0.96 W, against a continuous rating of 0.5 W for the BCX53-16. A class event lasts
 at most 105 ms, so the average is small. A PSE that stayed in the classification range for
 seconds would overheat [Q2](#q2). A PD controller IC switches off in that case.
 
@@ -595,13 +606,17 @@ not meant to rest in the mark range, and the six simulated Type 1 sequences give
 result. In the failing case the adapter draws 25.5 W from a 15.4 W port and the PSE switches it
 off.
 
-**T2P expires.** T2P is valid for 1.4 s at worst, counted from the port reaching its operating
+**T2P expires.** T2P is valid for 1.3 s in the shortest simulated case ([C3](#c3) at −10 %, the
+highest gate threshold, the shortest class events, 27 °C), counted from the port reaching its operating
 voltage. Firmware that boots more slowly needs a latch on the 3.3 V side.
 
 **Leakage at the hold node.** The hold node sits on 10 MΩ. A leakage of 100 nA into it from a
 net at VDD lifts it by 1 V, which is the lowest gate threshold of [Q11](#q11) and reads as T2P high. The
-leakage limits of [Q10](#q10) and of the board surface are not part of the simulation. The node needs a
-guard trace and a clean board.
+BSS123 datasheet allows a drain leakage of 1 µA at 100 V for [Q10](#q10) and a gate leakage of 100 nA
+for [Q11](#q11) ([Part datasheet](#evidence-marks)). The datasheet limits therefore do not guarantee a
+low T2P; typical parts leak far less. A false high makes the adapter draw 25.5 W from a Type 1
+port. The simulation contains no leakage at this node. The node also needs a guard trace and a
+clean board.
 
 **No inrush limit after a short interruption.** The gate of [Q13](#q13) discharges with a time constant
 of 0.66 s. A supply that returns within about 1.5 s finds [Q13](#q13) still on and charges [C6](#c6) without a
@@ -635,7 +650,7 @@ The parts of the [Hold and T2P output](#hold-block) are counted in the two-event
 | Block | Parts | Cost (USD) |
 | --- | --- | --- |
 | [Input](#input-block) | 5 | 0.074 |
-| [Hot swap](#hotswap-block) | 8 | 0.147 |
+| [Hot swap](#hotswap-block) | 8 | 0.148 |
 | [Class sink](#class-block) | 17 | 0.193 |
 | [Mark latch](#mark-block) | 8 | 0.035 |
 | [Two-event detector](#twoevent-block) | 24 | 0.141 |
@@ -654,7 +669,7 @@ The parts of the [Hold and T2P output](#hold-block) are counted in the two-event
 | <a id="d6"></a>D6 | [Hot swap](#hotswap-block) | 24 V | – | SOD-123 | BZT52C24 | R+O | [C19077416](https://www.lcsc.com/product-detail/C19077416.html) | [PDF](../../datasheets/components/RO_BZT52C_Series.pdf) | 0.0145 |
 | <a id="d7"></a>D7 | [Hot swap](#hotswap-block) | 12 V | – | SOD-123 | BZT52C12 | R+O | [C19077410](https://www.lcsc.com/product-detail/C19077410.html) | [PDF](../../datasheets/components/RO_BZT52C_Series.pdf) | 0.0102 |
 | <a id="q13"></a>Q13 | [Hot swap](#hotswap-block) | 15N10 | – | TO-252 | 15N10 | UMW | [C359106](https://www.lcsc.com/product-detail/C359106.html) | [PDF](../../datasheets/components/UMW_15N10.pdf) | 0.0974 |
-| <a id="r27"></a>R27 | [Hot swap](#hotswap-block) | 750 kΩ | – | 0805 | 0805W8F7503T5E | UNI-ROYAL | [C17817](https://www.lcsc.com/product-detail/C17817.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0024 |
+| <a id="r27"></a>R27 | [Hot swap](#hotswap-block) | 1 MΩ | – | 0805 | 0805W8F1004T5E | UNI-ROYAL | [C17514](https://www.lcsc.com/product-detail/C17514.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0035 |
 | <a id="r28"></a>R28 | [Hot swap](#hotswap-block) | 2 MΩ | – | 0603 | 0603WAF2004T5E | UNI-ROYAL | [C22976](https://www.lcsc.com/product-detail/C22976.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0020 |
 | <a id="r31"></a>R31 | [Hot swap](#hotswap-block) | 100 Ω | – | 0603 | 0603WAF1000T5E | UNI-ROYAL | [C22775](https://www.lcsc.com/product-detail/C22775.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0015 |
 | <a id="c7"></a>C7 | [Class sink](#class-block) | 4.7 nF | 50 V | 0603 | 0603B472K500NT | FH | [C53987](https://www.lcsc.com/product-detail/C53987.html) | [PDF](../../datasheets/components/FH_MLCC_Series.pdf) | 0.0036 |
@@ -666,7 +681,7 @@ The parts of the [Hold and T2P output](#hold-block) are counted in the two-event
 | <a id="q4"></a>Q4 | [Class sink](#class-block) | MMBT3904 | – | SOT-23 | MMBT3904 | ST(Semtech) | [C84104](https://www.lcsc.com/product-detail/C84104.html) | [PDF](../../datasheets/components/Semtech_MMBT3904.pdf) | 0.0092 |
 | <a id="r2"></a>R2 | [Class sink](#class-block) | 4.7 kΩ | – | 0603 | 0603WAF4701T5E | UNI-ROYAL | [C23162](https://www.lcsc.com/product-detail/C23162.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0023 |
 | <a id="r3"></a>R3 | [Class sink](#class-block) | 10 kΩ | – | 0603 | 0603WAF1002T5E | UNI-ROYAL | [C25804](https://www.lcsc.com/product-detail/C25804.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0016 |
-| <a id="r4"></a>R4 | [Class sink](#class-block) | [Class table](#class-resistor-r4) | – | 0603 | – | – | – | – | 0.0016 |
+| <a id="r4"></a>R4 | [Class sink](#class-block) | [Class table](#class-resistor-r4) | – | 0603 | – | – | – | – | 0.0009 |
 | <a id="r5"></a>R5 | [Class sink](#class-block) | 1 MΩ | – | 0805 | 0805W8F1004T5E | UNI-ROYAL | [C17514](https://www.lcsc.com/product-detail/C17514.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0035 |
 | <a id="r6"></a>R6 | [Class sink](#class-block) | 1 MΩ | – | 0603 | 0603WAF1004T5E | UNI-ROYAL | [C22935](https://www.lcsc.com/product-detail/C22935.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0014 |
 | <a id="r7"></a>R7 | [Class sink](#class-block) | 100 kΩ | – | 0603 | 0603WAF1003T5E | UNI-ROYAL | [C25803](https://www.lcsc.com/product-detail/C25803.html) | [PDF](../../datasheets/components/UniRoyal_Chip_Resistor_Series.pdf) | 0.0023 |
@@ -770,7 +785,7 @@ The schematic generator uses the drawing helpers of the LX-IS601F schematic,
 | [IEEE draft](#evidence-marks) | [Extended classification using two classification events, 802.3at task force, 2007](https://www.ieee802.org/3/poep_study/email/pdf00033.pdf) | Reset range of the PSE |
 | [UNH-IOL test suite](#evidence-marks) | [Clause 33 PD parametric test suite, version 1.5](https://www.iol.unh.edu/sites/default/files/testsuites/ethernet/CL33_PD/PD_Test_Suite_v1.5.pdf) | Limits of detection and classification |
 | [TI datasheet](#evidence-marks) | [TPS2378 datasheet](../../datasheets/components/TI_TPS2378.pdf) | Limits after power-up |
-| [TI application note](#evidence-marks) | [SLVA233A, electrical transient immunity for PoE](https://www.ti.com/lit/an/slva233a/slva233a.pdf) | Clamp diode and isolation requirement |
+| [TI transient note](#evidence-marks) | [SLVA233A, electrical transient immunity for PoE](https://www.ti.com/lit/an/slva233a/slva233a.pdf) | Clamp diode and isolation requirement |
 | [Ethernet Alliance](#evidence-marks) | [Overview of 802.3bt Power over Ethernet](https://ethernetalliance.org/wp-content/uploads/2019/12/WP_EA_Overview8023bt_V2p1_FINAL.pdf) | Class power and mark current |
 
 The class sink follows a published discrete PD front end:

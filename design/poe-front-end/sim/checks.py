@@ -12,7 +12,7 @@ from frontend import circuit, run, ICLASS
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROWS = []
 FAILED = []
-DATA = {"static": [], "sequence": [], "latch": [], "idle": None, "power": []}
+DATA = {"static": [], "sequence": [], "latch": [], "idle": None, "power": [], "inrush": []}
 
 
 def row(group, check, result, limit, ok):
@@ -183,6 +183,17 @@ def check_sequences():
         print("   corner failed:", b)
 
 
+def check_inrush():
+    """Inrush at the part tolerances that raise it, on the stiffest source: 57 V behind 0.5 Ω."""
+    worst = dict(vz3=24 * 0.95, vthp=1.0, parts=dict(C6=47e-6 * 1.2, C5=6.8e-9 * 0.9))
+    for label, kw in (("nominal parts", {}), ("C6 +20 %, C5 -10 %, D6 -5 %, Q13 threshold 1.0 V", worst)):
+        text, T = pwl(TWO(20.5, 0.03, 10, 0.012, 57), 2e-4)
+        d = tran(circuit(cls=4, t2p=True, load='cp', **kw), text, T, 5e-5, COLS, rcab=0.5, pload=3)
+        ipk = max(-r[2] for r in d)
+        DATA["inrush"].append(ipk)
+        row("Inrush", f"Peak inrush current, {label}", f"{ipk*1e3:.0f} mA", "400 mA maximum", ipk < 0.4)
+
+
 def check_reset_and_idle():
     # mark latch release: one class event, then a slow fall
     for temp in (0, 70):
@@ -200,7 +211,9 @@ def check_reset_and_idle():
         ev = TWO(vc, tc, vm, tm, vp)[:-1] + [(vp, 6.0)]
         for vth in (1.0, 2.5):
             text, T = pwl(ev, 2e-4)
-            d = tran(circuit(cls=4, t2p=True, load='cp', vth=vth), text, T, 2e-4, COLS, rcab=rcab, pload=3)
+            # the shortest hold: C3 and R23 at their low tolerance (-10 % and -1 %) with the high threshold
+            low = dict(parts=dict(C3=220e-9 * 0.9, R23=10e6 * 0.99)) if vth == 2.5 else {}
+            d = tran(circuit(cls=4, t2p=True, load='cp', vth=vth, **low), text, T, 2e-4, COLS, rcab=rcab, pload=3)
             t_on = next(r[0] for r in d if r[7] > 2.9)
             t_off = next((r[0] for r in d if r[0] > t_on and r[7] < 2.9), T)
             DATA["hold"].append((seq, vth, t_off - t_on))
@@ -267,6 +280,8 @@ def write_results():
     for temp, rel in DATA["latch"]:
         L.append(f"| Mark latch release voltage at {temp} °C | {rel:.2f} | V | 2.81 | 6.9 | {v(2.81 < rel < 6.9)} |")
     L.append(f"| Front end current at 57 V | {DATA['idle']*1e3:.2f} | mA | – | – | Information |")
+    L.append(f"| Peak inrush current with nominal parts | {DATA['inrush'][0]*1e3:.0f} | mA | – | 400 | {v(DATA['inrush'][0] < 0.4)} |")
+    L.append(f"| Peak inrush current at the part tolerances that raise it | {DATA['inrush'][1]*1e3:.0f} | mA | – | 400 | {v(DATA['inrush'][1] < 0.4)} |")
     for seq, vth, hold in DATA["hold"]:
         L.append(f"| T2P stays high after the {seq} sequence with a gate threshold of {vth} V | {hold:.1f} | s | – | – | Information |")
     L += ["", "| Case | PSE voltage (V) | Runs at that voltage | Converter stops at (V) | Restarts | Cycling from (V) | Cycling to (V) | Q13 drop (mV) | Verdict |",
@@ -283,6 +298,7 @@ def write_results():
 if __name__ == "__main__":
     check_static()
     check_sequences()
+    check_inrush()
     check_reset_and_idle()
     check_power()
     write_results()

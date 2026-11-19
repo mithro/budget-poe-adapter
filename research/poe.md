@@ -207,7 +207,7 @@ PSE thresholds are wider than the PD currents. The PD currents are from the
 [UNH-IOL test suite](#evidence-codes).
 
 Between class events the PSE drops to a **mark event**: 7–10 V (PD sees
-6.9–10 V), PD must draw **0.25–4 mA** and must *not* reset. Below 2.8 V for
+6.9–10 V), PD must draw **0.25–4 mA** and must *not* reset. Below 2.81 V for
 ≥ 15 ms resets the PD's classification state. [Ethernet Alliance](#evidence-codes)
 
 Event timing [Ethernet Alliance](#evidence-codes):
@@ -290,7 +290,7 @@ Evidence mark for this section: [TI application note](#evidence-codes).
 To keep power on, the PD must periodically draw enough current or the PSE
 disconnects:
 
-| | Class 1–4 | Class 5–8 |
+| Parameter | Up to Class 4 | From Class 5 |
 |---|---|---|
 | I_hold (min) | 10 mA | 16 mA |
 | Min on-time with a Type 1 PSE | 75 ms | – |
@@ -314,7 +314,8 @@ to support both ([IEEE draft](#evidence-codes), item PD13 of the conformance sta
 and Type 4 PSEs grant by class events and use LLDP to adjust the allocation afterwards.
 
 The adapter's switch IC terminates the link from the PSE, so LLDP has to come from the
-adapter's firmware. Whether the YT9215 CPU can send a frame is an open question in
+adapter's firmware. The switch can trap LLDP frames to its CPU; whether custom firmware can be
+loaded and can send a frame is an open question in
 [The RISC-V CPU inside the YT9215](yt9215-embedded-cpu.md#packet-path). Without LLDP the
 adapter gets 25.5 W only from a PSE that grants by class events; the options are compared in
 [Getting more than 13 W](../design/poe-front-end/README.md#getting-more-than-13-w).

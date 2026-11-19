@@ -1,5 +1,7 @@
 # PoE (Power over Ethernet) for a cheap, software-driven PD
 
+> **Scope.** This note assumes a general-purpose MCU with an ADC, comparators and fast timers does the negotiation. The current design has no such MCU: it uses only the YT9215 switch IC and its internal RISC-V CPU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). The standards, timings and electrical limits here apply to any implementation. How the YT9215 does the job is not worked out in this note.
+
 Research notes for the open source PoE → USB-C adapter. Scope: the PoE
 standards, how a Powered Device (PD) negotiates power, and the electrical
 requirements for doing that negotiation with a budget MCU (WCH CH32V0xx,

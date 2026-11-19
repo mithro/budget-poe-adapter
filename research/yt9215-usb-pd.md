@@ -54,7 +54,7 @@ The jobs fall into three speed classes. Only the last class is hard for the YT92
 
 A minimal source sends a small, fixed set of messages: Source_Capabilities, GoodCRC, Accept, PS_RDY, and Not_Supported or Reject. Each differs only in its 3-bit MessageID, so every waveform the source ever transmits can be prepared in advance [**I**](#evidence-codes).
 
-VCONN, cable e-marker reading and DR_Swap are optional for this product. Offering 5 A needs either a captive cable or an e-marker read on SOP', which adds a VCONN switch ([`usb-c-pd.md`](usb-c-pd.md#5-usb-pd-physical-layer-bmc-on-cc), section 5.4). DR_Swap matters only if the adapter also becomes a USB device ([`usb-network-card.md`](usb-network-card.md)).
+VCONN, cable e-marker reading and DR_Swap are optional for this product. Offering 5 A needs either a captive cable or an e-marker read on SOP', which adds a VCONN switch ([`usb-c-pd.md`](usb-c-pd.md#5-usb-pd-physical-layer-bmc-on-cc), section 5.4). DR_Swap matters only if the adapter also becomes a USB device ([`usb-network-card.md`](../archive/research/usb-network-card.md), an archived note).
 
 ### The BMC waveform
 
@@ -101,7 +101,7 @@ The datasheet's example for the I²C master shows it driving a PoE power-sourcin
 
 | Item | Value | Source | Evidence |
 |---|---|---|---|
-| Core | Nuclei N205 | Press article | [**I**](#evidence-codes) |
+| Core | Nuclei N205 | [Press article](yt9215-embedded-cpu.md#identity) | [**I**](#evidence-codes) |
 | Instruction set of vendor builds | RV32EC | [`make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) | [**V**](#evidence-codes) |
 | Compiler | `riscv-nuclei-elf-gcc` | [`.config`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/config/freeRTOS/.config) | [**V**](#evidence-codes) |
 | Operating system | FreeRTOS | [`freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) | [**V**](#evidence-codes) |
@@ -117,7 +117,7 @@ The datasheet's example for the I²C master shows it driving a PoE power-sourcin
 | GPIO interrupts | Unpublished | – | [**U**](#evidence-codes) |
 | Boot image format | Unpublished | – | [**U**](#evidence-codes) |
 
-RV32EC has 16 registers and no multiply instruction. The vendor builds may be conservative, so the core could have more, but firmware should assume RV32EC until the chip says otherwise [**I**](#evidence-codes). [`switch-embedded-cpu.md`](switch-embedded-cpu.md) has the background on the core and its press sources.
+RV32EC has 16 registers and no multiply instruction. The vendor builds may be conservative, so the core could have more, but firmware should assume RV32EC until the chip says otherwise [**I**](#evidence-codes). [`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md) has the background on the core, its memory and its boot modes.
 
 The SDK refers to a firmware tree named `switch_sw_lite_mgmt` that holds FreeRTOS, the `SoC/yt921x` support code and the `eth_export.h` driver. That tree is not in the public copy and a web search found no other copy [**U**](#evidence-codes). It is where the timers, GPIO registers, interrupt numbers and boot format are defined.
 
@@ -200,7 +200,7 @@ The YT9215 has no documented equivalent of SPI with DMA, timer capture or RMT [*
 - A clock fast enough to sample at 2.4 MHz or more, with interrupts off and the loop in RAM or in the 2 KB cache.
 - A free-running counter to time edges.
 
-If the CPU runs from the 125 MHz switch clock, as the [`SYS_CLK` register](switch-embedded-cpu.md) suggests, there are about 200 cycles per half bit, which is enough [**I**](#evidence-codes). This option stays open until the firmware tree is found or the registers are traced on a running chip.
+If the CPU runs from the 125 MHz switch clock, as the [`SYS_CLK` register](yt9215-embedded-cpu.md#clock) suggests, there are about 200 cycles per half bit, which is enough [**I**](#evidence-codes). This option stays open until the firmware tree is found or the registers are traced on a running chip.
 
 <a id="option-c"></a>
 
@@ -293,7 +293,7 @@ Prices are LCSC list prices as returned by a web search on 2026-11-19; the live 
 
 | Question | How | Decides |
 |---|---|---|
-| Can code run on the CPU? | Find the firmware tree, or read a flash image from a managed YT9215 switch | Everything |
+| Can code run on the CPU? | Find the firmware tree, or read a flash image from a managed YT9215 switch ([boot modes](yt9215-embedded-cpu.md#boot)) | Everything |
 | Which register enables I²C on pins 72 and 73? | Firmware tree, or trace a vendor image | [Option A](#option-a) |
 | Where are the GPIO registers and timers? | Firmware tree | [Option B](#option-b) |
 | How long from frame hand-over to the first nibble? | Scope on TX_CTL | [Option C](#option-c) transmit |

@@ -1,6 +1,8 @@
 # Cheap ~3-port gigabit switch ICs for the PoE → USB-C adapter
 
-Goal: replace the passive PoE passthrough (see [`poe.md` section 3](poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t)) with a tiny
+> **Archived.** This note is not part of the current design. It picks the RTL8363NB switch IC, managed by an external MCU. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
+
+Goal: replace the passive PoE passthrough (see [`poe.md` section 3](../../research/poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t)) with a tiny
 managed switch so the adapter's MCU can sit on the network: report what was
 negotiated (PoE class, link speed, USB-PD contract), talk LLDP, expose
 counters and settings. Topology:
@@ -163,11 +165,11 @@ CH32V208's MAC is, as far as I know (not verified here), only wired to its
 internal 10M PHY, which is why it needs a copper port. The RP2040 option is
 not for throughput.
 
-A practical split, matching [`poe.md` section 6.3](poe.md#63-the-bootstrap-problem): a tiny CH32V003‑class part does the
+A practical split, matching [`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem): a tiny CH32V003‑class part does the
 PoE signature and classification from cold start; the switch plus a CH32V307 (or
 RP2040) come up after the hot‑swap FET closes and handle networking, LLDP and
 USB‑PD reporting. With an Ethernet‑capable MCU the adapter can do **LLDP
-power negotiation**, which [`poe.md` section 4.5](poe.md#45-lldp-data-link-layer-classification) said a passive passthrough could not.
+power negotiation**, which [`poe.md` section 4.5](../../research/poe.md#45-lldp-data-link-layer-classification) said a passive passthrough could not.
 
 ## 4a. Chinese alternatives
 
@@ -246,7 +248,7 @@ Sources for this section:
 * **YT9213NB**: worth asking Motorcomm distributors; same family as the
   YT9215 with upstream Linux support, and the right port count.
 * Layout: two sets of GbE magnetics are still needed (one per jack), plus the
-  PoE centre‑tap extraction on the input side as in [`poe.md` section 3](poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t) option 1.
+  PoE centre‑tap extraction on the input side as in [`poe.md` section 3](../../research/poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t) option 1.
 
 ## 6. Sources
 

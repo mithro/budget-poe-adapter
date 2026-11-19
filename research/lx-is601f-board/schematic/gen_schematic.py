@@ -522,27 +522,25 @@ s.textbox('- U201 (silk U1, QFN-48) marked "2184A 533AQ1H": maker not identified
 
 # ---------------------------------------------------------------- LEDS
 s = leds
-s.frame(m(12.7), m(15), m(175), m(170), 'Port LED array (silk columns FX and POW, rows 1-6)')
+s.frame(m(12.7), m(15), m(175), m(170), 'Port LED array (silk rows FX and POW, columns 1-6)')
 rws = [('LED_P0', 'RJ7', 'RJ8'), ('LED_P1', 'RJ9', 'RJ10'), ('LED_P2', 'RJ11', 'RJ12'), ('LED_P3', 'RJ13', 'RJ14'),
        ('LED_P4', 'RJ15', 'RJ16'), ('LED_P9', 'RJ17', 'RJ18')]
-s.text('FX column', m(30), m(22), size=1.6, bold=True); s.text('POW column', m(110), m(22), size=1.6, bold=True)
+s.text('FX row', m(30), m(22), size=1.6, bold=True); s.text('POW row', m(110), m(22), size=1.6, bold=True)
 for i, (net, rf, rp) in enumerate(rws):
     y = m(35.56 + 17.78 * i)
-    for col, (xr, rr, refn, val, onet, conf2) in enumerate([(m(30), rf, 101 + i, 'FX %d' % (i + 1), net, 'I'),
-                                                           (m(110), rp, 111 + i, 'POW %d' % (i + 1), 'TBD_POW%d' % (i + 1), 'U')]):
+    for col, (xr, ref, val, onet, conf2) in enumerate([(m(30), rf, 'FX %d' % (i + 1), net, 'I'),
+                                                       (m(110), rp, 'POW %d' % (i + 1), 'TBD_POW%d' % (i + 1), 'U')]):
         s.power('+3V3', xr - m(7.62), y - m(5.08))
-        r = two(s, 'Device:R', rr, '0603', xr, y, True)
-        s.wire([(xr - m(7.62), y - m(5.08)), (xr - m(7.62), y), r.p('1')], 'U'); s.mark(r, '1', '+3V3', 'U')
-        d = two(s, 'Device:LED', 'LED%d' % refn, val, xr + m(15.24), y, True, flip=True)
-        s.wire([r.p('2'), d.p('2')], 'U'); s.mark(r, '2', 'LED%d_A' % refn, 'U'); s.mark(d, '2', 'LED%d_A' % refn, 'U')
+        d = two(s, 'Device:LED', ref, val, xr + m(7.62), y, True, flip=True)
+        s.wire([(xr - m(7.62), y - m(5.08)), (xr - m(7.62), y), d.p('2')], 'U'); s.mark(d, '2', '+3V3', 'U')
         e = (d.p('1')[0] + m(10.16), y)
         s.wire([d.p('1'), e], conf2); s.mark(d, '1', onet, conf2)
         if col == 0:
             s.label(net, e, (1, 0), kind='hier', shape='input')
         else:
             s.label(onet, e, (1, 0))
-s.textbox('- The array LEDs have no visible reference designators: LED101-106 (FX) and\n  LED111-116 (POW) are numbering for this schematic.\n'
-          '- Active-low drive from U4 and the RJ-resistor pairing are inferred. Row 6 is\n  assumed to be the SFP (U4 P9LED0, pin 67).\n'
+s.textbox('- The 12 array LEDs carry the silk names RJ7-RJ18, two names per column. Which\n  name of a pair is the FX LED and which the POW LED is assumed.\n'
+          '- No series resistors are visible next to the array; the anode supply and the\n  active-low drive from U4 are inferred. Column 6 is assumed to be the SFP\n  (U4 P9LED0, pin 67).\n'
           '- The POW LEDs are probably driven by the PoE module (not traced).', m(17.78), m(140), m(110), m(25), size=1.1)
 s.frame(m(185), m(15), m(284), m(130), 'LED6 header (DNP), LED7, LED8')
 hd = s.place('Connector_Generic:Conn_02x03_Odd_Even', 'J5', 'LED6 (DNP)', m(235), m(40), fields={'Silk': 'LED6'})

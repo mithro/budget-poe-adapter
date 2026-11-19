@@ -114,8 +114,8 @@ Each image links to the full-size render.
 | **C** | Green | Solid | 0 |
 | **V** | Blue | Solid | 107 |
 | **I** | Orange | Dashed | 237 |
-| **U** | Red | Dotted | 228 |
-| All | | | 572 |
+| **U** | Red | Dotted | 204 |
+| All | | | 548 |
 
 Buses, and the links between sheet symbols on the root sheet, are drawn grey and carry no confidence code; the code is on the wires they join.
 
@@ -134,7 +134,7 @@ A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered 
 - **Config EEPROM U10** `HK24C08` (Hangshun 24C08, 1 KB I²C) on the bottom. It is presumably on U4 pin 91 (SCL) and pin 92 (SDA). The OSHWHub YT9215S board has no EEPROM; this board does.
 - **Empty SPI-flash footprint U6** (SOP-8 or WSON-8) on the bottom, with R40, R94, R96, R98, R100, R102 and R109 next to it. Together with R44, R89, R92 and R93 on the SPF0 pins, the board looks designed to take a flash chip.
 - **ESD**: ED1–ED10, SOT-23-6 marked `05U`, two per copper port between U4 and the magnetics.
-- **LEDs**: a 6×2 array of 0603 LEDs, columns `FX` and `POW`, rows 1–6, with RJ7–RJ18 resistors. LED7 and LED8 sit next to an unpopulated 2×3 header `LED6` (with R68).
+- **LEDs**: a 6×2 array of 0603 LEDs with the silkscreen names RJ7–RJ18, in rows `POW` and `FX` and columns 1–6. No series resistors are visible next to the array. LED7 and LED8 sit next to an unpopulated 2×3 header `LED6` (with R68).
 - **Bottom edge under the RJ45s**: twelve SMB parts marked `CP06C` (D6, D8–D18, maybe bidirectional TVS), and 1206 capacitors (C16, C38, C55, C56, C60, C61, C62, C65, C71, C75 and C98 are readable) with 0603 resistors R15, R32, R67, R71 to R76 and R82 to R84. These are probably per-pair Bob-Smith terminations or PoE centre-tap filtering (inferred).
 
 ## Port mapping (inferred from placement)

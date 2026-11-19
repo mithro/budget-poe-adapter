@@ -450,8 +450,10 @@ Each photo is embedded in this section, except the annotated strap array, which 
 | 4 | Continuity | Inner pads of <a href="#lx-r59">R59</a> | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-85">85</a> | <a href="#lx-inference-pin-order">Pin order</a> |
 | 5 | Register read of [`PON_STRAP_CAP`](yt9215-registers/docs/reference/system.rst) | Management interface | Address 0x80328 | Levels sampled at power-on |
 | 6 | EEPROM read with a clip | <a href="#lx-u10">U10</a> | All 8 Kbit | Registers loaded at reset |
-| 7 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-46">46</a> | Every nearby via | No hidden route from the pad |
-| 7 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-47">47</a> | Every nearby via | No hidden route from the pad |
+| 7 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-46">46</a> | 3.3 V | No hidden strap on the pad |
+| 8 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-46">46</a> | Ground | No hidden strap on the pad |
+| 9 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-47">47</a> | 3.3 V | No hidden strap on the pad |
+| 10 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-47">47</a> | Ground | No hidden strap on the pad |
 
 Check 5 is not certain to work as written. The register name and address come from the Linux driver, as recorded in the
 [register reference](yt9215-registers/docs/reference/system.rst); neither datasheet lists it, and the bit positions of the strap pins on this board are not documented. With DIS_SPIS (pin <a href="#lx-pin-70">70</a>) = 1 and SMI_SEL (pin <a href="#lx-pin-85">85</a>) = 1,

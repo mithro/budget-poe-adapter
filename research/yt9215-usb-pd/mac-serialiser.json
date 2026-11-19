@@ -1,0 +1,10 @@
+{ "signal": [
+  { "name": "TXC, 2.5 MHz",      "wave": "p..................." },
+  { "name": "TX_CTL",            "wave": "1..................." },
+  { "name": "frame byte",        "wave": "x=.=.=.=.=.=.=.=.=.x", "data": ["0x22", "0x22", "0x00", "0x00", "0x22", "0x22", "0x22", "0x22", "0x00"] },
+  { "name": "TXD1",              "wave": "x1...0...1.......0.x" },
+  { "name": "BMC half bit",      "wave": "x=...=...=...=...=.x", "data": ["high, 1.6 µs", "low, 1.6 µs", "high", "high", "low"] },
+  { "name": "PD bit",            "wave": "x=.......=.......=.x", "data": ["1", "0", ""] }
+  ],
+  "head": { "text": "Port 8 at 10 Mbit/s: two equal frame bytes make one BMC half bit on TXD1" }
+}

@@ -57,6 +57,7 @@ The research notes cover these topics:
 | [`usb-c-pd.md`](research/usb-c-pd.md) | USB-C power standards |
 | [`usb-c-pd.md`](research/usb-c-pd.md) | Raspberry Pi 5 requirements |
 | [`usb-c-pd.md`](research/usb-c-pd.md) | PD negotiation at the electrical level |
+| [`yt9215-usb-pd.md`](research/yt9215-usb-pd.md) | USB-C PD from the YT9215 alone |
 | [`cost-reduction.md`](research/cost-reduction.md) | Cost reduction |
 | [`cost-reduction.md`](research/cost-reduction.md) | Part-count reduction |
 

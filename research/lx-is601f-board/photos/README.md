@@ -1,6 +1,6 @@
 # LX-IS601F V2.0 photo catalogue
 
-Tim's photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with a
+Photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with a
 Pixel 7 Pro. The originals (3072 x 4080) are in the
 [Google Photos album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9). This folder holds
 copies resized to 1600 px ([`web/`](web/)), 240 px thumbnails ([`thumbs/`](thumbs/)) and
@@ -31,6 +31,9 @@ They differ in what is fitted:
 | PoE PSE module | Not fitted | Fitted |
 | SFP cage | Not fitted | Fitted |
 | U4 heatsink | Fitted | Not seen |
+| C4 marking | `YX 47 63V` | `22 63V MB` |
+| C4 value | 47 µF | 22 µF |
+| TC1 marking | `YX 220 16V` | `220 16V MB` |
 
 Board A is the non-PoE build: the 8-hole header for the PoE module is empty and U12
 has only the SFP host connector, without its cage. Board B is the PoE build, with the
@@ -45,19 +48,22 @@ Parts common to both boards:
 | DXFRM1-6 | Magnetics | Top | SMD 24-pin | `G2401PR` | |
 | ED1-ED10 | ESD array | Top | SOT-23-6 | `05U` | |
 | Y6 | Crystal | Top | SMD 4-pad | `25.000` | 25 MHz |
-| PU1 | Buck regulator | Top | SOIC-8 | `SCT2622` | 3.3 V out |
+| PU1 | SCT2622 buck regulator | Top | SOIC-8 | `2622 SCT 6DC 2U650` | 3.3 V out |
 | PL3 | Buck inductor | Top | SMD | `100` | 10 µH |
 | D40 | Buck diode | Top | SMA | `SS510` | |
 | L2 | Input inductor | Top | SMD | `701` | |
-| C4 | Input capacitor | Top | Polymer can | `YX 47 63V` | 47 µF |
-| TC1 | 3.3 V output capacitor | Top | Polymer can | `YX 220 16V` | 220 µF |
+| C4 | Input capacitor | Top | Polymer can | | |
+| TC1 | 3.3 V output capacitor | Top | Polymer can | | 220 µF |
 | J2 | Power input connector | Top | THT 2-pin | `POWER2` | |
 | U10 | I²C EEPROM | Bottom | SOIC-8 | `HK24C08` | 8 Kbit |
 
+The marking of C4 and TC1, and the value of C4, differ between the boards and are in
+the first table.
+
 ## Catalogue
 
-Click a thumbnail for the 1600 px copy, or the number for the notes, which list the
-parts in each photo. "Callout" marks photos with an annotated image in their notes.
+Click a thumbnail for the 1600 px copy, or the number for the notes. The parts to
+look for in each photo are listed under [Parts in each photo](#parts-in-each-photo). "Callout" marks photos with an annotated image in their notes.
 Times are the camera's local time.
 
 | # | Preview | Board | Side | Area | Framing | Angle | U4 marking | Callout | Time |
@@ -69,14 +75,14 @@ Times are the camera's local time.
 | [05](#photo-05) | [<img src="thumbs/05.jpg" width="120">](web/05.jpg) | A | Top | Whole board | Wide | Angled | Glare |  | 09:48 |
 | [06](#photo-06) | [<img src="thumbs/06.jpg" width="120">](web/06.jpg) | A | Top | U4 | Close | Straight | Readable | Yes | 09:48 |
 | [07](#photo-07) | [<img src="thumbs/07.jpg" width="120">](web/07.jpg) | B | Top | U4 | Close | Straight | Readable |  | 09:48 |
-| [08](#photo-08) | [<img src="thumbs/08.jpg" width="120">](web/08.jpg) | B | Top | Whole board | Wide | Straight | Too small | Yes | 09:48 |
+| [08](#photo-08) | [<img src="thumbs/08.jpg" width="120">](web/08.jpg) | B | Top | Whole board | Wide | Straight | Readable | Yes | 09:48 |
 | [09](#photo-09) | [<img src="thumbs/09.jpg" width="120">](web/09.jpg) | B | Top | U4 | Close | Straight | Glare |  | 09:49 |
 | [10](#photo-10) | [<img src="thumbs/10.jpg" width="120">](web/10.jpg) | B | Top | U4 left edge | Macro | Straight | Not in shot |  | 09:49 |
 | [11](#photo-11) | [<img src="thumbs/11.jpg" width="120">](web/11.jpg) | B | Top | U4 left edge | Macro | Straight | Not in shot |  | 09:49 |
 | [12](#photo-12) | [<img src="thumbs/12.jpg" width="120">](web/12.jpg) | B | Top | U4 | Close | Straight | Readable |  | 09:49 |
 | [13](#photo-13) | [<img src="thumbs/13.jpg" width="120">](web/13.jpg) | A | Top | U4 | Close | Straight | Readable |  | 09:49 |
-| [14](#photo-14) | [<img src="thumbs/14.jpg" width="120">](web/14.jpg) | A | Top | U4 and power | Close | Angled | Glare |  | 09:50 |
-| [15](#photo-15) | [<img src="thumbs/15.jpg" width="120">](web/15.jpg) | A | Top | U4 and power | Close | Angled | Glare |  | 09:50 |
+| [14](#photo-14) | [<img src="thumbs/14.jpg" width="120">](web/14.jpg) | A | Top | Power section | Close | Angled | Glare |  | 09:50 |
+| [15](#photo-15) | [<img src="thumbs/15.jpg" width="120">](web/15.jpg) | A | Top | Power section | Close | Angled | Glare |  | 09:50 |
 | [16](#photo-16) | [<img src="thumbs/16.jpg" width="120">](web/16.jpg) | A | Top | Centre | Wide | Straight | Readable |  | 09:50 |
 | [17](#photo-17) | [<img src="thumbs/17.jpg" width="120">](web/17.jpg) | A | Top | Centre | Wide | Angled | Glare |  | 09:50 |
 | [18](#photo-18) | [<img src="thumbs/18.jpg" width="120">](web/18.jpg) | A | Top | Centre | Wide | Angled | Readable |  | 09:50 |
@@ -96,6 +102,87 @@ Times are the camera's local time.
 | [32](#photo-32) | [<img src="thumbs/32.jpg" width="120">](web/32.jpg) | B | Top | PoE module | Macro | Straight | Not in shot | Yes | 13:43 |
 | [33](#photo-33) | [<img src="thumbs/33.jpg" width="120">](web/33.jpg) | A | Top | Uplink corner | Close | Straight | Not in shot |  | 13:43 |
 | [34](#photo-34) | [<img src="thumbs/34.jpg" width="120">](web/34.jpg) | B | Top | Uplink corner | Close | Straight | Not in shot |  | 13:44 |
+
+## Parts in each photo
+
+| Photo | Part to look for |
+| --- | --- |
+| [01](#photo-01) | Heatsink on U4 |
+| [02](#photo-02) | Heatsink on U4 |
+| [03](#photo-03) | Heatsink on U4 |
+| [04](#photo-04) | U4 without heatsink |
+| [04](#photo-04) | U12 SFP connector |
+| [05](#photo-05) | U4 without heatsink |
+| [06](#photo-06) | U4 marking |
+| [06](#photo-06) | Y6 |
+| [06](#photo-06) | R44 |
+| [06](#photo-06) | R89 |
+| [06](#photo-06) | R92 |
+| [06](#photo-06) | R93 |
+| [07](#photo-07) | U4 marking |
+| [07](#photo-07) | PoE module U1 |
+| [08](#photo-08) | PoE module |
+| [08](#photo-08) | SFP cage |
+| [09](#photo-09) | U4 in glare |
+| [10](#photo-10) | Y6 |
+| [10](#photo-10) | R250 sense resistors |
+| [10](#photo-10) | ESD arrays |
+| [11](#photo-11) | Y6 |
+| [11](#photo-11) | R250 sense resistors |
+| [11](#photo-11) | ESD arrays |
+| [12](#photo-12) | U4 marking |
+| [12](#photo-12) | PoE module U1 |
+| [13](#photo-13) | U4 marking |
+| [13](#photo-13) | ESD arrays |
+| [14](#photo-14) | PU1 |
+| [14](#photo-14) | PL3 |
+| [14](#photo-14) | C4 |
+| [15](#photo-15) | PU1 |
+| [15](#photo-15) | PL3 |
+| [15](#photo-15) | C4 |
+| [16](#photo-16) | U4 |
+| [16](#photo-16) | Magnetics |
+| [16](#photo-16) | TC1 |
+| [17](#photo-17) | U4 |
+| [17](#photo-17) | Magnetics |
+| [17](#photo-17) | TC1 |
+| [18](#photo-18) | U4 |
+| [18](#photo-18) | Magnetics |
+| [18](#photo-18) | TC1 |
+| [19](#photo-19) | PU1 |
+| [19](#photo-19) | C4 |
+| [19](#photo-19) | L2 |
+| [20](#photo-20) | U4 marking |
+| [20](#photo-20) | DXFRM6 |
+| [21](#photo-21) | Empty PoE module header |
+| [21](#photo-21) | LED resistor pads |
+| [22](#photo-22) | LED6 footprint |
+| [22](#photo-22) | LED7 |
+| [22](#photo-22) | LED8 |
+| [22](#photo-22) | R68 |
+| [23](#photo-23) | U4 |
+| [23](#photo-23) | Y6 |
+| [23](#photo-23) | L2 |
+| [24](#photo-24) | D19 |
+| [24](#photo-24) | D21 |
+| [24](#photo-24) | C69 |
+| [24](#photo-24) | C73 |
+| [25](#photo-25) | Port diodes D8-D14 |
+| [26](#photo-26) | U6 footprint |
+| [26](#photo-26) | U10 |
+| [27](#photo-27) | U10 |
+| [27](#photo-27) | Port diodes |
+| [28](#photo-28) | U10 |
+| [29](#photo-29) | U10 marking |
+| [30](#photo-30) | PoE module U1 |
+| [30](#photo-30) | R250 sense resistors |
+| [30](#photo-30) | Diodes D1-D7 |
+| [31](#photo-31) | Diode marking `RGS 2616` |
+| [32](#photo-32) | PoE module U1 marking |
+| [33](#photo-33) | `LX-IS601F V2.0` silkscreen |
+| [33](#photo-33) | DXFRM6 date `2632` |
+| [34](#photo-34) | `LX-IS601F V2.0` silkscreen |
+| [34](#photo-34) | DXFRM6 date `2523A` |
 
 ## Notes per photo
 
@@ -118,8 +205,7 @@ Board A, same view as 02 at a slight angle.
 
 ### Photo 04
 
-Board A after the heatsink was taken off U4. The heatsink, with thermal-pad residue,
-was beside the board in the original shot and is cropped out here.
+Board A with the heatsink removed from U4.
 
 ![Photo 04 annotated](annotated/04.jpg)
 
@@ -146,7 +232,8 @@ visible, marked `2184A / 533AQ1H`.
 
 ### Photo 08
 
-Board B, whole top side. The PoE PSE module sits over the RJ45 block, and an SFP cage
+Board B, whole top side. The PoE PSE module sits beside the RJ45 block, over the
+DXFRM magnetics, and an SFP cage
 covers U12 at the bottom left. Magnetics on this board are date-coded `2523A`.
 
 ![Photo 08 annotated](annotated/08.jpg)
@@ -175,7 +262,7 @@ R110-R114 near the crystal are clear.
 
 ### Photo 14
 
-Board A, U4 and the power section at an angle. PU1 (`2622 / SCT 6DC / 2U650`, an
+Board A, U4 and the power section at an angle. PU1 (`2622 SCT 6DC 2U650`, an
 SCT2622 buck), PL3 `100`, D40 `SS510` and C4 (`YX 47 63V`) are in frame.
 
 ### Photo 15
@@ -189,11 +276,11 @@ Board A, wider view of the centre: magnetics on the left, U4, and TC1
 
 ### Photo 17
 
-Board A, same area as 16 at an angle.
+Board A, same area as 16 (magnetics, U4 and TC1) at an angle.
 
 ### Photo 18
 
-Board A, same area as 16 from slightly further back.
+Board A, same area as 16 (magnetics, U4 and TC1) from slightly further back.
 
 ### Photo 19
 
@@ -229,7 +316,8 @@ residue. D19, D21, C69 and C73 are visible.
 ### Photo 25
 
 Bottom side, the other end of the RJ45 block. A row of SMB diodes (D8, D10-D14,
-marked `P06C`) sits behind the jacks, with R71-R76 and 1206 capacitors below them.
+marked `CP06C`) sits behind the jacks, with R76, R74, R73, R72, R71, R67 and 1206
+capacitors beside them.
 
 ### Photo 26
 
@@ -241,7 +329,8 @@ U4's exposed pad.
 
 ### Photo 27
 
-Bottom side, wider view of 26 including the port-diode column (D6-D12).
+Bottom side, wider view of 26 including U10 and the port-diode column (D6-D12 and
+D16-D18).
 
 ### Photo 28
 
@@ -263,8 +352,8 @@ Board B, PoE module at an angle. The diodes are marked `RGS / 2616`.
 
 ### Photo 32
 
-Board B, macro of the PoE module. U1 reads `2184A / 533AQ1H` (QFN). The part is not
-yet identified; it is drawn as an unidentified 4-port PSE in the
+Board B, macro of the PoE module. U1 reads `2184A / 533AQ1H` (QFN). The part is
+unidentified; it is drawn as an unidentified 4-port PSE in the
 [schematic](../schematic/README.md).
 
 ![Photo 32 annotated](annotated/32.jpg)

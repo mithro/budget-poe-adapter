@@ -167,7 +167,7 @@ addrmap yt9215 {
 
     reg {
         name = "Port control";
-        desc = "Forces or negotiates the MAC settings of one port. Bits 7 to 0 have the same layout as PORT_STATUS; with PORT_CTRL.LINK_AN clear the MAC uses the values written here. Bring a port up gives the order of writes. Index: port = 0 to 10.";
+        desc = "Forces or negotiates the MAC settings of one port. Bits 7 to 0 have the same layout as PORT_STATUS; it is inferred from the name of PORT_CTRL.LINK_AN that with the bit clear the MAC uses the values written here. Bring a port up gives the order of writes. Index: port = 0 to 10.";
         enum port_ctrl_speed_e {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
@@ -214,7 +214,7 @@ addrmap yt9215 {
 
     reg {
         name = "Pin strap override value";
-        desc = "Values used in place of the power-on straps for every function whose bit is set in PON_STRAP_FUNC.";
+        desc = "It is inferred from the register names that the switch uses these values in place of the power-on straps for every function whose bit is set in PON_STRAP_FUNC.";
         field { desc = "1 turns Energy Efficient Ethernet on. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names."; sw = rw; hw = r; } EEE[16:16];
         field { desc = "Loop detection strap value. The vendor SDK function fal_tiger_loop_detect_enable_set() clears this bit and sets PON_STRAP_FUNC.LOOP_DETECT to turn loop detection on, and its comment calls the strap \"dis lpd strap\". By that code 1 turns loop detection off."; sw = rw; hw = r; } LOOP_DETECT[7:7];
     } PON_STRAP_VAL @ 0x80324;
@@ -261,9 +261,9 @@ addrmap yt9215 {
 
     reg {
         name = "xMII enable";
-        desc = "Enables the parallel MAC interface (MII, RMII or RGMII) pins of ports 8 and 9. The bit order is the reverse of the port order.";
-        field { desc = "Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9."; sw = rw; hw = r; } PORT_8[1:1];
-        field { desc = "Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9."; sw = rw; hw = r; } PORT_9[0:0];
+        desc = "Selects the parallel MAC interface (MII, RMII or RGMII) pins of ports 8 and 9. The bit order is the reverse of the port order. yt921x_port_config clears the bit of a port that uses its SerDes. The vendor SDK function fal_tiger_port_extif_mode_set() sets the bit for an xMII mode, under the comment \"select xmii mode\".";
+        field { desc = "Bit 1 selects the xMII pins of port 8. Bit 0 selects the xMII pins of port 9."; sw = rw; hw = r; } PORT_8[1:1];
+        field { desc = "Bit 1 selects the xMII pins of port 8. Bit 0 selects the xMII pins of port 9."; sw = rw; hw = r; } PORT_9[0:0];
     } XMII_CTRL @ 0x80394;
 
     reg {
@@ -508,8 +508,8 @@ addrmap yt9215 {
 
     reg {
         name = "LED group 0 behaviour";
-        desc = "Conditions that light or blink LED 0 of one port. Each set bit adds one condition; the LED shows the combination. LEDs explains the three LED groups. Index: port = 0 to 9.";
-        field { desc = "Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment \"tiger must set disable_link_try bit to 1\". What the bit does is not known."; sw = rw; hw = r; } ACT_LINK_TRY_DIS[17:17];
+        desc = "Conditions that light or blink LED 0 of one port. It is inferred from yt921x_led_trigger_set, which sets several bits at once, that each set bit adds one condition and that the LED shows the combination. LEDs explains the three LED groups. Index: port = 0 to 9.";
+        field { desc = "Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment \"tiger must set disable_link_try bit to 1\". The Linux driver disagrees: yt921x_led_trigger_set writes LED 0 with a mask that holds this bit and never sets it, so it clears the bit. What the bit does is not known."; sw = rw; hw = r; } ACT_LINK_TRY_DIS[17:17];
         field { desc = "Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_COLLISION_BLINK. It is inferred from the name that the LED blinks on a collision."; sw = rw; hw = r; } ACT_COLLISION_BLINK_INDI[16:16];
         field { desc = "Blink while the port is in low power idle."; sw = rw; hw = r; } ACT_EEE_BLINK[15:15];
         field { desc = "Blink when a loop is detected on the port."; sw = rw; hw = r; } ACT_LOOPDETECT_BLINK[14:14];
@@ -762,7 +762,7 @@ addrmap yt9215 {
 
     reg {
         name = "VLAN priority to internal priority map";
-        desc = "Internal priority and colour for each VLAN tag priority. There are two maps (index map); each has one entry per drop eligible bit value (dei) and priority code point (pcp). PORT_QOS picks the map a port uses. Index: map = 0 to 1, dei = 0 to 1, pcp = 0 to 7.";
+        desc = "Internal priority and colour for each VLAN tag priority. There are two maps (index map); each has one entry per drop eligible bit value (dei) and priority code point (pcp). The vendor SDK functions fal_tiger_qos_intPri_cpri_map_set() and fal_tiger_qos_intPri_spri_map_set() write the map number 0 or 1 to PORT_QOS and use it as the index map. Index: map = 0 to 1, dei = 0 to 1, pcp = 0 to 7.";
         enum ipm_pcp_color_e {
             GREEN = 0 { desc = "Lowest drop precedence"; };
             YELLOW = 1 { desc = "Yellow"; };
@@ -774,7 +774,7 @@ addrmap yt9215 {
 
     reg {
         name = "Port priority";
-        desc = "Port default priority and the choice of IPM_PCP map. Index: port = 0 to 10.";
+        desc = "Port default priority and, by the code of the vendor SDK that the description of IPM_PCP names, the choice of IPM_PCP map. Index: port = 0 to 10.";
         field { desc = "Index map of the IPM_PCP map used for customer tags."; sw = rw; hw = r; } CVLAN_PRIO_MAP_ID[5:5];
         field { desc = "Index map of the IPM_PCP map used for service tags."; sw = rw; hw = r; } SVLAN_PRIO_MAP_ID[4:4];
         field { desc = "Port default priority from 0 to 7."; sw = rw; hw = r; } PRIO[3:1];
@@ -1000,7 +1000,7 @@ addrmap yt9215 {
 
     reg {
         name = "Unknown unicast flood filter";
-        desc = "Ports that do not receive flooded frames with an unknown unicast destination.";
+        desc = "Port mask for flooded frames with an unknown unicast destination. yt921x_chip_setup_dsa sets the bit of every port.";
         field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_10[10:10];
         field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_9[9:9];
         field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_8[8:8];
@@ -1016,7 +1016,7 @@ addrmap yt9215 {
 
     reg {
         name = "Unknown multicast flood filter";
-        desc = "Ports that do not receive flooded frames with an unknown multicast destination.";
+        desc = "Port mask for flooded frames with an unknown multicast destination. yt921x_chip_setup_dsa sets the bit of every port.";
         field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_10[10:10];
         field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_9[9:9];
         field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_8[8:8];
@@ -1258,7 +1258,7 @@ addrmap yt9215 {
         field { desc = "Replace the priority of the customer tag."; sw = rw; hw = r; } CPRI_REPLACE[48:48];
         field { desc = "New customer VLAN ID."; sw = rw; hw = r; } CVID[47:36];
         field { desc = "Replace the customer VLAN ID."; sw = rw; hw = r; } CVID_REPLACE[35:35];
-        field { desc = "Internal priority given to the frame. It is a source for PORT_PRIO_ORD."; sw = rw; hw = r; } PRIO[34:32];
+        field { desc = "Internal priority given to the frame. It is inferred that it is a source for PORT_PRIO_ORD."; sw = rw; hw = r; } PRIO[34:32];
         field { desc = "Enables PRIO."; sw = rw; hw = r; } PRIO_EN[31:31];
         field { desc = "Colour given to the frame."; sw = rw; hw = r; encode = acl_act_color_e; } COLOR[30:29];
         field { desc = "Enables COLOR."; sw = rw; hw = r; } COLOR_EN[28:28];
@@ -1411,15 +1411,15 @@ addrmap yt9215 {
 
     reg {
         name = "Port ingress tag recognition";
-        desc = "Chooses which TPID_IGR entries one port treats as a customer tag and which as a service tag. VLAN-aware and VLAN-unaware ports shows how this makes a port ignore VLAN tags. Index: port = 0 to 10.";
-        field { desc = "Entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_3[7:7];
-        field { desc = "Entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_2[6:6];
-        field { desc = "Entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_1[5:5];
-        field { desc = "Entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_0[4:4];
-        field { desc = "Entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_3[3:3];
-        field { desc = "Entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_2[2:2];
-        field { desc = "Entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_1[1:1];
-        field { desc = "Entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_0[0:0];
+        desc = "yt921x_vlan_aware_set writes the register to make a port VLAN-aware or VLAN-unaware. It is inferred from the names that the register chooses which TPID_IGR entries one port treats as a customer tag and which as a service tag. VLAN-aware and VLAN-unaware ports shows how this makes a port ignore VLAN tags. Index: port = 0 to 10.";
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_3[7:7];
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_2[6:6];
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_1[5:5];
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a service tag on this port."; sw = rw; hw = r; } STAG_0[4:4];
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_3[3:3];
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_2[2:2];
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_1[1:1];
+        field { desc = "It is inferred from the names that entry n of TPID_IGR marks a customer tag on this port."; sw = rw; hw = r; } CTAG_0[0:0];
     } PORT_IGR_TPID[11] @ 0x210010 += 0x4;
 
     reg {

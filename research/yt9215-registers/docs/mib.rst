@@ -11,8 +11,8 @@ Every port counts the frames and bytes it receives and sends. The registers are 
 Enable
 ------
 
-The counters run only while :field:`FUNC.MIB` is set, which :ref:`bringup-features`
-describes.
+It is :ev:`inferred` that the counters run only while :field:`FUNC.MIB` is set, which
+:ref:`bringup-features` describes.
 
 .. _mib-counters:
 

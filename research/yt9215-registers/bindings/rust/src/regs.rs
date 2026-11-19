@@ -551,7 +551,7 @@ pub const MDIO_POLLING_SPEED: Field = Field { lsb: 0, width: 3 };
 
 /// xMII enable.
 pub const XMII_CTRL: u32 = 0x80394;
-/// Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9.
+/// Bit 1 selects the xMII pins of port 8. Bit 0 selects the xMII pins of port 9.
 pub const fn xmii_ctrl_port(port: u32) -> Field {
     Field { lsb: (1 - (port - 8)) as u8, width: 1 }
 }
@@ -753,7 +753,7 @@ pub const fn led0_port(port: u32) -> u32 {
 pub const LED0_PORT_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`led0_port`].
 pub const LED0_PORT_PORT_COUNT: u32 = 10;
-/// Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment "tiger must set disable_link_try bit to 1". What the bit does is not known.
+/// Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment "tiger must set disable_link_try bit to 1". The Linux driver disagrees: yt921x_led_trigger_set writes LED 0 with a mask that holds this bit and never sets it, so it clears the bit. What the bit does is not known.
 pub const LED0_PORT_ACT_LINK_TRY_DIS: Field = Field { lsb: 17, width: 1 };
 /// Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_COLLISION_BLINK. It is inferred from the name that the LED blinks on a collision.
 pub const LED0_PORT_ACT_COLLISION_BLINK_INDI: Field = Field { lsb: 16, width: 1 };
@@ -1092,13 +1092,13 @@ pub const fn port_igr_tpid(port: u32) -> u32 {
 pub const PORT_IGR_TPID_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_igr_tpid`].
 pub const PORT_IGR_TPID_PORT_COUNT: u32 = 11;
-/// Entry n of TPID_IGR marks a service tag on this port.
+/// It is inferred from the names that entry n of TPID_IGR marks a service tag on this port.
 pub const fn port_igr_tpid_stag(n: u32) -> Field {
     Field { lsb: (4 + n) as u8, width: 1 }
 }
 /// All elements of [`port_igr_tpid_stag`] as one field.
 pub const PORT_IGR_TPID_STAG_ALL: Field = Field { lsb: 4, width: 4 };
-/// Entry n of TPID_IGR marks a customer tag on this port.
+/// It is inferred from the names that entry n of TPID_IGR marks a customer tag on this port.
 pub const fn port_igr_tpid_ctag(n: u32) -> Field {
     Field { lsb: (n) as u8, width: 1 }
 }
@@ -1672,7 +1672,7 @@ pub const ACL_ACT_CPRI_REPLACE: Field = Field { lsb: 48, width: 1 };
 pub const ACL_ACT_CVID: Field = Field { lsb: 36, width: 12 };
 /// Replace the customer VLAN ID.
 pub const ACL_ACT_CVID_REPLACE: Field = Field { lsb: 35, width: 1 };
-/// Internal priority given to the frame. It is a source for PORT_PRIO_ORD.
+/// Internal priority given to the frame. It is inferred that it is a source for PORT_PRIO_ORD.
 pub const ACL_ACT_PRIO: Field = Field { lsb: 32, width: 3 };
 /// Enables PRIO.
 pub const ACL_ACT_PRIO_EN: Field = Field { lsb: 31, width: 1 };

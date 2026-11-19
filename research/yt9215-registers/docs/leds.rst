@@ -22,6 +22,11 @@ bits at once, that an LED shows the combination of the conditions whose bits are
 The :ref:`link and activity table <leds-link-table>` gives the bits for an LED that shows link
 and activity. Write all five bits in one write to :reg:`LED0_PORT` of the port. The five bits are
 :ev:`confirmed` by :lx:`yt921x_led_trigger_set` of the :ref:`Linux driver <sources-list>`.
+That function clears :field:`LED0_PORT.ACT_LINK_TRY_DIS` in the same write. The
+:ref:`vendor SDK <sources-list>` function
+`fal_tiger_led_action_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L320>`__
+sets that bit for LED 0 in every case, under the comment "tiger must set disable_link_try
+bit to 1". It is :ev:`not known` which is right.
 
 .. _leds-link-table:
 

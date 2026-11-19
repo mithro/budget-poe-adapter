@@ -150,7 +150,7 @@ A meter has two token buckets, committed and excess. It colours frames green, ye
 and drops the colours selected in :field:`METER_CTRL.DROP`. The two buckets are the four fields
 of the :ref:`colour table <rate-colour-table>`, and the three colours are the value names of
 :field:`METER_CTRL.DROP` in :lx:`tc.h`. The assignment of a colour to a rate is :ev:`inferred`
-from the two RFCs that :field:`METER_CTRL.RFC2698` names. Meters work only while
+from the two RFCs that :field:`METER_CTRL.RFC2698` names. It is :ev:`inferred` that meters work only while
 :field:`FUNC.METER` is set, which :ref:`bringup-features` describes.
 
 .. _rate-colour-table:

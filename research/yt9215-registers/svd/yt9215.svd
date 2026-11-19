@@ -528,7 +528,7 @@
           <dim>11</dim>
           <dimIncrement>0x4</dimIncrement>
           <name>PORT_CTRL[%s]</name>
-          <description>Forces or negotiates the MAC settings of one port. Bits 7 to 0 have the same layout as PORT_STATUS; with PORT_CTRL.LINK_AN clear the MAC uses the values written here. Bring a port up gives the order of writes. Index: port = 0 to 10.</description>
+          <description>Forces or negotiates the MAC settings of one port. Bits 7 to 0 have the same layout as PORT_STATUS; it is inferred from the name of PORT_CTRL.LINK_AN that with the bit clear the MAC uses the values written here. Bring a port up gives the order of writes. Index: port = 0 to 10.</description>
           <addressOffset>0x100</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -737,7 +737,7 @@
         </register>
         <register>
           <name>PON_STRAP_VAL</name>
-          <description>Values used in place of the power-on straps for every function whose bit is set in PON_STRAP_FUNC.</description>
+          <description>It is inferred from the register names that the switch uses these values in place of the power-on straps for every function whose bit is set in PON_STRAP_FUNC.</description>
           <addressOffset>0x324</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -891,21 +891,21 @@
         </register>
         <register>
           <name>XMII_CTRL</name>
-          <description>Enables the parallel MAC interface (MII, RMII or RGMII) pins of ports 8 and 9. The bit order is the reverse of the port order.</description>
+          <description>Selects the parallel MAC interface (MII, RMII or RGMII) pins of ports 8 and 9. The bit order is the reverse of the port order. yt921x_port_config clears the bit of a port that uses its SerDes. The vendor SDK function fal_tiger_port_extif_mode_set() sets the bit for an xMII mode, under the comment "select xmii mode".</description>
           <addressOffset>0x394</addressOffset>
           <size>32</size>
           <access>read-write</access>
           <fields>
             <field>
               <name>PORT_8</name>
-              <description>Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9.</description>
+              <description>Bit 1 selects the xMII pins of port 8. Bit 0 selects the xMII pins of port 9.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>PORT_9</name>
-              <description>Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9.</description>
+              <description>Bit 1 selects the xMII pins of port 8. Bit 0 selects the xMII pins of port 9.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -1520,7 +1520,7 @@
           <dim>10</dim>
           <dimIncrement>0x4</dimIncrement>
           <name>LED0_PORT[%s]</name>
-          <description>Conditions that light or blink LED 0 of one port. Each set bit adds one condition; the LED shows the combination. LEDs explains the three LED groups. Index: port = 0 to 9.</description>
+          <description>Conditions that light or blink LED 0 of one port. It is inferred from yt921x_led_trigger_set, which sets several bits at once, that each set bit adds one condition and that the LED shows the combination. LEDs explains the three LED groups. Index: port = 0 to 9.</description>
           <addressOffset>0x4</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -1646,7 +1646,7 @@
             </field>
             <field>
               <name>ACT_LINK_TRY_DIS</name>
-              <description>Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment "tiger must set disable_link_try bit to 1". What the bit does is not known.</description>
+              <description>Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment "tiger must set disable_link_try bit to 1". The Linux driver disagrees: yt921x_led_trigger_set writes LED 0 with a mask that holds this bit and never sets it, so it clears the bit. What the bit does is not known.</description>
               <bitOffset>17</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -2654,7 +2654,7 @@
           <dim>32</dim>
           <dimIncrement>0x4</dimIncrement>
           <name>IPM_PCP[%s]</name>
-          <description>Internal priority and colour for each VLAN tag priority. There are two maps (index map); each has one entry per drop eligible bit value (dei) and priority code point (pcp). PORT_QOS picks the map a port uses. Index: map = 0 to 1, dei = 0 to 1, pcp = 0 to 7. Flat index = 16 × map + 8 × dei + pcp.</description>
+          <description>Internal priority and colour for each VLAN tag priority. There are two maps (index map); each has one entry per drop eligible bit value (dei) and priority code point (pcp). The vendor SDK functions fal_tiger_qos_intPri_cpri_map_set() and fal_tiger_qos_intPri_spri_map_set() write the map number 0 or 1 to PORT_QOS and use it as the index map. Index: map = 0 to 1, dei = 0 to 1, pcp = 0 to 7. Flat index = 16 × map + 8 × dei + pcp.</description>
           <addressOffset>0x100</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -2696,7 +2696,7 @@
           <dim>11</dim>
           <dimIncrement>0x4</dimIncrement>
           <name>PORT_QOS[%s]</name>
-          <description>Port default priority and the choice of IPM_PCP map. Index: port = 0 to 10.</description>
+          <description>Port default priority and, by the code of the vendor SDK that the description of IPM_PCP names, the choice of IPM_PCP map. Index: port = 0 to 10.</description>
           <addressOffset>0x180</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -3434,7 +3434,7 @@
         </register>
         <register>
           <name>FILTER_UNK_UCAST</name>
-          <description>Ports that do not receive flooded frames with an unknown unicast destination.</description>
+          <description>Port mask for flooded frames with an unknown unicast destination. yt921x_chip_setup_dsa sets the bit of every port.</description>
           <addressOffset>0x508</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -3453,7 +3453,7 @@
         </register>
         <register>
           <name>FILTER_UNK_MCAST</name>
-          <description>Ports that do not receive flooded frames with an unknown multicast destination.</description>
+          <description>Port mask for flooded frames with an unknown multicast destination. yt921x_chip_setup_dsa sets the bit of every port.</description>
           <addressOffset>0x50C</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -3990,7 +3990,7 @@
             <fields>
               <field>
                 <name>PRIO</name>
-                <description>Internal priority given to the frame. It is a source for PORT_PRIO_ORD.</description>
+                <description>Internal priority given to the frame. It is inferred that it is a source for PORT_PRIO_ORD.</description>
                 <bitOffset>0</bitOffset>
                 <bitWidth>3</bitWidth>
                 <access>read-write</access>
@@ -8931,7 +8931,7 @@
           <dim>11</dim>
           <dimIncrement>0x4</dimIncrement>
           <name>PORT_IGR_TPID[%s]</name>
-          <description>Chooses which TPID_IGR entries one port treats as a customer tag and which as a service tag. VLAN-aware and VLAN-unaware ports shows how this makes a port ignore VLAN tags. Index: port = 0 to 10.</description>
+          <description>yt921x_vlan_aware_set writes the register to make a port VLAN-aware or VLAN-unaware. It is inferred from the names that the register chooses which TPID_IGR entries one port treats as a customer tag and which as a service tag. VLAN-aware and VLAN-unaware ports shows how this makes a port ignore VLAN tags. Index: port = 0 to 10.</description>
           <addressOffset>0x10</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -8941,7 +8941,7 @@
               <dimIncrement>1</dimIncrement>
               <dimIndex>0-3</dimIndex>
               <name>CTAG%s</name>
-              <description>Entry n of TPID_IGR marks a customer tag on this port.</description>
+              <description>It is inferred from the names that entry n of TPID_IGR marks a customer tag on this port.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -8951,7 +8951,7 @@
               <dimIncrement>1</dimIncrement>
               <dimIndex>0-3</dimIndex>
               <name>STAG%s</name>
-              <description>Entry n of TPID_IGR marks a service tag on this port.</description>
+              <description>It is inferred from the names that entry n of TPID_IGR marks a service tag on this port.</description>
               <bitOffset>4</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>

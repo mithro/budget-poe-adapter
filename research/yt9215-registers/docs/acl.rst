@@ -5,8 +5,8 @@ Access control list
 
 The access control list (ACL) matches frames on header fields and applies an action: drop,
 redirect, trap to the CPU, rate limit, change priority or tags. The registers are in the
-:blk:`acl` block. The ACL works only while :field:`FUNC.ACL` is set, which
-:ref:`bringup-features` describes.
+:blk:`acl` block. It is :ev:`inferred` that the ACL works only while
+:field:`FUNC.ACL` is set, which :ref:`bringup-features` describes.
 
 .. _acl-model:
 

@@ -252,8 +252,8 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
      - none
      - :ev:`confirmed`
 
-The column "Role of the switch" of the :ref:`mode table <ports-serdes-modes>` is :ev:`inferred`
-from the value name :val:`SERDES.MODE.REVSGMII`. The :ref:`Linux driver <sources-list>` names value 3 :val:`SERDES.MODE.V100BASEX` and the |ds| lists the fibre mode of
+The column "Role of the switch" of the :ref:`mode table <ports-serdes-modes>` follows the
+comment in :lx:`yt921x_dsa_phylink_get_caps`, "REVSGMII (SGMII in PHY role)". The :ref:`Linux driver <sources-list>` names value 3 :val:`SERDES.MODE.V100BASEX` and the |ds| lists the fibre mode of
 the extension ports as 100FX in the section "Extension Ports Fiber Mode (100FX/1000BX/2500BX)".
 
 .. _ports-xmii:

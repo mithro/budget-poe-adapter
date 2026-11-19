@@ -97,7 +97,13 @@ eligible bit. Each entry gives the internal priority in :field:`IPM_PCP.PRIO` an
 .. yt-bitfield:: IPM_PCP
 
 There are two :reg:`IPM_PCP` maps. :field:`PORT_QOS.CVLAN_PRIO_MAP_ID` and
-:field:`PORT_QOS.SVLAN_PRIO_MAP_ID` choose the one a port uses for each tag kind, which is :ev:`inferred` from the two field names. The
+:field:`PORT_QOS.SVLAN_PRIO_MAP_ID` choose the one a port uses for each tag kind. No function of the
+:ref:`Linux driver <sources-list>` writes the two fields. The
+:ref:`vendor SDK <sources-list>` functions
+`fal_tiger_qos_intPri_cpri_map_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_qos.c#L148>`__
+and
+`fal_tiger_qos_intPri_spri_map_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_qos.c#L195>`__
+write the map number to them and use it as the index of the map. The
 reference entry of :reg:`IPM_PCP` gives the address of each map entry.
 
 Fill the tables once at start-up, as :lx:`yt921x_chip_setup_qos` does. That function gives

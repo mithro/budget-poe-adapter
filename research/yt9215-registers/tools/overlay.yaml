@@ -493,8 +493,8 @@ registers:
     block: system
     title: Pin strap override value
     desc: |
-      Values used in place of the power-on straps for every function whose bit is set in
-      :reg:`PON_STRAP_FUNC`.
+      It is :ev:`inferred` from the register names that the switch uses these values in place
+      of the power-on straps for every function whose bit is set in :reg:`PON_STRAP_FUNC`.
     fields:
       EEE: {desc: "1 turns Energy Efficient Ethernet on. :lx:`yt921x_set_eee` sets this bit together with :field:`PON_STRAP_FUNC.EEE`; the role of each bit alone is :ev:`inferred` from the register names."}
       LOOP_DETECT: {desc: "Loop detection strap value. The :ref:`vendor SDK <sources-list>` function `fal_tiger_loop_detect_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_loopdetect.c#L13>`__ clears this bit and sets :field:`PON_STRAP_FUNC.LOOP_DETECT` to turn loop detection on, and its comment calls the strap \"dis lpd strap\". By that code 1 turns loop detection off.", inferred: true}
@@ -583,8 +583,8 @@ registers:
     title: Port control
     desc: |
       Forces or negotiates the MAC settings of one port. Bits 7 to 0 have the same layout as
-      :reg:`PORT_STATUS`; with :field:`PORT_CTRL.LINK_AN` clear the MAC uses the values written
-      here. :ref:`Bring a port up <ports-up>` gives the order of writes.
+      :reg:`PORT_STATUS`; it is :ev:`inferred` from the name of :field:`PORT_CTRL.LINK_AN` that with the bit clear
+      the MAC uses the values written here. :ref:`Bring a port up <ports-up>` gives the order of writes.
     fields:
       PAUSE_AN: {desc: "Take the pause settings from in-band negotiation. :lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band negotiation other than SGMII. It is :ev:`inferred` from the name that RX_PAUSE and TX_PAUSE are then ignored."}
       LINK_AN: {desc: "Take speed and duplex from the in-band status. :lx:`yt921x_serdes_config` sets the bit for a SerDes link with in-band status. It is :ev:`inferred` from the name that the bit also follows a built-in PHY and that the forced bits are then ignored."}
@@ -645,10 +645,13 @@ registers:
     block: port
     title: xMII enable
     desc: |
-      Enables the parallel MAC interface (MII, RMII or RGMII) pins of ports 8 and 9. The bit
-      order is the reverse of the port order.
+      Selects the parallel MAC interface (MII, RMII or RGMII) pins of ports 8 and 9. The bit
+      order is the reverse of the port order. :lx:`yt921x_port_config` clears the bit of a port
+      that uses its SerDes. The :ref:`vendor SDK <sources-list>` function
+      `fal_tiger_port_extif_mode_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L687>`__
+      sets the bit for an xMII mode, under the comment "select xmii mode".
     fields:
-      PORTn: {desc: "Bit 1 enables the xMII pins of port 8. Bit 0 enables the xMII pins of port 9."}
+      PORTn: {desc: "Bit 1 selects the xMII pins of port 8. Bit 0 selects the xMII pins of port 9."}
   XMII:
     block: port
     title: xMII mode and timing
@@ -797,11 +800,12 @@ registers:
     block: led
     title: LED group 0 behaviour
     desc: |
-      Conditions that light or blink LED 0 of one port. Each set bit adds one condition; the LED
-      shows the combination. :ref:`LEDs <leds>` explains the three LED groups.
+      Conditions that light or blink LED 0 of one port. It is :ev:`inferred` from
+      :lx:`yt921x_led_trigger_set`, which sets several bits at once, that each set bit adds one
+      condition and that the LED shows the combination. :ref:`LEDs <leds>` explains the three LED groups.
     fields:
       ACT: {desc: "All behaviour bits of this LED as one mask.", group: true}
-      ACT_LINK_TRY_DIS: {desc: "Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L40>`__ names the bit LED_ACTION_DISABLE_LINK_TRY, and `fal_tiger_led_action_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L320>`__ sets it for LED 0 in every case, under the comment \"tiger must set disable_link_try bit to 1\". What the bit does is :ev:`not known`.", inferred: true}
+      ACT_LINK_TRY_DIS: {desc: "Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L40>`__ names the bit LED_ACTION_DISABLE_LINK_TRY, and `fal_tiger_led_action_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L320>`__ sets it for LED 0 in every case, under the comment \"tiger must set disable_link_try bit to 1\". The :ref:`Linux driver <sources-list>` disagrees: :lx:`yt921x_led_trigger_set` writes LED 0 with a mask that holds this bit and never sets it, so it clears the bit. What the bit does is :ev:`not known`.", inferred: true}
       ACT_COLLISION_BLINK_INDI: {desc: "Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L39>`__ names the bit LED_ACTION_COLLISION_BLINK. It is :ev:`inferred` from the name that the LED blinks on a collision.", inferred: true}
       <<: &ledact
         ACT_EEE_BLINK: {desc: "Blink while the port is in low power idle.", inferred: true}
@@ -932,12 +936,13 @@ registers:
     block: vlan
     title: Port ingress tag recognition
     desc: |
-      Chooses which :reg:`TPID_IGR` entries one port treats as a customer tag and which as a
-      service tag. :ref:`VLAN-aware and VLAN-unaware ports <vlan-aware>` shows how this makes
+      :lx:`yt921x_vlan_aware_set` writes the register to make a port VLAN-aware or
+      VLAN-unaware. It is :ev:`inferred` from the names that the register chooses which
+      :reg:`TPID_IGR` entries one port treats as a customer tag and which as a service tag. :ref:`VLAN-aware and VLAN-unaware ports <vlan-aware>` shows how this makes
       a port ignore VLAN tags.
     fields:
-      STAG: {desc: "Entry ``n`` of :reg:`TPID_IGR` marks a service tag on this port."}
-      CTAG: {desc: "Entry ``n`` of :reg:`TPID_IGR` marks a customer tag on this port."}
+      STAG: {desc: "It is :ev:`inferred` from the names that entry ``n`` of :reg:`TPID_IGR` marks a service tag on this port."}
+      CTAG: {desc: "It is :ev:`inferred` from the names that entry ``n`` of :reg:`TPID_IGR` marks a customer tag on this port."}
   VLAN_IGR_FILTER:
     block: vlan
     title: Ingress VLAN filter
@@ -1015,13 +1020,18 @@ registers:
     desc: |
       Internal priority and colour for each VLAN tag priority. There are two maps (index
       ``map``); each has one entry per drop eligible bit value (``dei``) and priority code
-      point (``pcp``). :reg:`PORT_QOS` picks the map a port uses.
+      point (``pcp``). The :ref:`vendor SDK <sources-list>` functions
+      `fal_tiger_qos_intPri_cpri_map_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_qos.c#L148>`__
+      and
+      `fal_tiger_qos_intPri_spri_map_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_qos.c#L195>`__
+      write the map number 0 or 1 to :reg:`PORT_QOS` and use it as the index ``map``.
     fields: *ipm
   PORT_QOS:
     block: qos
     title: Port priority
     desc: |
-      Port default priority and the choice of :reg:`IPM_PCP` map.
+      Port default priority and, by the code of the :ref:`vendor SDK <sources-list>` that the
+      description of :reg:`IPM_PCP` names, the choice of :reg:`IPM_PCP` map.
     fields:
       CVLAN_PRIO_MAP_ID: {desc: "Index ``map`` of the :reg:`IPM_PCP` map used for customer tags.", inferred: true}
       SVLAN_PRIO_MAP_ID: {desc: "Index ``map`` of the :reg:`IPM_PCP` map used for service tags.", inferred: true}
@@ -1180,13 +1190,14 @@ registers:
     block: flood
     title: Unknown unicast flood filter
     desc: |
-      Ports that do not receive flooded frames with an unknown unicast destination.
+      Port mask for flooded frames with an unknown unicast destination. :lx:`yt921x_chip_setup_dsa`
+      sets the bit of every port.
     fields: &filter
       PORTS: {desc: "It is :ev:`inferred` from the word \"filter\" in the register name that frames of this class are not flooded to port ``port`` while its bit is set."}
   FILTER_UNK_MCAST:
     block: flood
     title: Unknown multicast flood filter
-    desc: Ports that do not receive flooded frames with an unknown multicast destination.
+    desc: "Port mask for flooded frames with an unknown multicast destination. :lx:`yt921x_chip_setup_dsa` sets the bit of every port."
     fields: *filter
   FILTER_MCAST:
     block: flood
@@ -1383,7 +1394,7 @@ registers:
       CPRI_REPLACE: {desc: "Replace the priority of the customer tag."}
       CVID: {desc: "New customer VLAN ID."}
       CVID_REPLACE: {desc: "Replace the customer VLAN ID."}
-      PRIO: {desc: "Internal priority given to the frame. It is a source for :reg:`PORT_PRIO_ORD`."}
+      PRIO: {desc: "Internal priority given to the frame. It is :ev:`inferred` that it is a source for :reg:`PORT_PRIO_ORD`."}
       PRIO_EN: {desc: "Enables PRIO."}
       COLOR:
         desc: "Colour given to the frame."

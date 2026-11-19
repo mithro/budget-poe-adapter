@@ -1,0 +1,6 @@
+# Packages needed to build the documentation (python3 -m sphinx -b html . _build/html).
+sphinx==9.2.0
+myst-parser==5.2.0
+furo==2025.12.19
+pyyaml==6.0.3
+sphinx-design==0.7.0

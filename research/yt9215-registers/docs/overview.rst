@@ -1,0 +1,171 @@
+.. _overview:
+
+Overview of the chip
+====================
+
+A YT921x is an Ethernet switch with up to eleven ports, numbered 0 to 10. Software sees it as
+a file of 32-bit registers that it reads and writes over the two-wire MDIO management
+interface. The :ref:`Linux driver <sources-list>` controls the switch through these registers
+alone and loads no firmware.
+
+Sections 5.5.1 and 5.5.3 of the |ds| describe two more host interfaces to the same registers, I2C
+and SPI, which strap pins select. This manual covers MDIO only. :ref:`access-straps` names
+the pins.
+
+.. yt-diagram:: system
+   :caption: A host and the parts of the switch it deals with. The boxes are links.
+
+.. _overview-ports:
+
+Ports
+-----
+
+Ports 0 to 7 have a built-in Gigabit copper PHY that also runs at 10 and 100 Mbit/s. The
+:ref:`YT9215 family <reference-parts>` has up to five of them (ports 0 to 4) and the
+:ref:`YT9218 family <reference-parts>` eight. Ports 8 and 9 are the external ports. Depending
+on the part each has an SGMII-class SerDes, parallel MAC pins or both. This manual calls the
+parallel MAC pins xMII; they carry MII, RMII or RGMII. Port 10 leads to the built-in
+microcontroller, which a host driver leaves alone. The comment in :lx:`chip.h:448` gives this
+layout as "8 internal + 2 external + 1 mcu". :ref:`reference-parts-ports` lists the
+ports of every part that the :ref:`Linux driver <sources-list>` identifies.
+
+A host that wants to send and receive frames through the switch connects its own Ethernet MAC
+to one of the external ports. That port is then the CPU port, and frames on it can carry the
+8-byte tag of :doc:`cpu-tag`, which names the port a frame came from or must go to.
+
+A set of ports is always written as a bit mask in which bit *n* stands for port *n*; a mask of
+all ports is ``0x7ff``.
+
+.. _overview-frame-path:
+
+The path of a frame
+-------------------
+
+The functions of the switch are easiest to learn in the order a frame meets them. Each box
+of the :ref:`frame path diagram <overview-frame-path>` is a link to the page that describes the stage.
+
+.. yt-diagram:: frame-path
+   :caption: Stages a frame passes through, from the receiving to the sending port.
+
+The order of the stages is :ev:`inferred` from the order in which
+`IEEE 802.1Q <https://en.wikipedia.org/wiki/IEEE_802.1Q>`__ describes the forwarding process, with
+one exception. A comment in :lx:`yt921x_chip_setup_dsa` states that port isolation is applied
+after the destination lookup: a frame whose known destination is blocked is dropped, not flooded.
+
+.. _overview-driver:
+
+What a driver has to do
+-----------------------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 6 44 50
+
+   * - Step
+     - Task
+     - Described in
+   * - 1
+     - Implement register access
+     - :ref:`access-smi`
+   * - 2
+     - Reset the switch
+     - :ref:`bringup-reset`
+   * - 3
+     - Turn on the optional function blocks
+     - :ref:`bringup-features`
+   * - 4
+     - Set up the CPU port
+     - :ref:`cpu-tag`
+   * - 5
+     - Enable the port MACs
+     - :ref:`ports-up`
+   * - 6
+     - Configure the external ports
+     - :ref:`ports-external`
+   * - 7
+     - Group ports
+     - :ref:`forwarding-isolation`
+   * - 8
+     - Set the handling of unknown destinations
+     - :ref:`forwarding-flood`
+   * - 9
+     - Add VLANs
+     - :doc:`vlan`
+   * - 10
+     - Add static addresses
+     - :doc:`fdb`
+   * - 11
+     - Read counters
+     - :doc:`mib`
+
+Step 3 turns
+on the counters, the ACL and the meters; :ref:`bringup-features` gives the evidence that they
+need it. Step 4 is needed for a host that sends and receives
+frames through the switch, step 6 for a part that uses port 8 or port 9, and steps 8 to 11
+only for the function they name.
+
+.. _overview-init:
+
+The :ref:`start-up example <overview-init>` is built from the examples of steps 1 to 5 and step 7. It
+finds, resets and identifies the switch, turns on the function blocks, sets up a tagged CPU
+port, forces its MAC to 1000 Mbit/s full duplex and puts all copper ports into one group. It
+leaves three tasks to the driver.
+
+* Select the interface of the CPU port (:ref:`ports-external`).
+* Enable the MAC of each copper port when its link comes up (:ref:`ports-up`).
+* Set the handling of unknown destinations (:ref:`forwarding-flood`).
+
+.. tab-set::
+
+   .. tab-item:: C
+      :sync: c
+
+      From :download:`guide.c <../bindings/c/examples/guide.c>`.
+
+      .. literalinclude:: ../bindings/c/examples/guide.c
+           :language: c
+           :start-after: /* [init] */
+           :end-before: /* [init end] */
+
+   .. tab-item:: MicroPython
+      :sync: micropython
+
+      From :download:`guide.py <../bindings/micropython/examples/guide.py>`.
+
+      .. literalinclude:: ../bindings/micropython/examples/guide.py
+           :language: python
+           :start-after: # [init]
+           :end-before: # [init end]
+
+Table 25 of the |ds| lists the start-up modes that strap pins select. In the modes that
+load a configuration from an EEPROM or from flash, the switch is configured without a host.
+
+.. _overview-conventions:
+
+Conventions
+-----------
+
+.. list-table::
+   :header-rows: 1
+   :widths: 25 75
+
+   * - Notation
+     - Meaning
+   * - :reg:`PORT_CTRL`
+     - register
+   * - :field:`PORT_CTRL.SPEED`
+     - field of a register
+   * - ``PORT_CTRL[port]``
+     - register with the index ``port``
+   * - ``17:6``
+     - bits 17 down to 6
+   * - ``0x7ff``
+     - hexadecimal number
+
+Every register and field name is a link to its description. A register with an index exists once
+per value of the index. Bit 0 is the least significant bit.
+
+Register and field names are the ones the :doc:`bindings <bindings>` use. They follow the
+:ref:`Linux driver <sources-list>`, with index letters removed. The reference entry of each
+register gives the original Linux name and the :ref:`vendor SDK <sources-list>` name, in the
+rows and tables that :ref:`sources-sdk` explains.

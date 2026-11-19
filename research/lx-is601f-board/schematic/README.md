@@ -190,7 +190,7 @@ A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered 
 - **PoE module**: a daughterboard on the 8-pin **PIN1** header beside J1. It carries the part with silkscreen name U1 (drawn as U201), a QFN-48 marked **`2184A 533AQ1H`** (4-port PSE controller, maker not identified; IP804AR is the closest public match in package and function). It also has four `R250` 0.25 Ω sense resistors (silkscreen names R8, R12, R13 and R14), four `330` 33 Ω resistors (R3, R9, R10 and R11), five SMB TVS diodes marked `RGS` (D1, D3, D5, D7 and one more) and 1206 capacitors.
 - **Power**: 2-pin `POWER2` input (48–57 V assumed), L1, three `SS510` Schottkys (D1, D4, D5), three blue disc parts RV1–RV3 (varistors or Y-caps), L2 `701` inductor, C4 (47 µF 63 V on board A, 22 µF 63 V on board B). **PU1 SCT2622** (marking `2622` with `SCT 6DC` on board A and `SCT 5DC` on board B, 4.2–60 V 2 A non-synchronous buck, ESOP-8) with PL3 10 µH, D40 catch diode and TC1 220 µF 16 V makes **3.3 V**. **1.15 V** core comes from U4's internal switching regulator (LX pins 63 and 64) through **L3 4.7 µH**.
 - **25 MHz crystal Y6** with C43 and C44, beside U4 XTAL pins 87 and 88.
-- **Config EEPROM U10** `HK 24C08` (Hangshun 24C08, 1 KB I²C) on the bottom. It is presumably on U4 pin 91 (SCL) and pin 92 (SDA). The OSHWHub YT9215S board has no EEPROM; this board does.
+- **Config EEPROM U10** `24C08` with a maker logo that does not identify the maker (8 Kbit I²C) on the bottom. It is presumably on U4 pin 91 (SCL) and pin 92 (SDA). The OSHWHub YT9215S board has no EEPROM; this board does.
 - **Empty SPI-flash footprint U6** (SOP-8 or WSON-8) on the bottom, with R40, R94, R96, R98, R100, R102 and R109 next to it. Together with R44, R89, R92 and R93 on the SPF0 pins, the board looks designed to take a flash chip.
 - **ESD**: ED1–ED10, SOT-23-6 marked `05U`, two per copper port between U4 and the magnetics.
 - **LEDs**: a 6×2 array of 0603 LEDs with the silkscreen names RJ7–RJ18, in two lines labelled `POW` and `FX`. The silkscreen labels five positions P1 to P5 and leaves the sixth unlabelled. No resistors sit inside the array; R2–R5, R103 and R110–R114 beside it may be the LED resistors (not traced). LED7 and LED8 sit next to an unpopulated 2×2 through-hole footprint `LED6` (with R68).
@@ -232,7 +232,7 @@ These would let most I and U nets become V.
 1. **Flat, straight-down shots of each whole side** with the board lying flat and the phone parallel to it. Use diffuse light (no flash), at 2–3 overlapping tiles per side. Put a ruler in frame for scale.
 2. **Both sides with the PoE module unplugged**, so the PIN1 header area and the traces under the module are visible.
 3. **The PoE module on its own**, both sides, straight down.
-4. **Close-ups of the bottom** around U6, U10 and the R49–R66 resistor arrays, and the bottom area under U4 (pins and vias).
+4. **Close-ups of the bottom area under U4** (pins and vias). The R49–R66 strap resistor array is read in [`switch-board-strapping.md`](../../switch-board-strapping.md#strap-resistor-array).
 5. **Macro of the SFP area** (U12) on the board without the cage.
 
 ### Continuity checks (power off; a meter in beep mode)

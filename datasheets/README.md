@@ -95,12 +95,12 @@ column links to the origin of the PDF.
 | [`Usakro_UKG2401PR.pdf`](components/Usakro_UKG2401PR.pdf) | UKG2401PR | Usakro | [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | None | 5 | [szlcsc](https://atta.szlcsc.com/upload/public/pdf/source/20251231/8F77EB1084DA065C91E50931DB5ED80E.pdf) | `bf1f01eb85364bd628da2017db71eeea` |
 
 [`Usakro_UKG2401PR.pdf`](components/Usakro_UKG2401PR.pdf) is the closest published match to the `United-tek G2401PR` port
-magnetics ([DXFRM2](../research/switch-board-strapping.md#major-components)) on the LX-IS601F V2.0 board. It is a 24-pin gigabit LAN transformer of the
+magnetics ([DXFRM2](../research/switch-board-strapping.md#lx-dxfrm2)) on the LX-IS601F V2.0 board. It is a 24-pin gigabit LAN transformer of the
 same kind but is not confirmed to be the same part.
 
 The LX-IS601F V2.0 rows are catalogue parts matched from the markings on the board, not known purchases.
 [`Hangshun_HK24C08.pdf`](components/Hangshun_HK24C08.pdf) is one of several pin-compatible 24C08 parts; the maker of the
-`24C08` fitted as [U10](../research/switch-board-strapping.md#major-components) is not identified.
+`24C08` fitted as [U10](../research/switch-board-strapping.md#lx-u10) is not identified.
 
 ## Board components (not found)
 
@@ -109,11 +109,11 @@ full lists are in [`../research/switch-board-strapping.md`](../research/switch-b
 
 | Board | Designator | Part | Maker | LCSC | Status |
 | --- | --- | --- | --- | --- | --- |
-| [wu-kou YT9215S V2.0](../research/switch-board-strapping.md#wu-kou-yt9215s-v20) | [F1](../research/switch-board-strapping.md#major-components-1) | BSMD1206-075-30V | BHFuse | [C976305](https://www.lcsc.com/product-detail/C976305.html) | No PDF at LCSC |
-| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [DXFRM2](../research/switch-board-strapping.md#major-components) | G2401PR | United-tek | None | No datasheet under this name |
-| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [ED1](../research/switch-board-strapping.md#major-components) | Marking `05U` | Not identified | None | Marking not identified |
-| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [Module U1](../research/switch-board-strapping.md#major-components) | Marking `2184A` | Not identified | None | Marking not identified |
-| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [Module D1](../research/switch-board-strapping.md#major-components) | Marking `2616 RGS` | Not identified | None | Marking not identified |
+| [wu-kou YT9215S V2.0](../research/switch-board-strapping.md#wu-kou-yt9215s-v20) | [F1](../research/switch-board-strapping.md#wk-f1) | BSMD1206-075-30V | BHFuse | [C976305](https://www.lcsc.com/product-detail/C976305.html) | No PDF at LCSC |
+| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [DXFRM2](../research/switch-board-strapping.md#lx-dxfrm2) | G2401PR | United-tek | None | No datasheet under this name |
+| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [ED1](../research/switch-board-strapping.md#lx-ed1) | Marking `05U` | Not identified | None | Marking not identified |
+| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [Module U1](../research/switch-board-strapping.md#lx-module-u1) | Marking `2184A` | Not identified | None | Marking not identified |
+| [LX-IS601F V2.0](../research/switch-board-strapping.md#lx-is601f-v20) | [Module D1](../research/switch-board-strapping.md#lx-module-d1) | Marking `2616 RGS` | Not identified | None | Marking not identified |
 
 For the G2401PR, the nearest match is the [Usakro UKG2401PR](components/Usakro_UKG2401PR.pdf) in [Board components (included)](#board-components-included).
 
@@ -128,8 +128,8 @@ They are therefore linked, not copied into this repository.
 | RTL8363NB-VB-CG | Datasheet | Rev. 1.2 | 68 | [szlcsc](https://atta.szlcsc.com/upload/public/pdf/source/20240423/989DCAA6328F19215A910B22766A32D7.pdf) | [LCSC C2835942](https://www.lcsc.com/datasheet/C2835942.pdf) | – |
 | RTL8367S-CG | Datasheet | Rev. Pre-0.941 | 82 | [framboise314.fr mirror](https://www.framboise314.fr/wp-content/uploads/2021/06/RTL8367S-CG_Datasheet.pdf) | [LCSC C2760849](https://www.lcsc.com/datasheet/C2760849.pdf) | – |
 | RTL8364NB-VB-CG | Datasheet | – | – | [LCSC C3013610](https://www.lcsc.com/datasheet/C3013610.pdf) | – | – |
-| RTL8305NB-CG | Datasheet | – | – | [LCSC C52146](https://www.lcsc.com/datasheet/C52146.pdf) | – | 10 Mbit/s and 100 Mbit/s part |
-| RTL8305NBI-VB-CG | Datasheet | – | – | [LCSC C42451794](https://www.lcsc.com/datasheet/C42451794.pdf) | – | 10 Mbit/s and 100 Mbit/s part |
+| RTL8305NB-CG | Datasheet | – | – | [LCSC C52146](https://www.lcsc.com/datasheet/C52146.pdf) | – | Fast Ethernet part |
+| RTL8305NBI-VB-CG | Datasheet | – | – | [LCSC C42451794](https://www.lcsc.com/datasheet/C42451794.pdf) | – | Fast Ethernet part |
 | RTL8367RB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
 | RTL8367MB | Register Table | V1.0.0 | – | [GitHub attachment](https://github.com/user-attachments/files/18147305/RTL8367RB_RTL8367MB_Register_Table_V1.0.0.pdf) | – | Leaked |
 

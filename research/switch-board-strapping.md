@@ -39,7 +39,7 @@ in [motorcomm-debug-pins.md](motorcomm-debug-pins.md). The switch IC datasheets 
 [datasheets/README.md](../datasheets/README.md).
 
 A datasheet link points at the cited page of the PDF. In the built documentation the link
-downloads the PDF, so the page number is also given in the link text or in the Column, Tag and Source table or the source sentence of the same section.
+downloads the PDF, so the page number is also given in the link text, in the Source column of the tag table of the same section, or in the source sentence of the same section.
 
 On both chips the strap pins are latched at reset and most of them double as LED outputs. Neither datasheet lists a strap for
 port speed, port mode or the extension-port interface type; those are register settings.
@@ -86,7 +86,7 @@ Switch IC: <a href="#lx-u4">U4</a>, a Motorcomm YT9215SCH. Pin functions are fro
 ### Strap resistor array
 
 The bottom side has two rows of nine small chip-resistor footprints, <a href="#lx-r49">R49</a> to <a href="#lx-r66">R66</a>. They form nine pairs, and each pair has exactly
-one resistor fitted. The source photo is <a href="#lx-photo-bottom-under-u4">Bottom under U4</a>. The array is taken to lie under the side of <a href="#lx-u4">U4</a> that carries pins 65 to 96 ([Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)); that
+one resistor fitted. The source photo is <a href="#lx-photo-bottom-under-u4">Bottom under U4</a>. The array is taken to lie under the side of <a href="#lx-u4">U4</a> that carries pins 65 to 96 (<a href="#lx-photo-u4-top-edge">U4 top edge</a>; [Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)); that
 placement comes from lining <a href="#lx-photo-bottom-under-u4">Bottom under U4</a> up with <a href="#lx-photo-board-a-top">Board A top</a> and <a href="#lx-photo-board-b-top">Board B top</a>, and is part of the <a href="#lx-inference-pin-order">pin order inference</a>.
 The designators do not run in order along the rows: <a href="#lx-r65">R65</a> and <a href="#lx-r66">R66</a> are the third pair and <a href="#lx-r59">R59</a> and <a href="#lx-r60">R60</a> are the last pair.
 
@@ -132,7 +132,7 @@ Inferred (tag <a href="#tag-i">I</a>), with the reasons:
 - <a id="lx-inference-pin-order"></a>**Pin order.** The YT9215SCH has exactly nine latched strap pins on the LED side
   (<a href="#lx-pin-70">70</a>, <a href="#lx-pin-71">71</a>, <a href="#lx-pin-74">74</a>, <a href="#lx-pin-75">75</a>, <a href="#lx-pin-76">76</a>, <a href="#lx-pin-77">77</a>, <a href="#lx-pin-80">80</a>, <a href="#lx-pin-83">83</a>, <a href="#lx-pin-85">85</a>), and the array has exactly nine pairs, so the pairs are assigned to the nine pins
   in the order they sit along the package. Two things fix which end is pin <a href="#lx-pin-70">70</a>. The EEPROM <a href="#lx-u10">U10</a> sits at the
-  <a href="#lx-r59">R59</a> and <a href="#lx-r60">R60</a> end of the array (<a href="#lx-photo-bottom-strap-array">Bottom strap array</a>), which is the end nearest the I²C pins 91 and 92 ([Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)). With the order reversed,
+  <a href="#lx-r59">R59</a> and <a href="#lx-r60">R60</a> end of the array (<a href="#lx-photo-bottom-strap-array">Bottom strap array</a>), which is the end nearest the I²C pins [91](motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) and [92](motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) ([Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)). With the order reversed,
   the levels would give EN_PHY (pin <a href="#lx-pin-83">83</a>) = 0 and EEPROM_MOD (pin <a href="#lx-pin-71">71</a>) = 1, which turns the copper PHYs off and contradicts the 8 Kbit EEPROM.
 - <a id="lx-inference-row"></a>**Which row pulls up.** With the odd-numbered row as pull-downs, the three low straps are
   EEPROM_MOD (pin <a href="#lx-pin-71">71</a>), EN_SPIF (pin <a href="#lx-pin-75">75</a>) and DISAUTOLOAD (pin <a href="#lx-pin-77">77</a>). All three agree with what is
@@ -141,7 +141,7 @@ Inferred (tag <a href="#tag-i">I</a>), with the reasons:
   the PHYs off on a board built as a copper switch, and EEPROM_MOD, EN_SPIF and DISAUTOLOAD would all contradict the fitted parts.
 
 Neither inference has been checked with a meter; the <a href="#lx-checks">checks</a> would settle both. <a href="#lx-photo-bottom-under-u4">Bottom under U4</a> does
-not show which of the two photographed boards it is, so the table is for one board; the other is assumed to match.
+not show which of the two photographed boards it is, so the <a href="#lx-strap-resistor-array">strap resistor array</a> table is for one board; the other is assumed to match.
 
 <a id="lx-other-configuration-pins"></a>
 ### Other configuration pins
@@ -157,19 +157,19 @@ not show which of the two photographed boards it is, so the table is for one boa
 | <a id="lx-pin-54"></a>54 | [SPF0_SO](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r89"></a>R89 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
 | <a id="lx-pin-55"></a>55 | [SPF0_CS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r44"></a>R44 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | – | – | Not a strap |
 | <a id="lx-pin-60"></a>60 | [EN_SWR](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">U</a> | – | None | 1 | <a href="#tag-i">I</a> | Internal regulator on |
-| <a id="lx-pin-89"></a>89 | [nRESET](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30) | Not traced | <a href="#tag-u">U</a> | – | Pull-up | – | – | Not a strap |
+| <a id="lx-pin-89"></a>89 | [nRESET](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30) | Trace to a via | <a href="#tag-i">I</a> | <a href="#lx-photo-u4-top-edge">U4 top edge</a> | Pull-up | – | – | Not a strap |
 
 | Column | Tag | Source |
 |---|---|---|
-| Board connection | In the Tag column | In the Photo column |
-| Level | In the Level tag column | <a href="#lx-level-reasons">Level reasoning</a> |
+| Board connection | Per row | Photo column |
+| Level | Per row | <a href="#lx-level-reasons">Level reasoning</a> |
 | Pin | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
 | Signal | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
 | Internal | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
 | Selects | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
 
-Three rows are not in Table 20: pins <a href="#lx-pin-54">54</a> and <a href="#lx-pin-55">55</a> are from [Table 10 on page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) and pin
-<a href="#lx-pin-89">89</a> is from [Table 23 on page 30](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30).
+Six rows take their Internal value from another table: pins <a href="#lx-pin-47">47</a>, <a href="#lx-pin-48">48</a> and <a href="#lx-pin-50">50</a> are from [Table 19 on page 27](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=27),
+pins <a href="#lx-pin-54">54</a> and <a href="#lx-pin-55">55</a> are from [Table 10 on page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) and pin <a href="#lx-pin-89">89</a> is from [Table 23 on page 30](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30).
 
 <a id="lx-level-reasons"></a>
 
@@ -179,9 +179,9 @@ Three rows are not in Table 20: pins <a href="#lx-pin-54">54</a> and <a href="#l
   which are the four [SPF0 flash pins, page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25). Where their far pads go is not traced, so it is not known whether
   they are pull-ups or series resistors to the empty <a href="#lx-u6">U6</a> footprint. SPF_MUX_SEL only matters when EN_SPIF
   (pin <a href="#lx-pin-75">75</a>) is high, which it is not.
-- EN_SWR (pin <a href="#lx-pin-60">60</a>) is taken as high because the regulator's inductor <a href="#lx-l3">L3</a> is fitted on the LX pins 63 and 64 ([Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)).
-- A group of option footprints (R39, R40, R45, R94 to R102, R108 and R109) sits next to <a href="#lx-u6">U6</a> and is partly populated
-  (<a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a>). Its function is not traced.
+- EN_SWR (pin <a href="#lx-pin-60">60</a>) is taken as high because the regulator's inductor <a href="#lx-l3">L3</a> is fitted on the LX pins 63 and 64 (<a href="#lx-photo-board-b-switch-ic">Board B switch IC</a>; [Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)).
+- A group of option footprints sits next to <a href="#lx-u6">U6</a> and is partly populated
+  (<a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a>, where the silkscreen reads R39, R40, R45, R94 to R102, R108 and R109). Its function is not traced.
 
 <a id="lx-what-the-strapping-selects"></a>
 ### What the strapping selects
@@ -276,7 +276,7 @@ are active low.
 
 | Column | Tag | Source |
 |---|---|---|
-| Ref | In the Ref tag column | Silkscreen in the linked photo |
+| Ref | Per row | Silkscreen in the linked photo |
 | Marking | <a href="#tag-r">R</a> | Top marking in the linked photo |
 | Board | <a href="#tag-r">R</a> | The linked photo |
 | Side | <a href="#tag-r">R</a> | The linked photo |
@@ -306,7 +306,7 @@ columns point at the catalogue part that matches the marking, not at a known pur
   single-port 1000BASE-T transformer in the same 24-pin package; that it is the same part is not confirmed.
   Four transformer bodies are visible in <a href="#lx-photo-board-b-magnetics">Board B magnetics</a>. <a href="#lx-dxfrm3">DXFRM3</a> is partly under the PoE module, so its marking is only partly
   legible and its part is inferred. The <a href="#lx-dxfrm1">DXFRM1</a> silkscreen has no visible body beside it, and an unreadable
-  label next to it in <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> may be DXFRM4.
+  label next to it in <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> may be DXFRM4, which the [schematic notes](lx-is601f-board/schematic/README.md#what-the-board-is) list as a fitted transformer.
 - The <a href="#lx-l3">L3</a> silkscreen is only partly legible in <a href="#lx-photo-board-a-power-input">Board A power input</a> and is not visible in <a href="#lx-photo-board-b-power-input">Board B power input</a>, so that designator is inferred.
 - <a href="#lx-c4">C4</a> differs between the two boards, so it has one row per board.
 - No datasheet is available for the ESD arrays (<a href="#lx-ed1">ED1</a> to <a href="#lx-ed10">ED10</a>; nine show `05U` and the marking of <a href="#lx-ed2">ED2</a> is hidden by the PoE module), the `2184A` PSE controller (<a href="#lx-module-u1">module U1</a>) or the `2616 RGS` diodes (<a href="#lx-module-d1">module D1</a> to <a href="#lx-module-d7">D7</a> and the <a href="#lx-module-d-unlabelled">unlabelled fifth diode</a>).
@@ -315,17 +315,19 @@ columns point at the catalogue part that matches the marking, not at a known pur
   PoE module and the SFP cage. <a href="#lx-photo-board-a-top">Board A top</a> does not show the SFP area of board A.
 
 <a id="lx-unlisted"></a>
-#### Parts not in the table
+#### Parts not in the major components table
 
-These are visible but are not identified from the photos on this page. The [schematic notes](lx-is601f-board/schematic/README.md) name more
+These are visible but are not identified from the photos on this page. The [schematic notes](lx-is601f-board/schematic/README.md#what-the-board-is) name more
 parts from other photos of the same boards: L2 for the `701` choke, J1 for the four-port RJ45 block, J3 for the uplink RJ45, U12
 for the SFP connector, RV1 to RV3 for the three blue disc parts, and five transformers DXFRM2 to DXFRM6. This page shows four
 transformer bodies, so the fifth is taken to be under the PoE module.
 
 - Three blue radial disc parts stand beside <a href="#lx-p4">P4</a> (<a href="#lx-photo-board-b-power-input">Board B power input</a>). They are taken to be surge protection parts on the power input.
 - An array of LEDs sits along the board edge beside G1 (<a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a>). On board B the edge of the PoE module covers it. The
-  silkscreen at the array reads RJ7 to RJ18, which the [schematic notes](lx-is601f-board/schematic/README.md) take to be the names of the LEDs.
+  silkscreen at the array reads RJ7 to RJ18, which the [schematic notes](lx-is601f-board/schematic/README.md#what-the-board-is) take to be the names of the LEDs.
 - A group of option footprints sits next to <a href="#lx-u6">U6</a> on the bottom side and is partly populated (<a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a>).
+- The [schematic notes](lx-is601f-board/schematic/README.md#what-the-board-is) differ from this page in three places. They list a third `SS510` diode, D1, which is not legible in the photos on this page.
+  They call the power input `POWER2`, where the silkscreen beside it in <a href="#lx-photo-board-b-power-input">Board B power input</a> reads <a href="#lx-p4">P4</a>. They take the <a href="#lx-module-d1">module diodes</a> to be TVS diodes, which this page does not decide.
 
 <a id="lx-photos"></a>
 ### Photos
@@ -335,17 +337,18 @@ transformer bodies, so the fifth is taken to be under the PoE module.
 | <a href="#lx-photo-strap-array">Strap array annotated</a> | Not known | Bottom | Strap resistor array with decoded levels |
 | <a href="#lx-photo-bottom-under-u4">Bottom under U4</a> | Not known | Bottom | Area under <a href="#lx-u4">U4</a> with the strap resistor array |
 | <a href="#lx-photo-board-a-top">Board A top</a> | A | Top | Area around <a href="#lx-u4">U4</a> |
-| <a href="#lx-photo-u4-right-edge">U4 right edge</a> | B | Top | Leads 46 to 55 of <a href="#lx-u4">U4</a> with their traces and the resistors beside them |
-| <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> | Not known | Bottom | Strap resistor array beside <a href="#lx-u10">U10</a> |
+| <a href="#lx-photo-u4-right-edge">U4 right edge</a> | B | Top | Leads 46 to 55 of <a href="#lx-u4">U4</a> |
+| <a href="#lx-photo-u4-top-edge">U4 top edge</a> | B | Top | Leads 65 to 96 of <a href="#lx-u4">U4</a> |
+| <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> | Not known | Bottom | Strap resistor array area |
 | <a href="#lx-photo-board-b-top">Board B top</a> | B | Top | Whole board |
 | <a href="#lx-photo-poe-module">PoE module</a> | B | Top | Plug-in PoE module |
 | <a href="#lx-photo-board-b-power-input">Board B power input</a> | B | Top | Power input parts |
-| <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | B | Top | <a href="#lx-u4">U4</a> and the parts beside it |
-| <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | B | Top | Port magnetics and ESD arrays |
-| <a href="#lx-photo-board-a-regulator">Board A regulator</a> | A | Top | Buck regulator <a href="#lx-pu1">PU1</a> with its parts |
+| <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | B | Top | Area around <a href="#lx-u4">U4</a> |
+| <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | B | Top | Port magnetics area |
+| <a href="#lx-photo-board-a-regulator">Board A regulator</a> | A | Top | Area around buck regulator <a href="#lx-pu1">PU1</a> |
 | <a href="#lx-photo-board-a-power-input">Board A power input</a> | A | Top | Power input parts |
-| <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | A | Top | LED array and two ESD arrays |
-| <a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a> | Not known | Bottom | Flash footprint <a href="#lx-u6">U6</a> with the option footprints beside it |
+| <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | A | Top | LED array area |
+| <a href="#lx-photo-bottom-flash-footprint">Bottom flash footprint</a> | Not known | Bottom | Area around flash footprint <a href="#lx-u6">U6</a> |
 
 Each photo is embedded in this section, except the annotated strap array, which is embedded under
 <a href="#lx-strap-resistor-array">Strap resistor array</a>. The originals are in the [photo album](https://photos.app.goo.gl/f4gAaRwkkgGWYLGu9). The folder notes are in
@@ -368,6 +371,12 @@ Each photo is embedded in this section, except the annotated strap array, which 
 **U4 right edge**
 
 ![Right edge of U4 on LX-IS601F board B with leads 46 to 55 and the SPF0 resistors marked](lx-is601f-board/u4-pins-right-edge-annotated.png)
+
+<a id="lx-photo-u4-top-edge"></a>
+
+**U4 top edge**
+
+![Top edge of U4 on LX-IS601F board B with the debug pins and their vias marked](lx-is601f-board/u4-pins-top-edge-annotated.png)
 
 <a id="lx-photo-bottom-strap-array"></a>
 
@@ -438,11 +447,11 @@ Each photo is embedded in this section, except the annotated strap array, which 
 | 2 | Continuity | Outer pad of <a href="#lx-r49">R49</a> | Ground | <a href="#lx-inference-row">Which row pulls up</a> |
 | 3 | Continuity | Inner pads of <a href="#lx-r49">R49</a> | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-70">70</a> | <a href="#lx-inference-pin-order">Pin order</a> |
 | 4 | Continuity | Inner pads of <a href="#lx-r59">R59</a> | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-85">85</a> | <a href="#lx-inference-pin-order">Pin order</a> |
-| 5 | Register read of `PON_STRAP_VAL` | Management interface | Address 0x80324 | All latched levels |
+| 5 | Register read of [`PON_STRAP_CAP`](yt9215-registers/docs/reference/system.rst) | Management interface | Address 0x80328 | Levels sampled at power-on |
 | 6 | EEPROM read with a clip | <a href="#lx-u10">U10</a> | All 8 Kbit | Registers loaded at reset |
 
-Check 5 is not certain to work as written. The register name and address come from the Linux driver, as noted in
-[motorcomm-debug-pins.md](motorcomm-debug-pins.md); neither datasheet lists it. With DIS_SPIS (pin <a href="#lx-pin-70">70</a>) = 1 and SMI_SEL (pin <a href="#lx-pin-85">85</a>) = 1,
+Check 5 is not certain to work as written. The register name and address come from the Linux driver, as recorded in the
+[register reference](yt9215-registers/docs/reference/system.rst); neither datasheet lists it, and the bit positions of the strap pins on this board are not documented. With DIS_SPIS (pin <a href="#lx-pin-70">70</a>) = 1 and SMI_SEL (pin <a href="#lx-pin-85">85</a>) = 1,
 [page 45 of the datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=45) selects the slave I²C interface and [page 47 of the datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=47) selects the
 slave SMI interface, and the I²C pins are shared with the EEPROM bus. If slave SMI answers, its address is 0x1d
 (pin <a href="#lx-pin-80">80</a>, MID29 = 1).
@@ -475,6 +484,8 @@ the YT9215S.
 <a id="wk-configuration-pins"></a>
 ### Configuration pins
 
+Strap names are written without the `STRAP_` prefix that [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) prints, so `STRAP_EN_PHY` is EN_PHY here.
+
 | Pin | Strap | Net | Resistor | Value | Pulls to | BOM line | Test point | Sheet | Internal | Level | Level tag | Selects |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | <a id="wk-pin-45"></a>45 | [SWITCH_ID_1](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) | Unconnected | None | – | – | – | None | [P1](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/kicad/1_P1.kicad_sch) | Pull-down | 0 | <a href="#tag-d">D</a> | Switch ID bit 1 = 0 |
@@ -505,14 +516,14 @@ the YT9215S.
 | Strap | <a href="#tag-d">D</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
 | Internal | <a href="#tag-d">D</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
 | Selects | <a href="#tag-d">D</a> | [Table 15 on pages 28 to 29](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=28) |
-| Level | In the Level tag column | <a href="#wk-level-reasons">Level reasoning</a> |
+| Level | Per row | <a href="#wk-level-reasons">Level reasoning</a> |
 
 <a id="wk-level-reasons"></a>
 
 On a row with a resistor the level is the rail that the resistor pulls to. On a row without one the level is the internal
 pull given by the datasheet. For the three reserved pins the pin numbers are from the [Table 19 on pages 31 to 32](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=31)
 and the internal pulls are from [Table 14 on pages 27 to 28](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=27). EN_SWR (pin <a href="#wk-pin-60">60</a>) is an analog enable input
-and is not latched; the other pins in the table are latched at reset.
+and is not latched; the other pins in the <a href="#wk-configuration-pins">configuration pins</a> table are latched at reset.
 
 - The [datasheet, page 32](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf#page=32) says reserved_0, reserved_1 and reserved_2 (pins <a href="#wk-pin-46">46</a>, <a href="#wk-pin-47">47</a> and <a href="#wk-pin-49">49</a>)
   must be pulled high through external 4.7 kΩ resistors. The board leaves all three unconnected, and pin <a href="#wk-pin-49">49</a> has an
@@ -796,7 +807,7 @@ All columns are tagged <a href="#tag-r">R</a> from [bom.csv](https://github.com/
 <a id="wk-designators"></a>
 ### Designators
 
-One row per designator in [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv). A linked designator goes to the table that describes it.
+One row per designator in [bom.csv](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/blob/main/bom/bom.csv). A linked designator goes to its row in <a href="#wk-major-components">Major components</a>, the <a href="#wk-ferrite-beads">ferrite bead table</a> or <a href="#wk-bom">All BOM lines</a>.
 
 | Designator | BOM line | Part | Value |
 |---|---|---|---|

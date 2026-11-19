@@ -7,7 +7,8 @@ where its strap resistors sit. The photos show two boards with the same layout, 
 The switch IC, [U4](../switch-board-strapping.md#major-components), is a **YT9215SCH**. Its pinout differs from the YT9215S used on the
 open-hardware board in
 [the wu-kou board repository](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0);
-the two pinouts are compared in [`../motorcomm-debug-pins.md`](../motorcomm-debug-pins.md).
+the pin tables of both parts, and the route of each debug pin on this board, are in
+[the LX-IS601F V2.0 boards section of `../motorcomm-debug-pins.md`](../motorcomm-debug-pins.md#lx-is601f-v20-boards).
 
 | Image | File | Kind | Board | Side | Shows |
 | --- | --- | --- | --- | --- | --- |
@@ -18,9 +19,11 @@ the two pinouts are compared in [`../motorcomm-debug-pins.md`](../motorcomm-debu
 | <a href="#photo-board-b-top">Board B top</a> | [`photo-board-b-top.jpg`](photo-board-b-top.jpg) | Source photo | B | Top | Whole board |
 | <a href="#photo-bottom-under-u4">Bottom under U4</a> | [`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg) | Source photo | Not known | Bottom | Area under [U4](../switch-board-strapping.md#major-components) with the strap resistor array |
 | <a href="#photo-poe-module">PoE module</a> | [`photo-poe-module.jpg`](photo-poe-module.jpg) | Source photo | B | Top | Plug-in PoE module |
+| None | [`photos/README.md`](photos/README.md) | Photo catalogue | Both | Both | 34 photos of the two boards |
 | None | [`annotate.py`](annotate.py) | Script | None | None | Draws the debug pin annotations |
 
-Run [`annotate.py`](annotate.py) with `python3 annotate.py`; it needs Pillow. The strap resistor image has no script. The
+Run [`annotate.py`](annotate.py) with `python3 annotate.py`; it needs Pillow and draws on
+[`photo-u4-macro.jpg`](photo-u4-macro.jpg). The strap resistor image has no script. The
 strap resistors are explained in [`../switch-board-strapping.md`](../switch-board-strapping.md).
 
 ## Images
@@ -75,7 +78,7 @@ strap resistors are explained in [`../switch-board-strapping.md`](../switch-boar
 * Pin 1 is the lead beside the small dimple on the package. Leads are counted from
   there, 32 per side, in the <a href="#photo-u4-close-up">U4 close-up</a> and <a href="#photo-board-a-top">Board A top</a> images, and checked against features whose pins are known from
   [Table 1 of the datasheet, pages 17 to 19](../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17): the ground pour on pins 61 and 62, the wide power
-  traces on pins 58, 59, 68 and 69, the decoupling capacitor on pin 82, and the crystal.
+  traces on pins 58, 59, 68 and 69, the decoupling capacitor on pin 82, and the crystal [Y6](../motorcomm-debug-pins.md#parts-beside-u4) on pins 87 and 88.
 * Routing is traced from the <a href="#photo-u4-close-up">U4 close-up</a> and <a href="#photo-board-a-top">Board A top</a> images only. Where the vias go on other layers is not known. What the far pads of
   [R44](../switch-board-strapping.md#other-configuration-pins), [R89](../switch-board-strapping.md#other-configuration-pins), [R92](../switch-board-strapping.md#other-configuration-pins) and [R93](../switch-board-strapping.md#other-configuration-pins) connect to is not known either. The strap levels are worked out in
   [`../switch-board-strapping.md`](../switch-board-strapping.md).

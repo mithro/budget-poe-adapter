@@ -25,7 +25,7 @@ The [Archive](#archive) group comes last and holds the notes that are not part o
 | [YT921x switch programming](#yt921x-switch-programming) | How is a YT921x switch programmed? |
 | [Power](#power) | How does the adapter take PoE power and hand it on over USB-C? |
 | [Datasheets](#datasheets) | Where are the vendor documents? |
-| [Archive](#archive) | Which notes belong to designs that the project no longer follows? |
+| [Archive](#archive) | Which notes assume a design other than the current one? |
 
 ### YT9215 switch IC
 
@@ -75,7 +75,7 @@ Each one opens with a statement of the design it assumes.
 
 | Document | Covers |
 | --- | --- |
-| [Archive](archive/README.md) | Index of the archived notes with the design each one assumes |
+| [Archive index](archive/README.md) | Index of the archived notes with the design each one assumes |
 | [Block diagram and rough BOM](archive/design/block-diagram-and-bom.md) | Blocks of an adapter with an external MCU with their rough cost |
 | [Cheap gigabit switch ICs](archive/research/ethernet-switch.md) | Survey of cheap gigabit switch ICs with about three ports |
 | [Switch IC comparison table](archive/research/ethernet-switch-comparison.md) | The surveyed switch ICs side by side |

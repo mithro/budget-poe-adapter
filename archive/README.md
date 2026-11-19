@@ -1,4 +1,4 @@
-# Archive
+# Archive index
 
 The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The
 notes here assume something else: an external MCU, a switch IC from another vendor, or
@@ -59,9 +59,9 @@ The current design runs its firmware on the YT9215 CPU.
 | File | Covers | Assumes |
 | --- | --- | --- |
 | [`risc-v-mcu-comparison.md`](research/risc-v-mcu-comparison.md) | MCU comparison | External MCU |
-| [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking a small device on a gigabit Ethernet link | External MCU |
-| [`bitbang-10mbit-ethernet.md`](research/bitbang-10mbit-ethernet.md) | Bit-banging 10 Mbit/s Ethernet | RP2040 |
-| [`bitbang-usb.md`](research/bitbang-usb.md) | Bit-banged (software) USB device | External MCU |
+| [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking on a gigabit link | External MCU |
+| [`bitbang-10mbit-ethernet.md`](research/bitbang-10mbit-ethernet.md) | Bit-banged 10 Mbit/s Ethernet | RP2040 |
+| [`bitbang-usb.md`](research/bitbang-usb.md) | Bit-banged USB | External MCU |
 | [`usb-network-card.md`](research/usb-network-card.md) | A virtual USB network card on the MCU | CH32X035 |
 | [`usb-network-card.md`](research/usb-network-card.md) | A USB network card that bridges Ethernet | CH397A |
 

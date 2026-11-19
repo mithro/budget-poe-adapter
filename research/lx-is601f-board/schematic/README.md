@@ -54,7 +54,7 @@ The schematic is a hierarchical KiCad 7 schematic. Open [`lx-is601f.kicad_sch`](
 | [`kisch.py`](kisch.py) | KiCad schematic file writer |
 | [`renders/`](renders/) | PNG of each sheet, and detail PNGs named `N-name-detail-NN.png` |
 
-Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence code and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF, the render of each sheet and the [detail images](#sheets), and lists the detail images in this file. It checks that each sheet keeps a clear 10 mm margin and that no detail image is cut through a symbol or text. Edit the scripts, not the `.kicad_sch` files.
+Each row of [`lx-is601f-nets.csv`](lx-is601f-nets.csv) gives a pin's net, confidence level and sheet; sort by `net` to get a netlist. The `net` column is the name in the data model and the `kicad_net` column is the name KiCad's netlist gives the same net. Only the global power nets have the same name in both columns. KiCad prefixes a labelled net with its sheet path, so `P0_MDI0` is `/Ports 1-4 with PoE/P0_MDI0`. It names a wire with no label after a pin, so `VIN_P` is `Net-(D4-K)`. A pin whose `net` is `(NC)` has no connection and KiCad calls it `unconnected-(…)`. [`gen_schematic.py`](gen_schematic.py) generates every sheet from one data model, exports KiCad's netlist and checks it against the model, then writes the CSV, the PDF, the render of each sheet and the [detail images](#sheets), and lists the detail images in this file. It checks that each sheet keeps a clear 10 mm margin and that no detail image is cut through a symbol or text. Edit the scripts, not the `.kicad_sch` files.
 
 Parts on the PoE module are drawn as R2xx, D2xx and U201 so they don't clash with mainboard references; the silkscreen name is in each part's `Silk` field. The mainboard connectors whose silkscreen name is not a reference are drawn as follows:
 
@@ -155,30 +155,30 @@ A whole sheet scaled to the width of this page leaves its text too small to read
 [![Sheet 7, LED6 footprint (DNP), LED7 and LED8 with R68](renders/7-leds-detail-02.png)](renders/7-leds.png)
 <!-- sheets:end -->
 
-## Confidence codes
+## Confidence levels
 
-| Code | Name | Evidence that earns it |
-|---|---|---|
-| **C** | Confirmed | Traced on both sides |
-| **C** | Confirmed | Measured |
-| **V** | Seen | Trace visible on one side in a photo |
-| **V** | Seen | Pads adjacent in a photo |
-| **I** | Inferred | Datasheet |
-| **I** | Inferred | Part marking |
-| **I** | Inferred | Usual practice |
-| **U** | Unknown | Destination not traced |
+| Confidence | Evidence that earns it |
+|---|---|
+| Confirmed | Traced on both sides |
+| Confirmed | Measured |
+| Seen | Trace visible on one side in a photo |
+| Seen | Pads adjacent in a photo |
+| Inferred | Datasheet |
+| Inferred | Part marking |
+| Inferred | Usual practice |
+| Unknown | Destination not traced |
 
-| Code | Wire colour | Wire style | Pin connections |
+| Confidence | Wire colour | Wire style | Pin connections |
 |---|---|---|---|
-| **C** | Green | Solid | 0 |
-| **V** | Blue | Solid | 103 |
-| **I** | Orange | Dashed | 235 |
-| **U** | Red | Dotted | 208 |
+| Confirmed | Green | Solid | 0 |
+| Seen | Blue | Solid | 103 |
+| Inferred | Orange | Dashed | 235 |
+| Unknown | Red | Dotted | 208 |
 | All | | | 546 |
 
-Buses, and the links between sheet symbols on the root sheet, are drawn grey and carry no confidence code; the code is on the wires they join.
+Buses, and the links between sheet symbols on the root sheet, are drawn grey and carry no confidence level; the level is on the wires they join.
 
-**No net is confirmed.** The photos are handheld and oblique, and inner layers are invisible, so continuity checks are needed before anything can be marked C.
+**No net is confirmed.** The photos are handheld and oblique, and inner layers are invisible, so continuity checks are needed before anything can be marked confirmed.
 
 ## What the board is
 
@@ -227,7 +227,7 @@ The SFP connector U12 has no magnetics and no ESD array. Which SerDes feeds it i
 
 ### Photos
 
-These would let most I and U nets become V.
+These would let most inferred and unknown nets become seen.
 
 1. **Flat, straight-down shots of each whole side** with the board lying flat and the phone parallel to it. Use diffuse light (no flash), at 2–3 overlapping tiles per side. Put a ruler in frame for scale.
 2. **Both sides with the PoE module unplugged**, so the PIN1 header area and the traces under the module are visible.

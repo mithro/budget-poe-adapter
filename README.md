@@ -32,6 +32,8 @@ The [Archive](#archive) group comes last and holds the notes that are not part o
 | Document | Covers |
 | --- | --- |
 | [The RISC-V CPU inside the YT9215](research/yt9215-embedded-cpu.md) | What is publicly known about the CPU that runs the adapter firmware |
+| [Speed and resources of the YT9215 CPU](research/yt9215-cpu-performance.md) | Estimates of the CPU's speed and memory against what the adapter firmware needs |
+| [Benchmark for the YT9215 CPU](research/yt9215-cpu-performance/README.md) | Workload model and emulator behind the speed estimates |
 | [Motorcomm debug pins](research/motorcomm-debug-pins.md) | Debug pins of the YT9215 variants with their routes on the LX-IS601F board |
 | [Boards and products that carry a YT9215](research/yt9215-boards.md) | Hardware on which the YT9215 can be studied |
 
@@ -46,9 +48,9 @@ The [Archive](#archive) group comes last and holds the notes that are not part o
 
 ### YT921x switch programming
 
-The guide and its bindings describe register access from an external host. How that carries
-over to firmware on the YT9215 CPU is an open question in
-[The RISC-V CPU inside the YT9215](research/yt9215-embedded-cpu.md#packet-path).
+The guide and its bindings describe register access from an external host. For firmware on
+the YT9215 CPU the same registers are memory locations, as described in
+[The RISC-V CPU inside the YT9215](research/yt9215-embedded-cpu.md#register-access).
 
 | Document | Covers |
 | --- | --- |

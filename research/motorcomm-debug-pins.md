@@ -12,7 +12,7 @@ Each claim carries one of these codes.
 | **V** | Verified | Present in a board netlist |
 | **V** | Verified | Read from a chip marking in a photo |
 | **I** | Inferred | Reasoned from other evidence |
-| **C** | Conflicting | Sources disagree |
+| **C** | Conflicting | Sources disagree or one source contradicts itself |
 
 ## Headline findings
 

@@ -72,7 +72,7 @@ The "Embedded RISC-V" subsection of the
 with its section on the SPI flash interface, is the only public
 description of the CPU's memory [**V**](#evidence-codes). The [YT9215S](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf), [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) and
 [YT9215RB](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) draft datasheets give no figures, so the values are confirmed for the YT9215SCH
-only. It says the CPU is there "to support software
+only. The YT9215SCH datasheet says the CPU is there "to support software
 management/protocol functions" and that it "can transmit to or receive frames from the
 switch core". The two sections give these figures:
 
@@ -91,7 +91,7 @@ The memory map is not published.
 ## Clock
 
 - The CPU clock is not published.
-- The [`yt921x` Linux driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c) reads a `SYS_CLK` register. Its default gives an 8 ns
+- The [`yt921x` Linux driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c) reads a `SYS_CLK` register. Its value 0 gives an 8 ns
   (125 MHz) switch core cycle on the YT9215, and 143 MHz and other values are selectable
   [**V**](#evidence-codes).
 - The CPU probably runs from this clock or from a divider of it [**I**](#evidence-codes).
@@ -171,8 +171,9 @@ functions (register addresses, drivers) is not published.
 
 ## Packet path
 
-The upstream
-[`yt921x` DSA driver](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c)
+The upstream `yt921x` DSA driver
+([`chip.c`](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.c)
+and [`chip.h`](https://github.com/torvalds/linux/blob/20eef29b7c84/drivers/net/dsa/motorcomm/chip.h))
 gives these facts [**V**](#evidence-codes):
 
 - The switch has 11 ports: "8 internal + 2 external + 1 mcu". The CPU is port 10.

@@ -51,7 +51,7 @@ distributors and marketplaces found none listed [**I**](#evidence-codes).
 | YT9215SC | 5 | 2 | 1 | Yes | Yes |
 | YT9215RB | 5 | – | 2 | No | Yes |
 | YT9218N | 8 | – | – | Yes | Not checked |
-| YT9218MB | 8 | – | – | Yes | Not checked |
+| YT9218MB | 8 | 2 | 2 | Yes | Not checked |
 
 - The [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) datasheet lists two SerDes
   ports and one RGMII port for two extension ports: the second extension port is either
@@ -62,8 +62,9 @@ distributors and marketplaces found none listed [**I**](#evidence-codes).
   YT9218N and the YT9218MB only. Its wording for the YT9215SC is "内置高性能RISC-V
   核心CPU" and "支持简单网管" [**V**](#evidence-codes).
 - The [YT9215S](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf), [YT9215SC](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf) and [YT9215RB](../datasheets/motorcomm/YT9215RB_Datasheet_Draft_05_2023-02-16.pdf) datasheets all list an integrated
-  RISC-V microprocessor [**V**](#evidence-codes). The evidence is in
-  [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#every-variant-has-the-risc-v-mcu).
+  RISC-V microprocessor [**V**](#evidence-codes).
+  [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#every-variant-has-the-risc-v-mcu)
+  has the detail.
 - The product page and the datasheets therefore disagree for the YT9215S and the
   YT9215RB. Motorcomm may support CPU firmware only on the parts where its product page
   lists the CPU [**I**](#evidence-codes).

@@ -83,7 +83,7 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 | D6 | Port diode | Bottom | SMB | `2529` | `CP06C` |  |  |
 | D8-D19 | Port diode | Bottom | SMB | `2529` | `CP06C` |  |  |
 | D21 | Port diode | Bottom | SMB | `2529` | `CP06C` |  |  |
-| PR2 | Resistor | Top | SMD | `300` |  |  |  |
+| PR2 | Resistor | Top | SMD | `30D` |  |  |  |
 | PC6 | Capacitor | Top | SMD |  |  |  |  |
 | C18 | Capacitor | Top | SMD |  |  |  |  |
 | C20 | Capacitor | Top | SMD |  |  |  |  |

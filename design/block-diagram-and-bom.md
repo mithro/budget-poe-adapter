@@ -23,11 +23,11 @@ signalling has three priced builds, each with its own BOM table: a
 <!-- BEGIN totals -->
 | Option | CC interface | Parts cost | Placements | Line items | PCB estimate | Assembly estimate | Total |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | $6.80 | 131 | 43 | $0.40 | $1.10 | $8.30 |
-| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | $6.65 | 146 | 50 | $0.40 | $1.10 | $8.15 |
-| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | $6.68 | 152 | 51 | $0.40 | $1.10 | $8.18 |
-| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | $8.24 | 155 | 43 | $0.50 | $1.30 | $10.04 |
-| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | $7.90 | 182 | 50 | $0.50 | $1.30 | $9.70 |
+| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | $6.80 | 132 | 43 | $0.40 | $1.10 | $8.30 |
+| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | $6.65 | 147 | 50 | $0.40 | $1.10 | $8.15 |
+| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | $6.68 | 153 | 51 | $0.40 | $1.10 | $8.18 |
+| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | $8.24 | 156 | 43 | $0.50 | $1.30 | $10.04 |
+| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | $7.90 | 183 | 50 | $0.50 | $1.30 | $9.70 |
 | [B](#option-b) | [Port 9 MAC](#block-cc-mac) | – | – | – | – | – | – |
 <!-- END totals -->
 
@@ -51,7 +51,7 @@ signalling has three priced builds, each with its own BOM table: a
 | --- | --- | --- |
 | **V** | Verified | Printed in a datasheet in [`datasheets/`](../datasheets/README.md) |
 | **P** | Catalogue read | Figure read from a parts catalogue listing |
-| **I** | Inferred | Reasoned or estimated from other evidence |
+| **I** | Inferred | Estimated from other evidence |
 | **U** | Unverified | Not yet checked |
 
 The switch datasheet is [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf). The
@@ -60,7 +60,8 @@ their pin numbers, and this note uses those numbers.
 
 - The catalogues are those of LCSC and JLCPCB.
 - Every price, stock figure and part rating in the comparison tables of [Blocks](#blocks) is a
-  catalogue read [**P**](#evidence-codes).
+  catalogue read [**P**](#evidence-codes), except a row with no selected part and a figure that carries
+  its own code.
 - An unverified point waits on bench work, on a datasheet check or on another note.
 
 <a id="software-jobs"></a>
@@ -143,6 +144,8 @@ uses one of the five.
 - The [port 9 MAC](#block-cc-mac) build uses pins 46 to 57 for port 9, which leaves pin 44.
 - An Rp resistor fed from a pin with a pull-up is weakly on at reset. The pull value is not
   published [**U**](#evidence-codes).
+- An Rp resistor that the firmware leaves unselected also adds current while the device runs,
+  unless the firmware can turn the pull of its pin off [**U**](#evidence-codes).
 - In the port 9 MAC build the buffer reset gate also sits on a pin with a pull-up. Its 10 kΩ
   pull-down works against that unpublished pull [**U**](#evidence-codes).
 - Option B with the [PD transceiver](#block-cc-transceiver) on two I²C masters needs pin 49
@@ -159,7 +162,7 @@ uses one of the five.
 | PoE voltage | Bridges | 5 V converter | [PoE front end](#block-poe) |
 | 5 V | 5 V converter | USB-C outputs | [5 V converter](#block-5v) |
 | 5 V | 5 V converter | 3.3 V converter | [5 V converter](#block-5v) |
-| 3.3 V | 3.3 V converter | YT9215 logic and analogue pins | [3.3 V converter](#block-3v3) |
+| 3.3 V | 3.3 V converter | YT9215 3.3 V pins | [3.3 V converter](#block-3v3) |
 | 1.15 V | Regulator inside the YT9215 | YT9215 core pins | [Switch](#block-switch) |
 
 The PoE voltage at the device is 37 to 57 V at 12.95 W and 42.5 to 57 V at 25.5 W
@@ -181,7 +184,8 @@ output voltage, which adds about one [5 V converter](#block-5v) block per output
 Every column except "Granted at the PoE input" is an estimate [**I**](#evidence-codes):
 
 - Bridge loss is two diode drops of 1.1 V at the lowest input voltage of each grant. LCSC lists
-  1.1 V at 0.4 A for the counted bridge [**P**](#evidence-codes).
+  1.1 V at 0.4 A for the counted bridge [**P**](#evidence-codes). The 0.6 A of a 25.5 W grant is past
+  that listed point.
 - The 5 V rail is the remainder times an assumed converter efficiency of 87 %.
 - Switch supply starts from Table 28 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)
   [**V**](#evidence-codes): 663 mW with no link and 1613 mW with five gigabit links, so 190 mW
@@ -201,7 +205,8 @@ These consequences follow [**I**](#evidence-codes):
 - In option B at 25.5 W the firmware can give one output 3 A and the other 0.9 A, or split the
   3.9 A some other way.
 - In option B at 12.95 W the 1.8 A total covers two outputs at the default USB current of
-  0.9 A each. It does not cover one output at 1.5 A with the other at 0.9 A.
+  at most 0.9 A each
+  ([USB power standards](../research/usb-c-pd.md#2-usb-power-standards-voltages-and-currents)). It does not cover one output at 1.5 A with the other at 0.9 A.
 - An output held at 0.9 A needs the default-current Rp value, which is a third resistor in the
   two software builds ([CC interface](#block-cc)).
 - A 5 V source above 15 W is outside the USB PD power rules, which add 9 V above 15 W
@@ -249,6 +254,8 @@ The BOM uses one transformer part for every port to keep the line items down.
 | Transformer | G24P02S | [C2827276](https://www.lcsc.com/product-detail/C2827276.html) | Plain | $0.27 | No | No |
 | Jack with built-in magnetics | HR911130A | [C54408](https://www.lcsc.com/product-detail/C54408.html) | Built in | $1.61 | No | No |
 | Capacitor coupling | 8 capacitors | – | Plain | $0.12 | No | No |
+
+The capacitor coupling price is an estimate [**I**](#evidence-codes).
 
 - The plain jack is the R-RJ45R08P-A004,
   [C385834](https://www.lcsc.com/product-detail/C385834.html), at $0.10, unshielded and without
@@ -318,14 +325,14 @@ image size is unknown [**U**](#evidence-codes), so 4 Mbit is a guess.
 **Supplies.** The regulator inside the chip makes the 1.15 V core rail from 3.3 V with one
 external inductor, as on the
 [wu-kou board](../research/switch-board-strapping.md#wk-l2). The BOM counts one 100 nF
-capacitor for each of the 29 supply pins (Table 21 of the
-[switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)) [**V**](#evidence-codes) and two ferrite beads. The wu-kou board fits eight beads, and the
+capacitor for each of the 27 supply pins of Table 21 and for the two regulator input pins 65
+and 66 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) [**V**](#evidence-codes), one more for the flash, and two ferrite beads. The wu-kou board fits eight beads, and the
 smaller number is not verified [**U**](#evidence-codes).
 
 **Reset.** Reset is a 4.7 kΩ resistor and a 10 µF capacitor, the values of the
-[wu-kou board](../research/switch-board-strapping.md#wk-c51). Their 47 ms time constant covers
-the 10 ms that Table 32 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) asks for after
-the supplies settle [**V**](#evidence-codes). The discharge diode of the wu-kou board is not counted [**U**](#evidence-codes).
+[wu-kou board](../research/switch-board-strapping.md#wk-c51). Table 32 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) asks for 10 ms of reset after
+the supplies settle [**V**](#evidence-codes). The 47 ms time constant is taken to cover that, with the
+reset threshold not published [**I**](#evidence-codes). The discharge diode of the wu-kou board is not counted [**U**](#evidence-codes).
 
 **Not fitted.** No LEDs, no EEPROM and no reset chip.
 
@@ -342,7 +349,7 @@ BOM rows are placeholders for its functions, with part values left open
 | --- | --- |
 | Polarity bridges | Either pair set may carry either polarity |
 | Surge clamp | Cable surges |
-| Detection signature | The PoE switch looks for 25 kΩ before it applies power |
+| Detection signature | Detection by the PoE switch |
 | Class 4 current sink | Marks the device as able to ask for 25.5 W |
 | Hot-swap switch | Turn-on threshold with inrush limit |
 
@@ -353,9 +360,11 @@ BOM rows are placeholders for its functions, with part values left open
 
 - The device starts at 12.95 W, and the CPU asks for 25.5 W by LLDP
   ([LLDP](../research/poe.md#45-lldp-data-link-layer-classification)).
-- IEEE 802.3at expects a 25.5 W device to understand both ways. A PoE source without LLDP
-  signals 25.5 W by two class events, and a device that cannot see them stays at 12.95 W
+- A PoE source without LLDP signals 25.5 W by two class events, and a device that cannot see
+  them stays at 12.95 W
   ([classification](../research/poe.md#42-classification-how-much-power-do-you-want)).
+- Whether IEEE 802.3at requires a 25.5 W device to understand both ways is not checked
+  [**U**](#evidence-codes).
 - The two-event circuit is not designed, and its figures are a guess [**I**](#evidence-codes).
 - The class sink has to turn off above the classification window so that it draws nothing at
   48 V. The placeholder rows may not be enough for that [**U**](#evidence-codes).
@@ -578,7 +587,7 @@ The parts of the two software builds are untested candidates [**U**](#evidence-c
 | BMC driver buffer | [CC interface](#block-cc) | Chip outputs cannot make a 1.1 V swing |
 | CC series resistor | [CC interface](#block-cc) | Chip pins do not tolerate 5 V |
 | CC clamp diode | [CC interface](#block-cc) | Chip pins do not tolerate 5 V |
-| PD transceiver | [CC interface](#block-cc) | Makes and reads the 1.1 V CC swing |
+| PD transceiver | [CC interface](#block-cc) | Drives the 1.1 V CC swing |
 
 <a id="prices"></a>
 
@@ -619,6 +628,7 @@ Parts that are always fitted in option A:
 | [Switch](#block-switch) | Firmware flash | P25Q40SH-SSH-IT | Puya | SOP-8 | 4 Mbit | – | [C2836860](https://www.lcsc.com/product-detail/C2836860.html) | 1 | $0.1001 | LCSC | 2,500 | $0.1001 |
 | [Switch](#block-switch) | Bias resistor | RC0402FR-072K49L | Yageo | 0402 | 2.49 kΩ | – | [C145071](https://www.lcsc.com/product-detail/C145071.html) | 1 | $0.0016 | LCSC | 1,000 | $0.0016 |
 | [Switch](#block-switch) | Flash chip-select pull-up | 0402WGF1002TCE | Uni-Royal | 0402 | 10 kΩ | – | [C25744](https://www.lcsc.com/product-detail/C25744.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
+| [Switch](#block-switch) | Flash supply capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 1 | $0.0018 | LCSC | 1,000 | $0.0018 |
 | [Switch](#block-switch) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 29 | $0.0018 | LCSC | 1,000 | $0.0522 |
 | [Switch](#block-switch) | Supply bulk capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 4 | $0.0107 | LCSC | 4,000 | $0.0428 |
 | [Switch](#block-switch) | Analogue supply bead | BLM18KG221SN1D | Murata | 0603 | 220 Ω | 2.2 A | [C88980](https://www.lcsc.com/product-detail/C88980.html) | 2 | $0.0291 | LCSC | 4,000 | $0.0582 |
@@ -752,6 +762,7 @@ Parts that are always fitted in option B:
 | [Switch](#block-switch) | Firmware flash | P25Q40SH-SSH-IT | Puya | SOP-8 | 4 Mbit | – | [C2836860](https://www.lcsc.com/product-detail/C2836860.html) | 1 | $0.1001 | LCSC | 2,500 | $0.1001 |
 | [Switch](#block-switch) | Bias resistor | RC0402FR-072K49L | Yageo | 0402 | 2.49 kΩ | – | [C145071](https://www.lcsc.com/product-detail/C145071.html) | 1 | $0.0016 | LCSC | 1,000 | $0.0016 |
 | [Switch](#block-switch) | Flash chip-select pull-up | 0402WGF1002TCE | Uni-Royal | 0402 | 10 kΩ | – | [C25744](https://www.lcsc.com/product-detail/C25744.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
+| [Switch](#block-switch) | Flash supply capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 1 | $0.0018 | LCSC | 1,000 | $0.0018 |
 | [Switch](#block-switch) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 29 | $0.0018 | LCSC | 1,000 | $0.0522 |
 | [Switch](#block-switch) | Supply bulk capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 4 | $0.0107 | LCSC | 4,000 | $0.0428 |
 | [Switch](#block-switch) | Analogue supply bead | BLM18KG221SN1D | Murata | 0603 | 220 Ω | 2.2 A | [C88980](https://www.lcsc.com/product-detail/C88980.html) | 2 | $0.0291 | LCSC | 4,000 | $0.0582 |
@@ -845,7 +856,7 @@ Added to option B for the [GPIO bit-bang](#block-cc-bit-bang) build:
 | Block | Option A cost | Option A placements | Option B cost | Option B placements |
 | --- | ---: | ---: | ---: | ---: |
 | [Ethernet](#block-ethernet) | $0.89 | 25 | $1.31 | 36 |
-| [Switch](#block-switch) | $3.28 | 53 | $3.28 | 53 |
+| [Switch](#block-switch) | $3.28 | 54 | $3.28 | 54 |
 | [PoE front end](#block-poe) | $0.44 | 17 | $0.44 | 17 |
 | [5 V converter](#block-5v) | $1.05 | 15 | $1.05 | 15 |
 | [3.3 V converter](#block-3v3) | $0.14 | 9 | $0.14 | 9 |
@@ -863,8 +874,8 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 
 | Assumption | Waits on | If it is wrong |
 | --- | --- | --- |
-| Code can be loaded and run on the CPU | CPU study | No option works as drawn |
-| The CPU can send and receive LLDP frames | CPU study | No grant above 12.95 W |
+| Firmware runs on the CPU | CPU study | No option works as drawn |
+| The CPU can exchange LLDP frames | CPU study | No grant above 12.95 W |
 | A 4 Mbit flash holds the firmware | CPU study | Larger flash |
 | GPIO registers are usable by firmware | CPU study | No VBUS control |
 | Pins 44 and 46 stay low until firmware drives them | CPU study | Hardware gate on VBUS |
@@ -894,11 +905,15 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | Sinks accept 5 V above 15 W | Bench | Converter per output |
 | Three Rp resistors per output fit the free GPIOs | USB PD study | Fewer current levels |
 | CPU timing is good enough for bit-bang | USB PD study | Build not usable |
-| The port 9 MAC can send and capture PD bits | USB PD study | Build not usable |
+| The port 9 MAC can carry PD bits | USB PD study | Build not usable |
 | The candidate buffer tolerates 3.3 V when disabled | Datasheet check | Other buffer |
 | The TP1942-SR has two channels | Datasheet check | Second comparator |
 | The candidate comparator slices BMC cleanly | Bench | Other comparator |
 | The internal pull-ups leave Rp off enough at reset | Bench | Rp on a pull-down pin |
+| Unselected Rp pins add no current | CPU study | Fewer current levels |
+| The flash can be programmed on the board | CPU study | Programming pads |
+| The FUSB302B interrupt pin can stay unconnected | USB PD study | One pull-up per output |
+| No input filter is needed for emissions | Bench | Filter parts |
 | One shared current limit is acceptable | USB PD study | Current-limited switch |
 | The chip has no ADC | CPU study | Current measurement possible |
 | VBUS turn-on does not dip the 5 V rail | Bench | Gate capacitor |
@@ -915,7 +930,7 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | Drop the line termination | About $0.01 per downstream port | Emissions |
 | Linear regulator for 3.3 V | About $0.07 | 0.5 W less for USB-C |
 | YT9215S in place of the YT9215SC | $0.97 | [Two pin conflicts](#block-switch) |
-| Rp resistor with one comparator in place of PD | About $0.24 per output at least | No PD offer |
+| Rp resistor with one comparator in place of PD | $0.24 per output | No PD offer |
 
 The Rp resistor with one comparator is the [no PD baseline](https://github.com/mithro/budget-poe-adapter/blob/main/research/yt9215-usb-pd.md#option-0)
 of the USB PD note.
@@ -924,7 +939,7 @@ of the USB PD note.
 
 | File | Contents |
 | --- | --- |
-| [`make_bom.py`](block-diagram-and-bom/make_bom.py) | Part list that writes the CSV files with the BOM tables of this note |
+| [`make_bom.py`](block-diagram-and-bom/make_bom.py) | Part list and BOM table generator |
 | [`bom-option-a.csv`](block-diagram-and-bom/bom-option-a.csv) | BOM rows of option A |
 | [`bom-option-b.csv`](block-diagram-and-bom/bom-option-b.csv) | BOM rows of option B |
 | [`make_diagrams.py`](block-diagram-and-bom/make_diagrams.py) | Draws the two block diagrams with the power tree |

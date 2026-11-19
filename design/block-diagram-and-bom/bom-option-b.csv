@@ -10,6 +10,7 @@ Switch,Crystal load capacitor,0402CG180J500NT,FH,0402,18 pF,50 V,C1549,2,0.0014,
 Switch,Firmware flash,P25Q40SH-SSH-IT,Puya,SOP-8,4 Mbit,–,C2836860,1,0.1001,LCSC,"2,500",0.1001,Always
 Switch,Bias resistor,RC0402FR-072K49L,Yageo,0402,2.49 kΩ,–,C145071,1,0.0016,LCSC,"1,000",0.0016,Always
 Switch,Flash chip-select pull-up,0402WGF1002TCE,Uni-Royal,0402,10 kΩ,–,C25744,1,0.0011,LCSC,"1,000",0.0011,Always
+Switch,Flash supply capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,1,0.0018,LCSC,"1,000",0.0018,Always
 Switch,Supply pin capacitor,CL05B104KO5NNNC,Samsung,0402,100 nF,16 V,C1525,29,0.0018,LCSC,"1,000",0.0522,Always
 Switch,Supply bulk capacitor,CL10A106KP8NNNC,Samsung,0603,10 µF,10 V,C19702,4,0.0107,LCSC,"4,000",0.0428,Always
 Switch,Analogue supply bead,BLM18KG221SN1D,Murata,0603,220 Ω,2.2 A,C88980,2,0.0291,LCSC,"4,000",0.0582,Always

@@ -96,6 +96,7 @@ ROWS = [
     (SW, "Firmware flash", "flash", 1, 1, BASE),
     (SW, "Bias resistor", "r2k49", 1, 1, BASE),
     (SW, "Flash chip-select pull-up", "r10k", 1, 1, BASE),
+    (SW, "Flash supply capacitor", "c100n", 1, 1, BASE),
     (SW, "Supply pin capacitor", "c100n", 29, 29, BASE),
     (SW, "Supply bulk capacitor", "c10u", 4, 4, BASE),
     (SW, "Analogue supply bead", "bead", 2, 2, BASE),

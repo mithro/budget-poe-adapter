@@ -1,54 +1,87 @@
 # PoE → USB-C adapter: block diagram and rough BOM cost
 
+<a id="block-diagram"></a>
+
 ![Block diagram](block-diagram.svg)
 
-Rough first pass, 2026-10-21 (updated for 5 V + 12 V output). Built
-from `research/poe.md`, `research/usb-c-pd.md` and
-`research/ethernet-switch.md`. Line items and per-line prices are in
-[`bom-rough.csv`](bom-rough.csv). The diagram is also available as
-[`block-diagram.png`](block-diagram.png).
+Rough first-pass design for a 5 V and 12 V output, with prices as of 2026-10-21. Built
+from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
+[`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
+[`bom-rough.csv`](bom-rough.csv). The diagram is [`block-diagram.svg`](block-diagram.svg).
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
-RTL8363NB price ($1.43 @1k) was checked live (in the switch research). Every
+RTL8363NB price ($1.43 @1k) was checked live (in [`research/ethernet-switch.md`](../research/ethernet-switch.md)). Every
 other price is an estimate from typical LCSC pricing for that part class and
-is tagged high/medium/low confidence in the CSV. Treat the totals as ±30 %.
+is tagged high, medium or low confidence in [`bom-rough.csv`](bom-rough.csv). Treat the totals as ±30 %.
 
 ## Summary
 
-| | With switch (RTL8363NB + CH32V307) | Without switch (passive passthrough) |
+| | With switch | Without switch |
 |---|---|---|
-| **Rough BOM + PCB + assembly @1k** | **≈ $8.60** (likely $7.50–10.50) | **≈ $4.10** (likely $3.60–5.30) |
-| USB-C output | USB-PD 5 V and 12 V | same |
-| Gigabit to the Pi | yes, switched | yes, passive |
-| MCU on the network (LLDP, stats, config) | yes | no |
+| Variant | RTL8363NB with a CH32V307 | Passive passthrough |
+| **Rough BOM + PCB + assembly @1k** | **≈ $8.60** | **≈ $4.10** |
+| Likely range, low | $7.50 | $3.60 |
+| Likely range, high | $10.50 | $5.30 |
+| USB-C output: USB-PD 5 V | yes | yes |
+| USB-C output: USB-PD 12 V | yes | yes |
+| Gigabit to the Pi | yes | yes |
+| Gigabit path | switched | passive |
+| MCU on the network | yes | no |
+| MCU does LLDP | yes | no |
+| MCU serves stats | yes | no |
+| MCU takes config over the network | yes | no |
 | LLDP power negotiation | possible | no |
 | Extra load on the PoE budget | ~0.5–1 W for the switch | none |
 | PCB | 4-layer | 2-layer possible |
 
 The switch costs about **$4.50 extra** per unit. Of that, $1.62 is the switch
-and its crystal/passives, $0.95 is the bigger MCU, $1.05 is the second set of
+and its crystal and passives, $0.95 is the bigger MCU, $1.05 is the second set of
 magnetics, and the rest is the 4-layer board and more placements.
 
 Adding 12 V output costs about **$0.20** per unit on either variant compared
-with a 5 V-only design (see below).
+with a 5 V-only design (see [Output voltages](#output-voltages-5-v-and-12-v)).
 
 ## Output voltages: 5 V and 12 V
 
 The USB-C port is a USB-PD source with two fixed PDOs, **5 V and 12 V**.
-That covers the Pi 5 (5 V / 5 A) and 12 V devices such as SBCs, routers,
-cameras and small displays. 9/15/20 V and PPS are out of scope.
+That covers the Pi 5 (5 V at 5 A) and 12 V devices such as SBCs, routers,
+cameras and small displays. 9, 15 and 20 V and PPS are out of scope.
 
 ### What changes in hardware compared with 5 V only
 
-| Change | Why | Cost delta @1k |
-|---|---|---:|
-| 5 V / 12 V select: a GPIO-driven NMOS switches an extra resistor into the buck's feedback divider | Two fixed set points, no PWM "DAC". With the GPIO low or floating the buck outputs 5 V, so a firmware fault can't leave 12 V on a 5 V-only sink | +$0.02 |
-| Output caps rated 16–25 V | 12 V rail | +$0.02 |
-| VBUS PMOS gets a gate zener and an NPN driver | Keeps Vgs within limits when switching 12 V | +$0.02 |
-| 15 V TVS on VBUS instead of 6–7 V | Clamp level for a 12 V rail | +$0.01 |
-| CC1/CC2 protection against a 12 V short (series NMOS clamps or a CC OVP IC) | A bad cable or plug twist can put VBUS on CC, which would kill 3.3 V MCU pins | +$0.10 |
-| 3.3 V rail fed from a 5–12 V rail (18 V-rated buck / 16 V LDO) | The rail it was fed from is no longer fixed at 5 V | +$0.01–0.05 |
-| **Total** | | **≈ +$0.20** |
+| # | Change | Alternative | Cost delta @1k |
+| --- | --- | --- | ---: |
+| 1 | Output voltage select | – | +$0.02 |
+| 2 | Output caps | – | +$0.02 |
+| 3 | VBUS PMOS drive | – | +$0.02 |
+| 4 | VBUS TVS | – | +$0.01 |
+| 5 | CC-pin protection against a 12 V short | A CC OVP IC | +$0.10 |
+| 6 | 3.3 V rail fed from a 5–12 V rail | 16 V LDO | +$0.01–0.05 |
+|  | **Total** |  | **≈ +$0.20** |
+
+Notes on the rows of this table:
+
+- **Output voltage select**, how: GPIO-driven NMOS adds a resistor to the buck FB divider.
+- **Output voltage select**, why: Two fixed set points with no PWM "DAC".
+- **Output caps**, how: Rated 16–25 V.
+- **Output caps**, why: 12 V rail.
+- **VBUS PMOS drive**, how: Gate zener with an NPN driver.
+- **VBUS PMOS drive**, why: Keeps Vgs within limits when switching 12 V.
+- **VBUS TVS**, how: 15 V part, where a 5 V-only design uses a 6–7 V part.
+- **VBUS TVS**, why: Clamp level for a 12 V rail.
+- **CC-pin protection against a 12 V short**, how: Series NMOS clamps.
+- **CC-pin protection against a 12 V short**, why: VBUS on CC would kill 3.3 V MCU pins.
+- **3.3 V rail fed from a 5–12 V rail**, how: 18 V-rated buck.
+- **3.3 V rail fed from a 5–12 V rail**, why: Its source rail varies from 5 V to 12 V.
+
+| Select GPIO state | Buck output |
+|---|---|
+| Low | 5 V |
+| Floating | 5 V |
+| High | 12 V |
+
+Because a low or floating GPIO gives 5 V, a firmware fault can't leave 12 V
+on a 5 V-only sink. VBUS can reach CC through a bad cable or a plug twist.
 
 The buck controller, FETs and inductor do not change: 57 V → 5 V at 5 A is
 still the sizing case, and 12 V is at most ~3 A. Firmware gets one extra PDO,
@@ -58,31 +91,35 @@ back to 5 V on Hard Reset or detach.
 ### What the PoE class allows
 
 The PDOs the adapter offers come from the PoE class it was granted (counted
-class events, `poe.md` §4.2), at roughly 90 % efficiency:
+class events, [`poe.md` section 4.2](../research/poe.md#42-classification-how-much-power-do-you-want)), at roughly 90 % efficiency:
 
-| Granted PoE class | USB-C budget | PDOs offered |
-|---|---|---|
-| Class 3 (af, 13 W) | ~11 W | 5 V / 2.2 A, 12 V / 0.9 A |
-| Class 4 (at, 25.5 W) | ~22 W (~21 W with the switch) | 5 V / 3 A (4.4 A with the Pi override), 12 V / 1.8 A |
-| Class 5 (bt, 40 W) | ~35 W | 5 V / 5 A*, 12 V / 2.9 A |
-| Class 6 (bt, 51 W) | ~45 W | 5 V / 5 A*, 12 V / 3 A |
+| Granted PoE class | Standard | PD input | USB-C budget | With the switch | 5 V PDO | 5 V with the Pi override | 12 V PDO |
+|---|---|---|---|---|---|---|---|
+| Class 3 | af | 13 W | ~11 W | – | 2.2 A | – | 0.9 A |
+| Class 4 | at | 25.5 W | ~22 W | ~21 W | 3 A | 4.4 A | 1.8 A |
+| Class 5 | bt | 40 W | ~35 W | – | 5 A* | – | 2.9 A |
+| Class 6 | bt | 51 W | ~45 W | – | 5 A* | – | 3 A |
 
-\* 5 A needs a captive or e-marked cable (`usb-c-pd.md` §5.4).
+\* 5 A needs a captive or e-marked cable ([`usb-c-pd.md` section 5.4](../research/usb-c-pd.md#54-cable-e-marker-for-advertising--3-a)).
 
 **Caveat:** a 5 V + 12 V source does not follow the PD "power rules", which
 expect 9 V on any source above 15 W. This only matters for certification.
 Functionally, a sink that wants 12 V will request it. Phones and laptops that
-only ask for 9/15/20 V will fall back to 5 V, which is safe but slow.
+only ask for 9, 15 and 20 V will fall back to 5 V, which is safe but slow.
 
 ## Block diagrams
 
-See [`block-diagram.svg`](block-diagram.svg) / [`block-diagram.png`](block-diagram.png). Each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
+[`block-diagram.png`](block-diagram.png) is the same figure as [the block diagram](#block-diagram), as a bitmap:
+
+![Block diagram as a bitmap](block-diagram.png)
+
+In [the block diagram](#block-diagram), each block is tagged with its cost @1k; PCB and assembly are listed under each panel title.
 
 * **A (with switch):** RJ45 IN (PoE magjack) → RTL8363NB → RJ45 OUT. The
   CH32V307 sits on the switch's RMII port. Power path: PoE front end → 60 V
   sync buck (5 V or 12 V, selected by the MCU) → VBUS switch → USB-C.
 * **B (without switch):** RJ45 IN → 4-channel PoE splitter transformer →
-  RJ45 OUT (`poe.md` §3 option 2; the Pi's own magnetics stay in the link).
+  RJ45 OUT ([`poe.md` section 3](../research/poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t) option 2; the Pi's own magnetics stay in the link).
   Option 1, back-to-back magjacks, costs about $1 more and is lower risk on
   return loss. The power path is the same as A, with a CH32V203 as the MCU.
 
@@ -90,19 +127,40 @@ See [`block-diagram.svg`](block-diagram.svg) / [`block-diagram.png`](block-diagr
 
 | Block | With switch | Without switch |
 |---|---:|---:|
-| PoE front end (bridges, TVS, signature, class sink, bootstrap, hot-swap) | 0.53 | 0.53 |
-| Output buck, 5 V / 12 V (controller, 2 FETs, inductor, caps, FB select) | 1.09 | 1.09 |
+| PoE front end | 0.53 | 0.53 |
+| Dual-voltage output buck | 1.09 | 1.09 |
 | 3.3 V logic rail | 0.15 | 0.04 |
-| USB-C output (receptacle, VBUS switch, CC network + 12 V protection, ESD) | 0.42 | 0.42 |
+| USB-C output | 0.42 | 0.42 |
 | Ethernet magnetics and jacks | 1.75 | 0.70 |
-| Switch IC + crystal + passives | 1.62 | – |
-| MCU + crystal + passives | 1.38 | 0.43 |
+| Switch IC with crystal and passives | 1.62 | – |
+| MCU with crystal and passives | 1.38 | 0.43 |
 | PCB | 0.45 | 0.20 |
-| JLCPCB assembly (amortised setup + extended-part fees) | 1.20 | 0.70 |
+| JLCPCB assembly | 1.20 | 0.70 |
 | **Total** | **8.59** | **4.11** |
 
+| Block | Contains |
+|---|---|
+| PoE front end | Bridges |
+| PoE front end | TVS |
+| PoE front end | Signature |
+| PoE front end | Class sink |
+| PoE front end | Bootstrap |
+| PoE front end | Hot-swap |
+| Output buck | Controller |
+| Output buck | 2 FETs |
+| Output buck | Inductor |
+| Output buck | Caps |
+| Output buck | FB select |
+| USB-C output | Receptacle |
+| USB-C output | VBUS switch |
+| USB-C output | CC network |
+| USB-C output | 12 V protection |
+| USB-C output | ESD |
+| JLCPCB assembly | Amortised setup |
+| JLCPCB assembly | Extended-part fees |
+
 Not included: enclosure (~$0.30–0.80), captive 5 A USB-C cable instead of a
-receptacle (~$0.50–0.80), test/programming, shipping, duties.
+receptacle (~$0.50–0.80), test and programming, shipping, duties.
 
 ## What drives the cost and where the risk is
 
@@ -111,33 +169,33 @@ receptacle (~$0.50–0.80), test/programming, shipping, duties.
    properly is the first thing to firm up.
 2. **The 60 V buck is the second.** I assumed a cheap Chinese 60–100 V
    synchronous controller plus external FETs (~$1.09 total including the
-   12 V select). An integrated 60 V 5 A converter from TI/MPS would
+   12 V select). An integrated 60 V 5 A converter from TI or MPS would
    be $1.50–2.50.
 3. **CH32V307 is overkill as an MCU but cheap for what it brings.** It is the
    only cheap WCH part with a MAC that can talk RMII to the switch. Its price
    is an estimate ($1.10–1.60 depending on package).
-4. **MCU power during PoE mark events.** `poe.md` §6.3 requires ≤ 4 mA total
+4. **MCU power during PoE mark events.** [`poe.md` section 6.3](../research/poe.md#63-the-bootstrap-problem) requires ≤ 4 mA total
    during mark events. A CH32V307 running from its internal oscillator at low
    clock may or may not fit that. If it doesn't, add a CH32V003 (~$0.12) as a
    cold-start PoE controller that wakes the CH32V307 after power-on. That adds
    about $0.15 to the switch variant.
 5. **Discrete PoE front end vs a PD controller IC.** The discrete front end
    costs ~$0.53 here. Cheap PD controller ICs are roughly $0.30–1 but most only
-   handle af/at, and bt-capable ones cost more. The software PD looks like a
-   small cost win and the main way to get bt Class 5/6 cheaply, but this has
+   handle af and at, and bt-capable ones cost more. The software PD looks like a
+   small cost win and the main way to get bt Class 5 and 6 cheaply, but this has
    not been verified with real quotes.
 6. **Power budget.** The switch draws ~0.5–1 W (datasheet figure not found).
-   On an at/PoE+ port this lowers the USB-C budget by about 1 W. On a bt
-   Class 5/6 port it doesn't matter.
+   On an at (PoE+) port this lowers the USB-C budget by about 1 W. On a bt
+   Class 5 or Class 6 port it doesn't matter.
 7. **Output voltage safety.** With 12 V possible, a firmware bug that leaves
-   VBUS at 12 V on a 5 V-only sink is the main new failure mode. Mitigations:
+   VBUS at 12 V on a 5 V-only sink is the main added failure mode. Mitigations:
    the buck defaults to 5 V in hardware when the select GPIO is low or
    floating, and VBUS is checked against the contract before the load switch
    closes.
 
 ## Suggested next steps
 
-* Get real LCSC prices for 3–4 candidate magjacks / splitter transformers and
-  2–3 60 V buck controllers, then update the CSV.
+* Get real LCSC prices for 3–4 candidate magjacks and splitter transformers and
+  2–3 60 V buck controllers, then update [`bom-rough.csv`](bom-rough.csv).
 * Bench-check CH32V307 supply current at low clock against the 4 mA mark-event
   limit, to decide whether the CH32V003 helper is needed.

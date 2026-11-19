@@ -145,7 +145,7 @@ for n, t, col in RIGHT:
 for lab, y in (('R44', 1825), ('R89', 1925), ('R92', 2025), ('R93', 2125)):
     px, py = c.P(2925, y)
     c.d.rounded_rectangle((px - 75, py - 36, px + 75, py + 36), radius=8, outline=SPI, width=5)
-    c.text(2840, y, lab, fs, SPI, 'rm')
+    c.text(3004, y, lab, fp, SPI, 'lm')                   # right of the box, clear of the trace into the pad
 c.save('u4-pins-right-edge-annotated.png')
 
 # ---------- U4 and the parts beside it, with their silkscreen names, on board A ----------

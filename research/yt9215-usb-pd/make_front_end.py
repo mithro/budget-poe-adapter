@@ -34,7 +34,7 @@ out.append('<rect width="%d" height="%d" fill="#ffffff"/>' % (W, H))
 
 box(20, 20, 150, 600, ["YT9215SCH"], fill="#e8eefc")
 box(680, 20, 150, 600, ["USB-C cable"], fill="#e8f6e8")
-out.append('<text x="95" y="48" text-anchor="middle">port 8 pins</text>')
+out.append('<text x="95" y="48" text-anchor="middle">port 9 pins</text>')
 out.append('<text x="95" y="400" text-anchor="middle">GPIO pins</text>')
 
 # Transmit path

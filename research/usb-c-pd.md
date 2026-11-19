@@ -24,7 +24,7 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 | USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W | Baseline | – |
 | USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W | Baseline | – |
 | BC1.2 DCP | Data pair | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
-| BC1.2 CDP | Data pair | – | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
+| BC1.2 CDP | Data pair | – | 5 V | – | 1.5 A | – | 7.5 W | Skip | Needs a data port |
 | Apple divider, level 1 | Data pair | Fixed voltages | 5 V | – | 1 A | – | – | Resistors only | – |
 | Apple divider, level 2 | Data pair | Fixed voltages | 5 V | – | 2.1 A | – | – | Resistors only | – |
 | Apple divider, level 3 | Data pair | Fixed voltages | 5 V | – | 2.4 A | – | – | Resistors only | – |
@@ -175,7 +175,7 @@ K-codes:
 | **EOP** | **01101** |
 
 - Ordered sets: **SOP** = S1 S1 S1 S2 (port partner). **SOP'** = S1 S1 S3 S3 (cable plug near end). **SOP''** = S1 S3 S1 S3. **Hard Reset** = R1 R1 R1 R2. **Cable Reset** = R1 S1 R1 S3. A receiver should accept an ordered set when 3 of 4 K-codes match.
-- **CRC-32:** same as Ethernet (poly 0x04C11DB7, init 0xFFFFFFFF, reflected, final inversion), over header + data objects, transmitted as 4b5b like data. It is the same CRC as the Ethernet frame check sequence.
+- **CRC-32:** same as Ethernet (poly 0x04C11DB7, init 0xFFFFFFFF, reflected, final inversion), over header + data objects, transmitted as 4b5b like data.
 
 Example: Source_Capabilities with one PDO = 64 + 20 + 20 + 40 + 40 + 5 = **189 bits ≈ 630 µs** on the wire.
 

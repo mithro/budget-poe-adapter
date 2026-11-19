@@ -153,7 +153,7 @@ not show which of the two photographed boards it is, so the table is for one boa
 | <a id="lx-pin-47"></a>47 | [RESERVED_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | No trace leaves the pin | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-close-up">U4 close-up</a> | Pull-up | 1 | <a href="#tag-i">I</a> | – |
 | <a id="lx-pin-48"></a>48 | [RESERVED_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | Not traced | <a href="#tag-u">U</a> | – | Pull-up | 1 | <a href="#tag-i">I</a> | – |
 | <a id="lx-pin-50"></a>50 | [RESERVED_2](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a id="lx-r92"></a>R92 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | Pull-down | Not known | <a href="#tag-u">U</a> | – |
-| <a id="lx-pin-49"></a>49 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a id="lx-r93"></a>R93 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-top">Board A top</a> | Pull-down | Not known | <a href="#tag-u">U</a> | Flash pin group |
+| <a id="lx-pin-49"></a>49 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a id="lx-r93"></a>R93 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | Pull-down | Not known | <a href="#tag-u">U</a> | Flash pin group |
 | <a id="lx-pin-54"></a>54 | [SPF0_SO](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r89"></a>R89 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | Pull-up | – | – | Not a strap |
 | <a id="lx-pin-55"></a>55 | [SPF0_CS](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) | <a id="lx-r44"></a>R44 | <a href="#tag-r">R</a> | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | Pull-up | – | – | Not a strap |
 | <a id="lx-pin-60"></a>60 | [EN_SWR](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">U</a> | – | None | 1 | <a href="#tag-i">I</a> | Internal regulator on |
@@ -233,11 +233,11 @@ are active low.
 | <a id="lx-pl3"></a>PL3 | <a href="#tag-r">R</a> | Buck inductor | – | `100` | SMD | 10 µH | – | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | – | – |
 | <a id="lx-d40"></a>D40 | <a href="#tag-r">R</a> | Buck catch diode | SS310 | `LGE SS310` | SMA | 3 A | 100 V | A | Top | <a href="#lx-photo-board-a-regulator">Board A regulator</a> | [PDF](../datasheets/components/LGE_SS32-SS320_Series.pdf) | [C432297](https://www.lcsc.com/product-detail/C432297.html) |
 | <a id="lx-tc1"></a>TC1 | <a href="#tag-r">R</a> | Buck output capacitor | – | `220 16V` | Aluminium can | 220 µF | 16 V | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | – | – |
-| <a id="lx-l3"></a>L3 | <a href="#tag-i">I</a> | Core regulator inductor | – | `4R7` | SMD | 4.7 µH | – | B | Top | <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a> | – | – |
+| <a id="lx-l3"></a>L3 | <a href="#tag-i">I</a> | Core regulator inductor | – | `4R7` | SMD | 4.7 µH | – | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | – | – |
 | <a id="lx-c4"></a>C4 | <a href="#tag-r">R</a> | Input capacitor | – | `YX 47 63V` | Aluminium can | 47 µF | 63 V | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | – | – |
 | <a id="lx-c4-b"></a>C4 | <a href="#tag-r">R</a> | Input capacitor | – | `22 63V EMB` | Aluminium can | 22 µF | 63 V | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
 | <a id="lx-choke"></a>Not legible | <a href="#tag-u">U</a> | Input choke | – | `701` | SMD | – | – | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
-| <a id="lx-d4"></a>D4 | <a href="#tag-r">R</a> | Input diode | SS510 | `LGE SS510` | SMA | 5 A | 100 V | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | [PDF](../datasheets/components/LGE_SS52-SS520_Series.pdf) | [C432296](https://www.lcsc.com/product-detail/C432296.html) |
+| <a id="lx-d4"></a>D4 | <a href="#tag-r">R</a> | Input diode | SS510 | `LGE SS510` | SMA | 5 A | 100 V | A | Top | <a href="#lx-photo-board-a-power-input">Board A power input</a> | [PDF](../datasheets/components/LGE_SS52-SS520_Series.pdf) | [C432296](https://www.lcsc.com/product-detail/C432296.html) |
 | <a id="lx-d5"></a>D5 | <a href="#tag-r">R</a> | Input diode | SS510 | `LGE SS510` | SMA | 5 A | 100 V | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | [PDF](../datasheets/components/LGE_SS52-SS520_Series.pdf) | [C432296](https://www.lcsc.com/product-detail/C432296.html) |
 | <a id="lx-p4"></a>P4 | <a href="#tag-r">R</a> | Power input | – | – | 2-pin through-hole header | – | – | B | Top | <a href="#lx-photo-board-b-power-input">Board B power input</a> | – | – |
 | <a id="lx-dxfrm1"></a>DXFRM1 | <a href="#tag-r">R</a> | Port magnetics footprint | – | – | Not visible | – | – | B | Top | <a href="#lx-photo-board-b-top">Board B top</a> | – | – |
@@ -246,7 +246,7 @@ are active low.
 | <a id="lx-dxfrm5"></a>DXFRM5 | <a href="#tag-r">R</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
 | <a id="lx-dxfrm6"></a>DXFRM6 | <a href="#tag-r">R</a> | Port magnetics | G2401PR | `United-tek G2401PR` | SMD 24-pin | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | [Similar part](../datasheets/components/Usakro_UKG2401PR.pdf) | – |
 | <a id="lx-ed1"></a>ED1 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | A | Top | <a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> | – | – |
-| <a id="lx-ed2"></a>ED2 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
+| <a id="lx-ed2"></a>ED2 | <a href="#tag-r">R</a> | ESD array | Not identified | Hidden | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
 | <a id="lx-ed3"></a>ED3 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
 | <a id="lx-ed4"></a>ED4 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
 | <a id="lx-ed5"></a>ED5 | <a href="#tag-r">R</a> | ESD array | Not identified | `05U` | SOT-23-6 | – | – | B | Top | <a href="#lx-photo-board-b-magnetics">Board B magnetics</a> | – | – |
@@ -307,10 +307,10 @@ columns point at the catalogue part that matches the marking, not at a known pur
   Four transformer bodies are visible in <a href="#lx-photo-board-b-top">Board B top</a>. <a href="#lx-dxfrm3">DXFRM3</a> is partly under the PoE module, so its marking is only partly
   legible and its part is inferred. The <a href="#lx-dxfrm1">DXFRM1</a> silkscreen has no visible body beside it, and an unreadable
   label next to it in <a href="#lx-photo-board-b-top">Board B top</a> may be DXFRM4.
-- The <a href="#lx-l3">L3</a> silkscreen is partly hidden by <a href="#lx-c4">C4</a> in both <a href="#lx-photo-board-a-power-input">Board A power input</a> and <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a>, so that designator is inferred.
+- The <a href="#lx-l3">L3</a> silkscreen is partly covered by the inductor body in <a href="#lx-photo-board-a-power-input">Board A power input</a> and is not visible in <a href="#lx-photo-board-b-switch-ic">Board B switch IC</a>, so that designator is inferred.
 - <a href="#lx-c4">C4</a> differs between the two boards, so it has one row per board.
 - No datasheet is available for the `05U` ESD arrays (<a href="#lx-ed1">ED1</a> to <a href="#lx-ed10">ED10</a>), the `2184A` PSE controller (<a href="#lx-module-u1">module U1</a>) or the `2616 RGS` diodes (<a href="#lx-module-d1">module D1</a> to <a href="#lx-module-d7">D7</a> and the <a href="#lx-module-d-unlabelled">unlabelled fifth diode</a>).
-- Second marking lines are date or lot codes: `533AQ1H` on <a href="#lx-module-u1">module U1</a> (<a href="#lx-photo-poe-module">PoE module</a>) and `2523A` on the <a href="#lx-dxfrm2">G2401PR parts</a> (<a href="#lx-photo-board-b-top">Board B top</a>).
+- Second marking lines are date or lot codes: `533AQ1H` on <a href="#lx-module-u1">module U1</a> (<a href="#lx-photo-poe-module">PoE module</a>) and `2523A` on the <a href="#lx-dxfrm2">G2401PR parts</a> (<a href="#lx-photo-board-b-magnetics">Board B magnetics</a>).
 - The two photographed boards differ in fitted parts. Board A (<a href="#lx-photo-board-a-top">Board A top</a>) has no PoE module fitted. Board B (<a href="#lx-photo-board-b-top">Board B top</a>) has the
   PoE module and the SFP cage. <a href="#lx-photo-board-a-top">Board A top</a> does not show the SFP area of board A.
 
@@ -323,7 +323,7 @@ for the SFP connector, RV1 to RV3 for the three blue disc parts, and five transf
 transformer bodies, so the fifth is taken to be under the PoE module.
 
 - Three blue radial disc parts stand beside <a href="#lx-p4">P4</a> (<a href="#lx-photo-board-b-power-input">Board B power input</a>). They are taken to be surge protection parts on the power input.
-- An array of LEDs sits along the board edge beside G1, under the edge of the PoE module (<a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a> and <a href="#lx-photo-poe-module">PoE module</a>). The
+- An array of LEDs sits along the board edge beside G1 (<a href="#lx-photo-board-a-led-esd">Board A LED and ESD arrays</a>). On board B the edge of the PoE module covers it. The
   silkscreen at the array reads RJ7 to RJ18, which the [schematic notes](lx-is601f-board/schematic/README.md) take to be the names of the LEDs.
 - A group of option footprints sits next to <a href="#lx-u6">U6</a> on the bottom side and is partly populated (<a href="#lx-photo-bottom-eeprom-flash">Bottom EEPROM and flash</a>).
 

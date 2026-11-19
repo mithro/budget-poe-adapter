@@ -18,8 +18,8 @@ the pin tables of both parts, and the route of each debug pin on this board, are
 | <a href="#photo-board-a-top">Board A top</a> | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | A | Top | Area around [U4](../switch-board-strapping.md#major-components) |
 | <a href="#photo-board-b-top">Board B top</a> | [`photo-board-b-top.jpg`](photo-board-b-top.jpg) | Source photo | B | Top | Whole board |
 | <a href="#photo-bottom-under-u4">Bottom under U4</a> | [`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg) | Source photo | Not known | Bottom | Area under [U4](../switch-board-strapping.md#major-components) with the strap resistor array |
-| <a href="#photo-poe-module">PoE module</a> | [`photo-poe-module.jpg`](photo-poe-module.jpg) | Source photo | B | Top | Plug-in PoE module |
-| <a href="#photo-poe-module-crop">PoE module crop</a> | [`crop-poe-module.jpg`](crop-poe-module.jpg) | Area crop | B | Top | Plug-in PoE module |
+| <a href="#photo-poe-module">PoE module wide view</a> | [`photo-poe-module.jpg`](photo-poe-module.jpg) | Source photo | B | Top | Plug-in PoE module with the parts around it |
+| <a href="#photo-poe-module-crop">PoE module</a> | [`crop-poe-module.jpg`](crop-poe-module.jpg) | Area crop | B | Top | Plug-in PoE module |
 | <a href="#photo-board-b-power-input">Board B power input</a> | [`crop-board-b-power-input.jpg`](crop-board-b-power-input.jpg) | Area crop | B | Top | Power input parts |
 | <a href="#photo-board-b-switch-ic">Board B switch IC</a> | [`crop-board-b-switch-ic.jpg`](crop-board-b-switch-ic.jpg) | Area crop | B | Top | [U4](../switch-board-strapping.md#major-components) with the parts beside it |
 | <a href="#photo-board-b-magnetics">Board B magnetics</a> | [`crop-board-b-magnetics.jpg`](crop-board-b-magnetics.jpg) | Area crop | B | Top | Port magnetics with ESD arrays |
@@ -78,13 +78,13 @@ strap resistors are explained in [`../switch-board-strapping.md`](../switch-boar
 
 <a id="photo-poe-module"></a>
 
-**PoE module**
+**PoE module wide view**
 
 ![PoE module on board B](photo-poe-module.jpg)
 
 <a id="photo-poe-module-crop"></a>
 
-**PoE module crop**
+**PoE module**
 
 ![PoE module on board B](crop-poe-module.jpg)
 

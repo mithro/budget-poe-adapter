@@ -13,7 +13,7 @@ HERE = Path(__file__).parent
 CROPS = {
     "crop-board-b-power-input.jpg": ("photo-board-b-top.jpg", (1376, 0, 2176, 704)),
     "crop-board-b-switch-ic.jpg": ("photo-board-b-top.jpg", (1344, 384, 2176, 1440)),
-    "crop-board-b-magnetics.jpg": ("photo-board-b-top.jpg", (704, 560, 1700, 1472)),
+    "crop-board-b-magnetics.jpg": ("photo-board-b-top.jpg", (704, 560, 1700, 1520)),
     "crop-board-a-regulator.jpg": ("photo-u4-wide.jpg", (1877, 1687, 3072, 4080)),
     "crop-board-a-power-input.jpg": ("photo-u4-wide.jpg", (925, 0, 3072, 1741)),
     "crop-board-a-led-esd.jpg": ("photo-u4-wide.jpg", (0, 0, 1000, 1224)),

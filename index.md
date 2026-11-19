@@ -8,14 +8,6 @@
 
 ```{toctree}
 :hidden:
-:caption: Design
-
-design/block-diagram-and-bom
-research/cost-reduction
-```
-
-```{toctree}
-:hidden:
 :caption: Power
 
 research/poe
@@ -24,14 +16,11 @@ research/usb-c-pd
 
 ```{toctree}
 :hidden:
-:caption: Switch ICs
+:caption: YT9215 switch IC
 
-research/ethernet-switch
-research/ethernet-switch-comparison
-research/switch-detail-comparison
-research/switch-embedded-cpu
-research/switch-cpu-dev-boards
+research/yt9215-embedded-cpu
 research/motorcomm-debug-pins
+research/yt9215-boards
 ```
 
 ```{toctree}
@@ -54,19 +43,27 @@ research/yt9215-registers/README
 
 ```{toctree}
 :hidden:
-:caption: MCU and its network link
+:caption: Datasheets
 
-research/risc-v-mcu-comparison
-research/gigabit-piggyback
-research/bitbang-10mbit-ethernet
-research/bitbang-usb
-research/usb-network-card
+datasheets/README
 ```
 
 ```{toctree}
 :hidden:
-:caption: Datasheets
+:caption: Archive
 
-datasheets/README
+archive/README
+archive/design/block-diagram-and-bom
+archive/research/ethernet-switch
+archive/research/ethernet-switch-comparison
+archive/research/switch-detail-comparison
+archive/research/switch-embedded-cpu
+archive/research/switch-cpu-dev-boards
+archive/research/risc-v-mcu-comparison
+archive/research/gigabit-piggyback
+archive/research/bitbang-10mbit-ethernet
+archive/research/bitbang-usb
+archive/research/usb-network-card
+archive/research/cost-reduction
 ```
 

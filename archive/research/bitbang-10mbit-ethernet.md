@@ -1,5 +1,7 @@
 # Bit-banged 10 Mbit/s Ethernet
 
+> **Archived.** This note is not part of the current design. It assumes an external MCU (an RP2040) that needs an Ethernet port of its own. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
+
 Question: can the adapter's MCU get onto Ethernet with no MAC or PHY silicon of
 its own, either by driving 10BASE-T on the wire straight from GPIO, or by
 running the MAC in software (RP2040 PIO) against an external PHY or a switch
@@ -291,7 +293,7 @@ that would be a small port, using the standard BMCR and ANAR registers.
    * RTL8363NB ext port in RMII PHY mode at 10 Mbit/s against PIO RMII:
      who sources the 50 MHz clock (the PIO driver expects to be clocked by it).
    * RP2040 idle current with the PIO MAC running vs. the PoE MPS budget
-     ([`poe.md` section 6.3](poe.md#63-the-bootstrap-problem)).
+     ([`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem)).
    * Optional: CH32X035 DMA-driven MII ([section 4.3](#43-without-pio-dma-driven-mii-on-a-wch-part-untested-idea)). If it works, the switch SKU
      doesn't need a second MCU at all.
 

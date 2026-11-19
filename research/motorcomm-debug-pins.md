@@ -86,7 +86,7 @@ There is one flash interface, on one of two pin groups. The `SPF_MUX_SEL` strap 
 | SO | Flash | DO | IO1 |
 
 - `EN_SPIF` on pin <a id="s-pin-74"></a>74 (GPIO37, also P3LED0) is the enable strap: pull it up to enable flash [**V**](#evidence-codes).
-- SPF0 takes over the extension-port RGMII and MII pins. If the adapter's MCU link uses that port, flash has to go on SPF1 [**I**](#evidence-codes).
+- SPF0 takes over the extension-port RGMII and MII pins. A design that uses that port has to put flash on SPF1 [**I**](#evidence-codes).
 - On SPF1, CS# is the `DISAUTOLOAD` strap pin. The usual CS# pull-up therefore latches DISAUTOLOAD=1, which the [YT9215SCH boot table](#boot-table) calls "no action", so nothing would load [**I**](#evidence-codes). This needs a bench test, or a pull-down on CS# during reset. The S datasheet has no boot-mode table, so this conclusion borrows the SCH table.
 
 ### JTAG on the YT9215S
@@ -282,7 +282,7 @@ The strap levels sampled at power-on can be read back over MDIO from the [`PON_S
 
 ## Implications for the adapter
 
-If the adapter uses the YT9215S, strap `DIS_MCU` (pin [75](#s-pin-75)) high and leave `EN_SPIF` (pin [74](#s-pin-74)) low. That is the opposite of the [mirrored board](#how-the-mirrored-board-wires-these-pins), which leaves the MCU enabled.
+The adapter runs its firmware on the switch's own MCU and has no external MCU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). On a YT9215S that means `DIS_MCU` (pin [75](#s-pin-75)) stays low, as on the [mirrored board](#how-the-mirrored-board-wires-these-pins). Running code from SPI flash also needs `EN_SPIF` (pin [74](#s-pin-74)) high and `DISAUTOLOAD` (pin [76](#s-pin-76)) low. The mirrored board pulls `EN_SPIF` low and `DISAUTOLOAD` high, and flash on SPF1 puts its CS# on the `DISAUTOLOAD` pin ([SPI flash on the YT9215S](#spi-flash-on-the-yt9215s)). This reading takes the strap combinations from the [YT9215SCH boot table](#boot-table), because the S datasheet has no boot-mode table [**I**](#evidence-codes).
 
 A debug option stays open cheaply with one 0402 pad on each of these YT9215S pins. Most already carry strap resistors, so a test pad per net costs almost nothing.
 

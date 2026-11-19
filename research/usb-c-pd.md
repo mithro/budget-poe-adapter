@@ -1,5 +1,7 @@
 # USB-C power
 
+> **Scope.** This note assumes a general-purpose MCU with an ADC, comparators and fast timers does the negotiation. The current design has no such MCU: it uses only the YT9215 switch IC and its internal RISC-V CPU ([`yt9215-embedded-cpu.md`](yt9215-embedded-cpu.md)). The standards, timings and electrical limits here apply to any implementation. How the YT9215 does the job is not worked out in this note.
+
 Goal of this note: give enough low-level detail to implement a **USB-C power source** (the PoE adapter supplies power to a device such as a Raspberry Pi 5) on a cheap MCU (WCH CH32V0xx and CH32V2xx, RP2040 and RP2350) using GPIO bit-banging, comparators or ADC, and a handful of passives.
 
 Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2, and Raspberry Pi documentation, written from working knowledge without the spec PDFs open. Treat values marked **(verify)** as needing a check against the spec tables before committing to a schematic. Everything else is well established.

@@ -1,5 +1,7 @@
 # Block diagram and rough BOM
 
+> **Archived.** This note is not part of the current design. It assumes an external MCU, with either an RTL8363NB switch IC or a passive Ethernet passthrough. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
+
 <a id="block-diagram"></a>
 
 ![Block diagram A, with a switch chip](block-diagram-with-switch.svg)
@@ -7,13 +9,13 @@
 ![Block diagram B, without a switch chip](block-diagram-without-switch.svg)
 
 Rough first-pass design for a 5 V and 12 V output, with prices as of 2026-10-21. Built
-from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
-[`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
+from [`poe.md`](../../research/poe.md), [`usb-c-pd.md`](../../research/usb-c-pd.md) and
+[`ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
 [`bom-rough.csv`](bom-rough.csv). The diagrams are [`block-diagram-with-switch.svg`](block-diagram-with-switch.svg) and
 [`block-diagram-without-switch.svg`](block-diagram-without-switch.svg), drawn by [`make_block_diagram.py`](make_block_diagram.py). [`svg_to_png.js`](svg_to_png.js) renders the bitmap copies.
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
-RTL8363NB price ($1.43 @1k) was checked live (in [`research/ethernet-switch.md`](../research/ethernet-switch.md)). Every
+RTL8363NB price ($1.43 @1k) was checked live (in [`ethernet-switch.md`](../research/ethernet-switch.md)). Every
 other price is an estimate from typical LCSC pricing for that part class and
 is tagged high, medium or low confidence in [`bom-rough.csv`](bom-rough.csv). Treat the totals as ±30 %.
 
@@ -94,7 +96,7 @@ back to 5 V on Hard Reset or detach.
 ### What the PoE class allows
 
 The PDOs the adapter offers come from the PoE class it was granted (counted
-class events, [`poe.md` section 4.2](../research/poe.md#42-classification-how-much-power-do-you-want)), at roughly 90 % efficiency:
+class events, [`poe.md` section 4.2](../../research/poe.md#42-classification-how-much-power-do-you-want)), at roughly 90 % efficiency:
 
 | Granted PoE class | Standard | PD input | USB-C budget | With the switch | 5 V PDO | 5 V with the Pi override | 12 V PDO |
 |---|---|---|---|---|---|---|---|
@@ -103,7 +105,7 @@ class events, [`poe.md` section 4.2](../research/poe.md#42-classification-how-mu
 | Class 5 | bt | 40 W | ~35 W | – | 5 A* | – | 2.9 A |
 | Class 6 | bt | 51 W | ~45 W | – | 5 A* | – | 3 A |
 
-\* 5 A needs a captive or e-marked cable ([`usb-c-pd.md` section 5.4](../research/usb-c-pd.md#54-cable-e-marker-for-advertising--3-a)).
+\* 5 A needs a captive or e-marked cable ([`usb-c-pd.md` section 5.4](../../research/usb-c-pd.md#54-cable-e-marker-for-advertising--3-a)).
 
 **Caveat:** a 5 V + 12 V source does not follow the PD "power rules", which
 expect 9 V on any source above 15 W. This only matters for certification.
@@ -154,7 +156,7 @@ BMC transmit goes through a resistor divider, and BMC receive uses the MCU's on-
   CH32V307 sits on the switch's RMII port. Power path: PoE front end → 60 V
   sync buck (5 V or 12 V, selected by the MCU) → VBUS switch → USB-C.
 * **B (without switch):** RJ45 IN → 4-channel PoE splitter transformer →
-  RJ45 OUT ([`poe.md` section 3](../research/poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t) option 2; the Pi's own magnetics stay in the link).
+  RJ45 OUT ([`poe.md` section 3](../../research/poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t) option 2; the Pi's own magnetics stay in the link).
   Option 1, back-to-back magjacks, costs about $1 more and is lower risk on
   return loss. The power path is the same as A, with a CH32V203 as the MCU.
 
@@ -209,7 +211,7 @@ receptacle (~$0.50–0.80), test and programming, shipping, duties.
 3. **CH32V307 is overkill as an MCU but cheap for what it brings.** It is the
    only cheap WCH part with a MAC that can talk RMII to the switch. Its price
    is an estimate ($1.10–1.60 depending on package).
-4. **MCU power during PoE mark events.** [`poe.md` section 6.3](../research/poe.md#63-the-bootstrap-problem) requires ≤ 4 mA total
+4. **MCU power during PoE mark events.** [`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem) requires ≤ 4 mA total
    during mark events. A CH32V307 running from its internal oscillator at low
    clock may or may not fit that. If it doesn't, add a CH32V003 (~$0.12) as a
    cold-start PoE controller that wakes the CH32V307 after power-on. That adds

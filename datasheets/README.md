@@ -119,7 +119,12 @@ For the G2401PR, the nearest match is the [Usakro UKG2401PR](components/Usakro_U
 
 ## Realtek (linked, not included)
 
-The Realtek datasheets are marked "CONFIDENTIAL: Development
+The current design uses no Realtek part. The notes in the
+[archive](../archive/README.md) cite these documents, and each YT9215 variant copies the
+pinout of an RTL8367 part
+([`motorcomm-debug-pins.md`](../research/motorcomm-debug-pins.md#the-three-variants-have-three-different-pinouts)).
+
+The Realtek datasheets found during the research are marked "CONFIDENTIAL: Development
 Partners Only" and say they may not be reproduced without Realtek's written permission.
 They are therefore linked, not copied into this repository.
 

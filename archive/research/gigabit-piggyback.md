@@ -1,5 +1,7 @@
 # Piggybacking on a gigabit link
 
+> **Archived.** This note is not part of the current design. It assumes an external MCU that has to reach a gigabit link passed through the adapter. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
+
 Question: can the adapter's MCU get onto (listen to, or send on) the
 passthrough gigabit link more cheaply than with the 3‑port switch from
 [`ethernet-switch.md`](ethernet-switch.md) (RTL8363NB + CH32V307, about **+$4.50** per unit over
@@ -113,7 +115,7 @@ What the host daemon does:
   passthrough, so `lldpd` on the host can advertise the adapter's request
   (`configure dot3 power pd supported enabled ... requested <mW>`) and pass
   the PSE's "allocated" answer back to the MCU, which then updates the PD
-  PDOs. This closes the gap [`poe.md` section 4.5](poe.md#45-lldp-data-link-layer-classification) noted ("passthrough has no PHY so
+  PDOs. This closes the gap [`poe.md` section 4.5](../../research/poe.md#45-lldp-data-link-layer-classification) noted ("passthrough has no PHY so
   cannot speak LLDP").
 * Firmware update of the adapter MCU from the host (DFU over the same link).
 
@@ -159,7 +161,7 @@ Trims worth bench‑testing:
    enough for LLDP and management. The RP2040 also does USB host or device for
    option A, and has the PIO to bit‑bang USB‑PD BMC. Costs: no hardware MAC
    (CPU does CRC and framing), higher idle current, which matters for the ≤ 4 mA
-   PoE mark‑event budget ([`poe.md` section 6.3](poe.md#63-the-bootstrap-problem)), so a CH32V003 cold‑start helper is
+   PoE mark‑event budget ([`poe.md` section 6.3](../../research/poe.md#63-the-bootstrap-problem)), so a CH32V003 cold‑start helper is
    likely needed (+$0.15). Net ≈ −$0.30 to −$0.45.
 3. **Stay on 4 layers.** Two GbE ports plus a QFN‑76 switch really wants
    controlled impedance; I wouldn't try to save the $0.25 here.
@@ -183,7 +185,7 @@ RTL8367S has an embedded 8051 in the same role, also undocumented.
 ### E. PoE‑layer signalling (what we already get for free)
 
 * PSE → PD: number of class events (power grant), first‑class‑event length
-  (PSE Type 1 or 2 versus Type 3 or 4), and Autoclass on bt. Already in [`poe.md` section 4](poe.md#4-the-negotiation-sequence-end-to-end).
+  (PSE Type 1 or 2 versus Type 3 or 4), and Autoclass on bt. Already in [`poe.md` section 4](../../research/poe.md#4-the-negotiation-sequence-end-to-end).
 * PD → PSE: the class signature only. A PD can also drop its MPS to get
   power removed and re‑detected, which is a crude one‑bit "reset me" signal.
 * No standard PSE carries data over the PoE DC. Any data‑over‑DC scheme would
@@ -279,7 +281,7 @@ The reasoning behind each row:
 * **[LAN Tap]** Throwing Star LAN Tap Pro (passive tap, 10/100 only): https://www.elektor.com/products/great-scott-gadgets-throwing-star-lan-tap-pro
 * RP2040 at LCSC (C2040), $0.73 @1k, 41,863 in stock: https://lcsc.com/product-detail/C2040.html
 * YT8531C‑CA at LCSC (C22472312), $0.79 @1k, 7,563 in stock: https://www.lcsc.com/product-detail/C22472312.html
-* Related project research: [`ethernet-switch.md`](ethernet-switch.md), [`poe.md`](poe.md), [`../design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md)
+* Related project research: [`ethernet-switch.md`](ethernet-switch.md), [`poe.md`](../../research/poe.md), [`../design/block-diagram-and-bom.md`](../design/block-diagram-and-bom.md)
 
 [Pi5 gadget]: https://blog.hardill.me.uk/2023/12/23/pi5-usb-c-gadget/
 [ADI]: https://wiki.analog.com/resources/eval/user-guides/adin1300-and-adin1200/cap-coupling

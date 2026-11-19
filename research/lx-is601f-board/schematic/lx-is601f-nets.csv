@@ -65,7 +65,7 @@ net,ref,pin,confidence,sheet
 +48V,L2,2,I,Power input and 3.3 V buck
 +48V,PU1,2,I,Power input and 3.3 V buck
 +48V,R7,1,I,Power input and 3.3 V buck
-+48V,U101,?1,U,PoE PSE module (daughterboard)
++48V,U201,?1,U,PoE PSE module (daughterboard)
 BUCK_BST,PC6,1,I,Power input and 3.3 V buck
 BUCK_BST,PU1,1,I,Power input and 3.3 V buck
 BUCK_EN,PU1,3,I,Power input and 3.3 V buck
@@ -80,12 +80,12 @@ BUCK_SW,D40,1,I,Power input and 3.3 V buck
 BUCK_SW,PC6,2,I,Power input and 3.3 V buck
 BUCK_SW,PL3,1,V,Power input and 3.3 V buck
 BUCK_SW,PU1,8,V,Power input and 3.3 V buck
-CHASSIS,J1A,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
-CHASSIS,J1B,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
-CHASSIS,J1C,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
-CHASSIS,J1D,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
-CHASSIS,J3,SH,U,Port 5 uplink and SFP
-CHASSIS,U12,CAGE,U,Port 5 uplink and SFP
+Earth_Protective,J1A,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
+Earth_Protective,J1B,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
+Earth_Protective,J1C,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
+Earth_Protective,J1D,SH,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
+Earth_Protective,J3,SH,U,Port 5 uplink and SFP
+Earth_Protective,U12,CAGE,U,Port 5 uplink and SFP
 FL_CS,R44,1,U,Switch IC YT9215SCH
 FL_CS,U6,1,U,Switch IC YT9215SCH
 FL_SCK,R93,1,U,Switch IC YT9215SCH
@@ -127,7 +127,6 @@ GND,U10,1,I,Switch IC YT9215SCH
 GND,U10,2,I,Switch IC YT9215SCH
 GND,U10,3,I,Switch IC YT9215SCH
 GND,U10,4,I,Switch IC YT9215SCH
-GND,U101,?5,U,PoE PSE module (daughterboard)
 GND,U12,1,U,Port 5 uplink and SFP
 GND,U12,10,U,Port 5 uplink and SFP
 GND,U12,11,U,Port 5 uplink and SFP
@@ -135,6 +134,7 @@ GND,U12,14,U,Port 5 uplink and SFP
 GND,U12,17,U,Port 5 uplink and SFP
 GND,U12,20,U,Port 5 uplink and SFP
 GND,U12,9,U,Port 5 uplink and SFP
+GND,U201,?5,U,PoE PSE module (daughterboard)
 GND,U4,11,I,Switch IC YT9215SCH
 GND,U4,117,I,Switch IC YT9215SCH
 GND,U4,129,I,Switch IC YT9215SCH
@@ -434,30 +434,30 @@ POE7,J4,7,U,PoE PSE module (daughterboard)
 POE8,DXFRM5,21,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
 POE8,J4,8,U,PoE PSE module (daughterboard)
 POE9,DXFRM6,24,U,Port 5 uplink and SFP
-POE_OUT1,D101,1,U,PoE PSE module (daughterboard)
-POE_OUT1,R103,1,U,PoE PSE module (daughterboard)
-POE_OUT1,U101,?10,U,PoE PSE module (daughterboard)
-POE_OUT2,D103,1,U,PoE PSE module (daughterboard)
-POE_OUT2,R109,1,U,PoE PSE module (daughterboard)
-POE_OUT2,U101,?20,U,PoE PSE module (daughterboard)
-POE_OUT3,D105,1,U,PoE PSE module (daughterboard)
-POE_OUT3,R110,1,U,PoE PSE module (daughterboard)
-POE_OUT3,U101,?30,U,PoE PSE module (daughterboard)
-POE_OUT4,D107,1,U,PoE PSE module (daughterboard)
-POE_OUT4,R111,1,U,PoE PSE module (daughterboard)
-POE_OUT4,U101,?40,U,PoE PSE module (daughterboard)
-POE_RTN,R108,2,U,PoE PSE module (daughterboard)
-POE_RTN,R112,2,U,PoE PSE module (daughterboard)
-POE_RTN,R113,2,U,PoE PSE module (daughterboard)
-POE_RTN,R114,2,U,PoE PSE module (daughterboard)
-POE_SNS1,R108,1,U,PoE PSE module (daughterboard)
-POE_SNS1,U101,?11,U,PoE PSE module (daughterboard)
-POE_SNS2,R112,1,U,PoE PSE module (daughterboard)
-POE_SNS2,U101,?21,U,PoE PSE module (daughterboard)
-POE_SNS3,R113,1,U,PoE PSE module (daughterboard)
-POE_SNS3,U101,?31,U,PoE PSE module (daughterboard)
-POE_SNS4,R114,1,U,PoE PSE module (daughterboard)
-POE_SNS4,U101,?41,U,PoE PSE module (daughterboard)
+POE_OUT1,D201,1,U,PoE PSE module (daughterboard)
+POE_OUT1,R203,1,U,PoE PSE module (daughterboard)
+POE_OUT1,U201,?10,U,PoE PSE module (daughterboard)
+POE_OUT2,D203,1,U,PoE PSE module (daughterboard)
+POE_OUT2,R209,1,U,PoE PSE module (daughterboard)
+POE_OUT2,U201,?20,U,PoE PSE module (daughterboard)
+POE_OUT3,D205,1,U,PoE PSE module (daughterboard)
+POE_OUT3,R210,1,U,PoE PSE module (daughterboard)
+POE_OUT3,U201,?30,U,PoE PSE module (daughterboard)
+POE_OUT4,D207,1,U,PoE PSE module (daughterboard)
+POE_OUT4,R211,1,U,PoE PSE module (daughterboard)
+POE_OUT4,U201,?40,U,PoE PSE module (daughterboard)
+POE_RTN,R208,2,U,PoE PSE module (daughterboard)
+POE_RTN,R212,2,U,PoE PSE module (daughterboard)
+POE_RTN,R213,2,U,PoE PSE module (daughterboard)
+POE_RTN,R214,2,U,PoE PSE module (daughterboard)
+POE_SNS1,R208,1,U,PoE PSE module (daughterboard)
+POE_SNS1,U201,?11,U,PoE PSE module (daughterboard)
+POE_SNS2,R212,1,U,PoE PSE module (daughterboard)
+POE_SNS2,U201,?21,U,PoE PSE module (daughterboard)
+POE_SNS3,R213,1,U,PoE PSE module (daughterboard)
+POE_SNS3,U201,?31,U,PoE PSE module (daughterboard)
+POE_SNS4,R214,1,U,PoE PSE module (daughterboard)
+POE_SNS4,U201,?41,U,PoE PSE module (daughterboard)
 RBIAS,U4,12,I,Switch IC YT9215SCH
 SDS0_RXN,U12,12,U,Port 5 uplink and SFP
 SDS0_RXN,U4,42,U,Switch IC YT9215SCH
@@ -496,10 +496,10 @@ TBD_LED7_A,LED7,2,U,Port LEDs
 TBD_LED7_K,LED7,1,U,Port LEDs
 TBD_LED8_A,LED8,2,U,Port LEDs
 TBD_LED8_K,LED8,1,U,Port LEDs
-TBD_MOD_R10,R110,2,U,PoE PSE module (daughterboard)
-TBD_MOD_R11,R111,2,U,PoE PSE module (daughterboard)
-TBD_MOD_R3,R103,2,U,PoE PSE module (daughterboard)
-TBD_MOD_R9,R109,2,U,PoE PSE module (daughterboard)
+TBD_MOD_R10,R210,2,U,PoE PSE module (daughterboard)
+TBD_MOD_R11,R211,2,U,PoE PSE module (daughterboard)
+TBD_MOD_R3,R203,2,U,PoE PSE module (daughterboard)
+TBD_MOD_R9,R209,2,U,PoE PSE module (daughterboard)
 TBD_P0_ESD_VP,ED1,5,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
 TBD_P0_ESD_VP,ED10,5,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
 TBD_P1_ESD_VP,ED2,5,U,"Ports 1-4 (PoE): magnetics, ESD, RJ45"
@@ -518,9 +518,9 @@ TBD_POW3,LED113,1,U,Port LEDs
 TBD_POW4,LED114,1,U,Port LEDs
 TBD_POW5,LED115,1,U,Port LEDs
 TBD_POW6,LED116,1,U,Port LEDs
-TBD_PSE_IO1,U101,?3,U,PoE PSE module (daughterboard)
-TBD_PSE_IO2,U101,?4,U,PoE PSE module (daughterboard)
-TBD_PSE_VDD,U101,?2,U,PoE PSE module (daughterboard)
+TBD_PSE_IO1,U201,?3,U,PoE PSE module (daughterboard)
+TBD_PSE_IO2,U201,?4,U,PoE PSE module (daughterboard)
+TBD_PSE_VDD,U201,?2,U,PoE PSE module (daughterboard)
 TBD_R11_1,R11,1,U,Power input and 3.3 V buck
 TBD_R11_2,R11,2,U,Power input and 3.3 V buck
 TBD_R68_1,R68,1,U,Port LEDs
@@ -532,10 +532,10 @@ TBD_SFP_SCL,U12,5,U,Port 5 uplink and SFP
 TBD_SFP_SDA,U12,4,U,Port 5 uplink and SFP
 TBD_SFP_TXDIS,U12,3,U,Port 5 uplink and SFP
 TBD_SFP_TXFAULT,U12,2,U,Port 5 uplink and SFP
-TBD_TVS1,D101,2,U,PoE PSE module (daughterboard)
-TBD_TVS2,D103,2,U,PoE PSE module (daughterboard)
-TBD_TVS3,D105,2,U,PoE PSE module (daughterboard)
-TBD_TVS4,D107,2,U,PoE PSE module (daughterboard)
+TBD_TVS1,D201,2,U,PoE PSE module (daughterboard)
+TBD_TVS2,D203,2,U,PoE PSE module (daughterboard)
+TBD_TVS3,D205,2,U,PoE PSE module (daughterboard)
+TBD_TVS4,D207,2,U,PoE PSE module (daughterboard)
 TBD_U10_WP,U10,7,U,Switch IC YT9215SCH
 TBD_U4_44,U4,44,U,Switch IC YT9215SCH
 TBD_U4_48,U4,48,U,Switch IC YT9215SCH

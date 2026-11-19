@@ -411,12 +411,12 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=185, h=10
     s.wire([(xt, t.p('1')[1]), (xt, t.p('10')[1] + m(5.08))], 'U')
     s.label('P%d_TCT' % p, (xt, t.p('10')[1] + m(5.08)), (0, 1))
     j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(157.48), y0 + m(45), mirror='y',
-                ref_at=(x0 + m(165.1), y0 + m(25.4)), val_at=(x0 + m(165.1), y0 + m(27.94)), center=set())
+                ref_at=(x0 + m(152.4), y0 + m(25.4)), val_at=(x0 + m(152.4), y0 + m(27.94)), center=set())
     for tp, jp in [('23', '1'), ('22', '2'), ('20', '3'), ('19', '6'), ('17', '4'), ('16', '5'), ('14', '7'), ('13', '8')]:
         s.stub(t, tp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
         s.stub(j, jp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
     sh = j.p('SH'); s.wire([sh, (sh[0], sh[1] + G)], 'U'); s.power('Earth_Protective', sh[0], sh[1] + G, lib_name='Earth_Protective')
-    s.mark(j, 'SH', 'CHASSIS', 'U')
+    s.mark(j, 'SH', 'Earth_Protective', 'U')
     for pin, net in (('24', 'POE%d' % poe_base), ('21', 'POE%d' % (poe_base + 1)), ('18', 'P%d_CT45' % p), ('15', 'P%d_CT78' % p)):
         s.stub(t, pin, net, 'U', length=m(10.16))
     for k, ed in enumerate(eds):
@@ -455,7 +455,10 @@ s.textbox('Notes: PoE assumed on the centre taps of pairs 1-2 / 3-6 (POE odd/eve
 s = upl
 port_block(s, 4, 'DXFRM6', 'J3', 'RJ45 uplink (no PoE)', ('ED8', 'ED9'), m(12.7), m(15), 9, 'Port 5 (uplink): U4 P4 -> DXFRM6 -> J3')
 s.frame(m(220), m(15), m(330), m(135), 'SFP: U12')
-sfp = s.place('Interface_Optical:SFP', 'U12', 'SFP host connector', m(275), m(70))
+# The library draws the CAGE pin number at 0.5 mm; enlarge it so it can be read.
+from kisch import parse, dump, load_lib_symbol
+sfp_node = parse(dump(load_lib_symbol('Interface_Optical', 'SFP')).replace('(size 0.508 0.508)', '(size 1.016 1.016)'))[0]
+sfp = s.place('Interface_Optical:SFP', 'U12', 'SFP host connector', m(275), m(70), node=sfp_node)
 for n, net, sh in (('18', 'SDS0_TXP', 'input'), ('19', 'SDS0_TXN', 'input'), ('13', 'SDS0_RXP', 'output'), ('12', 'SDS0_RXN', 'output')):
     s.stub(sfp, n, net, 'U', length=m(12.7), kind='hier', shape=sh)
 for n, net in (('2', 'TBD_SFP_TXFAULT'), ('8', 'TBD_SFP_LOS'), ('3', 'TBD_SFP_TXDIS'), ('4', 'TBD_SFP_SDA'), ('5', 'TBD_SFP_SCL'),
@@ -469,7 +472,7 @@ for n in ('9', '11', '14', '17', '20'):
 b1, b10 = sfp.p('1'), sfp.p('10'); yg = max(b1[1], b10[1]) + m(2.54)
 s.wire([b1, (b1[0], yg)], 'U'); s.wire([b10, (b10[0], yg)], 'U'); s.wire([(b1[0], yg), (b10[0], yg)], 'U')
 s.power('GND', max(b1[0], b10[0]), yg); s.mark(sfp, '1', 'GND', 'U'); s.mark(sfp, '10', 'GND', 'U')
-s.mark(sfp, 'CAGE', 'CHASSIS', 'U')
+s.mark(sfp, 'CAGE', 'Earth_Protective', 'U')
 c = sfp.p('CAGE'); ye = c[1] + m(7.62); xe = c[0] - m(7.62)
 s.wire([c, (c[0], ye), (xe, ye)], 'U'); s.power('Earth_Protective', xe, ye, lib_name='Earth_Protective')
 s.textbox('U12 is a 20-pin SFP edge connector; one board has the cage fitted.\nAC-coupling caps, I2C and status pins are not traced.', m(225), m(110), m(100))
@@ -488,11 +491,11 @@ for k in range(8):
     s.wire([(XB + G, q[1]), q], 'U'); s.label('POE%d' % (k + 1), (XB + 2 * G, q[1]), (1, 0)); s.mark(pin1, str(k + 1), 'POE%d' % (k + 1), 'U')
 s.textbox('Silk "PIN1": 8-pin row along J1.\nAssumed to carry the 4 ports\' PoE\ncentre-tap feeds. Needs a\ncontinuity check to J1.', m(17.78), m(90), m(52))
 s.frame(m(80), m(15), m(284), m(155), 'PoE PSE module (separate PCB)')
-pse = s.place('lxr:PSE_2184A', 'U101', '2184A', m(115), m(70), node=pse_symbol(), fields={'Silk': 'U1 (module)'})
+pse = s.place('lxr:PSE_2184A', 'U201', '2184A', m(115), m(70), node=pse_symbol(), fields={'Silk': 'U1 (module)'})
 s.pin_power(pse, '?1', '+48V', 'U'); s.stub(pse, '?2', 'TBD_PSE_VDD', 'U', length=m(7.62))
 s.stub(pse, '?3', 'TBD_PSE_IO1', 'U', length=m(7.62)); s.stub(pse, '?4', 'TBD_PSE_IO2', 'U', length=m(7.62)); s.pin_power(pse, '?5', 'GND', 'U')
-chans = [('R108', 'R8', 'R103', 'R3', 'D101', 'D1'), ('R112', 'R12', 'R109', 'R9', 'D103', 'D3'),
-         ('R113', 'R13', 'R110', 'R10', 'D105', 'D5'), ('R114', 'R14', 'R111', 'R11', 'D107', 'D7')]
+chans = [('R208', 'R8', 'R203', 'R3', 'D201', 'D1'), ('R212', 'R12', 'R209', 'R9', 'D203', 'D3'),
+         ('R213', 'R13', 'R210', 'R10', 'D205', 'D5'), ('R214', 'R14', 'R211', 'R11', 'D207', 'D7')]
 for ch, (rs, rss, rd, rds, dd, dds) in enumerate(chans, 1):
     po = pse.p('?%d0' % ch); se = pse.p('?%d1' % ch)
     rdp = two(s, 'Device:R', rd, '33R', m(170), po[1], True, fields={'Silk': rds + ' (module)'})
@@ -507,7 +510,7 @@ for ch, (rs, rss, rd, rds, dd, dds) in enumerate(chans, 1):
     s.stub(dv, '1', 'POE_OUT%d' % ch, 'U', length=m(7.62)); s.stub(dv, '2', 'TBD_TVS%d' % ch, 'U', length=m(7.62))
 s.textbox('- U1 (QFN-48) marked "2184A 533AQ1H": maker not identified (IP804AR is the\n  closest public 4-port PSE in QFN-48 7x7).\n'
           '- Per channel: 0.25 Ohm "R250" sense (R8, R12, R13, R14), 33 Ohm "330" (R3, R9,\n  R10, R11), SMB TVS "RGS" (D1, D3, D5, D7; one more next to C7).\n'
-          '- The module silk reuses mainboard reference numbers, so its parts are\n  renumbered here (R1xx, D1xx, U101); the "Silk" field keeps the silk name.\n'
+          '- The module silk reuses mainboard reference numbers, so its parts are\n  renumbered here (R2xx, D2xx, U201); the "Silk" field keeps the silk name.\n'
           '- The topology is a guess. How the module gets 48 V and GND is unknown.', m(82), m(130), m(120), m(30), size=1.1)
 
 # ---------------------------------------------------------------- LEDS
@@ -636,7 +639,7 @@ def netlist_check(tmp):
     out = os.path.join(tmp, 'check.net')
     subprocess.run(['kicad-cli', 'sch', 'export', 'netlist', '-o', out, os.path.join(HERE, root.fname)],
                    check=True, capture_output=True)
-    from kisch import parse, find
+    from kisch import find
     nl = parse(open(out).read())[0]
     actual = {}
     for net in find(find(nl, 'nets')[0], 'net'):
@@ -653,7 +656,10 @@ def netlist_check(tmp):
         m2k[mn].add(kn); k2m[kn].add(mn)
     bad = {m: k for m, k in m2k.items() if len(k) != 1 or None in k}
     bad2 = {k: m for k, m in k2m.items() if len(m) != 1}
-    print('netlist check: %d model nets, %d split/missing, %d merged' % (len(m2k), len(bad), len(bad2)))
+    rails = {m: k for m, k in m2k.items() if m[0] in '+G' and m not in k and '/' + m not in k and len(k) == 1}
+    print('netlist check: %d model nets, %d split/missing, %d merged, %d misnamed rails' % (len(m2k), len(bad), len(bad2), len(rails)))
+    for m, k in rails.items():
+        print('  MISNAMED', m, k)
     for m, k in list(bad.items())[:20]:
         print('  SPLIT', m, k)
     for k, m in list(bad2.items())[:20]:
@@ -661,14 +667,14 @@ def netlist_check(tmp):
 
 
 def clear_margin(png, paper):
-    """True when the 10 mm band inside the page border and around the title block holds no ink."""
+    """True when the 10 mm band inside the inner border line and around the title block holds no ink."""
     from PIL import Image, ImageChops
     im = Image.open(png).convert('RGB')
     W, H = Sheet.PAPER[paper]
     k = im.size[0] / W
     tb = (W - 10 - 110, H - 10 - 34)          # top-left corner of the title block
-    bands = [(12.6, 12.6, W - 12.6, 20), (12.6, 12.6, 20, H - 12.6), (12.6, H - 20, tb[0] - 10, H - 12.6),
-             (W - 20, 12.6, W - 12.6, tb[1] - 10), (tb[0] - 10, tb[1] - 10, tb[0] - 0.6, H - 12.6),
+    bands = [(12.6, 12.6, W - 12.6, 22), (12.6, 12.6, 22, H - 12.6), (12.6, H - 22, tb[0] - 10, H - 12.6),
+             (W - 22, 12.6, W - 12.6, tb[1] - 10), (tb[0] - 10, tb[1] - 10, tb[0] - 0.6, H - 12.6),
              (tb[0] - 10, tb[1] - 10, W - 12.6, tb[1] - 0.6)]
     for x0, y0, x1, y1 in bands:
         c = im.crop((round(x0 * k), round(y0 * k), round(x1 * k), round(y1 * k)))

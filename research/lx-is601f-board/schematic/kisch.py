@@ -320,6 +320,12 @@ class Sheet:
         """Place a power port with its pin at (x, y). GND-like ports point down."""
         lib_name = lib_name or {'GND': 'GND', 'CHASSIS': 'Earth_Protective'}.get(name, None)
         lid = 'power:' + (lib_name or name)
+        if lib_name and lib_name not in (name, 'PWR_FLAG', 'Earth_Protective'):
+            # A rail the library lacks: copy a library port and give its pin the rail's
+            # name, because KiCad names the net after the pin, not after the Value.
+            node = parse(dump(load_lib_symbol('power', lib_name)).replace(lib_name, name))[0]
+            lid, lib_name = 'power:' + name, name
+            self.use(lid, node)
         self.use(lid)
         n = len([s for s in self.symbols if s['lib_id'].startswith('power:')]) + 1
         props = {p[1]: p for p in find(self.lib[lid], 'property')}
@@ -539,9 +545,9 @@ class Sheet:
     # page padding -------------------------------------------------------
     PAPER = {'A4': (297, 210), 'A3': (420, 297), 'A2': (594, 420), 'A1': (841, 594)}
     MARGIN = 10.0                     # clear space inside the page border (mm)
-    BORDER = 10.0                     # KiCad's drawing border inset (mm)
-    TITLE_BLOCK = (120.0, 44.0)       # title block footprint incl. its border gap (mm)
-    offset = (10.16, 7.62)            # everything is drawn this far right/down
+    BORDER = 12.0                     # inner line of KiCad's drawing border (mm)
+    TITLE_BLOCK = (108.0, 32.0)       # title block, measured from the inner border line (mm)
+    offset = (10.16, 10.16)           # everything is drawn this far right/down
 
     def _shift(self, out):
         dx, dy = self.offset

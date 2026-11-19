@@ -29,7 +29,7 @@ def font(size, bold=True):
 
 def topx(n):
     """x of the lead of pin n on the top edge (pins 65 to 96)."""
-    return 2430 - 38.4 * (n - 65)
+    return 2437 - 38.4 * (n - 65)
 
 
 def righty(n):
@@ -80,8 +80,8 @@ src = Image.open(SP + 'photo-u4-macro.jpg').convert('RGB')
 # ---------- the whole package: pin 1 and the pin range of each side ----------
 c = Crop(src, (900, 1130, 2800, 2960), darken=90)
 big, mid = font(64), font(50)
-c.ring(1320, 2530, WHITE, r=72, width=6)
-c.text(1410, 2530, 'pin-1 dimple', mid, WHITE, 'lm', 4)
+c.ring(1345, 2557, WHITE, r=72, width=6)
+c.text(1435, 2557, 'pin-1 dimple', mid, WHITE, 'lm', 4)
 c.text((1240 + 2430) / 2, 2655, 'pins 1 to 32', big, WHITE, 'mm', 4)
 c.text(2390, (1486 + 2670) / 2, 'pins 33 to 64', big, WHITE, 'rm', 4)
 c.text((1240 + 2430) / 2, 1500, 'pins 65 to 96', big, WHITE, 'mm', 4)
@@ -95,7 +95,7 @@ c.save('u4-pin-numbering-annotated.png')
 c = Crop(src, (1180, 580, 2540, 2130))
 fp = font(30)
 TOP = [  # pin, text, colour
-    (67, '67  JTAG1_TDO* — no trace', JTAG),
+    (67, '67  JTAG1_TDO* — no visible trace', JTAG),
     (70, '70  UART1_RX · DIS_SPIS', UART),
     (72, '72  JTAG0_TMS* (P4LED1)', JTAG),
     (73, '73  JTAG0_TCK* (P3LED1)', JTAG),
@@ -104,13 +104,13 @@ TOP = [  # pin, text, colour
     (76, '76  UART1_TX · DIS_MCU strap', UART),
     (77, '77  DISAUTOLOAD strap (P2LED0)', STRAP),
     (78, '78  SPF1_SO (P2LED1)', SPI),
-    (79, '79  SPF1_SI — no trace', SPI),
+    (79, '79  SPF1_SI — no visible trace', SPI),
     (81, '81  SPF1_CS · JTAG1_TMS*', SPI),
     (83, '83  SPF1_SCK · JTAG1_TCK* · EN_PHY', SPI),
     (84, '84  JTAG1_TDI* (LED_DA)', JTAG),
     (87, '87  XTALO', REF), (88, '88  XTALI', REF),
     (89, '89  nRESET', REF),
-    (90, '90  JTAG0_TDO* — no trace', JTAG),
+    (90, '90  JTAG0_TDO* — no visible trace', JTAG),
     (91, '91  SCL / MDC', I2C), (92, '92  SDA / MDIO', I2C),
 ]
 for n, t, col in TOP:
@@ -120,11 +120,11 @@ for n, t, col in TOP:
     c.vtext(x, 1418, t, fp, col)
 fs = font(34)
 c.text(2430, 1232, '65', fs, WHITE, 'mm'); c.text(1240, 1232, '96', fs, WHITE, 'mm')
-VIAS = [(80, 1925, 1030, OTHER, -8, -40), (77, 2022, 1065, STRAP, 0, 42), (76, 2087, 1005, UART, 0, -40),
-        (75, 2142, 1047, STRAP, 0, 42), (74, 2197, 1002, JTAG, 0, -40), (70, 2380, 1067, UART, 46, 0),
-        (78, 2102, 702, SPI, 46, 0), (81, 2025, 630, SPI, -46, 0),
-        (85, 1644, 1136, OTHER, -44, 8), (84, 1664, 1064, JTAG, -46, -10), (83, 1720, 1022, SPI, 46, -6),
-        (92, 1430, 1057, I2C, -6, -42), (91, 1410, 1112, I2C, -46, 6), (89, 1433, 682, REF, -46, 0)]
+VIAS = [(80, 1927, 1035, OTHER, -8, -40), (77, 2022, 1075, STRAP, 0, 42), (76, 2089, 1011, UART, 0, -40),
+        (75, 2142, 1052, STRAP, 0, 42), (74, 2199, 1007, JTAG, 0, -40), (70, 2380, 1077, UART, 46, 0),
+        (78, 2105, 714, SPI, 46, 0), (81, 2028, 647, SPI, -46, 0),
+        (85, 1647, 1136, OTHER, -44, 8), (84, 1670, 1075, JTAG, -46, -10), (83, 1722, 1035, SPI, 46, -6),
+        (92, 1435, 1062, I2C, -6, -42), (91, 1413, 1118, I2C, -46, 6), (89, 1429, 701, REF, -46, 0)]
 for n, x, y, col, dx, dy in VIAS:
     c.ring(x, y, col)
     c.text(x + dx, y + dy, str(n), fs, col, 'mm')
@@ -135,7 +135,7 @@ c = Crop(src, (1540, 1740, 3072, 2260))
 RIGHT = [
     (55, 'SPF0_CS → R44   55', SPI), (54, 'SPF0_SO → R89   54', SPI),
     (50, 'SPF0_SI → R92   50', SPI), (49, 'SPF0_SCK · SPF_MUX_SEL strap → R93   49', SPI),
-    (47, 'UART0_TX — no trace   47', UART), (46, 'UART0_RX — no trace   46', UART),
+    (47, 'UART0_TX — no visible trace   47', UART), (46, 'UART0_RX — no visible trace   46', UART),
 ]
 for n, t, col in RIGHT:
     y = righty(n)

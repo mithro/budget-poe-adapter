@@ -9,7 +9,7 @@ import glob
 import os
 import re
 
-import diagrams
+import wavedrom_diagrams
 import model as M
 
 #: Document name prefix of the documentation inside the Sphinx project.
@@ -271,35 +271,32 @@ def range_text(first, count):
 
 # ----------------------------------------------------------------- diagrams
 
-def diagram_fields(m, reg, family=None, layout=None, href=None):
-    """Boxes of the register diagram of one register."""
-    out = []
+def register_diagram(m, reg, family=None, layout=None):
+    """WaveDrom sources of the diagram of one register, the highest word first.
 
-    def add(f, lay, cls):
+    Each source comes with the ``(label, tooltip)`` of its named fields,
+    lowest bit first."""
+    fields = []
+
+    def add(f, lay, kind):
         sym = M.fsym(reg, f, lay)
-        base = {"cls": cls, "href": href(field_label(sym)) if href else None,
-                "tip": "%s: %s" % (M.fdisplay(f), M.plain(f["desc"]))}
+        link = (field_label(sym), "%s: %s" % (M.fdisplay(f), M.plain(f["desc"])))
         if f.get("array") and not M.packed(f):
             for idx, lsb, width in M.elems(f):
                 name = f["name"] + "".join("[%d]" % i for i in idx)
-                out.append(dict(base, name=name, lsb=lsb, width=width))
+                fields.append({"name": name, "lsb": lsb, "width": width, "type": kind, "link": link})
             return
-        ticks = [lsb for _, lsb, _ in M.elems(f)] if f.get("array") else ()
-        out.append(dict(base, name=M.fdisplay(f), lsb=f["lsb"], width=f["width"], ticks=ticks))
+        fields.append({"name": M.fdisplay(f), "lsb": f["lsb"], "width": f["width"], "type": kind,
+                       "link": link})
 
     for f in M.visible_fields(reg, family):
-        add(f, None, "yt-ro" if f["access"] == "ro" else "")
+        add(f, None, wavedrom_diagrams.TYPE_READ_ONLY if f["access"] == "ro" else None)
     if layout is not None:
         for f in M.visible_fields(reg, family, layout):
             if f.get("key_only") and reg["id"] != "ACL_KEY":
                 continue
-            add(f, layout, "yt-alt")
-    return out
-
-
-def bitfield_svg(m, reg, family=None, layout=None, href=None):
-    label = "Bit fields of " + reg["id"]
-    return diagrams.bitfield(label, reg["words"], diagram_fields(m, reg, family, layout, href))
+            add(f, layout, wavedrom_diagrams.TYPE_LAYOUT)
+    return wavedrom_diagrams.register(fields, 32 * reg["words"])
 
 
 # -------------------------------------------------------------- guide scan
@@ -682,8 +679,30 @@ def index_page(m):
     out += heading("Register reference", "=")
     out += [
         "The reference describes every register of this manual, grouped by function. Each "
-        "register has its address, a bit diagram, a field table and its sources. The fields in "
-        "a diagram are links to their descriptions.",
+        "register has its address, a bit diagram, a field table and its sources.",
+        "",
+        "`WaveDrom <https://wavedrom.com/>`__ draws the bit diagrams from the "
+        ":ref:`register description <description-files-yaml>`. "
+        "A diagram has the highest bit on the left and 32 bits in a row. The name of a field "
+        "is a link to its description. The :ref:`shading table <legend-diagram>` gives the "
+        "meaning of the background of a field.",
+        "",
+        ".. _legend-diagram:",
+        "",
+        ".. list-table::",
+        "   :header-rows: 1",
+        "   :widths: 30 70",
+        "",
+        "   * - Background",
+        "     - Bits",
+        "   * - white",
+        "     - :ref:`read-write <legend-access>` field",
+        "   * - green",
+        "     - :ref:`read-only <legend-access>` field",
+        "   * - blue",
+        "     - field of a :ref:`layout <acl-key>`",
+        "   * - grey",
+        "     - no field",
         "",
         "Three columns of the register pages use fixed words. Each word in a table is a link to "
         "its definition: :ref:`legend-access` for the Access column, :ref:`evidence` for the "

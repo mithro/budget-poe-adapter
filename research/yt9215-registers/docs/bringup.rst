@@ -38,8 +38,19 @@ that its device tree node gives.
 Reset
 -----
 
-.. yt-diagram:: reset-sequence
-   :caption: Reset followed by identification.
+.. wavedrom::
+   :caption: Reset followed by identification. Time runs from left to right, and the switch
+             supplies the green values. The last read stands for the read of byte 0xfb of the
+             configuration byte store.
+
+   {"signal": [
+     {"name": "Host", "period": 0.5, "wave": "=...=...=...=......=....=.....=......",
+      "data": ["write", "wait", "read", "read", "read", "read", "read"]},
+     {"name": "Register", "period": 0.5, "wave": "=...x...=...=......=....=.....=......",
+      "data": ["RST", "RST", "CPU_TAG_TPID", "CHIP_ID", "CHIP_MODE", "EDATA_DATA"]},
+     {"name": "Value", "period": 0.5, "wave": "=...=...7...7......7....7.....7......",
+      "data": ["HW = 1", "10 ms", "until 0", "0x9988", "family", "mode", "extended mode"]}
+   ]}
 
 1. Write :reg:`RST` with only :field:`RST.HW` set.
 2. Wait 10 ms (:const:`RST_DELAY_US`).
@@ -80,8 +91,18 @@ bytes inside the chip. The extended mode is the byte at address ``0xfb``
 (:const:`EDATA_EXTMODE`). The Linux driver only reads the store, in :lx:`yt921x_edata_read`,
 and no source describes a write.
 
-.. yt-diagram:: edata-sequence
-   :caption: Reading one byte of the configuration byte store.
+.. wavedrom::
+   :caption: Reading one byte of the configuration byte store. Time runs from left to right, and
+             the switch supplies the green values.
+
+   {"signal": [
+     {"name": "Host", "period": 0.5, "wave": "=........=.......=............",
+      "data": ["read", "write", "read"]},
+     {"name": "Register", "period": 0.5, "wave": "=........=.......=............",
+      "data": ["EDATA_DATA", "EDATA_CTRL", "EDATA_DATA"]},
+     {"name": "Value", "period": 0.5, "wave": "7........=.......7........7...",
+      "data": ["until STATUS = IDLE", "ADDR, OP = READ", "until STATUS = IDLE", "DATA"]}
+   ]}
 
 1. Read :reg:`EDATA_DATA` until :field:`EDATA_DATA.STATUS` is
    :val:`EDATA_DATA.STATUS.IDLE`.

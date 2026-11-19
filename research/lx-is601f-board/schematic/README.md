@@ -266,11 +266,11 @@ These would let most I and U nets become V.
 | 8 | U12 | 18 | U4 | 31–42 | SerDes for TD+ |
 | 8 | U12 | 19 | U4 | 31–42 | SerDes for TD- |
 | 9 | RJ7–RJ18 | Cathode | U4 | 67–85 | LED pin mapping |
-| 10 | U4 | 46 | Every net | – | Hidden route under the package |
-| 10 | U4 | 47 | Every net | – | Hidden route under the package |
-| 10 | U4 | 67 | Every net | – | Hidden route under the package |
-| 10 | U4 | 79 | Every net | – | Hidden route under the package |
-| 10 | U4 | 90 | Every net | – | Hidden route under the package |
+| 10 | U4 | 46 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 47 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 67 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 79 | Nearby vias | Every via | Hidden route under the package |
+| 10 | U4 | 90 | Nearby vias | Every via | Hidden route under the package |
 
 Check 8 may pass through AC-coupling capacitors, so probe both sides of any capacitor on the way.
 

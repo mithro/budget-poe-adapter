@@ -175,7 +175,7 @@ The levels of pins <a href="#lx-pin-46">46</a> and <a href="#lx-pin-47">47</a> a
 <a id="lx-level-reasons"></a>
 
 - The [datasheet, page 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) says RESERVED_0 (pin <a href="#lx-pin-47">47</a>), RESERVED_1 (pin <a href="#lx-pin-48">48</a>) and RESERVED_2 (pin <a href="#lx-pin-50">50</a>) must each be pulled high through an external
-  4.7 kΩ resistor. Pin <a href="#lx-pin-47">47</a> has no external part at all, so on this board it relies on its internal pull-up.
+  4.7 kΩ resistor. Pin <a href="#lx-pin-47">47</a> has no visible external part, so on this board it is taken to rely on its internal pull-up.
 - <a href="#lx-r44">R44</a>, <a href="#lx-r89">R89</a>, <a href="#lx-r92">R92</a> and <a href="#lx-r93">R93</a> sit on pins <a href="#lx-pin-55">55</a>, <a href="#lx-pin-54">54</a>, <a href="#lx-pin-50">50</a> and <a href="#lx-pin-49">49</a>,
   which are the four [SPF0 flash pins, page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25). Where their far pads go is not traced, so it is not known whether
   they are pull-ups or series resistors to the empty <a href="#lx-u6">U6</a> footprint. SPF_MUX_SEL only matters when EN_SPIF
@@ -450,6 +450,8 @@ Each photo is embedded in this section, except the annotated strap array, which 
 | 4 | Continuity | Inner pads of <a href="#lx-r59">R59</a> | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-85">85</a> | <a href="#lx-inference-pin-order">Pin order</a> |
 | 5 | Register read of [`PON_STRAP_CAP`](yt9215-registers/docs/reference/system.rst) | Management interface | Address 0x80328 | Levels sampled at power-on |
 | 6 | EEPROM read with a clip | <a href="#lx-u10">U10</a> | All 8 Kbit | Registers loaded at reset |
+| 7 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-46">46</a> | Every nearby via | No hidden route from the pad |
+| 7 | Continuity | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-47">47</a> | Every nearby via | No hidden route from the pad |
 
 Check 5 is not certain to work as written. The register name and address come from the Linux driver, as recorded in the
 [register reference](yt9215-registers/docs/reference/system.rst); neither datasheet lists it, and the bit positions of the strap pins on this board are not documented. With DIS_SPIS (pin <a href="#lx-pin-70">70</a>) = 1 and SMI_SEL (pin <a href="#lx-pin-85">85</a>) = 1,

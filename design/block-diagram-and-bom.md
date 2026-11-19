@@ -23,11 +23,11 @@ signalling has three priced builds, each with its own BOM table: a
 <!-- BEGIN totals -->
 | Option | CC interface | Parts cost | Placements | Line items | PCB estimate | Assembly estimate | Total |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | $6.75 | 129 | 42 | $0.40 | $1.10 | $8.25 |
-| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | $6.60 | 145 | 48 | $0.40 | $1.10 | $8.10 |
-| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | $6.63 | 151 | 49 | $0.40 | $1.10 | $8.13 |
-| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | $8.18 | 151 | 42 | $0.50 | $1.30 | $9.98 |
-| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | $7.85 | 180 | 48 | $0.50 | $1.30 | $9.65 |
+| [A](#option-a) | [PD transceiver](#block-cc-transceiver) | $6.80 | 131 | 43 | $0.40 | $1.10 | $8.30 |
+| [A](#option-a) | [GPIO bit-bang](#block-cc-bit-bang) | $6.65 | 146 | 50 | $0.40 | $1.10 | $8.15 |
+| [A](#option-a) | [Port 9 MAC](#block-cc-mac) | $6.68 | 152 | 51 | $0.40 | $1.10 | $8.18 |
+| [B](#option-b) | [PD transceiver](#block-cc-transceiver) | $8.24 | 155 | 43 | $0.50 | $1.30 | $10.04 |
+| [B](#option-b) | [GPIO bit-bang](#block-cc-bit-bang) | $7.90 | 182 | 50 | $0.50 | $1.30 | $9.70 |
 | [B](#option-b) | [Port 9 MAC](#block-cc-mac) | – | – | – | – | – | – |
 <!-- END totals -->
 
@@ -37,10 +37,10 @@ signalling has three priced builds, each with its own BOM table: a
 - The PCB and assembly columns are estimates [**I**](#evidence-codes) and are not BOM rows.
 - The port 9 MAC serves one CC line, so it has no figures for option B
   ([port 9 MAC](#block-cc-mac)).
-- With a 25.5 W PoE grant the USB-C side gets about 20.0 W in option A and about 19.7 W in
+- With a 25.5 W PoE grant the USB-C side gets about 19.8 W in option A and about 19.5 W in
   option B, where the two outputs share it ([power budget](#power-budget)).
-- A 25.5 W grant is too small for a 5 V, 5 A offer, and at 12.95 W an output advertises 1.5 A
-  with no PD offer ([power budget](#power-budget)).
+- A 25.5 W grant is too small for a 5 V, 5 A offer, and a 12.95 W grant is under the 3 A of a
+  standard PD offer ([power budget](#power-budget)).
 - The open points are in [Assumptions not yet verified](#assumptions).
 
 <a id="evidence-codes"></a>
@@ -50,13 +50,18 @@ signalling has three priced builds, each with its own BOM table: a
 | Code | Name | Evidence |
 | --- | --- | --- |
 | **V** | Verified | Printed in a datasheet in [`datasheets/`](../datasheets/README.md) |
-| **P** | Price read | Price and stock read from the LCSC or JLCPCB catalogue |
+| **P** | Catalogue read | Figure read from a parts catalogue listing |
 | **I** | Inferred | Reasoned or estimated from other evidence |
-| **U** | Unverified | Waits on bench work or on another note |
+| **U** | Unverified | Not yet checked |
 
 The switch datasheet is [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf). The
 [YT9215SC and YT9215SCH](../research/motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) share
 their pin numbers, and this note uses those numbers.
+
+- The catalogues are those of LCSC and JLCPCB.
+- Every price, stock figure and part rating in the comparison tables of [Blocks](#blocks) is a
+  catalogue read [**P**](#evidence-codes).
+- An unverified point waits on bench work, on a datasheet check or on another note.
 
 <a id="software-jobs"></a>
 
@@ -138,6 +143,8 @@ uses one of the five.
 - The [port 9 MAC](#block-cc-mac) build uses pins 46 to 57 for port 9, which leaves pin 44.
 - An Rp resistor fed from a pin with a pull-up is weakly on at reset. The pull value is not
   published [**U**](#evidence-codes).
+- In the port 9 MAC build the buffer reset gate also sits on a pin with a pull-up. Its 10 kΩ
+  pull-down works against that unpublished pull [**U**](#evidence-codes).
 - Option B with the [PD transceiver](#block-cc-transceiver) on two I²C masters needs pin 49
   high, which the buffer enables do not use in that build.
 
@@ -168,16 +175,17 @@ output voltage, which adds about one [5 V converter](#block-5v) block per output
 
 | Granted at the PoE input | Bridge loss | 5 V rail | Switch supply in option A | USB-C budget in option A | USB-C current in option A | Switch supply in option B | USB-C budget in option B | USB-C current in option B |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 12.95 W | 0.6 W | 10.7 W | 1.2 W | 9.5 W | 1.9 A | 1.5 W | 9.2 W | 1.8 A |
-| 25.5 W | 1.1 W | 21.2 W | 1.2 W | 20.0 W | 4.0 A | 1.5 W | 19.7 W | 3.9 A |
+| 12.95 W | 0.8 W | 10.6 W | 1.2 W | 9.4 W | 1.9 A | 1.5 W | 9.1 W | 1.8 A |
+| 25.5 W | 1.3 W | 21.0 W | 1.2 W | 19.8 W | 4.0 A | 1.5 W | 19.5 W | 3.9 A |
 
 Every column except "Granted at the PoE input" is an estimate [**I**](#evidence-codes):
 
-- Bridge loss is two diode drops of 0.9 V at the lowest input voltage of each grant.
+- Bridge loss is two diode drops of 1.1 V at the lowest input voltage of each grant. LCSC lists
+  1.1 V at 0.4 A for the counted bridge [**P**](#evidence-codes).
 - The 5 V rail is the remainder times an assumed converter efficiency of 87 %.
 - Switch supply starts from Table 28 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)
   [**V**](#evidence-codes): 663 mW with no link and 1613 mW with five gigabit links, so 190 mW
-  per link. It adds the losses of the core regulator at an assumed 85 % and of the 3.3 V
+  per link. The table is that of the YT9215SCH and is applied here to the YT9215SC. It adds the losses of the core regulator at an assumed 85 % and of the 3.3 V
   converter at an assumed 90 %.
 - USB-C current in option B is the total of both outputs.
 - The [budget in the PoE note](../research/poe.md#5-raspberry-pi-5-power-budget-against-poe-classes)
@@ -185,12 +193,20 @@ Every column except "Granted at the PoE input" is an estimate [**I**](#evidence-
 
 The firmware turns the budget into an offer by the rule in the
 [power budget hand-off](https://github.com/mithro/budget-poe-adapter/blob/main/research/yt9215-usb-pd.md#power-budget).
-Four consequences follow [**I**](#evidence-codes):
+These consequences follow [**I**](#evidence-codes):
 
 - A 25.5 W grant cannot supply 5 V at 5 A. The largest single offer is about 4 A.
-- At 12.95 W the budget is under 3 A, so an output advertises 1.5 A by Rp and sends no PD offer.
-- In option B the rule gives a PD offer only to an output with 3 A or more. At 25.5 W the
-  firmware can give one output 3 A and the other 0.9 A, or both under 3 A with no PD offer.
+- At 12.95 W the budget is under 3 A. The rule leaves open whether an output under 3 A sends a
+  PD offer at its available current or advertises by Rp alone.
+- In option B at 25.5 W the firmware can give one output 3 A and the other 0.9 A, or split the
+  3.9 A some other way.
+- In option B at 12.95 W the 1.8 A total covers two outputs at the default USB current of
+  0.9 A each. It does not cover one output at 1.5 A with the other at 0.9 A.
+- An output held at 0.9 A needs the default-current Rp value, which is a third resistor in the
+  two software builds ([CC interface](#block-cc)).
+- A 5 V source above 15 W is outside the USB PD power rules, which add 9 V above 15 W
+  ([USB power standards](../research/usb-c-pd.md#2-usb-power-standards-voltages-and-currents)).
+  Whether sinks accept 5 V at about 4 A is not tested [**U**](#evidence-codes).
 - A Raspberry Pi 5 lifts its USB current limit only for a 5 A offer
   ([Raspberry Pi 5](../research/usb-c-pd.md#3-raspberry-pi-5-specifics)). That needs a PoE
   grant above 25.5 W, which this note does not cover.
@@ -268,7 +284,8 @@ The BOM uses one transformer part for every port to keep the line items down.
 **Crystal.** The chip needs a 25 MHz reference within 50 ppm with at most 50 Ω series
 resistance (Table 50 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)) [**V**](#evidence-codes). The BOM counts
 the YXC X322525MOB4SI, [C9006](https://www.lcsc.com/product-detail/C9006.html), at $0.05 with
-two 18 pF load capacitors. Its series resistance is not checked [**U**](#evidence-codes).
+two 18 pF load capacitors. LCSC lists it with 50 Ω series resistance and a 12 pF load
+[**P**](#evidence-codes), so it sits on the limit with no margin.
 
 **Flash.** The firmware runs in place from an SPI NOR flash on pins 78, 79, 81 and 83
 ([boot](../research/yt9215-embedded-cpu.md#boot)). The BOM counts the 4 Mbit Puya
@@ -301,10 +318,16 @@ image size is unknown [**U**](#evidence-codes), so 4 Mbit is a guess.
 **Supplies.** The regulator inside the chip makes the 1.15 V core rail from 3.3 V with one
 external inductor, as on the
 [wu-kou board](../research/switch-board-strapping.md#wk-l2). The BOM counts one 100 nF
-capacitor per supply pin and two ferrite beads. The wu-kou board fits eight beads, and the
+capacitor for each of the 29 supply pins (Table 21 of the
+[switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf)) [**V**](#evidence-codes) and two ferrite beads. The wu-kou board fits eight beads, and the
 smaller number is not verified [**U**](#evidence-codes).
 
-**Not fitted.** No LEDs, no EEPROM and no reset chip. Reset is a resistor and a capacitor.
+**Reset.** Reset is a 4.7 kΩ resistor and a 10 µF capacitor, the values of the
+[wu-kou board](../research/switch-board-strapping.md#wk-c51). Their 47 ms time constant covers
+the 10 ms that Table 32 of the [switch datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) asks for after
+the supplies settle [**V**](#evidence-codes). The discharge diode of the wu-kou board is not counted [**U**](#evidence-codes).
+
+**Not fitted.** No LEDs, no EEPROM and no reset chip.
 
 <a id="block-poe"></a>
 
@@ -336,8 +359,21 @@ BOM rows are placeholders for its functions, with part values left open
 - The two-event circuit is not designed, and its figures are a guess [**I**](#evidence-codes).
 - The class sink has to turn off above the classification window so that it draws nothing at
   48 V. The placeholder rows may not be enough for that [**U**](#evidence-codes).
+- The class sink transistor dissipates about 1 W for up to 105 ms during classification
+  ([minimal external parts](../research/poe.md#64-minimal-external-parts-architecture-b)).
+  Whether the counted SOT-23 part survives that pulse is not checked [**U**](#evidence-codes).
+- The hot-swap switch has to stay off at the 20.5 V of classification and be fully on at 37 V.
+  A resistor divider alone cannot do that, so the BOM counts a threshold zener with no
+  selected part [**U**](#evidence-codes).
+- A resistor across the PoE input sees 57 V, and 93.6 V in a surge. An 0402 resistor is rated
+  50 V, so the BOM counts the class sink and threshold resistors as 0805 parts [**I**](#evidence-codes).
 - The signature resistor dissipates 0.13 W at 57 V, so the BOM counts a 1206 part. That loss is
   not in the [power budget](#power-budget).
+- With power on two pairs, one bridge carries the whole current and dissipates up to 1.3 W.
+  Whether the MBS package can shed that is not checked [**U**](#evidence-codes).
+- The USB-C ground connects to the PoE input through the converters, with no isolation. That
+  does not meet the 1500 V isolation of IEEE 802.3
+  ([isolation and safety](../research/poe.md#8-isolation-and-safety-non-isolated-design)) [**U**](#evidence-codes).
 - The hot-swap MOSFET is $0.31 of this block. A cheaper 100 V part is not selected.
 - The switch draws more than the 10 mA a PoE switch needs to see, so no dummy load is fitted
   ([maintain power signature](../research/poe.md#44-maintain-power-signature-mps)).
@@ -349,7 +385,7 @@ BOM rows are placeholders for its functions, with part values left open
 ### 5 V converter
 
 One converter makes 5 V for the USB-C outputs and for the 3.3 V converter. It is sized for the
-25.5 W grant: 21.2 W is 4.2 A at 5 V.
+25.5 W grant: 21.0 W is 4.2 A at 5 V.
 
 | Converter | Maker | Input limit | Output current | Rectifier | Catalogue number | Price | Counted in the BOM |
 | --- | --- | ---: | ---: | --- | --- | ---: | --- |
@@ -361,8 +397,9 @@ One converter makes 5 V for the USB-C outputs and for the 3.3 V converter. It is
 | EG1163S | EG Micro | 600 V | Set by its MOSFETs | 2 external MOSFETs | [C480648](https://www.lcsc.com/product-detail/C480648.html) | $0.45 | No |
 
 - A 58 V surge clamp lets the input rise to 93.6 V at its rated surge current
-  [**V**](#evidence-codes), above a 60 V part. Whether a 60 V converter survives depends on the
-  [PoE front end](#block-poe) [**U**](#evidence-codes).
+  [**P**](#evidence-codes). That is above the 60 V rating of the counted converter and of the counted
+  SS56 catch diode. Whether 60 V parts survive depends on the [PoE front end](#block-poe)
+  [**U**](#evidence-codes).
 - The SY8513FCC stops at 3 A, which is 15 W, and the TX4138 at 4 A, under the 4.2 A needed.
 - The LCSC and JLCPCB searches for this note turned up no 100 V converter with built-in
   switches and 5 A output.
@@ -381,7 +418,7 @@ The switch takes about 1.1 to 1.3 W at 3.3 V, core regulator included
 
 | Choice | Part | Catalogue number | Price with its inductor | Loss at 0.4 A | Counted in the BOM |
 | --- | --- | --- | ---: | ---: | --- |
-| Buck converter | MT2492 | [C89358](https://www.lcsc.com/product-detail/C89358.html) | $0.08 | 0.15 W | Yes |
+| Buck converter | MT2492 | [C89358](https://www.lcsc.com/product-detail/C89358.html) | $0.10 | 0.15 W | Yes |
 | Linear regulator | Not selected | – | $0.03 | 0.7 W | No |
 
 The MT2492 with a 4.7 µH inductor is the 3.3 V supply of the
@@ -409,10 +446,13 @@ price are estimates [**I**](#evidence-codes).
   that output gets no PD offer ([power budget](#power-budget)).
 - The LCSC and JLCPCB searches for this note turned up no switch with a limit near 4 A at a
   price near $0.05.
-- The chip has no ADC, so the firmware cannot measure current. A fixed limit does not enforce
-  an offer under it.
-- The on-resistance of the AO4407A with a 5 V gate drive is not checked, and its loss is not in
-  the [power budget](#power-budget) [**U**](#evidence-codes).
+- No ADC is documented for the chip [**U**](#evidence-codes), so the firmware is assumed unable to
+  measure current. A fixed limit does not enforce an offer under it.
+- LCSC lists the AO4407A at 38 mΩ with a 5 V gate drive [**P**](#evidence-codes). At 4 A that is
+  0.6 W and a 0.15 V drop, which are not in the [power budget](#power-budget).
+- The driver switches the MOSFET on with no slew limit. The inrush into a sink can dip the 5 V
+  rail, which also feeds the 3.3 V converter and, in option B, the other output
+  [**U**](#evidence-codes).
 
 **Discharge.** A 1 kΩ resistor from VBUS to ground discharges the output after the switch
 opens. It costs 25 mW while the output is on and stands in for a discharge transistor
@@ -427,7 +467,7 @@ pins of the two software builds have a series resistor and a clamp diode.
 | --- | --- | --- | ---: | ---: | ---: | --- |
 | Captive cable | Not selected | – | $0.40 | 5 A | 1 | Yes |
 | 6-pin receptacle | TYPE-C 6P | [C456012](https://www.lcsc.com/product-detail/C456012.html) | $0.02 | 3 A | 2 | No |
-| 16-pin receptacle | TYPE-C-31-M-12 | [C165948](https://www.lcsc.com/product-detail/C165948.html) | $0.10 | 5 A | 2 | No |
+| 16-pin receptacle | TYPE-C-31-M-12 | [C165948](https://www.lcsc.com/product-detail/C165948.html) | $0.11 | 5 A | 2 | No |
 
 - The cable price is an estimate with no quote behind it [**I**](#evidence-codes).
 - A receptacle may offer more than 3 A only after reading the cable marker, which the design
@@ -468,6 +508,9 @@ note.
   [option B table](#bom-b-transceiver) ([straps](#straps)) [**U**](#evidence-codes).
 - The second address variant on I²C master 1 avoids that move and costs $0.75 more.
 - The two addresses are not checked against the onsemi datasheet [**U**](#evidence-codes).
+- The BOM counts a 100 nF and a 1 µF supply capacitor and one receiver capacitor on CC per
+  transceiver. That list is from memory of the onsemi reference circuit and is not checked
+  against the datasheet [**U**](#evidence-codes).
 - Other transceiver chips are compared in the
   [fixed-function chips](https://github.com/mithro/budget-poe-adapter/blob/main/research/yt9215-usb-pd.md#fixed-function-chips) table of the USB PD note.
 
@@ -475,6 +518,10 @@ note.
 
 **GPIO bit-bang.** A buffer drives CC, a fast comparator slices it, and the CPU times every
 edge. It needs GPIO registers and a timer that are not published [**U**](#evidence-codes).
+
+Both software builds count three Rp resistors per output: 36 kΩ for the default current, 12 kΩ
+for 1.5 A and 7.5 kΩ in parallel for 3 A. Each takes a GPIO, and the GPIO count is not checked
+against the free pins [**U**](#evidence-codes).
 
 <a id="block-cc-mac"></a>
 
@@ -531,7 +578,7 @@ The parts of the two software builds are untested candidates [**U**](#evidence-c
 | BMC driver buffer | [CC interface](#block-cc) | Chip outputs cannot make a 1.1 V swing |
 | CC series resistor | [CC interface](#block-cc) | Chip pins do not tolerate 5 V |
 | CC clamp diode | [CC interface](#block-cc) | Chip pins do not tolerate 5 V |
-| PD transceiver | [CC interface](#block-cc) | Not fitted in the two software builds |
+| PD transceiver | [CC interface](#block-cc) | Makes and reads the 1.1 V CC swing |
 
 <a id="prices"></a>
 
@@ -572,28 +619,29 @@ Parts that are always fitted in option A:
 | [Switch](#block-switch) | Firmware flash | P25Q40SH-SSH-IT | Puya | SOP-8 | 4 Mbit | – | [C2836860](https://www.lcsc.com/product-detail/C2836860.html) | 1 | $0.1001 | LCSC | 2,500 | $0.1001 |
 | [Switch](#block-switch) | Bias resistor | RC0402FR-072K49L | Yageo | 0402 | 2.49 kΩ | – | [C145071](https://www.lcsc.com/product-detail/C145071.html) | 1 | $0.0016 | LCSC | 1,000 | $0.0016 |
 | [Switch](#block-switch) | Flash chip-select pull-up | 0402WGF1002TCE | Uni-Royal | 0402 | 10 kΩ | – | [C25744](https://www.lcsc.com/product-detail/C25744.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
-| [Switch](#block-switch) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 30 | $0.0018 | LCSC | 1,000 | $0.0540 |
+| [Switch](#block-switch) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 29 | $0.0018 | LCSC | 1,000 | $0.0522 |
 | [Switch](#block-switch) | Supply bulk capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 4 | $0.0107 | LCSC | 4,000 | $0.0428 |
 | [Switch](#block-switch) | Analogue supply bead | BLM18KG221SN1D | Murata | 0603 | 220 Ω | 2.2 A | [C88980](https://www.lcsc.com/product-detail/C88980.html) | 2 | $0.0291 | LCSC | 4,000 | $0.0582 |
-| [Switch](#block-switch) | Core regulator inductor | SWPA4018S2R2MT | Sunlord | 4 × 4 mm | 2.2 µH | – | [C50543](https://jlcpcb.com/partdetail/C50543) | 1 | $0.0357 | JLCPCB | 3,000 | $0.0357 |
+| [Switch](#block-switch) | Core regulator inductor | SWPA4018S2R2MT | Sunlord | 4 × 4 mm | 2.2 µH | – | [C50543](https://jlcpcb.com/partdetail/C50543) | 1 | $0.0407 | JLCPCB | 3,000 | $0.0407 |
 | [Switch](#block-switch) | Core regulator capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 2 | $0.0107 | LCSC | 4,000 | $0.0214 |
 | [Switch](#block-switch) | Strap resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 6 | $0.0013 | LCSC | 1,000 | $0.0078 |
-| [Switch](#block-switch) | Reset resistor | 0402WGF1002TCE | Uni-Royal | 0402 | 10 kΩ | – | [C25744](https://www.lcsc.com/product-detail/C25744.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
-| [Switch](#block-switch) | Reset capacitor | CL05A105KA5NQNC | Samsung | 0402 | 1 µF | 25 V | [C52923](https://www.lcsc.com/product-detail/C52923.html) | 1 | $0.0042 | LCSC | 1,000 | $0.0042 |
+| [Switch](#block-switch) | Reset resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 1 | $0.0013 | LCSC | 1,000 | $0.0013 |
+| [Switch](#block-switch) | Reset capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 1 | $0.0107 | LCSC | 4,000 | $0.0107 |
 | [PoE front end](#block-poe) | Polarity bridge | MB10S-50MIL | MDD | MBS | – | 1 A | [C2488](https://www.lcsc.com/product-detail/C2488.html) | 2 | $0.0145 | LCSC | 3,000 | $0.0290 |
 | [PoE front end](#block-poe) | Surge clamp | SMAJ58A | Goodwork | SMA | – | 58 V | [C2980408](https://www.lcsc.com/product-detail/C2980408.html) | 1 | $0.0186 | LCSC | 2,000 | $0.0186 |
 | [PoE front end](#block-poe) | Signature resistor | Not selected | Not selected | 1206 | 24.9 kΩ | – | – | 1 | $0.0030 | Estimate | – | $0.0030 |
 | [PoE front end](#block-poe) | Signature capacitor | Not selected | Not selected | 0805 | 100 nF | 100 V | – | 1 | $0.0100 | Estimate | – | $0.0100 |
 | [PoE front end](#block-poe) | Class sink transistor | MMBT5551 | JSCJ | SOT-23 | – | 160 V | [C2145](https://www.lcsc.com/product-detail/C2145.html) | 2 | $0.0096 | LCSC | 3,000 | $0.0192 |
 | [PoE front end](#block-poe) | Class sink window zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Class sink resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 3 | $0.0011 | Estimate | – | $0.0033 |
+| [PoE front end](#block-poe) | Class sink resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 3 | $0.0020 | Estimate | – | $0.0060 |
 | [PoE front end](#block-poe) | Hot-swap MOSFET | NCE0130KA | NCE | TO-252 | – | 100 V | [C502817](https://www.lcsc.com/product-detail/C502817.html) | 1 | $0.3143 | LCSC | 2,500 | $0.3143 |
 | [PoE front end](#block-poe) | Gate clamp zener | BZT52C15 | Goodwork | SOD-123 | 15 V | – | [C2932746](https://www.lcsc.com/product-detail/C2932746.html) | 1 | $0.0099 | LCSC | 3,000 | $0.0099 |
-| [PoE front end](#block-poe) | Turn-on threshold resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 2 | $0.0011 | Estimate | – | $0.0022 |
+| [PoE front end](#block-poe) | Turn-on threshold zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
+| [PoE front end](#block-poe) | Turn-on threshold resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 2 | $0.0020 | Estimate | – | $0.0040 |
 | [PoE front end](#block-poe) | Gate capacitor | CL05B104KB54PNC | Samsung | 0402 | 100 nF | 50 V | [C307331](https://www.lcsc.com/product-detail/C307331.html) | 1 | $0.0064 | LCSC | 1,000 | $0.0064 |
 | [5 V converter](#block-5v) | Converter IC | RT6365GSP | Richtek | SOP-8-EP | 5 A | 60 V | [C3024482](https://www.lcsc.com/product-detail/C3024482.html) | 1 | $0.5319 | LCSC | 1,000 | $0.5319 |
 | [5 V converter](#block-5v) | Catch diode | SS56 | MDD | SMA | 5 A | 60 V | [C65009](https://www.lcsc.com/product-detail/C65009.html) | 1 | $0.0353 | LCSC | 1,000 | $0.0353 |
-| [5 V converter](#block-5v) | Inductor | MWSA1005S-100MT | Sunlord | 11.5 × 10 mm | 10 µH | 8 A | [C17700185](https://jlcpcb.com/partdetail/C17700185) | 1 | $0.1862 | JLCPCB | 2,500 | $0.1862 |
+| [5 V converter](#block-5v) | Inductor | MWSA1005S-100MT | Sunlord | 11.5 × 10 mm | 10 µH | 8 A | [C17700185](https://jlcpcb.com/partdetail/C17700185) | 1 | $0.1872 | JLCPCB | 2,500 | $0.1872 |
 | [5 V converter](#block-5v) | Input bulk capacitor | ERM1KM220E12OT | Aishi | 6.3 × 12 mm | 22 µF | 100 V | [C106608](https://www.lcsc.com/product-detail/C106608.html) | 1 | $0.0250 | LCSC | 1,000 | $0.0250 |
 | [5 V converter](#block-5v) | Input capacitor | CS3225X7R225K101NRK | Samwha | 1210 | 2.2 µF | 100 V | [C2900749](https://www.lcsc.com/product-detail/C2900749.html) | 2 | $0.0658 | LCSC | 2,000 | $0.1316 |
 | [5 V converter](#block-5v) | Output capacitor | CL31A226KAHNNNE | Samsung | 1206 | 22 µF | 25 V | [C12891](https://www.lcsc.com/product-detail/C12891.html) | 2 | $0.0646 | LCSC | 2,000 | $0.1292 |
@@ -603,7 +651,7 @@ Parts that are always fitted in option A:
 | [5 V converter](#block-5v) | Compensation resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 1 | $0.0011 | Estimate | – | $0.0011 |
 | [5 V converter](#block-5v) | Compensation capacitor | Not selected | Not selected | 0402 | Set at schematic | – | – | 2 | $0.0020 | Estimate | – | $0.0040 |
 | [3.3 V converter](#block-3v3) | Converter IC | MT2492 | Aerosemi | SOT-23-6 | 2 A | – | [C89358](https://www.lcsc.com/product-detail/C89358.html) | 1 | $0.0361 | LCSC | 1,000 | $0.0361 |
-| [3.3 V converter](#block-3v3) | Inductor | SWPA4030S4R7NT | Sunlord | 4 × 4 mm | 4.7 µH | 2 A | [C193025](https://jlcpcb.com/partdetail/C193025) | 1 | $0.0411 | JLCPCB | 2,000 | $0.0411 |
+| [3.3 V converter](#block-3v3) | Inductor | SWPA4030S4R7NT | Sunlord | 4 × 4 mm | 4.7 µH | 2 A | [C193025](https://jlcpcb.com/partdetail/C193025) | 1 | $0.0614 | JLCPCB | 2,000 | $0.0614 |
 | [3.3 V converter](#block-3v3) | Feedback top resistor | 0402WGF1802TCE | Uni-Royal | 0402 | 18 kΩ | – | [C25762](https://www.lcsc.com/product-detail/C25762.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
 | [3.3 V converter](#block-3v3) | Feedback bottom resistor | 0402WGF2001TCE | Uni-Royal | 0402 | 2 kΩ | – | [C4109](https://www.lcsc.com/product-detail/C4109.html) | 2 | $0.0015 | LCSC | 1,000 | $0.0030 |
 | [3.3 V converter](#block-3v3) | Input capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 1 | $0.0107 | LCSC | 4,000 | $0.0107 |
@@ -627,6 +675,8 @@ Added to option A for the [PD transceiver](#block-cc-transceiver) build:
 | [CC interface: PD transceiver](#block-cc-transceiver) | PD transceiver | FUSB302BMPX | onsemi | WQFN-14 | – | – | [C132291](https://www.lcsc.com/product-detail/C132291.html) | 1 | $0.4080 | LCSC | 1,000 | $0.4080 |
 | [CC interface: PD transceiver](#block-cc-transceiver) | I²C pull-up | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 2 | $0.0013 | LCSC | 1,000 | $0.0026 |
 | [CC interface: PD transceiver](#block-cc-transceiver) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 1 | $0.0018 | LCSC | 1,000 | $0.0018 |
+| [CC interface: PD transceiver](#block-cc-transceiver) | Supply bulk capacitor | CL05A105KA5NQNC | Samsung | 0402 | 1 µF | 25 V | [C52923](https://www.lcsc.com/product-detail/C52923.html) | 1 | $0.0042 | LCSC | 1,000 | $0.0042 |
+| [CC interface: PD transceiver](#block-cc-transceiver) | Receiver capacitor | Not selected | Not selected | 0402 | Set at schematic | – | – | 1 | $0.0020 | Estimate | – | $0.0020 |
 <!-- END bom-a-transceiver -->
 
 <a id="bom-a-bit-bang"></a>
@@ -643,6 +693,7 @@ Added to option A for the [GPIO bit-bang](#block-cc-bit-bang) build:
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Threshold divider resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 4 | $0.0011 | Estimate | – | $0.0044 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | CC series resistor | 0402WGF1001TCE | Uni-Royal | 0402 | 1 kΩ | – | [C11702](https://www.lcsc.com/product-detail/C11702.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | CC clamp diode | BAV99 | R+O | SOT-23 | – | 70 V | [C7420336](https://www.lcsc.com/product-detail/C7420336.html) | 1 | $0.0080 | LCSC | 3,000 | $0.0080 |
+| [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Rp for default current | Not selected | Not selected | 0402 | 36 kΩ | – | – | 1 | $0.0010 | Estimate | – | $0.0010 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Rp for 1.5 A | 0402WGF1202TCE | Uni-Royal | 0402 | 12 kΩ | – | [C25752](https://www.lcsc.com/product-detail/C25752.html) | 1 | $0.0010 | LCSC | 1,000 | $0.0010 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Rp step to 3 A | 0402WGF7501TCE | Uni-Royal | 0402 | 7.5 kΩ | – | [C25918](https://www.lcsc.com/product-detail/C25918.html) | 1 | $0.0017 | LCSC | 1,000 | $0.0017 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Slow dual comparator | LM393DR2G | onsemi | SOIC-8 | 1.3 µs | – | [C7955](https://www.lcsc.com/product-detail/C7955.html) | 1 | $0.0323 | LCSC | 2,500 | $0.0323 |
@@ -667,6 +718,7 @@ Added to option A for the [port 9 MAC](#block-cc-mac) build:
 | [CC interface: port 9 MAC](#block-cc-mac) | Threshold divider resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 4 | $0.0011 | Estimate | – | $0.0044 |
 | [CC interface: port 9 MAC](#block-cc-mac) | CC series resistor | 0402WGF1001TCE | Uni-Royal | 0402 | 1 kΩ | – | [C11702](https://www.lcsc.com/product-detail/C11702.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
 | [CC interface: port 9 MAC](#block-cc-mac) | CC clamp diode | BAV99 | R+O | SOT-23 | – | 70 V | [C7420336](https://www.lcsc.com/product-detail/C7420336.html) | 1 | $0.0080 | LCSC | 3,000 | $0.0080 |
+| [CC interface: port 9 MAC](#block-cc-mac) | Rp for default current | Not selected | Not selected | 0402 | 36 kΩ | – | – | 1 | $0.0010 | Estimate | – | $0.0010 |
 | [CC interface: port 9 MAC](#block-cc-mac) | Rp for 1.5 A | 0402WGF1202TCE | Uni-Royal | 0402 | 12 kΩ | – | [C25752](https://www.lcsc.com/product-detail/C25752.html) | 1 | $0.0010 | LCSC | 1,000 | $0.0010 |
 | [CC interface: port 9 MAC](#block-cc-mac) | Rp step to 3 A | 0402WGF7501TCE | Uni-Royal | 0402 | 7.5 kΩ | – | [C25918](https://www.lcsc.com/product-detail/C25918.html) | 1 | $0.0017 | LCSC | 1,000 | $0.0017 |
 | [CC interface: port 9 MAC](#block-cc-mac) | Slow dual comparator | LM393DR2G | onsemi | SOIC-8 | 1.3 µs | – | [C7955](https://www.lcsc.com/product-detail/C7955.html) | 1 | $0.0323 | LCSC | 2,500 | $0.0323 |
@@ -700,28 +752,29 @@ Parts that are always fitted in option B:
 | [Switch](#block-switch) | Firmware flash | P25Q40SH-SSH-IT | Puya | SOP-8 | 4 Mbit | – | [C2836860](https://www.lcsc.com/product-detail/C2836860.html) | 1 | $0.1001 | LCSC | 2,500 | $0.1001 |
 | [Switch](#block-switch) | Bias resistor | RC0402FR-072K49L | Yageo | 0402 | 2.49 kΩ | – | [C145071](https://www.lcsc.com/product-detail/C145071.html) | 1 | $0.0016 | LCSC | 1,000 | $0.0016 |
 | [Switch](#block-switch) | Flash chip-select pull-up | 0402WGF1002TCE | Uni-Royal | 0402 | 10 kΩ | – | [C25744](https://www.lcsc.com/product-detail/C25744.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
-| [Switch](#block-switch) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 30 | $0.0018 | LCSC | 1,000 | $0.0540 |
+| [Switch](#block-switch) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 29 | $0.0018 | LCSC | 1,000 | $0.0522 |
 | [Switch](#block-switch) | Supply bulk capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 4 | $0.0107 | LCSC | 4,000 | $0.0428 |
 | [Switch](#block-switch) | Analogue supply bead | BLM18KG221SN1D | Murata | 0603 | 220 Ω | 2.2 A | [C88980](https://www.lcsc.com/product-detail/C88980.html) | 2 | $0.0291 | LCSC | 4,000 | $0.0582 |
-| [Switch](#block-switch) | Core regulator inductor | SWPA4018S2R2MT | Sunlord | 4 × 4 mm | 2.2 µH | – | [C50543](https://jlcpcb.com/partdetail/C50543) | 1 | $0.0357 | JLCPCB | 3,000 | $0.0357 |
+| [Switch](#block-switch) | Core regulator inductor | SWPA4018S2R2MT | Sunlord | 4 × 4 mm | 2.2 µH | – | [C50543](https://jlcpcb.com/partdetail/C50543) | 1 | $0.0407 | JLCPCB | 3,000 | $0.0407 |
 | [Switch](#block-switch) | Core regulator capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 2 | $0.0107 | LCSC | 4,000 | $0.0214 |
 | [Switch](#block-switch) | Strap resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 6 | $0.0013 | LCSC | 1,000 | $0.0078 |
-| [Switch](#block-switch) | Reset resistor | 0402WGF1002TCE | Uni-Royal | 0402 | 10 kΩ | – | [C25744](https://www.lcsc.com/product-detail/C25744.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
-| [Switch](#block-switch) | Reset capacitor | CL05A105KA5NQNC | Samsung | 0402 | 1 µF | 25 V | [C52923](https://www.lcsc.com/product-detail/C52923.html) | 1 | $0.0042 | LCSC | 1,000 | $0.0042 |
+| [Switch](#block-switch) | Reset resistor | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 1 | $0.0013 | LCSC | 1,000 | $0.0013 |
+| [Switch](#block-switch) | Reset capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 1 | $0.0107 | LCSC | 4,000 | $0.0107 |
 | [PoE front end](#block-poe) | Polarity bridge | MB10S-50MIL | MDD | MBS | – | 1 A | [C2488](https://www.lcsc.com/product-detail/C2488.html) | 2 | $0.0145 | LCSC | 3,000 | $0.0290 |
 | [PoE front end](#block-poe) | Surge clamp | SMAJ58A | Goodwork | SMA | – | 58 V | [C2980408](https://www.lcsc.com/product-detail/C2980408.html) | 1 | $0.0186 | LCSC | 2,000 | $0.0186 |
 | [PoE front end](#block-poe) | Signature resistor | Not selected | Not selected | 1206 | 24.9 kΩ | – | – | 1 | $0.0030 | Estimate | – | $0.0030 |
 | [PoE front end](#block-poe) | Signature capacitor | Not selected | Not selected | 0805 | 100 nF | 100 V | – | 1 | $0.0100 | Estimate | – | $0.0100 |
 | [PoE front end](#block-poe) | Class sink transistor | MMBT5551 | JSCJ | SOT-23 | – | 160 V | [C2145](https://www.lcsc.com/product-detail/C2145.html) | 2 | $0.0096 | LCSC | 3,000 | $0.0192 |
 | [PoE front end](#block-poe) | Class sink window zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
-| [PoE front end](#block-poe) | Class sink resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 3 | $0.0011 | Estimate | – | $0.0033 |
+| [PoE front end](#block-poe) | Class sink resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 3 | $0.0020 | Estimate | – | $0.0060 |
 | [PoE front end](#block-poe) | Hot-swap MOSFET | NCE0130KA | NCE | TO-252 | – | 100 V | [C502817](https://www.lcsc.com/product-detail/C502817.html) | 1 | $0.3143 | LCSC | 2,500 | $0.3143 |
 | [PoE front end](#block-poe) | Gate clamp zener | BZT52C15 | Goodwork | SOD-123 | 15 V | – | [C2932746](https://www.lcsc.com/product-detail/C2932746.html) | 1 | $0.0099 | LCSC | 3,000 | $0.0099 |
-| [PoE front end](#block-poe) | Turn-on threshold resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 2 | $0.0011 | Estimate | – | $0.0022 |
+| [PoE front end](#block-poe) | Turn-on threshold zener | Not selected | Not selected | SOD-123 | Set by the PoE design | – | – | 1 | $0.0100 | Estimate | – | $0.0100 |
+| [PoE front end](#block-poe) | Turn-on threshold resistor | Not selected | Not selected | 0805 | Set at schematic | 150 V | – | 2 | $0.0020 | Estimate | – | $0.0040 |
 | [PoE front end](#block-poe) | Gate capacitor | CL05B104KB54PNC | Samsung | 0402 | 100 nF | 50 V | [C307331](https://www.lcsc.com/product-detail/C307331.html) | 1 | $0.0064 | LCSC | 1,000 | $0.0064 |
 | [5 V converter](#block-5v) | Converter IC | RT6365GSP | Richtek | SOP-8-EP | 5 A | 60 V | [C3024482](https://www.lcsc.com/product-detail/C3024482.html) | 1 | $0.5319 | LCSC | 1,000 | $0.5319 |
 | [5 V converter](#block-5v) | Catch diode | SS56 | MDD | SMA | 5 A | 60 V | [C65009](https://www.lcsc.com/product-detail/C65009.html) | 1 | $0.0353 | LCSC | 1,000 | $0.0353 |
-| [5 V converter](#block-5v) | Inductor | MWSA1005S-100MT | Sunlord | 11.5 × 10 mm | 10 µH | 8 A | [C17700185](https://jlcpcb.com/partdetail/C17700185) | 1 | $0.1862 | JLCPCB | 2,500 | $0.1862 |
+| [5 V converter](#block-5v) | Inductor | MWSA1005S-100MT | Sunlord | 11.5 × 10 mm | 10 µH | 8 A | [C17700185](https://jlcpcb.com/partdetail/C17700185) | 1 | $0.1872 | JLCPCB | 2,500 | $0.1872 |
 | [5 V converter](#block-5v) | Input bulk capacitor | ERM1KM220E12OT | Aishi | 6.3 × 12 mm | 22 µF | 100 V | [C106608](https://www.lcsc.com/product-detail/C106608.html) | 1 | $0.0250 | LCSC | 1,000 | $0.0250 |
 | [5 V converter](#block-5v) | Input capacitor | CS3225X7R225K101NRK | Samwha | 1210 | 2.2 µF | 100 V | [C2900749](https://www.lcsc.com/product-detail/C2900749.html) | 2 | $0.0658 | LCSC | 2,000 | $0.1316 |
 | [5 V converter](#block-5v) | Output capacitor | CL31A226KAHNNNE | Samsung | 1206 | 22 µF | 25 V | [C12891](https://www.lcsc.com/product-detail/C12891.html) | 2 | $0.0646 | LCSC | 2,000 | $0.1292 |
@@ -731,7 +784,7 @@ Parts that are always fitted in option B:
 | [5 V converter](#block-5v) | Compensation resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 1 | $0.0011 | Estimate | – | $0.0011 |
 | [5 V converter](#block-5v) | Compensation capacitor | Not selected | Not selected | 0402 | Set at schematic | – | – | 2 | $0.0020 | Estimate | – | $0.0040 |
 | [3.3 V converter](#block-3v3) | Converter IC | MT2492 | Aerosemi | SOT-23-6 | 2 A | – | [C89358](https://www.lcsc.com/product-detail/C89358.html) | 1 | $0.0361 | LCSC | 1,000 | $0.0361 |
-| [3.3 V converter](#block-3v3) | Inductor | SWPA4030S4R7NT | Sunlord | 4 × 4 mm | 4.7 µH | 2 A | [C193025](https://jlcpcb.com/partdetail/C193025) | 1 | $0.0411 | JLCPCB | 2,000 | $0.0411 |
+| [3.3 V converter](#block-3v3) | Inductor | SWPA4030S4R7NT | Sunlord | 4 × 4 mm | 4.7 µH | 2 A | [C193025](https://jlcpcb.com/partdetail/C193025) | 1 | $0.0614 | JLCPCB | 2,000 | $0.0614 |
 | [3.3 V converter](#block-3v3) | Feedback top resistor | 0402WGF1802TCE | Uni-Royal | 0402 | 18 kΩ | – | [C25762](https://www.lcsc.com/product-detail/C25762.html) | 1 | $0.0011 | LCSC | 1,000 | $0.0011 |
 | [3.3 V converter](#block-3v3) | Feedback bottom resistor | 0402WGF2001TCE | Uni-Royal | 0402 | 2 kΩ | – | [C4109](https://www.lcsc.com/product-detail/C4109.html) | 2 | $0.0015 | LCSC | 1,000 | $0.0030 |
 | [3.3 V converter](#block-3v3) | Input capacitor | CL10A106KP8NNNC | Samsung | 0603 | 10 µF | 10 V | [C19702](https://www.lcsc.com/product-detail/C19702.html) | 1 | $0.0107 | LCSC | 4,000 | $0.0107 |
@@ -755,6 +808,8 @@ Added to option B for the [PD transceiver](#block-cc-transceiver) build:
 | [CC interface: PD transceiver](#block-cc-transceiver) | PD transceiver | FUSB302BMPX | onsemi | WQFN-14 | – | – | [C132291](https://www.lcsc.com/product-detail/C132291.html) | 2 | $0.4080 | LCSC | 1,000 | $0.8160 |
 | [CC interface: PD transceiver](#block-cc-transceiver) | I²C pull-up | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 4 | $0.0013 | LCSC | 1,000 | $0.0052 |
 | [CC interface: PD transceiver](#block-cc-transceiver) | Supply pin capacitor | CL05B104KO5NNNC | Samsung | 0402 | 100 nF | 16 V | [C1525](https://www.lcsc.com/product-detail/C1525.html) | 2 | $0.0018 | LCSC | 1,000 | $0.0036 |
+| [CC interface: PD transceiver](#block-cc-transceiver) | Supply bulk capacitor | CL05A105KA5NQNC | Samsung | 0402 | 1 µF | 25 V | [C52923](https://www.lcsc.com/product-detail/C52923.html) | 2 | $0.0042 | LCSC | 1,000 | $0.0084 |
+| [CC interface: PD transceiver](#block-cc-transceiver) | Receiver capacitor | Not selected | Not selected | 0402 | Set at schematic | – | – | 2 | $0.0020 | Estimate | – | $0.0040 |
 | [CC interface: PD transceiver](#block-cc-transceiver) | Flash pin group strap | 0402WGF4701TCE | Uni-Royal | 0402 | 4.7 kΩ | – | [C25900](https://www.lcsc.com/product-detail/C25900.html) | 1 | $0.0013 | LCSC | 1,000 | $0.0013 |
 <!-- END bom-b-transceiver -->
 
@@ -772,6 +827,7 @@ Added to option B for the [GPIO bit-bang](#block-cc-bit-bang) build:
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Threshold divider resistor | Not selected | Not selected | 0402 | Set at schematic | – | – | 8 | $0.0011 | Estimate | – | $0.0088 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | CC series resistor | 0402WGF1001TCE | Uni-Royal | 0402 | 1 kΩ | – | [C11702](https://www.lcsc.com/product-detail/C11702.html) | 2 | $0.0011 | LCSC | 1,000 | $0.0022 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | CC clamp diode | BAV99 | R+O | SOT-23 | – | 70 V | [C7420336](https://www.lcsc.com/product-detail/C7420336.html) | 2 | $0.0080 | LCSC | 3,000 | $0.0160 |
+| [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Rp for default current | Not selected | Not selected | 0402 | 36 kΩ | – | – | 2 | $0.0010 | Estimate | – | $0.0020 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Rp for 1.5 A | 0402WGF1202TCE | Uni-Royal | 0402 | 12 kΩ | – | [C25752](https://www.lcsc.com/product-detail/C25752.html) | 2 | $0.0010 | LCSC | 1,000 | $0.0020 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Rp step to 3 A | 0402WGF7501TCE | Uni-Royal | 0402 | 7.5 kΩ | – | [C25918](https://www.lcsc.com/product-detail/C25918.html) | 2 | $0.0017 | LCSC | 1,000 | $0.0034 |
 | [CC interface: GPIO bit-bang](#block-cc-bit-bang) | Slow dual comparator | LM393DR2G | onsemi | SOIC-8 | 1.3 µs | – | [C7955](https://www.lcsc.com/product-detail/C7955.html) | 1 | $0.0323 | LCSC | 2,500 | $0.0323 |
@@ -789,14 +845,14 @@ Added to option B for the [GPIO bit-bang](#block-cc-bit-bang) build:
 | Block | Option A cost | Option A placements | Option B cost | Option B placements |
 | --- | ---: | ---: | ---: | ---: |
 | [Ethernet](#block-ethernet) | $0.89 | 25 | $1.31 | 36 |
-| [Switch](#block-switch) | $3.27 | 54 | $3.27 | 54 |
-| [PoE front end](#block-poe) | $0.43 | 16 | $0.43 | 16 |
+| [Switch](#block-switch) | $3.28 | 53 | $3.28 | 53 |
+| [PoE front end](#block-poe) | $0.44 | 17 | $0.44 | 17 |
 | [5 V converter](#block-5v) | $1.05 | 15 | $1.05 | 15 |
-| [3.3 V converter](#block-3v3) | $0.12 | 9 | $0.12 | 9 |
+| [3.3 V converter](#block-3v3) | $0.14 | 9 | $0.14 | 9 |
 | [USB-C power](#block-usb) | $0.59 | 6 | $1.18 | 12 |
-| [CC interface: PD transceiver](#block-cc-transceiver) | $0.41 | 4 | $0.83 | 9 |
-| [CC interface: GPIO bit-bang](#block-cc-bit-bang) | $0.27 | 20 | $0.50 | 38 |
-| [CC interface: port 9 MAC](#block-cc-mac) | $0.30 | 26 | – | – |
+| [CC interface: PD transceiver](#block-cc-transceiver) | $0.42 | 6 | $0.84 | 13 |
+| [CC interface: GPIO bit-bang](#block-cc-bit-bang) | $0.27 | 21 | $0.50 | 40 |
+| [CC interface: port 9 MAC](#block-cc-mac) | $0.30 | 27 | – | – |
 <!-- END blocks -->
 
 Option B costs more than option A by one Ethernet port, one USB-C output and one CC interface.
@@ -815,20 +871,28 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | The flash works on pin group SPF1 with these straps | CPU study | Strap changes |
 | Two ferrite beads are enough | Schematic work | Up to six more beads |
 | The reset circuit needs no diode | Schematic work | One more diode |
-| The crystal meets the 50 Ω limit | Datasheet check | Other crystal |
-| Switch supply is 1.2 W to 1.5 W | Bench | USB-C budget changes |
+| Table 28 of the YT9215SCH holds for the YT9215SC | Bench | USB-C budget changes |
+| A crystal on the 50 Ω limit starts reliably | Bench | Other crystal |
+| Switch supply matches the power budget | Bench | USB-C budget changes |
 | The PoE front end parts are as listed | PoE front end design | PoE rows change |
 | LLDP alone is an acceptable way to 25.5 W | PoE front end design | Two-event detection circuit |
 | The firmware learns the grant from LLDP alone | PoE front end design | One more signal |
-| A 60 V converter survives behind the surge clamp | PoE front end design | 100 V converter |
-| Bridge loss is 1.1 W at 25.5 W | PoE front end design | USB-C budget changes |
+| 60 V converter parts survive behind the surge clamp | PoE front end design | 100 V parts |
+| The class sink transistor survives the class pulse | Datasheet check | Larger transistor |
+| One threshold zener makes the hot-swap switch work | PoE front end design | PoE rows change |
+| One bridge can shed 1.3 W | Schematic work | Schottky bridge |
+| A non-isolated design is acceptable | PoE front end design | Isolated converter |
+| Bridge loss is 1.3 W at 25.5 W | PoE front end design | USB-C budget changes |
 | The 5 V converter reaches 87 % | Bench | USB-C budget changes |
 | The catch diode can shed its loss | Schematic work | Larger diode |
 | The G2415S carries the PoE current | Datasheet check | Other transformer |
 | An unshielded jack passes emissions | Bench | Shielded jack |
 | The I²C master can drive a PD transceiver | USB PD study | Bit-banged I²C |
 | I²C master 2 works with the flash on pin group SPF0 | USB PD study | Second address variant |
-| The FUSB302B addresses are 0x22 and 0x23 | Datasheet check | Other variant |
+| The two FUSB302B variants differ in address | Datasheet check | Other variant |
+| The FUSB302B needs only the counted passives | Datasheet check | More passives |
+| Sinks accept 5 V above 15 W | Bench | Converter per output |
+| Three Rp resistors per output fit the free GPIOs | USB PD study | Fewer current levels |
 | CPU timing is good enough for bit-bang | USB PD study | Build not usable |
 | The port 9 MAC can send and capture PD bits | USB PD study | Build not usable |
 | The candidate buffer tolerates 3.3 V when disabled | Datasheet check | Other buffer |
@@ -836,7 +900,9 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | The candidate comparator slices BMC cleanly | Bench | Other comparator |
 | The internal pull-ups leave Rp off enough at reset | Bench | Rp on a pull-down pin |
 | One shared current limit is acceptable | USB PD study | Current-limited switch |
-| The AO4407A is efficient with a 5 V gate drive | Datasheet check | Other MOSFET |
+| The chip has no ADC | CPU study | Current measurement possible |
+| VBUS turn-on does not dip the 5 V rail | Bench | Gate capacitor |
+| No reverse-current block is needed | Bench | Second MOSFET per output |
 | No ESD parts are needed on USB-C | Bench | ESD diodes |
 
 <a id="reductions"></a>
@@ -846,8 +912,8 @@ Option B costs more than option A by one Ethernet port, one USB-C output and one
 | Idea | Saves | Risk |
 | --- | --- | --- |
 | Capacitor coupling on downstream ports | About $0.29 per port | Untested |
-| Drop the line termination | About $0.02 per port | Emissions |
-| Linear regulator for 3.3 V | About $0.05 | 0.5 W less for USB-C |
+| Drop the line termination | About $0.01 per downstream port | Emissions |
+| Linear regulator for 3.3 V | About $0.07 | 0.5 W less for USB-C |
 | YT9215S in place of the YT9215SC | $0.97 | [Two pin conflicts](#block-switch) |
 | Rp resistor with one comparator in place of PD | About $0.24 per output at least | No PD offer |
 

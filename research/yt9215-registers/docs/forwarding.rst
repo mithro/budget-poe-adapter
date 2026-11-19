@@ -174,7 +174,10 @@ what happens.
 The :ref:`register table <forwarding-flood-registers>` names the two sets. An action
 register chooses, per receiving port, one of the four actions of the
 :ref:`action table <forwarding-flood-actions>`. :reg:`ACT_UNK_MCAST` has the same four values
-as :reg:`ACT_UNK_UCAST`.
+as :reg:`ACT_UNK_UCAST`. The behaviour of the four actions is the wording of the comments on
+their definitions in :lx:`chip.h:346`: "flood", "steer to CPU", "discard" and "flood and copy".
+:lx:`yt921x_chip_setup_dsa` writes :val:`ACT_UNK_UCAST.ACT.TRAP` and
+:val:`ACT_UNK_UCAST.ACT.DROP`; the other two actions are :ev:`header` definitions.
 
 .. _forwarding-flood-registers:
 

@@ -4612,7 +4612,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>ERP</name>
-                      <description>Ethernet ring protection</description>
+                      <description>Ethernet ring protection. The meaning is inferred from the name; yt921x_acl_rule_ext_parse_flow_entries selects the value for the EtherType ETH_P_CFM.</description>
                       <value>6</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -4955,7 +4955,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>ERP</name>
-                      <description>Ethernet ring protection</description>
+                      <description>Ethernet ring protection. The meaning is inferred from the name; yt921x_acl_rule_ext_parse_flow_entries selects the value for the EtherType ETH_P_CFM.</description>
                       <value>6</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -5152,7 +5152,7 @@
                   <enumeratedValues>
                     <enumeratedValue>
                       <name>ETH</name>
-                      <description>Other Ethernet framing</description>
+                      <description>Other Ethernet framing. The meaning is inferred from the name.</description>
                       <value>0</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -8116,7 +8116,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>ERP</name>
-                      <description>Ethernet ring protection</description>
+                      <description>Ethernet ring protection. The meaning is inferred from the name; yt921x_acl_rule_ext_parse_flow_entries selects the value for the EtherType ETH_P_CFM.</description>
                       <value>6</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -8289,7 +8289,7 @@
                     </enumeratedValue>
                     <enumeratedValue>
                       <name>ERP</name>
-                      <description>Ethernet ring protection</description>
+                      <description>Ethernet ring protection. The meaning is inferred from the name; yt921x_acl_rule_ext_parse_flow_entries selects the value for the EtherType ETH_P_CFM.</description>
                       <value>6</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -8318,7 +8318,7 @@
                   <enumeratedValues>
                     <enumeratedValue>
                       <name>ETH</name>
-                      <description>Other Ethernet framing</description>
+                      <description>Other Ethernet framing. The meaning is inferred from the name.</description>
                       <value>0</value>
                     </enumeratedValue>
                     <enumeratedValue>
@@ -9275,7 +9275,7 @@
               </field>
               <field>
                 <name>TOKEN_OVERFLOW_EN</name>
-                <description>Tokens that overflow the committed bucket spill into the excess bucket. The comment on the field reads "RFC4115: yellow use unused green bw".</description>
+                <description>Tokens that overflow the committed bucket spill into the excess bucket. This meaning is inferred from a comment. The comment on the field reads "RFC4115: yellow use unused green bw".</description>
                 <bitOffset>13</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>

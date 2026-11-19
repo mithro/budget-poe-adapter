@@ -23,10 +23,10 @@ The pages are also readable as source:
 | [`docs/index.rst`](docs/index.rst) | Start page |
 | [`docs/overview.rst`](docs/overview.rst) | Chip overview |
 | [`docs/access.rst`](docs/access.rst) | Register access over MDIO |
-| [`docs/bringup.rst`](docs/bringup.rst) | Reset and identification |
+| [`docs/bringup.rst`](docs/bringup.rst) | Reset |
 | [`docs/ports.rst`](docs/ports.rst) | Port configuration |
 | [`docs/phy.rst`](docs/phy.rst) | PHY access through the MDIO masters of the switch |
-| [`docs/cpu-tag.rst`](docs/cpu-tag.rst) | CPU port and the 8-byte frame tag |
+| [`docs/cpu-tag.rst`](docs/cpu-tag.rst) | CPU port |
 | [`docs/forwarding.rst`](docs/forwarding.rst) | Forwarding between ports |
 | [`docs/vlan.rst`](docs/vlan.rst) | VLANs |
 | [`docs/fdb.rst`](docs/fdb.rst) | Forwarding database |
@@ -34,7 +34,7 @@ The pages are also readable as source:
 | [`docs/qos.rst`](docs/qos.rst) | Priorities |
 | [`docs/lag.rst`](docs/lag.rst) | Link aggregation |
 | [`docs/acl.rst`](docs/acl.rst) | Access control list |
-| [`docs/rate.rst`](docs/rate.rst) | Meters and shapers |
+| [`docs/rate.rst`](docs/rate.rst) | Rate limiting |
 | [`docs/mirror.rst`](docs/mirror.rst) | Port mirroring |
 | [`docs/leds.rst`](docs/leds.rst) | LEDs |
 | [`docs/bindings.rst`](docs/bindings.rst) | The code bindings |

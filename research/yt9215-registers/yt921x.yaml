@@ -718,6 +718,7 @@ enums:
       src:
       - chip.h
       - 117
+      used: false
   - name: V100
     value: 1
     desc: 100 Mbit/s
@@ -726,6 +727,7 @@ enums:
       src:
       - chip.h
       - 118
+      used: false
   - name: V1000
     value: 2
     desc: 1000 Mbit/s
@@ -734,6 +736,7 @@ enums:
       src:
       - chip.h
       - 119
+      used: false
   - name: V10000
     value: 3
     desc: 10 Gbit/s
@@ -742,6 +745,7 @@ enums:
       src:
       - chip.h
       - 120
+      used: false
   - name: V2500
     value: 4
     desc: 2500 Mbit/s
@@ -750,6 +754,7 @@ enums:
       src:
       - chip.h
       - 121
+      used: false
 - name: app_selector
   title: Priority sources
   desc: Index of a priority source in :reg:`PORT_PRIO_ORD`.
@@ -767,6 +772,7 @@ enums:
       src:
       - chip.h
       - 211
+      used: false
   - name: MAC_DA
     value: 1
     desc: Priority of the matching destination address entry in the forwarding database
@@ -775,6 +781,7 @@ enums:
       src:
       - chip.h
       - 212
+      used: false
   - name: VID
     value: 2
     desc: Priority of the VLAN table entry
@@ -783,6 +790,7 @@ enums:
       src:
       - chip.h
       - 213
+      used: false
   - name: ACL
     value: 3
     desc: Priority set by an ACL rule
@@ -791,6 +799,7 @@ enums:
       src:
       - chip.h
       - 214
+      used: false
   - name: DSCP
     value: 4
     desc: Priority mapped from the IP DSCP value through :reg:`IPM_DSCP`
@@ -799,6 +808,8 @@ enums:
       src:
       - chip.h
       - 215
+      use: [chip.c, yt921x_dsa_port_get_apptrust, 1605]
+      used: true
   - name: CVLAN_PCP
     value: 5
     desc: Priority mapped from the customer VLAN tag through :reg:`IPM_PCP`
@@ -807,6 +818,8 @@ enums:
       src:
       - chip.h
       - 216
+      use: [chip.c, yt921x_dsa_port_get_apptrust, 1607]
+      used: true
   - name: SVLAN_PCP
     value: 6
     desc: Priority mapped from the service VLAN tag through :reg:`IPM_PCP`
@@ -815,6 +828,8 @@ enums:
       src:
       - chip.h
       - 217
+      use: [chip.c, yt921x_dsa_port_set_apptrust, 1643]
+      used: true
   - name: PORT
     value: 7
     desc: Port default priority from :field:`PORT_QOS.PRIO`
@@ -823,6 +838,7 @@ enums:
       src:
       - chip.h
       - 219
+      used: false
 - name: acl_type
   title: ACL key types
   desc: Value of :field:`ACL_KEY.TYPE`; it selects which layout the rest of the key slot uses.
@@ -840,6 +856,7 @@ enums:
       src:
       - tc.h
       - 103
+      used: false
   - name: MAC_DA0
     value: 1
     desc: Destination MAC address bits 47 to 16
@@ -848,6 +865,8 @@ enums:
       src:
       - tc.h
       - 104
+      use: [tc.c, yt921x_acl_entries_set_l3_type, 442]
+      used: true
   - name: MAC_SA0
     value: 2
     desc: Source MAC address bits 47 to 16
@@ -856,6 +875,8 @@ enums:
       src:
       - tc.h
       - 105
+      use: [tc.c, yt921x_acl_entries_set_l3_type, 443]
+      used: true
   - name: MAC_DA1_SA1
     value: 3
     desc: Destination and source MAC address bits 15 to 0
@@ -864,6 +885,8 @@ enums:
       src:
       - tc.h
       - 106
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 748]
+      used: true
   - name: VLAN
     value: 4
     desc: VLAN identifiers and priorities with tag format
@@ -872,6 +895,7 @@ enums:
       src:
       - tc.h
       - 107
+      used: false
   - name: VTAG
     value: 5
     desc: VLAN identifiers and priorities
@@ -880,6 +904,7 @@ enums:
       src:
       - tc.h
       - 108
+      used: false
   - name: IPV4_DA
     value: 6
     desc: IPv4 destination address
@@ -888,6 +913,8 @@ enums:
       src:
       - tc.h
       - 109
+      use: [tc.c, yt921x_acl_entries_set_is_fragment, 375]
+      used: true
   - name: IPV4_SA
     value: 7
     desc: IPv4 source address
@@ -896,6 +923,8 @@ enums:
       src:
       - tc.h
       - 110
+      use: [tc.c, yt921x_acl_entries_set_is_fragment, 376]
+      used: true
   - name: IPV6_DA0
     value: 8
     desc: IPv6 destination address bits 127 to 96
@@ -904,6 +933,8 @@ enums:
       src:
       - tc.h
       - 111
+      use: [tc.c, yt921x_acl_entries_set_l4_type, 475]
+      used: true
   - name: IPV6_DA1
     value: 9
     desc: IPv6 destination address bits 95 to 64
@@ -912,6 +943,8 @@ enums:
       src:
       - tc.h
       - 112
+      use: [tc.c, yt921x_acl_entries_set_l4_type, 476]
+      used: true
   - name: IPV6_DA2
     value: 10
     desc: IPv6 destination address bits 63 to 32
@@ -920,6 +953,8 @@ enums:
       src:
       - tc.h
       - 113
+      use: [tc.c, yt921x_acl_entries_set_first_frag, 412]
+      used: true
   - name: IPV6_DA3
     value: 11
     desc: IPv6 destination address bits 31 to 0
@@ -928,6 +963,8 @@ enums:
       src:
       - tc.h
       - 114
+      use: [tc.c, yt921x_acl_entries_set_is_fragment, 380]
+      used: true
   - name: IPV6_SA0
     value: 12
     desc: IPv6 source address bits 127 to 96
@@ -936,6 +973,8 @@ enums:
       src:
       - tc.h
       - 115
+      use: [tc.c, yt921x_acl_entries_set_l4_type, 479]
+      used: true
   - name: IPV6_SA1
     value: 13
     desc: IPv6 source address bits 95 to 64
@@ -944,6 +983,8 @@ enums:
       src:
       - tc.h
       - 116
+      use: [tc.c, yt921x_acl_entries_set_l4_type, 480]
+      used: true
   - name: IPV6_SA2
     value: 14
     desc: IPv6 source address bits 63 to 32
@@ -952,6 +993,8 @@ enums:
       src:
       - tc.h
       - 117
+      use: [tc.c, yt921x_acl_entries_set_first_frag, 413]
+      used: true
   - name: IPV6_SA3
     value: 15
     desc: IPv6 source address bits 31 to 0
@@ -960,6 +1003,8 @@ enums:
       src:
       - tc.h
       - 118
+      use: [tc.c, yt921x_acl_entries_set_is_fragment, 381]
+      used: true
   - name: MISC
     value: 16
     desc: IP and TCP header fields. The fields are the IP protocol and the type of service and the TCP
@@ -969,6 +1014,8 @@ enums:
       src:
       - tc.h
       - 119
+      use: [tc.c, yt921x_acl_entries_set_is_fragment, 386]
+      used: true
   - name: L4
     value: 17
     desc: TCP or UDP source and destination ports
@@ -977,6 +1024,8 @@ enums:
       src:
       - tc.h
       - 120
+      use: [tc.c, yt921x_acl_entries_set_is_fragment, 390]
+      used: true
   - name: UDF0
     value: 18
     desc: User-defined field windows 0 and 1
@@ -985,6 +1034,8 @@ enums:
       src:
       - tc.h
       - 124
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 993]
+      used: true
   - name: UDF1
     value: 19
     desc: User-defined field windows 2 and 3
@@ -993,6 +1044,7 @@ enums:
       src:
       - tc.h
       - 125
+      used: false
   - name: UDF2
     value: 20
     desc: User-defined field windows 4 and 5
@@ -1001,6 +1053,7 @@ enums:
       src:
       - tc.h
       - 126
+      used: false
   - name: UDF3
     value: 21
     desc: User-defined field windows 6 and 7
@@ -1009,6 +1062,7 @@ enums:
       src:
       - tc.h
       - 127
+      used: false
   - name: UDF4
     value: 22
     desc: User-defined field windows 8 and 9
@@ -1017,6 +1071,7 @@ enums:
       src:
       - tc.h
       - 128
+      used: false
   - name: UDF5
     value: 23
     desc: User-defined field windows 10 and 11
@@ -1025,6 +1080,7 @@ enums:
       src:
       - tc.h
       - 129
+      used: false
   - name: UDF6
     value: 24
     desc: User-defined field windows 12 and 13
@@ -1033,6 +1089,7 @@ enums:
       src:
       - tc.h
       - 130
+      used: false
   - name: UDF7
     value: 25
     desc: User-defined field windows 14 and 15
@@ -1041,6 +1098,7 @@ enums:
       src:
       - tc.h
       - 131
+      used: false
   - name: ETHERTYPE
     value: 26
     desc: EtherType
@@ -1049,6 +1107,8 @@ enums:
       src:
       - tc.h
       - 132
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 800]
+      used: true
 - name: l2_type
   title: Layer 2 frame formats
   desc: Frame encapsulation code matched by the :field:`L2_TYPE <ACL_KEY.MAC_DA1_SA1_L2_TYPE>` field of
@@ -1061,12 +1121,13 @@ enums:
   values:
   - name: ETH
     value: 0
-    desc: Other Ethernet framing
+    desc: Other Ethernet framing. The meaning is :ev:`inferred` from the name.
     linux:
       macro: YT921X_L2_TYPE_ETH
       src:
       - tc.h
       - 230
+      used: false
   - name: ETHV2
     value: 1
     desc: Ethernet II
@@ -1075,6 +1136,7 @@ enums:
       src:
       - tc.h
       - 231
+      used: false
   - name: ETHSAP
     value: 2
     desc: '`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC'
@@ -1083,6 +1145,7 @@ enums:
       src:
       - tc.h
       - 232
+      used: false
   - name: ETHSNAP
     value: 3
     desc: '`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC and SNAP'
@@ -1091,6 +1154,7 @@ enums:
       src:
       - tc.h
       - 233
+      used: false
 - name: l3_type
   title: Layer 3 protocol classes
   desc: Protocol class matched by the :field:`L3_TYPE <ACL_KEY.MAC_ADDR0_L3_TYPE>` field of an ACL key.
@@ -1108,6 +1172,8 @@ enums:
       src:
       - tc.h
       - 237
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 765]
+      used: true
   - name: IPV4
     value: 1
     desc: IPv4
@@ -1116,6 +1182,8 @@ enums:
       src:
       - tc.h
       - 238
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 772]
+      used: true
   - name: IPV6
     value: 2
     desc: IPv6
@@ -1124,6 +1192,8 @@ enums:
       src:
       - tc.h
       - 239
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 775]
+      used: true
   - name: ARP
     value: 3
     desc: ARP
@@ -1132,6 +1202,8 @@ enums:
       src:
       - tc.h
       - 240
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 778]
+      used: true
   - name: LLDP
     value: 4
     desc: LLDP
@@ -1140,6 +1212,8 @@ enums:
       src:
       - tc.h
       - 241
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 781]
+      used: true
   - name: PAE
     value: 5
     desc: '`IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ port access entity'
@@ -1148,14 +1222,19 @@ enums:
       src:
       - tc.h
       - 242
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 784]
+      used: true
   - name: ERP
     value: 6
-    desc: Ethernet ring protection
+    desc: Ethernet ring protection. The meaning is :ev:`inferred` from the name; :lx:`yt921x_acl_rule_ext_parse_flow_entries`
+      selects the value for the EtherType ``ETH_P_CFM``.
     linux:
       macro: YT921X_L3_TYPE_ERP
       src:
       - tc.h
       - 243
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 787]
+      used: true
   - name: SLOW_PROTOCOL
     value: 7
     desc: '`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ slow protocols such as LACP'
@@ -1164,6 +1243,7 @@ enums:
       src:
       - tc.h
       - 244
+      used: false
 - name: l4_type
   title: Layer 4 protocol classes
   desc: Protocol class matched by the :field:`L4_TYPE <ACL_KEY.IPV4_L4_TYPE>` field of an ACL key.
@@ -1181,6 +1261,8 @@ enums:
       src:
       - tc.h
       - 248
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 810]
+      used: true
   - name: TCP
     value: 1
     desc: TCP
@@ -1189,6 +1271,8 @@ enums:
       src:
       - tc.h
       - 249
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 817]
+      used: true
   - name: UDP
     value: 2
     desc: UDP
@@ -1197,6 +1281,8 @@ enums:
       src:
       - tc.h
       - 250
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 820]
+      used: true
   - name: UDPLITE
     value: 3
     desc: UDP-Lite
@@ -1205,6 +1291,8 @@ enums:
       src:
       - tc.h
       - 251
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 823]
+      used: true
   - name: ICMP
     value: 4
     desc: ICMP
@@ -1213,6 +1301,8 @@ enums:
       src:
       - tc.h
       - 252
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 826]
+      used: true
   - name: IGMP
     value: 5
     desc: IGMP
@@ -1221,6 +1311,8 @@ enums:
       src:
       - tc.h
       - 253
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 829]
+      used: true
   - name: MLD
     value: 6
     desc: Multicast Listener Discovery
@@ -1229,6 +1321,7 @@ enums:
       src:
       - tc.h
       - 254
+      used: false
   - name: ND
     value: 7
     desc: IPv6 Neighbour Discovery
@@ -1237,6 +1330,7 @@ enums:
       src:
       - tc.h
       - 255
+      used: false
 - name: udf_type
   title: User-defined field bases
   desc: Header that a user-defined field offset is counted from, in :field:`UDF_CTRL.UDF_TYPE`.
@@ -1254,6 +1348,7 @@ enums:
       src:
       - tc.h
       - 265
+      used: false
   - name: L3
     value: 1
     desc: Start of the layer 3 header
@@ -1262,6 +1357,8 @@ enums:
       src:
       - tc.h
       - 266
+      use: [tc.c, '', 560]
+      used: true
   - name: L4
     value: 2
     desc: Start of the layer 4 header
@@ -1270,6 +1367,8 @@ enums:
       src:
       - tc.h
       - 267
+      use: [tc.c, '', 561]
+      used: true
 registers:
 - id: RST
   address: 0x80000
@@ -11529,8 +11628,9 @@ registers:
       use: [tc.c, yt921x_meter_config, 228]
     lsb: 77
     width: 1
-    desc: 'Tokens that overflow the committed bucket spill into the excess bucket. The :lx:`comment on
-      the field <tc.h:280>` reads "RFC4115: yellow use unused green bw".'
+    desc: 'Tokens that overflow the committed bucket spill into the excess bucket. This meaning is :ev:`inferred`
+      from a comment. The :lx:`comment on the field <tc.h:280>` reads "RFC4115: yellow use unused green
+      bw".'
     access: rw
     sdk:
       status: same bits

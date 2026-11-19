@@ -217,7 +217,7 @@ pub const ACL_TYPE_UDF6: u32 = 24;
 pub const ACL_TYPE_UDF7: u32 = 25;
 /// ACL key types: EtherType.
 pub const ACL_TYPE_ETHERTYPE: u32 = 26;
-/// Layer 2 frame formats: Other Ethernet framing.
+/// Layer 2 frame formats: Other Ethernet framing. The meaning is inferred from the name.
 pub const L2_TYPE_ETH: u32 = 0;
 /// Layer 2 frame formats: Ethernet II.
 pub const L2_TYPE_ETHV2: u32 = 1;
@@ -237,7 +237,7 @@ pub const L3_TYPE_ARP: u32 = 3;
 pub const L3_TYPE_LLDP: u32 = 4;
 /// Layer 3 protocol classes: IEEE 802.1X port access entity.
 pub const L3_TYPE_PAE: u32 = 5;
-/// Layer 3 protocol classes: Ethernet ring protection.
+/// Layer 3 protocol classes: Ethernet ring protection. The meaning is inferred from the name; yt921x_acl_rule_ext_parse_flow_entries selects the value for the EtherType ETH_P_CFM.
 pub const L3_TYPE_ERP: u32 = 6;
 /// Layer 3 protocol classes: IEEE 802.3 slow protocols such as LACP.
 pub const L3_TYPE_SLOW_PROTOCOL: u32 = 7;
@@ -2073,7 +2073,7 @@ pub const METER_CTRL_METER_COUNT: u32 = 75;
 pub const METER_CTRL_WORDS: usize = 3;
 /// Enables the meter.
 pub const METER_CTRL_METER_EN: Field = Field { lsb: 78, width: 1 };
-/// Tokens that overflow the committed bucket spill into the excess bucket. The comment on the field reads "RFC4115: yellow use unused green bw".
+/// Tokens that overflow the committed bucket spill into the excess bucket. This meaning is inferred from a comment. The comment on the field reads "RFC4115: yellow use unused green bw".
 pub const METER_CTRL_TOKEN_OVERFLOW_EN: Field = Field { lsb: 77, width: 1 };
 /// Colours that are dropped.
 pub const METER_CTRL_DROP: Field = Field { lsb: 75, width: 2 };

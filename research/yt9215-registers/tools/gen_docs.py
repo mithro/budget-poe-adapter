@@ -714,7 +714,7 @@ def index_page(m):
         nt = sum(1 for t in m.sdk["tables"] if sdk_region(m, t) is x)
         rows.append([lit(hexaddr(x["base"])), ":doc:`%s <regions/%s>`" % (x["name"], region_slug(x)),
                      x["title"], n, nt])
-    out += table(["Base address", "Region", "Title", "Registers described", "Vendor SDK tables"],
+    out += table(["Base address", "Region", "Title", "Registers described", ":ref:`Vendor SDK <sources-list>` tables"],
                  rows, [14, 18, 40, 14, 14])
     out += target("reference-blocks")
     out += heading("Function blocks", "-")
@@ -756,14 +756,15 @@ def enums_page(m):
         rows = [[lit(str(v["value"])),
                  ".. _%s:\n\n%s" % (enum_val_label(e["name"], v["name"]), lit(v["name"])),
                  linux_name(m, v.get("linux")),
+                 use_link(m, v.get("linux") or {}),
                  ev_link("driver" if (v.get("linux") or {}).get("used") else
                          "header" if v.get("linux") else "inferred"),
                  *short_cell(v.get("desc", ""), "note-enum-%s-%s" % (e["name"].lower(), v["name"].lower()),
                              notes, v["name"])] for v in e["values"]]
         out += ["The :ref:`C binding <bindings-c>` names each value ``YT921X_%s_`` followed by "
                 "the name in the column \"Name\"." % prefix, ""]
-        out += table(["Value", "Name", "Linux name", ":ref:`Evidence <evidence>`", "Meaning",
-                      "Notes"], rows, [9, 16, 27, 12, 28, 8])
+        out += table(["Value", "Name", "Linux name", "First used in", ":ref:`Evidence <evidence>`",
+                      "Meaning", "Notes"], rows, [7, 13, 22, 20, 10, 21, 7])
         out += note_lines(notes)
         if users.get(e["name"]):
             out += [".. rubric:: Used by", ""]

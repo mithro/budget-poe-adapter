@@ -230,7 +230,7 @@ and from the names of the :ref:`vendor SDK <sources-list>` tables at the same ad
    * - Register
      - Direction
      - Function
-     - Vendor SDK table
+     - :ref:`Vendor SDK <sources-list>` table
    * - :reg:`TPID_EGR`
      - egress
      - Four tag protocol identifiers to send

@@ -123,7 +123,7 @@ The part table of the :ref:`Linux driver <sources-list>`, which :lx:`yt921x_chip
 has no entry for the :chip:`YT9215SCH`. No source gives the identification values of that part.
 This manual assumes the values of the :chip:`YT9215SC`, because the |ds| gives the YT9215SCH the
 package and pin numbers that the :doc:`debug pin note </research/motorcomm-debug-pins>` records
-for the YT9215SC. The assumption is :ev:`inferred`.
+for the YT9215SC. Whether the assumption is right is :ev:`not known`.
 
 .. _bringup-clock:
 
@@ -229,7 +229,7 @@ Some settings are sampled from strap pins at power-on. It is :ev:`inferred` from
 names that a bit in :reg:`PON_STRAP_FUNC` makes the switch use the same bit of
 :reg:`PON_STRAP_VAL` in place of the strap. :lx:`yt921x_set_eee` sets the EEE bit in both
 registers to turn Energy Efficient Ethernet on and clears both to turn it off, which
-:ref:`ports-eee` describes. Setting both bits is the only use that is :ev:`confirmed`. It is :ev:`inferred` from
+:ref:`ports-eee` describes. Writing both bits alike is the only use that is :ev:`confirmed`. It is :ev:`inferred` from
 the name of :reg:`PON_STRAP_CAP` that the register shows the sampled levels.
 
 .. _bringup-io-level:

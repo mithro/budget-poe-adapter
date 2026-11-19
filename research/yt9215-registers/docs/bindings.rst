@@ -8,7 +8,7 @@ definitions of C, Rust and MicroPython are generated from
 :download:`yt921x.yaml <../yt921x.yaml>`, the description that this manual is generated from
 and that :doc:`description-files` explains. Zephyr uses the C definitions. A small
 hand-written access layer per environment implements the procedures of :doc:`access`,
-:doc:`bringup`, :doc:`phy` and :doc:`mib`. Every source file carries an Apache-2.0 licence
+:doc:`bringup`, :doc:`phy` and :doc:`mib`. Every source code file carries an Apache-2.0 licence
 identifier.
 
 .. list-table::
@@ -364,10 +364,6 @@ How the code is checked
      - Built for ``thumbv7em-none-eabihf``
    * - MicroPython
      - Run under CPython against the software model
-   * - MicroPython
-     - Compiled with ``mpy-cross``
-   * - Zephyr
-     - Sample run on ``native_sim``
    * - All
      - Generated values compared with the description file
 
@@ -378,4 +374,5 @@ None of the code has been run against a YT921x. The software model is
 Each implements the behaviour that this manual describes, so the tests show that code and
 manual agree with each other, not that both are right. The description file
 is :download:`yt921x.yaml <../yt921x.yaml>`. :download:`Makefile <../Makefile>` runs all
-checks with the command ``make check``.
+checks with the command ``make check``. Where the tool ``mpy-cross`` is installed, the command
+also compiles the MicroPython modules with it. No check builds the Zephyr module.

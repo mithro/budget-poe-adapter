@@ -249,11 +249,11 @@ enums:
   l2_type:
     title: Layer 2 frame formats
     desc: "Frame encapsulation code matched by the :field:`L2_TYPE <ACL_KEY.MAC_DA1_SA1_L2_TYPE>` field of an ACL key."
-    values: {ETH: Other Ethernet framing, ETHV2: Ethernet II, ETHSAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC", ETHSNAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC and SNAP"}
+    values: {ETH: "Other Ethernet framing. The meaning is :ev:`inferred` from the name.", ETHV2: Ethernet II, ETHSAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC", ETHSNAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC and SNAP"}
   l3_type:
     title: Layer 3 protocol classes
     desc: "Protocol class matched by the :field:`L3_TYPE <ACL_KEY.MAC_ADDR0_L3_TYPE>` field of an ACL key."
-    values: {OTHER: Any other protocol, IPV4: IPv4, IPV6: IPv6, ARP: ARP, LLDP: LLDP, PAE: "`IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ port access entity", ERP: Ethernet ring protection, SLOW_PROTOCOL: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ slow protocols such as LACP"}
+    values: {OTHER: Any other protocol, IPV4: IPv4, IPV6: IPv6, ARP: ARP, LLDP: LLDP, PAE: "`IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ port access entity", ERP: "Ethernet ring protection. The meaning is :ev:`inferred` from the name; :lx:`yt921x_acl_rule_ext_parse_flow_entries` selects the value for the EtherType ``ETH_P_CFM``.", SLOW_PROTOCOL: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ slow protocols such as LACP"}
   l4_type:
     title: Layer 4 protocol classes
     desc: "Protocol class matched by the :field:`L4_TYPE <ACL_KEY.IPV4_L4_TYPE>` field of an ACL key."
@@ -1380,7 +1380,7 @@ registers:
       :ref:`Token arithmetic <rate-tokens>` gives the conversion from bit rates.
     fields:
       METER_EN: {desc: "Enables the meter."}
-      TOKEN_OVERFLOW_EN: {desc: "Tokens that overflow the committed bucket spill into the excess bucket. The :lx:`comment on the field <tc.h:280>` reads \"RFC4115: yellow use unused green bw\"."}
+      TOKEN_OVERFLOW_EN: {desc: "Tokens that overflow the committed bucket spill into the excess bucket. This meaning is :ev:`inferred` from a comment. The :lx:`comment on the field <tc.h:280>` reads \"RFC4115: yellow use unused green bw\"."}
       DROP:
         desc: "Colours that are dropped."
         values: {GYR: "Drop every frame", YR: "Drop yellow and red frames", R: "Drop red frames", NONE: "Drop nothing and only colour the frame"}

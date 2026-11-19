@@ -1477,7 +1477,7 @@ addrmap yt9215 {
             NONE = 3 { desc = "Drop nothing and only colour the frame"; };
         };
         field { desc = "Enables the meter."; sw = rw; hw = r; } METER_EN[78:78];
-        field { desc = "Tokens that overflow the committed bucket spill into the excess bucket. The comment on the field reads \"RFC4115: yellow use unused green bw\"."; sw = rw; hw = r; } TOKEN_OVERFLOW_EN[77:77];
+        field { desc = "Tokens that overflow the committed bucket spill into the excess bucket. This meaning is inferred from a comment. The comment on the field reads \"RFC4115: yellow use unused green bw\"."; sw = rw; hw = r; } TOKEN_OVERFLOW_EN[77:77];
         field { desc = "Colours that are dropped."; sw = rw; hw = r; encode = meter_ctrl_drop_e; } DROP[76:75];
         field { desc = "Ignore the colour the frame already has."; sw = rw; hw = r; } COLOR_BLIND[74:74];
         field { desc = "Token scale. Every token value is multiplied by 4 to the power of UNIT."; sw = rw; hw = r; } UNIT[73:71];

@@ -203,6 +203,12 @@ FUNCS = {}
 USES = {}
 
 
+def enum_linux(member):
+    lx = dict(macro=member["cname"], src=member["src"])
+    lx["used"] = first_use(lx, ())
+    return lx
+
+
 def first_use(lx, funcs, *more):
     """Record where the driver first uses an item, trying its macro and then the others.
 
@@ -435,6 +441,9 @@ def parse_linux(ldir, overlay):
                 sizes[m.group(2)] = int(m.group(1))
     for mib in mibs:
         mib["words"] = sizes.get(mib["cname"], 1)
+    for e in enums.values():
+        for mem in e["members"]:
+            used(mem["cname"])
     return regs, consts, mibs, enums
 
 
@@ -773,7 +782,7 @@ def main():
             linux=dict(macro="enum yt921x_" + name, src=e["src"]),
             values=[dict(name=ident(m["name"]), value=m["value"],
                          desc=od.get("values", {}).get(m["name"], ""),
-                         linux=dict(macro=m["cname"], src=m["src"]))
+                         linux=enum_linux(m))
                     for m in e["members"]]))
     omib = overlay["counters"]
     out_mibs = []

@@ -14,8 +14,8 @@ Behaviour
 ---------
 
 :reg:`LED0_PORT`, :reg:`LED1_PORT` and :reg:`LED2_PORT` each hold, per port, one bit for every
-condition of the matching LED. An LED shows the combination of the conditions whose bits are
-set.
+condition of the matching LED. It is :ev:`inferred` from :lx:`yt921x_led_trigger_set`, which sets several
+bits at once, that an LED shows the combination of the conditions whose bits are set.
 
 .. yt-bitfield:: LED0_PORT
 
@@ -130,6 +130,7 @@ LED appears at which pin or stream position.
      - high
      - active high
 
-:lx:`yt921x_led_setup` writes :reg:`LED_PAR_INV`. The registers :reg:`LED_CTRL`,
+:lx:`yt921x_led_setup` writes :reg:`LED_PAR_INV`, and the polarity is that of the comment in
+that function, "Inversion is internal - force on will give low logic". The registers :reg:`LED_CTRL`,
 :reg:`LED_PAR_MAP`, :reg:`LED_SER_CTRL` and :reg:`LED_SER_MAP` have the level :ev:`header`:
 :lx:`leds.h` defines them and no function of the :ref:`Linux driver <sources-list>` uses them.

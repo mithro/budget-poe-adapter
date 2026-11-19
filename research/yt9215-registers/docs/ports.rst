@@ -208,6 +208,8 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
 :field:`SERDES.SPEED`, :field:`SERDES.DUPLEX_FULL`, :field:`SERDES.RX_PAUSE` and
 :field:`SERDES.TX_PAUSE` for a link with in-band status too.
 
+.. _ports-serdes-modes:
+
 .. list-table::
    :header-rows: 1
    :widths: 30 12 24 18 16
@@ -243,7 +245,8 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
      - none
      - :ev:`confirmed`
 
-The :ref:`Linux driver <sources-list>` names value 3 100BASEX and the |ds| lists the fibre mode of
+The column "Role of the switch" of the :ref:`mode table <ports-serdes-modes>` is :ev:`inferred`
+from the value name :val:`SERDES.MODE.REVSGMII`. The :ref:`Linux driver <sources-list>` names value 3 100BASEX and the |ds| lists the fibre mode of
 the extension ports as 100FX in the section "Extension Ports Fiber Mode (100FX/1000BX/2500BX)".
 
 .. _ports-xmii:

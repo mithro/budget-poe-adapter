@@ -114,5 +114,5 @@ Port default priority
 ---------------------
 
 Set :field:`PORT_QOS.PRIO` and :field:`PORT_QOS.PRIO_EN` to give all frames of a port one
-priority when no better source applies. :lx:`yt921x_dsa_port_set_default_prio` writes the
-two fields.
+priority. :lx:`yt921x_dsa_port_set_default_prio` writes the two fields. It is :ev:`inferred`
+that a source with a higher weight in :reg:`PORT_PRIO_ORD` takes precedence.

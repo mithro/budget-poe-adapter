@@ -199,8 +199,8 @@ value, high half first. The READ bit has the same value in all four frames.
    :caption: Register write. All four frames are MDIO writes.
 
 With switch ID 0 the four register numbers are 1, 1, 3, 3 for a read and 0, 0, 2, 2 for a
-write. The bits of the register number are :ev:`header` definitions in :lx:`chip.h:11`, and the
-two sequences are :ev:`confirmed` by :lx:`yt921x_reg_mdio_read` and
+write. The bits of the register number are defined in :lx:`chip.h:11`, and their use in the
+two sequences is :ev:`confirmed` by :lx:`yt921x_reg_mdio_read` and
 :lx:`yt921x_reg_mdio_write`.
 
 .. tab-set::

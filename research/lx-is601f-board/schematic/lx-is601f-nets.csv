@@ -4,6 +4,7 @@ net,kicad_net,ref,pin,confidence,sheet
 (NC),unconnected-(U4C-NC-Pad15),U4,15,I,Switch IC YT9215SCH
 (no trace seen),unconnected-(U4C-GPIO6{slash}UART0_RX-Pad46),U4,46,V,Switch IC YT9215SCH
 (no trace seen),unconnected-(U4C-GPIO7{slash}UART0_TX-Pad47),U4,47,V,Switch IC YT9215SCH
+(no trace seen),unconnected-(U4C-GPIO31{slash}P9LED0-Pad67),U4,67,V,Switch IC YT9215SCH
 (no trace seen),unconnected-(U4C-GPIO41{slash}P1LED2{slash}SPF1_SI-Pad79),U4,79,V,Switch IC YT9215SCH
 (no trace seen),unconnected-(U4C-GPIO47{slash}SSPI_CS-Pad90),U4,90,V,Switch IC YT9215SCH
 +1V15,+1V15,L3,1,V,Switch IC YT9215SCH
@@ -159,8 +160,6 @@ LED_P3,/Port LEDs/LED_P3,RJ11,1,I,Port LEDs
 LED_P3,/Port LEDs/LED_P3,U4,75,I,Switch IC YT9215SCH
 LED_P4,/Port LEDs/LED_P4,RJ9,1,I,Port LEDs
 LED_P4,/Port LEDs/LED_P4,U4,71,I,Switch IC YT9215SCH
-LED_P9,/Port LEDs/LED_P9,RJ7,1,I,Port LEDs
-LED_P9,/Port LEDs/LED_P9,U4,67,I,Switch IC YT9215SCH
 NRESET,/Switch IC YT9215SCH/NRESET,U4,89,U,Switch IC YT9215SCH
 P0_CT45,/Ports 1-4 with PoE/P0_CT45,DXFRM4,18,U,Ports 1-4 with PoE
 P0_CT78,/Ports 1-4 with PoE/P0_CT78,DXFRM4,15,U,Ports 1-4 with PoE
@@ -462,6 +461,7 @@ TBD_D1_A,/Power input and 3.3 V buck/TBD_D1_A,D1,2,U,Power input and 3.3 V buck
 TBD_D1_K,/Power input and 3.3 V buck/TBD_D1_K,D1,1,U,Power input and 3.3 V buck
 TBD_D5_A,/Power input and 3.3 V buck/TBD_D5_A,D5,2,U,Power input and 3.3 V buck
 TBD_D5_K,/Power input and 3.3 V buck/TBD_D5_K,D5,1,U,Power input and 3.3 V buck
+TBD_FX6,/Port LEDs/TBD_FX6,RJ7,1,U,Port LEDs
 TBD_LED6_1,/Port LEDs/TBD_LED6_1,J5,1,U,Port LEDs
 TBD_LED6_2,/Port LEDs/TBD_LED6_2,J5,2,U,Port LEDs
 TBD_LED6_3,/Port LEDs/TBD_LED6_3,J5,3,U,Port LEDs

@@ -403,7 +403,7 @@ registers:
       :ref:`Reset <bringup-reset>` gives the full sequence.
     fields:
       HW: {desc: "Write 1 to reset the whole chip. The bit clears itself when the reset is complete. Section 4.1.2.1 of the |ds| calls the bit CHIP_RESET."}
-      SW: {desc: "Write 1 for a software reset. Section 4.1.2.2 of the |ds| calls the bit SW_RESET. It states that the bit clears itself and resets what :field:`RST.HW` resets except the analog circuit of the built-in PHYs. No function of the Linux driver uses the bit."}
+      SW: {desc: "Write 1 for a software reset. Section 4.1.2.2 of the |ds| calls the bit SW_RESET. It states that the bit clears itself and resets what :field:`RST.HW` resets except the analog circuit of the built-in PHYs. No function of the :ref:`Linux driver <sources-list>` uses the bit."}
   FUNC:
     block: system
     title: Function enables
@@ -423,7 +423,7 @@ registers:
     add_fields:
       MINOR: {lsb: 0, width: 16, desc: "Lower half of the chip ID. The file `fal_tiger_init.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_init.c#L133>`__ of the :ref:`vendor SDK <sources-list>` tests it for the value 1. The meaning of its values is :ev:`not known`.", inferred: true}
     fields:
-      MAJOR: {desc: "Family code. 0x9002 is the YT9215 family and 0x9001 the YT9218 family."}
+      MAJOR: {desc: "Family code. ``0x9002`` is the :ref:`YT9215 family <reference-parts>` and ``0x9001`` the :ref:`YT9218 family <reference-parts>`."}
   CHIP_MODE:
     block: system
     title: Package variant
@@ -623,7 +623,7 @@ registers:
       Enables the SGMII SerDes of ports 8 and 9, as :lx:`yt921x_port_config` does. A port uses either its SerDes or its xMII pins;
       clear the matching bit in :reg:`XMII_CTRL` when setting one here.
     fields:
-      TEST: {desc: ":lx:`yt921x_chip_setup` clears the bit. It is :ev:`inferred` from the name that the bit selects a test mode of the SerDes. The file `fal_tiger_init.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_init.c#L140>`__ of the :ref:`vendor SDK <sources-list>` clears the bit together with the two port bits under the comment \"disable sds intf,will be enabled when config sds mode, set to mdio access mode\"."}
+      TEST: {desc: ":lx:`yt921x_chip_setup` clears the bit. It is :ev:`inferred` from the name that the bit selects a test mode of the SerDes. The file `fal_tiger_init.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_init.c#L140>`__ of the :ref:`vendor SDK <sources-list>` clears the bit together with the two port bits under a comment with the lines \"disable sds intf,will be enabled when config sds mode\" and \"set to mdio access mode\"."}
       PORTn: {desc: "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."}
   SERDES:
     block: port
@@ -786,7 +786,7 @@ registers:
       Chooses between parallel and serial LED outputs and sets the loop detection blink rate.
     inferred: true
     fields:
-      UNK: {desc: "The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_enable() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L123>`__ sets the bit under the comment \"enabel LED\". The Linux driver does not name its function.", inferred: true}
+      UNK: {desc: "The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_enable() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L123>`__ sets the bit under the comment \"enabel LED\". The :ref:`Linux driver <sources-list>` does not name its function.", inferred: true}
       LOOPDETECT_BLINK: {desc: "Blink cycle that signals a detected loop. The :lx:`comment on the field <leds.h:16>` gives the cycle as 512 ms times the field value. The :ref:`vendor SDK <sources-list>` list `yt_led_loopdetect_blink_rate_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_led.h#L79>`__ gives 512 ms for the value 0 and 2048 ms for the value 3, which is 512 ms times the field value plus one. It is :ev:`not known` which is right.", inferred: true}
       PORT_NUM: {desc: "Number of ports shifted out in serial mode.", inferred: true}
       MODE:
@@ -801,7 +801,7 @@ registers:
       shows the combination. :ref:`LEDs <leds>` explains the three LED groups.
     fields:
       ACT: {desc: "All behaviour bits of this LED as one mask.", group: true}
-      ACT_LINK_TRY_DIS: {desc: "Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L39>`__ names the bit LED_ACTION_DISABLE_LINK_TRY, and `fal_tiger_led_action_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L320>`__ sets it for LED 0 in every case, under the comment \"tiger must set disable_link_try bit to 1\". What the bit does is :ev:`not known`.", inferred: true}
+      ACT_LINK_TRY_DIS: {desc: "Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L40>`__ names the bit LED_ACTION_DISABLE_LINK_TRY, and `fal_tiger_led_action_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L320>`__ sets it for LED 0 in every case, under the comment \"tiger must set disable_link_try bit to 1\". What the bit does is :ev:`not known`.", inferred: true}
       ACT_COLLISION_BLINK_INDI: {desc: "Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L39>`__ names the bit LED_ACTION_COLLISION_BLINK. It is :ev:`inferred` from the name that the LED blinks on a collision.", inferred: true}
       <<: &ledact
         ACT_EEE_BLINK: {desc: "Blink while the port is in low power idle.", inferred: true}
@@ -857,7 +857,7 @@ registers:
       Settings of the serial LED output.
     inferred: true
     fields:
-      UNK: {desc: "The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_serial_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L1013>`__ sets both bits to turn the serial LED output on and clears both to turn it off. The :lx:`comment on the field <leds.h:68>` in the Linux driver reads \"delay?\".", inferred: true}
+      UNK: {desc: "The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_serial_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L1013>`__ sets both bits to turn the serial LED output on and clears both to turn it off. The :lx:`comment on the field <leds.h:68>` in the :ref:`Linux driver <sources-list>` reads \"delay?\".", inferred: true}
       ACTIVE_LOW: {desc: "Serial LED data is active low.", inferred: true}
       GRP_NUM: {desc: "Number of LED groups shifted out per port minus one.", inferred: true}
   LED_SER_MAP:
@@ -874,7 +874,7 @@ registers:
     block: led
     title: Parallel LED port enable
     desc: |
-      Parallel LED outputs in use. The Linux driver defines the address only.
+      Parallel LED outputs in use. The :ref:`Linux driver <sources-list>` defines the address only.
     inferred: true
     add_fields:
       VALUE: {lsb: 0, width: 32, desc: "The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_parallel_output_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L1080>`__ writes a port mask to bits 9 to 0, one bit per port, under the comment \"select output port mask of parallel LED\". Bits 31 to 10 are :ev:`not known`.", inferred: true}
@@ -964,8 +964,8 @@ registers:
     fields:
       UNTAG_PORTS: {desc: "Ports that send frames of this VLAN without a tag. Each port has one bit."}
       STP_ID: {desc: "Spanning tree instance of this VLAN. It selects the :reg:`STP` register."}
-      SVLAN_EN: {desc: "No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set` states. The Linux name reads as a service VLAN enable. The :ref:`vendor SDK <sources-list>` names the bit SVL_EN and sets it in `fal_tiger_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L71>`__; the `comment on yt_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan.h#L136>`__ reads \"Set vlan svl mode.It will look up fid after enable svl.\" By that comment the bit makes the VLAN use :field:`VLAN_CTRL.FID` for the address lookup, which disagrees with the reading of the Linux name.", inferred: true}
-      FID: {desc: "Filtering ID for address learning and lookup. No function of the Linux driver writes it. :lx:`yt921x_fdb_in01` writes the VLAN ID to :field:`FDB_IN1.FID`, so the Linux driver addresses the forwarding database by VLAN ID. The :ref:`vendor SDK <sources-list>` function `fal_tiger_vlan_fid_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L93>`__ writes the field, and the `comment on yt_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan.h#L136>`__ states that the lookup uses the filtering ID once :field:`VLAN_CTRL.SVLAN_EN` is set. The field crosses the boundary between the two words.", inferred: true}
+      SVLAN_EN: {desc: "No function of the :ref:`Linux driver <sources-list>` sets it, as the comment in :lx:`yt921x_vlan_aware_set` states. The Linux name reads as a service VLAN enable. The :ref:`vendor SDK <sources-list>` names the bit SVL_EN and sets it in `fal_tiger_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L71>`__; the `comment on yt_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan.h#L136>`__ reads \"Set vlan svl mode.It will look up fid after enable svl.\" By that comment the bit makes the VLAN use :field:`VLAN_CTRL.FID` for the address lookup, which disagrees with the reading of the Linux name.", inferred: true}
+      FID: {desc: "Filtering ID for address learning and lookup. No function of the :ref:`Linux driver <sources-list>` writes it. :lx:`yt921x_fdb_in01` writes the VLAN ID to :field:`FDB_IN1.FID`, so the :ref:`Linux driver <sources-list>` addresses the forwarding database by VLAN ID. The :ref:`vendor SDK <sources-list>` function `fal_tiger_vlan_fid_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L93>`__ writes the field, and the `comment on yt_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan.h#L136>`__ states that the lookup uses the filtering ID once :field:`VLAN_CTRL.SVLAN_EN` is set. The field crosses the boundary between the two words.", inferred: true}
       LEARN_DIS: {desc: "Source addresses of frames in this VLAN are not learned."}
       PRIO_EN: {desc: "Frames of this VLAN get the priority in PRIO.", inferred: true}
       PRIO: {desc: "VLAN priority. It is a source for :reg:`PORT_PRIO_ORD`.", inferred: true}
@@ -979,8 +979,8 @@ registers:
     desc: |
       VLAN IDs and priorities given to frames that arrive on a port without the matching tag.
     fields:
-      SVLAN_PRIO_EN: {desc: "Use SVLAN_PRIO as the default service tag priority.", inferred: true}
-      CVLAN_PRIO_EN: {desc: "Use CVLAN_PRIO as the default customer tag priority.", inferred: true}
+      SVLAN_PRIO_EN: {desc: "The Linux name reads as: use :field:`PORT_VLAN_CTRL.SVLAN_PRIO` as the default service tag priority. The :ref:`vendor SDK <sources-list>` names the bit `PRIORITY_TAG_SVID_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L308>`__, which reads as: give the default service VLAN ID to a priority-tagged frame. No code of either source uses the bit, and it is :ev:`not known` which reading is right.", inferred: true}
+      CVLAN_PRIO_EN: {desc: "The Linux name reads as: use :field:`PORT_VLAN_CTRL.CVLAN_PRIO` as the default customer tag priority. The :ref:`vendor SDK <sources-list>` names the bit `PRIORITY_TAG_CVID_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L309>`__, which reads as: give the default customer VLAN ID to a priority-tagged frame. No code of either source uses the bit, and it is :ev:`not known` which reading is right.", inferred: true}
       SVID: {desc: "Default service VLAN ID."}
       CVID: {desc: "Default customer VLAN ID (the port VLAN ID)."}
       SVLAN_PRIO: {desc: "Default service tag priority.", inferred: true}
@@ -991,7 +991,7 @@ registers:
     desc: |
       Drops tagged or untagged frames on receive, per tag kind.
     fields:
-      VLAN_RANGE_EN: {desc: "Enables VLAN range matching with the profile in VLAN_RANGE_PROFILE_ID.", inferred: true}
+      VLAN_RANGE_EN: {desc: "The Linux name reads as an enable of VLAN range matching with the profile in :field:`PORT_VLAN_CTRL1.VLAN_RANGE_PROFILE_ID`. The :ref:`vendor SDK <sources-list>` names the bit VLAN_RANGE_MODE, and `fal_tiger_vlan_trans_mode_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan_translate.c#L186>`__ writes a value of the list `yt_vlan_range_trans_mode_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L34>`__ to it: 0 for the customer tag and 1 for the service tag. By that code the bit selects the tag that range matching uses, which disagrees with the Linux name. It is :ev:`not known` which is right.", inferred: true}
       VLAN_RANGE_PROFILE_ID: {desc: "VLAN range profile number.", inferred: true}
       SVLAN_DROP_TAGGED: {desc: "Drop received frames that carry a service tag.", inferred: true}
       SVLAN_DROP_UNTAGGED: {desc: "Drop received frames that carry no service tag.", inferred: true}
@@ -1068,7 +1068,7 @@ registers:
       SUSPEND_DROP_EN: {desc: "Drop frames with a not yet learned source address.", inferred: true}
       DIS: {desc: "Disables address learning on the port."}
       LIMIT_EN: {desc: "Enables the limit in LIMIT.", inferred: true}
-      LIMIT: {desc: "Largest number of addresses learned on the port. The vendor SDK lists this field as 13 bits wide, at bits 15 to 3.", inferred: true}
+      LIMIT: {desc: "Largest number of addresses learned on the port. The :ref:`vendor SDK <sources-list>` lists this field as 13 bits wide, at bits 15 to 3.", inferred: true}
       DROP_ON_EXCEEDED: {desc: "Drop frames with a new source address once the limit is reached.", inferred: true}
       MODE:
         desc: "Who learns addresses."
@@ -1100,7 +1100,7 @@ registers:
         desc: "State of the entry."
         inferred_values: [MIN_TIME, MOVE_AGING_MAX_TIME, MAX_TIME, PENDING]
         values: {INVALID: "Entry is empty", MIN_TIME: "Dynamic entry about to age out", MOVE_AGING_MAX_TIME: "Dynamic entry that moved to another port", MAX_TIME: "Dynamic entry just learned or refreshed", PENDING: "Entry waiting for the CPU to confirm it", STATIC: "Static entry that never ages out"}
-      FID: {desc: "Filtering ID of the entry. The Linux driver uses the VLAN ID as the filtering ID."}
+      FID: {desc: "Filtering ID of the entry. The :ref:`Linux driver <sources-list>` uses the VLAN ID as the filtering ID."}
       ADDR_LO2: {desc: "MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8."}
   FDB_IN2:
     block: fdb
@@ -1124,10 +1124,10 @@ registers:
     fields:
       INDEX: {desc: "Entry index from 0 to 4095. It is used when MODE_INDEX is set."}
       MODE_INDEX: {desc: "Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID."}
-      FLUSH_MCAST: {desc: "A flush removes multicast entries in place of unicast entries.", inferred: true}
+      FLUSH_MCAST: {desc: "A flush removes multicast entries in place of unicast entries. The :ref:`vendor SDK <sources-list>` list `yt_l2_tbl_op_flush_mode_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_l2.h#L80>`__ gives this meaning to the bit.", inferred: true}
       FLUSH:
         desc: "Scope of a flush."
-        values: {ALL: "Every entry", PORT: "Entries of the ports in :field:`FDB_IN2.EGR_PORTS`", PORT_VID: "Entries of the ports in :field:`FDB_IN2.EGR_PORTS` with the filtering ID in :field:`FDB_IN1.FID`", VID: "Entries with the filtering ID in :field:`FDB_IN1.FID`"}
+        values: {ALL: "Every entry of the kind that :field:`FDB_OP.FLUSH_MCAST` selects", PORT: "Entries of the ports in :field:`FDB_IN2.EGR_PORTS`", PORT_VID: "Entries of the ports in :field:`FDB_IN2.EGR_PORTS` with the filtering ID in :field:`FDB_IN1.FID`", VID: "Entries with the filtering ID in :field:`FDB_IN1.FID`"}
       FLUSH_STATIC: {desc: "A flush also removes static entries."}
       NEXT_TYPE:
         desc: "Which entries GET_NEXT walks."
@@ -1314,10 +1314,10 @@ registers:
       CVID_RANGE_EN: {desc: "Match the customer VLAN ID as a range. The key holds the lowest and the mask the highest value."}
       CDEI: {desc: "Drop eligible bit of the customer tag."}
       CPRI: {desc: "Priority of the customer tag."}
-      CTAG_FMT: {desc: "Customer tag format of the frame. The Linux driver gives no codes. The :ref:`vendor SDK <sources-list>` list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__ gives 0 for untagged, 1 for priority-tagged and 2 for tagged.", inferred: true}
+      CTAG_FMT: {desc: "Customer tag format of the frame. The :ref:`Linux driver <sources-list>` gives no codes. The :ref:`vendor SDK <sources-list>` list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__ gives 0 for untagged, 1 for priority-tagged and 2 for tagged.", inferred: true}
       SDEI: {desc: "Drop eligible bit of the service tag."}
       SPRI: {desc: "Priority of the service tag."}
-      STAG_FMT: {desc: "Service tag format of the frame. The Linux driver gives no codes. The :ref:`vendor SDK <sources-list>` list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__ gives 0 for untagged, 1 for priority-tagged and 2 for tagged.", inferred: true}
+      STAG_FMT: {desc: "Service tag format of the frame. The :ref:`Linux driver <sources-list>` gives no codes. The :ref:`vendor SDK <sources-list>` list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__ gives 0 for untagged, 1 for priority-tagged and 2 for tagged.", inferred: true}
       SVID: {desc: "Service VLAN ID."}
       CVID: {desc: "Customer VLAN ID."}
       ADDR_RANGE_EN: {desc: "Match the address as a range. The key holds the lowest and the mask the highest value."}

@@ -216,10 +216,15 @@ removes static ones as well. The command and the rows :val:`FDB_OP.FLUSH.PORT` a
 :ev:`confirmed` by :lx:`yt921x_fdb_flush_raw`. The other two rows have the level
 :ev:`header`.
 
-It is :ev:`inferred` that the command works on unicast entries, or on multicast entries when
-:field:`FDB_OP.FLUSH_MCAST` is set, so that emptying the database takes one flush of each kind. The
-only source is the comment on the definition of the field in :lx:`chip.h:260`, which reads
-"ucast / mcast". No function of the :ref:`Linux driver <sources-list>` sets the field.
+The command works on unicast entries, or on multicast entries when
+:field:`FDB_OP.FLUSH_MCAST` is set, so that emptying the database takes one flush of each
+kind. No function of the :ref:`Linux driver <sources-list>` sets the field, and the comment
+on its definition in :lx:`chip.h:260` reads "ucast / mcast". The
+:ref:`vendor SDK <sources-list>` treats the field and :field:`FDB_OP.FLUSH` as one field of
+three bits, and its list
+`yt_l2_tbl_op_flush_mode_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_l2.h#L80>`__
+gives the values 0 to 3 to the four scopes for unicast entries and the values 4 to 7 to the
+same scopes for multicast entries.
 
 .. _fdb-flush-table:
 

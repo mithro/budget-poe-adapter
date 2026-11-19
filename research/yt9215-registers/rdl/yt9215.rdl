@@ -101,7 +101,7 @@ addrmap yt9215 {
     reg {
         name = "SerDes enable";
         desc = "Enables the SGMII SerDes of ports 8 and 9, as yt921x_port_config does. A port uses either its SerDes or its xMII pins; clear the matching bit in XMII_CTRL when setting one here.";
-        field { desc = "yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes. The file fal_tiger_init.c of the vendor SDK clears the bit together with the two port bits under the comment \"disable sds intf,will be enabled when config sds mode, set to mdio access mode\"."; sw = rw; hw = r; } TEST[6:6];
+        field { desc = "yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes. The file fal_tiger_init.c of the vendor SDK clears the bit together with the two port bits under a comment with the lines \"disable sds intf,will be enabled when config sds mode\" and \"set to mdio access mode\"."; sw = rw; hw = r; } TEST[6:6];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_9[1:1];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_8[0:0];
     } SERDES_CTRL @ 0x80028;
@@ -925,7 +925,7 @@ addrmap yt9215 {
         name = "Forwarding database command";
         desc = "Selects and starts a forwarding database command. Write the input words first, then this register with START set, then wait for FDB_RESULT.DONE.";
         enum fdb_op_flush_e {
-            ALL = 0 { desc = "Every entry"; };
+            ALL = 0 { desc = "Every entry of the kind that FDB_OP.FLUSH_MCAST selects"; };
             PORT = 1 { desc = "Entries of the ports in FDB_IN2.EGR_PORTS"; };
             PORT_VID = 2 { desc = "Entries of the ports in FDB_IN2.EGR_PORTS with the filtering ID in FDB_IN1.FID"; };
             VID = 3 { desc = "Entries with the filtering ID in FDB_IN1.FID"; };
@@ -945,7 +945,7 @@ addrmap yt9215 {
         };
         field { desc = "Entry index from 0 to 4095. It is used when MODE_INDEX is set."; sw = rw; hw = r; } INDEX[22:11];
         field { desc = "Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID."; sw = rw; hw = r; } MODE_INDEX[10:10];
-        field { desc = "A flush removes multicast entries in place of unicast entries."; sw = rw; hw = r; } FLUSH_MCAST[9:9];
+        field { desc = "A flush removes multicast entries in place of unicast entries. The vendor SDK list yt_l2_tbl_op_flush_mode_t gives this meaning to the bit."; sw = rw; hw = r; } FLUSH_MCAST[9:9];
         field { desc = "Scope of a flush."; sw = rw; hw = r; encode = fdb_op_flush_e; } FLUSH[8:7];
         field { desc = "A flush also removes static entries."; sw = rw; hw = r; } FLUSH_STATIC[6:6];
         field { desc = "Which entries GET_NEXT walks."; sw = rw; hw = r; encode = fdb_op_next_type_e; } NEXT_TYPE[5:4];
@@ -1500,8 +1500,8 @@ addrmap yt9215 {
     reg {
         name = "Port default VLAN";
         desc = "VLAN IDs and priorities given to frames that arrive on a port without the matching tag. Index: port = 0 to 10.";
-        field { desc = "Use SVLAN_PRIO as the default service tag priority."; sw = rw; hw = r; } SVLAN_PRIO_EN[31:31];
-        field { desc = "Use CVLAN_PRIO as the default customer tag priority."; sw = rw; hw = r; } CVLAN_PRIO_EN[30:30];
+        field { desc = "The Linux name reads as: use PORT_VLAN_CTRL.SVLAN_PRIO as the default service tag priority. The vendor SDK names the bit PRIORITY_TAG_SVID_EN, which reads as: give the default service VLAN ID to a priority-tagged frame. No code of either source uses the bit, and it is not known which reading is right."; sw = rw; hw = r; } SVLAN_PRIO_EN[31:31];
+        field { desc = "The Linux name reads as: use PORT_VLAN_CTRL.CVLAN_PRIO as the default customer tag priority. The vendor SDK names the bit PRIORITY_TAG_CVID_EN, which reads as: give the default customer VLAN ID to a priority-tagged frame. No code of either source uses the bit, and it is not known which reading is right."; sw = rw; hw = r; } CVLAN_PRIO_EN[30:30];
         field { desc = "Default service VLAN ID."; sw = rw; hw = r; } SVID[29:18];
         field { desc = "Default customer VLAN ID (the port VLAN ID)."; sw = rw; hw = r; } CVID[17:6];
         field { desc = "Default service tag priority."; sw = rw; hw = r; } SVLAN_PRIO[5:3];
@@ -1511,7 +1511,7 @@ addrmap yt9215 {
     reg {
         name = "Port acceptable frame types";
         desc = "Drops tagged or untagged frames on receive, per tag kind. Index: port = 0 to 10.";
-        field { desc = "Enables VLAN range matching with the profile in VLAN_RANGE_PROFILE_ID."; sw = rw; hw = r; } VLAN_RANGE_EN[8:8];
+        field { desc = "The Linux name reads as an enable of VLAN range matching with the profile in PORT_VLAN_CTRL1.VLAN_RANGE_PROFILE_ID. The vendor SDK names the bit VLAN_RANGE_MODE, and fal_tiger_vlan_trans_mode_set() writes a value of the list yt_vlan_range_trans_mode_t to it: 0 for the customer tag and 1 for the service tag. By that code the bit selects the tag that range matching uses, which disagrees with the Linux name. It is not known which is right."; sw = rw; hw = r; } VLAN_RANGE_EN[8:8];
         field { desc = "VLAN range profile number."; sw = rw; hw = r; } VLAN_RANGE_PROFILE_ID[7:4];
         field { desc = "Drop received frames that carry a service tag."; sw = rw; hw = r; } SVLAN_DROP_TAGGED[3:3];
         field { desc = "Drop received frames that carry no service tag."; sw = rw; hw = r; } SVLAN_DROP_UNTAGGED[2:2];

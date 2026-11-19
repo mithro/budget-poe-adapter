@@ -444,7 +444,7 @@ pub const CPU_COPY_TO_EXT_CPU: Field = Field { lsb: 0, width: 1 };
 
 /// SerDes enable.
 pub const SERDES_CTRL: u32 = 0x80028;
-/// yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes. The file fal_tiger_init.c of the vendor SDK clears the bit together with the two port bits under the comment "disable sds intf,will be enabled when config sds mode, set to mdio access mode".
+/// yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes. The file fal_tiger_init.c of the vendor SDK clears the bit together with the two port bits under a comment with the lines "disable sds intf,will be enabled when config sds mode" and "set to mdio access mode".
 pub const SERDES_CTRL_TEST: Field = Field { lsb: 6, width: 1 };
 /// Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9.
 pub const fn serdes_ctrl_port(port: u32) -> Field {
@@ -1113,9 +1113,9 @@ pub const fn port_vlan_ctrl(port: u32) -> u32 {
 pub const PORT_VLAN_CTRL_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_vlan_ctrl`].
 pub const PORT_VLAN_CTRL_PORT_COUNT: u32 = 11;
-/// Use SVLAN_PRIO as the default service tag priority.
+/// The Linux name reads as: use PORT_VLAN_CTRL.SVLAN_PRIO as the default service tag priority. The vendor SDK names the bit PRIORITY_TAG_SVID_EN, which reads as: give the default service VLAN ID to a priority-tagged frame. No code of either source uses the bit, and it is not known which reading is right.
 pub const PORT_VLAN_CTRL_SVLAN_PRIO_EN: Field = Field { lsb: 31, width: 1 };
-/// Use CVLAN_PRIO as the default customer tag priority.
+/// The Linux name reads as: use PORT_VLAN_CTRL.CVLAN_PRIO as the default customer tag priority. The vendor SDK names the bit PRIORITY_TAG_CVID_EN, which reads as: give the default customer VLAN ID to a priority-tagged frame. No code of either source uses the bit, and it is not known which reading is right.
 pub const PORT_VLAN_CTRL_CVLAN_PRIO_EN: Field = Field { lsb: 30, width: 1 };
 /// Default service VLAN ID.
 pub const PORT_VLAN_CTRL_SVID: Field = Field { lsb: 18, width: 12 };
@@ -1134,7 +1134,7 @@ pub const fn port_vlan_ctrl1(port: u32) -> u32 {
 pub const PORT_VLAN_CTRL1_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`port_vlan_ctrl1`].
 pub const PORT_VLAN_CTRL1_PORT_COUNT: u32 = 11;
-/// Enables VLAN range matching with the profile in VLAN_RANGE_PROFILE_ID.
+/// The Linux name reads as an enable of VLAN range matching with the profile in PORT_VLAN_CTRL1.VLAN_RANGE_PROFILE_ID. The vendor SDK names the bit VLAN_RANGE_MODE, and fal_tiger_vlan_trans_mode_set() writes a value of the list yt_vlan_range_trans_mode_t to it: 0 for the customer tag and 1 for the service tag. By that code the bit selects the tag that range matching uses, which disagrees with the Linux name. It is not known which is right.
 pub const PORT_VLAN_CTRL1_VLAN_RANGE_EN: Field = Field { lsb: 8, width: 1 };
 /// VLAN range profile number.
 pub const PORT_VLAN_CTRL1_VLAN_RANGE_PROFILE_ID: Field = Field { lsb: 4, width: 4 };
@@ -1362,11 +1362,11 @@ pub const FDB_OP: u32 = 0x180460;
 pub const FDB_OP_INDEX: Field = Field { lsb: 11, width: 12 };
 /// Addresses the entry by INDEX. Value 0 addresses it by MAC address and filtering ID.
 pub const FDB_OP_MODE_INDEX: Field = Field { lsb: 10, width: 1 };
-/// A flush removes multicast entries in place of unicast entries.
+/// A flush removes multicast entries in place of unicast entries. The vendor SDK list yt_l2_tbl_op_flush_mode_t gives this meaning to the bit.
 pub const FDB_OP_FLUSH_MCAST: Field = Field { lsb: 9, width: 1 };
 /// Scope of a flush.
 pub const FDB_OP_FLUSH: Field = Field { lsb: 7, width: 2 };
-/// Every entry
+/// Every entry of the kind that FDB_OP.FLUSH_MCAST selects
 pub const FDB_OP_FLUSH_ALL: u32 = 0;
 /// Entries of the ports in FDB_IN2.EGR_PORTS
 pub const FDB_OP_FLUSH_PORT: u32 = 1;

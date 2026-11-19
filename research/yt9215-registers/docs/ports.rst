@@ -128,8 +128,9 @@ which of the two each part has. Select one before enabling the MAC.
 :ref:`selection table <ports-select-table>`. The :ref:`vendor SDK <sources-list>` function
 `fal_tiger_port_extif_mode_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L687>`__
 sets :field:`XMII_CTRL.PORT` of the port for an xMII mode. It does not clear
-:field:`SERDES_CTRL.PORT` there; that cell of the table is :ev:`inferred` as the mirror image
-of the SerDes row.
+:field:`SERDES_CTRL.PORT` there; the cell "Clear" of the row "xMII" of the
+:ref:`selection table <ports-select-table>` is :ev:`inferred` as the mirror image of the row
+"SerDes".
 
 .. _ports-select-table:
 

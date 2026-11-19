@@ -192,7 +192,7 @@ uses.
      - :ref:`forwarding-learning`
    * - :field:`VLAN_CTRL.FID`
      - Filtering ID
-     - :field:`VLAN_CTRL.SVLAN_EN`
+     - :ref:`VLAN_CTRL in the reference <reg-vlan_ctrl>`
    * - :field:`VLAN_CTRL.PRIO`
      - Priority of the VLAN
      - :ref:`qos-sources`

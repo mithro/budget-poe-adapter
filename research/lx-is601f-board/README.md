@@ -16,7 +16,7 @@ The pin tables of both parts, and the route of each debug pin on this board, are
 | [`u4-pin-numbering-annotated.png`](u4-pin-numbering-annotated.png) | Annotated image | Pin 1 and the pin range of each side of [U4](../motorcomm-debug-pins.md#lx-u4) |
 | [`u4-pins-top-edge-annotated.png`](u4-pins-top-edge-annotated.png) | Annotated image | Pins 65 to 96 of [U4](../motorcomm-debug-pins.md#lx-u4) and their vias |
 | [`u4-pins-right-edge-annotated.png`](u4-pins-right-edge-annotated.png) | Annotated image | Pins 46 to 55 of [U4](../motorcomm-debug-pins.md#lx-u4) and the SPF0 resistors |
-| [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) on board B with the heatsink removed |
+| [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink |
 | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of [U4](../motorcomm-debug-pins.md#lx-u4) on board A |
 | [`u4-surroundings.jpg`](u4-surroundings.jpg) | Cropped photo | [U4](../motorcomm-debug-pins.md#lx-u4) and the named parts beside it, from [`photo-u4-wide.jpg`](photo-u4-wide.jpg) |
 | [`annotate.py`](annotate.py) | Script | Draws the annotations and makes the crop |
@@ -52,7 +52,7 @@ A ring with a number marks the via that the lead of that pin runs to.
 ## Source photos
 
 The three annotated images are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jpg), a close-up of
-[U4](../motorcomm-debug-pins.md#lx-u4) on board B with the heatsink removed. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
+[U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
 
 [`photo-u4-wide.jpg`](photo-u4-wide.jpg) shows board A, which has the same layout. The crop below keeps
 [U4](../motorcomm-debug-pins.md#lx-u4) and the parts beside it whose silkscreen names the pin table uses:

@@ -177,6 +177,6 @@ External PHYs and link polling
 
 It is :ev:`inferred` from the name of :reg:`MDIO_POLLING` that the switch can learn the link state
 of an external port by polling a PHY on the external master. It is :ev:`not known` how that
-polling is set up. The :ev:`confirmed` use of the register is a port without a PHY:
+polling is set up. The :ev:`confirmed` use of the register is an external port that does not use its SerDes:
 :lx:`yt921x_port_up` writes the link state into :reg:`MDIO_POLLING` itself, which is step 4 of
 :ref:`ports-xmii`.

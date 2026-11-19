@@ -613,6 +613,8 @@ def register_section(m, reg, guide_refs, mentions):
     rows.append(("Linux name", linux_name(m, lx)))
     rows.append(("First used in", use_link(m, lx)))
     rows.append((":ref:`SDK table <reference-sdk>`", sdk_cell(m, reg)))
+    for name in (reg.get("sdk") or {}).get("more", []):
+        rows.append((":ref:`SDK table <reference-sdk>`", ":sdk:`%s`" % name))
     c = "YT921X_%s%s" % (reg["id"], "(%s)" % ", ".join(d["var"] for d in reg["dims"]) if reg["dims"] else "")
     rs = "regs::%s(%s)" % (reg["id"].lower(), ", ".join(d["var"] for d in reg["dims"])) \
         if reg["dims"] else "regs::" + reg["id"]
@@ -891,8 +893,10 @@ def sdk_pages(m):
                          ":sdk:`%s`" % t["name"], t["entries"],
                          t["bytes"], ":reg:`%s`" % reg if reg else "none"])
     out += heading("All SDK tables by address", "-")
-    out += ["The column \"Described as\" names the register of this manual at the address of "
-            "the table. A table with the address \"none\" is a layout of an "
+    out += ["The column \"Described as\" names the register of this manual whose address range "
+            "holds the address of the table. The :ref:`vendor SDK <sources-list>` splits some "
+            "registers that this manual describes as one array into several tables, and each of "
+            "those tables names the same register. A table with the address \"none\" is a layout of an "
             ":ref:`ACL rule <acl>` and has no address of its own.", ""]
     out += table(["Address", "SDK table", "Entries", "Bytes per entry", "Described as"], rows,
                  [14, 36, 10, 14, 26])

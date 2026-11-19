@@ -101,7 +101,7 @@ addrmap yt9215 {
     reg {
         name = "SerDes enable";
         desc = "Enables the SGMII SerDes of ports 8 and 9, as yt921x_port_config does. A port uses either its SerDes or its xMII pins; clear the matching bit in XMII_CTRL when setting one here.";
-        field { desc = "SerDes test mode. Clear it before use."; sw = rw; hw = r; } TEST[6:6];
+        field { desc = "yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes."; sw = rw; hw = r; } TEST[6:6];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_9[1:1];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_8[0:0];
     } SERDES_CTRL @ 0x80028;
@@ -154,7 +154,7 @@ addrmap yt9215 {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s"; };
+            V10000 = 3 { desc = "10000 Mbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "SerDes protocol."; sw = rw; hw = r; encode = serdes_mode_e; } MODE[9:7];
@@ -172,7 +172,7 @@ addrmap yt9215 {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s"; };
+            V10000 = 3 { desc = "10000 Mbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "Take the pause settings from in-band negotiation. yt921x_serdes_config sets the bit for a SerDes link with in-band negotiation other than SGMII. It is inferred from the name that RX_PAUSE and TX_PAUSE are then ignored."; sw = rw; hw = r; } PAUSE_AN[10:10];
@@ -193,7 +193,7 @@ addrmap yt9215 {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s"; };
+            V10000 = 3 { desc = "10000 Mbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "1 while the link is up."; sw = r; hw = w; } LINK[8:8];
@@ -228,12 +228,12 @@ addrmap yt9215 {
 
     reg {
         name = "External port link override";
-        desc = "Link state of port 8 or 9. yt921x_port_up writes the link state here for a port that is wired straight to another MAC. It is inferred from the name that the switch otherwise learns the state by polling a PHY on the external MDIO bus. Index: port = 8 to 9.";
+        desc = "Link state of port 8 or 9. yt921x_port_up writes the link state here for an external port that does not use its SerDes. It is inferred from the name that the switch otherwise learns the state by polling a PHY on the external MDIO bus. Index: port = 8 to 9.";
         enum mdio_polling_speed_e {
             V10 = 0 { desc = "10 Mbit/s"; };
             V100 = 1 { desc = "100 Mbit/s"; };
             V1000 = 2 { desc = "1000 Mbit/s"; };
-            V10000 = 3 { desc = "10 Gbit/s"; };
+            V10000 = 3 { desc = "10000 Mbit/s"; };
             V2500 = 4 { desc = "2500 Mbit/s"; };
         };
         field { desc = "1 for full duplex."; sw = rw; hw = r; } DUPLEX_FULL[4:4];
@@ -249,8 +249,8 @@ addrmap yt9215 {
 
     reg {
         name = "Temperature sensor reading";
-        desc = "Raw reading of the die temperature sensor. No source gives the conversion to degrees.";
-        field { desc = "Raw sensor value. Its scale and offset are not known."; sw = r; hw = w; } VALUE[31:0];
+        desc = "Reading of the temperature sensor. No function of the Linux driver reads the register. :ref:`bringup-temp` gives the conversion that the vendor SDK uses.";
+        field { desc = "Sensor value. The vendor SDK function fal_tiger_sensor_temp_value_get() uses bits 15 to 0, in steps of 1/128 °C."; sw = r; hw = w; } VALUE[31:0];
     } TEMP @ 0x80374;
 
     reg {
@@ -300,8 +300,8 @@ addrmap yt9215 {
 
     reg {
         name = "Port EEE value";
-        desc = "Per-port Energy Efficient Ethernet setting inside the MAC. Index: port = 0 to 10.";
-        field { desc = "1 enables low power idle on the port."; sw = rw; hw = r; } DATA[1:1];
+        desc = "Per-port Energy Efficient Ethernet bit that yt921x_set_eee sets and clears together with EEE_CTRL.EN of the port. It is not known what the bit does alone. Index: port = 0 to 10.";
+        field { desc = "Set to turn Energy Efficient Ethernet on for the port and cleared to turn it off, as yt921x_set_eee does."; sw = rw; hw = r; } DATA[1:1];
     } EEE_VAL[11] @ 0xA0000 += 0x40;
 
     reg {

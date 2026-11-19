@@ -951,6 +951,19 @@ def main():
                                    desc=ocon[c["name"]],
                                    linux=dict(macro=c["cname"], src=c["src"])))
 
+    # ---- SDK tables that lie inside an array register beyond its first table
+    based = {r["sdk"]["table"] for r in out_regs if "table" in r.get("sdk", {})}
+    for r in out_regs:
+        if "table" not in r.get("sdk", {}) or not r["dims"]:
+            continue
+        starts = set()
+        for idx in itertools.product(*[range(d["count"]) for d in r["dims"]]):
+            a = r["address"] + sum(d["stride"] * i for d, i in zip(r["dims"], idx))
+            starts.update(range(a, a + 4 * r["words"], 4))
+        more = [t["name"] for t in sorted(tables, key=lambda t: t["base"])
+                if t["base"] in starts and t["name"] not in based]
+        if more:
+            r["sdk"]["more"] = Flow(more)
     doc = dict(
         schema=1,
         device=overlay["device"],
@@ -982,6 +995,8 @@ def main():
     for r in out_regs:
         if "table" in r.get("sdk", {}):
             covered.setdefault(r["sdk"]["table"], []).append(r["id"])
+            for name in r["sdk"].get("more", []):
+                covered.setdefault(name, []).append(r["id"])
     sdk_doc = dict(
         schema=1,
         source=dict(repo="https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk",

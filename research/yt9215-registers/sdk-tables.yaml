@@ -623,7 +623,7 @@ tables:
   entries: 1
   index_line: 185
   struct_line: 173
-  registers: []
+  registers: [XMII]
   fields:
   - name: XMII_MODE
     lsb: 29
@@ -726,7 +726,7 @@ tables:
   entries: 2
   index_line: 209
   struct_line: 201
-  registers: []
+  registers: [TPID_IGR]
   fields:
   - name: TPID
     lsb: 0
@@ -1522,7 +1522,7 @@ tables:
   entries: 48
   index_line: 465
   struct_line: 425
-  registers: []
+  registers: [ACL_KEY]
   fields: []
 - name: ACL_RULE_BIN2
   address: 0x204400
@@ -1531,7 +1531,7 @@ tables:
   entries: 48
   index_line: 473
   struct_line: 428
-  registers: []
+  registers: [ACL_KEY]
   fields: []
 - name: ACL_RULE_BIN3
   address: 0x204600
@@ -1540,7 +1540,7 @@ tables:
   entries: 48
   index_line: 481
   struct_line: 431
-  registers: []
+  registers: [ACL_KEY]
   fields: []
 - name: ACL_RULE_BIN4
   address: 0x204800
@@ -1549,7 +1549,7 @@ tables:
   entries: 48
   index_line: 489
   struct_line: 434
-  registers: []
+  registers: [ACL_KEY]
   fields: []
 - name: ACL_RULE_BIN5
   address: 0x204a00
@@ -1558,7 +1558,7 @@ tables:
   entries: 48
   index_line: 497
   struct_line: 437
-  registers: []
+  registers: [ACL_KEY]
   fields: []
 - name: ACL_RULE_BIN6
   address: 0x204c00
@@ -1567,7 +1567,7 @@ tables:
   entries: 48
   index_line: 505
   struct_line: 440
-  registers: []
+  registers: [ACL_KEY]
   fields: []
 - name: ACL_RULE_BIN7
   address: 0x204e00
@@ -1576,7 +1576,7 @@ tables:
   entries: 48
   index_line: 513
   struct_line: 443
-  registers: []
+  registers: [ACL_KEY]
   fields: []
 - name: ACL_RULE_MASK_BIN0
   address: 0x205000
@@ -1594,7 +1594,7 @@ tables:
   entries: 48
   index_line: 529
   struct_line: 449
-  registers: []
+  registers: [ACL_MASK]
   fields: []
 - name: ACL_RULE_MASK_BIN2
   address: 0x205400
@@ -1603,7 +1603,7 @@ tables:
   entries: 48
   index_line: 537
   struct_line: 452
-  registers: []
+  registers: [ACL_MASK]
   fields: []
 - name: ACL_RULE_MASK_BIN3
   address: 0x205600
@@ -1612,7 +1612,7 @@ tables:
   entries: 48
   index_line: 545
   struct_line: 455
-  registers: []
+  registers: [ACL_MASK]
   fields: []
 - name: ACL_RULE_MASK_BIN4
   address: 0x205800
@@ -1621,7 +1621,7 @@ tables:
   entries: 48
   index_line: 553
   struct_line: 458
-  registers: []
+  registers: [ACL_MASK]
   fields: []
 - name: ACL_RULE_MASK_BIN5
   address: 0x205a00
@@ -1630,7 +1630,7 @@ tables:
   entries: 48
   index_line: 561
   struct_line: 461
-  registers: []
+  registers: [ACL_MASK]
   fields: []
 - name: ACL_RULE_MASK_BIN6
   address: 0x205c00
@@ -1639,7 +1639,7 @@ tables:
   entries: 48
   index_line: 569
   struct_line: 464
-  registers: []
+  registers: [ACL_MASK]
   fields: []
 - name: ACL_RULE_MASK_BIN7
   address: 0x205e00
@@ -1648,7 +1648,7 @@ tables:
   entries: 48
   index_line: 577
   struct_line: 467
-  registers: []
+  registers: [ACL_MASK]
   fields: []
 - name: MAC_DA0_RULE
   address: 0x0

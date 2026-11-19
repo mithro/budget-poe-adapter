@@ -210,8 +210,6 @@ against the :ref:`software model <bindings-tests>` only. No source settles the t
      - :field:`VLAN_CTRL.FID`
    * - Meaning of a service VLAN bit
      - :field:`VLAN_CTRL.SVLAN_EN`
-   * - Scale of the temperature reading
-     - :reg:`TEMP`
    * - MDIO `clause 45 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__
      - :ref:`phy-mbus`
    * - SPI host interface

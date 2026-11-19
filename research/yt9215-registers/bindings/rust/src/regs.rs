@@ -143,7 +143,7 @@ pub const SPEED_V10: u32 = 0;
 pub const SPEED_V100: u32 = 1;
 /// Link speed codes: 1000 Mbit/s.
 pub const SPEED_V1000: u32 = 2;
-/// Link speed codes: 10 Gbit/s.
+/// Link speed codes: 10000 Mbit/s.
 pub const SPEED_V10000: u32 = 3;
 /// Link speed codes: 2500 Mbit/s.
 pub const SPEED_V2500: u32 = 4;
@@ -374,7 +374,7 @@ pub const SENSOR_TEMP: Field = Field { lsb: 18, width: 1 };
 
 /// Temperature sensor reading.
 pub const TEMP: u32 = 0x80374;
-/// Raw sensor value. Its scale and offset are not known.
+/// Sensor value. The vendor SDK function fal_tiger_sensor_temp_value_get() uses bits 15 to 0, in steps of 1/128 °C.
 pub const TEMP_VALUE: Field = Field { lsb: 0, width: 32 };
 
 /// Package variant.
@@ -444,7 +444,7 @@ pub const CPU_COPY_TO_EXT_CPU: Field = Field { lsb: 0, width: 1 };
 
 /// SerDes enable.
 pub const SERDES_CTRL: u32 = 0x80028;
-/// SerDes test mode. Clear it before use.
+/// yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes.
 pub const SERDES_CTRL_TEST: Field = Field { lsb: 6, width: 1 };
 /// Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9.
 pub const fn serdes_ctrl_port(port: u32) -> Field {
@@ -692,7 +692,7 @@ pub const fn eee_val(port: u32) -> u32 {
 pub const EEE_VAL_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`eee_val`].
 pub const EEE_VAL_PORT_COUNT: u32 = 11;
-/// 1 enables low power idle on the port.
+/// Set to turn Energy Efficient Ethernet on for the port and cleared to turn it off, as yt921x_set_eee does.
 pub const EEE_VAL_DATA: Field = Field { lsb: 1, width: 1 };
 
 /// EEE port enable.

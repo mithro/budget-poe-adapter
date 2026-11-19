@@ -742,7 +742,7 @@ enums:
       use: [chip.h, ethtool_speed_to_yt921x, 548]
   - name: V10000
     value: 3
-    desc: 10 Gbit/s
+    desc: 10000 Mbit/s
     linux:
       macro: YT921X_SPEED_10000
       src:
@@ -2105,14 +2105,20 @@ registers:
   - name: VALUE
     lsb: 0
     width: 32
-    desc: Raw sensor value. Its scale and offset are :ev:`not known`.
+    desc: Sensor value. The :ref:`vendor SDK <sources-list>` function `fal_tiger_sensor_temp_value_get()
+      <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_sensor.c#L44>`__
+      uses bits 15 to 0, in steps of 1/128 °C.
     access: ro
     inferred: true
     sdk:
       status: no SDK table
   block: system
   title: Temperature sensor reading
-  desc: Raw reading of the die temperature sensor. No source gives the conversion to degrees.
+  desc: 'Reading of the temperature sensor. No function of the :ref:`Linux driver <sources-list>`
+
+    reads the register. :ref:`bringup-temp` gives the conversion that the
+
+    :ref:`vendor SDK <sources-list>` uses.'
   access: ro
   words: 1
   inferred: true
@@ -2554,7 +2560,8 @@ registers:
       use: [chip.c, yt921x_chip_setup, 2421]
     lsb: 6
     width: 1
-    desc: SerDes test mode. Clear it before use.
+    desc: :lx:`yt921x_chip_setup` clears the bit. It is :ev:`inferred` from the name that the bit selects
+      a test mode of the SerDes.
     access: rw
     sdk:
       status: no SDK table
@@ -3123,9 +3130,9 @@ registers:
       fields: [SPEED]
   block: port
   title: External port link override
-  desc: 'Link state of port 8 or 9. :lx:`yt921x_port_up` writes the link state here for a port
+  desc: 'Link state of port 8 or 9. :lx:`yt921x_port_up` writes the link state here for an
 
-    that is wired straight to another MAC. It is :ev:`inferred` from the name that the switch
+    external port that does not use its SerDes. It is :ev:`inferred` from the name that the switch
 
     otherwise learns the state by polling a PHY on the external MDIO bus.'
   access: rw
@@ -3458,6 +3465,7 @@ registers:
     src:
     - switch_sdk/core/fal/tiger/fal_tiger_index.c
     - 169
+    more: [EXTIF1_MODE]
 - id: MAC_FRAME
   address: 0x81008
   dims:
@@ -3960,13 +3968,16 @@ registers:
       use: [chip.c, yt921x_set_eee, 218]
     lsb: 1
     width: 1
-    desc: 1 enables low power idle on the port.
+    desc: Set to turn Energy Efficient Ethernet on for the port and cleared to turn it off, as :lx:`yt921x_set_eee`
+      does.
     access: rw
     sdk:
       status: no SDK table
   block: eee
   title: Port EEE value
-  desc: Per-port Energy Efficient Ethernet setting inside the MAC.
+  desc: 'Per-port Energy Efficient Ethernet bit that :lx:`yt921x_set_eee` sets and clears together
+
+    with :field:`EEE_CTRL.EN` of the port. It is :ev:`not known` what the bit does alone.'
   access: rw
   words: 1
   sdk:
@@ -6060,6 +6071,7 @@ registers:
     src:
     - switch_sdk/core/fal/tiger/fal_tiger_index.c
     - 201
+    more: [TPID_PROFILE1]
 - id: PORT_IGR_TPID
   address: 0x210010
   dims:
@@ -10723,6 +10735,7 @@ registers:
     src:
     - switch_sdk/core/fal/tiger/fal_tiger_index.c
     - 457
+    more: [ACL_RULE_BIN1, ACL_RULE_BIN2, ACL_RULE_BIN3, ACL_RULE_BIN4, ACL_RULE_BIN5, ACL_RULE_BIN6, ACL_RULE_BIN7]
 - id: ACL_MASK
   address: 0x205000
   dims:
@@ -11518,6 +11531,8 @@ registers:
     src:
     - switch_sdk/core/fal/tiger/fal_tiger_index.c
     - 521
+    more: [ACL_RULE_MASK_BIN1, ACL_RULE_MASK_BIN2, ACL_RULE_MASK_BIN3, ACL_RULE_MASK_BIN4, ACL_RULE_MASK_BIN5,
+      ACL_RULE_MASK_BIN6, ACL_RULE_MASK_BIN7]
 - id: UDF_CTRL
   address: 0x210094
   dims:

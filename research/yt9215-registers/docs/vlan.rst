@@ -126,14 +126,14 @@ Ingress filtering
      - :ev:`confirmed`
    * - Tagged
      - :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`
-     - :ev:`confirmed`
+     - :ev:`inferred`
 
 :lx:`yt921x_vlan_filtering` sets the fields of the rows "VLAN does not include the receiving
 port" and "Untagged" of the :ref:`filter table <vlan-filter-table>`. It sets :field:`PORT_VLAN_CTRL1.CVLAN_DROP_UNTAGGED` for a VLAN-aware
 port that has no port VLAN. It always clears :field:`PORT_VLAN_CTRL1.CVLAN_DROP_TAGGED`, and
 its comment leaves the dropping of tagged frames to :reg:`VLAN_IGR_FILTER`. The :ref:`Linux driver <sources-list>`
-therefore :ev:`confirms <confirmed>` the field only by clearing it; the effect of setting it is
-:ev:`inferred` from its name. An access port is a use for it.
+therefore uses the field only by clearing it, and the effect of setting it, which the row
+"Tagged" states, is :ev:`inferred` from its name. An access port is a use for it.
 
 .. _vlan-table:
 

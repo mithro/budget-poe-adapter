@@ -250,8 +250,13 @@ Temperature sensor
 ~~~~~~~~~~~~~~~~~~
 
 Set :field:`SENSOR.TEMP` to start the temperature sensor, as :lx:`yt921x_chip_setup` does,
-and read :reg:`TEMP`. It is :ev:`inferred` from the name of the register that it holds a raw
-temperature value. The conversion to degrees is :ev:`not known`.
+and read :reg:`TEMP`. No function of the :ref:`Linux driver <sources-list>` reads
+:reg:`TEMP`. The :ref:`vendor SDK <sources-list>` function
+`fal_tiger_sensor_temp_value_get() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_sensor.c#L44>`__
+reads the register and uses bits 15 to 0 as the value *v*. With bit 15 clear it returns
+*v* × 100 ÷ 128 as hundredths of a degree Celsius, so that one step of *v* is 1/128 °C. With
+bit 15 set it returns the temperature as negative, with the size 51200 − *v* × 100 ÷ 128 in the
+same unit. The conversion is not tested on a chip.
 
 .. _bringup-mac:
 

@@ -307,10 +307,10 @@ its configuration.
      - :field:`XMII.EN`
      - 1
    * - :reg:`XMII` of port 8
-     - bit 26
+     - SDK field `EN_MACMODE_LNKDN_SWH <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L152>`__
      - 1
    * - :reg:`XMII` of port 8
-     - bit 20
+     - SDK field `RGMII_TXC_DLY100_10_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L153>`__
      - 1
    * - :reg:`XMII` of port 8
      - :field:`XMII.RGMII_RX_DELAY_150PS`
@@ -363,8 +363,13 @@ the delay fields.
 
 The `YT9215RB vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c>`__ writes :reg:`IO_LEVEL` only for 1.8 V RGMII pins. Its value 3 disagrees
 with :lx:`chip.h`, which gives 1.8 V as 2 in :field:`IO_LEVEL.YT9215_RGMII0` and
-:field:`IO_LEVEL.YT9215_RGMII1` and has no value 3. It is :ev:`not known` which is right. No
-source names bits 26 and 20 of :reg:`XMII`. The :ref:`YT9215RB vendor driver <sources-list>` does not write
+:field:`IO_LEVEL.YT9215_RGMII1` and has no value 3. It is :ev:`not known` which is right. The
+:ref:`Linux driver <sources-list>` does not name bits 26 and 20 of :reg:`XMII`. The
+:ref:`vendor SDK <sources-list>` table :sdk:`EXTIF0_MODE` names bit 26
+`EN_MACMODE_LNKDN_SWH <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L152>`__
+and bit 20
+`RGMII_TXC_DLY100_10_EN <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L153>`__.
+What the two bits do is :ev:`not known`. The :ref:`YT9215RB vendor driver <sources-list>` does not write
 :reg:`SERDES_CTRL` or :reg:`MDIO_POLLING`.
 
 .. _ports-mtu:

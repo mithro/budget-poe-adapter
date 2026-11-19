@@ -301,7 +301,7 @@
             </field>
             <field>
               <name>TEST</name>
-              <description>SerDes test mode. Clear it before use.</description>
+              <description>yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes.</description>
               <bitOffset>6</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -450,7 +450,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s</description>
+                  <description>10000 Mbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -557,7 +557,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s</description>
+                  <description>10000 Mbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -658,7 +658,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s</description>
+                  <description>10000 Mbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -786,7 +786,7 @@
           <dimIncrement>0x4</dimIncrement>
           <dimIndex>8-9</dimIndex>
           <name>MDIO_POLLING_%s</name>
-          <description>Link state of port 8 or 9. yt921x_port_up writes the link state here for a port that is wired straight to another MAC. It is inferred from the name that the switch otherwise learns the state by polling a PHY on the external MDIO bus. Index: port = 8 to 9.</description>
+          <description>Link state of port 8 or 9. yt921x_port_up writes the link state here for an external port that does not use its SerDes. It is inferred from the name that the switch otherwise learns the state by polling a PHY on the external MDIO bus. Index: port = 8 to 9.</description>
           <addressOffset>0x364</addressOffset>
           <size>32</size>
           <access>read-write</access>
@@ -815,7 +815,7 @@
                 </enumeratedValue>
                 <enumeratedValue>
                   <name>V10000</name>
-                  <description>10 Gbit/s</description>
+                  <description>10000 Mbit/s</description>
                   <value>3</value>
                 </enumeratedValue>
                 <enumeratedValue>
@@ -859,14 +859,14 @@
         </register>
         <register>
           <name>TEMP</name>
-          <description>Raw reading of the die temperature sensor. No source gives the conversion to degrees.</description>
+          <description>Reading of the temperature sensor. No function of the Linux driver reads the register. :ref:`bringup-temp` gives the conversion that the vendor SDK uses.</description>
           <addressOffset>0x374</addressOffset>
           <size>32</size>
           <access>read-only</access>
           <fields>
             <field>
               <name>VALUE</name>
-              <description>Raw sensor value. Its scale and offset are not known.</description>
+              <description>Sensor value. The vendor SDK function fal_tiger_sensor_temp_value_get() uses bits 15 to 0, in steps of 1/128 °C.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>32</bitWidth>
               <access>read-only</access>
@@ -1081,14 +1081,14 @@
           <dim>11</dim>
           <dimIncrement>0x40</dimIncrement>
           <name>EEE_VAL[%s]</name>
-          <description>Per-port Energy Efficient Ethernet setting inside the MAC. Index: port = 0 to 10.</description>
+          <description>Per-port Energy Efficient Ethernet bit that yt921x_set_eee sets and clears together with EEE_CTRL.EN of the port. It is not known what the bit does alone. Index: port = 0 to 10.</description>
           <addressOffset>0x0</addressOffset>
           <size>32</size>
           <access>read-write</access>
           <fields>
             <field>
               <name>DATA</name>
-              <description>1 enables low power idle on the port.</description>
+              <description>Set to turn Energy Efficient Ethernet on for the port and cleared to turn it off, as yt921x_set_eee does.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>

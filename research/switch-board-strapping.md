@@ -132,7 +132,7 @@ Inferred (tag <a href="#tag-i">I</a>), with the reasons:
 - <a id="lx-inference-pin-order"></a>**Pin order.** The YT9215SCH has exactly nine latched strap pins on the LED side
   (<a href="#lx-pin-70">70</a>, <a href="#lx-pin-71">71</a>, <a href="#lx-pin-74">74</a>, <a href="#lx-pin-75">75</a>, <a href="#lx-pin-76">76</a>, <a href="#lx-pin-77">77</a>, <a href="#lx-pin-80">80</a>, <a href="#lx-pin-83">83</a>, <a href="#lx-pin-85">85</a>), and the array has exactly nine pairs, so the pairs are assigned to the nine pins
   in the order they sit along the package. Two things fix which end is pin <a href="#lx-pin-70">70</a>. The EEPROM <a href="#lx-u10">U10</a> sits at the
-  <a href="#lx-r59">R59</a> and <a href="#lx-r60">R60</a> end of the array (<a href="#lx-photo-bottom-strap-array">Bottom strap array</a>), which is the end nearest the I²C pins [91](motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) and [92](motorcomm-debug-pins.md#yt9215sc-and-yt9215sch) ([Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)). With the order reversed,
+  <a href="#lx-r59">R59</a> and <a href="#lx-r60">R60</a> end of the array (<a href="#lx-photo-bottom-strap-array">Bottom strap array</a>), which is the end nearest the I²C pins [91](motorcomm-debug-pins.md#sch-pin-91) and [92](motorcomm-debug-pins.md#sch-pin-92) ([Table 1, pages 17 to 19](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=17)). With the order reversed,
   the levels would give EN_PHY (pin <a href="#lx-pin-83">83</a>) = 0 and EEPROM_MOD (pin <a href="#lx-pin-71">71</a>) = 1, which turns the copper PHYs off and contradicts the 8 Kbit EEPROM.
 - <a id="lx-inference-row"></a>**Which row pulls up.** With the odd-numbered row as pull-downs, the three low straps are
   EEPROM_MOD (pin <a href="#lx-pin-71">71</a>), EN_SPIF (pin <a href="#lx-pin-75">75</a>) and DISAUTOLOAD (pin <a href="#lx-pin-77">77</a>). All three agree with what is
@@ -168,8 +168,8 @@ not show which of the two photographed boards it is, so the <a href="#lx-strap-r
 | Internal | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
 | Selects | <a href="#tag-d">D</a> | [Table 20 on pages 28 to 29](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) |
 
-Six rows take their Internal value from another table: pins <a href="#lx-pin-47">47</a>, <a href="#lx-pin-48">48</a> and <a href="#lx-pin-50">50</a> are from [Table 19 on page 27](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=27),
-pins <a href="#lx-pin-54">54</a> and <a href="#lx-pin-55">55</a> are from [Table 10 on page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25) and pin <a href="#lx-pin-89">89</a> is from [Table 23 on page 30](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30).
+Six rows use other tables. Pins <a href="#lx-pin-54">54</a> and <a href="#lx-pin-55">55</a> take Pin, Signal and Internal from [Table 10 on page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25), and pin <a href="#lx-pin-89">89</a> takes them from [Table 23 on page 30](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30).
+Pins <a href="#lx-pin-47">47</a>, <a href="#lx-pin-48">48</a> and <a href="#lx-pin-50">50</a> take only Internal from [Table 19 on page 27](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=27).
 
 <a id="lx-level-reasons"></a>
 
@@ -300,7 +300,7 @@ columns point at the catalogue part that matches the marking, not at a known pur
 - The board is PoE sourcing equipment (PSE): it feeds power out of the <a href="#lx-poe-ports">four-port RJ45 block</a> under control of
   <a href="#lx-module-u1">module U1</a>, taken to be a four-port controller from the four `R250` sense resistors (<a href="#lx-module-r8">module R8</a>, <a href="#lx-module-r12">R12</a>, <a href="#lx-module-r13">R13</a> and <a href="#lx-module-r14">R14</a>). It has no powered-device front end.
 - The <a href="#lx-choke">`701` part</a> has two terminals on each side and exposed windings (<a href="#lx-photo-board-b-power-input">Board B power input</a>), so it is taken to be a common-mode choke on the power input.
-- <a href="#lx-u10">U10</a> is marked `24C08` with a maker logo that does not identify the maker. The linked datasheet is the [Hangshun HK24C08](../datasheets/components/Hangshun_HK24C08.pdf),
+- <a href="#lx-u10">U10</a> is marked `24C08` with a maker logo that does not identify the maker; the [photo catalogue](lx-is601f-board/photos/README.md) transcribes the logo as `HK`. The linked datasheet is the [Hangshun HK24C08](../datasheets/components/Hangshun_HK24C08.pdf),
   one of several pin-compatible 24C08 parts. Its LCSC number, [C495286](https://jlcpcb.com/partdetail/C495286), has no page on lcsc.com, so the link goes to the JLCPCB page for the same number.
 - The marking `United-tek G2401PR` has no datasheet under that name. The linked "similar part" is the [Usakro UKG2401PR](../datasheets/components/Usakro_UKG2401PR.pdf), a
   single-port 1000BASE-T transformer in the same 24-pin package; that it is the same part is not confirmed.

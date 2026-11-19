@@ -12,16 +12,16 @@ The pin tables of both parts, and the route of each debug pin on this board, are
 
 ## Files
 
-| File | Kind | Shows | Cut from |
+| File | Kind | Shows | Made from |
 | --- | --- | --- | --- |
-| [`u4-pin-numbering-annotated.png`](u4-pin-numbering-annotated.png) | Annotated image | Pin 1 and the pin range of each side of [U4](../motorcomm-debug-pins.md#lx-u4) | – |
-| [`u4-pins-top-edge-annotated.png`](u4-pins-top-edge-annotated.png) | Annotated image | Pins 65 to 96 of [U4](../motorcomm-debug-pins.md#lx-u4) and their vias | – |
-| [`u4-pins-right-edge-annotated.png`](u4-pins-right-edge-annotated.png) | Annotated image | Pins 46 to 55 of [U4](../motorcomm-debug-pins.md#lx-u4) and the SPF0 resistors | – |
+| [`u4-pin-numbering-annotated.png`](u4-pin-numbering-annotated.png) | Annotated image | Pin 1 and the pin range of each side of [U4](../motorcomm-debug-pins.md#lx-u4) | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) |
+| [`u4-pins-top-edge-annotated.png`](u4-pins-top-edge-annotated.png) | Annotated image | Pins 65 to 96 of [U4](../motorcomm-debug-pins.md#lx-u4) and their vias | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) |
+| [`u4-pins-right-edge-annotated.png`](u4-pins-right-edge-annotated.png) | Annotated image | Pins 46 to 55 of [U4](../motorcomm-debug-pins.md#lx-u4) and the SPF0 resistors | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) |
 | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink | – |
 | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of [U4](../motorcomm-debug-pins.md#lx-u4) on board A | – |
 | [`u4-surroundings.jpg`](u4-surroundings.jpg) | Cropped photo | [U4](../motorcomm-debug-pins.md#lx-u4) and the named parts beside it | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) |
 | [`annotate.py`](annotate.py) | Script | Draws the annotations and makes the crop | – |
-| [`strap-resistors-annotated.jpg`](strap-resistors-annotated.jpg) | Annotated image | Strap resistor array with the decoded levels | – |
+| [`strap-resistors-annotated.jpg`](strap-resistors-annotated.jpg) | Annotated image | Strap resistor array with the decoded levels | [`strap-resistors-source.jpg`](strap-resistors-source.jpg) |
 | [`crop-bottom-strap-array.jpg`](crop-bottom-strap-array.jpg) | Cropped photo | Strap resistor array beside the EEPROM [U10](../switch-board-strapping.md#lx-u10) | [`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg) |
 | [`crop-bottom-flash-footprint.jpg`](crop-bottom-flash-footprint.jpg) | Cropped photo | Area around the flash footprint [U6](../switch-board-strapping.md#lx-u6) | [`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg) |
 | [`crop-board-b-switch-ic.jpg`](crop-board-b-switch-ic.jpg) | Cropped photo | Area around [U4](../motorcomm-debug-pins.md#lx-u4) on board B | [`photo-board-b-top.jpg`](photo-board-b-top.jpg) |
@@ -82,8 +82,7 @@ The three annotated images are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jp
 
 ![U4 on board A with Y6, R22 and R23 above it and R44, R89, R92 and R93 to its right](u4-surroundings.jpg)
 
-[`photo-poe-module.jpg`](photo-poe-module.jpg) shows the PoE module on board B with the parts around it, and
-[`strap-resistors-source.jpg`](strap-resistors-source.jpg) is the strap resistor array without labels.
+[`photo-poe-module.jpg`](photo-poe-module.jpg) shows the PoE module on board B with the parts around it.
 
 ![PoE module on board B with the parts around it](photo-poe-module.jpg)
 
@@ -93,6 +92,9 @@ The three annotated images are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jp
 ![Top side of board B](photo-board-b-top.jpg)
 
 ![Bottom side under U4](photo-bottom-under-u4.jpg)
+
+[`strap-resistors-source.jpg`](strap-resistors-source.jpg) is the strap resistor array without labels, cut from
+[`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg).
 
 ![Strap resistor array on the bottom side without labels](strap-resistors-source.jpg)
 

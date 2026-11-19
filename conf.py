@@ -31,12 +31,6 @@ myst_heading_anchors = 4
 
 html_theme = "furo"
 html_title = project
-html_theme_options = {
-    "source_repository": "https://github.com/mithro/budget-poe-adapter/",
-    "source_branch": "main",
-    "source_directory": "",
-    "navigation_with_keys": True,
-}
 html_static_path = []
 
 
@@ -99,5 +93,18 @@ def link_directories(app, docname, source):
     source[0] = text
 
 
+# Furo opens the sidebar at its top; this brings the entry of the current page into view.
+SCROLL_SIDEBAR_JS = """
+document.addEventListener("DOMContentLoaded", function () {
+  var box = document.querySelector(".sidebar-scroll");
+  var here = document.querySelector(".sidebar-tree .current-page > a");
+  if (!box || !here) return;
+  var b = box.getBoundingClientRect(), h = here.getBoundingClientRect();
+  if (h.bottom > b.bottom || h.top < b.top) box.scrollTop += h.top - b.top - b.height / 3;
+});
+"""
+
+
 def setup(app):
+    app.add_js_file(None, body=SCROLL_SIDEBAR_JS)
     app.connect("source-read", link_directories)

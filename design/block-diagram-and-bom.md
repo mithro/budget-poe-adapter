@@ -1,4 +1,4 @@
-# PoE → USB-C adapter: block diagram and rough BOM cost
+# Block diagram and rough BOM
 
 <a id="block-diagram"></a>
 

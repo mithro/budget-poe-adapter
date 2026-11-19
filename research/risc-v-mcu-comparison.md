@@ -1,4 +1,4 @@
-# MCU comparison for the PoE → USB-C adapter
+# MCU comparison
 
 Prices and stock were read live from LCSC product pages on 2026-10-21 and 2026-10-22
 (JLCPCB assembly uses the same C-numbers and LCSC stock). Baseline: RP2040

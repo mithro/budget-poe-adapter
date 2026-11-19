@@ -1,4 +1,4 @@
-# Bit-banging 10 Mbit/s Ethernet
+# Bit-banged 10 Mbit/s Ethernet
 
 Question: can the adapter's MCU get onto Ethernet with no MAC or PHY silicon of
 its own, either by driving 10BASE-T on the wire straight from GPIO, or by

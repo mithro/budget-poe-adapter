@@ -1,4 +1,4 @@
-# LX-IS601F V2.0 switch board: debug pins
+# LX-IS601F debug pins
 
 Photos of two bought 5-port switch boards (silkscreen `LX-IS601F V2.0`) and annotated
 images showing where the UART, SPI flash and JTAG pins of its switch IC come out.

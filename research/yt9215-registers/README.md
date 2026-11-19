@@ -1,4 +1,4 @@
-# YT921x switch: programmer's guide, register description and bindings
+# YT921x source files and build commands
 
 Material for writing a driver for the Motorcomm YT921x Gigabit Ethernet switches
 of the YT9215 and YT9218 families: a manual, a

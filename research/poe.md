@@ -1,4 +1,4 @@
-# PoE (Power over Ethernet) for a cheap, software-driven PD
+# PoE powered device
 
 Research notes for the open source PoE → USB-C adapter. Scope: the PoE
 standards, how a Powered Device (PD) negotiates power, and the electrical

@@ -1,4 +1,4 @@
-# USB-C Power: Standards, RPi 5 Requirements, and PD Negotiation at the Electrical Level
+# USB-C power
 
 Goal of this note: give enough low-level detail to implement a **USB-C power source** (the PoE adapter supplies power to a device such as a Raspberry Pi 5) on a cheap MCU (WCH CH32V0xx and CH32V2xx, RP2040 and RP2350) using GPIO bit-banging, comparators or ADC, and a handful of passives.
 

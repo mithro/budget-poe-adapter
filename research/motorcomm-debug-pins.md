@@ -1,4 +1,4 @@
-# Motorcomm switch ICs: JTAG, SPI flash and UART pins
+# Motorcomm debug pins
 
 Where the debug and boot interfaces of the YT9215 family come out: the YT9215S, the YT9215SC with its YT9215SCH revision, and the YT9215RB.
 

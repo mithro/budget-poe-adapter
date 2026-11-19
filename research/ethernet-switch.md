@@ -1,4 +1,4 @@
-# Cheap ~3-port gigabit switch ICs for the PoE → USB-C adapter
+# Cheap gigabit switch ICs
 
 Goal: replace the passive PoE passthrough (see [`poe.md` section 3](poe.md#3-wiring-mode-a-mode-b-polarity-and-1000base-t)) with a tiny
 managed switch so the adapter's MCU can sit on the network: report what was

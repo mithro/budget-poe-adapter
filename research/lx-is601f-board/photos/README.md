@@ -1,4 +1,4 @@
-# LX-IS601F V2.0 photo catalogue
+# LX-IS601F photo catalogue
 
 Photos of two `LX-IS601F V2.0` PoE switch boards, taken on 2026-11-17 with a
 Pixel 7 Pro. The full-resolution originals are in the
@@ -155,40 +155,40 @@ local time.
 
 | # | Preview | Board | Side | Area | Framing | Angle | U4 marking | Callout | Time |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [01](#photo-01) | <img src="thumbs/01.jpg" width="120"> | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:23 |
-| [02](#photo-02) | <img src="thumbs/02.jpg" width="120"> | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:24 |
-| [03](#photo-03) | <img src="thumbs/03.jpg" width="120"> | A | Top | Whole board | Wide | Angled | Heatsink |  | 09:24 |
-| [04](#photo-04) | <img src="thumbs/04.jpg" width="120"> | A | Top | Whole board | Wide | Straight | Smeared | Yes | 09:48 |
-| [05](#photo-05) | <img src="thumbs/05.jpg" width="120"> | A | Top | Whole board | Wide | Angled | Readable |  | 09:48 |
-| [06](#photo-06) | <img src="thumbs/06.jpg" width="120"> | A | Top | U4 | Close | Straight | Readable | Yes | 09:48 |
-| [07](#photo-07) | <img src="thumbs/07.jpg" width="120"> | B | Top | U4 | Close | Straight | Readable |  | 09:48 |
-| [08](#photo-08) | <img src="thumbs/08.jpg" width="120"> | B | Top | Whole board | Wide | Straight | Readable | Yes | 09:48 |
-| [09](#photo-09) | <img src="thumbs/09.jpg" width="120"> | B | Top | U4 | Close | Straight | Glare |  | 09:49 |
-| [10](#photo-10) | <img src="thumbs/10.jpg" width="120"> | B | Top | U4 left edge | Macro | Straight | Partly in shot |  | 09:49 |
-| [11](#photo-11) | <img src="thumbs/11.jpg" width="120"> | B | Top | U4 left side | Macro | Straight | Glare |  | 09:49 |
-| [12](#photo-12) | <img src="thumbs/12.jpg" width="120"> | B | Top | U4 | Close | Straight | Readable |  | 09:49 |
-| [13](#photo-13) | <img src="thumbs/13.jpg" width="120"> | A | Top | U4 | Close | Straight | Readable |  | 09:49 |
-| [14](#photo-14) | <img src="thumbs/14.jpg" width="120"> | A | Top | Power section | Close | Angled | Glare |  | 09:50 |
-| [15](#photo-15) | <img src="thumbs/15.jpg" width="120"> | A | Top | Power section | Close | Angled | Glare |  | 09:50 |
-| [16](#photo-16) | <img src="thumbs/16.jpg" width="120"> | A | Top | Centre | Wide | Straight | Readable |  | 09:50 |
-| [17](#photo-17) | <img src="thumbs/17.jpg" width="120"> | A | Top | Centre | Wide | Angled | Readable |  | 09:50 |
-| [18](#photo-18) | <img src="thumbs/18.jpg" width="120"> | A | Top | Centre | Wide | Angled | Readable |  | 09:50 |
-| [19](#photo-19) | <img src="thumbs/19.jpg" width="120"> | A | Top | Power corner | Close | Straight | Not in shot |  | 13:41 |
-| [20](#photo-20) | <img src="thumbs/20.jpg" width="120"> | A | Top | U4 | Close | Straight | Readable |  | 13:41 |
-| [21](#photo-21) | <img src="thumbs/21.jpg" width="120"> | A | Top | Port edge | Close | Angled | Not in shot | Yes | 13:41 |
-| [22](#photo-22) | <img src="thumbs/22.jpg" width="120"> | A | Top | Port edge | Close | Angled | Not in shot |  | 13:41 |
-| [23](#photo-23) | <img src="thumbs/23.jpg" width="120"> | A | Top | U4 | Close | Straight | Readable |  | 13:42 |
-| [24](#photo-24) | <img src="thumbs/24.jpg" width="120"> | Unknown | Bottom | RJ45 pins | Close | Angled |  |  | 13:42 |
-| [25](#photo-25) | <img src="thumbs/25.jpg" width="120"> | Unknown | Bottom | RJ45 pins | Close | Angled |  |  | 13:42 |
-| [26](#photo-26) | <img src="thumbs/26.jpg" width="120"> | Unknown | Bottom | Under U4 | Close | Straight |  | Yes | 13:42 |
-| [27](#photo-27) | <img src="thumbs/27.jpg" width="120"> | Unknown | Bottom | Under U4 | Close | Angled |  |  | 13:42 |
-| [28](#photo-28) | <img src="thumbs/28.jpg" width="120"> | Unknown | Bottom | Under U4 | Close | Angled |  |  | 13:42 |
-| [29](#photo-29) | <img src="thumbs/29.jpg" width="120"> | Unknown | Bottom | U10 | Macro | Straight |  |  | 13:43 |
-| [30](#photo-30) | <img src="thumbs/30.jpg" width="120"> | B | Top | PoE module | Close | Straight | Not in shot |  | 13:43 |
-| [31](#photo-31) | <img src="thumbs/31.jpg" width="120"> | B | Top | PoE module | Close | Angled | Not in shot |  | 13:43 |
-| [32](#photo-32) | <img src="thumbs/32.jpg" width="120"> | B | Top | PoE module | Macro | Straight | Not in shot | Yes | 13:43 |
-| [33](#photo-33) | <img src="thumbs/33.jpg" width="120"> | A | Top | Uplink corner | Close | Straight | Not in shot |  | 13:43 |
-| [34](#photo-34) | <img src="thumbs/34.jpg" width="120"> | B | Top | Uplink corner | Close | Straight | Not in shot |  | 13:44 |
+| [01](#photo-01) | ![Photo 01](thumbs/01.jpg) | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:23 |
+| [02](#photo-02) | ![Photo 02](thumbs/02.jpg) | A | Top | Whole board | Wide | Straight | Heatsink |  | 09:24 |
+| [03](#photo-03) | ![Photo 03](thumbs/03.jpg) | A | Top | Whole board | Wide | Angled | Heatsink |  | 09:24 |
+| [04](#photo-04) | ![Photo 04](thumbs/04.jpg) | A | Top | Whole board | Wide | Straight | Smeared | Yes | 09:48 |
+| [05](#photo-05) | ![Photo 05](thumbs/05.jpg) | A | Top | Whole board | Wide | Angled | Readable |  | 09:48 |
+| [06](#photo-06) | ![Photo 06](thumbs/06.jpg) | A | Top | U4 | Close | Straight | Readable | Yes | 09:48 |
+| [07](#photo-07) | ![Photo 07](thumbs/07.jpg) | B | Top | U4 | Close | Straight | Readable |  | 09:48 |
+| [08](#photo-08) | ![Photo 08](thumbs/08.jpg) | B | Top | Whole board | Wide | Straight | Readable | Yes | 09:48 |
+| [09](#photo-09) | ![Photo 09](thumbs/09.jpg) | B | Top | U4 | Close | Straight | Glare |  | 09:49 |
+| [10](#photo-10) | ![Photo 10](thumbs/10.jpg) | B | Top | U4 left edge | Macro | Straight | Partly in shot |  | 09:49 |
+| [11](#photo-11) | ![Photo 11](thumbs/11.jpg) | B | Top | U4 left side | Macro | Straight | Glare |  | 09:49 |
+| [12](#photo-12) | ![Photo 12](thumbs/12.jpg) | B | Top | U4 | Close | Straight | Readable |  | 09:49 |
+| [13](#photo-13) | ![Photo 13](thumbs/13.jpg) | A | Top | U4 | Close | Straight | Readable |  | 09:49 |
+| [14](#photo-14) | ![Photo 14](thumbs/14.jpg) | A | Top | Power section | Close | Angled | Glare |  | 09:50 |
+| [15](#photo-15) | ![Photo 15](thumbs/15.jpg) | A | Top | Power section | Close | Angled | Glare |  | 09:50 |
+| [16](#photo-16) | ![Photo 16](thumbs/16.jpg) | A | Top | Centre | Wide | Straight | Readable |  | 09:50 |
+| [17](#photo-17) | ![Photo 17](thumbs/17.jpg) | A | Top | Centre | Wide | Angled | Readable |  | 09:50 |
+| [18](#photo-18) | ![Photo 18](thumbs/18.jpg) | A | Top | Centre | Wide | Angled | Readable |  | 09:50 |
+| [19](#photo-19) | ![Photo 19](thumbs/19.jpg) | A | Top | Power corner | Close | Straight | Not in shot |  | 13:41 |
+| [20](#photo-20) | ![Photo 20](thumbs/20.jpg) | A | Top | U4 | Close | Straight | Readable |  | 13:41 |
+| [21](#photo-21) | ![Photo 21](thumbs/21.jpg) | A | Top | Port edge | Close | Angled | Not in shot | Yes | 13:41 |
+| [22](#photo-22) | ![Photo 22](thumbs/22.jpg) | A | Top | Port edge | Close | Angled | Not in shot |  | 13:41 |
+| [23](#photo-23) | ![Photo 23](thumbs/23.jpg) | A | Top | U4 | Close | Straight | Readable |  | 13:42 |
+| [24](#photo-24) | ![Photo 24](thumbs/24.jpg) | Unknown | Bottom | RJ45 pins | Close | Angled |  |  | 13:42 |
+| [25](#photo-25) | ![Photo 25](thumbs/25.jpg) | Unknown | Bottom | RJ45 pins | Close | Angled |  |  | 13:42 |
+| [26](#photo-26) | ![Photo 26](thumbs/26.jpg) | Unknown | Bottom | Under U4 | Close | Straight |  | Yes | 13:42 |
+| [27](#photo-27) | ![Photo 27](thumbs/27.jpg) | Unknown | Bottom | Under U4 | Close | Angled |  |  | 13:42 |
+| [28](#photo-28) | ![Photo 28](thumbs/28.jpg) | Unknown | Bottom | Under U4 | Close | Angled |  |  | 13:42 |
+| [29](#photo-29) | ![Photo 29](thumbs/29.jpg) | Unknown | Bottom | U10 | Macro | Straight |  |  | 13:43 |
+| [30](#photo-30) | ![Photo 30](thumbs/30.jpg) | B | Top | PoE module | Close | Straight | Not in shot |  | 13:43 |
+| [31](#photo-31) | ![Photo 31](thumbs/31.jpg) | B | Top | PoE module | Close | Angled | Not in shot |  | 13:43 |
+| [32](#photo-32) | ![Photo 32](thumbs/32.jpg) | B | Top | PoE module | Macro | Straight | Not in shot | Yes | 13:43 |
+| [33](#photo-33) | ![Photo 33](thumbs/33.jpg) | A | Top | Uplink corner | Close | Straight | Not in shot |  | 13:43 |
+| [34](#photo-34) | ![Photo 34](thumbs/34.jpg) | B | Top | Uplink corner | Close | Straight | Not in shot |  | 13:44 |
 
 ## Parts in each photo
 

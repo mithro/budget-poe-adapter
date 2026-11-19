@@ -1,4 +1,4 @@
-# Piggybacking a small device on a gigabit Ethernet link
+# Piggybacking on a gigabit link
 
 Question: can the adapter's MCU get onto (listen to, or send on) the
 passthrough gigabit link more cheaply than with the 3‑port switch from

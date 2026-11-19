@@ -1,4 +1,4 @@
-# Dev boards and off-the-shelf hardware for the RTL8367S and YT9215S
+# Switch IC dev boards
 
 Companion to [`switch-embedded-cpu.md`](switch-embedded-cpu.md) (what the embedded CPUs are) and [`switch-detail-comparison.md`](switch-detail-comparison.md). This note answers: what can we buy to experiment with the RTL8367S DW8051 and the YT9215 RISC-V core, and how easy is it to reach the chip's pins on each?
 

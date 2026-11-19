@@ -1,4 +1,4 @@
-# Bit-banged (software) USB device for the PoE → USB-C adapter
+# Bit-banged USB
 
 Sources were read on 2026-10-22. Scope: USB **device** mode only (host mode is out of
 scope). Price cap is the RP2040 (~$0.79 @100); MCU prices come from

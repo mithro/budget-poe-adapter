@@ -1,4 +1,4 @@
-# The adapter as a USB network card (CDC-ECM, NCM or RNDIS)
+# USB network card
 
 Presenting as a USB network card is an interesting idea, and
 10 Mbit/s is fully acceptable. Price cap: RP2040,

@@ -1,4 +1,4 @@
-# Cost and part-count reduction for the PoE → USB-C adapter
+# Cost and part-count reduction
 
 Scope: everything except the switch-vs-passthrough
 question (covered in [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`ethernet-switch.md`](ethernet-switch.md)). The

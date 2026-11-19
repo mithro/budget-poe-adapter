@@ -1,4 +1,4 @@
-# Switch IC detail: RTL8363NB (pick) vs RTL8367S and YT9215S (candidates)
+# Switch ICs in detail
 
 Side-by-side tables holding the data of the *Switch detail* tab in the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=2). Prices are LCSC on 2026-10-22. `?` means no public source gives the value; None means the chip doesn't have it; Not listed means the public datasheet does not list it.
 

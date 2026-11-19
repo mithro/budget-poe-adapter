@@ -1,4 +1,4 @@
-# Embedded CPUs in the candidate switch ICs: RTL8367S, YT9215S, RTL8363NB
+# Embedded CPUs in the switch ICs
 
 > **Which YT9215 variants have the CPU:** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC**, the YT9218N and the YT9218MB, while the selection guide and the YT9215S, YT9215SC and YT9215RB datasheets all list it (see [`switch-cpu-dev-boards.md`](switch-cpu-dev-boards.md) and [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md)). The core is probably on every die but supported only on the SC. Plan any CPU work on the YT9215SC.
 

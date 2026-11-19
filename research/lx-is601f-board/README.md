@@ -74,6 +74,8 @@ A ring with a number marks the via that the lead of that pin runs to.
 The three annotated images of [U4](../motorcomm-debug-pins.md#lx-u4) are crops of [`photo-u4-macro.jpg`](photo-u4-macro.jpg), a close-up of
 [U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink. Boards A and B are told apart in [`photos/README.md`](photos/README.md).
 
+![Close-up of U4 on board B, without a heatsink](photo-u4-macro.jpg)
+
 [`photo-u4-wide.jpg`](photo-u4-wide.jpg) shows board A, which has the same layout. The crop under this paragraph keeps
 [U4](../motorcomm-debug-pins.md#lx-u4) and the parts beside it whose silkscreen names the pin table uses:
 [Y6](../motorcomm-debug-pins.md#lx-y6) and [R22](../motorcomm-debug-pins.md#lx-r22) above the chip, and

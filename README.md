@@ -14,6 +14,7 @@ The project is at the research stage. It has no schematic or PCB of the adapter.
 | [`research/`](research/) | Research notes | [Research: Motorcomm and Realtek switch ICs](#research-motorcomm-and-realtek-switch-ics) |
 | [`research/`](research/) | Research notes | [Research: MCU and its network link](#research-mcu-and-its-network-link) |
 | [`datasheets/`](datasheets/) | Switch IC documentation | [`datasheets/README.md`](datasheets/README.md) |
+| [`datasheets/components/`](datasheets/README.md#board-components-included) | Datasheets of the parts on the two switch boards | [`datasheets/README.md`](datasheets/README.md#board-components-included) |
 
 The research notes cover these topics:
 
@@ -29,6 +30,7 @@ The research notes cover these topics:
 | --- | --- |
 | Motorcomm | Included |
 | Realtek | Linked |
+| Makers of the other parts on the two switch boards | Included where found |
 
 ### Design
 
@@ -80,6 +82,9 @@ The research notes cover these topics:
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | JTAG pins of the YT9215 variants |
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | SPI flash pins of the YT9215 variants |
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | UART pins of the YT9215 variants |
+| [`switch-board-strapping.md`](research/switch-board-strapping.md) | Strap settings of the LX-IS601F V2.0 board |
+| [`switch-board-strapping.md`](research/switch-board-strapping.md) | Strap settings of the wu-kou YT9215S V2.0 board |
+| [`switch-board-strapping.md`](research/switch-board-strapping.md) | Major components of both boards |
 | [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x switch programmer's guide with register reference |
 | [`yt9215-registers/`](research/yt9215-registers/README.md) | YT921x register bindings for C, Rust, MicroPython and Zephyr |
 | [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Annotated photos of a bought LX-IS601F V2.0 board |
@@ -99,7 +104,7 @@ The research notes cover these topics:
 
 ## Related repositories
 
-* [mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0):
+* [The wu-kou board repository](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0):
   mirror of an open-hardware 5-port gigabit switch built around the Motorcomm YT9215S
   (EasyEDA source, schematic, PCB, Gerbers, BOM). It is the reference design for the
   YT9215S notes here. The [`attachments/...`](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0/tree/main/attachments) paths quoted in

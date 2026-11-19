@@ -11,7 +11,7 @@ The project is at the research stage. There is no schematic or PCB here yet.
 | --- | --- |
 | [`design/`](design/) | Block diagram and rough BOM for the current concept. |
 | [`research/`](research/) | Research notes: PoE, USB-C PD, switch ICs, MCUs and how to attach an MCU to the network. |
-| [`datasheets/`](datasheets/README.md) | Datasheets: Motorcomm switch ICs and the parts on the two switch boards (included), Realtek switch ICs (linked). See [`datasheets/README.md`](datasheets/README.md). |
+| [`datasheets/`](datasheets/README.md) | Datasheets for the two switch boards. |
 
 ### Design
 
@@ -37,8 +37,8 @@ The project is at the research stage. There is no schematic or PCB here yet.
 | [`switch-embedded-cpu.md`](research/switch-embedded-cpu.md) | The CPUs inside the RTL8367S (DW8051), YT9215S (RISC-V) and RTL8363NB (none). |
 | [`switch-cpu-dev-boards.md`](research/switch-cpu-dev-boards.md) | Dev boards and off-the-shelf hardware carrying the RTL8367S and YT9215S. |
 | [`motorcomm-debug-pins.md`](research/motorcomm-debug-pins.md) | JTAG, SPI flash and UART pins of the YT9215 S, SC/SCH and RB variants. |
-| [`switch-board-strapping.md`](research/switch-board-strapping.md) | How the LX-IS601F V2.0 and wu-kou YT9215S V2.0 boards are strapped, what that selects, and their major components. |
-| [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Photos of a bought LX-IS601F V2.0 board (YT9215SCH), annotated to show the debug pins and the strap resistors. |
+| [`switch-board-strapping.md`](research/switch-board-strapping.md) | How the two switch boards are configured. |
+| [`lx-is601f-board/`](research/lx-is601f-board/README.md) | Annotated photos of the LX-IS601F V2.0 board. |
 | [`gigabit-piggyback.md`](research/gigabit-piggyback.md) | Piggybacking a small device on a gigabit Ethernet link. |
 
 ### Research: MCU and its network link

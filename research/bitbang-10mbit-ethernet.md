@@ -64,23 +64,39 @@ Prices are LCSC prices. Evidence codes:
 | E | CH32X035 | CH32V003 | DMA-driven MII | – | Switch ext port | – | – | Switch ext MAC port (MII PHY mode at 10M) |
 | F | Any | – | Any bit-banged port | – | The PoE cable itself | – | – | None |
 
-| # | Extra BOM | PHY | Crystal | Magjack | Passives | Replaces | Saving | Proven? | Proven against | Not yet proven |
-|---|---|---|---|---|---|---|---|---|---|---|
-| A | $0 | – | – | – | – | CH32V307 | ≈ $0.40 | Partly | LAN8720 | A switch port |
-| B | ≈ +$0.5–2 over RTL8363NB | – | – | – | – | – | – | Yes | Real switches over a cable | – |
-| C | – | ≈ $0.23 | ~$0.05 | Needed | – | – | – | Yes | LAN8720 | – |
-| D | – | – | – | Needed | A few resistors | – | – | Yes | TCP at 5–7 Mbit/s | – |
-| E | $0 | – | – | – | – | – | – | **No** | – | Not done by anyone I found |
-| F | — | – | – | – | – | – | – | — | – | – |
+| # | Extra BOM | PHY | Crystal | Magjack | Passives | Replaces | Saving | Proven? |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| A | $0 | – | – | – | – | CH32V307 | ≈ $0.40 | Partly |
+| B | ≈ +$0.5–2 over RTL8363NB | – | – | – | – | – | – | Yes |
+| C | – | ≈ $0.23 | ~$0.05 | Needed | – | – | – | Yes |
+| D | – | – | – | Needed | A few resistors | – | – | Yes |
+| E | $0 | – | – | – | – | – | – | **No** |
+| F | — | – | – | – | – | – | – | — |
 
-| # | Verdict | Upside | Downside |
-|---|---|---|---|
-| A | **Recommended** for the switch SKU | – | – |
-| B | Works | – | Costs more than A |
-| C | Only for a product with a separate management port | – | – |
-| D | Same as C | Cheaper | Flakier RX |
-| E | Research item | – | – |
-| F | Dead end | – | Gigabit uses all four pairs |
+Notes on the rows of this table:
+
+- **A**, proven against: LAN8720.
+- **A**, not yet proven: A switch port.
+- **B**, proven against: Real switches over a cable.
+- **C**, proven against: LAN8720.
+- **D**, proven against: TCP at 5–7 Mbit/s.
+- **E**, not yet proven: Not done by anyone I found.
+
+| # | Verdict |
+| --- | --- |
+| A | **Recommended** for the switch SKU |
+| B | Works |
+| C | Only for a product with a separate management port |
+| D | Same as C |
+| E | Research item |
+| F | Dead end |
+
+Notes on the rows of this table:
+
+- **B**, downside: Costs more than A.
+- **D**, upside: Cheaper.
+- **D**, downside: Flakier RX.
+- **F**, downside: Gigabit uses all four pairs.
 
 
 ## 3. Direct on the wire (10BASE-T from MCU pins)
@@ -123,7 +139,7 @@ Evidence code for this section: [**802.3**](#evidence-codes).
 | [PA3FWM avreth] | – |
 
 | Project | Property | Value |
-|---|---|---|
+| --- | --- | --- |
 | pico_eth_doc | Line hardware option 1 | 10/100 transformer |
 | pico_eth_doc | Line hardware option 2 | Magjack |
 | pico_eth_doc | Resistors | ~8 |
@@ -155,17 +171,20 @@ Evidence code for this section: [**802.3**](#evidence-codes).
 | Pico-100BASE-TX | Scope | Transmit only |
 | Pico-100BASE-TX | Rate | 100 Mbit/s |
 | Pico-100BASE-TX | Lesson | Shows the TX side scales |
-| Pico-100BASE-TX | RX | RX at 125 Mbaud MLT-3 does not exist |
 | espthernet | RX sampling | Oversampled |
 | espthernet | Line driver | Recommended |
 | espthernet | Magnetics | Yes |
 | espthernet | Duplex | Half duplex (NLP) |
-| espthernet | Author's view | "a party trick, not a legitimate engineering solution" |
 | AVR projects | Alternative RX method | BPSK-in-payload trick |
 | AVR projects | Line hardware 1 | Resistors |
 | AVR projects | Line hardware 2 | Bias |
 | AVR projects | Lesson | Shows how little hardware is needed |
 | AVR projects | Fit | Not a basis for a product |
+
+Longer entries for this table:
+
+- **Pico-100BASE-TX, RX**: RX at 125 Mbaud MLT-3 does not exist.
+- **espthernet, Author's view**: "a party trick, not a legitimate engineering solution".
 
 ### 3.3 Fit for this adapter
 
@@ -244,11 +263,16 @@ relay, it would need a MAC. A software one is conceivable over MII at 10M:
 
 ### 4.4 Cheap PHYs if a standalone port is wanted
 
-| Vendor | Part | LCSC | MII | RMII | Speed | Pkg | $ @100 | $ @1k | Stock | Stock evidence | Core supply | Auto-MDIX | Notes |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| CoreChips | SR8201F | [C378491] | Yes | Yes | 10/100 | QFN-32 | **$0.266** | **$0.229** | 6,895 | [**live**](#evidence-codes) | Internal 1.1 V | Yes | Cheapest found |
-| WCH | CH182H | [C22370607] | Yes | Yes | 10/100 | QFN-32 | $0.452 | $0.390 | **Out of stock** | [**live**](#evidence-codes) | – | – | – |
-| Microchip | LAN8710A | [C46185] | Yes | Yes | – | QFN-32 | $0.545 | $0.513 | 5,829 | [**live**](#evidence-codes) | – | – | LAN8720A is the one the PIO drivers test against |
+| Vendor | Part | LCSC | MII | RMII | Speed | Pkg | $ @100 | $ @1k | Stock | Stock evidence | Core supply | Auto-MDIX |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CoreChips | SR8201F | [C378491] | Yes | Yes | 10/100 | QFN-32 | **$0.266** | **$0.229** | 6,895 | [**live**](#evidence-codes) | Internal 1.1 V | Yes |
+| WCH | CH182H | [C22370607] | Yes | Yes | 10/100 | QFN-32 | $0.452 | $0.390 | **Out of stock** | [**live**](#evidence-codes) | – | – |
+| Microchip | LAN8710A | [C46185] | Yes | Yes | – | QFN-32 | $0.545 | $0.513 | 5,829 | [**live**](#evidence-codes) | – | – |
+
+Notes on the rows of this table:
+
+- **SR8201F**, notes: Cheapest found.
+- **LAN8710A**, notes: LAN8720A is the one the PIO drivers test against.
 
 All need a 25 MHz crystal (or 50 MHz RMII clock) and magnetics. The PIO
 drivers use a few LAN87xx-specific MDIO registers to force 10M; for SR8201F

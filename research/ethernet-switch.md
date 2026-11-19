@@ -189,16 +189,26 @@ Short answer: **none of them is cheaper than the RTL8363NB at JLCPCB or LCSC.** 
 
 The YT9213NB is in the same family as the YT9215.
 
-| Vendor | Part | At LCSC | LCSC part | $ @1 | $ @90 | $ @900 | Other source | Verdict | Note |
-|---|---|---|---|---|---|---|---|---|---|
-| Motorcomm | YT9215S | Yes | C5899183 | $3.98 | $2.12 | $1.92 | – | Cheapest buyable Chinese option | ~35 % dearer than RTL8363NB at volume |
-| Motorcomm | YT9213NB | No (nor at szlcsc) | – | – | – | – | Motorcomm distributor quote | The exact RTL8363NB equivalent | Upstream Linux `yt921x` support |
-| Motorcomm | YT9214NB | No | – | – | – | – | – | YT9213NB with a second MAC | – |
-| JLSemi | JL6107 family | No | – | – | – | – | Distributor VOOHU (no public price) | Pin compatibility claims unverified | – |
-| JLSemi | JL6105-NC | No | – | – | – | – | – | Useless here | The MCU has no port to attach to |
-| JLSemi | JL6110 | — | – | – | – | – | – | Too big | – |
-| JLSemi | JL5104 | — | – | – | – | – | – | Fails the GbE requirement | 100 Mbit only |
-| JLSemi | JL5106C | — | – | – | – | – | – | Fails the GbE requirement | 100 Mbit only |
+| Vendor | Part | At LCSC | LCSC part | $ @1 | $ @90 | $ @900 | Verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Motorcomm | YT9215S | Yes | C5899183 | $3.98 | $2.12 | $1.92 | Cheapest buyable Chinese option |
+| Motorcomm | YT9213NB | No (nor at szlcsc) | – | – | – | – | The exact RTL8363NB equivalent |
+| Motorcomm | YT9214NB | No | – | – | – | – | YT9213NB with a second MAC |
+| JLSemi | JL6107 family | No | – | – | – | – | Pin compatibility claims unverified |
+| JLSemi | JL6105-NC | No | – | – | – | – | Useless here |
+| JLSemi | JL6110 | — | – | – | – | – | Too big |
+| JLSemi | JL5104 | — | – | – | – | – | Fails the GbE requirement |
+| JLSemi | JL5106C | — | – | – | – | – | Fails the GbE requirement |
+
+Notes on the rows of this table:
+
+- **YT9215S**, note: ~35 % dearer than RTL8363NB at volume.
+- **YT9213NB**, other source: Motorcomm distributor quote.
+- **YT9213NB**, note: Upstream Linux `yt921x` support.
+- **JL6107 family**, other source: Distributor VOOHU (no public price)
+- **JL6105-NC**, note: The MCU has no port to attach to.
+- **JL5104**, note: 100 Mbit only.
+- **JL5106C**, note: 100 Mbit only.
 
 The YT9215S also takes 4× the board area of the RTL8363NB (LQFP-128).
 

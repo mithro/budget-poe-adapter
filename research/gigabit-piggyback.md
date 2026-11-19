@@ -39,15 +39,32 @@ Unmarked prices are estimates carried over from the BOM CSV.
 
 ## 2. Options ranked
 
-| # | Approach | Switch IC | MCU | MCU link | Mechanism | Second mechanism | MCU can send? | Works with any host? | Needs | Δ BOM low | Δ BOM high | Basis | Verdict | Remark |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| A | **Host relay over USB-C** | – | – | USB 2.0 to the host | Host speaks on Ethernet | – | Via the host | No | A daemon on the host | ≈ $0.00 | ≈ $0.05 | – | **Best cheap option** | – |
-| B | **3-port switch, trimmed** | RTL8363NB | RP2040 | RMII | Cap-coupled device port | – | Yes | Yes | – | ≈ +$3.3 | ≈ +$3.6 | Estimate | Best standalone option | Needs bench validation |
-| C | 3-port switch as designed | RTL8363NB | CH32V307 | – | – | – | Yes | Yes | – | ≈ +$4.50 | ≈ +$4.50 | – | Baseline | Lowest risk |
-| D | Switch with embedded CPU | YT9215S | Its RISC-V core | – | The core does the networking | – | Yes | Yes | A Motorcomm SDK | ≈ +$3.5 | ≈ +$4 | Estimate | Only if Motorcomm gives an SDK | – |
-| E | PoE-layer signalling | – | – | – | Class events | Autoclass | Not really | Yes | – | $0 | $0 | Already in design | Already used | Tells the PD its power grant only |
-| F | Analog link sensing | – | – | – | Detect pair activity | 10/100/1000 by which pairs are active | No | Yes | – | ≈ $0.05 | ≈ $0.10 | – | Status only | Risks return loss |
-| G | Passive and overlay schemes | – | – | – | Each one is listed in [section 4](#4-dead-ends-and-why) | – | — | — | – | — | — | – | Dead ends ([section 4](#4-dead-ends-and-why)) | – |
+| # | Approach | Switch IC | MCU | MCU link | MCU can send? | Works with any host? | Δ BOM low | Δ BOM high | Basis | Verdict |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| A | **Host relay over USB-C** | – | – | USB 2.0 to the host | Via the host | No | ≈ $0.00 | ≈ $0.05 | – | **Best cheap option** |
+| B | **3-port switch, trimmed** | RTL8363NB | RP2040 | RMII | Yes | Yes | ≈ +$3.3 | ≈ +$3.6 | Estimate | Best standalone option |
+| C | 3-port switch as designed | RTL8363NB | CH32V307 | – | Yes | Yes | ≈ +$4.50 | ≈ +$4.50 | – | Baseline |
+| D | Switch with embedded CPU | YT9215S | Its RISC-V core | – | Yes | Yes | ≈ +$3.5 | ≈ +$4 | Estimate | Only if Motorcomm gives an SDK |
+| E | PoE-layer signalling | – | – | – | Not really | Yes | $0 | $0 | Already in design | Already used |
+| F | Analog link sensing | – | – | – | No | Yes | ≈ $0.05 | ≈ $0.10 | – | Status only |
+| G | Passive and overlay schemes | – | – | – | — | — | — | — | – | Dead ends ([section 4](#4-dead-ends-and-why)) |
+
+Notes on the rows of this table:
+
+- **A, Host relay over USB-C**, mechanism: Host speaks on Ethernet.
+- **A, Host relay over USB-C**, needs: A daemon on the host.
+- **B, 3-port switch, trimmed**, mechanism: Cap-coupled device port.
+- **B, 3-port switch, trimmed**, remark: Needs bench validation.
+- **C, 3-port switch as designed**, remark: Lowest risk.
+- **D, Switch with embedded CPU**, mechanism: The core does the networking.
+- **D, Switch with embedded CPU**, needs: A Motorcomm SDK.
+- **E, PoE-layer signalling**, mechanism: Class events.
+- **E, PoE-layer signalling**, second mechanism: Autoclass.
+- **E, PoE-layer signalling**, remark: Tells the PD its power grant only.
+- **F, Analog link sensing**, mechanism: Detect pair activity.
+- **F, Analog link sensing**, second mechanism: 10/100/1000 by which pairs are active.
+- **F, Analog link sensing**, remark: Risks return loss.
+- **G, Passive and overlay schemes**, mechanism: Each one is listed in [section 4](#4-dead-ends-and-why)
 
 The Δ BOM columns are against the passive variant @1k.
 
@@ -188,16 +205,33 @@ not a network presence.
 
 ## 4. Dead ends and why
 
-| Idea | Would work if | Why it fails here | Key figure | Key figure evidence |
-| --- | --- | --- | --- | --- |
-| **Passive tap (Throwing-Star style)** | The link is 10/100 | Gigabit sends both ways on all four pairs | – |  |
-| **Use the spare pairs** | The link drops to 100 Mbit | 1000BASE-T uses all four pairs | Needs ≥1 Gbit/s |  |
-| **10BASE-T1S overlay** | A custom injector is at the other end | The PSE switch has no receiver for it | – |  |
-| **Data over PoE DC (powerline-style)** | – | Nothing at the PSE end listens | – |  |
-| **Autoneg next pages** | The adapter terminates the link (has PHYs) | Only the two link endpoints exchange them | – |  |
-| **Two PHYs back-to-back + glue logic** | It does work | Costs more than the switch | 2 × YT8531C at **$0.79 @1k** | [**live**](#evidence-codes) |
-| **"MAC-in-PHY" SPI Ethernet parts** | – | They all terminate their *own* link | – |  |
-| **USB-Ethernet bridge (RTL8153)** | The host has USB 3 | The Pi's USB-C port is USB 2.0 | 480 Mbit/s |  |
+| Idea | Key figure | Key figure evidence |
+| --- | --- | --- |
+| **Passive tap (Throwing-Star style)** | – |  |
+| **Use the spare pairs** | Needs ≥1 Gbit/s |  |
+| **10BASE-T1S overlay** | – |  |
+| **Data over PoE DC (powerline-style)** | – |  |
+| **Autoneg next pages** | – |  |
+| **Two PHYs back-to-back + glue logic** | 2 × YT8531C at **$0.79 @1k** | [**live**](#evidence-codes) |
+| **"MAC-in-PHY" SPI Ethernet parts** | – |  |
+| **USB-Ethernet bridge (RTL8153)** | 480 Mbit/s |  |
+
+Notes on the rows of this table:
+
+- **Passive tap (Throwing-Star style)**, would work if: The link is 10/100.
+- **Passive tap (Throwing-Star style)**, why it fails here: Gigabit sends both ways on all four pairs.
+- **Use the spare pairs**, would work if: The link drops to 100 Mbit.
+- **Use the spare pairs**, why it fails here: 1000BASE-T uses all four pairs.
+- **10BASE-T1S overlay**, would work if: A custom injector is at the other end.
+- **10BASE-T1S overlay**, why it fails here: The PSE switch has no receiver for it.
+- **Data over PoE DC (powerline-style)**, why it fails here: Nothing at the PSE end listens.
+- **Autoneg next pages**, would work if: The adapter terminates the link (has PHYs)
+- **Autoneg next pages**, why it fails here: Only the two link endpoints exchange them.
+- **Two PHYs back-to-back + glue logic**, would work if: It does work.
+- **Two PHYs back-to-back + glue logic**, why it fails here: Costs more than the switch.
+- **"MAC-in-PHY" SPI Ethernet parts**, why it fails here: They all terminate their *own* link.
+- **USB-Ethernet bridge (RTL8153)**, would work if: The host has USB 3.
+- **USB-Ethernet bridge (RTL8153)**, why it fails here: The Pi's USB-C port is USB 2.0.
 
 The reasoning behind each row:
 

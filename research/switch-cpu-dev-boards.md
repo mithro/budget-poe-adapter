@@ -181,7 +181,6 @@ Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches f
 | PCBWay | Firmware | Realtek config `.bin` |  |
 | PCBWay | Firmware terms | "non-commercial use only" |  |
 | PCBWay | How to get | Order through PCBWay |  |
-| PCBWay | Use to us | Closest to our use-case (SerDes port in use) |  |
 | BrixIT | Author | Martijn Braam |  |
 | BrixIT | Control link | GPIO SMI from the PINE64 A64-LTS | [**V**](#evidence-codes) |
 | BrixIT | Straps | Solder jumpers | [**V**](#evidence-codes) |
@@ -191,15 +190,19 @@ Linux support: upstream `rtl8365mb` DSA driver (RGMII; SGMII or HSGMII patches f
 | BrixIT | Useful notes 2 | The minimal config |  |
 | maxx-ukoo | Target | ZX900-AFG-82N PoE switch | [**V**](#evidence-codes) |
 | maxx-ukoo | Switch ICs | 2 × RTL8367S over RGMII | [**V**](#evidence-codes) |
-| maxx-ukoo | What it does | Replaces the MCU with an STM32F103 over SMI | [**V**](#evidence-codes) |
 | maxx-ukoo | PoE controller in target | TMI7608S |  |
-| maxx-ukoo | Use to us | A retail PoE switch close to our topology |  |
 | libc0607 | Contents 1 | Docs | [**V**](#evidence-codes) |
 | libc0607 | Contents 2 | ESP8266 SMI tools | [**V**](#evidence-codes) |
 | libc0607 | Contents 3 | Yakigani RTL8370 IROM programmer | [**V**](#evidence-codes) |
 | libc0607 | Open board switch IC | RTL8367RB | [**V**](#evidence-codes) |
 | libc0607 | Open board MCU | ESP8266 | [**V**](#evidence-codes) |
-| libc0607 | Use to us | Best community hub for Realtek 8051 work |  |
+
+Longer entries for this table:
+
+- **PCBWay, Use to us**: Closest to our use-case (SerDes port in use)
+- **maxx-ukoo, What it does**: Replaces the MCU with an STM32F103 over SMI.
+- **maxx-ukoo, Use to us**: A retail PoE switch close to our topology.
+- **libc0607, Use to us**: Best community hub for Realtek 8051 work.
 
 ## 3. YT9215 options
 
@@ -254,7 +257,6 @@ So on retail YT9215S boards the core is probably present but unsupported and lik
 | Xiaomi CR881x | Evidence 2 | [hzyitc issue #150](https://github.com/hzyitc/openwrt-redmi-ax3000/issues/150) |  |
 | Xiaomi CR881x | UART | J1 (VCC-RX-GND-TX) |  |
 | Xiaomi CR881x | OpenWrt | [hzyitc/openwrt-redmi-ax3000](https://github.com/hzyitc/openwrt-redmi-ax3000) |  |
-| Xiaomi CR881x | Known issue | Switch probe still flaky on some boards | [**V**](#evidence-codes) |
 | Xiaomi CR881x | Where sold | Mostly second-hand in China (Xianyu) |  |
 | Xiaomi CR881x | **AliExpress** | Occasional listings |  |
 | Xiaomi CR881x | **eBay** | Occasional listings |  |
@@ -276,6 +278,10 @@ So on retail YT9215S boards the core is probably present but unsupported and lik
 | BDY-G98 | AliExpress | Not found in this search |  |
 | Unnamed boards | Evidence | Several CSDN write-ups ([CSDN](https://blog.csdn.net/xuesong10210/article/details/135957672)) |  |
 | Unnamed boards | Product names | Not given |  |
+
+Longer entries for this table:
+
+- **Xiaomi CR881x, Known issue**: Switch probe still flaky on some boards.
 
 I found **no cheap unmanaged retail switch** confirmed to use a YT9215. Motorcomm targets "dumb switch" use, so some Chinese-brand 5-port switches likely use it, but none were identified in teardowns. [**I**](#evidence-codes)
 

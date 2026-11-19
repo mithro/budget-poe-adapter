@@ -41,12 +41,18 @@ Sean "xobs" Cross did with grainuum?
 
 From [`gigabit-piggyback.md` section A](gigabit-piggyback.md#a-host-relay-over-usbc-recommended-for-the-cheap-sku) ("host relay"):
 
-| Job | Size | Rate | Needs high throughput? | In scope | Note |
-|---|---|---|---|---|---|
-| Status reports | tens of bytes | ~1/s | No | Yes | [Status report fields](#status-report-fields) |
-| LLDP power negotiation | a few bytes | per change | No | Yes | Relayed by a host daemon (`lldpd`) |
-| Firmware update from the host | 8–32 KB | rare | No (slow is fine) | Yes | – |
-| Act as a USB NIC for the host | Mbit/s | – | **Yes** | No | Host already has gigabit via the passthrough |
+| Job | Size | Rate | Needs high throughput? | In scope |
+| --- | --- | --- | --- | --- |
+| Status reports | tens of bytes | ~1/s | No | Yes |
+| LLDP power negotiation | a few bytes | per change | No | Yes |
+| Firmware update from the host | 8–32 KB | rare | No (slow is fine) | Yes |
+| Act as a USB NIC for the host | Mbit/s | – | **Yes** | No |
+
+Notes on the rows of this table:
+
+- **Status reports**, note: [Status report fields](#status-report-fields)
+- **LLDP power negotiation**, note: Relayed by a host daemon (`lldpd`)
+- **Act as a USB NIC for the host**, note: Host already has gigabit via the passthrough.
 
 <a id="status-report-fields"></a>
 
@@ -80,7 +86,7 @@ the same for hardware and software USB; see [`gigabit-piggyback.md` section A](g
 | **ValentyUSB** | Fomu | xobs | Luke Valenty et al. | iCE40UP5K FPGA | – | Gateware | 48 MHz | FS | – | – | – | Full device | ? | – |
 
 | Stack | Property | Value |
-|---|---|---|
+| --- | --- | --- |
 | grainuum | MCU requirement | Cortex-M0+ with single-cycle IO |
 | grainuum | HID bootloader drivers | "Driver-free" |
 | grainuum | Bootloader works on Windows | Yes |
@@ -133,7 +139,6 @@ the same for hardware and software USB; see [`gigabit-piggyback.md` section A](g
 | stm32f030-vusb | PY32F002 port | Someone tried |
 | stm32f030-vusb | PY32F002 port result | None reported |
 | stm32f030-vusb | PY32F002 port reference | [py32 issue] |
-| Pico-PIO-USB | PIO clock | 48 MHz × N from sys clock |
 | Pico-PIO-USB | Fractional clock divider | Allowed |
 | Pico-PIO-USB | Host speed 1 | FS |
 | Pico-PIO-USB | Host speed 2 | LS |
@@ -145,14 +150,18 @@ the same for hardware and software USB; see [`gigabit-piggyback.md` section A](g
 | Pico-PIO-USB | Code size | ~15 KB |
 | Pico-PIO-USB | D+ pull-up | 1.5 kΩ external |
 | Pico-PIO-USB | Series resistors | 22 Ω |
-| Pico-PIO-USB | RX CRC | Done by the CPU in an IRQ |
 | Pico-PIO-USB | CPU load | One core is busy during transfers |
 | Pico-PIO-USB | Reference | [PIO-USB] |
 | ValentyUSB | DFU | foboot |
 | ValentyUSB | Kind | "Soft" USB in logic |
 | ValentyUSB | CPU bit-banging | No |
 | ValentyUSB | Why listed | For completeness |
-| ValentyUSB | Fit | An FPGA is far over the price cap |
+
+Longer entries for this table:
+
+- **Pico-PIO-USB, PIO clock**: 48 MHz × N from sys clock.
+- **Pico-PIO-USB, RX CRC**: Done by the CPU in an IRQ.
+- **ValentyUSB, Fit**: An FPGA is far over the price cap.
 
 (Tomu, xobs's other USB board, uses the EFM32HG's hardware USB, so it is not a
 bit-bang design.)
@@ -182,18 +191,36 @@ bit-level work in hardware state machines and the CPU only handles bytes.
 
 ## 3. Low-speed limits that matter here
 
-| Limit | Value | Effect | Workaround | Alt workaround | Verdict | Note | Reference |
-|---|---|---|---|---|---|---|---|
-| Max packet | 8 bytes | Larger blocks go in 8-byte pieces | HID feature reports (control transfers) | – | Fine | Enough for telemetry | USB 2.0 §5.7–5.8 |
-| Max packet | 8 bytes | Larger blocks go in 8-byte pieces | HID feature reports (control transfers) | – | Fine | Enough for DFU | USB 2.0 §5.7–5.8 |
-| Control endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
-| Interrupt endpoints | Allowed | – | – | – | Fine | – | USB 2.0 §5.7–5.8 |
-| Interrupt `bInterval` | ≥ 10 ms by spec | ~800 B/s per interrupt endpoint | Control-transfer DFU is quicker | – | Fine either way | Hosts often poll faster | – |
-| Bulk endpoints | Not allowed | No USB network class on Linux | – | – | Can't be a network interface | – | – |
-| Linux usbnet drivers | Reject LS devices | – | – | – | – | – | [rv003usb test_ethernet] |
-| Linux USB core | Converts LS bulk to interrupt | – | – | – | – | – | [LS bulk patch] |
-| CDC-ACM | Needs bulk | Out of spec | HID | Vendor control transfers | Avoid | Works by luck on some hosts | – |
-| LS edge rates from plain GPIOs | – | Some hosts are less tolerant | 33–47 Ω series resistors | – | Needs testing | Long cables are less tolerant too | – |
+| Limit | Value | Verdict | Reference |
+| --- | --- | --- | --- |
+| Max packet | 8 bytes | Fine | USB 2.0 §5.7–5.8 |
+| Max packet | 8 bytes | Fine | USB 2.0 §5.7–5.8 |
+| Control endpoints | Allowed | Fine | USB 2.0 §5.7–5.8 |
+| Interrupt endpoints | Allowed | Fine | USB 2.0 §5.7–5.8 |
+| Interrupt `bInterval` | ≥ 10 ms by spec | Fine either way | – |
+| Bulk endpoints | Not allowed | Can't be a network interface | – |
+| Linux usbnet drivers | Reject LS devices | – | [rv003usb test_ethernet] |
+| Linux USB core | Converts LS bulk to interrupt | – | [LS bulk patch] |
+| CDC-ACM | Needs bulk | Avoid | – |
+| LS edge rates from plain GPIOs | – | Needs testing | – |
+
+Notes on the rows of this table:
+
+- **Max packet**, effect: Larger blocks go in 8-byte pieces.
+- **Max packet**, workaround: HID feature reports (control transfers)
+- **Max packet**, note: Enough for telemetry.
+- **Max packet**, note: Enough for DFU.
+- **Interrupt `bInterval`**, effect: ~800 B/s per interrupt endpoint.
+- **Interrupt `bInterval`**, workaround: Control-transfer DFU is quicker.
+- **Interrupt `bInterval`**, note: Hosts often poll faster.
+- **Bulk endpoints**, effect: No USB network class on Linux.
+- **CDC-ACM**, effect: Out of spec.
+- **CDC-ACM**, workaround: HID.
+- **CDC-ACM**, alt workaround: Vendor control transfers.
+- **CDC-ACM**, note: Works by luck on some hosts.
+- **LS edge rates from plain GPIOs**, effect: Some hosts are less tolerant.
+- **LS edge rates from plain GPIOs**, workaround: 33–47 Ω series resistors.
+- **LS edge rates from plain GPIOs**, note: Long cables are less tolerant too.
 
 The edge-rate tests should use the Pi 5 and a laptop.
 
@@ -204,12 +231,17 @@ so a config page for the adapter could be a static web page.
 
 ### Cost
 
-| MCU | USB stack | MCU $ | At qty | USB | Second USB | PD PHY | PD method | Crystal-less | 5 V supply | Comparators | ADC | Note |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| CH32X035G8U6 | – | $0.312 | 100 | HW FS | – | **HW** | Hardware | Yes | Yes | Yes | – | Current pick |
-| CH570Q | – | $0.233 | 50 | HW FS | – | ✗ | Bit-banged | – | – | – | No | – |
-| CH32V003F4P6 | rv003usb | $0.244 | 50 | SW **LS** | – | ✗ | Bit-banged on the same core | – | – | – | – | – |
-| RP2040 | Pico-PIO-USB | $0.786 | 100 | HW FS | SW FS | ✗ | – | – | – | – | – | Only useful as a second port |
+| MCU | USB stack | MCU $ | At qty | USB | Second USB | PD PHY | PD method | Crystal-less | 5 V supply | Comparators | ADC |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| CH32X035G8U6 | – | $0.312 | 100 | HW FS | – | **HW** | Hardware | Yes | Yes | Yes | – |
+| CH570Q | – | $0.233 | 50 | HW FS | – | ✗ | Bit-banged | – | – | – | No |
+| CH32V003F4P6 | rv003usb | $0.244 | 50 | SW **LS** | – | ✗ | Bit-banged on the same core | – | – | – | – |
+| RP2040 | Pico-PIO-USB | $0.786 | 100 | HW FS | SW FS | ✗ | – | – | – | – | – |
+
+Notes on the rows of this table:
+
+- **CH32X035G8U6**, note: Current pick.
+- **RP2040, Pico-PIO-USB**, note: Only useful as a second port.
 
 The MCU prices are from [`risc-v-mcu-comparison.md`](risc-v-mcu-comparison.md).
 

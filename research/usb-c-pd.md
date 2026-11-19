@@ -19,36 +19,61 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 
 ## 2. USB power standards: voltages and currents
 
-| Mechanism | Signalling line | Signalling detail | Voltage | Voltage step | Max current | With e-marked 5 A cable | Max power | Relevance as a source | Reason |
-|---|---|---|---|---|---|---|---|---|---|
-| USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W | Baseline | – |
-| USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W | Baseline | – |
-| BC1.2 DCP | Data pair | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
-| BC1.2 CDP | Data pair | – | 5 V | – | 1.5 A | – | 7.5 W | Trivial on a power-only port | – |
-| Apple divider, level 1 | Data pair | Fixed voltages | 5 V | – | 1 A | – | – | Resistors only | – |
-| Apple divider, level 2 | Data pair | Fixed voltages | 5 V | – | 2.1 A | – | – | Resistors only | – |
-| Apple divider, level 3 | Data pair | Fixed voltages | 5 V | – | 2.4 A | – | – | Resistors only | – |
-| Type-C Current, default | CC | Rp value | 5 V | – | Default | – | – | **Required for any USB-C source** | – |
-| Type-C Current, 1.5 A | CC | Rp value | 5 V | – | 1.5 A | – | – | **Required for any USB-C source** | – |
-| Type-C Current, 3.0 A | CC | Rp value | 5 V | – | 3.0 A | – | 15 W | **Required for any USB-C source** | – |
-| USB PD Fixed (SPR) | CC | BMC | 5 V | – | 3 A | 5 A | – | 5 V at 5 A for the Pi 5 | – |
-| USB PD Fixed (SPR) | CC | BMC | 9 V | – | 3 A | 5 A | – | – | – |
-| USB PD Fixed (SPR) | CC | BMC | 15 V | – | 3 A | 5 A | – | – | – |
-| USB PD Fixed (SPR) | CC | BMC | 20 V | – | 3 A | 5 A | 100 W | – | – |
-| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | 50 mA current-limit steps | – | ≤ 100 W | Skip | Needs a tightly controlled converter |
-| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 28 V | – | 5 A | – | 140 W | Out of PoE budget | bt max ≈ 71 W at the PD |
-| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 36 V | – | 5 A | – | 180 W | Out of PoE budget | bt max ≈ 71 W at the PD |
-| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W | Out of PoE budget | bt max ≈ 71 W at the PD |
-| USB PD EPR AVS (PD 3.1) | CC | BMC | 15 to 48 V | 100 mV | – | – | – | Skip | – |
-| USB PD SPR AVS (PD 3.2) | CC | BMC | 9 to 20 V (verify) | – | – | – | – | Skip | – |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 5 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 9 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 12 V | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 2.0 | Data pair | Voltage levels | 20 V (optional) | – | – | – | ~18 W | Only for phones on legacy ports | – |
-| Qualcomm QC 3.0 | Data pair | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W | Only for phones on legacy ports | – |
-| Samsung AFC | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
-| Huawei FCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
-| Huawei SCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – | Skip | – |
+| Mechanism | Signalling line | Signalling detail | Voltage | Voltage step | Max current | With e-marked 5 A cable | Max power |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| USB 2.0 default | None | – | 5 V | – | 500 mA | – | 2.5 W |
+| USB 3.x default | None | – | 5 V | – | 900 mA | – | 4.5 W |
+| BC1.2 DCP | Data pair | D+ shorted to D- | 5 V | – | 1.5 A | – | 7.5 W |
+| BC1.2 CDP | Data pair | – | 5 V | – | 1.5 A | – | 7.5 W |
+| Apple divider, level 1 | Data pair | Fixed voltages | 5 V | – | 1 A | – | – |
+| Apple divider, level 2 | Data pair | Fixed voltages | 5 V | – | 2.1 A | – | – |
+| Apple divider, level 3 | Data pair | Fixed voltages | 5 V | – | 2.4 A | – | – |
+| Type-C Current, default | CC | Rp value | 5 V | – | Default | – | – |
+| Type-C Current, 1.5 A | CC | Rp value | 5 V | – | 1.5 A | – | – |
+| Type-C Current, 3.0 A | CC | Rp value | 5 V | – | 3.0 A | – | 15 W |
+| USB PD Fixed (SPR) | CC | BMC | 5 V | – | 3 A | 5 A | – |
+| USB PD Fixed (SPR) | CC | BMC | 9 V | – | 3 A | 5 A | – |
+| USB PD Fixed (SPR) | CC | BMC | 15 V | – | 3 A | 5 A | – |
+| USB PD Fixed (SPR) | CC | BMC | 20 V | – | 3 A | 5 A | 100 W |
+| USB PD PPS (PD 3.0) | CC | BMC | 3.3 to 21 V | 20 mV | 50 mA current-limit steps | – | ≤ 100 W |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 28 V | – | 5 A | – | 140 W |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 36 V | – | 5 A | – | 180 W |
+| USB PD EPR Fixed (PD 3.1) | CC | BMC with EPR mode entry | 48 V | – | 5 A | – | 240 W |
+| USB PD EPR AVS (PD 3.1) | CC | BMC | 15 to 48 V | 100 mV | – | – | – |
+| USB PD SPR AVS (PD 3.2) | CC | BMC | 9 to 20 V (verify) | – | – | – | – |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 5 V | – | – | – | ~18 W |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 9 V | – | – | – | ~18 W |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 12 V | – | – | – | ~18 W |
+| Qualcomm QC 2.0 | Data pair | Voltage levels | 20 V (optional) | – | – | – | ~18 W |
+| Qualcomm QC 3.0 | Data pair | Pulses | 5 to 20 V | 200 mV | – | – | ~18 W |
+| Samsung AFC | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
+| Huawei FCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
+| Huawei SCP | Data pair | Proprietary single-wire | 9 V etc. | – | – | – | – |
+
+Notes on the rows of this table:
+
+- **USB 2.0 default**, relevance as a source: Baseline.
+- **USB 3.x default**, relevance as a source: Baseline.
+- **BC1.2 DCP**, relevance as a source: Trivial on a power-only port.
+- **BC1.2 CDP**, relevance as a source: Trivial on a power-only port.
+- **Apple divider, level 1**, relevance as a source: Resistors only.
+- **Apple divider, level 2**, relevance as a source: Resistors only.
+- **Apple divider, level 3**, relevance as a source: Resistors only.
+- **Type-C Current, default**, relevance as a source: Required for any USB-C source.
+- **Type-C Current, 1.5 A**, relevance as a source: Required for any USB-C source.
+- **Type-C Current, 3.0 A**, relevance as a source: Required for any USB-C source.
+- **USB PD Fixed (SPR)**, relevance as a source: 5 V at 5 A for the Pi 5.
+- **USB PD PPS (PD 3.0)**, relevance as a source: Skip.
+- **USB PD PPS (PD 3.0)**, reason: Needs a tightly controlled converter.
+- **USB PD EPR Fixed (PD 3.1)**, relevance as a source: Out of PoE budget.
+- **USB PD EPR Fixed (PD 3.1)**, reason: bt max ≈ 71 W at the PD.
+- **USB PD EPR AVS (PD 3.1)**, relevance as a source: Skip.
+- **USB PD SPR AVS (PD 3.2)**, relevance as a source: Skip.
+- **Qualcomm QC 2.0**, relevance as a source: Only for phones on legacy ports.
+- **Qualcomm QC 3.0**, relevance as a source: Only for phones on legacy ports.
+- **Samsung AFC**, relevance as a source: Skip.
+- **Huawei FCP**, relevance as a source: Skip.
+- **Huawei SCP**, relevance as a source: Skip.
 
 **PD power rules (SPR source profiles):** a source rated at P watts must offer every lower standard voltage. ≤15 W offers 5 V; 15 to 27 W also offers 9 V; 27 to 45 W also offers 15 V; >45 W also offers 20 V. A **5 V-only 25 W source is not a "PD Power Rule" compliant 27 W supply** (a compliant 27 W source must also offer 9 V at 3 A). The Pi official PSU offers 5.1 V at 5 A plus 9, 12 and 15 V at lower current (verify exact PDO list). This matters only for certification, not function.
 
@@ -235,7 +260,7 @@ Message types needed for a minimal source:
 ### 6.3 Other analog needs
 
 | Function | Property | Value |
-|---|---|---|
+| --- | --- | --- |
 | CC attach detect | Channels | 2 |
 | CC attach detect | Window 1 | 0.8 V |
 | CC attach detect | Window 2 | 2.6 V |
@@ -259,8 +284,6 @@ Message types needed for a minimal source:
 | Variable VBUS | Voltage 1 | 9 V |
 | Variable VBUS | Voltage 2 | 15 V |
 | Variable VBUS | Voltage 3 | 20 V |
-| Variable VBUS | Needed | Only if you go beyond the Pi |
-| Variable VBUS | Implementation | PWM-filtered "DAC" injected into the buck FB node |
 | Variable VBUS | Resolution | 10-bit+ |
 | Variable VBUS | Resolution set by | PPS 20 mV steps |
 | VCONN | Voltage | 5 V |
@@ -276,6 +299,11 @@ Message types needed for a minimal source:
 | Data-pair legacy (optional): QC | Sense channels | 2 |
 | Data-pair legacy (optional): QC | Threshold 1 | ≈0.325 V |
 | Data-pair legacy (optional): QC | Threshold 2 | ≈2 V |
+
+Longer entries for this table:
+
+- **Variable VBUS, Needed**: Only if you go beyond the Pi.
+- **Variable VBUS, Implementation**: PWM-filtered "DAC" injected into the buck FB node.
 
 ### 6.4 MCU candidates (rough)
 

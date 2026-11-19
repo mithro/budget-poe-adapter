@@ -132,15 +132,29 @@ rejects low-speed network devices ([`bitbang-usb.md` section 3](bitbang-usb.md#3
 | CH579M | CH579M | Built-in 10M PHY | – | – | FS | – | 10BASE-T | – | – | MCU bridge |
 | CH32V208WBU6 | CH32V208WBU6 | Built-in 10M PHY | – | – | FS | – | 10BASE-T | – | – | MCU bridge |
 
-| Option | Silicon $ @100 | Silicon $ @1k | Silicon $ @1k evidence | Extra part 1 | Extra part 2 | Verdict | Reason | Second reason | Third reason |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| **CH397A** | **$0.672** | **$0.596** | [**live**](#evidence-codes) | 25 MHz crystal | – | **Best standalone NIC** | Cheapest | Fastest | No firmware |
-| Switch SKU with RP2040 | $0 extra | $0 extra |  | – | – | Good | Same board serves an Ethernet Pi | It also serves a USB-only device | – |
-| Switch SKU with CH32V307 | $0 extra | $0 extra |  | – | – | Fastest switch-SKU option | Already in that BOM at $2.15 @1k | The RP2040 swap saves ~$0.40 | – |
-| CH32X035 with CH390H | $1.25 | – |  | – | – | Over cap | Slower than the CH397A | More work than the CH397A | – |
-| RP2040 with PIO 10BASE-T | $0.79 | – |  | Flash | Crystal | Not worth it | 5–7 Mbit/s TCP | "not recommended for PoE equipment" | – |
-| CH579M | $1.21 | – |  | – | – | Over cap | – | – | – |
-| CH32V208WBU6 | $1.42 | – |  | – | – | Over cap | – | – | – |
+| Option | Silicon $ @100 | Silicon $ @1k | Silicon $ @1k evidence | Extra part 1 | Extra part 2 | Verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| **CH397A** | **$0.672** | **$0.596** | [**live**](#evidence-codes) | 25 MHz crystal | – | **Best standalone NIC** |
+| Switch SKU with RP2040 | $0 extra | $0 extra |  | – | – | Good |
+| Switch SKU with CH32V307 | $0 extra | $0 extra |  | – | – | Fastest switch-SKU option |
+| CH32X035 with CH390H | $1.25 | – |  | – | – | Over cap |
+| RP2040 with PIO 10BASE-T | $0.79 | – |  | Flash | Crystal | Not worth it |
+| CH579M | $1.21 | – |  | – | – | Over cap |
+| CH32V208WBU6 | $1.42 | – |  | – | – | Over cap |
+
+Notes on the rows of this table:
+
+- **CH397A**, reason: Cheapest.
+- **CH397A**, second reason: Fastest.
+- **CH397A**, third reason: No firmware.
+- **Switch SKU with RP2040**, reason: Same board serves an Ethernet Pi.
+- **Switch SKU with RP2040**, second reason: It also serves a USB-only device.
+- **Switch SKU with CH32V307**, reason: Already in that BOM at $2.15 @1k.
+- **Switch SKU with CH32V307**, second reason: The RP2040 swap saves ~$0.40.
+- **CH32X035 with CH390H**, reason: Slower than the CH397A.
+- **CH32X035 with CH390H**, second reason: More work than the CH397A.
+- **RP2040 with PIO 10BASE-T**, reason: 5–7 Mbit/s TCP.
+- **RP2040 with PIO 10BASE-T**, second reason: "not recommended for PoE equipment".
 
 | Part of the CH32X035 with CH390H option | $ [**live**](#evidence-codes) |
 |---|---|

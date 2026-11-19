@@ -48,15 +48,30 @@ cameras and small displays. 9, 15 and 20 V and PPS are out of scope.
 
 ### What changes in hardware compared with 5 V only
 
-| # | Change | How | Alternative | Why | Cost delta @1k |
-|---|---|---|---|---|---:|
-| 1 | Output voltage select | GPIO-driven NMOS adds a resistor to the buck FB divider | – | Two fixed set points with no PWM "DAC" | +$0.02 |
-| 2 | Output caps | Rated 16–25 V | – | 12 V rail | +$0.02 |
-| 3 | VBUS PMOS drive | Gate zener with an NPN driver | – | Keeps Vgs within limits when switching 12 V | +$0.02 |
-| 4 | VBUS TVS | 15 V part | – | Clamp level for a 12 V rail | +$0.01 |
-| 5 | CC-pin protection against a 12 V short | Series NMOS clamps | A CC OVP IC | VBUS on CC would kill 3.3 V MCU pins | +$0.10 |
-| 6 | 3.3 V rail fed from a 5–12 V rail | 18 V-rated buck | 16 V LDO | Its source rail varies from 5 V to 12 V | +$0.01–0.05 |
-| | **Total** | | | | **≈ +$0.20** |
+| # | Change | Alternative | Cost delta @1k |
+| --- | --- | --- | ---: |
+| 1 | Output voltage select | – | +$0.02 |
+| 2 | Output caps | – | +$0.02 |
+| 3 | VBUS PMOS drive | – | +$0.02 |
+| 4 | VBUS TVS | – | +$0.01 |
+| 5 | CC-pin protection against a 12 V short | A CC OVP IC | +$0.10 |
+| 6 | 3.3 V rail fed from a 5–12 V rail | 16 V LDO | +$0.01–0.05 |
+|  | **Total** |  | **≈ +$0.20** |
+
+Notes on the rows of this table:
+
+- **Output voltage select**, how: GPIO-driven NMOS adds a resistor to the buck FB divider.
+- **Output voltage select**, why: Two fixed set points with no PWM "DAC".
+- **Output caps**, how: Rated 16–25 V.
+- **Output caps**, why: 12 V rail.
+- **VBUS PMOS drive**, how: Gate zener with an NPN driver.
+- **VBUS PMOS drive**, why: Keeps Vgs within limits when switching 12 V.
+- **VBUS TVS**, how: 15 V part.
+- **VBUS TVS**, why: Clamp level for a 12 V rail.
+- **CC-pin protection against a 12 V short**, how: Series NMOS clamps.
+- **CC-pin protection against a 12 V short**, why: VBUS on CC would kill 3.3 V MCU pins.
+- **3.3 V rail fed from a 5–12 V rail**, how: 18 V-rated buck.
+- **3.3 V rail fed from a 5–12 V rail**, why: Its source rail varies from 5 V to 12 V.
 
 | Select GPIO state | Buck output |
 |---|---|

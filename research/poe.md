@@ -308,12 +308,22 @@ adapter does not need it. Physical classification alone gets up to Class 8.
 
 ## 5. Raspberry Pi 5 power budget against PoE classes
 
-| Granted | Standard | Events | PD input | PD peak | 5 V output | 5 V current | Pi 5 behaviour | Caveat | Comparable to |
-|---|---|---|---|---|---|---|---|---|---|
-| Class 3 | af | 1 | 13 W | – | ~11.5 W | ≈ 2.3 A | Boots with USB current limited to 600 mA | May brown out under load | – |
-| Class 4 | at | 2 | 25.5 W | 28.3 W | ~22.5 W | ≈ 4.5 A | – | – | Official PoE+ HAT (5 V at 4 A) |
-| Class 5 | bt | 4 | 40 W | – | ~35 W | – | **Full 5 V at 5 A** | Has margin | – |
-| Class 6 | bt | – | 51 W | – | ~45 W | – | Full power | Headroom for other loads | – |
+| Granted | Standard | Events | PD input | PD peak | 5 V output | 5 V current |
+| --- | --- | --- | --- | --- | --- | --- |
+| Class 3 | af | 1 | 13 W | – | ~11.5 W | ≈ 2.3 A |
+| Class 4 | at | 2 | 25.5 W | 28.3 W | ~22.5 W | ≈ 4.5 A |
+| Class 5 | bt | 4 | 40 W | – | ~35 W | – |
+| Class 6 | bt | – | 51 W | – | ~45 W | – |
+
+Notes on the rows of this table:
+
+- **Class 3**, pi 5 behaviour: Boots with USB current limited to 600 mA.
+- **Class 3**, caveat: May brown out under load.
+- **Class 4**, comparable to: Official PoE+ HAT (5 V at 4 A)
+- **Class 5**, pi 5 behaviour: Full 5 V at 5 A.
+- **Class 5**, caveat: Has margin.
+- **Class 6**, pi 5 behaviour: Full power.
+- **Class 6**, caveat: Headroom for other loads.
 
 The 5 V output assumes ~90 % efficiency, including bridge losses.
 
@@ -328,11 +338,16 @@ research thread.
 
 ### 6.1 Measurement
 
-| Quantity | Range min | Range max | Needed resolution | Why | Rate |
-|---|---|---|---|---|---|
-| Port voltage (after bridge) | 0 V | 60 V | ~0.1 V | To place the voltage windows below | ≥ 1 kHz |
-| Classification current | 0 mA | 50 mA | ≤ 0.5 mA | The 36–44 mA window is ±10 % | ≥ 1 kHz |
-| Load current (optional) | 0 A | 2 A | ~10 mA | – | ~1 kHz |
+| Quantity | Range min | Range max | Needed resolution | Rate |
+| --- | --- | --- | --- | --- |
+| Port voltage (after bridge) | 0 V | 60 V | ~0.1 V | ≥ 1 kHz |
+| Classification current | 0 mA | 50 mA | ≤ 0.5 mA | ≥ 1 kHz |
+| Load current (optional) | 0 A | 2 A | ~10 mA | ~1 kHz |
+
+Notes on the rows of this table:
+
+- **Port voltage (after bridge)**, why: To place the voltage windows below.
+- **Classification current**, why: The 36–44 mA window is ±10 %.
 
 | Voltage window edge to resolve |
 |---|
@@ -396,7 +411,7 @@ it could have been given. Fine for an af- and at-only product; loses bt.
 ### 6.4 Minimal external parts (architecture B)
 
 | Function | Property | Value |
-|---|---|---|
+| --- | --- | --- |
 | Input rectifier | Part | 2 bridges |
 | Input rectifier | Diodes | 8 × 100 V |
 | Input rectifier | Placement | One bridge per pairset |
@@ -411,7 +426,6 @@ it could have been given. Fine for an af- and at-only product; loses bt.
 | Signature | Optional disconnect | MOSFET |
 | Signature | Disconnect when | After power-on |
 | Signature | Disconnect saving | ~2 mW |
-| Signature | Why bt wants it | The signature must look invalid in some states |
 | Classification sink | Transistor option 1 | NPN |
 | Classification sink | Transistor option 2 | NMOS |
 | Classification sink | Sense resistor | Yes |
@@ -438,6 +452,10 @@ it could have been given. Fine for an af- and at-only product; loses bt.
 | Power stage | Part | 60 V synchronous buck |
 | Power stage | Output | The USB-PD rail(s) |
 | Power stage | Scope | Outside PoE negotiation |
+
+Longer entries for this table:
+
+- **Signature, Why bt wants it**: The signature must look invalid in some states.
 
 That is roughly 15–25 jellybean parts. For comparison, dedicated PD controller
 ICs (TI TPS2375 and TPS2378, TPS23730 for bt; ADI and Silvertel PD modules; Silicon

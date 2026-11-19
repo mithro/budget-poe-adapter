@@ -338,8 +338,8 @@ transformer bodies, so the fifth is taken to be under the PoE module.
 | <a href="#lx-photo-strap-array">Strap array annotated</a> | Not known | Bottom | Strap resistor array with decoded levels |
 | <a href="#lx-photo-bottom-under-u4">Bottom under U4</a> | Not known | Bottom | Area under <a href="#lx-u4">U4</a> with the strap resistor array |
 | <a href="#lx-photo-board-a-top">Board A top</a> | A | Top | Area around <a href="#lx-u4">U4</a> |
-| <a href="#lx-photo-u4-right-edge">U4 right edge</a> | B | Top | Leads 46 to 55 of <a href="#lx-u4">U4</a> |
-| <a href="#lx-photo-u4-top-edge">U4 top edge</a> | B | Top | Leads 65 to 96 of <a href="#lx-u4">U4</a> |
+| <a href="#lx-photo-u4-right-edge">U4 right edge</a> | A | Top | Leads 46 to 55 of <a href="#lx-u4">U4</a> |
+| <a href="#lx-photo-u4-top-edge">U4 top edge</a> | A | Top | Leads 65 to 96 of <a href="#lx-u4">U4</a> |
 | <a href="#lx-photo-bottom-strap-array">Bottom strap array</a> | Not known | Bottom | Strap resistor array area |
 | <a href="#lx-photo-board-b-top">Board B top</a> | B | Top | Whole board |
 | <a href="#lx-photo-poe-module">PoE module</a> | B | Top | Plug-in PoE module |

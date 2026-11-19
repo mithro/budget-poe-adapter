@@ -29,7 +29,7 @@ def font(size, bold=True):
 
 def topx(n):
     """x of the lead of pin n on the top edge (pins 65 to 96)."""
-    return 2430 - 38.4 * (n - 65)
+    return 2437 - 38.4 * (n - 65)
 
 
 def righty(n):
@@ -80,8 +80,8 @@ src = Image.open(SP + 'photo-u4-macro.jpg').convert('RGB')
 # ---------- the whole package: pin 1 and the pin range of each side ----------
 c = Crop(src, (900, 1130, 2800, 2960), darken=90)
 big, mid = font(64), font(50)
-c.ring(1320, 2530, WHITE, r=72, width=6)
-c.text(1410, 2530, 'pin-1 dimple', mid, WHITE, 'lm', 4)
+c.ring(1345, 2557, WHITE, r=72, width=6)
+c.text(1435, 2557, 'pin-1 dimple', mid, WHITE, 'lm', 4)
 c.text((1240 + 2430) / 2, 2655, 'pins 1 to 32', big, WHITE, 'mm', 4)
 c.text(2390, (1486 + 2670) / 2, 'pins 33 to 64', big, WHITE, 'rm', 4)
 c.text((1240 + 2430) / 2, 1500, 'pins 65 to 96', big, WHITE, 'mm', 4)
@@ -123,7 +123,7 @@ c.text(2430, 1232, '65', fs, WHITE, 'mm'); c.text(1240, 1232, '96', fs, WHITE, '
 VIAS = [(80, 1927, 1035, OTHER, -8, -40), (77, 2022, 1075, STRAP, 0, 42), (76, 2089, 1011, UART, 0, -40),
         (75, 2142, 1052, STRAP, 0, 42), (74, 2199, 1007, JTAG, 0, -40), (70, 2380, 1077, UART, 46, 0),
         (78, 2105, 714, SPI, 46, 0), (81, 2028, 647, SPI, -46, 0),
-        (85, 1647, 1136, OTHER, -44, 8), (84, 1664, 1062, JTAG, -46, -10), (83, 1720, 1022, SPI, 46, -6),
+        (85, 1647, 1136, OTHER, -44, 8), (84, 1670, 1075, JTAG, -46, -10), (83, 1722, 1035, SPI, 46, -6),
         (92, 1435, 1062, I2C, -6, -42), (91, 1413, 1118, I2C, -46, 6), (89, 1429, 701, REF, -46, 0)]
 for n, x, y, col, dx, dy in VIAS:
     c.ring(x, y, col)

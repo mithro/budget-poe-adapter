@@ -1532,7 +1532,9 @@ registers:
   - name: MINOR
     lsb: 0
     width: 16
-    desc: Lower half of the chip ID. Its values are not catalogued.
+    desc: Lower half of the chip ID. The file `fal_tiger_init.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_init.c#L133>`__
+      of the :ref:`vendor SDK <sources-list>` tests it for the value 1. The meaning of its values is :ev:`not
+      known`.
     access: ro
     inferred: true
     sdk:
@@ -1987,7 +1989,10 @@ registers:
       used: false
     lsb: 7
     width: 1
-    desc: 1 turns loop detection on.
+    desc: Loop detection strap value. The :ref:`vendor SDK <sources-list>` function `fal_tiger_loop_detect_enable_set()
+      <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_loopdetect.c#L13>`__
+      clears this bit and sets :field:`PON_STRAP_FUNC.LOOP_DETECT` to turn loop detection on, and its
+      comment calls the strap "dis lpd strap". By that code 1 turns loop detection off.
     access: rw
     inferred: true
     sdk:
@@ -2561,7 +2566,9 @@ registers:
     lsb: 6
     width: 1
     desc: :lx:`yt921x_chip_setup` clears the bit. It is :ev:`inferred` from the name that the bit selects
-      a test mode of the SerDes.
+      a test mode of the SerDes. The file `fal_tiger_init.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_init.c#L140>`__
+      of the :ref:`vendor SDK <sources-list>` clears the bit together with the two port bits under the
+      comment "disable sds intf,will be enabled when config sds mode, set to mdio access mode".
     access: rw
     sdk:
       status: no SDK table
@@ -3327,7 +3334,9 @@ registers:
       used: false
     lsb: 13
     width: 4
-    desc: Fine RGMII transmit clock delay in steps of about 150 ps.
+    desc: Fine RGMII transmit clock delay in steps of 150 ps. A `comment in fal_tiger_port.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1010>`__
+      of the :ref:`vendor SDK <sources-list>` gives the transmit clock delay as 2 ns times :field:`XMII.RGMII_TX_DELAY_2NS`
+      plus 0.15 ns times this field.
     access: rw
     inferred: true
     sdk:
@@ -3372,7 +3381,8 @@ registers:
       used: false
     lsb: 8
     width: 1
-    desc: Adds about 2 ns to the RGMII transmit clock.
+    desc: Adds 2 ns to the delay of the RGMII transmit clock, by the `comment in fal_tiger_port.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1010>`__
+      of the :ref:`vendor SDK <sources-list>`.
     access: rw
     inferred: true
     sdk:
@@ -3402,7 +3412,8 @@ registers:
       used: false
     lsb: 3
     width: 4
-    desc: RGMII receive clock delay in steps of about 150 ps.
+    desc: RGMII receive clock delay in steps of 150 ps, by the `comment in fal_tiger_port.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1010>`__
+      of the :ref:`vendor SDK <sources-list>`.
     access: rw
     inferred: true
     sdk:
@@ -4165,7 +4176,8 @@ registers:
       used: false
     lsb: 21
     width: 1
-    desc: Function :ev:`not known`.
+    desc: The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_enable() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L123>`__
+      sets the bit under the comment "enabel LED". The Linux driver does not name its function.
     access: rw
     inferred: true
     sdk:
@@ -4179,7 +4191,11 @@ registers:
       used: false
     lsb: 19
     width: 2
-    desc: Blink cycle that signals a detected loop. The cycle is 512 ms times the field value.
+    desc: Blink cycle that signals a detected loop. The :lx:`comment on the field <leds.h:16>` gives the
+      cycle as 512 ms times the field value. The :ref:`vendor SDK <sources-list>` list `yt_led_loopdetect_blink_rate_t
+      <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_led.h#L79>`__
+      gives 512 ms for the value 0 and 2048 ms for the value 3, which is 512 ms times the field value
+      plus one. It is :ev:`not known` which is right.
     access: rw
     inferred: true
     sdk:
@@ -4266,7 +4282,10 @@ registers:
       used: false
     lsb: 17
     width: 1
-    desc: Function :ev:`not known`. Only LED 0 has the field.
+    desc: Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L39>`__
+      names the bit LED_ACTION_DISABLE_LINK_TRY, and `fal_tiger_led_action_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L320>`__
+      sets it for LED 0 in every case, under the comment "tiger must set disable_link_try bit to 1". What
+      the bit does is :ev:`not known`.
     access: rw
     inferred: true
     sdk:
@@ -4280,7 +4299,9 @@ registers:
       used: false
     lsb: 16
     width: 1
-    desc: Function :ev:`not known`. Only LED 0 has the field.
+    desc: Only LED 0 has the field. The :ref:`vendor SDK <sources-list>` `action list <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L39>`__
+      names the bit LED_ACTION_COLLISION_BLINK. It is :ev:`inferred` from the name that the LED blinks
+      on a collision.
     access: rw
     inferred: true
     sdk:
@@ -5283,7 +5304,9 @@ registers:
       used: false
     lsb: 24
     width: 2
-    desc: Function :ev:`not known`. The :lx:`comment on the field <leds.h:68>` reads "delay?".
+    desc: The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_serial_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L1013>`__
+      sets both bits to turn the serial LED output on and clears both to turn it off. The :lx:`comment
+      on the field <leds.h:68>` in the Linux driver reads "delay?".
     access: rw
     inferred: true
     sdk:
@@ -5397,6 +5420,11 @@ registers:
   access: rw
   words: 1
   inferred: true
+  sdk:
+    literal: true
+    src:
+    - switch_sdk/core/fal/tiger/fal_tiger_led.h
+    - 35
 - id: LED_PAR_PORTS
   address: 0xd01c4
   dims: []
@@ -5410,14 +5438,16 @@ registers:
   - name: VALUE
     lsb: 0
     width: 32
-    desc: Layout :ev:`not known`.
+    desc: The :ref:`vendor SDK <sources-list>` function `fal_tiger_led_parallel_output_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L1080>`__
+      writes a port mask to bits 9 to 0, one bit per port, under the comment "select output port mask
+      of parallel LED". Bits 31 to 10 are :ev:`not known`.
     access: rw
     inferred: true
     sdk:
       status: no SDK table
   block: led
   title: Parallel LED port enable
-  desc: Parallel LED outputs in use. The bit layout is :ev:`not known`.
+  desc: Parallel LED outputs in use. The Linux driver defines the address only.
   access: rw
   words: 1
   inferred: true
@@ -5869,10 +5899,13 @@ registers:
       used: false
     lsb: 35
     width: 1
-    desc: 'Meaning :ev:`not known`. No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set`
-      states. The Linux name suggests a service VLAN enable. The :ref:`vendor SDK <sources-list>` names
-      the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the
-      VLAN ID.'
+    desc: No function of the Linux driver sets it, as the comment in :lx:`yt921x_vlan_aware_set` states.
+      The Linux name reads as a service VLAN enable. The :ref:`vendor SDK <sources-list>` names the bit
+      SVL_EN and sets it in `fal_tiger_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L71>`__;
+      the `comment on yt_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan.h#L136>`__
+      reads "Set vlan svl mode.It will look up fid after enable svl." By that comment the bit makes the
+      VLAN use :field:`VLAN_CTRL.FID` for the address lookup, which disagrees with the reading of the
+      Linux name.
     access: rw
     inferred: true
     sdk:
@@ -5889,8 +5922,10 @@ registers:
     width: 12
     desc: Filtering ID for address learning and lookup. No function of the Linux driver writes it. :lx:`yt921x_fdb_in01`
       writes the VLAN ID to :field:`FDB_IN1.FID`, so the Linux driver addresses the forwarding database
-      by VLAN ID. It is :ev:`not known` when the field takes effect. :field:`VLAN_CTRL.SVLAN_EN` is a
-      candidate. The field crosses the boundary between the two words.
+      by VLAN ID. The :ref:`vendor SDK <sources-list>` function `fal_tiger_vlan_fid_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_vlan.c#L93>`__
+      writes the field, and the `comment on yt_vlan_svlMode_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan.h#L136>`__
+      states that the lookup uses the filtering ID once :field:`VLAN_CTRL.SVLAN_EN` is set. The field
+      crosses the boundary between the two words.
     access: rw
     inferred: true
     sdk:
@@ -6358,7 +6393,8 @@ registers:
       use: [chip.c, yt921x_vlan_filtering, 967]
     lsb: 1
     width: 1
-    desc: Drop received frames that carry a customer tag.
+    desc: :lx:`yt921x_vlan_filtering` always clears the bit. It is :ev:`inferred` from the name that a
+      set bit drops received frames that carry a customer tag.
     access: rw
     sdk:
       status: part of SDK field
@@ -8190,7 +8226,8 @@ registers:
       src:
       - chip.h
       - 321
-    desc: Frames of this class are not flooded to port ``port``.
+    desc: It is :ev:`inferred` from the word "filter" in the register name that frames of this class are
+      not flooded to port ``port`` while its bit is set.
     access: rw
     sdk:
       status: same bits
@@ -8240,7 +8277,8 @@ registers:
       src:
       - chip.h
       - 321
-    desc: Frames of this class are not flooded to port ``port``.
+    desc: It is :ev:`inferred` from the word "filter" in the register name that frames of this class are
+      not flooded to port ``port`` while its bit is set.
     access: rw
     sdk:
       status: same bits
@@ -8288,7 +8326,8 @@ registers:
       src:
       - chip.h
       - 321
-    desc: Frames of this class are not flooded to port ``port``.
+    desc: It is :ev:`inferred` from the word "filter" in the register name that frames of this class are
+      not flooded to port ``port`` while its bit is set.
     access: rw
     inferred: true
     sdk:
@@ -8338,7 +8377,8 @@ registers:
       src:
       - chip.h
       - 321
-    desc: Frames of this class are not flooded to port ``port``.
+    desc: It is :ev:`inferred` from the word "filter" in the register name that frames of this class are
+      not flooded to port ``port`` while its bit is set.
     access: rw
     inferred: true
     sdk:
@@ -8839,7 +8879,8 @@ registers:
       src:
       - chip.h
       - 339
-    desc: Port ``port`` forwards received frames that match no rule.
+    desc: :lx:`yt921x_chip_setup_acl` sets the bit of every port. It is :ev:`inferred` from the register
+      name that port ``port`` then forwards received frames that match no rule.
     access: rw
     sdk:
       status: same bits
@@ -9978,7 +10019,9 @@ registers:
         used: false
       lsb: 30
       width: 2
-      desc: Customer tag format of the frame. No source gives the codes.
+      desc: Customer tag format of the frame. The Linux driver gives no codes. The :ref:`vendor SDK <sources-list>`
+        list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__
+        gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
       access: rw
       inferred: true
       sdk:
@@ -10018,7 +10061,9 @@ registers:
         used: false
       lsb: 24
       width: 2
-      desc: Service tag format of the frame. No source gives the codes.
+      desc: Service tag format of the frame. The Linux driver gives no codes. The :ref:`vendor SDK <sources-list>`
+        list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__
+        gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
       access: rw
       inferred: true
       sdk:
@@ -10874,7 +10919,9 @@ registers:
         used: false
       lsb: 30
       width: 2
-      desc: Customer tag format of the frame. No source gives the codes.
+      desc: Customer tag format of the frame. The Linux driver gives no codes. The :ref:`vendor SDK <sources-list>`
+        list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__
+        gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
       access: rw
       inferred: true
       sdk:
@@ -10914,7 +10961,9 @@ registers:
         used: false
       lsb: 24
       width: 2
-      desc: Service tag format of the frame. No source gives the codes.
+      desc: Service tag format of the frame. The Linux driver gives no codes. The :ref:`vendor SDK <sources-list>`
+        list `yt_vlan_format_t <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_vlan_translate.h#L40>`__
+        gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
       access: rw
       inferred: true
       sdk:

@@ -132,5 +132,10 @@ LED appears at which pin or stream position.
 
 :lx:`yt921x_led_setup` writes :reg:`LED_PAR_INV`, and the polarity is that of the comment in
 that function, "Inversion is internal - force on will give low logic". :lx:`leds.h` defines the registers :reg:`LED_CTRL`, :reg:`LED_PAR_MAP`, :reg:`LED_SER_CTRL` and
-:reg:`LED_SER_MAP`, and no function of the :ref:`Linux driver <sources-list>` uses them. Their
-functions, the serial stream among them, are :ev:`inferred` from their names.
+:reg:`LED_SER_MAP`, and no function of the :ref:`Linux driver <sources-list>` uses them. The file
+`fal_tiger_led.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L1>`__ of the :ref:`vendor SDK <sources-list>` uses all four. Its function
+`fal_tiger_led_enable() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L123>`__
+turns the LED function on with :field:`LED_CTRL.UNK`, and its function
+`fal_tiger_led_serial_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_led.c#L1013>`__
+turns the serial stream on with :field:`LED_SER_CTRL.UNK`. The functions of the other fields
+of the four registers are :ev:`inferred` from their names.

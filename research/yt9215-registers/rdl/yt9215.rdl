@@ -65,7 +65,7 @@ addrmap yt9215 {
         name = "Chip identification";
         desc = "Identifies the chip family. Read it before the reset, as described in Find the switch.";
         field { desc = "Family code. 0x9002 is the YT9215 family and 0x9001 the YT9218 family."; sw = r; hw = w; } MAJOR[31:16];
-        field { desc = "Lower half of the chip ID. Its values are not catalogued."; sw = r; hw = w; } MINOR[15:0];
+        field { desc = "Lower half of the chip ID. The file fal_tiger_init.c of the vendor SDK tests it for the value 1. The meaning of its values is not known."; sw = r; hw = w; } MINOR[15:0];
     } CHIP_ID @ 0x80008;
 
     reg {
@@ -101,7 +101,7 @@ addrmap yt9215 {
     reg {
         name = "SerDes enable";
         desc = "Enables the SGMII SerDes of ports 8 and 9, as yt921x_port_config does. A port uses either its SerDes or its xMII pins; clear the matching bit in XMII_CTRL when setting one here.";
-        field { desc = "yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes."; sw = rw; hw = r; } TEST[6:6];
+        field { desc = "yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes. The file fal_tiger_init.c of the vendor SDK clears the bit together with the two port bits under the comment \"disable sds intf,will be enabled when config sds mode, set to mdio access mode\"."; sw = rw; hw = r; } TEST[6:6];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_9[1:1];
         field { desc = "Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9."; sw = rw; hw = r; } PORT_8[0:0];
     } SERDES_CTRL @ 0x80028;
@@ -216,7 +216,7 @@ addrmap yt9215 {
         name = "Pin strap override value";
         desc = "Values used in place of the power-on straps for every function whose bit is set in PON_STRAP_FUNC.";
         field { desc = "1 turns Energy Efficient Ethernet on. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names."; sw = rw; hw = r; } EEE[16:16];
-        field { desc = "1 turns loop detection on."; sw = rw; hw = r; } LOOP_DETECT[7:7];
+        field { desc = "Loop detection strap value. The vendor SDK function fal_tiger_loop_detect_enable_set() clears this bit and sets PON_STRAP_FUNC.LOOP_DETECT to turn loop detection on, and its comment calls the strap \"dis lpd strap\". By that code 1 turns loop detection off."; sw = rw; hw = r; } LOOP_DETECT[7:7];
     } PON_STRAP_VAL @ 0x80324;
 
     reg {
@@ -281,12 +281,12 @@ addrmap yt9215 {
         field { desc = "Forces the link of the interface up."; sw = rw; hw = r; } LINK[19:19];
         field { desc = "Enables the interface."; sw = rw; hw = r; } EN[18:18];
         field { desc = "Resets the interface logic."; sw = rw; hw = r; } SOFT_RST[17:17];
-        field { desc = "Fine RGMII transmit clock delay in steps of about 150 ps."; sw = rw; hw = r; } RGMII_TX_DELAY_150PS[16:13];
+        field { desc = "Fine RGMII transmit clock delay in steps of 150 ps. A comment in fal_tiger_port.c of the vendor SDK gives the transmit clock delay as 2 ns times XMII.RGMII_TX_DELAY_2NS plus 0.15 ns times this field."; sw = rw; hw = r; } RGMII_TX_DELAY_150PS[16:13];
         field { desc = "The transmit clock pin is an input."; sw = rw; hw = r; } TX_CLK_IN[11:11];
         field { desc = "The receive clock pin is an input."; sw = rw; hw = r; } RX_CLK_IN[10:10];
-        field { desc = "Adds about 2 ns to the RGMII transmit clock."; sw = rw; hw = r; } RGMII_TX_DELAY_2NS[8:8];
+        field { desc = "Adds 2 ns to the delay of the RGMII transmit clock, by the comment in fal_tiger_port.c of the vendor SDK."; sw = rw; hw = r; } RGMII_TX_DELAY_2NS[8:8];
         field { desc = "Drives the RGMII transmit clock."; sw = rw; hw = r; } RGMII_TX_CLK_OUT[7:7];
-        field { desc = "RGMII receive clock delay in steps of about 150 ps."; sw = rw; hw = r; } RGMII_RX_DELAY_150PS[6:3];
+        field { desc = "RGMII receive clock delay in steps of 150 ps, by the comment in fal_tiger_port.c of the vendor SDK."; sw = rw; hw = r; } RGMII_RX_DELAY_150PS[6:3];
         field { desc = "Drives the RMII reference clock when the switch is the PHY side."; sw = rw; hw = r; } RMII_PHY_TX_CLK_OUT[2:2];
         field { desc = "Drives the MII transmit clock when the switch is the PHY side."; sw = rw; hw = r; } REVMII_TX_CLK_OUT[1:1];
         field { desc = "Drives the MII receive clock when the switch is the PHY side."; sw = rw; hw = r; } REVMII_RX_CLK_OUT[0:0];
@@ -500,8 +500,8 @@ addrmap yt9215 {
             PARALLEL = 0 { desc = "One pin per LED"; };
             SERIAL = 2 { desc = "LED states shifted out on a clock and data pin pair"; };
         };
-        field { desc = "Function not known."; sw = rw; hw = r; } UNK[21:21];
-        field { desc = "Blink cycle that signals a detected loop. The cycle is 512 ms times the field value."; sw = rw; hw = r; } LOOPDETECT_BLINK[20:19];
+        field { desc = "The vendor SDK function fal_tiger_led_enable() sets the bit under the comment \"enabel LED\". The Linux driver does not name its function."; sw = rw; hw = r; } UNK[21:21];
+        field { desc = "Blink cycle that signals a detected loop. The comment on the field gives the cycle as 512 ms times the field value. The vendor SDK list yt_led_loopdetect_blink_rate_t gives 512 ms for the value 0 and 2048 ms for the value 3, which is 512 ms times the field value plus one. It is not known which is right."; sw = rw; hw = r; } LOOPDETECT_BLINK[20:19];
         field { desc = "Number of ports shifted out in serial mode."; sw = rw; hw = r; } PORT_NUM[16:13];
         field { desc = "LED output mode."; sw = rw; hw = r; encode = led_ctrl_mode_e; } MODE[1:0];
     } LED_CTRL @ 0xD0000;
@@ -509,8 +509,8 @@ addrmap yt9215 {
     reg {
         name = "LED group 0 behaviour";
         desc = "Conditions that light or blink LED 0 of one port. Each set bit adds one condition; the LED shows the combination. LEDs explains the three LED groups. Index: port = 0 to 9.";
-        field { desc = "Function not known. Only LED 0 has the field."; sw = rw; hw = r; } ACT_LINK_TRY_DIS[17:17];
-        field { desc = "Function not known. Only LED 0 has the field."; sw = rw; hw = r; } ACT_COLLISION_BLINK_INDI[16:16];
+        field { desc = "Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment \"tiger must set disable_link_try bit to 1\". What the bit does is not known."; sw = rw; hw = r; } ACT_LINK_TRY_DIS[17:17];
+        field { desc = "Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_COLLISION_BLINK. It is inferred from the name that the LED blinks on a collision."; sw = rw; hw = r; } ACT_COLLISION_BLINK_INDI[16:16];
         field { desc = "Blink while the port is in low power idle."; sw = rw; hw = r; } ACT_EEE_BLINK[15:15];
         field { desc = "Blink when a loop is detected on the port."; sw = rw; hw = r; } ACT_LOOPDETECT_BLINK[14:14];
         field { desc = "Blink on any activity."; sw = rw; hw = r; } ACT_ACTIVE_BLINK[13:13];
@@ -599,7 +599,7 @@ addrmap yt9215 {
     reg {
         name = "Serial LED control";
         desc = "Settings of the serial LED output.";
-        field { desc = "Function not known. The comment on the field reads \"delay?\"."; sw = rw; hw = r; } UNK[25:24];
+        field { desc = "The vendor SDK function fal_tiger_led_serial_enable_set() sets both bits to turn the serial LED output on and clears both to turn it off. The comment on the field in the Linux driver reads \"delay?\"."; sw = rw; hw = r; } UNK[25:24];
         field { desc = "Serial LED data is active low."; sw = rw; hw = r; } ACTIVE_LOW[4:4];
         field { desc = "Number of LED groups shifted out per port minus one."; sw = rw; hw = r; } GRP_NUM[1:0];
     } LED_SER_CTRL @ 0xD0100;
@@ -621,8 +621,8 @@ addrmap yt9215 {
 
     reg {
         name = "Parallel LED port enable";
-        desc = "Parallel LED outputs in use. The bit layout is not known.";
-        field { desc = "Layout not known."; sw = rw; hw = r; } VALUE[31:0];
+        desc = "Parallel LED outputs in use. The Linux driver defines the address only.";
+        field { desc = "The vendor SDK function fal_tiger_led_parallel_output_set() writes a port mask to bits 9 to 0, one bit per port, under the comment \"select output port mask of parallel LED\". Bits 31 to 10 are not known."; sw = rw; hw = r; } VALUE[31:0];
     } LED_PAR_PORTS @ 0xD01C4;
 
     reg {
@@ -1001,65 +1001,65 @@ addrmap yt9215 {
     reg {
         name = "Unknown unicast flood filter";
         desc = "Ports that do not receive flooded frames with an unknown unicast destination.";
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_10[10:10];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_9[9:9];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_8[8:8];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_7[7:7];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_6[6:6];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_5[5:5];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_4[4:4];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_3[3:3];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_2[2:2];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_1[1:1];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_0[0:0];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_10[10:10];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_9[9:9];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_8[8:8];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_7[7:7];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_6[6:6];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_5[5:5];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_4[4:4];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_3[3:3];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_2[2:2];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_1[1:1];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_0[0:0];
     } FILTER_UNK_UCAST @ 0x180508;
 
     reg {
         name = "Unknown multicast flood filter";
         desc = "Ports that do not receive flooded frames with an unknown multicast destination.";
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_10[10:10];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_9[9:9];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_8[8:8];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_7[7:7];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_6[6:6];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_5[5:5];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_4[4:4];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_3[3:3];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_2[2:2];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_1[1:1];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_0[0:0];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_10[10:10];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_9[9:9];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_8[8:8];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_7[7:7];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_6[6:6];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_5[5:5];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_4[4:4];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_3[3:3];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_2[2:2];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_1[1:1];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_0[0:0];
     } FILTER_UNK_MCAST @ 0x18050C;
 
     reg {
         name = "Multicast flood filter";
         desc = "Ports that do not receive multicast frames.";
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_10[10:10];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_9[9:9];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_8[8:8];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_7[7:7];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_6[6:6];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_5[5:5];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_4[4:4];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_3[3:3];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_2[2:2];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_1[1:1];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_0[0:0];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_10[10:10];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_9[9:9];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_8[8:8];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_7[7:7];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_6[6:6];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_5[5:5];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_4[4:4];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_3[3:3];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_2[2:2];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_1[1:1];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_0[0:0];
     } FILTER_MCAST @ 0x180510;
 
     reg {
         name = "Broadcast flood filter";
         desc = "Ports that do not receive broadcast frames.";
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_10[10:10];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_9[9:9];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_8[8:8];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_7[7:7];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_6[6:6];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_5[5:5];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_4[4:4];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_3[3:3];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_2[2:2];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_1[1:1];
-        field { desc = "Frames of this class are not flooded to port port."; sw = rw; hw = r; } PORTS_0[0:0];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_10[10:10];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_9[9:9];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_8[8:8];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_7[7:7];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_6[6:6];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_5[5:5];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_4[4:4];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_3[3:3];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_2[2:2];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_1[1:1];
+        field { desc = "It is inferred from the word \"filter\" in the register name that frames of this class are not flooded to port port while its bit is set."; sw = rw; hw = r; } PORTS_0[0:0];
     } FILTER_BCAST @ 0x180514;
 
     reg {
@@ -1102,17 +1102,17 @@ addrmap yt9215 {
     reg {
         name = "ACL unmatched frame permit";
         desc = "Ports on which a frame that matches no ACL rule is forwarded.";
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_10[10:10];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_9[9:9];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_8[8:8];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_7[7:7];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_6[6:6];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_5[5:5];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_4[4:4];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_3[3:3];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_2[2:2];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_1[1:1];
-        field { desc = "Port port forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_0[0:0];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_10[10:10];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_9[9:9];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_8[8:8];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_7[7:7];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_6[6:6];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_5[5:5];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_4[4:4];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_3[3:3];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_2[2:2];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_1[1:1];
+        field { desc = "yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule."; sw = rw; hw = r; } PORTS_0[0:0];
     } ACL_PERMIT_UNMATCH @ 0x1806A0;
 
     reg {
@@ -1183,8 +1183,8 @@ addrmap yt9215 {
         field { desc = "Ports that send frames of this VLAN without a tag. Each port has one bit."; sw = rw; hw = r; } UNTAG_PORTS_1[41:41];
         field { desc = "Ports that send frames of this VLAN without a tag. Each port has one bit."; sw = rw; hw = r; } UNTAG_PORTS_0[40:40];
         field { desc = "Spanning tree instance of this VLAN. It selects the STP register."; sw = rw; hw = r; } STP_ID[39:36];
-        field { desc = "Meaning not known. No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name suggests a service VLAN enable. The vendor SDK names the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the VLAN ID."; sw = rw; hw = r; } SVLAN_EN[35:35];
-        field { desc = "Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. It is not known when the field takes effect. VLAN_CTRL.SVLAN_EN is a candidate. The field crosses the boundary between the two words."; sw = rw; hw = r; } FID[34:23];
+        field { desc = "No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name reads as a service VLAN enable. The vendor SDK names the bit SVL_EN and sets it in fal_tiger_vlan_svlMode_enable_set(); the comment on yt_vlan_svlMode_enable_set() reads \"Set vlan svl mode.It will look up fid after enable svl.\" By that comment the bit makes the VLAN use VLAN_CTRL.FID for the address lookup, which disagrees with the reading of the Linux name."; sw = rw; hw = r; } SVLAN_EN[35:35];
+        field { desc = "Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. The vendor SDK function fal_tiger_vlan_fid_set() writes the field, and the comment on yt_vlan_svlMode_enable_set() states that the lookup uses the filtering ID once VLAN_CTRL.SVLAN_EN is set. The field crosses the boundary between the two words."; sw = rw; hw = r; } FID[34:23];
         field { desc = "Source addresses of frames in this VLAN are not learned."; sw = rw; hw = r; } LEARN_DIS[22:22];
         field { desc = "Frames of this VLAN get the priority in PRIO."; sw = rw; hw = r; } PRIO_EN[21:21];
         field { desc = "VLAN priority. It is a source for PORT_PRIO_ORD."; sw = rw; hw = r; } PRIO[20:18];
@@ -1515,7 +1515,7 @@ addrmap yt9215 {
         field { desc = "VLAN range profile number."; sw = rw; hw = r; } VLAN_RANGE_PROFILE_ID[7:4];
         field { desc = "Drop received frames that carry a service tag."; sw = rw; hw = r; } SVLAN_DROP_TAGGED[3:3];
         field { desc = "Drop received frames that carry no service tag."; sw = rw; hw = r; } SVLAN_DROP_UNTAGGED[2:2];
-        field { desc = "Drop received frames that carry a customer tag."; sw = rw; hw = r; } CVLAN_DROP_TAGGED[1:1];
+        field { desc = "yt921x_vlan_filtering always clears the bit. It is inferred from the name that a set bit drops received frames that carry a customer tag."; sw = rw; hw = r; } CVLAN_DROP_TAGGED[1:1];
         field { desc = "Drop received frames that carry no customer tag."; sw = rw; hw = r; } CVLAN_DROP_UNTAGGED[0:0];
     } PORT_VLAN_CTRL1[11] @ 0x230080 += 0x4;
 

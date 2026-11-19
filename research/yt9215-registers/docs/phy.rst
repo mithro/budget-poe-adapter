@@ -13,7 +13,10 @@ SerDes of port 8 or 9 at address 8 or 9. :lx:`yt921x_serdes_config` of the
 passes the port number as the address of a PHY. The external master reaches
 PHYs wired to the MDIO master pins of the switch, at their own addresses. Tables 16 and 17
 of the |ds| name the pins of the two MDIO master groups: SMI1_MDC with SMI1_MDIO, and
-SMI2_MDC with SMI2_MDIO. It is :ev:`not known` which group the external master drives. Each
+SMI2_MDC with SMI2_MDIO. The file `fal_tiger_init.c <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_init.c#L119>`__ of the :ref:`vendor SDK <sources-list>` sets bit 2 of the address ``0x80358`` for two
+boards under the comment "select mdio grp1 pin", so the group is selectable. This manual
+does not describe that register, and it is :ev:`not known` which group the external master
+drives after reset. Each
 master has four registers, and :lx:`mdio_bus.h` defines the fields of the two sets under common
 names.
 

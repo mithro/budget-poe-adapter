@@ -108,6 +108,11 @@ use the words of its column "Word in the guide"; each use of such a word is a li
      - No source
      - :ref:`sources-open`
 
+The levels describe the :ref:`Linux driver <sources-list>`. Where code of the
+:ref:`vendor SDK <sources-list>` states what the Linux driver does not, the sentence names
+the SDK function or file as a link to its line, and the level of the field in the reference
+stays :ev:`header` or :ev:`inferred`.
+
 A statement with the level :ref:`driver <evidence-driver>` follows what the code does. A
 :ev:`header` definition that no
 code uses carries a name and often a list of values, which is taken at face value. An
@@ -181,7 +186,7 @@ Open topics
 -----------
 
 No part of this manual and none of its code has been run on a YT921x. The code is tested
-against the :ref:`software model <bindings-tests>` only. No source settles the topics of the
+against the :ref:`software model <bindings-tests>` only. This manual leaves open the topics of the
 :ref:`open-topic table <sources-open-table>`.
 
 .. _sources-open-table:
@@ -204,21 +209,11 @@ against the :ref:`software model <bindings-tests>` only. No source settles the t
      - :ref:`access-wait`
    * - Duration of table commands
      - :ref:`access-wait`
-   * - xMII modes other than RGMII
-     - :ref:`ports-xmii`
-   * - Effect of the filtering ID
-     - :field:`VLAN_CTRL.FID`
-   * - Meaning of a service VLAN bit
-     - :field:`VLAN_CTRL.SVLAN_EN`
    * - MDIO `clause 45 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__
      - :ref:`phy-mbus`
-   * - SPI host interface
-     - :ref:`access-straps`
-   * - I2C host interface
-     - :ref:`access-straps`
 
 The :ref:`vendor SDK <sources-list>` lists 237 tables and the reference describes 101 registers.
-The other tables are known by name only. :ref:`reference-sdk` lists them by address region.
+This manual does not describe the other tables. :ref:`reference-sdk` lists them by address region.
 
 .. _sources-reset:
 

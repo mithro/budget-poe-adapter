@@ -286,7 +286,7 @@ pub const FUNC_MIB: Field = Field { lsb: 1, width: 1 };
 pub const CHIP_ID: u32 = 0x80008;
 /// Family code. 0x9002 is the YT9215 family and 0x9001 the YT9218 family.
 pub const CHIP_ID_MAJOR: Field = Field { lsb: 16, width: 16 };
-/// Lower half of the chip ID. Its values are not catalogued.
+/// Lower half of the chip ID. The file fal_tiger_init.c of the vendor SDK tests it for the value 1. The meaning of its values is not known.
 pub const CHIP_ID_MINOR: Field = Field { lsb: 0, width: 16 };
 
 /// I/O voltage select.
@@ -357,7 +357,7 @@ pub const PON_STRAP_FUNC_LOOP_DETECT: Field = Field { lsb: 7, width: 1 };
 pub const PON_STRAP_VAL: u32 = 0x80324;
 /// 1 turns Energy Efficient Ethernet on. yt921x_set_eee sets this bit together with PON_STRAP_FUNC.EEE; the role of each bit alone is inferred from the register names.
 pub const PON_STRAP_VAL_EEE: Field = Field { lsb: 16, width: 1 };
-/// 1 turns loop detection on.
+/// Loop detection strap value. The vendor SDK function fal_tiger_loop_detect_enable_set() clears this bit and sets PON_STRAP_FUNC.LOOP_DETECT to turn loop detection on, and its comment calls the strap "dis lpd strap". By that code 1 turns loop detection off.
 pub const PON_STRAP_VAL_LOOP_DETECT: Field = Field { lsb: 7, width: 1 };
 
 /// Pin strap capture.
@@ -444,7 +444,7 @@ pub const CPU_COPY_TO_EXT_CPU: Field = Field { lsb: 0, width: 1 };
 
 /// SerDes enable.
 pub const SERDES_CTRL: u32 = 0x80028;
-/// yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes.
+/// yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes. The file fal_tiger_init.c of the vendor SDK clears the bit together with the two port bits under the comment "disable sds intf,will be enabled when config sds mode, set to mdio access mode".
 pub const SERDES_CTRL_TEST: Field = Field { lsb: 6, width: 1 };
 /// Bit 0 enables the SerDes of port 8. Bit 1 enables the SerDes of port 9.
 pub const fn serdes_ctrl_port(port: u32) -> Field {
@@ -586,17 +586,17 @@ pub const XMII_LINK: Field = Field { lsb: 19, width: 1 };
 pub const XMII_EN: Field = Field { lsb: 18, width: 1 };
 /// Resets the interface logic.
 pub const XMII_SOFT_RST: Field = Field { lsb: 17, width: 1 };
-/// Fine RGMII transmit clock delay in steps of about 150 ps.
+/// Fine RGMII transmit clock delay in steps of 150 ps. A comment in fal_tiger_port.c of the vendor SDK gives the transmit clock delay as 2 ns times XMII.RGMII_TX_DELAY_2NS plus 0.15 ns times this field.
 pub const XMII_RGMII_TX_DELAY_150PS: Field = Field { lsb: 13, width: 4 };
 /// The transmit clock pin is an input.
 pub const XMII_TX_CLK_IN: Field = Field { lsb: 11, width: 1 };
 /// The receive clock pin is an input.
 pub const XMII_RX_CLK_IN: Field = Field { lsb: 10, width: 1 };
-/// Adds about 2 ns to the RGMII transmit clock.
+/// Adds 2 ns to the delay of the RGMII transmit clock, by the comment in fal_tiger_port.c of the vendor SDK.
 pub const XMII_RGMII_TX_DELAY_2NS: Field = Field { lsb: 8, width: 1 };
 /// Drives the RGMII transmit clock.
 pub const XMII_RGMII_TX_CLK_OUT: Field = Field { lsb: 7, width: 1 };
-/// RGMII receive clock delay in steps of about 150 ps.
+/// RGMII receive clock delay in steps of 150 ps, by the comment in fal_tiger_port.c of the vendor SDK.
 pub const XMII_RGMII_RX_DELAY_150PS: Field = Field { lsb: 3, width: 4 };
 /// Drives the RMII reference clock when the switch is the PHY side.
 pub const XMII_RMII_PHY_TX_CLK_OUT: Field = Field { lsb: 2, width: 1 };
@@ -732,9 +732,9 @@ pub const MIB_DATA_COUNT: Field = Field { lsb: 0, width: 32 };
 
 /// LED global control.
 pub const LED_CTRL: u32 = 0xd0000;
-/// Function not known.
+/// The vendor SDK function fal_tiger_led_enable() sets the bit under the comment "enabel LED". The Linux driver does not name its function.
 pub const LED_CTRL_UNK: Field = Field { lsb: 21, width: 1 };
-/// Blink cycle that signals a detected loop. The cycle is 512 ms times the field value.
+/// Blink cycle that signals a detected loop. The comment on the field gives the cycle as 512 ms times the field value. The vendor SDK list yt_led_loopdetect_blink_rate_t gives 512 ms for the value 0 and 2048 ms for the value 3, which is 512 ms times the field value plus one. It is not known which is right.
 pub const LED_CTRL_LOOPDETECT_BLINK: Field = Field { lsb: 19, width: 2 };
 /// Number of ports shifted out in serial mode.
 pub const LED_CTRL_PORT_NUM: Field = Field { lsb: 13, width: 4 };
@@ -753,9 +753,9 @@ pub const fn led0_port(port: u32) -> u32 {
 pub const LED0_PORT_PORT_FIRST: u32 = 0;
 /// Number of valid `port` values of [`led0_port`].
 pub const LED0_PORT_PORT_COUNT: u32 = 10;
-/// Function not known. Only LED 0 has the field.
+/// Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment "tiger must set disable_link_try bit to 1". What the bit does is not known.
 pub const LED0_PORT_ACT_LINK_TRY_DIS: Field = Field { lsb: 17, width: 1 };
-/// Function not known. Only LED 0 has the field.
+/// Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_COLLISION_BLINK. It is inferred from the name that the LED blinks on a collision.
 pub const LED0_PORT_ACT_COLLISION_BLINK_INDI: Field = Field { lsb: 16, width: 1 };
 /// Blink while the port is in low power idle.
 pub const LED0_PORT_ACT_EEE_BLINK: Field = Field { lsb: 15, width: 1 };
@@ -914,7 +914,7 @@ pub const LED2_PORT_ACT_10M_BLINK: Field = Field { lsb: 0, width: 1 };
 
 /// Serial LED control.
 pub const LED_SER_CTRL: u32 = 0xd0100;
-/// Function not known. The comment on the field reads "delay?".
+/// The vendor SDK function fal_tiger_led_serial_enable_set() sets both bits to turn the serial LED output on and clears both to turn it off. The comment on the field in the Linux driver reads "delay?".
 pub const LED_SER_CTRL_UNK: Field = Field { lsb: 24, width: 2 };
 /// Serial LED data is active low.
 pub const LED_SER_CTRL_ACTIVE_LOW: Field = Field { lsb: 4, width: 1 };
@@ -944,7 +944,7 @@ pub const fn led_ser_map_dst_led(slot: u32) -> Field {
 
 /// Parallel LED port enable.
 pub const LED_PAR_PORTS: u32 = 0xd01c4;
-/// Layout not known.
+/// The vendor SDK function fal_tiger_led_parallel_output_set() writes a port mask to bits 9 to 0, one bit per port, under the comment "select output port mask of parallel LED". Bits 31 to 10 are not known.
 pub const LED_PAR_PORTS_VALUE: Field = Field { lsb: 0, width: 32 };
 
 /// Parallel LED polarity.
@@ -1050,9 +1050,9 @@ pub const fn vlan_ctrl_untag_ports(port: u32) -> Field {
 pub const VLAN_CTRL_UNTAG_PORTS_ALL: Field = Field { lsb: 40, width: 11 };
 /// Spanning tree instance of this VLAN. It selects the STP register.
 pub const VLAN_CTRL_STP_ID: Field = Field { lsb: 36, width: 4 };
-/// Meaning not known. No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name suggests a service VLAN enable. The vendor SDK names the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the VLAN ID.
+/// No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name reads as a service VLAN enable. The vendor SDK names the bit SVL_EN and sets it in fal_tiger_vlan_svlMode_enable_set(); the comment on yt_vlan_svlMode_enable_set() reads "Set vlan svl mode.It will look up fid after enable svl." By that comment the bit makes the VLAN use VLAN_CTRL.FID for the address lookup, which disagrees with the reading of the Linux name.
 pub const VLAN_CTRL_SVLAN_EN: Field = Field { lsb: 35, width: 1 };
-/// Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. It is not known when the field takes effect. VLAN_CTRL.SVLAN_EN is a candidate. The field crosses the boundary between the two words.
+/// Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. The vendor SDK function fal_tiger_vlan_fid_set() writes the field, and the comment on yt_vlan_svlMode_enable_set() states that the lookup uses the filtering ID once VLAN_CTRL.SVLAN_EN is set. The field crosses the boundary between the two words.
 pub const VLAN_CTRL_FID: Field = Field { lsb: 23, width: 12 };
 /// Source addresses of frames in this VLAN are not learned.
 pub const VLAN_CTRL_LEARN_DIS: Field = Field { lsb: 22, width: 1 };
@@ -1142,7 +1142,7 @@ pub const PORT_VLAN_CTRL1_VLAN_RANGE_PROFILE_ID: Field = Field { lsb: 4, width: 
 pub const PORT_VLAN_CTRL1_SVLAN_DROP_TAGGED: Field = Field { lsb: 3, width: 1 };
 /// Drop received frames that carry no service tag.
 pub const PORT_VLAN_CTRL1_SVLAN_DROP_UNTAGGED: Field = Field { lsb: 2, width: 1 };
-/// Drop received frames that carry a customer tag.
+/// yt921x_vlan_filtering always clears the bit. It is inferred from the name that a set bit drops received frames that carry a customer tag.
 pub const PORT_VLAN_CTRL1_CVLAN_DROP_TAGGED: Field = Field { lsb: 1, width: 1 };
 /// Drop received frames that carry no customer tag.
 pub const PORT_VLAN_CTRL1_CVLAN_DROP_UNTAGGED: Field = Field { lsb: 0, width: 1 };
@@ -1468,7 +1468,7 @@ pub const FDB_HW_FLUSH_ON_LINKDOWN: Field = Field { lsb: 0, width: 1 };
 
 /// Unknown unicast flood filter.
 pub const FILTER_UNK_UCAST: u32 = 0x180508;
-/// Frames of this class are not flooded to port port.
+/// It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.
 pub const fn filter_unk_ucast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1477,7 +1477,7 @@ pub const FILTER_UNK_UCAST_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Unknown multicast flood filter.
 pub const FILTER_UNK_MCAST: u32 = 0x18050c;
-/// Frames of this class are not flooded to port port.
+/// It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.
 pub const fn filter_unk_mcast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1486,7 +1486,7 @@ pub const FILTER_UNK_MCAST_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Multicast flood filter.
 pub const FILTER_MCAST: u32 = 0x180510;
-/// Frames of this class are not flooded to port port.
+/// It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.
 pub const fn filter_mcast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1495,7 +1495,7 @@ pub const FILTER_MCAST_PORTS_ALL: Field = Field { lsb: 0, width: 11 };
 
 /// Broadcast flood filter.
 pub const FILTER_BCAST: u32 = 0x180514;
-/// Frames of this class are not flooded to port port.
+/// It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.
 pub const fn filter_bcast_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1593,7 +1593,7 @@ pub const LAG_HASH_SRC_PORT: Field = Field { lsb: 0, width: 1 };
 
 /// ACL unmatched frame permit.
 pub const ACL_PERMIT_UNMATCH: u32 = 0x1806a0;
-/// Port port forwards received frames that match no rule.
+/// yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule.
 pub const fn acl_permit_unmatch_ports(port: u32) -> Field {
     Field { lsb: (port) as u8, width: 1 }
 }
@@ -1795,13 +1795,13 @@ pub const ACL_KEY_VLAN_CVID_RANGE_EN: Field = Field { lsb: 62, width: 1 };
 pub const ACL_KEY_VLAN_CDEI: Field = Field { lsb: 35, width: 1 };
 /// Priority of the customer tag.
 pub const ACL_KEY_VLAN_CPRI: Field = Field { lsb: 32, width: 3 };
-/// Customer tag format of the frame. No source gives the codes.
+/// Customer tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
 pub const ACL_KEY_VLAN_CTAG_FMT: Field = Field { lsb: 30, width: 2 };
 /// Drop eligible bit of the service tag.
 pub const ACL_KEY_VLAN_SDEI: Field = Field { lsb: 29, width: 1 };
 /// Priority of the service tag.
 pub const ACL_KEY_VLAN_SPRI: Field = Field { lsb: 26, width: 3 };
-/// Service tag format of the frame. No source gives the codes.
+/// Service tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
 pub const ACL_KEY_VLAN_STAG_FMT: Field = Field { lsb: 24, width: 2 };
 /// Service VLAN ID.
 pub const ACL_KEY_VLAN_SVID: Field = Field { lsb: 12, width: 12 };
@@ -1926,13 +1926,13 @@ pub const ACL_MASK_MAC_DA1_SA1_MAC_SA1: Field = Field { lsb: 0, width: 16 };
 pub const ACL_MASK_VLAN_CDEI: Field = Field { lsb: 35, width: 1 };
 /// Priority of the customer tag.
 pub const ACL_MASK_VLAN_CPRI: Field = Field { lsb: 32, width: 3 };
-/// Customer tag format of the frame. No source gives the codes.
+/// Customer tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
 pub const ACL_MASK_VLAN_CTAG_FMT: Field = Field { lsb: 30, width: 2 };
 /// Drop eligible bit of the service tag.
 pub const ACL_MASK_VLAN_SDEI: Field = Field { lsb: 29, width: 1 };
 /// Priority of the service tag.
 pub const ACL_MASK_VLAN_SPRI: Field = Field { lsb: 26, width: 3 };
-/// Service tag format of the frame. No source gives the codes.
+/// Service tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.
 pub const ACL_MASK_VLAN_STAG_FMT: Field = Field { lsb: 24, width: 2 };
 /// Service VLAN ID.
 pub const ACL_MASK_VLAN_SVID: Field = Field { lsb: 12, width: 12 };

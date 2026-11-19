@@ -201,7 +201,7 @@
           <fields>
             <field>
               <name>MINOR</name>
-              <description>Lower half of the chip ID. Its values are not catalogued.</description>
+              <description>Lower half of the chip ID. The file fal_tiger_init.c of the vendor SDK tests it for the value 1. The meaning of its values is not known.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>16</bitWidth>
               <access>read-only</access>
@@ -301,7 +301,7 @@
             </field>
             <field>
               <name>TEST</name>
-              <description>yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes.</description>
+              <description>yt921x_chip_setup clears the bit. It is inferred from the name that the bit selects a test mode of the SerDes. The file fal_tiger_init.c of the vendor SDK clears the bit together with the two port bits under the comment "disable sds intf,will be enabled when config sds mode, set to mdio access mode".</description>
               <bitOffset>6</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -744,7 +744,7 @@
           <fields>
             <field>
               <name>LOOP_DETECT</name>
-              <description>1 turns loop detection on.</description>
+              <description>Loop detection strap value. The vendor SDK function fal_tiger_loop_detect_enable_set() clears this bit and sets PON_STRAP_FUNC.LOOP_DETECT to turn loop detection on, and its comment calls the strap "dis lpd strap". By that code 1 turns loop detection off.</description>
               <bitOffset>7</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -945,7 +945,7 @@
             </field>
             <field>
               <name>RGMII_RX_DELAY_150PS</name>
-              <description>RGMII receive clock delay in steps of about 150 ps.</description>
+              <description>RGMII receive clock delay in steps of 150 ps, by the comment in fal_tiger_port.c of the vendor SDK.</description>
               <bitOffset>3</bitOffset>
               <bitWidth>4</bitWidth>
               <access>read-write</access>
@@ -959,7 +959,7 @@
             </field>
             <field>
               <name>RGMII_TX_DELAY_2NS</name>
-              <description>Adds about 2 ns to the RGMII transmit clock.</description>
+              <description>Adds 2 ns to the delay of the RGMII transmit clock, by the comment in fal_tiger_port.c of the vendor SDK.</description>
               <bitOffset>8</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -980,7 +980,7 @@
             </field>
             <field>
               <name>RGMII_TX_DELAY_150PS</name>
-              <description>Fine RGMII transmit clock delay in steps of about 150 ps.</description>
+              <description>Fine RGMII transmit clock delay in steps of 150 ps. A comment in fal_tiger_port.c of the vendor SDK gives the transmit clock delay as 2 ns times XMII.RGMII_TX_DELAY_2NS plus 0.15 ns times this field.</description>
               <bitOffset>13</bitOffset>
               <bitWidth>4</bitWidth>
               <access>read-write</access>
@@ -1502,14 +1502,14 @@
             </field>
             <field>
               <name>LOOPDETECT_BLINK</name>
-              <description>Blink cycle that signals a detected loop. The cycle is 512 ms times the field value.</description>
+              <description>Blink cycle that signals a detected loop. The comment on the field gives the cycle as 512 ms times the field value. The vendor SDK list yt_led_loopdetect_blink_rate_t gives 512 ms for the value 0 and 2048 ms for the value 3, which is 512 ms times the field value plus one. It is not known which is right.</description>
               <bitOffset>19</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>UNK</name>
-              <description>Function not known.</description>
+              <description>The vendor SDK function fal_tiger_led_enable() sets the bit under the comment "enabel LED". The Linux driver does not name its function.</description>
               <bitOffset>21</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -1639,14 +1639,14 @@
             </field>
             <field>
               <name>ACT_COLLISION_BLINK_INDI</name>
-              <description>Function not known. Only LED 0 has the field.</description>
+              <description>Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_COLLISION_BLINK. It is inferred from the name that the LED blinks on a collision.</description>
               <bitOffset>16</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
             </field>
             <field>
               <name>ACT_LINK_TRY_DIS</name>
-              <description>Function not known. Only LED 0 has the field.</description>
+              <description>Only LED 0 has the field. The vendor SDK action list names the bit LED_ACTION_DISABLE_LINK_TRY, and fal_tiger_led_action_set() sets it for LED 0 in every case, under the comment "tiger must set disable_link_try bit to 1". What the bit does is not known.</description>
               <bitOffset>17</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -2021,7 +2021,7 @@
             </field>
             <field>
               <name>UNK</name>
-              <description>Function not known. The comment on the field reads "delay?".</description>
+              <description>The vendor SDK function fal_tiger_led_serial_enable_set() sets both bits to turn the serial LED output on and clears both to turn it off. The comment on the field in the Linux driver reads "delay?".</description>
               <bitOffset>24</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
@@ -2061,14 +2061,14 @@
         </register>
         <register>
           <name>LED_PAR_PORTS</name>
-          <description>Parallel LED outputs in use. The bit layout is not known.</description>
+          <description>Parallel LED outputs in use. The Linux driver defines the address only.</description>
           <addressOffset>0x1C4</addressOffset>
           <size>32</size>
           <access>read-write</access>
           <fields>
             <field>
               <name>VALUE</name>
-              <description>Layout not known.</description>
+              <description>The vendor SDK function fal_tiger_led_parallel_output_set() writes a port mask to bits 9 to 0, one bit per port, under the comment "select output port mask of parallel LED". Bits 31 to 10 are not known.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>32</bitWidth>
               <access>read-write</access>
@@ -3444,7 +3444,7 @@
               <dimIncrement>1</dimIncrement>
               <dimIndex>0-10</dimIndex>
               <name>PORTS%s</name>
-              <description>Frames of this class are not flooded to port port.</description>
+              <description>It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3463,7 +3463,7 @@
               <dimIncrement>1</dimIncrement>
               <dimIndex>0-10</dimIndex>
               <name>PORTS%s</name>
-              <description>Frames of this class are not flooded to port port.</description>
+              <description>It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3482,7 +3482,7 @@
               <dimIncrement>1</dimIncrement>
               <dimIndex>0-10</dimIndex>
               <name>PORTS%s</name>
-              <description>Frames of this class are not flooded to port port.</description>
+              <description>It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3501,7 +3501,7 @@
               <dimIncrement>1</dimIncrement>
               <dimIndex>0-10</dimIndex>
               <name>PORTS%s</name>
-              <description>Frames of this class are not flooded to port port.</description>
+              <description>It is inferred from the word "filter" in the register name that frames of this class are not flooded to port port while its bit is set.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3612,7 +3612,7 @@
               <dimIncrement>1</dimIncrement>
               <dimIndex>0-10</dimIndex>
               <name>PORTS%s</name>
-              <description>Port port forwards received frames that match no rule.</description>
+              <description>yt921x_chip_setup_acl sets the bit of every port. It is inferred from the register name that port port then forwards received frames that match no rule.</description>
               <bitOffset>0</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>
@@ -3798,7 +3798,7 @@
               </field>
               <field>
                 <name>FID_LO</name>
-                <description>Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. It is not known when the field takes effect. VLAN_CTRL.SVLAN_EN is a candidate. The field crosses the boundary between the two words.</description>
+                <description>Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. The vendor SDK function fal_tiger_vlan_fid_set() writes the field, and the comment on yt_vlan_svlMode_enable_set() states that the lookup uses the filtering ID once VLAN_CTRL.SVLAN_EN is set. The field crosses the boundary between the two words.</description>
                 <bitOffset>23</bitOffset>
                 <bitWidth>9</bitWidth>
                 <access>read-write</access>
@@ -3814,14 +3814,14 @@
             <fields>
               <field>
                 <name>FID_HI</name>
-                <description>Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. It is not known when the field takes effect. VLAN_CTRL.SVLAN_EN is a candidate. The field crosses the boundary between the two words.</description>
+                <description>Filtering ID for address learning and lookup. No function of the Linux driver writes it. yt921x_fdb_in01 writes the VLAN ID to FDB_IN1.FID, so the Linux driver addresses the forwarding database by VLAN ID. The vendor SDK function fal_tiger_vlan_fid_set() writes the field, and the comment on yt_vlan_svlMode_enable_set() states that the lookup uses the filtering ID once VLAN_CTRL.SVLAN_EN is set. The field crosses the boundary between the two words.</description>
                 <bitOffset>0</bitOffset>
                 <bitWidth>3</bitWidth>
                 <access>read-write</access>
               </field>
               <field>
                 <name>SVLAN_EN</name>
-                <description>Meaning not known. No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name suggests a service VLAN enable. The vendor SDK names the bit SVL_EN, which suggests shared VLAN learning: learning by the filtering ID in place of the VLAN ID.</description>
+                <description>No function of the Linux driver sets it, as the comment in yt921x_vlan_aware_set states. The Linux name reads as a service VLAN enable. The vendor SDK names the bit SVL_EN and sets it in fal_tiger_vlan_svlMode_enable_set(); the comment on yt_vlan_svlMode_enable_set() reads "Set vlan svl mode.It will look up fid after enable svl." By that comment the bit makes the VLAN use VLAN_CTRL.FID for the address lookup, which disagrees with the reading of the Linux name.</description>
                 <bitOffset>3</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>
@@ -4400,7 +4400,7 @@
                 </field>
                 <field>
                   <name>STAG_FMT</name>
-                  <description>Service tag format of the frame. No source gives the codes.</description>
+                  <description>Service tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.</description>
                   <bitOffset>24</bitOffset>
                   <bitWidth>2</bitWidth>
                   <access>read-write</access>
@@ -4421,7 +4421,7 @@
                 </field>
                 <field>
                   <name>CTAG_FMT</name>
-                  <description>Customer tag format of the frame. No source gives the codes.</description>
+                  <description>Customer tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.</description>
                   <bitOffset>30</bitOffset>
                   <bitWidth>2</bitWidth>
                   <access>read-write</access>
@@ -7904,7 +7904,7 @@
                 </field>
                 <field>
                   <name>STAG_FMT</name>
-                  <description>Service tag format of the frame. No source gives the codes.</description>
+                  <description>Service tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.</description>
                   <bitOffset>24</bitOffset>
                   <bitWidth>2</bitWidth>
                   <access>read-write</access>
@@ -7925,7 +7925,7 @@
                 </field>
                 <field>
                   <name>CTAG_FMT</name>
-                  <description>Customer tag format of the frame. No source gives the codes.</description>
+                  <description>Customer tag format of the frame. The Linux driver gives no codes. The vendor SDK list yt_vlan_format_t gives 0 for untagged, 1 for priority-tagged and 2 for tagged.</description>
                   <bitOffset>30</bitOffset>
                   <bitWidth>2</bitWidth>
                   <access>read-write</access>
@@ -9412,7 +9412,7 @@
             </field>
             <field>
               <name>CVLAN_DROP_TAGGED</name>
-              <description>Drop received frames that carry a customer tag.</description>
+              <description>yt921x_vlan_filtering always clears the bit. It is inferred from the name that a set bit drops received frames that carry a customer tag.</description>
               <bitOffset>1</bitOffset>
               <bitWidth>1</bitWidth>
               <access>read-write</access>

@@ -241,8 +241,10 @@ I/O voltage
 :reg:`IO_LEVEL` sets the signalling voltage of the digital pins and of each xMII interface.
 Its field positions differ between the two families, so a driver has to identify the part
 first. The fields have the level :ev:`header`: :lx:`chip.h` defines them and no function of
-the :ref:`Linux driver <sources-list>` writes them. :ref:`ports-xmii` shows the one use, in the
-:ref:`YT9215RB vendor driver <sources-list>`.
+the :ref:`Linux driver <sources-list>` writes them. :ref:`ports-xmii` shows the write of the
+:ref:`YT9215RB vendor driver <sources-list>`. The :ref:`vendor SDK <sources-list>` function
+`fal_tiger_port_dvddio_power_level_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1820>`__
+writes the register with the values of :lx:`chip.h`.
 
 .. _bringup-temp:
 
@@ -256,7 +258,10 @@ and read :reg:`TEMP`. No function of the :ref:`Linux driver <sources-list>` read
 reads the register and uses bits 15 to 0 as the value *v*. With bit 15 clear it returns
 *v* × 100 ÷ 128 as hundredths of a degree Celsius, so that one step of *v* is 1/128 °C. With
 bit 15 set it returns the temperature as negative, with the size 51200 − *v* × 100 ÷ 128 in the
-same unit. The conversion is not tested on a chip.
+same unit. The unit is that of the
+`comment on yt_sensor_temp_value_get() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/yt/yt_sensor.c#L66>`__
+in the :ref:`vendor SDK <sources-list>`, "centigrade*100". The conversion is not tested on a
+chip.
 
 .. _bringup-mac:
 

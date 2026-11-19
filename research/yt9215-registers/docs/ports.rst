@@ -46,7 +46,8 @@ in-band negotiation enabled whose pause result the MAC may take.
 In both modes the MAC passes frames only while :field:`PORT_CTRL.RX_MAC_EN` and
 :field:`PORT_CTRL.TX_MAC_EN` are set. To take a port down, clear
 :field:`PORT_CTRL.RX_MAC_EN`, :field:`PORT_CTRL.TX_MAC_EN` and :field:`PORT_CTRL.LINK_AN`, as
-:lx:`yt921x_port_down` of the :ref:`Linux driver <sources-list>` does.
+:lx:`yt921x_port_down` of the :ref:`Linux driver <sources-list>` does. For an external port
+that function also clears :field:`SERDES.LINK` and :field:`XMII.LINK`.
 
 Forcing is the :ev:`confirmed` way for a port with a built-in PHY. The Linux kernel watches
 the PHY and, on a link change, :lx:`yt921x_port_up` writes the negotiated speed, duplex and
@@ -124,8 +125,11 @@ External ports 8 and 9
 An external port uses either its SerDes or its xMII pins. :ref:`reference-parts-ports` shows
 which of the two each part has. Select one before enabling the MAC.
 :lx:`yt921x_port_config` writes the values for the SerDes in the
-:ref:`selection table <ports-select-table>`. The values for the xMII pins are :ev:`inferred` as
-their mirror image.
+:ref:`selection table <ports-select-table>`. The :ref:`vendor SDK <sources-list>` function
+`fal_tiger_port_extif_mode_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L687>`__
+sets :field:`XMII_CTRL.PORT` of the port for an xMII mode. It does not clear
+:field:`SERDES_CTRL.PORT` there; that cell of the table is :ev:`inferred` as the mirror image
+of the SerDes row.
 
 .. _ports-select-table:
 
@@ -363,7 +367,11 @@ the delay fields.
 
 The `YT9215RB vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c>`__ writes :reg:`IO_LEVEL` only for 1.8 V RGMII pins. Its value 3 disagrees
 with :lx:`chip.h`, which gives 1.8 V as 2 in :field:`IO_LEVEL.YT9215_RGMII0` and
-:field:`IO_LEVEL.YT9215_RGMII1` and has no value 3. It is :ev:`not known` which is right. The
+:field:`IO_LEVEL.YT9215_RGMII1` and has no value 3. The :ref:`vendor SDK <sources-list>` function
+`fal_tiger_port_dvddio_power_level_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_port.c#L1820>`__
+agrees with :lx:`chip.h`: it writes 2 for 1.8 V into the field of an RGMII interface, and 3
+only into :field:`IO_LEVEL.YT9215_NORMAL`. It is :ev:`not known` what the value 3 does in the
+field of an RGMII interface. The
 :ref:`Linux driver <sources-list>` does not name bits 26 and 20 of :reg:`XMII`. The
 :ref:`vendor SDK <sources-list>` table :sdk:`EXTIF0_MODE` names bit 26
 `EN_MACMODE_LNKDN_SWH <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_struct.c#L152>`__

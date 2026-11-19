@@ -896,6 +896,11 @@ def main():
                             src=["switch_sdk/core/fal/tiger/fal_tiger_index.c", t["line"]])
         else:
             lit = sdk_literal(args.sdk, r["address"])
+            if not lit and r["dims"]:
+                # The SDK names an array by its lowest address.
+                low = min(r["address"] + sum(d["stride"] * i for d, i in zip(r["dims"], idx))
+                          for idx in itertools.product(*[(0, d["count"] - 1) for d in r["dims"]]))
+                lit = sdk_literal(args.sdk, low)
             if lit:
                 r["sdk"] = dict(literal=True, src=lit)
         for fld in r["fields"] + [f for l in r.get("layouts", []) for f in l["fields"]]:

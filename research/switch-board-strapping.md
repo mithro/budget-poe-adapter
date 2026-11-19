@@ -148,9 +148,9 @@ not show which of the two photographed boards it is, so the <a href="#lx-strap-r
 
 | Pin | Signal | Board connection | Tag | Photo | Internal | Level | Level tag | Selects |
 |---|---|---|---|---|---|---|---|---|
-| <a id="lx-pin-46"></a>46 | [SWITCH_ID_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | No trace leaves the pin | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | 0 | <a href="#tag-i">I</a> | Switch ID bit 1 = 0 |
+| <a id="lx-pin-46"></a>46 | [SWITCH_ID_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | No trace leaves the pad outward | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | 0 | <a href="#tag-i">I</a> | Switch ID bit 1 = 0 |
 | <a id="lx-pin-51"></a>51 | [SWITCH_ID_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | Not traced | <a href="#tag-u">U</a> | – | Pull-down | 0 | <a href="#tag-i">I</a> | Switch ID bit 0 = 0 |
-| <a id="lx-pin-47"></a>47 | [RESERVED_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | No trace leaves the pin | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | 1 | <a href="#tag-i">I</a> | – |
+| <a id="lx-pin-47"></a>47 | [RESERVED_0](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | No trace leaves the pad outward | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-up | 1 | <a href="#tag-i">I</a> | – |
 | <a id="lx-pin-48"></a>48 | [RESERVED_1](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | Not traced | <a href="#tag-u">U</a> | – | Pull-up | 1 | <a href="#tag-i">I</a> | – |
 | <a id="lx-pin-50"></a>50 | [RESERVED_2](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=29) | <a id="lx-r92"></a>R92 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | – |
 | <a id="lx-pin-49"></a>49 | [SPF_MUX_SEL](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=28) | <a id="lx-r93"></a>R93 | <a href="#tag-r">R</a> | <a href="#lx-photo-u4-right-edge">U4 right edge</a> | Pull-down | Not known | <a href="#tag-u">U</a> | Flash pin group |
@@ -170,6 +170,7 @@ not show which of the two photographed boards it is, so the <a href="#lx-strap-r
 
 Six rows use other tables. Pins <a href="#lx-pin-54">54</a> and <a href="#lx-pin-55">55</a> take Pin, Signal and Internal from [Table 10 on page 25](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=25), and pin <a href="#lx-pin-89">89</a> takes them from [Table 23 on page 30](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=30).
 Pins <a href="#lx-pin-47">47</a>, <a href="#lx-pin-48">48</a> and <a href="#lx-pin-50">50</a> take only Internal from [Table 19 on page 27](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=27).
+The levels of pins <a href="#lx-pin-46">46</a> and <a href="#lx-pin-47">47</a> assume that the pad is unconnected. The photo shows only that no trace leaves the pad outward; a route under the package is [not ruled out](lx-is601f-board/README.md#pins-with-no-visible-trace).
 
 <a id="lx-level-reasons"></a>
 

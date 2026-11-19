@@ -20,8 +20,8 @@ The pin tables of both parts, and the route of each debug pin on this board, are
 | [`photo-u4-macro.jpg`](photo-u4-macro.jpg) | Source photo | Close-up of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, without a heatsink | – |
 | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) | Source photo | Wider view of [U4](../motorcomm-debug-pins.md#lx-u4) on board A | – |
 | [`u4-surroundings.jpg`](u4-surroundings.jpg) | Cropped photo | [U4](../motorcomm-debug-pins.md#lx-u4) and the named parts beside it | [`photo-u4-wide.jpg`](photo-u4-wide.jpg) |
-| [`u4-corner-pins-65-71-photo-12.jpg`](u4-corner-pins-65-71-photo-12.jpg) | Cropped photo | Leads 65 to 71 of [U4](../motorcomm-debug-pins.md#lx-u4) on board B at full album resolution | [photo 12](photos/README.md#photo-12) |
-| [`u4-corner-pins-65-70-photo-13.jpg`](u4-corner-pins-65-70-photo-13.jpg) | Cropped photo | Leads 65 to 70 of [U4](../motorcomm-debug-pins.md#lx-u4) on board A at full album resolution | [photo 13](photos/README.md#photo-13) |
+| [`u4-corner-pins-65-71-photo-12.jpg`](u4-corner-pins-65-71-photo-12.jpg) | Cropped photo | Leads 65 to 71 of [U4](../motorcomm-debug-pins.md#lx-u4) on board B, enlarged | [photo 12](photos/README.md#photo-12) |
+| [`u4-corner-pins-65-70-photo-13.jpg`](u4-corner-pins-65-70-photo-13.jpg) | Cropped photo | Leads 65 to 70 of [U4](../motorcomm-debug-pins.md#lx-u4) on board A, enlarged | [photo 13](photos/README.md#photo-13) |
 | [`annotate.py`](annotate.py) | Script | Draws the annotations and makes the crop | – |
 | [`strap-resistors-annotated.jpg`](strap-resistors-annotated.jpg) | Annotated image | Strap resistor array with the decoded levels | [`strap-resistors-source.jpg`](strap-resistors-source.jpg) |
 | [`crop-bottom-strap-array.jpg`](crop-bottom-strap-array.jpg) | Cropped photo | Strap resistor array beside the EEPROM [U10](../switch-board-strapping.md#lx-u10) | [`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg) |
@@ -170,15 +170,15 @@ there anticlockwise as seen from the top, 32 to a side, and checked against thes
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [87](../motorcomm-debug-pins.md#sch-pin-87) |
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [88](../motorcomm-debug-pins.md#sch-pin-88) |
 
-### Pins with no trace
+### Pins with no visible trace
 
-Pins [46](../motorcomm-debug-pins.md#sch-pin-46), [47](../motorcomm-debug-pins.md#sch-pin-47), [67](../motorcomm-debug-pins.md#sch-pin-67), [79](../motorcomm-debug-pins.md#sch-pin-79) and [90](../motorcomm-debug-pins.md#sch-pin-90) have no trace leaving the pad outward. The two crops below show this for pin 67 at the full resolution of the album photos: leads 65 and 66 sit on a copper pour, leads 68 to 71 each have a trace, and the pad of lead 67 between them has none.
+Pins [46](../motorcomm-debug-pins.md#sch-pin-46), [47](../motorcomm-debug-pins.md#sch-pin-47), [67](../motorcomm-debug-pins.md#sch-pin-67), [79](../motorcomm-debug-pins.md#sch-pin-79) and [90](../motorcomm-debug-pins.md#sch-pin-90) have no trace leaving the pad outward. The two crops below show this for pin 67. Each is cut from the 3072 × 4080 album original of its photo and enlarged to page width. Leads 65 and 66 sit on a copper pour, leads 68 to 71 each have a trace, and the pad of lead 67 between them has none.
 
 ![Leads 65 to 71 of U4 on board B, with no trace above lead 67](u4-corner-pins-65-71-photo-12.jpg)
 
 ![Leads 65 to 70 of U4 on board A, with no trace above lead 67](u4-corner-pins-65-70-photo-13.jpg)
 
-A top-side photo shows only the copper outside the package. A trace that runs inward from a pad to a via under the package body is hidden, so these pins are not proven unconnected. A continuity check from each lead settles it.
+A top-side photo shows only the copper outside the package. A trace that runs inward from a pad to a via under the package body is hidden, so these pins are not proven unconnected. The board A crop is the softer of the two, and in it the edge of the pour comes close to lead 67, so the board B crop carries the observation. A continuity check from each lead settles it; these are [check 10](schematic/README.md#continuity-checks-power-off-a-meter-in-beep-mode).
 
 The debug pin routing is traced from top-side photos only. Where the vias go on other layers and what the far pads of [R44](../motorcomm-debug-pins.md#lx-r44), [R89](../motorcomm-debug-pins.md#lx-r89), [R92](../motorcomm-debug-pins.md#lx-r92) and [R93](../motorcomm-debug-pins.md#lx-r93) connect to are unknown.
 The strap levels are inferred from the bottom-side resistor array in [`../switch-board-strapping.md`](../switch-board-strapping.md#strap-resistor-array) and are not confirmed by a meter.

@@ -17,19 +17,19 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 - The transmit waveform of option C can be tried without any firmware: an external host sets up port 9 over the management interface and a PC sends the frame through a copper port ([next steps](#what-to-find-out-next)).
 - Every option that speaks PD waits until code runs on the CPU. Motorcomm's SDK shows that firmware for it exists (FreeRTOS, built for RV32EC) [**V**](#evidence-codes). The boot image format and the CPU's peripheral registers are unpublished [**U**](#evidence-codes).
 - Rp, VBUS and all PD signalling stay off until the PoE side has secured its power ([start-up order](#start-up-order)).
-- The safe design is [option A](#option-a): a PD transceiver with an I²C interface, driven by the documented I²C master of the YT9215. It takes over every microsecond-scale task.
-- Options B and C are not clearly cheaper than option A once every part is counted ([cost](#cost)) [**I**](#evidence-codes).
-- The CH224K, HUSB238 and IP2721 are sink chips. They ask a charger for a voltage and cannot make this adapter a source ([fixed-function chips](#fixed-function-chips)).
+- [Option A](#option-a) is a PD transceiver with an I²C interface on the I²C master of the YT9215. The transceiver takes over every microsecond-scale task. Several such chips cost $0.26 to $0.42 ([transceiver chips](#transceiver-chips)).
+- [Option B](#option-b) times the BMC signal in software on GPIO pins. A published design does this on a 48 MHz RV32EC microcontroller. Options B and C need an analog front end that costs $0.19 to $0.50 ([cost](#cost)) [**I**](#evidence-codes).
+- The CH224K, HUSB238 and IP2721 are sink chips. They ask a charger for a voltage and cannot make this adapter a source. Source chips that need no host exist ([chips that need no host](#fixed-function-chips)).
 - A Raspberry Pi 5 needs PD for one thing only: a 5 V, 5 A offer lifts its USB current limit. A PD source limited to 3 A gives the Pi nothing that a bare resistor does not ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)).
 
 | Option | Firmware needed | PD signalling done by | Estimated cost, low | Estimated cost, high | Details |
 |---|---|---|---|---|---|
 | Resistor and attach comparator | No | Nothing, no PD | $0.03 | $0.03 | [No PD](#option-0) |
-| I²C PD transceiver | Yes | Transceiver chip | $0.44 | $0.51 | [Option A](#option-a) |
-| GPIO bit-bang | Yes | CPU timing loops | $0.29 | $0.49 | [Option B](#option-b) |
-| Port 9 MAC | Yes | Port 9 MAC | $0.32 | $0.52 | [Option C](#option-c) |
+| I²C PD transceiver | Yes | Transceiver chip | $0.26 | $0.42 | [Option A](#option-a) |
+| GPIO bit-bang | Yes | CPU timing loops | $0.19 | $0.46 | [Option B](#option-b) |
+| Port 9 MAC | Yes | Port 9 MAC | $0.23 | $0.50 | [Option C](#option-c) |
 
-The costs are the totals of the [cost table](#cost).
+The costs are the totals of the [cost tables](#cost). They count only the parts for USB-C signalling.
 
 ## Evidence codes
 
@@ -150,16 +150,17 @@ What the port offers is derived from what the upstream PoE switch grants, so not
 | Efficiency of the 5 V converter | Converter design |
 | Power the adapter uses itself | Measurement of the switch and its supplies |
 
-The current available at 5 V is the granted power times the efficiency, less the adapter's own power, divided by 5 V. The [power budget per PoE class](poe.md#5-raspberry-pi-5-power-budget-against-poe-classes) gives the figures before the adapter's own use. The offer follows from that current [**I**](#evidence-codes):
+The current available at 5 V is the granted power times the efficiency, less the adapter's own power, divided by 5 V. The [power budget per PoE class](poe.md#5-raspberry-pi-5-power-budget-against-poe-classes) gives the figures before the adapter's own use. What the port can offer follows from that current [**I**](#evidence-codes):
 
-| Current available at 5 V | Rp | Source_Capabilities |
+| Current available at 5 V | Largest Rp value allowed | Largest PD offer allowed |
 |---|---|---|
-| Under 1.5 A | Off | None |
-| 1.5 A to under 3 A | 12 kΩ | None |
-| 3 A to under 5 A | 12 kΩ and 7.5 kΩ | 5 V at the available current |
-| 5 A or more | 12 kΩ and 7.5 kΩ | 5 V at 5 A |
+| Under 1.5 A | Default USB current | 5 V at the available current |
+| 1.5 A to under 3 A | 1.5 A | 5 V at the available current |
+| 3 A to under 5 A | 3 A | 5 V at the available current |
+| 5 A or more | 3 A | 5 V at 5 A |
 
-- From 1.5 A to under 3 A the port advertises by Rp alone, and under 1.5 A it stays off. Leaving PD out below 3 A is a design choice: PD is allowed there, but it gives a Raspberry Pi 5 nothing that Rp does not.
+- The table gives limits, not a decision. Whether the port speaks PD below 3 A, and whether it turns on at all below 1.5 A, are open choices. PD below 3 A gives a Raspberry Pi 5 nothing that Rp does not.
+- The default-current Rp needs a third resistor of 36 kΩ, which the [front end](#front-end) does not have.
 - An offer above 3 A relies on the [captive cable](#captive-cable).
 - If an LLDP allocation changes while a sink is attached, the source sends a new Source_Capabilities message. If the new budget is below the running contract, the sink has to accept the lower offer before the adapter may count on it.
 - A sink that ignores Rp or its contract is stopped only by a current limit on VBUS. The offer varies with the grant, so a fixed limit protects only the largest offer. Protecting the smaller ones needs a limit that firmware can select, because an overdraw makes the PoE switch cut the port.
@@ -264,13 +265,60 @@ These look promising and do not work [**I**](#evidence-codes):
 
 ## No PD: resistor and attach comparator
 
-A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is the only signalling part. The resistor, the comparator and the load switch are powered from rails that the PoE front end turns on only after classification, so the [start-up order](#start-up-order) holds without firmware. USB-C also requires the source to keep VBUS off until a sink is attached and to remove it on detach ([attach detection](usb-c-pd.md#43-source-state-machine-and-timing)). A comparator that watches CC does this by driving the enable of the VBUS load switch directly, because a plain input pin cannot read the attach level ([electrical limits](#electrical-limits-of-the-pins)). A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). This is the baseline every other option has to beat. It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted. The price is a fixed offer: the Rp value cannot follow the class that was granted, and a grant by LLDP is out of reach because LLDP needs firmware ([power budget](#power-budget)).
+A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is the only signalling part. The resistor, the comparator and the load switch are powered from rails that the PoE front end turns on only after classification, so the [start-up order](#start-up-order) holds without firmware. USB-C also requires the source to keep VBUS off until a sink is attached and to remove it on detach ([attach detection](usb-c-pd.md#43-source-state-machine-and-timing)). A comparator that watches CC does this by driving the enable of the VBUS load switch directly, because a plain input pin cannot read the attach level ([electrical limits](#electrical-limits-of-the-pins)). A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted. The price is a fixed offer: the Rp value cannot follow the class that was granted, and a grant by LLDP is out of reach because LLDP needs firmware ([power budget](#power-budget)).
 
 <a id="option-a"></a>
 
 ## Option A: I²C PD transceiver
 
-A PD transceiver such as the onsemi FUSB302B contains the BMC transmitter and receiver, the CC comparators for both CC pins, switchable Rp current sources, a VCONN switch, and logic that sends GoodCRC and retries by itself. The host reads and writes whole messages over I²C.
+A PD transceiver contains the BMC transmitter and receiver, the CC comparators, a switchable Rp, and logic that checks the CRC, sends GoodCRC and retries by itself. The host reads and writes whole messages over I²C and runs the message logic. Such a chip replaces the whole [front end](#front-end).
+
+<a id="transceiver-chips"></a>
+
+### Transceiver chips
+
+| Chip | Vendor | Register set | PD revision | Price, low | Price, high | Price basis | Price source |
+|---|---|---|---|---|---|---|---|
+| FUSB302B | onsemi | [FUSB302](#register-sets) | Not checked | $0.34 | $0.42 | 1,000 pieces | [LCSC C132291](https://www.lcsc.com/product-detail/C132291.html) |
+| HUSB311 | Hynetek | [TCPCI](#register-sets) | 2.0 | $0.26 | $0.26 | 1,000 pieces | [LCSC C7471922](https://www.lcsc.com/product-detail/C7471922.html) |
+| ET7304 | ETEK | [TCPCI](#register-sets) | 3.0 | €0.17 | €0.25 | 3,000 pieces | [DigiKey](https://www.digikey.de/en/products/detail/etek-microelectronics/ET7304/26227099) |
+| ET7303A | ETEK | Not checked | 2.0 | €0.40 | €0.40 | 1 piece | [DigiKey](https://www.digikey.de/en/products/detail/etek-microelectronics/ET7303A/26485631) |
+| AW35615FCR | Awinic | Not checked | 3.1 | ¥0.92 | ¥0.92 | 1,000 pieces | [Awinic](https://www.awinic.com/en/productDetail/AW35615FCR) |
+| AW35615CSR | Awinic | Not checked | 3.1 | ¥2.15 | ¥2.15 | 1,000 pieces | [Awinic](https://www.awinic.com/en/productDetail/AW35615CSR) |
+| RT1711P | Richtek | [TCPCI](#register-sets) | 2.0 | $1.23 | $1.23 | 1,500 pieces | [LCSC C3034209](https://www.lcsc.com/product-detail/C3034209.html) |
+
+Notes on the table [**I**](#evidence-codes):
+
+- All prices are list prices seen in search results and are not confirmed on the live pages. The second ET7304 price is from [Bürklin](https://www.buerklin.com/en/p/etek-microelectronics/logic-devices/et7304/71S0574/).
+- The Linux binding [`richtek,rt1711h.yaml`](https://www.kernel.org/doc/Documentation/devicetree/bindings/usb/richtek%2Crt1711h.yaml) gives the PD revisions of the RT1711H family, lists the ET7304 as compatible with the RT1715, and lists the HUSB311 as compatible with the RT1711H. A [kernel patch](https://lore.kernel.org/all/?q=tcpci_rt1711h+HUSB311) calls the HUSB311 a pin-compatible and register-compatible replacement for the RT1711H.
+- The PD revision of the chip limits which messages its hardware accepts. A source that offers only 5 V needs none of the PD 3 extras. Whether a Raspberry Pi 5 raises its current limit for a 5 A offer from a PD 2.0 source is not known [**U**](#evidence-codes).
+- No LCSC listing was found for the ETEK and Awinic parts.
+- The FUSB302B exists in four order codes that differ only in I²C address, which matters for a design with two USB-C outputs.
+
+<a id="register-sets"></a>
+
+### Register sets
+
+Two register sets cover the chips whose interface is known. Both have open drivers that serve as a reference for firmware.
+
+| Function | FUSB302 | TCPCI |
+|---|---|---|
+| Specification | onsemi datasheet | TCPCI specification of the USB-IF |
+| Rp | Current source with three settings | `ROLE_CONTROL` register |
+| Rp off | Pull-up switches open | `ROLE_CONTROL` set to open |
+| Attach detection | Firmware compares CC with a built-in DAC | `CC_STATUS` register |
+| Transmit | Firmware writes tokens and bytes to a FIFO | Firmware fills a buffer and writes `TRANSMIT` |
+| Receive | Firmware reads a FIFO | Firmware reads a buffer |
+| CRC | Hardware | Hardware |
+| GoodCRC reply | Hardware | Hardware |
+| Retries | Hardware | Hardware |
+| Hard Reset | Hardware | Hardware |
+| Open driver | [`fusb302.c`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/tcpm/fusb302.c) | [`tcpci.c`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/tcpm/tcpci.c) |
+| Chip-specific driver | None needed | [`tcpci_rt1711h.c`](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/tcpm/tcpci_rt1711h.c) |
+
+The rows are from the drivers and the specifications as generally known, not re-read line by line for this note [**I**](#evidence-codes).
+
+### What the YT9215 has to provide
 
 | YT9215 resource | Pin | Use |
 |---|---|---|
@@ -279,42 +327,104 @@ A PD transceiver such as the onsemi FUSB302B contains the BMC transmitter and re
 | GPIO output | Any free | VBUS load switch |
 | GPIO input | Any free | Interrupt line of the transceiver |
 
-The interrupt line is optional: the firmware can poll the status registers instead.
+- The interrupt line can be left out: the firmware can poll the status registers.
+- Everything the firmware does is slower than a millisecond. The tightest deadline is answering a Request within 15 ms.
+- A Source_Capabilities message with one power data object is about 12 bytes on I²C. At 100 kHz that takes about 1.5 ms, and at 400 kHz about 0.4 ms [**I**](#evidence-codes).
+- A FreeRTOS task with polled I²C meets these times without any timer or interrupt knowledge [**I**](#evidence-codes).
+- Using I²C master 1 gives up the LED1 outputs of ports 3 and 4 [**V**](#evidence-codes).
 
-Everything the firmware does is then slower than a millisecond. The tightest deadline is answering a Request within 15 ms. A FreeRTOS task with polled I²C meets that without any timer or interrupt knowledge [**I**](#evidence-codes). Using I²C master 1 gives up the LED1 outputs of ports 3 and 4 [**V**](#evidence-codes).
+### Unknowns
 
-The remaining risks [**U**](#evidence-codes):
+All of these are unpublished [**U**](#evidence-codes):
 
 - **Firmware on the CPU.** This is common to options A, B and C.
 - **Pin function.** The datasheet says pins 72 and 73 need "to enable the I2C function by software programming" and does not name the register.
 - **Master registers.** The registers of the I²C master are unpublished. The I²C code in the SDK is the host side of the management interface, not a driver for this master.
 - **Transaction format.** The datasheet shows this master only driving a PSE chip. The EEPROM reader on pins 91 and 92 is a separate interface. Whether the master can run the arbitrary reads and writes a transceiver needs is not stated.
 
-If the master does not fit, I²C at 100 kHz can be bit-banged on two GPIO pins, which then needs the GPIO registers of [option B](#option-b) and none of its timing.
+I²C at 100 kHz can also be bit-banged on two GPIO pins. That needs the GPIO registers of [option B](#option-b) and none of its timing, because an I²C master sets its own pace.
 
 <a id="option-b"></a>
 
 ## Option B: GPIO bit-bang
 
-The firmware toggles a GPIO for transmit and times the edges of a comparator output for receive. The external parts are those of the [front end](#front-end), connected to GPIO pins.
+The firmware toggles a GPIO for transmit and reads a comparator output on a GPIO for receive. The external parts are those of the [front end](#front-end), connected to GPIO pins.
 
-Published designs that run PD without a PD chip lean on a hardware timing peripheral, not on counted CPU cycles:
+### Published designs without a PD chip
 
-| Design | Direction | Peripheral | Source |
+| Design | Direction | Timing by | Source |
 |---|---|---|---|
 | Chromium EC on STM32 | Transmit | SPI fed by DMA | [`usb_pd_phy.c`](https://chromium.googlesource.com/chromiumos/platform/ec/+/v2.2.0/chip/stm32/usb_pd_phy.c) |
 | Chromium EC on STM32 | Receive | Comparator into timer capture | [`usb_pd_phy.c`](https://chromium.googlesource.com/chromiumos/platform/ec/+/v2.2.0/chip/stm32/usb_pd_phy.c) |
 | g3gg0 on ESP32 | Transmit | RMT pulse generator | [Hackaday](https://hackaday.com/2025/01/10/bit-banging-the-usb-pd-protocol) |
 | g3gg0 on ESP32 | Receive | RMT pulse timer | [Hackaday](https://hackaday.com/2025/01/10/bit-banging-the-usb-pd-protocol) |
+| eeucalyptus on CH32V003 | Transmit | Counted CPU cycles | [Part 2](https://eeucalyptus.net/2024-05-13-usb-pd-2.html) |
+| eeucalyptus on CH32V003 | Receive | Busy-wait sampling loop | [Part 2](https://eeucalyptus.net/2024-05-13-usb-pd-2.html) |
 
-The YT9215 has no documented equivalent [**U**](#evidence-codes). Pure software timing needs all of the following, and none is published:
+The CH32V003 design is the closest to this option, because that chip is also an RV32EC core and the BMC timing is pure software. Facts from its write-up:
 
-- GPIO data registers that the CPU can write and read in a few cycles.
-- A clock fast enough to sample at 2.4 MHz or more, with interrupts off and the loop in RAM or in the 2 KB cache.
-- A free-running counter to time edges.
-- A way to notice the start of a message: a GPIO edge interrupt, or a polling loop that leaves no time for other firmware.
+| Item | Value |
+|---|---|
+| CPU clock | 48 MHz |
+| Transmit rate | 600 kHz half bits |
+| Transmit budget | 80 cycles per half bit |
+| Receive sample rate | About 1.02 MHz |
+| Start of receive | Falling-edge interrupt of the on-chip comparator |
+| Transmit level | Resistor divider on two GPIO pins |
+| State of transmit | Decoded on a logic analyser |
+| State of receive | Not tested |
+| Code | [ch32v003-usbpd](https://github.com/eeucalyptus/ch32v003-usbpd) |
 
-If the CPU runs from the 125 MHz switch clock ([clock](yt9215-embedded-cpu.md#clock)), there are about 200 cycles per half bit, which is enough [**I**](#evidence-codes). This option stays open until the registers are known.
+It uses the comparator inside the CH32V003, which the YT9215 does not have, and it does not report a working exchange with a real PD device.
+
+### Transmit
+
+The half-bit levels of each message are worked out in advance ([message set](#what-a-pd-source-has-to-do)). Sending is then a loop that writes one level per half bit.
+
+| Quantity | Value | Basis |
+|---|---|---|
+| Half bit | 1.52 to 1.85 µs | 270 to 330 kbit/s |
+| Cycles per half bit at 125 MHz | 208 | 1.67 µs |
+| Cycles per half bit at 48 MHz | 80 | 1.67 µs |
+| Longest message from the source | About 0.6 ms | Source_Capabilities with one object |
+| Time with interrupts off | About 0.6 ms | Whole message |
+
+- The loop runs with interrupts off, so that every half bit has the same length. On a RISC-V core that is one write to the `mstatus` register, which needs no chip documentation [**I**](#evidence-codes).
+- The loop has to run from RAM or from the 2 KB instruction cache. Code fetched from SPI flash would add pauses of unknown length [**I**](#evidence-codes).
+- The bit rate may sit anywhere in the allowed range but must not drift within a message, so the loop is tuned once to the real CPU clock.
+- The GPIO that enables the buffer is switched on just before the first half bit and off after the low hold at the end.
+
+### Receive
+
+| Step | Method | Needs |
+|---|---|---|
+| Notice the start | GPIO edge interrupt | Interrupt registers |
+| Notice the start | Polling loop | GPIO input register |
+| Sample | Read the GPIO in a counted loop at 1.2 MHz or more | GPIO input register |
+| Time edges | Read the cycle counter at each edge | `mcycle` counter |
+| Decode | Turn run lengths into bits, then 4b5b symbols into bytes | Nothing |
+| Check | CRC-32 over the message | Nothing |
+| Reply | Send the prepared GoodCRC for that MessageID | [Transmit](#transmit) |
+
+- Sampling at four samples per half bit, 2.4 MHz, leaves about 52 cycles per sample at 125 MHz.
+- A Request from the sink is 189 bits and lasts about 0.63 ms. At 2.4 MHz that is about 1,500 samples, or 190 bytes when packed.
+- The standard RISC-V cycle counter `mcycle` is a free-running time base that needs no chip documentation, if the core implements it [**I**](#evidence-codes).
+- The reply has to start within 195 µs of the last bit ([turnaround](#goodcrc-turnaround)). Decoding and the CRC of a 6-byte Request take a few thousand cycles, which is tens of microseconds at 125 MHz [**I**](#evidence-codes).
+- While the firmware waits for a message by polling, it does nothing else. With an edge interrupt it can run the switch and LLDP between messages, and the interrupt latency then eats into the preamble, which is 64 bits long and can absorb it.
+
+### What is unknown
+
+| Item | State | Evidence |
+|---|---|---|
+| GPIO output register | Unpublished | [**U**](#evidence-codes) |
+| GPIO input register | Unpublished | [**U**](#evidence-codes) |
+| GPIO direction and pin function registers | Unpublished | [**U**](#evidence-codes) |
+| GPIO edge interrupt | Unpublished | [**U**](#evidence-codes) |
+| CPU clock frequency | Unpublished | [**U**](#evidence-codes) |
+| `mcycle` counter present | Not known | [**U**](#evidence-codes) |
+| Bus delay of a GPIO write | Not known | [**U**](#evidence-codes) |
+
+If the CPU runs from the 125 MHz switch clock ([clock](yt9215-embedded-cpu.md#clock)), there are about 200 cycles per half bit [**I**](#evidence-codes). The CH32V003 design does the same job in 80.
 
 <a id="option-c"></a>
 
@@ -345,6 +455,40 @@ The MAC of extension port 9 shifts bytes out on pins under crystal timing. Run a
 | Hard Reset | 84 | 348 | 348 | 0.28 ms |
 
 The frame length depends on the MessageID, because a message that ends on a low level needs one more bit time for its closing edge.
+
+<a id="frame-layout"></a>
+
+The frame as the MAC sends it, for a GoodCRC message [**S**](#evidence-codes):
+
+| Part of the frame | Bytes | Written by | TXD1 shows |
+|---|---|---|---|
+| Preamble and start delimiter | 8 | MAC | Low for 6.4 µs |
+| PD preamble | 256 | Firmware | 64 bits of alternating 0 and 1 |
+| Start of packet | 80 | Firmware | 4 symbols |
+| Header | 80 | Firmware | 4 symbols |
+| CRC | 160 | Firmware | 8 symbols |
+| End of packet | 20 | Firmware | 1 symbol |
+| Closing edge | 0 or 4 | Firmware | One high bit time when the message ends low |
+| Quiet tail | 4 | Firmware | Low |
+| FCS | 4 | MAC | Low |
+
+- Each PD bit takes four bytes: two for each half bit.
+- The frame has no Ethernet header of its own. Its first 14 bytes, which a switch reads as addresses and type, are the start of the PD preamble: `22 22 22 22 00 00`, `22 22 00 00 00 00`, `22 22`.
+- A 0 bit holds its level for four bytes. A 1 bit changes level after two bytes. The first twelve bytes above are therefore the PD bits 0, 1, 0.
+- `mac_bmc_frame.py --hex` prints a whole Source_Capabilities frame.
+
+The two port modes that fit:
+
+| Property | RGMII | REVMII |
+|---|---|---|
+| Transmit clock at 10 Mbit/s | 2.5 MHz | 2.5 MHz |
+| Transmit clock driven by | YT9215 | YT9215 |
+| Receive clock driven by | External source | YT9215 |
+| TXC looped to RXC | Needed | Not needed |
+| Frame start signal | TX_CTL | TX_EN on the same pin |
+| Vendor bring-up in the register guide | Yes | No |
+
+What the firmware does to send one message:
 
 | Step | Register or function | Guide page | Evidence |
 |---|---|---|---|
@@ -377,6 +521,17 @@ Five things have to hold, and none is documented [**U**](#evidence-codes):
 - **The firmware must see the end of a message** to pulse RX_CTL, which needs a readable GPIO and a time base, as in [option B](#option-b), though with looser timing.
 - **The receive clock must run.** In RGMII mode the chip expects RXC from outside, so TXC is looped back to it.
 - **The switch must not act on the addresses.** With RXD0 tied high, bit 0 of every captured byte is 1, so both the destination and the source address of the captured frame have the group bit set. Port 9 has to be isolated so that the frame goes to the CPU port only, and the switch must not discard a frame whose source is a group address.
+
+What the firmware does with a captured frame:
+
+| Step | Detail |
+|---|---|
+| Take the samples | Bit 3 and bit 7 of every byte, in that order |
+| Invert | A 1 is a low CC line |
+| Find the half bits | Runs of about 4 samples are half bits and runs of about 8 are full bits |
+| Decode | Half-bit pairs to bits, then 4b5b symbols to bytes |
+| Check | CRC-32 over the header and data |
+| Reply | Send the prepared GoodCRC frame for that MessageID |
 
 The frame reaches the CPU only after RX_CTL falls. The 195 µs budget is then spent on end-of-message detection, frame delivery, decoding about 800 bytes and queueing the reply.
 
@@ -467,54 +622,113 @@ Open points of the transmit driver [**U**](#evidence-codes):
 
 ## Cost
 
-All figures are estimates for quantities of about 1,000 [**I**](#evidence-codes). The VBUS load switch, the CC protection against electrostatic discharge and the 5 V converter are the same in every option and are left out.
+All figures are for quantities of about 1,000 [**I**](#evidence-codes). Each table counts only the parts that exist because of USB-C signalling. The VBUS load switch, the protection of CC against electrostatic discharge, the 5 V converter and the SPI flash for the firmware are not part of it.
 
-| Option | Part | Quantity | Cost, low | Cost, high |
-|---|---|---|---|---|
-| [No PD](#option-0) | Rp resistor | 1 | $0.001 | $0.001 |
-| [No PD](#option-0) | Slow comparator | 1 | $0.03 | $0.03 |
-| [No PD](#option-0) | Divider resistors | 2 | $0.002 | $0.002 |
-| [No PD](#option-0) | **Total** | | **$0.03** | **$0.03** |
-| [A](#option-a) | FUSB302B | 1 | $0.34 | $0.41 |
-| [A](#option-a) | I²C pull-up resistors | 2 | $0.002 | $0.002 |
-| [A](#option-a) | SPI flash for firmware | 1 | $0.10 | $0.10 |
-| [A](#option-a) | **Total** | | **$0.44** | **$0.51** |
-| [Front end](#front-end) | Buffer with enable | 1 | $0.04 | $0.04 |
-| [Front end](#front-end) | AND gate | 1 | $0.03 | $0.03 |
-| [Front end](#front-end) | Fast dual comparator | 1 | $0.10 | $0.30 |
-| [Front end](#front-end) | Slow comparator | 1 | $0.03 | $0.03 |
-| [Front end](#front-end) | Resistors | 15 | $0.01 | $0.01 |
-| [Front end](#front-end) | Clamp diode | 1 | $0.01 | $0.01 |
-| [Front end](#front-end) | Capacitor | 1 | $0.002 | $0.002 |
-| [Front end](#front-end) | SPI flash for firmware | 1 | $0.10 | $0.10 |
-| [Front end](#front-end) | **Total** | | **$0.32** | **$0.52** |
-| [B](#option-b) | Front end without the AND gate | | **$0.29** | **$0.49** |
-| [C](#option-c) | Whole front end | | **$0.32** | **$0.52** |
+| Option | Cost, low | Cost, high | Parts |
+|---|---|---|---|
+| [No PD](#option-0) | $0.03 | $0.03 | [Table](#cost-no-pd) |
+| [A](#option-a) with HUSB311 | $0.26 | $0.26 | [Table](#cost-a) |
+| [A](#option-a) with FUSB302B | $0.34 | $0.42 | [Table](#cost-a) |
+| [B](#option-b) | $0.19 | $0.46 | [Table](#cost-b) |
+| [C](#option-c) | $0.23 | $0.50 | [Table](#cost-c) |
 
-Option C uses the whole front end. Option B leaves out the AND gate and four resistors. Both totals overlap the total of option A: option C is cheaper by up to $0.19 or dearer by up to $0.08, and option B is cheaper by up to $0.22 or dearer by up to $0.05. A receptacle in place of the [captive cable](#captive-cable) adds a second set of CC parts to the front end and nothing to option A.
+"Estimate" in a basis column means a typical price for the kind of part, with no listing behind it. "List price" means a price seen in a search result for the linked listing, not confirmed on the live page.
+
+<a id="cost-no-pd"></a>
+
+### No PD
+
+| Part | Example | Quantity | Cost, low | Cost, high | Basis |
+|---|---|---|---|---|---|
+| Rp resistor | 4.7 kΩ | 1 | $0.001 | $0.001 | Estimate |
+| Attach comparator | LM393 class | 1 | $0.03 | $0.03 | Estimate |
+| Divider resistors | – | 2 | $0.002 | $0.002 | Estimate |
+| **Total** | | | **$0.03** | **$0.03** | |
+
+<a id="cost-a"></a>
+
+### Option A
+
+With the HUSB311:
+
+| Part | Example | Quantity | Cost, low | Cost, high | Basis |
+|---|---|---|---|---|---|
+| Transceiver | [HUSB311](https://www.lcsc.com/product-detail/C7471922.html) | 1 | $0.26 | $0.26 | List price |
+| I²C pull-up resistors | 4.7 kΩ | 2 | $0.002 | $0.002 | Estimate |
+| **Total** | | | **$0.26** | **$0.26** | |
+
+With the FUSB302B:
+
+| Part | Example | Quantity | Cost, low | Cost, high | Basis |
+|---|---|---|---|---|---|
+| Transceiver | [FUSB302BMPX](https://www.lcsc.com/product-detail/C132291.html) | 1 | $0.34 | $0.42 | List price |
+| I²C pull-up resistors | 4.7 kΩ | 2 | $0.002 | $0.002 | Estimate |
+| **Total** | | | **$0.34** | **$0.42** | |
+
+The other chips of the [transceiver table](#transceiver-chips) give the same table with their own price.
+
+<a id="cost-b"></a>
+
+### Option B
+
+| Part | Example | Quantity | Cost, low | Cost, high | Basis |
+|---|---|---|---|---|---|
+| Buffer with enable | [74AUP1G126GW](https://www.lcsc.com/product-detail/C2935392.html) | 1 | $0.04 | $0.11 | List price for the high figure |
+| Fast dual comparator | Not chosen | 1 | $0.10 | $0.30 | Estimate |
+| Slow comparator | LM393 class | 1 | $0.03 | $0.03 | Estimate |
+| Resistors | – | 11 | $0.01 | $0.01 | Estimate |
+| Clamp diode | – | 1 | $0.01 | $0.01 | Estimate |
+| Capacitor | 200 to 600 pF | 1 | $0.002 | $0.002 | Estimate |
+| **Total** | | | **$0.19** | **$0.46** | |
+
+<a id="cost-c"></a>
+
+### Option C
+
+| Part | Example | Quantity | Cost, low | Cost, high | Basis |
+|---|---|---|---|---|---|
+| Buffer with enable | [74AUP1G126GW](https://www.lcsc.com/product-detail/C2935392.html) | 1 | $0.04 | $0.11 | List price for the high figure |
+| AND gate | 74AUP1G08 | 1 | $0.03 | $0.03 | Estimate |
+| Fast dual comparator | Not chosen | 1 | $0.10 | $0.30 | Estimate |
+| Slow comparator | LM393 class | 1 | $0.03 | $0.03 | Estimate |
+| Resistors | – | 15 | $0.015 | $0.015 | Estimate |
+| Clamp diode | – | 1 | $0.01 | $0.01 | Estimate |
+| Capacitor | 200 to 600 pF | 1 | $0.002 | $0.002 | Estimate |
+| **Total** | | | **$0.23** | **$0.50** | |
+
+Notes on options B and C:
+
+- These parts exist because the pins of the YT9215 can neither read nor drive the 0 to 1.1 V signal on CC ([electrical limits](#electrical-limits-of-the-pins)). The job of each part is in the [front end](#front-end) table.
+- The buffer price of $0.11 is the 10-piece list price. The low figure is an estimate for a full reel.
+- The fast comparator is the largest and least certain figure, because no part is chosen.
+- A receptacle in place of the [captive cable](#captive-cable) adds a second set of CC parts to options B and C. The transceivers of option A have both CC pins built in.
 
 <a id="fixed-function-chips"></a>
 
-## Fixed-function chips
+## Chips that need no host
 
-| Chip | Role | Host interface | Offers 5 V 5 A | Price, low | Price, high | Price basis | Fit |
-|---|---|---|---|---|---|---|---|
-| Rp resistor | Source | None | No | $0.001 | $0.001 | Estimate | [Baseline](#option-0) |
-| onsemi FUSB302B | Either | I²C | If the host says so | $0.34 | $0.41 | 1,000 pieces | [Option A](#option-a) |
-| WCH CH32X035 | Either | None | If its firmware says so | $0.27 | $0.27 | Lowest tier | [Note](#chip-notes) |
-| FM XPD319BP | Source | Not stated | Not listed | $0.11 | $0.11 | Lowest tier | [Note](#chip-notes) |
-| WCH CH224K | Sink | None | Not applicable | $0.27 | $0.27 | 1,000 pieces | None |
-| Hynetek HUSB238 | Sink | I²C | Not applicable | $0.29 | $0.29 | Lowest tier | None |
-| Injoinic IP2721 | Sink | None | Not applicable | $0.38 | $0.38 | 1,000 pieces | None |
+These chips run PD by themselves. The YT9215 would at most switch them on.
 
-"Either" means the chip can be a source or a sink. The CH32X035 has no host interface because it runs its own firmware. Prices are unconfirmed LCSC list prices [**I**](#evidence-codes). The product pages: [FUSB302BMPX](https://www.lcsc.com/product-detail/C132291.html), [CH32X035F8U6](https://www.lcsc.com/product-detail/C42442062.html), [XPD319BP](https://www.lcsc.com/product-detail/USB-ICs_Shenzhen-Fuman-Elec-XPD319BP_C2937661.html), [CH224K](https://www.lcsc.com/product-detail/C970725.html), [HUSB238](https://www.lcsc.com/product-detail/C7471904.html), [IP2721](https://www.lcsc.com/product-detail/C603176.html).
+| Chip | Vendor | Role | Offer in the listing | Price | Price basis | Price source |
+|---|---|---|---|---|---|---|
+| HUSB305 | Hynetek | Source | 5 V at 3 A | $0.26 | Lowest tier | [LCSC C7471916](https://www.lcsc.com/product-detail/C7471916.html) |
+| XPD319BP | Fuman | Source | Up to 12 V at 3 A | $0.11 | Lowest tier | [LCSC C2937661](https://www.lcsc.com/product-detail/USB-ICs_Shenzhen-Fuman-Elec-XPD319BP_C2937661.html) |
+| IP2726 | Injoinic | Source | Up to 20 V | $0.56 | 1,000 pieces | [LCSC C2930955](https://www.lcsc.com/product-detail/C2930955.html) |
+| HUSB350 | Hynetek | Source | Up to 5 A | Not found | – | [Datasheet](https://www.hynetek.com/uploadfiles/site/219/news/fd876f09-e18a-43c1-8a90-2eab427f8259.pdf) |
+| CH32X035 | WCH | Source or sink | Set by its firmware | $0.27 | Lowest tier | [LCSC C42442062](https://www.lcsc.com/product-detail/C42442062.html) |
+| CH224K | WCH | Sink | Not applicable | $0.27 | 1,000 pieces | [LCSC C970725](https://www.lcsc.com/product-detail/C970725.html) |
+| HUSB238 | Hynetek | Sink | Not applicable | $0.29 | Lowest tier | [LCSC C7471904](https://www.lcsc.com/product-detail/C7471904.html) |
+| IP2721 | Injoinic | Sink | Not applicable | $0.38 | 1,000 pieces | [LCSC C603176](https://www.lcsc.com/product-detail/C603176.html) |
+
+Prices are list prices seen in search results and are not confirmed on the live pages [**I**](#evidence-codes).
 
 <a id="chip-notes"></a>
 
-- **Sink chips.** The CH224K, HUSB238 and IP2721 request a voltage from a charger. They are the right parts for a device that is powered from USB-C. This adapter is powered from PoE and supplies USB-C, so they do not apply.
-- **Standalone source chips.** The XPD319BP listing describes a source with 5 V, 9 V and 12 V offers at 3 A. For a Raspberry Pi 5 a 3 A offer is no better than the [Rp resistor](#option-0), so such a chip is worth its cost only if it can offer 5 V at 5 A. No standalone source chip with a confirmed 5 A offer is known [**U**](#evidence-codes).
-- **CH32X035.** It is cheaper than the FUSB302B and has a PD transceiver built in, but it is a second microcontroller with its own firmware. The design uses no microcontroller besides the YT9215 ([project overview](../README.md)), so it serves only as the price to beat.
-- **FUSB302B.** It is the cheapest part listed here that keeps all firmware on the YT9215.
+- **Sink chips.** The CH224K, HUSB238 and IP2721 request a voltage from a charger. They suit a device that is powered from USB-C. This adapter is powered from PoE and supplies USB-C, so they cannot do its job.
+- **Source chips.** The HUSB305 has a load switch built in. The IP2726 is made for a charger with one USB-A and one USB-C output. The HUSB350 datasheet lists up to six fixed offers and 5 A. How each chip is told its current limit, and whether a host can change the limit to follow the [power budget](#power-budget), is not checked [**U**](#evidence-codes).
+- **Offers above 5 V.** A source chip that offers 9 V or more expects to control the voltage of the converter. This adapter has a fixed 5 V rail, so such a chip has to be limited to its 5 V offer.
+- **3 A against 5 A.** A Raspberry Pi 5 raises its USB current limit only for a 5 V offer at 5 A ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). A 3 A offer gives it the same as the [Rp resistor](#option-0).
+- **CH32X035.** It is a microcontroller with a PD transceiver built in and runs its own firmware. The design direction is no microcontroller besides the YT9215 ([project overview](../README.md)).
 
 ## What to find out next
 
@@ -542,7 +756,7 @@ How to answer each:
 - <a id="q-latency"></a>**Transmit latency.** Send a frame from the CPU to port 9 and time TX_CTL against a GPIO edge.
 - <a id="q-capture"></a>**Captured frames.** Repeat the bad-FCS test with the CPU as the destination.
 
-The first four questions can be answered on a bench now. The rest wait for code on the CPU. Until then, a board should carry the [Rp resistor](#option-0) and the footprint of an [I²C PD transceiver](#option-a), with the port 9 pins brought out to test points so that [option C](#option-c) can be tried on the same board.
+The first four questions can be answered on a bench now. The rest wait for code on the CPU.
 
 ## Files
 

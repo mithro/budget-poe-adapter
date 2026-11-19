@@ -13,7 +13,7 @@ Numbers come from the USB Type-C spec (R2.x), USB PD spec (R3.1 and R3.2), BC1.2
 - **The minimum viable source** is a 5 V output, load switch, CC attach detection, an Rp advertising 3 A, and a small PD stack that sends one Source_Capabilities message containing a single 5 V at 5 A PDO and handles Request → Accept → PS_RDY. No variable-voltage converter is needed.
 - **The PD physical layer is the hard part for the YT9215.** Transmit needs a bit stream with edges placed to about 100 ns and a 1.1 V swing. Receive needs a **comparator**, because the 1.1 V BMC swing is below 3.3 V logic thresholds, and something that times the edges. The hard real-time constraint is replying with GoodCRC within **195 µs**. [`yt9215-usb-pd.md`](yt9215-usb-pd.md) compares the ways to meet this.
 - **A catch with 5 A:** PD only allows >3 A when the source knows the cable is 5 A-rated. That means either a **captive cable** (simplest, compliant) or a receptacle plus VCONN plus SOP' Discover Identity to read the cable e-marker (more firmware, plus a 5 V, 1 W VCONN switch). Many cheap supplies just offer 5 A anyway, and the Pi will accept it.
-- **Fallback:** a PD transceiver with an I²C interface, such as the FUSB302B, does the physical layer and the GoodCRC reply in hardware and leaves only the message logic to the YT9215 ([`yt9215-usb-pd.md`](yt9215-usb-pd.md#option-a)).
+- **Transceiver option:** a PD transceiver with an I²C interface, such as the FUSB302B, does the physical layer and the GoodCRC reply in hardware and leaves only the message logic to the YT9215 ([`yt9215-usb-pd.md`](yt9215-usb-pd.md#option-a)).
 
 ---
 
@@ -68,7 +68,7 @@ PPS sets its current limit in 50 mA steps.
 - Input tolerance: nominal 5 V, roughly ±5%. Design the converter for 5.1 V at the connector to cover cable drop at 5 A (a 0.1 Ω round trip costs 0.5 V, so keep the cable short or captive).
 - Real consumption: idle about 3 W, full CPU load about 8 to 12 W, the rest is USB, NVMe and HAT budget.
 
-**Recommended Pi-oriented design:** a fixed 5.1 V buck from the PoE rail, a single PDO `Fixed 5 V / 5 A` (optionally 3 A when the cable is not e-marked), and a captive cable or a documented "5 A cable only" receptacle.
+**Smallest offer that serves a Pi 5:** a fixed 5.1 V buck from the PoE rail, a single PDO `Fixed 5 V / 5 A` (optionally 3 A when the cable is not e-marked), and a captive cable or a documented "5 A cable only" receptacle.
 
 ---
 
@@ -217,7 +217,7 @@ Message types needed for a minimal source:
 
 ## 6. What the PD physical layer needs from hardware
 
-These are the requirements. [`yt9215-usb-pd.md`](yt9215-usb-pd.md) maps them to the YT9215 and to fallback chips.
+These are the requirements. [`yt9215-usb-pd.md`](yt9215-usb-pd.md) maps them to the YT9215 and to PD chips.
 
 ### 6.1 Transmit
 

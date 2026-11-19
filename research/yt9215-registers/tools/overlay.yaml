@@ -978,7 +978,7 @@ registers:
       PRIO: {desc: "VLAN priority. It is a source for :reg:`PORT_PRIO_ORD`.", inferred: true}
       PORTS: {desc: "Member ports. Each port has one bit."}
       BYPASS_1X_AC: {desc: "Frames of this VLAN skip `IEEE 802.1X <https://en.wikipedia.org/wiki/IEEE_802.1X>`__ access control.", inferred: true}
-      METER_EN: {desc: "Frames of this VLAN are rate limited by the meter in METER_ID.", inferred: true}
+      METER_EN: {desc: "Frames of this VLAN are rate limited by the meter in METER_ID. The :ref:`vendor SDK <sources-list>` function `fal_tiger_rate_meter_vlan_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_rate.c#L336>`__ writes this bit and METER_ID to attach a meter to a VLAN.", inferred: true}
       METER_ID: {desc: "Meter number. It is an index of :reg:`METER_CTRL`.", inferred: true}
   PORT_VLAN_CTRL:
     block: vlan

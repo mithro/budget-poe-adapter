@@ -3753,7 +3753,7 @@
               </field>
               <field>
                 <name>METER_EN</name>
-                <description>Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID.</description>
+                <description>Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID. The vendor SDK function fal_tiger_rate_meter_vlan_enable_set() writes this bit and VLAN_CTRL.METER_ID to attach a meter to a VLAN.</description>
                 <bitOffset>5</bitOffset>
                 <bitWidth>1</bitWidth>
                 <access>read-write</access>

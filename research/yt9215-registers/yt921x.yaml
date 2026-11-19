@@ -6062,7 +6062,9 @@ registers:
       used: false
     lsb: 5
     width: 1
-    desc: Frames of this VLAN are rate limited by the meter in :field:`VLAN_CTRL.METER_ID`.
+    desc: Frames of this VLAN are rate limited by the meter in :field:`VLAN_CTRL.METER_ID`. The :ref:`vendor
+      SDK <sources-list>` function `fal_tiger_rate_meter_vlan_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_rate.c#L336>`__
+      writes this bit and :field:`VLAN_CTRL.METER_ID` to attach a meter to a VLAN.
     access: rw
     inferred: true
     sdk:

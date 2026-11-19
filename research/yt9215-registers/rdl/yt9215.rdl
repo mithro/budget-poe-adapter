@@ -1200,7 +1200,7 @@ addrmap yt9215 {
         field { desc = "Member ports. Each port has one bit."; sw = rw; hw = r; } PORTS_1[8:8];
         field { desc = "Member ports. Each port has one bit."; sw = rw; hw = r; } PORTS_0[7:7];
         field { desc = "Frames of this VLAN skip IEEE 802.1X access control."; sw = rw; hw = r; } BYPASS_1X_AC[6:6];
-        field { desc = "Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID."; sw = rw; hw = r; } METER_EN[5:5];
+        field { desc = "Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID. The vendor SDK function fal_tiger_rate_meter_vlan_enable_set() writes this bit and VLAN_CTRL.METER_ID to attach a meter to a VLAN."; sw = rw; hw = r; } METER_EN[5:5];
         field { desc = "Meter number. It is an index of METER_CTRL."; sw = rw; hw = r; } METER_ID[4:0];
     } VLAN_CTRL[4096] @ 0x188000 += 0x8;
 

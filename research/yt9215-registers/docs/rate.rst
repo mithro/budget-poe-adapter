@@ -208,9 +208,12 @@ algorithm choice are :ev:`inferred` from the field names in :lx:`tc.h`.
 There are :const:`METER_NUM` general meters. The two ranges of general meters follow from the
 widths of the two fields: :field:`ACL_ACT.METER_ID` has 6 bits and :field:`VLAN_CTRL.METER_ID`
 has 5. :lx:`yt921x_acl_add` :ev:`confirms <confirmed>` the attachment by an ACL
-rule and :lx:`yt921x_dsa_port_policer_add` that by :reg:`PORT_METER`. The attachment by a
-VLAN is :ev:`inferred` from the names of :field:`VLAN_CTRL.METER_EN` and
-:field:`VLAN_CTRL.METER_ID`, which no function uses.
+rule and :lx:`yt921x_dsa_port_policer_add` that by :reg:`PORT_METER`. No function of the
+:ref:`Linux driver <sources-list>` uses :field:`VLAN_CTRL.METER_EN` and
+:field:`VLAN_CTRL.METER_ID`. The attachment by a VLAN follows the
+:ref:`vendor SDK <sources-list>` function
+`fal_tiger_rate_meter_vlan_enable_set() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_rate.c#L336>`__,
+which writes the two fields of the VLAN and accepts the meter numbers 0 to 31.
 
 Three steps limit what a port may receive.
 

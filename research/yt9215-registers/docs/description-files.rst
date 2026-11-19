@@ -148,7 +148,7 @@ Regenerating
    * - :download:`model.py <../tools/model.py>`
      - Loads the YAML source for the other tools
    * - :download:`generate.py <../tools/generate.py>`
-     - Runs the five writers of generated files
+     - Runs every writer of generated files
    * - :download:`gen_c.py <../tools/gen_c.py>`
      - Writes the C header
    * - :download:`gen_rust.py <../tools/gen_rust.py>`

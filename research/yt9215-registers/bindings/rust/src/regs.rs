@@ -1068,7 +1068,7 @@ pub const fn vlan_ctrl_ports(port: u32) -> Field {
 pub const VLAN_CTRL_PORTS_ALL: Field = Field { lsb: 7, width: 11 };
 /// Frames of this VLAN skip IEEE 802.1X access control.
 pub const VLAN_CTRL_BYPASS_1X_AC: Field = Field { lsb: 6, width: 1 };
-/// Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID.
+/// Frames of this VLAN are rate limited by the meter in VLAN_CTRL.METER_ID. The vendor SDK function fal_tiger_rate_meter_vlan_enable_set() writes this bit and VLAN_CTRL.METER_ID to attach a meter to a VLAN.
 pub const VLAN_CTRL_METER_EN: Field = Field { lsb: 5, width: 1 };
 /// Meter number. It is an index of METER_CTRL.
 pub const VLAN_CTRL_METER_ID: Field = Field { lsb: 0, width: 5 };

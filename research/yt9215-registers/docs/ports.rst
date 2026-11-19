@@ -253,7 +253,7 @@ The steps are :ev:`confirmed` by four functions of the :ref:`Linux driver <sourc
      - :ev:`confirmed`
 
 The column "Role of the switch" of the :ref:`mode table <ports-serdes-modes>` is :ev:`inferred`
-from the value name :val:`SERDES.MODE.REVSGMII`. The :ref:`Linux driver <sources-list>` names value 3 100BASEX and the |ds| lists the fibre mode of
+from the value name :val:`SERDES.MODE.REVSGMII`. The :ref:`Linux driver <sources-list>` names value 3 :val:`SERDES.MODE.V100BASEX` and the |ds| lists the fibre mode of
 the extension ports as 100FX in the section "Extension Ports Fiber Mode (100FX/1000BX/2500BX)".
 
 .. _ports-xmii:
@@ -264,8 +264,7 @@ xMII
 1. Set the port's bit in :reg:`XMII_CTRL` and clear it in :reg:`SERDES_CTRL`.
 2. Set the pin voltage in :reg:`IO_LEVEL`.
 3. Write :reg:`XMII`: the interface type in :field:`XMII.MODE`, the clock bits
-   :field:`XMII.TX_CLK_IN` and :field:`XMII.RX_CLK_IN`, whose function the sources read in two
-   ways that the description of :field:`XMII.TX_CLK_IN` gives, for RGMII the delays
+   :field:`XMII.TX_CLK_IN` and :field:`XMII.RX_CLK_IN`, for RGMII the delays
    (:field:`XMII.RGMII_RX_DELAY_150PS`, :field:`XMII.RGMII_TX_DELAY_150PS`,
    :field:`XMII.RGMII_TX_DELAY_2NS`), and :field:`XMII.EN`.
 4. No PHY reports the link of a MAC-to-MAC connection, so tell the switch: write speed and
@@ -281,7 +280,11 @@ configures no xMII mode: :lx:`yt921x_port_config` accepts SerDes modes only. Ste
 RGMII follow the function
 `yt9215rb_init() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver/yt9215rb.c#L322>`__
 of the :ref:`YT9215RB vendor driver <sources-list>`, which brings up RGMII on port 8 with the
-writes of the :ref:`RGMII table <ports-rgmii-table>`. The modes MII and RMII are :ev:`header` definitions in :lx:`chip.h`. The three delay fields of the
+writes of the :ref:`RGMII table <ports-rgmii-table>`. That function writes :reg:`IO_LEVEL`
+before :reg:`XMII_CTRL`, and it is :ev:`not known` whether the order matters. No source
+clears the bit of the port in :reg:`SERDES_CTRL` for an xMII mode; that part of step 1 is
+:ev:`inferred` as the mirror image of what :lx:`yt921x_port_config` does for a SerDes. The
+sources read :field:`XMII.TX_CLK_IN` in two ways, which the description of the field gives. The modes MII and RMII are :ev:`header` definitions in :lx:`chip.h`. The three delay fields of the
 :ref:`RGMII table <ports-rgmii-table>` depend on the board, and the vendor driver takes them from
 its configuration.
 

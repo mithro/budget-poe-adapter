@@ -783,7 +783,7 @@ addrmap yt9218 {
 
     reg {
         name = "Port priority source order";
-        desc = "Ranks the sources of a frame's internal priority on one port. Each source has a 3-bit weight; the source with the highest non-zero weight that applies to the frame wins. Priority sources lists the source numbers. Index: port = 0 to 10.";
+        desc = "Ranks the sources of a frame's internal priority on one port. Each source has a 3-bit weight. It is inferred that the source with the highest non-zero weight that applies to the frame wins; a comment in yt_qos.h of the vendor SDK reads \"The higher the value, the higher the priority\". Priority sources lists the source numbers. Index: port = 0 to 10.";
         field { desc = "Weight of priority source app. 0 disables the source, except for the port default priority which is enabled by PORT_QOS.PRIO_EN."; sw = rw; hw = r; } APP_7[23:21];
         field { desc = "Weight of priority source app. 0 disables the source, except for the port default priority which is enabled by PORT_QOS.PRIO_EN."; sw = rw; hw = r; } APP_6[20:18];
         field { desc = "Weight of priority source app. 0 disables the source, except for the port default priority which is enabled by PORT_QOS.PRIO_EN."; sw = rw; hw = r; } APP_5[17:15];

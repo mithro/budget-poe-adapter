@@ -132,8 +132,8 @@ identifies the parts in a different way from :lx:`yt921x_chip_detect`, which com
 whole extended mode byte. The SDK function compares each half of the byte on its own. For
 the mode of the :chip:`YT9215S` it reports a part YT9215SL when either half is 1; the
 :ref:`Linux driver <sources-list>` has no such part. For the mode of the :chip:`YT9215RB` it
-reports the :chip:`YT9214NB` when either half is 2 and the :chip:`YT9213NB` when either half
-is 3. It does not use the byte for the other parts, and it calls the :chip:`YT9218MB` YT9218M.
+reports the :chip:`YT9214NB` when either half is 2 and otherwise the :chip:`YT9213NB` when
+either half is 3. It does not use the byte for the other parts, and it calls the :chip:`YT9218MB` YT9218M.
 It has no case for the YT9215SCH either.
 
 .. _bringup-clock:

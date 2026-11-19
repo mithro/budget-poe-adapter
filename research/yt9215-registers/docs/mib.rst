@@ -55,7 +55,10 @@ accept that reads the low word again and repeats if it is smaller than before.
            :end-before: # [mib end]
 
 Reading all 39 counters of one port takes 42 register reads, about 11 ms at an MDC clock of
-1 MHz.
+1 MHz. The 39 counters are those of :lx:`mib.h`. The list in
+`yt_stat.h <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_stat.h#L73>`__
+of the :ref:`vendor SDK <sources-list>` has two more after them, RX_UNICAST and TX_UNICAST,
+which this manual does not describe.
 
 The counter names follow :lx:`mib.h` of the :ref:`Linux driver <sources-list>`. The counter table
 of the

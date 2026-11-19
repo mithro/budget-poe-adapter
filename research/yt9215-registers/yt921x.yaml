@@ -6764,7 +6764,12 @@ registers:
   title: Port priority source order
   desc: 'Ranks the sources of a frame''s internal priority on one port. Each source has a 3-bit
 
-    weight; the source with the highest non-zero weight that applies to the frame wins.
+    weight. It is :ev:`inferred` that the source with the highest non-zero weight that applies
+
+    to the frame wins; a `comment in yt_qos.h <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/include/yt_qos.h#L98>`__
+    of the
+
+    :ref:`vendor SDK <sources-list>` reads "The higher the value, the higher the priority".
 
     :ref:`Priority sources <qos-sources>` lists the source numbers.'
   access: rw

@@ -1,5 +1,7 @@
 # Dev boards and off-the-shelf hardware for the RTL8367S and YT9215S
 
+> **Archived.** This note is not part of the current design. Most of it covers hardware for the RTL8367S. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The boards and products that carry a YT9215 are in [`yt9215-boards.md`](../../research/yt9215-boards.md). The [archive index](../README.md) lists every archived note.
+
 Companion to [`switch-embedded-cpu.md`](switch-embedded-cpu.md) (what the embedded CPUs are) and [`switch-detail-comparison.md`](switch-detail-comparison.md). This note answers: what can we buy to experiment with the RTL8367S DW8051 and the YT9215 RISC-V core, and how easy is it to reach the chip's pins on each?
 
 <a id="evidence-codes"></a>
@@ -224,7 +226,7 @@ Longer entries for this table:
 | YT9215S | Draft datasheet | 2 JTAG groups |
 | YT9215S | Draft datasheet | UART0–2 |
 | YT9215S | Draft datasheet | SPI flash |
-| YT9215S | Draft datasheet | `STRAP_DIS_MCU` on pin [75](motorcomm-debug-pins.md#s-pin-75) |
+| YT9215S | Draft datasheet | `STRAP_DIS_MCU` on pin [75](../../research/motorcomm-debug-pins.md#s-pin-75) |
 | YT9215SC | Product page | "内置高性能RISC-V 核心CPU" |
 | YT9215SC | Product page | "支持简单网管" |
 | YT9215SC | Draft datasheet | Same pin functions as the YT9215S |
@@ -306,5 +308,5 @@ Note: the prices in this file come from search snippets and deal pages, not from
 ## Open questions
 
 - Which current TL-SG105 and LS1005G hardware versions are still RTL8367S? The V6 and V1 data points are from 2022.
-- Does the CR881x's YT9215S have its MCU strapped off (pin [75](motorcomm-debug-pins.md#s-pin-75))? A photo of the board around the switch would answer it.
+- Does the CR881x's YT9215S have its MCU strapped off (pin [75](../../research/motorcomm-debug-pins.md#s-pin-75))? A photo of the board around the switch would answer it.
 - Contents of the OSHWHub YT9215S design (JTAG or UART breakout).

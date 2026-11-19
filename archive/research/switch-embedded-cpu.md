@@ -1,6 +1,8 @@
 # Embedded CPUs in the candidate switch ICs: RTL8367S, YT9215S, RTL8363NB
 
-> **Which YT9215 variants have the CPU:** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC**, the YT9218N and the YT9218MB, while the selection guide and the YT9215S, YT9215SC and YT9215RB datasheets all list it (see [`switch-cpu-dev-boards.md`](switch-cpu-dev-boards.md) and [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md)). The core is probably on every die but supported only on the SC. Plan any CPU work on the YT9215SC.
+> **Archived.** This note is not part of the current design. It assumes an external MCU and recommends strapping the switch CPU off. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. What is known about the YT9215 CPU is in [`yt9215-embedded-cpu.md`](../../research/yt9215-embedded-cpu.md). The [archive index](../README.md) lists every archived note.
+
+> **Which YT9215 variants have the CPU:** Motorcomm's product page lists the embedded RISC-V CPU only for the **YT9215SC**, the YT9218N and the YT9218MB, while the selection guide and the YT9215S, YT9215SC and YT9215RB datasheets all list it (see [`switch-cpu-dev-boards.md`](switch-cpu-dev-boards.md) and [`motorcomm-debug-pins.md`](../../research/motorcomm-debug-pins.md)). The core is probably on every die but supported only on the SC. Plan any CPU work on the YT9215SC.
 
 Sources were read on 2026-10-22. This note looks at the CPU inside each candidate switch chip and asks whether it could run our own firmware and replace, or shrink, the external MCU (RP2040-class or CH32X035) in the PoE → USB-C adapter. It builds on [`switch-detail-comparison.md`](switch-detail-comparison.md) and [`ethernet-switch-comparison.md`](ethernet-switch-comparison.md) and does not repeat the datasheet basics given there.
 
@@ -305,25 +307,25 @@ Evidence code for this section: [**VI**](#evidence-codes).
 
 Evidence code for this section: [**V**](#evidence-codes).
 
-> The pin numbers in this section are for the **YT9215SC** only. The YT9215S (RTL8367S pinout), the YT9215SC (RTL8367SC pinout) and the YT9215RB (RTL8367RB-VB pinout) are pinned differently, and all three have the RISC-V MCU. [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md) gives the JTAG, flash and UART pins of each variant.
+> The pin numbers in this section are for the **YT9215SC** only. The YT9215S (RTL8367S pinout), the YT9215SC (RTL8367SC pinout) and the YT9215RB (RTL8367RB-VB pinout) are pinned differently, and all three have the RISC-V MCU. [`motorcomm-debug-pins.md`](../../research/motorcomm-debug-pins.md) gives the JTAG, flash and UART pins of each variant.
 
-From the [YT9215SC datasheet Draft_07](../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf); the YT9215S comes in the same LQFP-128 package with a different pinout ([YT9215S Draft_05](../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf)).
+From the [YT9215SC datasheet Draft_07](../../datasheets/motorcomm/YT9215SC_Datasheet_Draft_07_2023-02-28.pdf); the YT9215S comes in the same LQFP-128 package with a different pinout ([YT9215S Draft_05](../../datasheets/motorcomm/YT9215S_Datasheet_Draft_05_2023-02-21.pdf)).
 
 - **SPI flash.**
-  - One flash interface placed on either of two pin sets by `SPF_MUX_SEL`: SPF0 on pins [49](motorcomm-debug-pins.md#sch-pin-49), [50](motorcomm-debug-pins.md#sch-pin-50), [54](motorcomm-debug-pins.md#sch-pin-54) and [55](motorcomm-debug-pins.md#sch-pin-55), SPF1 on pins [78](motorcomm-debug-pins.md#sch-pin-78), [79](motorcomm-debug-pins.md#sch-pin-79), [81](motorcomm-debug-pins.md#sch-pin-81) and [83](motorcomm-debug-pins.md#sch-pin-83).
-  - Enabled by `EN_SPIF` (pin [75](motorcomm-debug-pins.md#sch-pin-75)).
+  - One flash interface placed on either of two pin sets by `SPF_MUX_SEL`: SPF0 on pins [49](../../research/motorcomm-debug-pins.md#sch-pin-49), [50](../../research/motorcomm-debug-pins.md#sch-pin-50), [54](../../research/motorcomm-debug-pins.md#sch-pin-54) and [55](../../research/motorcomm-debug-pins.md#sch-pin-55), SPF1 on pins [78](../../research/motorcomm-debug-pins.md#sch-pin-78), [79](../../research/motorcomm-debug-pins.md#sch-pin-79), [81](../../research/motorcomm-debug-pins.md#sch-pin-81) and [83](../../research/motorcomm-debug-pins.md#sch-pin-83).
+  - Enabled by `EN_SPIF` (pin [75](../../research/motorcomm-debug-pins.md#sch-pin-75)).
   - "Dual mode" and "Single mode" mean SPI I/O width, not two flash chips. [`switch-detail-comparison.md`](switch-detail-comparison.md) lists the two I/O modes in separate rows.
-- **MCU disable.** `DIS_MCU` on pin [76](motorcomm-debug-pins.md#sch-pin-76), shared with GPIO38, UART1_TX and P2LED2. Pull-up disables the MCU.
+- **MCU disable.** `DIS_MCU` on pin [76](../../research/motorcomm-debug-pins.md#sch-pin-76), shared with GPIO38, UART1_TX and P2LED2. Pull-up disables the MCU.
 - **Peripherals.**
-  - UART0 on pins [46](motorcomm-debug-pins.md#sch-pin-46) and [47](motorcomm-debug-pins.md#sch-pin-47), UART1 on pins [70](motorcomm-debug-pins.md#sch-pin-70) and [76](motorcomm-debug-pins.md#sch-pin-76).
+  - UART0 on pins [46](../../research/motorcomm-debug-pins.md#sch-pin-46) and [47](../../research/motorcomm-debug-pins.md#sch-pin-47), UART1 on pins [70](../../research/motorcomm-debug-pins.md#sch-pin-70) and [76](../../research/motorcomm-debug-pins.md#sch-pin-76).
   - I²C master and MDIO master ("Group1").
   - GPIO5–GPIO50.
   - Parallel or serial LEDs.
   - One interrupt output.
   - 16 KB EEPROM autoload, which is for configuration, not code.
 - **JTAG.** Two JTAG pin groups:
-  - JTAG0: TCK on GPIO35 (pin [73](motorcomm-debug-pins.md#sch-pin-73)), TMS on GPIO34 (pin [72](motorcomm-debug-pins.md#sch-pin-72)), TDI on GPIO36 (pin [74](motorcomm-debug-pins.md#sch-pin-74)), TDO on GPIO47 (pin [90](motorcomm-debug-pins.md#sch-pin-90));
-  - JTAG1: TCK on GPIO44 (pin [83](motorcomm-debug-pins.md#sch-pin-83)), TMS on GPIO43 (pin [81](motorcomm-debug-pins.md#sch-pin-81)), TDI on GPIO45 (pin [84](motorcomm-debug-pins.md#sch-pin-84)), TDO on GPIO31 (pin [67](motorcomm-debug-pins.md#sch-pin-67)).
+  - JTAG0: TCK on GPIO35 (pin [73](../../research/motorcomm-debug-pins.md#sch-pin-73)), TMS on GPIO34 (pin [72](../../research/motorcomm-debug-pins.md#sch-pin-72)), TDI on GPIO36 (pin [74](../../research/motorcomm-debug-pins.md#sch-pin-74)), TDO on GPIO47 (pin [90](../../research/motorcomm-debug-pins.md#sch-pin-90));
+  - JTAG1: TCK on GPIO44 (pin [83](../../research/motorcomm-debug-pins.md#sch-pin-83)), TMS on GPIO43 (pin [81](../../research/motorcomm-debug-pins.md#sch-pin-81)), TDI on GPIO45 (pin [84](../../research/motorcomm-debug-pins.md#sch-pin-84)), TDO on GPIO31 (pin [67](../../research/motorcomm-debug-pins.md#sch-pin-67)).
 
   If the MCU's debug module sits on one of them, standard RISC-V debug with OpenOCD would give halt, memory dump and load. That would be the only realistic way in. [**I**](#evidence-codes)
 - **Image format, size limit, checksum or signing: not published.** No firmware dump of a YT9215-based web-smart switch was found.

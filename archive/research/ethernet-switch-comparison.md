@@ -1,5 +1,7 @@
 # Gigabit switch IC comparison for the PoE → USB-C adapter
 
+> **Archived.** This note is not part of the current design. It compares switch ICs from several vendors and picks the RTL8363NB. The current design uses only the YT9215 switch IC and its internal RISC-V CPU. The [archive index](../README.md) lists every archived note.
+
 Prices and stock were read from LCSC product pages on 2026-10-22 (JLCPCB assembly uses the same C-numbers and LCSC stock). The table holds the data of the **Switches** tab in the comparison sheet; background and design reasoning are in [`ethernet-switch.md`](ethernet-switch.md), [`gigabit-piggyback.md`](gigabit-piggyback.md) and [`bitbang-10mbit-ethernet.md`](bitbang-10mbit-ethernet.md).
 
 The sheet is the [comparison sheet](https://docs.google.com/spreadsheets/d/1nPsWa2ZrP8suhqZF9iXVH5w3_iRSPm5tRze83cas7SA/edit#gid=1).

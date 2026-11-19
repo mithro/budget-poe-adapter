@@ -126,7 +126,7 @@ terminates both links. The input jack connects to one PHY port of the switch IC 
 output jack to another, each through its own magnetics. No signal runs from one jack to the
 other, so taking the power off has no effect on the link to the Pi.
 
-The input port needs PoE-rated magnetics with the centre taps of all four pairs brought
+The input port needs PoE-rated magnetics with the cable-side centre taps of all four pairs brought
 out to the bridges. A PoE-capable magjack is cheap in volume. The output port takes
 ordinary gigabit magnetics.
 
@@ -498,10 +498,11 @@ PASSIVE (Vport > 30 V with no class sequence seen):
   another network port. The PoE "−" rail then gets referenced to earth through
   the Pi's GND. This is usually harmless with one floating PSE, but surge and
   ESD events on the cable now couple into the Pi. Mitigations: robust TVS on
-  the 48 V rail, the Ethernet data path stays transformer-isolated (the Pi's
-  magnetics remain in circuit), and documenting the limitation.
-* The data path itself stays isolated in all options in [section 3](#3-wiring-mode-a-mode-b-polarity-and-1000base-t), because the Pi's
-  own magnetics are still in the link.
+  the 48 V rail, the Ethernet data path stays transformer-isolated (each port of the
+  switch IC has its own magnetics), and documenting the limitation.
+* The data path stays transformer-isolated on both links: the magnetics of the input port
+  stand between the PoE cable and the switch IC, and the magnetics of the output port stand
+  between the switch IC and the cable to the Pi ([section 3](#3-wiring-mode-a-mode-b-polarity-and-1000base-t)).
 
 ---
 

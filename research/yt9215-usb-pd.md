@@ -18,8 +18,8 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 - Every option that speaks PD waits until code runs on the CPU. Motorcomm's SDK shows that firmware for it exists (FreeRTOS, built for RV32EC) ([verified](#evidence-codes)). The boot image format and the CPU's peripheral registers are unpublished ([unknown](#evidence-codes)).
 - Rp, VBUS and all PD signalling stay off until the PoE side has secured its power ([start-up order](#start-up-order)).
 - [Option A](#option-a) is a PD transceiver with an I²C interface on the I²C master of the YT9215. The transceiver takes over every microsecond-scale task. Two such chips cost $0.26 to $0.42 at LCSC, and others list for less in other currencies ([transceiver chips](#transceiver-chips)).
-- [Option B](#option-b) times the BMC signal in software on GPIO pins. A published design transmits this way on a 48 MHz RV32EC microcontroller; its receive side is untested. Options B and C need an analog front end that costs $0.19 to $0.50 ([cost](#cost)) ([inferred](#evidence-codes)).
-- [Option D](#option-d) sends the message as a 10 Mbit/s frame out of a copper port that has no socket. The line signal is Manchester coded and cannot be put on CC as it is, so an external circuit of about three logic parts turns it into BMC levels ([inferred](#evidence-codes)). It transmits only; receive uses the parts of option B or C.
+- [Option B](#option-b) times the BMC signal in software on GPIO pins. A published design transmits this way on a 48 MHz RV32EC microcontroller; its receive side is untested. Options B, C and D need an analog front end that costs $0.19 to $0.50 for B and C ([cost](#cost)) ([inferred](#evidence-codes)).
+- [Option D](#option-d) sends the message as a 10 Mbit/s frame out of a copper port that has no socket. The line signal is Manchester coded and cannot be put on CC as it is, so an external circuit of a line receiver and about four logic parts turns it into BMC levels ([inferred](#evidence-codes)). It transmits only; receive uses the parts of option B or C.
 - The CH224K, HUSB238 and IP2721 are sink chips. They ask a charger for a voltage and cannot make this adapter a source. Source chips that need no host exist ([chips that need no host](#fixed-function-chips)).
 - A Raspberry Pi 5 needs PD for one thing only: a 5 V, 5 A offer lifts its USB current limit. A PD source limited to 3 A gives the Pi nothing that a bare resistor does not ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)).
 
@@ -29,7 +29,7 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 | I²C PD transceiver | Yes | Transceiver chip | $0.26 | $0.42 | [Option A](#option-a) |
 | GPIO bit-bang | Yes | CPU timing loops | $0.19 | $0.46 | [Option B](#option-b) |
 | Port 9 MAC | Yes | Port 9 MAC | $0.23 | $0.50 | [Option C](#option-c) |
-| Spare PHY port | Yes | PHY and decoder | $0.39 | $0.98 | [Option D](#option-d) |
+| Spare PHY port | Yes | PHY and decoder | $0.42 | $1.01 | [Option D](#option-d) |
 
 The costs are the totals of the [cost tables](#cost). They count only the parts for USB-C signalling. The first row carries no PD messages.
 
@@ -238,7 +238,7 @@ Every row is from the pin tables of the datasheet ([verified](#evidence-codes)).
 
 Only RV32EC is confirmed by the vendor builds. Whether the core has more is not known ([unknown](#evidence-codes)).
 
-The SDK calls the two frame functions and includes their header `eth_export.h`, but does not contain their code. Its build file [`freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) adds include paths into a firmware tree named `switch_sw_lite_mgmt`, with folders for FreeRTOS and for `SoC/yt921x` support code ([verified](#evidence-codes)). That tree is the likely home of the frame functions, the timers, the GPIO registers, the interrupt numbers and the boot format ([inferred](#evidence-codes)). It is not public ([unknown](#evidence-codes)).
+The SDK calls the two frame functions and includes a header for them, `eth_export.h`, but contains neither that header nor their code. Its build file [`freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) adds include paths into a firmware tree named `switch_sw_lite_mgmt`, with folders for FreeRTOS and for `SoC/yt921x` support code ([verified](#evidence-codes)). That tree is the likely home of the frame functions, the timers, the GPIO registers, the interrupt numbers and the boot format ([inferred](#evidence-codes)). It is not public ([unknown](#evidence-codes)).
 
 ### Electrical limits of the pins
 
@@ -348,7 +348,7 @@ The rows are not checked against the driver source ([inferred](#evidence-codes))
 
 All of these are unpublished ([unknown](#evidence-codes)):
 
-- **Firmware on the CPU.** This is common to options A, B and C.
+- **Firmware on the CPU.** This is common to options A, B, C and D.
 - **Pin function.** The datasheet says pins 72 and 73 need "to enable the I2C function by software programming" and does not name the register.
 - **Master registers.** The registers of the I²C master are unpublished. The I²C code in the SDK is the host side of the management interface, not a driver for this master.
 - **Transaction format.** The datasheet shows this master only driving a PSE chip. The EEPROM reader on pins 91 and 92 is a separate interface. Whether the master can run the arbitrary reads and writes a transceiver needs is not stated.
@@ -617,9 +617,11 @@ Each of the five copper ports has its own PHY ([verified](#evidence-codes)). A b
 | Peak differential voltage, minimum | 1.54 V | [Inferred](#evidence-codes) |
 | Peak differential voltage, maximum | 1.96 V | [Inferred](#evidence-codes) |
 | Common-mode voltage | Not given | [Unknown](#evidence-codes) |
-| Start of every frame | 62 alternating bits and two 1 bits | [Inferred](#evidence-codes) |
-| End of every frame | Positive pulse of 250 ns or more | [Inferred](#evidence-codes) |
-| Between frames | Silence with one 100 ns pulse every 16 ms | [Inferred](#evidence-codes) |
+| Alternating bits that start a frame | 62 | [Inferred](#evidence-codes) |
+| 1 bits that follow them | 2 | [Inferred](#evidence-codes) |
+| Positive pulse that ends a frame, minimum | 250 ns | [Inferred](#evidence-codes) |
+| Link pulse width between frames | 100 ns | [Inferred](#evidence-codes) |
+| Link pulse interval | 16 ms | [Inferred](#evidence-codes) |
 
 The verified rows are from section 3 of the datasheet. The inferred rows are IEEE 802.3 values for 10BASE-T and 10BASE-Te, not checked against the text of the standard.
 
@@ -631,7 +633,7 @@ The verified rows are from section 3 of the datasheet. The inferred rows are IEE
 
 ### Turning the line signal into a level
 
-Two circuits do this ([inferred](#evidence-codes)). Neither has been built for this note.
+Two circuits do this ([inferred](#evidence-codes)). Neither has been built.
 
 | Property | Manchester decoder | Edge-interval discriminator |
 |---|---|---|
@@ -641,51 +643,53 @@ Two circuits do this ([inferred](#evidence-codes)). Neither has been built for t
 | Output during the Ethernet preamble | 5 MHz toggling | Low |
 | Effect of swapped pair polarity | Inverted output | None |
 | Timing part | 75 ns one-shot | 75 ns one-shot |
-| Other logic parts | Flip-flop | Edge detector and flip-flop |
+| Edge detector | Needed | Needed |
+| Flip-flop | Needed | Needed |
+| One-shot type | Not retriggerable | Retriggerable |
 
-- **Manchester decoder.** A flip-flop samples the line 75 ns after each mid-bit edge, which is the classic decoder. The preamble aligns it to the mid-bit edges.
+- **Manchester decoder.** A flip-flop samples the line 75 ns after each mid-bit edge, which is the classic decoder. Mid-bit edges have both directions, so it needs an edge detector too, and its one-shot must ignore the edges at bit boundaries. The preamble aligns it to the mid-bit edges.
 - **Edge-interval discriminator.** Edges are 50 ns apart in a 10 MHz section and 100 ns apart in a 5 MHz section. An XOR gate with a short delay makes a pulse at every edge. The pulse starts a 75 ns one-shot and clocks a flip-flop that stores whether the one-shot from the edge before was still running.
 - Two equal bytes last 16 bit times, 1.6 µs, so the bit rate is 312.5 kbit/s and each PD bit takes four bytes. The frames have the lengths of the [option C frames](#frame-layout). [`mac_bmc_frame.py`](yt9215-usb-pd/mac_bmc_frame.py) does not build them.
-- Level changes fall on the 100 ns bit grid of the PHY, which is crystal timed. The one-shot tolerance adds some tens of nanoseconds to an edge.
-- A low-pass filter and a Schmitt-trigger gate after the flip-flop remove pulses of one or two bit times. The same filter slows the edges, which PD wants at 300 ns or more ([front end](#front-end)).
+- Level changes fall on the 100 ns bit grid of the PHY, which is crystal timed. In the discriminator a high section comes out about 1.65 µs long and a low section about 1.55 µs, both inside the 1.52 to 1.85 µs that PD allows.
+- A low-pass filter and a Schmitt-trigger gate after the flip-flop remove pulses of up to about three bit times. The gate and the buffer square the edges again, so the edge-rate problem of the [front end](#front-end) is unchanged.
 - The output feeds the buffer of the [front end](#front-end) in place of TXD1.
 
 ### Start and end of the frame
 
-- **Preamble.** The 62 alternating bits are a 5 MHz section, so the discriminator output stays low for 6.2 µs. The two closing 1 bits make one 100 ns pulse, which the filter has to remove. The Manchester decoder toggles for the whole preamble.
+- **Preamble.** The 62 alternating bits are a 5 MHz section, so the discriminator output stays low for 6.2 µs. The two closing 1 bits make one pulse of 150 to 250 ns, which the filter has to remove. The Manchester decoder toggles for the whole preamble.
 - **Buffer enable.** A PHY port has no signal like TX_CTL. An activity detector on the pair can enable the buffer, which then drives CC low 6.4 µs before the first PD bit, the same break of the 1 µs rule as in [option C](#option-c). A GPIO is the other source of the enable.
 - **FCS.** All 32 bits of the FCS show at the output, where option C shows 8 of them. Three ways exist to keep them off CC ([inferred](#evidence-codes)):
-  - A tail built only from the bytes `0x55` and `0xAA` is low throughout. About 28 such bytes give enough freedom to make the FCS a low pattern too. The line is then driven low for about 26 µs after the last PD edge, and PD allows 23 µs ([packet end](usb-c-pd.md#51-signalling)).
+  - A tail built only from the bytes `0x55` and `0xAA` is low after the filter, which removes the short pulse at each change between the two values. About 28 such bytes give enough freedom to make the FCS a low pattern too. The line is then driven low for about 26 µs after the last PD edge, and PD allows 23 µs ([packet end](usb-c-pd.md#51-signalling)).
   - A GPIO switches the buffer off during a low tail. The firmware has to hit a window of about 20 µs after the last PD edge.
   - A latch switches the buffer off after the first low period longer than a BMC bit and keeps it off until the frame ends. That adds parts.
-- **End pulse and link pulses.** Both are single pulses with no 50 ns edge pair, so the discriminator reads them as low.
+- **End pulse and link pulses.** A frame whose last FCS bit is 0 ends with two edges 50 ns apart, where the end pulse begins. The flip-flop then stores a high level and keeps it until the next edge, which may be a link pulse 16 ms later. A link pulse that the receiver sees as narrower than 75 ns has the same effect. The buffer therefore has to be off before the frame ends and stay off between frames, or the tail has to be chosen so that the last FCS bit is 1 ([inferred](#evidence-codes)).
 
 ### Making the PHY transmit
 
 | Requirement | Means | Evidence |
 |---|---|---|
-| Speed of 10 Mbit/s | PHY register 0 | [Verified](#evidence-codes) |
-| Full duplex | PHY register 0 | [Verified](#evidence-codes) |
+| Speed of 10 Mbit/s | PHY register 0 | [Inferred](#evidence-codes) |
+| Full duplex | PHY register 0 | [Inferred](#evidence-codes) |
 | Auto-negotiation off | PHY register 0 | [Verified](#evidence-codes) |
 | Link up with no partner | Pairs MDIA and MDIB joined on the board | [Inferred](#evidence-codes) |
 | Auto crossover off | Vendor register | [Unknown](#evidence-codes) |
 | Looped frames discarded | Port isolation | [Inferred](#evidence-codes) |
 | Frame sent to the port | `eth_tx_by_portlist()` | [Unknown](#evidence-codes) |
 
-- PHY register 0 is the standard control register, reached over the internal management bus ([PHY access](yt9215-registers/docs/phy.rst)). The verified mark covers the access and the standard bit layout; the write has not been tried on this PHY.
+- PHY register 0 is the basic control register, reached over the internal management bus ([PHY access](yt9215-registers/docs/phy.rst)). Its speed and duplex bits are taken from the IEEE 802.3 layout and are not confirmed for this PHY. The datasheet says that auto-negotiation can be switched off by software.
 - A 10BASE-T transmitter is held off while the link test fails. The link test passes when the receiver sees link pulses or frames. With the transmit pair wired to the receive pair, the PHY hears its own link pulses ([inferred](#evidence-codes)).
 - With auto crossover on, the PHY may swap the two pairs at any time, and the loop then has no fixed transmit pair. The register that fixes the pair assignment is a vendor register, which the [register guide](yt9215-registers/docs/phy.rst) does not cover.
 - A vendor bit that forces the link up would remove the loop. No public document shows one ([unknown](#evidence-codes)).
 - The port has to be full duplex. In half duplex a PHY that hears its own frame reports a collision.
 - Every frame the port sends comes back into the switch through the loop. Its first bytes are PD data, so the address fields are meaningless. The port is isolated and address learning on it is off.
-- IEEE 802.3 defines transmitter test modes for 1000BASE-T only, and none of them sends a chosen pattern. Whether this PHY has 10 Mbit/s test modes is not published ([unknown](#evidence-codes)).
+- Of the three speeds of this PHY, IEEE 802.3 defines transmitter test modes for 1000BASE-T only, and none of them sends a chosen pattern. Whether this PHY has 10 Mbit/s test modes is not published ([unknown](#evidence-codes)).
 - The frame transmit function has the same unknowns as in [option C](#option-c): tags, padding and latency.
 
 ### Analog parts
 
 - **Line receiver.** A fast comparator or a logic gate turns the pair into a logic signal with a delay of a few nanoseconds.
 - **Coupling.** The datasheet does not give the common-mode voltage of the pairs, or say whether the driver works without a transformer ([unknown](#evidence-codes)). Two coupling capacitors make the receiver independent of the first point.
-- **Termination.** A 100 Ω resistor across the pair stands in for the cable.
+- **Termination.** The pin table of the datasheet gives each pair a built-in 100 Ω termination ([verified](#evidence-codes)). With the two pairs joined, each end is terminated and no resistor is added.
 
 <a id="option-d-receive"></a>
 
@@ -725,11 +729,11 @@ Receive therefore uses the slicer on a GPIO ([option B receive](#b-receive)) or 
 
 <a id="front-end"></a>
 
-## Front end for options B and C
+## Front end for options B, C and D
 
 ![Front end: buffer and resistor for transmit, protection, two comparators for receive and attach detection, switchable Rp and a load switch](yt9215-usb-pd/front-end.svg)
 
-The figure shows the option C wiring with a [captive cable](#captive-cable). Option B uses the same parts on GPIO pins and has no fixed receive wiring. The AND gate and the last three rows of the table apply to option C only. Option B needs a pull-down on the GPIO that enables the buffer.
+The figure shows the option C wiring with a [captive cable](#captive-cable). Option D uses the option B parts and feeds the buffer from its [decoder](#option-d). Option B uses the same parts on GPIO pins and has no fixed receive wiring. The AND gate and the last three rows of the table apply to option C only. Option B needs a pull-down on the GPIO that enables the buffer.
 
 | Part | Example | Quantity | Job |
 |---|---|---|---|
@@ -778,7 +782,7 @@ All figures are for quantities of about 1,000 ([inferred](#evidence-codes)). Eac
 | [A](#option-a) with FUSB302B | $0.34 | $0.42 | [Table](#cost-a) |
 | [B](#option-b) | $0.19 | $0.46 | [Table](#cost-b) |
 | [C](#option-c) | $0.23 | $0.50 | [Table](#cost-c) |
-| [D](#option-d) | $0.39 | $0.98 | [Table](#cost-d) |
+| [D](#option-d) | $0.42 | $1.01 | [Table](#cost-d) |
 
 "Estimate" in a basis column means a typical price for the kind of part, with no listing behind it. "List price" means an unconfirmed price of the linked listing.
 
@@ -848,7 +852,7 @@ The other chips of the [transceiver table](#transceiver-chips) give the same tab
 
 ### Option D
 
-The table is for the edge-interval discriminator with receive on a GPIO.
+The table is for the edge-interval discriminator with receive on a GPIO and the buffer enable from a GPIO. An activity detector or a latch for the enable is not counted.
 
 | Part | Example | Quantity | Cost, low | Cost, high | Basis |
 |---|---|---|---|---|---|
@@ -857,16 +861,17 @@ The table is for the edge-interval discriminator with receive on a GPIO.
 | XOR gate | 74LVC1G86 | 1 | $0.03 | $0.03 | Estimate |
 | One-shot | 74LVC1G123 | 1 | $0.08 | $0.15 | Estimate |
 | Flip-flop | 74LVC1G79 | 1 | $0.03 | $0.03 | Estimate |
+| Schmitt-trigger gate | 74LVC1G17 | 1 | $0.03 | $0.03 | Estimate |
 | Coupling capacitors | – | 2 | $0.004 | $0.004 | Estimate |
 | Resistors and capacitors | – | 5 | $0.005 | $0.005 | Estimate |
-| **Total** | | | **$0.39** | **$0.98** | |
+| **Total** | | | **$0.42** | **$1.01** | |
 
 Notes on options B, C and D:
 
 - These parts exist because the pins of the YT9215 can neither read nor drive the 0 to 1.1 V signal on CC ([electrical limits](#electrical-limits-of-the-pins)). The job of each part is in the [front end](#front-end) table.
 - The buffer price of $0.11 is the 10-piece list price. The low figure is an estimate for a full reel.
 - The fast comparator is the largest and least certain figure, because no part is chosen.
-- A receptacle in place of the [captive cable](#captive-cable) adds a second set of CC parts to options B and C. The transceivers of option A have both CC pins built in.
+- A receptacle in place of the [captive cable](#captive-cable) adds a second set of CC parts to options B, C and D. The transceivers of option A have both CC pins built in.
 
 <a id="fixed-function-chips"></a>
 
@@ -915,7 +920,7 @@ How to answer each:
 - <a id="q-waveform"></a>**Waveform on TXD1.** On a board with the port 9 pins exposed, an external host sets port 9 to RGMII at 10 Mbit/s over the management interface, as the [register guide](yt9215-registers/README.md) describes. A PC on a copper port sends a frame from [`mac_bmc_frame.py`](yt9215-usb-pd/mac_bmc_frame.py), the switch forwards it to port 9, and an oscilloscope on pin 48 shows the result. The `--hex` switch of the script prints such a frame. Its destination address is an unknown unicast address, so the switch floods it to port 9.
 - <a id="q-pi"></a>**Pi 5.** Add the transmit half of the [front end](#front-end), send Source_Capabilities the same way, and look for the GoodCRC of the Pi on CC.
 - <a id="q-fcs"></a>**Bad FCS.** Feed a frame with a wrong FCS into port 9 and see whether the switch forwards it to another port or only raises the error counter. Looping the port back needs no equipment: TX_CTL to RX_CTL, TXD3 to RXD3, TXC to RXC, and RXD0 to RXD2 tied as in the [receive scheme](#option-c). The transmit delay of the port is switched on, so that the looped data meets the set-up time. A frame sent out of the port then returns as `0x5` and `0xD` nibbles with a wrong FCS and group addresses. A rising `RX_FCS_ERR` counter shows that the MAC received it; whether it is forwarded answers the FCS and the address question together.
-- <a id="q-phy"></a>**Looped PHY port.** On a board with a spare copper port, join its two 10 Mbit/s pairs, force the port to 10 Mbit/s full duplex from an external host and read the link bit. A PC on another port then sends a frame of `0xFF` and `0x55` bytes with an unknown destination address, and an oscilloscope on the pair shows the 10 MHz and 5 MHz sections.
+- <a id="q-phy"></a>**Looped PHY port.** On a board with a spare copper port, join its two 10 Mbit/s pairs, force the port to 10 Mbit/s full duplex from an external host and read the link bit. A PC on another port then sends a frame with an ordinary header, an unknown unicast destination address and a payload of `0xFF` and `0x55` bytes. An oscilloscope on the pair shows the 10 MHz and 5 MHz sections.
 - <a id="q-comparator"></a>**Comparator.** Bench test candidates against a real PD sink.
 - <a id="q-code"></a>**Code on the CPU.** Obtain the firmware tree, or read the flash image of a managed switch that uses a YT9215 and work out the image format from it. The [boot modes](yt9215-embedded-cpu.md#boot) say where the chip loads code from.
 - <a id="q-i2c"></a>**I²C master.** The pin function register, the master's own registers and its transaction format come from the firmware tree, or from tracing a vendor image.

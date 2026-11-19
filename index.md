@@ -39,6 +39,7 @@ research/yt9215-registers/README
 
 research/poe
 research/usb-c-pd
+research/yt9215-usb-pd
 ```
 
 ```{toctree}

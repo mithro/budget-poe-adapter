@@ -61,6 +61,7 @@ over to firmware on the YT9215 CPU is an open question in
 | --- | --- |
 | [PoE powered device](research/poe.md) | PoE standards and negotiation for a software-driven powered device |
 | [USB-C power](research/usb-c-pd.md) | USB-C power standards with PD negotiation for a source that feeds a Raspberry Pi 5 |
+| [USB-C PD from the YT9215 alone](research/yt9215-usb-pd.md) | Options for a USB-C PD source that uses only the CPU inside the YT9215 |
 
 ### Datasheets
 

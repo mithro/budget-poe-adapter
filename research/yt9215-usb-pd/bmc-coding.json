@@ -1,0 +1,28 @@
+{
+ "signal": [
+  {
+   "name": "half bit clock, 600 kHz",
+   "wave": "p..............."
+  },
+  {
+   "name": "data bit, 3.03 to 3.70 µs each",
+   "wave": "x=.=.=.=.=.=.=.x",
+   "data": [
+    "0",
+    "1",
+    "1",
+    "0",
+    "0",
+    "1",
+    "0"
+   ]
+  },
+  {
+   "name": "CC line, BMC",
+   "wave": "01.01010.1.010.."
+  }
+ ],
+ "head": {
+  "text": "Biphase mark code: an edge starts every bit, a 1 has a second edge in its middle"
+ }
+}

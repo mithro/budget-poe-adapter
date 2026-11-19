@@ -25,7 +25,7 @@ Statements that rest on a source are marked with one of these evidence codes:
 | Item | Value | Evidence | Detail |
 | --- | --- | --- | --- |
 | Core | Nuclei N205 | [**V**](#evidence-codes) | [Identity](#identity) |
-| Instruction set | RV32IMAC-class | [**I**](#evidence-codes) | [Identity](#identity) |
+| Instruction set of vendor builds | RV32EC | [**V**](#evidence-codes) | [Software](#software) |
 | SRAM (YT9215SCH) | 64 KB | [**V**](#evidence-codes) | [Memory](#memory) |
 | Boot ROM (YT9215SCH) | 16 KB | [**V**](#evidence-codes) | [Memory](#memory) |
 | I-cache (YT9215SCH) | 2 KB | [**V**](#evidence-codes) | [Memory](#memory) |
@@ -42,7 +42,9 @@ Statements that rest on a source are marked with one of these evidence codes:
 | GPIO pins on the chip | Yes | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
 | JTAG | Unconfirmed | [**VI**](#evidence-codes) | [Debug](#debug) |
 | USB | Not in the datasheets | [**V**](#evidence-codes) | [Peripherals](#peripherals) |
-| Vendor SDK for CPU firmware | None found | [**I**](#evidence-codes) | [Software](#software) |
+| Vendor operating system | FreeRTOS | [**V**](#evidence-codes) | [Software](#software) |
+| Vendor firmware tree | Not public | [**I**](#evidence-codes) | [Software](#software) |
+| USB-C PD signalling | No fitting peripheral documented | [**I**](#evidence-codes) | [`yt9215-usb-pd.md`](yt9215-usb-pd.md) |
 
 ## Identity
 
@@ -56,8 +58,8 @@ Statements that rest on a source are marked with one of these evidence codes:
   instruction set is configurable up to RV32IEMACB, its local instruction and data SRAM
   and its I-cache are configurable, and it uses the Nuclei ECLIC interrupt controller.
   These series facts are from general knowledge of the Nuclei product line, with no
-  source cited [**I**](#evidence-codes). Which options Motorcomm configured is unknown, so RV32IMAC is
-  an assumption [**I**](#evidence-codes).
+  source cited [**I**](#evidence-codes). Which options Motorcomm configured is not published. The vendor SDK compiles
+  for RV32EC ([Software](#software)).
 - The same N205 ("Bumblebee") core in the GD32VF103 gives 153 DMIPS and 360 CoreMark at
   108 MHz, about 1.4 DMIPS/MHz and 3.3 CoreMark/MHz
   ([GigaDevice](https://www.gigadevice.com/about/news-and-event/news/gigadevice-unveils-the-gd32v-series-with-risc-v-core))
@@ -125,7 +127,7 @@ The memory map is not published.
   strap [**V**](#evidence-codes). The pins of each variant are in
   [`motorcomm-debug-pins.md`](motorcomm-debug-pins.md#headline-findings).
 - The image format, the size limit of an image, and any checksum or signature are not
-  published. No firmware dump of a YT9215 product was found.
+  published. No firmware dump of a YT9215 product is public.
 
 ## Peripherals
 
@@ -185,24 +187,42 @@ gives these facts [**V**](#evidence-codes):
 
 From outside, the register space is reached over MDIO, I²C or SPI. The
 [register guide and its bindings](yt9215-registers/README.md) describe that access from
-an external host. How the CPU itself reaches the registers and port 10 is not published,
-so how much of the guide carries over to firmware on the CPU is unknown.
+an external host. On the CPU the vendor SDK reads and writes the same register addresses as plain memory
+([Software](#software)), so the register descriptions of the guide carry over to firmware
+on the CPU [**I**](#evidence-codes).
 
 ## Software
 
-- A [vendor SDK](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e)
-  for driving the switch from an external host is public, and the
-  [register guide](yt9215-registers/README.md) draws on it [**V**](#evidence-codes).
-  Whether it holds any code for the internal CPU has not been checked.
-- No Motorcomm SDK or programming guide for firmware on the CPU was found in searches
-  [**I**](#evidence-codes).
-- No public firmware, OpenOCD configuration or boot-ROM dump was found. Searches covered
-  English and Chinese terms.
+The public [vendor SDK](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e)
+is the switch library that the [register guide](yt9215-registers/README.md) draws on. It
+has a build configuration for the internal CPU, selected by the option `INTER_MCU`
+[**V**](#evidence-codes):
+
+| Item | Value | SDK file |
+| --- | --- | --- |
+| Compiler | `riscv-nuclei-elf-gcc` | [`config/freeRTOS/.config`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/config/freeRTOS/.config) |
+| Instruction set | `-march=rv32ec` | [`make/make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
+| ABI | `-mabi=ilp32e` | [`make/make.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/make.cfg#L29) |
+| Operating system | FreeRTOS | [`make/env/freert.cfg`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/make/env/freert.cfg) |
+| Register access | Memory read and write at the register address | [`mem.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/drv/sw_ctrl/mem/mem.c) |
+| Frame transmit | `eth_tx_by_portlist()` | [`fal_tiger_nic.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_nic.c) |
+| Frame receive | `eth_rx_register()` | [`fal_tiger_nic.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_nic.c) |
+| CPU port | 10 | [`bprofile_YT9215SC_default_demo.c`](https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/common/boardprofile/bprofile_YT9215SC_default_demo.c#L50) |
+
+- RV32EC has 16 registers and no multiply instruction. The core may have more than the
+  vendor build uses [**I**](#evidence-codes).
+- The SDK build adds include paths into a firmware tree named `switch_sw_lite_mgmt`,
+  with folders for FreeRTOS and for `SoC/yt921x` support code [**V**](#evidence-codes).
+  That tree is the likely home of the Ethernet driver behind `eth_tx_by_portlist()`, the
+  timers, the GPIO registers, the interrupt numbers and the boot image format
+  [**I**](#evidence-codes). It is not public.
+- No firmware image, OpenOCD configuration or boot-ROM dump is public.
 - A FreeBSD port of the switch driver exists
   ([if_yt921x_freebsd](https://github.com/am910021/if_yt921x_freebsd))
   [**V**](#evidence-codes).
-- The toolchain would be upstream `riscv*-gcc -march=rv32imac` or the Nuclei SDK, with
-  OpenOCD as the debugger [**I**](#evidence-codes).
+- A toolchain for new firmware would be `riscv-nuclei-elf-gcc` or upstream `riscv*-gcc`
+  with `-march=rv32ec -mabi=ilp32e`, with OpenOCD as the debugger
+  [**I**](#evidence-codes).
 
 ## Unknowns
 
@@ -211,8 +231,8 @@ so how much of the guide carries over to firmware on the CPU is unknown.
 - Boot ROM behaviour.
 - Boot image format.
 - Whether JTAG reaches the CPU.
-- How the CPU reaches the switch registers.
-- How the CPU sends and receives frames on port 10.
+- The driver behind the frame transmit and receive functions.
+- Timers, GPIO registers and interrupt numbers.
 
 ## Sources
 

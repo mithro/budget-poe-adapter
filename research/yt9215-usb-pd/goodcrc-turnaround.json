@@ -1,0 +1,35 @@
+{
+ "signal": [
+  {
+   "name": "sink drives CC",
+   "wave": "=....=.z...........",
+   "data": [
+    "Request",
+    "EOP"
+   ]
+  },
+  {
+   "name": "source drives CC",
+   "wave": "z..........=...=...",
+   "data": [
+    "preamble",
+    "GoodCRC"
+   ]
+  },
+  {
+   "name": "time after EOP",
+   "wave": "x......=.=.....x...",
+   "data": [
+    "0 to 25 µs",
+    "GoodCRC starts by 195 µs"
+   ]
+  },
+  {
+   "name": "GoodCRC may start",
+   "wave": "0........1.....0..."
+  }
+ ],
+ "head": {
+  "text": "After a message ends, the receiver must begin its GoodCRC between 25 and 195 µs later"
+ }
+}

@@ -8,6 +8,8 @@ Needs clang and ld.lld (LLVM 18 or newer) on the PATH.
 """
 
 import os
+import random
+import statistics
 import subprocess
 import sys
 import tempfile
@@ -35,10 +37,12 @@ def build(tmp):
     subprocess.run(common + ["-march=rv32e", "-O2", "-o", obj], check=True)
     subprocess.run(["ld.lld", "--no-warnings", "-e", "pd_tx", "-T", os.path.join(HERE, "link.ld"),
                     obj, "-o", elf], check=True)
-    subprocess.run(common + ["-march=rv32ec", "-Os", "-o", small], check=True)
-    size = subprocess.run(["llvm-size", small], check=True, capture_output=True, text=True)
-    text, data, bss = (int(v) for v in size.stdout.splitlines()[1].split()[:3])
-    return Elf(elf), (text, data, bss)
+    sizes = []
+    for level in ("-Os", "-O2"):
+        subprocess.run(common + ["-march=rv32ec", level, "-o", small], check=True)
+        size = subprocess.run(["llvm-size", small], check=True, capture_output=True, text=True)
+        sizes.append([level] + [int(v) for v in size.stdout.splitlines()[1].split()[:3]])
+    return Elf(elf), sizes
 
 
 # -- reference USB-PD line coding ---------------------------------------------
@@ -63,9 +67,12 @@ def bmc_edges(bits, bit_time, start):
         edges.append(start + i * bit_time)
         if bit:
             edges.append(start + (i + 0.5) * bit_time)
-    if len(edges) % 2:  # ends high: hold, then go low
-        edges.append(start + (len(bits) + 0.5) * bit_time)
+    end = start + len(bits) * bit_time
+    edges.append(end)  # trailing edge at the end of the last bit
+    if len(edges) % 2:  # that edge went high: hold one bit time, then go low
+        edges.append(end + bit_time)
     return edges
+
 
 
 def decode_edges(edges, bit_time):
@@ -95,6 +102,8 @@ def decode_edges(edges, bit_time):
         if symbol not in ENC:
             return None
         nibbles.append(ENC.index(symbol))
+    else:
+        return None  # no EOP
     return bytes(nibbles[i] | (nibbles[i + 1] << 4) for i in range(0, len(nibbles) - 1, 2))
 
 
@@ -128,6 +137,23 @@ def halves(clock_hz):
 
 REQUEST = bytes([0x82, 0x10, 0x2C, 0xB1, 0x04, 0x13])  # Request, one data object
 LONGEST = bytes([0x61, 0x71]) + bytes(range(28))        # header and seven data objects
+_rng = random.Random(9215)
+# Messages for the receive test: the two above and four random ones of other lengths.
+RX_MESSAGES = [REQUEST, LONGEST] + [bytes(_rng.randrange(256) for _ in range(n)) for n in (2, 10, 14, 22)]
+
+
+def tx_edges(cpu, clock):
+    """Edge times of what the code wrote to the GPIO output."""
+    edges, level = [], 0
+    for cycle, value in cpu.gpio_writes:
+        if value != level:
+            edges.append(cycle / clock)
+            level = value
+    return edges
+
+
+def with_crc(message):
+    return message + zlib.crc32(message).to_bytes(4, "little")
 
 
 def lldpdu():
@@ -139,7 +165,7 @@ def lldpdu():
     out += tlv(7, b"\x00\x14\x00\x04") + tlv(8, b"\x05\x01\xc0\x00\x02\x01\x02\x00\x00\x00\x01\x00")
     out += tlv(127, b"\x00\x80\xc2\x01\x00\x01")
     out += tlv(127, b"\x00\x12\x0f\x01\x03\x6c\x00\x00\x1e")
-    out += tlv(127, b"\x00\x12\x0f\x02\x0f\x01\x04\x53\x00\xff\x00\xff")
+    out += tlv(127, b"\x00\x12\x0f\x02\x0f\x01\x04\x13\x00\xff\x00\xff")
     out += tlv(127, b"\x00\x12\x0f\x04\x05\xf2")
     return out + tlv(0, b"")
 
@@ -155,10 +181,10 @@ def table(header, rows):
 def run():
     out = []
     with tempfile.TemporaryDirectory() as tmp:
-        elf, (text, data, bss) = build(tmp)
+        elf, sizes = build(tmp)
 
-    out.append("Code size, RV32EC, clang -Os")
-    out.append(table(["section", "bytes"], [["text and constants", text], ["data", data], ["bss", bss]]))
+    out.append("Code size as RV32EC, in bytes (the timed build is RV32E at -O2)")
+    out.append(table(["optimisation", "code and constants", "initialised data", "zeroed data"], sizes))
 
     # 1. Routines whose cost does not depend on the clock.
     rows = []
@@ -186,7 +212,7 @@ def run():
         du = lldpdu()
         cpu, r = measure(elf, model, "lldp_parse", SCRATCH, len(du), SCRATCH + 0x400, setup=lambda c: put(c, du))
         found = cpu.read_bytes(SCRATCH + 0x400, 6)
-        assert r == 0 and found == bytes([1, 0x53, 0xFF, 0x00, 0xFF, 0x00]), found
+        assert r == 0 and found == bytes([1, 0x13, 0xFF, 0x00, 0xFF, 0x00]), found
         rows.append(["Parse LLDPDU of %d bytes" % len(du), model, cpu.instructions, cpu.cycles])
 
         cpu, n = measure(elf, model, "lldp_build", SCRATCH + 0x100, SCRATCH, 255,
@@ -196,7 +222,7 @@ def run():
         cpu2 = Cpu(elf, model)
         cpu2.write_bytes(SCRATCH, frame[14:])
         assert cpu2.call("lldp_parse", SCRATCH, n - 14, SCRATCH + 0x400) == 0
-        assert cpu2.read_bytes(SCRATCH + 0x400, 6) == bytes([1, 0x51, 0xFF, 0x00, 0xFF, 0x00])
+        assert cpu2.read_bytes(SCRATCH + 0x400, 6) == bytes([1, 0x53, 0xFF, 0x00, 0xFF, 0x00])
         rows.append(["Build LLDP frame of %d bytes" % n, model, cpu.instructions, cpu.cycles])
 
         cpu, r = measure(elf, model, "soft_mul", 0x12345, 0xFFFFFFFF)
@@ -205,50 +231,55 @@ def run():
     out.append("\nRoutines")
     out.append(table(["routine", "model", "instructions", "cycles"], rows))
 
-    # 2. Transmit a GoodCRC and check the waveform.
+    # 2. Transmit each of the eight GoodCRC messages and check the waveform.
     rows = []
     for model in MODELS:
         for mhz in CLOCKS_MHZ:
             clock = mhz * 1e6
             h0, h1 = halves(clock)
-            cpu = Cpu(elf, model)
-            cpu.write_bytes(SCRATCH, bytes([0xA1, 0x03]))
-            cpu.call("pd_encode", SCRATCH + 0x100, SCRATCH, 2)
-            cpu.cycles = 0
-            cpu.call("pd_tx", SCRATCH + 0x100, 500, h0, h1)
-            edges, level = [], 0
-            for cycle, value in cpu.gpio_writes:
-                if value != level:
-                    edges.append(cycle / clock)
-                    level = value
             bit_time = (h0 + h1) / clock
-            ok = decode_edges(edges, bit_time) == bytes([0xA1, 0x03]) + zlib.crc32(bytes([0xA1, 0x03])).to_bytes(4, "little")
-            ideal = bmc_edges(pd_bits(bytes([0xA1, 0x03])), bit_time, edges[0])
-            error = max(abs(a - b) for a, b in zip(edges, ideal)) * 1e9 if len(edges) == len(ideal) else float("nan")
-            rows.append([mhz, model, h0 + h1, "%.1f" % (1e-3 / bit_time), "%.0f" % error, "yes" if ok else "NO"])
-    out.append("\nTransmit GoodCRC by GPIO writes timed against mcycle")
-    out.append(table(["clock MHz", "model", "cycles per bit", "kbit/s", "worst edge error ns", "decodes"], rows))
+            error, good = 0.0, 0
+            for message_id in range(8):
+                ack = bytes([0xA1, 0x01 | (message_id << 1)])
+                cpu = Cpu(elf, model)
+                cpu.write_bytes(SCRATCH, ack)
+                cpu.call("pd_encode", SCRATCH + 0x100, SCRATCH, 2)
+                cpu.cycles = 0
+                cpu.call("pd_tx", SCRATCH + 0x100, 500, h0, h1)
+                edges = tx_edges(cpu, clock)
+                ideal = bmc_edges(pd_bits(ack), bit_time, edges[0])
+                if len(edges) == len(ideal) and decode_edges(edges, bit_time) == with_crc(ack):
+                    good += 1
+                    error = max(error, max(abs(a - b) for a, b in zip(edges, ideal)) * 1e9)
+            rows.append([mhz, model, h0 + h1, "%.1f" % (1e-3 / bit_time), "%.0f" % error, "%d of 8" % good])
+    out.append("\nTransmit the eight GoodCRC messages by GPIO writes timed against mcycle")
+    out.append(table(["clock MHz", "model", "cycles per bit", "kbit/s", "worst edge error ns", "decode"], rows))
 
-    # 3. Receive a Request by polling, at the three bit rates.
+    # 3. Receive six messages by polling, at the three bit rates.
     rows = []
     for model in MODELS:
         for mhz in CLOCKS_MHZ:
             clock = mhz * 1e6
-            results, poll, busy = [], 0, 0
+            results, gaps = [], []
             for rate in BIT_RATES:
-                wave = Wave(bmc_edges(pd_bits(REQUEST), 1 / rate, 20e-6), clock)
-                cpu = Cpu(elf, model)
-                cpu.gpio_in = wave
-                r = cpu.call("pd_rx_poll", SCRATCH, round(0.75 * clock / 300e3), round(200e-6 * clock))
-                data = cpu.read_bytes(SCRATCH + 8, 10)
-                good = r == 0 and data == REQUEST + zlib.crc32(REQUEST).to_bytes(4, "little")
-                results.append("ok" if good else "FAIL %d" % r)
-                gaps = [b - a for a, b in zip(cpu.gpio_reads, cpu.gpio_reads[1:])]
-                poll, busy = min(gaps), max(busy, max(gaps))
-            rows.append([mhz, model, poll, "%.2f" % (poll / mhz), busy, "%.2f" % (busy / mhz)] + results)
-    out.append("\nReceive a Request by polling")
-    out.append(table(["clock MHz", "model", "poll cycles", "poll us", "longest gap cycles", "longest gap us",
-                      "270k", "300k", "330k"], rows))
+                good = 0
+                for message in RX_MESSAGES:
+                    cpu = Cpu(elf, model)
+                    cpu.gpio_in = Wave(bmc_edges(pd_bits(message), 1 / rate, 20e-6), clock)
+                    r = cpu.call("pd_rx_poll", SCRATCH, round(0.75 * clock / 300e3), round(200e-6 * clock))
+                    data = cpu.read_bytes(SCRATCH + 8, len(message) + 4)
+                    if r == 0 and data == with_crc(message):
+                        good += 1
+                        gaps += [b - a for a, b in zip(cpu.gpio_reads, cpu.gpio_reads[1:])]
+                results.append("%d of %d" % (good, len(RX_MESSAGES)))
+            if gaps:
+                poll, busy = statistics.mode(gaps), max(gaps)
+                rows.append([mhz, model, poll, "%.2f" % (poll / mhz), busy, "%.2f" % (busy / mhz)] + results)
+            else:
+                rows.append([mhz, model, "-", "-", "-", "-"] + results)
+    out.append("\nReceive six messages by polling (poll and gap figures are from the messages that decoded)")
+    out.append(table(["clock MHz", "model", "usual poll cycles", "usual poll us", "longest gap cycles",
+                      "longest gap us", "270k", "300k", "330k"], rows))
 
     # 4. Receive and answer with GoodCRC.
     rows = []
@@ -258,6 +289,7 @@ def run():
             h0, h1 = halves(clock)
             for label, message in (("Request", REQUEST), ("longest", LONGEST)):
                 in_edges = bmc_edges(pd_bits(message), 1 / 300e3, 20e-6)
+                end = 20e-6 + len(pd_bits(message)) / 300e3  # end of the last bit
                 cpu = Cpu(elf, model)
                 cpu.gpio_in = Wave(in_edges, clock)
                 marks = {}
@@ -267,19 +299,14 @@ def run():
                 if r:
                     rows.append([mhz, model, label, "receive failed", "-", "-"])
                     continue
-                end = in_edges[-1]
-                edges, level = [], 0
-                for cycle, value in cpu.gpio_writes:
-                    if value != level:
-                        edges.append(cycle / clock)
-                        level = value
+                edges = tx_edges(cpu, clock)
                 ack = bytes([0xA1, 0x01 | (((message[1] >> 1) & 7) << 1)])
-                ok = decode_edges(edges, (h0 + h1) / clock) == ack + zlib.crc32(ack).to_bytes(4, "little")
+                ok = decode_edges(edges, (h0 + h1) / clock) == with_crc(ack)
                 ready = (marks["ready"] / clock - end) * 1e6
                 first = (edges[0] - end) * 1e6
                 verdict = "yes" if ok and 25 <= first <= 195 else "NO"
                 rows.append([mhz, model, label, "%.1f" % ready, "%.1f" % first, verdict])
-    out.append("\nGoodCRC turnaround after the last edge of a received message")
+    out.append("\nGoodCRC turnaround after the end of the last bit of a received message")
     out.append(table(["clock MHz", "model", "message", "reply ready us", "reply starts us", "within 25 to 195 us"], rows))
     return "\n".join(out) + "\n"
 

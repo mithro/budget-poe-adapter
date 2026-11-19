@@ -1,9 +1,8 @@
-Code size, RV32EC, clang -Os
-section             bytes
-------------------  -----
-text and constants  1886
-data                0
-bss                 112
+Code size as RV32EC, in bytes (the timed build is RV32E at -O2)
+optimisation  code and constants  initialised data  zeroed data
+------------  ------------------  ----------------  -----------
+-Os           1896                0                 112
+-O2           2308                0                 112
 
 Routines
 routine                       model  instructions  cycles
@@ -25,61 +24,61 @@ Parse LLDPDU of 249 bytes     slow   226           294
 Build LLDP frame of 60 bytes  slow   101           118
 32-bit multiply, worst case   slow   228           292
 
-Transmit GoodCRC by GPIO writes timed against mcycle
-clock MHz  model  cycles per bit  kbit/s  worst edge error ns  decodes
----------  -----  --------------  ------  -------------------  -------
-12.5       fast   42              297.6   240                  yes
-15.625     fast   52              300.5   192                  yes
-20.833     fast   69              301.9   120                  yes
-25         fast   83              301.2   80                   yes
-31.25      fast   104             300.5   96                   yes
-41.667     fast   139             299.8   48                   yes
-62.5       fast   208             300.5   48                   yes
-125        fast   417             299.8   20                   yes
-12.5       slow   42              297.6   480                  yes
-15.625     slow   52              300.5   384                  yes
-20.833     slow   69              301.9   312                  yes
-25         slow   83              301.2   260                  yes
-31.25      slow   104             300.5   192                  yes
-41.667     slow   139             299.8   156                  yes
-62.5       slow   208             300.5   96                   yes
-125        slow   417             299.8   52                   yes
+Transmit the eight GoodCRC messages by GPIO writes timed against mcycle
+clock MHz  model  cycles per bit  kbit/s  worst edge error ns  decode
+---------  -----  --------------  ------  -------------------  ------
+12.5       fast   42              297.6   320                  8 of 8
+15.625     fast   52              300.5   256                  8 of 8
+20.833     fast   69              301.9   144                  8 of 8
+25         fast   83              301.2   120                  8 of 8
+31.25      fast   104             300.5   128                  8 of 8
+41.667     fast   139             299.8   72                   8 of 8
+62.5       fast   208             300.5   64                   8 of 8
+125        fast   417             299.8   24                   8 of 8
+12.5       slow   42              297.6   480                  8 of 8
+15.625     slow   52              300.5   384                  8 of 8
+20.833     slow   69              301.9   312                  8 of 8
+25         slow   83              301.2   260                  8 of 8
+31.25      slow   104             300.5   192                  8 of 8
+41.667     slow   139             299.8   156                  8 of 8
+62.5       slow   208             300.5   96                   8 of 8
+125        slow   417             299.8   52                   8 of 8
 
-Receive a Request by polling
-clock MHz  model  poll cycles  poll us  longest gap cycles  longest gap us  270k    300k    330k
----------  -----  -----------  -------  ------------------  --------------  ------  ------  ------
-12.5       fast   7            0.56     51                  4.08            FAIL 2  FAIL 2  FAIL 2
-15.625     fast   7            0.45     51                  3.26            FAIL 2  FAIL 2  FAIL 2
-20.833     fast   7            0.34     51                  2.45            ok      ok      ok
-25         fast   7            0.28     51                  2.04            ok      ok      ok
-31.25      fast   7            0.22     51                  1.63            ok      ok      ok
-41.667     fast   7            0.17     51                  1.22            ok      ok      ok
-62.5       fast   7            0.11     51                  0.82            ok      ok      ok
-125        fast   7            0.06     51                  0.41            ok      ok      ok
-12.5       slow   11           0.88     35                  2.80            FAIL 1  FAIL 1  FAIL 1
-15.625     slow   10           0.64     61                  3.90            FAIL 2  FAIL 2  FAIL 2
-20.833     slow   10           0.48     64                  3.07            FAIL 2  FAIL 2  FAIL 2
-25         slow   10           0.40     64                  2.56            FAIL 2  FAIL 2  FAIL 2
-31.25      slow   10           0.32     64                  2.05            ok      ok      ok
-41.667     slow   10           0.24     64                  1.54            ok      ok      ok
-62.5       slow   10           0.16     64                  1.02            ok      ok      ok
-125        slow   10           0.08     64                  0.51            ok      ok      ok
+Receive six messages by polling (poll and gap figures are from the messages that decoded)
+clock MHz  model  usual poll cycles  usual poll us  longest gap cycles  longest gap us  270k    300k    330k
+---------  -----  -----------------  -------------  ------------------  --------------  ------  ------  ------
+12.5       fast   -                  -              -                   -               0 of 6  0 of 6  0 of 6
+15.625     fast   -                  -              -                   -               0 of 6  0 of 6  0 of 6
+20.833     fast   8                  0.38           51                  2.45            6 of 6  6 of 6  6 of 6
+25         fast   8                  0.32           51                  2.04            6 of 6  6 of 6  6 of 6
+31.25      fast   8                  0.26           51                  1.63            6 of 6  6 of 6  6 of 6
+41.667     fast   8                  0.19           51                  1.22            6 of 6  6 of 6  6 of 6
+62.5       fast   8                  0.13           51                  0.82            6 of 6  6 of 6  6 of 6
+125        fast   8                  0.06           51                  0.41            6 of 6  6 of 6  6 of 6
+12.5       slow   -                  -              -                   -               0 of 6  0 of 6  0 of 6
+15.625     slow   -                  -              -                   -               0 of 6  0 of 6  0 of 6
+20.833     slow   -                  -              -                   -               0 of 6  0 of 6  0 of 6
+25         slow   -                  -              -                   -               0 of 6  0 of 6  0 of 6
+31.25      slow   11                 0.35           64                  2.05            6 of 6  6 of 6  6 of 6
+41.667     slow   11                 0.26           64                  1.54            6 of 6  6 of 6  6 of 6
+62.5       slow   11                 0.18           64                  1.02            6 of 6  6 of 6  6 of 6
+125        slow   11                 0.09           64                  0.51            6 of 6  6 of 6  6 of 6
 
-GoodCRC turnaround after the last edge of a received message
+GoodCRC turnaround after the end of the last bit of a received message
 clock MHz  model  message  reply ready us  reply starts us  within 25 to 195 us
 ---------  -----  -------  --------------  ---------------  -------------------
 12.5       fast   Request  receive failed  -                -
 12.5       fast   longest  receive failed  -                -
 15.625     fast   Request  receive failed  -                -
 15.625     fast   longest  receive failed  -                -
-20.833     fast   Request  96.6            97.6             yes
-20.833     fast   longest  117.1           118.1            yes
-25         fast   Request  80.3            81.1             yes
-25         fast   longest  97.7            98.5             yes
-31.25      fast   Request  64.3            65.0             yes
-31.25      fast   longest  78.1            78.7             yes
-41.667     fast   Request  48.2            48.7             yes
-41.667     fast   longest  58.7            59.2             yes
+20.833     fast   Request  96.3            97.3             yes
+20.833     fast   longest  117.2           118.2            yes
+25         fast   Request  80.4            81.2             yes
+25         fast   longest  97.7            98.6             yes
+31.25      fast   Request  64.4            65.1             yes
+31.25      fast   longest  78.2            78.9             yes
+41.667     fast   Request  48.3            48.8             yes
+41.667     fast   longest  58.6            59.1             yes
 62.5       fast   Request  32.2            32.5             yes
 62.5       fast   longest  39.1            39.4             yes
 125        fast   Request  16.1            25.1             yes
@@ -92,11 +91,11 @@ clock MHz  model  message  reply ready us  reply starts us  within 25 to 195 us
 20.833     slow   longest  receive failed  -                -
 25         slow   Request  receive failed  -                -
 25         slow   longest  receive failed  -                -
-31.25      slow   Request  76.3            77.1             yes
-31.25      slow   longest  93.3            94.2             yes
-41.667     slow   Request  57.4            58.0             yes
-41.667     slow   longest  70.1            70.7             yes
-62.5       slow   Request  38.1            38.6             yes
-62.5       slow   longest  46.6            47.0             yes
-125        slow   Request  19.1            25.1             yes
+31.25      slow   Request  76.5            77.4             yes
+31.25      slow   longest  93.2            94.1             yes
+41.667     slow   Request  57.4            58.1             yes
+41.667     slow   longest  69.9            70.5             yes
+62.5       slow   Request  38.2            38.6             yes
+62.5       slow   longest  46.7            47.1             yes
+125        slow   Request  19.1            25.2             yes
 125        slow   longest  23.4            25.2             yes

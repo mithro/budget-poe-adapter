@@ -110,7 +110,7 @@ static inline void wait_until(uint32_t t)
 /*
  * Send a line-coded message. half0 and half1 are the lengths of the two halves
  * of a bit in CPU cycles; they differ by one when the bit time is odd.
- * Interrupts are assumed off. Returns the cycle count of the last edge.
+ * Interrupts are assumed off. Returns the cycle count of the final falling edge.
  */
 __attribute__((noinline))
 uint32_t pd_tx(const struct bitbuf *b, uint32_t t, uint32_t half0, uint32_t half1)
@@ -131,9 +131,14 @@ uint32_t pd_tx(const struct bitbuf *b, uint32_t t, uint32_t half0, uint32_t half
 		}
 		t += half1;
 	}
+	/*
+	 * Trailing edge at the end of the last bit. A line that is high goes
+	 * low. A line that is low goes high for one bit time and then low.
+	 */
 	wait_until(t);
-	if (level) { /* end low: one more half bit high, then low */
-		t += half0;
+	if (!level) {
+		GPIO_OUT = 1;
+		t += half0 + half1;
 		wait_until(t);
 	}
 	GPIO_OUT = 0;
@@ -350,7 +355,7 @@ uint32_t lldp_build(uint8_t *frame, const uint8_t *mac, uint32_t request)
 	v[4] = 0x00; /* MDI power support: a PD */
 	v[5] = 1;    /* PSE power pair */
 	v[6] = 0;    /* power class */
-	v[7] = 0x51; /* type 2 PD, source PSE, priority low */
+	v[7] = 0x53; /* type 2 PD, source PSE, priority low */
 	v[8] = (uint8_t)(request >> 8);
 	v[9] = (uint8_t)request;
 	v[10] = v[8];

@@ -294,8 +294,10 @@ deliberately stop to power-cycle the Pi from the switch.
 
 Optional for every class. Used to fine-tune allocation after power-up. The adapter's
 switch IC terminates the link from the PSE, so LLDP would have to come from the adapter's
-firmware. Whether the YT9215 CPU can send a frame is an open question in
-[The RISC-V CPU inside the YT9215](yt9215-embedded-cpu.md#packet-path). The adapter does
+firmware. The vendor SDK has calls for firmware on the YT9215 CPU to receive and send
+frames, described in
+[The RISC-V CPU inside the YT9215](yt9215-embedded-cpu.md#packet-path). The driver
+behind those calls is not public. The adapter does
 not need LLDP: physical classification alone gets up to Class 8.
 
 ---

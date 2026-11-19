@@ -79,7 +79,7 @@ Notes on the rows of this table:
 
 **PD power rules (SPR source profiles):** a source rated at P watts must offer every lower standard voltage. ≤15 W offers 5 V; 15 to 27 W also offers 9 V; 27 to 45 W also offers 15 V; >45 W also offers 20 V. A **5 V-only 25 W source is not a "PD Power Rule" compliant 27 W supply** (a compliant 27 W source must also offer 9 V at 3 A). The Pi official PSU offers 5.1 V at 5 A plus 9, 12 and 15 V at lower current (verify exact PDO list). This matters only for certification, not function.
 
-**USB data:** if the adapter also carries data to the device over USB (for example Ethernet via a USB NIC), D+ and D- are used for data, so the DCP short is not an option. You would advertise CDP behaviour or rely on Type-C Rp and PD only. For a Pi 5, Type-C Rp + PD is all that matters.
+**Data over USB:** if the adapter also carries data to the device over USB (for example Ethernet via a USB NIC), D+ and D- are used for data, so the DCP short is not an option. You would advertise CDP behaviour or rely on Type-C Rp and PD only. For a Pi 5, Type-C Rp + PD is all that matters.
 
 ---
 

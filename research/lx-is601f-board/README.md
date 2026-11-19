@@ -1,12 +1,12 @@
 # LX-IS601F V2.0 switch board
 
-Photos of two bought 5-port switch boards (silkscreen `LX-IS601F V2.0`) and annotated
+Photos of two bought switch boards with five copper ports and one SFP port (silkscreen `LX-IS601F V2.0`) and annotated
 images showing where the UART, SPI flash and JTAG pins of its switch IC come out
 and where its strap resistors sit.
 
 The switch IC, [U4](../motorcomm-debug-pins.md#lx-u4), is a **YT9215SCH**. Its pinout differs from that of the YT9215S on the
 open-hardware board mirrored at
-[mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0).
+[the wu-kou board repository](https://github.com/mithro/wu-kou-qian-zhao-jiao-huan-ji-_yt9215s_v2_0).
 The pin tables of both parts, and the route of each debug pin on this board, are in
 [`../motorcomm-debug-pins.md`](../motorcomm-debug-pins.md#lx-is601f-v20-boards).
 

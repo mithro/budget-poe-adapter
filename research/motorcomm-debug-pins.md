@@ -314,7 +314,7 @@ A first bench experiment on the mirrored board needs no new PCB:
 
 ## LX-IS601F V2.0 boards
 
-Two bought 5-port switch boards with the silkscreen `LX-IS601F V2.0` were photographed. This section records where the debug pins of their switch IC go on the top copper layer. The photos, the annotation script and the method are in the [board notes](lx-is601f-board/README.md).
+Two bought switch boards with five copper ports and one SFP port and the silkscreen `LX-IS601F V2.0` were photographed. This section records where the debug pins of their switch IC go on the top copper layer. The photos, the annotation script and the method are in the [board notes](lx-is601f-board/README.md).
 
 ### The switch IC is a YT9215SCH
 

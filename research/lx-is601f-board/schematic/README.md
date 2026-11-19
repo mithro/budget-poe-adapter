@@ -182,7 +182,7 @@ Buses, and the links between sheet symbols on the root sheet, are drawn grey and
 
 ## What the board is
 
-A 6-port managed-capable switch with 4-port PoE output (PSE), not a PoE-powered device:
+A managed-capable switch with five copper ports and one SFP port, with 4-port PoE output (PSE), not a PoE-powered device:
 
 - **U4** Motorcomm **YT9215SCH** (LQFP-128 with EPAD). Two boards seen: `VKTP18287 3200111C 3AU2612M0` and `VKJC09324 2500211C 3AW4849M0`. One board has a heatsink on top. A tinned pad with a solder blob on the bottom side is probably under the EPAD.
 - **5 copper ports**: J1 is a 1×4 RJ45 block (ports 1–4, PoE). J3 is a single RJ45 uplink (no PoE) on the opposite edge. Each port has a United-tek **G2401PR** single-port GbE transformer (DXFRM2–6; there is no DXFRM1 part, only its silkscreen).

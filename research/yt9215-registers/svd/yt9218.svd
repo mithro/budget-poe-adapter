@@ -48,7 +48,7 @@
           <fields>
             <field>
               <name>OP</name>
-              <description>Direction. The comment on the field reads "wild guess".</description>
+              <description>Direction. The comment on the field reads "wild guess", so the width of the field is inferred.</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
@@ -67,7 +67,7 @@
             </field>
             <field>
               <name>TYPE</name>
-              <description>Frame format. The comment on the field reads "wild guess".</description>
+              <description>Frame format. The comment on the field reads "wild guess", so the width of the field is inferred.</description>
               <bitOffset>8</bitOffset>
               <bitWidth>4</bitWidth>
               <access>read-write</access>
@@ -2462,7 +2462,7 @@
           <fields>
             <field>
               <name>OP</name>
-              <description>Direction. The comment on the field reads "wild guess".</description>
+              <description>Direction. The comment on the field reads "wild guess", so the width of the field is inferred.</description>
               <bitOffset>2</bitOffset>
               <bitWidth>2</bitWidth>
               <access>read-write</access>
@@ -2481,7 +2481,7 @@
             </field>
             <field>
               <name>TYPE</name>
-              <description>Frame format. The comment on the field reads "wild guess".</description>
+              <description>Frame format. The comment on the field reads "wild guess", so the width of the field is inferred.</description>
               <bitOffset>8</bitOffset>
               <bitWidth>4</bitWidth>
               <access>read-write</access>

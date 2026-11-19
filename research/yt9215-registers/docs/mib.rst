@@ -114,8 +114,9 @@ port is that of the function
 `fal_tiger_stat_mib_clear() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L52>`__
 of the :ref:`vendor SDK <sources-list>`, and the sequence for every port is that of
 `fal_tiger_stat_mib_clear_all() <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/blob/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk/core/fal/tiger/fal_tiger_stat.c#L69>`__.
-The fields of :reg:`MIB_CTRL` have the level :ev:`header`: :lx:`mib.h` defines them and no
-function of the :ref:`Linux driver <sources-list>` uses them.
+:lx:`mib.h` defines the fields of :reg:`MIB_CTRL` and no function of the
+:ref:`Linux driver <sources-list>` uses them, so their meanings are :ev:`inferred` from their
+names and from the two SDK functions.
 
 It is :ev:`not known` whether :field:`MIB_CTRL.CLEAN` clears itself, which is why the first write
 puts it back to 0. The function

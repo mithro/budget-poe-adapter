@@ -629,11 +629,11 @@ pub const EXT_MBUS_CTRL: u32 = 0x6a004;
 pub const EXT_MBUS_CTRL_PORT: Field = Field { lsb: 21, width: 5 };
 /// PHY register number from 0 to 31.
 pub const EXT_MBUS_CTRL_REG: Field = Field { lsb: 16, width: 5 };
-/// Frame format. The comment on the field reads "wild guess".
+/// Frame format. The comment on the field reads "wild guess", so the width of the field is inferred.
 pub const EXT_MBUS_CTRL_TYPE: Field = Field { lsb: 8, width: 4 };
 /// IEEE 802.3 clause 22 frame
 pub const EXT_MBUS_CTRL_TYPE_C22: u32 = 4;
-/// Direction. The comment on the field reads "wild guess".
+/// Direction. The comment on the field reads "wild guess", so the width of the field is inferred.
 pub const EXT_MBUS_CTRL_OP: Field = Field { lsb: 2, width: 2 };
 /// Write the register
 pub const EXT_MBUS_CTRL_OP_WRITE: u32 = 1;
@@ -661,11 +661,11 @@ pub const INT_MBUS_CTRL: u32 = 0xf0004;
 pub const INT_MBUS_CTRL_PORT: Field = Field { lsb: 21, width: 5 };
 /// PHY register number from 0 to 31.
 pub const INT_MBUS_CTRL_REG: Field = Field { lsb: 16, width: 5 };
-/// Frame format. The comment on the field reads "wild guess".
+/// Frame format. The comment on the field reads "wild guess", so the width of the field is inferred.
 pub const INT_MBUS_CTRL_TYPE: Field = Field { lsb: 8, width: 4 };
 /// IEEE 802.3 clause 22 frame
 pub const INT_MBUS_CTRL_TYPE_C22: u32 = 4;
-/// Direction. The comment on the field reads "wild guess".
+/// Direction. The comment on the field reads "wild guess", so the width of the field is inferred.
 pub const INT_MBUS_CTRL_OP: Field = Field { lsb: 2, width: 2 };
 /// Write the register
 pub const INT_MBUS_CTRL_OP_WRITE: u32 = 1;

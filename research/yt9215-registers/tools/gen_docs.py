@@ -757,7 +757,8 @@ def enums_page(m):
                  ".. _%s:\n\n%s" % (enum_val_label(e["name"], v["name"]), lit(v["name"])),
                  linux_name(m, v.get("linux")),
                  use_link(m, v.get("linux") or {}),
-                 ev_link("driver" if (v.get("linux") or {}).get("used") else
+                 ev_link("inferred" if v.get("inferred") else
+                         "driver" if (v.get("linux") or {}).get("used") else
                          "header" if v.get("linux") else "inferred"),
                  *short_cell(v.get("desc", ""), "note-enum-%s-%s" % (e["name"].lower(), v["name"].lower()),
                              notes, v["name"])] for v in e["values"]]
@@ -790,7 +791,8 @@ def counters_page(m, guide_refs):
         rows.append([lit("0x%02x" % c["offset"]), name, 32 * c["words"],
                      linux_name(m, c.get("linux")), c["desc"]])
     out += ["The Linux name of a counter is a link to its definition in :lx:`mib.h`. The column "
-            "\"Counts\" is read from that name, which is the evidence level :ev:`header`.", ""]
+            "\"Counts\" is :ev:`inferred` from that name and from the counter of the same name in "
+            "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ clause 30.", ""]
     out += table(["Offset", "Counter", "Bits", "Linux name", "Counts"], rows,
                  [8, 24, 6, 34, 28])
     return out

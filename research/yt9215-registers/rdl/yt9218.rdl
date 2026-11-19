@@ -30,8 +30,8 @@ addrmap yt9218 {
         };
         field { desc = "PHY address from 0 to 31. On the internal bus it equals the port number."; sw = rw; hw = r; } PORT[25:21];
         field { desc = "PHY register number from 0 to 31."; sw = rw; hw = r; } REG[20:16];
-        field { desc = "Frame format. The comment on the field reads \"wild guess\"."; sw = rw; hw = r; encode = ext_mbus_ctrl_type_e; } TYPE[11:8];
-        field { desc = "Direction. The comment on the field reads \"wild guess\"."; sw = rw; hw = r; encode = ext_mbus_ctrl_op_e; } OP[3:2];
+        field { desc = "Frame format. The comment on the field reads \"wild guess\", so the width of the field is inferred."; sw = rw; hw = r; encode = ext_mbus_ctrl_type_e; } TYPE[11:8];
+        field { desc = "Direction. The comment on the field reads \"wild guess\", so the width of the field is inferred."; sw = rw; hw = r; encode = ext_mbus_ctrl_op_e; } OP[3:2];
     } EXT_MBUS_CTRL @ 0x6A004;
 
     reg {
@@ -719,8 +719,8 @@ addrmap yt9218 {
         };
         field { desc = "PHY address from 0 to 31. On the internal bus it equals the port number."; sw = rw; hw = r; } PORT[25:21];
         field { desc = "PHY register number from 0 to 31."; sw = rw; hw = r; } REG[20:16];
-        field { desc = "Frame format. The comment on the field reads \"wild guess\"."; sw = rw; hw = r; encode = int_mbus_ctrl_type_e; } TYPE[11:8];
-        field { desc = "Direction. The comment on the field reads \"wild guess\"."; sw = rw; hw = r; encode = int_mbus_ctrl_op_e; } OP[3:2];
+        field { desc = "Frame format. The comment on the field reads \"wild guess\", so the width of the field is inferred."; sw = rw; hw = r; encode = int_mbus_ctrl_type_e; } TYPE[11:8];
+        field { desc = "Direction. The comment on the field reads \"wild guess\", so the width of the field is inferred."; sw = rw; hw = r; encode = int_mbus_ctrl_op_e; } OP[3:2];
     } INT_MBUS_CTRL @ 0xF0004;
 
     reg {

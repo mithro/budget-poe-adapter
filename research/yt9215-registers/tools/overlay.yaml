@@ -206,6 +206,7 @@ enums:
   app_selector:
     title: Priority sources
     desc: Index of a priority source in :reg:`PORT_PRIO_ORD`.
+    inferred: [MAC_SA, MAC_DA, VID, ACL]
     values:
       MAC_SA: Priority of the matching source address entry in the forwarding database
       MAC_DA: Priority of the matching destination address entry in the forwarding database
@@ -249,6 +250,7 @@ enums:
   l2_type:
     title: Layer 2 frame formats
     desc: "Frame encapsulation code matched by the :field:`L2_TYPE <ACL_KEY.MAC_DA1_SA1_L2_TYPE>` field of an ACL key."
+    inferred: [ETH]
     values: {ETH: "Other Ethernet framing. The meaning is :ev:`inferred` from the name.", ETHV2: Ethernet II, ETHSAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC", ETHSNAP: "`IEEE 802.3 <https://en.wikipedia.org/wiki/IEEE_802.3>`__ with LLC and SNAP"}
   l3_type:
     title: Layer 3 protocol classes
@@ -262,6 +264,39 @@ enums:
     title: User-defined field bases
     desc: Header that a user-defined field offset is counted from, in :field:`UDF_CTRL.UDF_TYPE`.
     values: {L2: Start of the Ethernet header, L3: Start of the layer 3 header, L4: Start of the layer 4 header}
+
+# Uses of a field or of the values of a list that the driver makes without the macro of the
+# field. Each entry is the file and line of the first such use; ``null`` states that no
+# function uses the field although a shared macro suggests it.
+enum_uses:
+  speed: [chip.c, 1696]
+uses:
+  FDB_IN1.STATUS: [chip.c, 480]
+  FDB_IN1.FID: [chip.c, 480]
+  FDB_IN1.ADDR_LO2: [chip.c, 480]
+  FDB_OUT1.ADDR_LO2: [chip.c, 559]
+  FDB_IN2.EGR_PORTS: [chip.c, 600]
+  INT_MBUS_CTRL.TYPE: null
+  ACL_KEY.MAC_ADDR0/ADDR: [tc.c, 729]
+  ACL_KEY.MAC_DA1: [tc.c, 752]
+  ACL_KEY.MAC_SA1: [tc.c, 752]
+  ACL_KEY.IPV4/ADDR: [tc.c, 618]
+  ACL_KEY.ADDR: [tc.c, 647]
+  ACL_KEY.DPORT: [tc.c, 680]
+  ACL_KEY.SPORT: [tc.c, 680]
+  ACL_KEY.UDF0: [tc.c, 1008]
+  ACL_KEY.UDF1: [tc.c, 1008]
+  ACL_KEY.ETHERTYPE: [tc.c, 804]
+  ACL_MASK.MAC_ADDR0/ADDR: [tc.c, 730]
+  ACL_MASK.MAC_DA1: [tc.c, 754]
+  ACL_MASK.MAC_SA1: [tc.c, 754]
+  ACL_MASK.IPV4/ADDR: [tc.c, 619]
+  ACL_MASK.ADDR: [tc.c, 648]
+  ACL_MASK.DPORT: [tc.c, 682]
+  ACL_MASK.SPORT: [tc.c, 682]
+  ACL_MASK.UDF0: [tc.c, 1009]
+  ACL_MASK.UDF1: [tc.c, 1009]
+  ACL_MASK.ETHERTYPE: [tc.c, 805]
 
 constants:
   SWITCHID_NUM: Number of switch IDs that can share one MDIO address
@@ -647,12 +682,10 @@ registers:
       PORT: {desc: "PHY address from 0 to 31. On the internal bus it equals the port number."}
       REG: {desc: "PHY register number from 0 to 31."}
       TYPE:
-        desc: "Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads \"wild guess\"."
-        inferred: true
+        desc: "Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads \"wild guess\", so the width of the field is :ev:`inferred`."
         values: {C22: "`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame"}
       OP:
-        desc: "Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads \"wild guess\"."
-        inferred: true
+        desc: "Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads \"wild guess\", so the width of the field is :ev:`inferred`."
         values: {WRITE: "Write the register", READ: "Read the register"}
   INT_MBUS_CTRL:
     block: mbus
@@ -665,7 +698,7 @@ registers:
     title: External MDIO master write data
     desc: Data for the next write transfer on the external MDIO master.
     add_fields: &mbusdata
-      DATA: {lsb: 0, width: 16, desc: "The 16-bit PHY register value.", inferred: false}
+      DATA: {lsb: 0, width: 16, desc: "The 16-bit PHY register value."}
   INT_MBUS_DOUT:
     block: mbus
     title: Internal MDIO master write data
@@ -718,7 +751,7 @@ registers:
       Start of the counter block of one port. Each counter sits at a fixed byte offset inside
       the block, listed in :ref:`Port counters <mib-counters>`.
     add_fields:
-      COUNT: {lsb: 0, width: 32, desc: "Counter value. For a 64-bit counter it is the low 32 bits.", inferred: false}
+      COUNT: {lsb: 0, width: 32, desc: "Counter value. For a 64-bit counter it is the low 32 bits."}
 
   LED_CTRL:
     block: led

@@ -209,7 +209,8 @@ There are :const:`METER_NUM` general meters. The two ranges of general meters fo
 widths of the two fields: :field:`ACL_ACT.METER_ID` has 6 bits and :field:`VLAN_CTRL.METER_ID`
 has 5. :lx:`yt921x_acl_add` :ev:`confirms <confirmed>` the attachment by an ACL
 rule and :lx:`yt921x_dsa_port_policer_add` that by :reg:`PORT_METER`. The attachment by a
-VLAN is a :ev:`header` definition.
+VLAN is :ev:`inferred` from the names of :field:`VLAN_CTRL.METER_EN` and
+:field:`VLAN_CTRL.METER_ID`, which no function uses.
 
 Three steps limit what a port may receive.
 
@@ -271,7 +272,8 @@ burst then acts as a second burst allowance.
 In byte mode a meter counts the frame bytes only, unless
 :field:`METER_CTRL.BYTE_MODE_INCLUDE_GAP` adds the per-frame overhead in
 :field:`PORT_RATE.GAP_VALUE`. The comment on the bit in :lx:`tc.h:290` reads "+GAP_VALUE bytes
-each packet"; the bit is a :ev:`header` definition.
+each packet", from which the meaning of the bit is :ev:`inferred`. No function of the
+:ref:`Linux driver <sources-list>` uses the bit.
 
 .. _rate-shaper:
 

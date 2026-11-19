@@ -201,11 +201,15 @@ def parse_enums(text, hdr):
 
 FUNCS = {}
 USES = {}
+OWNER = {}
 
 
-def enum_linux(member):
+def enum_linux(member, use=None):
     lx = dict(macro=member["cname"], src=member["src"])
     lx["used"] = first_use(lx, ())
+    if use and not lx["used"]:
+        lx["used"] = True
+        lx["use"] = Flow([use[0], OWNER[use[0]][use[1] - 1] or "", use[1]])
     return lx
 
 
@@ -221,6 +225,7 @@ def first_use(lx, funcs, *more):
     lx.pop("use", None)
     if not found:
         return False
+    found.sort(key=lambda u: (u[0], u[2]))
     near = [u for u in found if u[1] and u[1] in funcs]
     lx["use"] = Flow((near or found)[0])
     return True
@@ -255,6 +260,7 @@ def parse_linux(ldir, overlay):
                 cur = cand = None
         owner[fn] = own
     FUNCS.update(funcs)
+    OWNER.update(owner)
 
     def used(cname):
         """True when a driver source file (not a header) uses the macro."""
@@ -737,6 +743,26 @@ def main():
             allf[0]["linux"] = keep
             if not r.get("inferred"):
                 allf[0].pop("inferred", None)
+        # ---- uses that no macro shows, stated in the overlay
+        ou = overlay.get("uses", {})
+        lays = [(None, f) for f in r["fields"]] + \
+               [(l["name"], f) for l in r.get("layouts", []) for f in l["fields"]]
+        for lay, fld in lays:
+            keys = ["%s.%s/%s" % (r["id"], lay, fld["name"]), "%s.%s" % (r["id"], fld["name"])]
+            key = next((k for k in keys if k in ou), None)
+            if key is None:
+                continue
+            u, lx = ou[key], fld.get("linux")
+            if u is None:
+                if lx:
+                    lx["used"] = False
+                    lx.pop("use", None)
+                continue
+            if not lx:
+                lx = fld["linux"] = dict(macro="", src=r["linux"]["src"])
+                fld.pop("inferred", None)
+            lx["used"] = True
+            lx["use"] = Flow([u[0], OWNER[u[0]][u[1] - 1] or "", u[1]])
         if len(allf) == 1 and r.get("inferred"):
             allf[0]["inferred"] = True
 
@@ -782,7 +808,8 @@ def main():
             linux=dict(macro="enum yt921x_" + name, src=e["src"]),
             values=[dict(name=ident(m["name"]), value=m["value"],
                          desc=od.get("values", {}).get(m["name"], ""),
-                         linux=enum_linux(m))
+                         **({"inferred": True} if m["name"] in od.get("inferred", []) else {}),
+                         linux=enum_linux(m, overlay.get("enum_uses", {}).get(name)))
                     for m in e["members"]]))
     omib = overlay["counters"]
     out_mibs = []

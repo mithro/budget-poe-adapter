@@ -23,11 +23,11 @@ Sources
    * - `Linux driver <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__
      - `torvalds/linux <https://github.com/torvalds/linux>`__
      - `20eef29b7c84 <https://github.com/torvalds/linux/commit/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca>`__
-     - Register names with working code
+     - Register names
    * - `Vendor SDK <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/switch_sdk>`__
      - `OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk>`__
      - `d2c8d6fc721f <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/commit/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
-     - Table names with bit positions
+     - Bit positions
    * - `YT9215RB vendor driver <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/tree/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e/yt9215rb_mdio_driver>`__
      - `OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk>`__
      - `d2c8d6fc721f <https://github.com/OpenEmbeddedBSP/motorcomm-yt9215-switch-sdk/commit/d2c8d6fc721fdb7e04e815b4fe2a397a2817ee5e>`__
@@ -35,7 +35,7 @@ Sources
    * - :download:`YT9215SCH datasheet <../../../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf>`
      - none
      - V1.03
-     - Pins with interface timing
+     - Pins
 
 The :ref:`Linux driver <sources-list>` is the directory
 `drivers/net/dsa/motorcomm <https://github.com/torvalds/linux/tree/20eef29b7c8465ac98d7dd6d6f2ac07a8d8056ca/drivers/net/dsa/motorcomm>`__

@@ -131,6 +131,6 @@ LED appears at which pin or stream position.
      - active high
 
 :lx:`yt921x_led_setup` writes :reg:`LED_PAR_INV`, and the polarity is that of the comment in
-that function, "Inversion is internal - force on will give low logic". The registers :reg:`LED_CTRL`,
-:reg:`LED_PAR_MAP`, :reg:`LED_SER_CTRL` and :reg:`LED_SER_MAP` have the level :ev:`header`:
-:lx:`leds.h` defines them and no function of the :ref:`Linux driver <sources-list>` uses them.
+that function, "Inversion is internal - force on will give low logic". :lx:`leds.h` defines the registers :reg:`LED_CTRL`, :reg:`LED_PAR_MAP`, :reg:`LED_SER_CTRL` and
+:reg:`LED_SER_MAP`, and no function of the :ref:`Linux driver <sources-list>` uses them. Their
+functions, the serial stream among them, are :ev:`inferred` from their names.

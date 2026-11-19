@@ -61,7 +61,8 @@ lower 36 bits, :field:`ACL_KEY.SPORTS` the receiving ports the slot applies to a
 
 A bit set in :reg:`ACL_MASK` means the same bit of the key must match; a clear bit is "don't
 care". This polarity is :ev:`confirmed` by :lx:`yt921x_acl_rule_ext_parse_flow_entries`, which
-copies the masks of a flower rule into :reg:`ACL_MASK` unchanged. The mask covers only the lower, type-specific bits. :field:`ACL_KEY.TYPE`,
+copies the masks of a flower rule into :reg:`ACL_MASK` unchanged. The mask covers only the lower, type-specific bits: the comment in :lx:`tc.h:99` reads "KEY_*
+fields need no masks". :field:`ACL_KEY.TYPE`,
 :field:`ACL_KEY.SPORTS`, :field:`ACL_KEY.ORD` and :field:`ACL_KEY.REVERSE` exist in the key
 alone and always apply; leave their positions in
 the mask at 0. The range flags of a layout, such as :field:`ACL_KEY.L4_DPORT_RANGE_EN`,
@@ -82,7 +83,7 @@ Actions
 
 .. yt-bitfield:: ACL_ACT
 
-Each goal needs every field of its rows written.
+Each goal of the :ref:`action table <acl-action-table>` needs every field of its rows written.
 
 .. _acl-action-table:
 
@@ -147,9 +148,9 @@ Each goal needs every field of its rows written.
      - priority
      - 0 to 7
 
-A mirrored frame goes to the monitor port in :field:`MIRROR.PORT`, which :doc:`mirror`
-describes. :ref:`rate-meter` shows how to set the meter up. A priority from the ACL counts
-only if the ACL source is ranked in :ref:`qos-sources`.
+It is :ev:`inferred` that a mirrored frame goes to the monitor port in :field:`MIRROR.PORT`,
+which :doc:`mirror` describes, and that a priority from the ACL counts only if the ACL source is
+ranked in :ref:`qos-sources`. :ref:`rate-meter` shows how to set the meter up.
 
 The drop, redirect and trap rows of the :ref:`action table <acl-action-table>` are :ev:`confirmed`
 by :lx:`yt921x_acl_rule_ext_parse_flow_action`, which writes :val:`ACL_ACT.FWD.REDIR` with no

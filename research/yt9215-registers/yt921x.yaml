@@ -718,7 +718,8 @@ enums:
       src:
       - chip.h
       - 117
-      used: false
+      used: true
+      use: [chip.c, yt921x_port_up, 1696]
   - name: V100
     value: 1
     desc: 100 Mbit/s
@@ -727,7 +728,8 @@ enums:
       src:
       - chip.h
       - 118
-      used: false
+      used: true
+      use: [chip.c, yt921x_port_up, 1696]
   - name: V1000
     value: 2
     desc: 1000 Mbit/s
@@ -736,7 +738,8 @@ enums:
       src:
       - chip.h
       - 119
-      used: false
+      used: true
+      use: [chip.c, yt921x_port_up, 1696]
   - name: V10000
     value: 3
     desc: 10 Gbit/s
@@ -745,7 +748,8 @@ enums:
       src:
       - chip.h
       - 120
-      used: false
+      used: true
+      use: [chip.c, yt921x_port_up, 1696]
   - name: V2500
     value: 4
     desc: 2500 Mbit/s
@@ -754,7 +758,8 @@ enums:
       src:
       - chip.h
       - 121
-      used: false
+      used: true
+      use: [chip.c, yt921x_port_up, 1696]
 - name: app_selector
   title: Priority sources
   desc: Index of a priority source in :reg:`PORT_PRIO_ORD`.
@@ -767,6 +772,7 @@ enums:
   - name: MAC_SA
     value: 0
     desc: Priority of the matching source address entry in the forwarding database
+    inferred: true
     linux:
       macro: YT921X_APP_SEL_MAC_SA
       src:
@@ -776,6 +782,7 @@ enums:
   - name: MAC_DA
     value: 1
     desc: Priority of the matching destination address entry in the forwarding database
+    inferred: true
     linux:
       macro: YT921X_APP_SEL_MAC_DA
       src:
@@ -785,6 +792,7 @@ enums:
   - name: VID
     value: 2
     desc: Priority of the VLAN table entry
+    inferred: true
     linux:
       macro: YT921X_APP_SEL_VID
       src:
@@ -794,6 +802,7 @@ enums:
   - name: ACL
     value: 3
     desc: Priority set by an ACL rule
+    inferred: true
     linux:
       macro: YT921X_APP_SEL_ACL
       src:
@@ -1122,6 +1131,7 @@ enums:
   - name: ETH
     value: 0
     desc: Other Ethernet framing. The meaning is :ev:`inferred` from the name.
+    inferred: true
     linux:
       macro: YT921X_L2_TYPE_ETH
       src:
@@ -2238,7 +2248,7 @@ registers:
       - chip.h
       - 174
       used: true
-      use: [chip.c, yt921x_edata_wait, 2114]
+      use: [chip.c, yt921x_edata_wait, 2110]
     values:
     - name: IDLE
       value: 3
@@ -2595,7 +2605,7 @@ registers:
       - chip.h
       - 79
       used: true
-      use: [pcs-921x.c, yt921x_serdes_config, 44]
+      use: [pcs-921x.c, yt921x_serdes_config, 28]
     values:
     - name: SGMII
       value: 0
@@ -3572,9 +3582,9 @@ registers:
       desc: '`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame'
     lsb: 8
     width: 4
-    desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess".
+    desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess", so the width
+      of the field is :ev:`inferred`.
     access: rw
-    inferred: true
     sdk:
       status: no SDK table
   - name: OP
@@ -3606,9 +3616,9 @@ registers:
       desc: Read the register
     lsb: 2
     width: 2
-    desc: Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads "wild guess".
+    desc: Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads "wild guess", so the width of
+      the field is :ev:`inferred`.
     access: rw
-    inferred: true
     sdk:
       status: no SDK table
   block: mbus
@@ -3637,7 +3647,13 @@ registers:
     width: 16
     desc: The 16-bit PHY register value.
     access: rw
-    inferred: false
+    linux:
+      macro: ''
+      src:
+      - mdio_bus.h
+      - 29
+      used: true
+      use: [mdio_bus.c, yt921x_extif_write, 236]
     sdk:
       status: no SDK table
   block: mbus
@@ -3666,7 +3682,13 @@ registers:
     width: 16
     desc: The 16-bit PHY register value.
     access: ro
-    inferred: false
+    linux:
+      macro: ''
+      src:
+      - mdio_bus.h
+      - 31
+      used: true
+      use: [mdio_bus.c, yt921x_extif_read, 206]
     sdk:
       status: no SDK table
   block: mbus
@@ -3762,8 +3784,7 @@ registers:
       src:
       - mdio_bus.h
       - 22
-      used: true
-      use: [mdio_bus.c, yt921x_extif_read, 193]
+      used: false
     values:
     - name: C22
       value: 4
@@ -3776,9 +3797,9 @@ registers:
       desc: '`IEEE 802.3 clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ frame'
     lsb: 8
     width: 4
-    desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess".
+    desc: Frame format. The :lx:`comment on the field <mdio_bus.h:22>` reads "wild guess", so the width
+      of the field is :ev:`inferred`.
     access: rw
-    inferred: true
     sdk:
       status: no SDK table
   - name: OP
@@ -3810,9 +3831,9 @@ registers:
       desc: Read the register
     lsb: 2
     width: 2
-    desc: Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads "wild guess".
+    desc: Direction. The :lx:`comment on the field <mdio_bus.h:25>` reads "wild guess", so the width of
+      the field is :ev:`inferred`.
     access: rw
-    inferred: true
     sdk:
       status: no SDK table
   block: mbus
@@ -3841,7 +3862,13 @@ registers:
     width: 16
     desc: The 16-bit PHY register value.
     access: rw
-    inferred: false
+    linux:
+      macro: ''
+      src:
+      - mdio_bus.h
+      - 30
+      used: true
+      use: [mdio_bus.c, yt921x_intif_write, 75]
     sdk:
       status: no SDK table
   block: mbus
@@ -3870,7 +3897,13 @@ registers:
     width: 16
     desc: The 16-bit PHY register value.
     access: ro
-    inferred: false
+    linux:
+      macro: ''
+      src:
+      - mdio_bus.h
+      - 32
+      used: true
+      use: [mdio_bus.c, yt921x_intif_read, 46]
     sdk:
       status: no SDK table
   block: mbus
@@ -4062,7 +4095,13 @@ registers:
     width: 32
     desc: Counter value. For a 64-bit counter it is the low 32 bits.
     access: ro
-    inferred: false
+    linux:
+      macro: ''
+      src:
+      - mib.h
+      - 19
+      used: true
+      use: [mib.c, yt921x_mib_read, 104]
     sdk:
       status: no SDK table
   block: mib
@@ -5870,7 +5909,7 @@ registers:
       - chip.h
       - 367
       used: true
-      use: [chip.c, yt921x_chip_setup_dsa, 2337]
+      use: [chip.c, yt921x_vlan_del, 995]
     lsb: 7
     width: 11
     array:
@@ -7096,7 +7135,7 @@ registers:
       - chip.h
       - 292
       used: true
-      use: [chip.c, yt921x_fdb_read, 542]
+      use: [chip.c, yt921x_fdb_in01, 480]
     values:
     - name: INVALID
       value: 0
@@ -7166,7 +7205,7 @@ registers:
       - chip.h
       - 300
       used: true
-      use: [chip.c, yt921x_fdb_read, 561]
+      use: [chip.c, yt921x_fdb_in01, 480]
     lsb: 16
     width: 12
     desc: Filtering ID of the entry. The Linux driver writes the VLAN ID here.
@@ -7180,7 +7219,8 @@ registers:
       src:
       - chip.h
       - 302
-      used: false
+      used: true
+      use: [chip.c, yt921x_fdb_in01, 480]
     lsb: 0
     width: 16
     desc: MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
@@ -7248,7 +7288,7 @@ registers:
       - chip.h
       - 306
       used: true
-      use: [chip.c, yt921x_fdb_read, 563]
+      use: [chip.c, yt921x_fdb_dump, 600]
     lsb: 18
     width: 11
     desc: Ports that frames to this address are sent to. Each port has one bit.
@@ -7525,7 +7565,7 @@ registers:
       - chip.h
       - 274
       used: true
-      use: [chip.c, yt921x_fdb_add_index_in12, 697]
+      use: [chip.c, yt921x_fdb_has, 501]
     values:
     - name: ADD
       value: 0
@@ -7846,7 +7886,8 @@ registers:
       src:
       - chip.h
       - 302
-      used: false
+      used: true
+      use: [chip.c, yt921x_fdb_read, 559]
     lsb: 0
     width: 16
     desc: MAC address bytes 4 and 5. Byte 4 is in bits 15 to 8.
@@ -8265,7 +8306,7 @@ registers:
       - chip.h
       - 344
       used: true
-      use: [chip.c, yt921x_chip_setup_dsa, 2324]
+      use: [chip.c, yt921x_chip_setup_dsa, 2318]
     values:
     - name: FORWARD
       value: 0
@@ -8380,7 +8421,7 @@ registers:
       - chip.h
       - 344
       used: true
-      use: [chip.c, yt921x_chip_setup_dsa, 2324]
+      use: [chip.c, yt921x_chip_setup_dsa, 2318]
     values:
     - name: FORWARD
       value: 0
@@ -8868,7 +8909,7 @@ registers:
       - tc.h
       - 25
       used: true
-      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1135]
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1058]
     values:
     - name: FWD
       value: 0
@@ -8920,7 +8961,7 @@ registers:
       - tc.h
       - 31
       used: true
-      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1134]
+      use: [tc.c, yt921x_acl_rule_ext_parse_flow_action, 1077]
     lsb: 74
     width: 11
     array:
@@ -9740,7 +9781,8 @@ registers:
         src:
         - tc.h
         - 140
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 729]
       lsb: 0
       width: 32
       desc: MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
@@ -9771,7 +9813,8 @@ registers:
         src:
         - tc.h
         - 144
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 752]
       lsb: 16
       width: 16
       desc: Destination MAC address bytes 4 and 5.
@@ -9784,7 +9827,8 @@ registers:
         src:
         - tc.h
         - 145
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 752]
       lsb: 0
       width: 16
       desc: Source MAC address bytes 4 and 5.
@@ -10092,7 +10136,8 @@ registers:
         src:
         - tc.h
         - 181
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 618]
       lsb: 0
       width: 32
       desc: IPv4 address. The first byte is in bits 31 to 24.
@@ -10124,7 +10169,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 647]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -10169,7 +10215,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 647]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -10215,7 +10262,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 647]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -10275,7 +10323,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 647]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -10481,7 +10530,8 @@ registers:
         src:
         - tc.h
         - 214
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 680]
       lsb: 16
       width: 16
       desc: Layer 4 destination port.
@@ -10494,7 +10544,8 @@ registers:
         src:
         - tc.h
         - 215
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 680]
       lsb: 0
       width: 16
       desc: Layer 4 source port.
@@ -10524,7 +10575,8 @@ registers:
         src:
         - tc.h
         - 218
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1008]
       lsb: 16
       width: 16
       desc: Two bytes from the even-numbered user-defined field window of the pair.
@@ -10537,7 +10589,8 @@ registers:
         src:
         - tc.h
         - 220
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1008]
       lsb: 0
       width: 16
       desc: Two bytes from the odd-numbered user-defined field window of the pair.
@@ -10582,7 +10635,8 @@ registers:
         src:
         - tc.h
         - 226
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 804]
       lsb: 0
       width: 16
       desc: EtherType.
@@ -10650,7 +10704,8 @@ registers:
         src:
         - tc.h
         - 140
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 730]
       lsb: 0
       width: 32
       desc: MAC address bytes 0 to 3. Byte 0 is in bits 31 to 24.
@@ -10681,7 +10736,8 @@ registers:
         src:
         - tc.h
         - 144
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 754]
       lsb: 16
       width: 16
       desc: Destination MAC address bytes 4 and 5.
@@ -10694,7 +10750,8 @@ registers:
         src:
         - tc.h
         - 145
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 754]
       lsb: 0
       width: 16
       desc: Source MAC address bytes 4 and 5.
@@ -10932,7 +10989,8 @@ registers:
         src:
         - tc.h
         - 181
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 619]
       lsb: 0
       width: 32
       desc: IPv4 address. The first byte is in bits 31 to 24.
@@ -10964,7 +11022,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 648]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -11009,7 +11068,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 648]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -11055,7 +11115,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 648]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -11101,7 +11162,8 @@ registers:
         src:
         - tc.h
         - 185
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 648]
       lsb: 0
       width: 32
       desc: 32 bits of the IPv6 address. The most significant byte is in bits 31 to 24.
@@ -11277,7 +11339,8 @@ registers:
         src:
         - tc.h
         - 214
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 682]
       lsb: 16
       width: 16
       desc: Layer 4 destination port.
@@ -11290,7 +11353,8 @@ registers:
         src:
         - tc.h
         - 215
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 682]
       lsb: 0
       width: 16
       desc: Layer 4 source port.
@@ -11320,7 +11384,8 @@ registers:
         src:
         - tc.h
         - 218
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1009]
       lsb: 16
       width: 16
       desc: Two bytes from the even-numbered user-defined field window of the pair.
@@ -11333,7 +11398,8 @@ registers:
         src:
         - tc.h
         - 220
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 1009]
       lsb: 0
       width: 16
       desc: Two bytes from the odd-numbered user-defined field window of the pair.
@@ -11364,7 +11430,8 @@ registers:
         src:
         - tc.h
         - 226
-        used: false
+        used: true
+        use: [tc.c, yt921x_acl_rule_ext_parse_flow_entries, 805]
       lsb: 0
       width: 16
       desc: EtherType.
@@ -12061,7 +12128,7 @@ registers:
       - tc.h
       - 304
       used: true
-      use: [tc.c, yt921x_mirror_add, 1620]
+      use: [tc.c, yt921x_mirror_del, 1592]
     lsb: 16
     width: 11
     array:
@@ -12088,7 +12155,7 @@ registers:
       - tc.h
       - 307
       used: true
-      use: [tc.c, yt921x_mirror_add, 1619]
+      use: [tc.c, yt921x_mirror_del, 1594]
     lsb: 4
     width: 11
     array:

@@ -8,8 +8,8 @@ definitions of C, Rust and MicroPython are generated from
 :download:`yt921x.yaml <../yt921x.yaml>`, the description that this manual is generated from
 and that :doc:`description-files` explains. Zephyr uses the C definitions. A small
 hand-written access layer per environment implements the procedures of :doc:`access`,
-:doc:`bringup`, :doc:`phy` and :doc:`mib`. Every source code file carries an Apache-2.0 licence
-identifier.
+:doc:`bringup`, :doc:`phy` and :doc:`mib`. Every C, Rust and Python file of the bindings carries an
+`Apache-2.0 <https://www.apache.org/licenses/LICENSE-2.0>`__ licence identifier.
 
 .. list-table::
    :header-rows: 1
@@ -187,7 +187,7 @@ files shift them into place.
 C
 -
 
-Portable C99 without dependencies. The caller supplies three functions in the structure
+Portable `C99 <https://en.wikipedia.org/wiki/C99>`__ without dependencies. The caller supplies three functions in the structure
 :download:`struct yt921x_bus <../bindings/c/yt921x.h>`: `clause 22 <https://en.wikipedia.org/wiki/Management_Data_Input/Output>`__ MDIO read,
 MDIO write and a delay.
 

@@ -20,10 +20,13 @@ the pin tables of both parts, and the route of each debug pin on this board, are
 | <a href="#photo-bottom-under-u4">Bottom under U4</a> | [`photo-bottom-under-u4.jpg`](photo-bottom-under-u4.jpg) | Source photo | Not known | Bottom | Area under [U4](../switch-board-strapping.md#major-components) with the strap resistor array |
 | <a href="#photo-poe-module">PoE module</a> | [`photo-poe-module.jpg`](photo-poe-module.jpg) | Source photo | B | Top | Plug-in PoE module |
 | None | [`photos/README.md`](photos/README.md) | Photo catalogue | Both | Both | 34 photos of the two boards |
+| None | [`strap-resistors-source.jpg`](strap-resistors-source.jpg) | Source photo | Not known | Bottom | Strap resistor array without labels |
 | None | [`annotate.py`](annotate.py) | Script | None | None | Draws the debug pin annotations |
+| None | [`annotate_straps.py`](annotate_straps.py) | Script | None | None | Draws the strap resistor annotations |
 
 Run [`annotate.py`](annotate.py) with `python3 annotate.py`; it needs Pillow and draws on
-[`photo-u4-macro.jpg`](photo-u4-macro.jpg). The strap resistor image has no script. The
+[`photo-u4-macro.jpg`](photo-u4-macro.jpg). Run [`annotate_straps.py`](annotate_straps.py) with `python3 annotate_straps.py`; it needs Pillow and the DejaVu Sans fonts, and draws on
+[`strap-resistors-source.jpg`](strap-resistors-source.jpg). The
 strap resistors are explained in [`../switch-board-strapping.md`](../switch-board-strapping.md).
 
 ## Images

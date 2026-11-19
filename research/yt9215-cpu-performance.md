@@ -60,7 +60,7 @@ Statements are marked with one of these words:
 | Mark | Meaning |
 | --- | --- |
 | Verified | Read directly in a cited source |
-| Measured | A result of the [benchmark](#the-benchmark), which runs in an emulator and not on the chip |
+| Measured | A result of the emulated [benchmark](#the-benchmark) |
 | Estimated | Calculated here from stated assumptions |
 | Inferred | A judgement from other evidence |
 
@@ -438,8 +438,8 @@ and whether the six test messages decode at all of 270, 300 and 330 kbit/s
 
 - The usual pass of the polling loop is 8 cycles in the fast model and 11 in the slow
   model. The longest gap is 51 and 64 cycles ([measured](#evidence-codes)).
-- At 125 MHz the code samples the line 19 to 26 times per half bit, and its longest
-  gap is 0.25 to 0.34 of a half bit across the three bit rates. Real edges have noise and jitter that the
+- At 125 MHz and 300 kbit/s the code samples the line 19 to 26 times per half bit.
+  Its longest gap is 0.22 to 0.34 of a half bit across the three bit rates. Real edges have noise and jitter that the
   benchmark does not model. This sampling rate leaves room for a filter that asks for
   several equal samples before it accepts an edge ([inferred](#evidence-codes)).
 - At 31.25 MHz the longest gap at 300 kbit/s is 0.98 of a half bit in the fast model
@@ -509,13 +509,13 @@ YT9215:
    within 23 µs of the end of a message
    ([signalling](usb-c-pd.md#51-signalling)). That needs a GPIO direction register
    that is as fast as the data register, or an analogue switch on a second GPIO pin.
-7. **A clock of 31.25 MHz or more.** At 62.5 MHz the longest gap of the receiver is
-   0.5 to 0.6 of a half bit ([receive](#receive)).
+7. **A clock of 31.25 MHz or more.** At 62.5 MHz and 300 kbit/s the longest gap of the
+   receiver is 0.5 to 0.6 of a half bit ([receive](#receive)).
 
 ### Verdict
 
 If the CPU runs at 125 MHz and the [conditions](#conditions) hold, the CPU bit-bangs
-USB-PD with a wide margin: 208 cycles per half bit against 8 to 11 cycles per sample,
+USB-PD with a wide margin: 208 cycles per half bit at 300 kbit/s against 8 to 11 cycles per sample,
 and a GoodCRC ready eight times faster than required ([measured](#evidence-codes)).
 The CPU is not the limit. The limits are the GPIO registers, which are unpublished,
 and the analogue front end.

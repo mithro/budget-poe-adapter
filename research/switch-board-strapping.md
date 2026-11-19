@@ -447,11 +447,11 @@ Each photo is embedded in this section, except the annotated strap array, which 
 | 2 | Continuity | Outer pad of <a href="#lx-r49">R49</a> | Ground | <a href="#lx-inference-row">Which row pulls up</a> |
 | 3 | Continuity | Inner pads of <a href="#lx-r49">R49</a> | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-70">70</a> | <a href="#lx-inference-pin-order">Pin order</a> |
 | 4 | Continuity | Inner pads of <a href="#lx-r59">R59</a> | <a href="#lx-u4">U4</a> pin <a href="#lx-pin-85">85</a> | <a href="#lx-inference-pin-order">Pin order</a> |
-| 5 | Register read of [`PON_STRAP_CAP`](yt9215-registers/docs/reference/system.rst) | Management interface | Address 0x80328 | Levels sampled at power-on |
+| 5 | Register read of [`PON_STRAP_CAP`](yt9215-registers/rdl/yt9215.rdl) | Management interface | Address 0x80328 | Levels sampled at power-on |
 | 6 | EEPROM read with a clip | <a href="#lx-u10">U10</a> | All 8 Kbit | Registers loaded at reset |
 
 Check 5 is not certain to work as written. The register name and address come from the Linux driver, as recorded in the
-[register reference](yt9215-registers/docs/reference/system.rst); neither datasheet lists it, and the bit positions of the strap pins on this board are not documented. With DIS_SPIS (pin <a href="#lx-pin-70">70</a>) = 1 and SMI_SEL (pin <a href="#lx-pin-85">85</a>) = 1,
+[register description](yt9215-registers/rdl/yt9215.rdl); neither datasheet lists it, and the bit positions of the strap pins on this board are not documented. With DIS_SPIS (pin <a href="#lx-pin-70">70</a>) = 1 and SMI_SEL (pin <a href="#lx-pin-85">85</a>) = 1,
 [page 45 of the datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=45) selects the slave I²C interface and [page 47 of the datasheet](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf#page=47) selects the
 slave SMI interface, and the I²C pins are shared with the EEPROM bus. If slave SMI answers, its address is 0x1d
 (pin <a href="#lx-pin-80">80</a>, MID29 = 1).

@@ -273,7 +273,7 @@ The driver identifies a YT9215 by the major number 0x9002 in the `CHIP_ID` regis
 | 2 | [YT9215S](#yt9215s) |
 | 3 | [YT9215RB](#yt9215rb) |
 
-The strap levels sampled at power-on can be read back over MDIO from the [`PON_STRAP_CAP`](yt9215-registers/docs/reference/system.rst) register (0x80328), which is taken from its name to hold those levels. The bit positions of `DIS_MCU` and `EN_SPIF` in it are not documented [**I**](#evidence-codes).
+The strap levels sampled at power-on can be read back over MDIO from the [`PON_STRAP_CAP`](yt9215-registers/rdl/yt9215.rdl) register (0x80328), which is taken from its name to hold those levels. The bit positions of `DIS_MCU` and `EN_SPIF` in it are not documented [**I**](#evidence-codes).
 
 ## Community and SDK status
 

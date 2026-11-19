@@ -14,7 +14,7 @@ HERE = Path(__file__).parent
 FONT_DIR = Path("/usr/share/fonts/truetype/dejavu")
 SCALE = 3  # the source crop is enlarged by this factor
 # x of each column in the source crop, in source pixels
-COLUMN_X = [37, 80, 127, 175, 220, 267, 312, 360, 407]
+COLUMN_X = [47, 90, 137, 185, 230, 277, 322, 370, 417]
 
 # (pin, strap name, level, pull-down designator, pull-up designator)
 COLUMNS = [

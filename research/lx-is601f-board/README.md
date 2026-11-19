@@ -27,16 +27,20 @@ the pin tables of both parts, and the route of each debug pin on this board, are
 | <a href="#photo-board-a-power-input">Board A power input</a> | [`crop-board-a-power-input.jpg`](crop-board-a-power-input.jpg) | Area crop | A | Top | Power input parts |
 | <a href="#photo-board-a-led-esd">Board A LED and ESD arrays</a> | [`crop-board-a-led-esd.jpg`](crop-board-a-led-esd.jpg) | Area crop | A | Top | LED array with two ESD arrays |
 | <a href="#photo-bottom-eeprom-flash">Bottom EEPROM and flash</a> | [`crop-bottom-eeprom-flash.jpg`](crop-bottom-eeprom-flash.jpg) | Area crop | Not known | Bottom | EEPROM with the flash footprint |
-| <a href="#photo-u4-right-edge">U4 right edge</a> | [`crop-u4-right-edge.jpg`](crop-u4-right-edge.jpg) | Area crop | B | Top | Leads 33 to 64 of [U4](../switch-board-strapping.md#major-components) with their traces |
+| <a href="#photo-u4-right-edge">U4 right edge</a> | [`u4-right-edge-annotated.jpg`](u4-right-edge-annotated.jpg) | Annotated image | B | Top | Leads 33 to 55 of [U4](../switch-board-strapping.md#major-components) with their traces |
+| <a href="#photo-board-a-u4-right-edge">Board A U4 right edge</a> | [`crop-board-a-u4-right-edge.jpg`](crop-board-a-u4-right-edge.jpg) | Area crop | A | Top | Resistors beside the right edge of [U4](../switch-board-strapping.md#major-components) with their traces |
+| <a href="#photo-bottom-strap-array">Bottom strap array</a> | [`crop-bottom-strap-array.jpg`](crop-bottom-strap-array.jpg) | Area crop | Not known | Bottom | Strap resistor array beside the EEPROM |
 | None | [`photos/README.md`](photos/README.md) | Photo catalogue | Both | Both | 34 photos of the two boards |
 | None | [`strap-resistors-source.jpg`](strap-resistors-source.jpg) | Source photo | Not known | Bottom | Strap resistor array without labels |
 | None | [`annotate.py`](annotate.py) | Script | None | None | Draws the debug pin annotations |
 | None | [`annotate_straps.py`](annotate_straps.py) | Script | None | None | Draws the strap resistor annotations |
+| None | [`annotate_u4_right_edge.py`](annotate_u4_right_edge.py) | Script | None | None | Draws the lead numbers on the right edge of U4 |
 | None | [`crop_photos.py`](crop_photos.py) | Script | None | None | Cuts the area crops out of the source photos |
 
 Run [`annotate.py`](annotate.py) with `python3 annotate.py`; it needs Pillow and draws on
 [`photo-u4-macro.jpg`](photo-u4-macro.jpg). Run [`annotate_straps.py`](annotate_straps.py) with `python3 annotate_straps.py`; it needs Pillow and the DejaVu Sans fonts, and draws on
-[`strap-resistors-source.jpg`](strap-resistors-source.jpg). Run [`crop_photos.py`](crop_photos.py) with `python3 crop_photos.py`; it needs Pillow. The
+[`strap-resistors-source.jpg`](strap-resistors-source.jpg). Run [`annotate_u4_right_edge.py`](annotate_u4_right_edge.py) with `python3 annotate_u4_right_edge.py`; it needs Pillow and the DejaVu Sans fonts, and draws on
+[`photo-u4-macro.jpg`](photo-u4-macro.jpg). Run [`crop_photos.py`](crop_photos.py) with `python3 crop_photos.py`; it needs Pillow and also cuts [`strap-resistors-source.jpg`](strap-resistors-source.jpg). The
 strap resistors are explained in [`../switch-board-strapping.md`](../switch-board-strapping.md).
 
 ## Images
@@ -135,7 +139,19 @@ strap resistors are explained in [`../switch-board-strapping.md`](../switch-boar
 
 **U4 right edge**
 
-![Right edge of U4 on board B, pins 33 to 64](crop-u4-right-edge.jpg)
+![Right edge of U4 on board B with leads 33, 46, 47, 49, 50, 54 and 55 marked](u4-right-edge-annotated.jpg)
+
+<a id="photo-board-a-u4-right-edge"></a>
+
+**Board A U4 right edge**
+
+![Right edge of U4 on board A with the resistors beside it](crop-board-a-u4-right-edge.jpg)
+
+<a id="photo-bottom-strap-array"></a>
+
+**Bottom strap array**
+
+![Strap resistor array beside the EEPROM on the bottom side](crop-bottom-strap-array.jpg)
 
 ## How the debug pins are identified
 

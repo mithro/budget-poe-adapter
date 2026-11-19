@@ -66,8 +66,8 @@ arrow(170, 385, 300, 385, "RX_CTL, pin 53")
 out.append('<text x="235" y="403" text-anchor="middle">from a GPIO</text>')
 
 # Rp
-box(300, 450, 190, 70, ["Rp", "12 kΩ to 3.3 V", "7.5 kΩ to a GPIO"])
-arrow(170, 485, 300, 485, "GPIO output")
+box(300, 450, 190, 70, ["Rp", "12 kΩ to a GPIO", "7.5 kΩ to a GPIO"])
+arrow(170, 485, 300, 485, "2 GPIO outputs")
 arrow(490, 485, 680, 485, "CC")
 
 # VBUS switch

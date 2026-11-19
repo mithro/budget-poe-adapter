@@ -16,6 +16,7 @@ The note assumes a **captive cable**: the adapter ends in a fixed USB-C cable, s
 - Option C is untested. Its transmit side depends on a frame-transmit function whose name is public and whose behaviour is not [**U**](#evidence-codes). Its receive side depends on a MAC behaviour that is not documented [**U**](#evidence-codes).
 - The transmit waveform of option C can be tried without any firmware: an external host sets up port 9 over the management interface and a PC sends the frame through a copper port ([next steps](#what-to-find-out-next)).
 - Every option that speaks PD waits until code runs on the CPU. Motorcomm's SDK shows that firmware for it exists (FreeRTOS, built for RV32EC) [**V**](#evidence-codes). The boot image format and the CPU's peripheral registers are unpublished [**U**](#evidence-codes).
+- Rp, VBUS and all PD signalling stay off until the PoE side has secured its power ([start-up order](#start-up-order)).
 - The safe design is [option A](#option-a): a PD transceiver with an I²C interface, driven by the documented I²C master of the YT9215. It takes over every microsecond-scale task.
 - Options B and C are not clearly cheaper than option A once every part is counted ([cost](#cost)) [**I**](#evidence-codes).
 - The CH224K, HUSB238 and IP2721 are sink chips. They ask a charger for a voltage and cannot make this adapter a source ([fixed-function chips](#fixed-function-chips)).
@@ -116,6 +117,27 @@ Every received message must be acknowledged with a GoodCRC that starts no later 
 
 The sender waits 0.9 to 1.1 ms for the complete GoodCRC, which itself lasts about 0.5 ms. A reply that starts up to about 0.4 ms after the message may therefore still be accepted by a real sink, although it breaks the 195 µs rule [**I**](#evidence-codes).
 
+<a id="start-up-order"></a>
+
+## Start-up order
+
+The USB-C side stays off until the PoE side has secured its power, by classification or by LLDP ([PoE](poe.md)). The downstream switch ports stay off for the same time.
+
+| Stage | Rp | VBUS | PD messages |
+|---|---|---|---|
+| PoE power not yet granted | Off | Off | None |
+| Power granted with no sink attached | On | Off | None |
+| Sink attached | On | On | Source_Capabilities, then the rest |
+
+With Rp off and VBUS off, a sink sees an unpowered port and waits. This has four consequences for the hardware [**I**](#evidence-codes):
+
+- Rp must be switchable as a whole. Every Rp resistor is fed from a GPIO output, or from a rail that comes on with the grant, and none from the fixed 3.3 V rail.
+- The VBUS load switch must stay off through reset. Its enable needs a pull-down, and whatever drives it waits for the grant.
+- The BMC driver must stay off through reset, which the [strap pins](#pins-used) of option C do not give for free.
+- The reset state of the GPIO pins decides whether all this holds before firmware runs. The datasheet gives the strap pulls and not the reset state of every GPIO [**U**](#evidence-codes).
+
+The grant also sets what the port may advertise. The Rp value and the current in Source_Capabilities are chosen after the grant, from the [power budget per PoE class](poe.md#5-raspberry-pi-5-power-budget-against-poe-classes), less what the switch itself draws.
+
 ## What the YT9215 offers
 
 ### Documented resources
@@ -214,7 +236,7 @@ These look promising and do not work [**I**](#evidence-codes):
 
 ## No PD: resistor and attach comparator
 
-A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is the only signalling part. USB-C also requires the source to keep VBUS off until a sink is attached and to remove it on detach ([attach detection](usb-c-pd.md#43-source-state-machine-and-timing)). A comparator that watches CC does this by driving the enable of the VBUS load switch directly, because a plain input pin cannot read the attach level ([electrical limits](#electrical-limits-of-the-pins)). A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). This is the baseline every other option has to beat. It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted.
+A 4.7 kΩ resistor from CC to 3.3 V advertises 3 A and is the only signalling part. The 3.3 V comes from a GPIO or a switched rail, so that Rp is off until PoE power is granted ([start-up order](#start-up-order)). USB-C also requires the source to keep VBUS off until a sink is attached and to remove it on detach ([attach detection](usb-c-pd.md#43-source-state-machine-and-timing)). A comparator that watches CC does this by driving the enable of the VBUS load switch directly, because a plain input pin cannot read the attach level ([electrical limits](#electrical-limits-of-the-pins)). A Raspberry Pi 5 then boots and limits its USB ports to 600 mA, unless `usb_max_current_enable=1` is set on the Pi ([Raspberry Pi 5](usb-c-pd.md#3-raspberry-pi-5-specifics)). This is the baseline every other option has to beat. It needs no firmware, so it works with the YT9215 CPU switched off and no flash fitted.
 
 <a id="option-a"></a>
 
@@ -389,8 +411,8 @@ The figure shows the option C wiring with a [captive cable](#captive-cable). Opt
 | Divider resistors | – | 4 | Two thresholds |
 | Series resistor | 1 kΩ | 1 | CC protection |
 | Clamp diode | – | 1 | CC protection |
-| Rp, fixed | 12 kΩ | 1 | Advertises 1.5 A |
-| Rp, switched | 7.5 kΩ | 1 | Raises it to 3 A |
+| Rp, first | 12 kΩ | 1 | Advertises 1.5 A |
+| Rp, second | 7.5 kΩ | 1 | Raises it to 3 A |
 | Slow comparator | LM393 class | 1 | VBUS at 0 V |
 | Divider resistors | – | 2 | VBUS threshold |
 | Tie resistors | – | 3 | Fixed levels on pins 54 to 56 |
@@ -402,7 +424,7 @@ Notes on the parts [**I**](#evidence-codes):
 - The buffer is powered from the 1.15 V core rail of the switch, DVDDL, so its output swings 0 to 1.15 V with no divider that would load CC.
 - Pins 48 and 50 are also strap pins. The buffer inputs are high impedance, so they do not disturb the straps.
 - Rp holds CC at 3.3 V with no sink attached and at about 1.7 V with one, while the buffer is off and powered from 1.15 V. The buffer must be a type whose disabled output accepts a voltage above its supply. Otherwise it clamps CC and attach detection fails.
-- The switched Rp hangs on a GPIO that is either driven high or left floating. Both resistors together make about 4.6 kΩ.
+- Each Rp resistor hangs on its own GPIO, which is either driven high or left floating. Both resistors together make about 4.6 kΩ. With both GPIOs floating, Rp is off ([start-up order](#start-up-order)).
 - The slicer needs a propagation delay of about 200 ns or less and matched rising and falling delays. An LM393-class part is too slow.
 - A load switch with a built-in discharge path covers VBUS discharge. Confirming that VBUS has reached 0 V needs a third comparator, because the chip has no ADC. The figure leaves it out, with the AND gate and the capacitor.
 

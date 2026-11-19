@@ -203,7 +203,7 @@ Message types needed for a minimal source:
 
 **Spec revision:** start with PD3.0 in the header. If the sink replies with PD2.0, use 2.0 for the rest of the connection.
 
-**PD3 collision avoidance:** the source signals with its Rp: **3.0 A Rp = SinkTxOK** (sink may start an AMS), **1.5 A Rp = SinkTxNG**. The source switches Rp to 1.5 A before it initiates a message. This requires two Rp values per CC; one output and two resistors are enough ([front end](yt9215-usb-pd.md#front-end)).
+**PD3 collision avoidance:** the source signals with its Rp: **3.0 A Rp = SinkTxOK** (sink may start an AMS), **1.5 A Rp = SinkTxNG**. The source switches Rp to 1.5 A before it initiates a message. This requires two Rp values per CC; two outputs and two resistors are enough, and they also let Rp be switched off ([front end](yt9215-usb-pd.md#front-end)).
 
 **PPS and EPR (if ever needed):** a PPS sink must re-request at least every 10 s, and the source hard-resets after tPPSTimeout (about 15 s) without one. EPR requires EPR_Mode entry via an e-marked 5 A, 50 V cable check and a sink keep-alive every ≤ 500 ms (verify). Both need a programmable converter with current limiting. Not recommended within a PoE budget.
 
@@ -244,9 +244,10 @@ These are the requirements. [`yt9215-usb-pd.md`](yt9215-usb-pd.md) maps them to 
 | CC attach detect | Implementation | Comparator |
 | Rp switching (3 A vs 1.5 A) | Scope | Per CC |
 | Rp switching (3 A vs 1.5 A) | Pull-up values | 2 |
-| Rp switching (3 A vs 1.5 A) | Implementation | 1 output |
+| Rp switching (3 A vs 1.5 A) | Implementation | 2 outputs |
 | Rp switching (3 A vs 1.5 A) | Pull-up for 3 A | 12 k and 7.5 k in parallel |
-| Rp switching (3 A vs 1.5 A) | Pull-up for 1.5 A | 12 k to 3.3 V |
+| Rp switching (3 A vs 1.5 A) | Pull-up for 1.5 A | 12 k alone |
+| Rp switching (3 A vs 1.5 A) | Rp off | Both outputs floating |
 | VBUS monitor | Range | 0 to 5.5 V |
 | VBUS monitor | Must detect | vSafe0V |
 | VBUS monitor | Implementation | Comparator with a divider |

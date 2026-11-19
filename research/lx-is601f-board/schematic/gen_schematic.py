@@ -222,7 +222,7 @@ s.power('+48V', m(175), YL); s.power('PWR_FLAG', m(175), YL, lib_name='PWR_FLAG'
 d1 = two(s, 'Device:D_Schottky', 'D1', 'SS510', m(40), m(80), True); s.stub(d1, '1', 'TBD_D1_K', 'U'); s.stub(d1, '2', 'TBD_D1_A', 'U')
 d5 = two(s, 'Device:D_Schottky', 'D5', 'SS510', m(80), m(80), True); s.stub(d5, '1', 'TBD_D5_K', 'U'); s.stub(d5, '2', 'TBD_D5_A', 'U')
 s.text('D1 and D5 sit next to the input; their nets are not traced.', m(15), m(88), size=1.27, italic=True)
-s.textbox('Input\n- Assumed 48-57 V (C4 is rated 63 V). J2 polarity not checked.\n'
+s.textbox('Input\n- Assumed 48-57 V (C4 is rated 63 V). J2 polarity not checked.\n- C4 is 47u 63V on board A and 22u 63V on board B.\n'
           '- RV1-RV3: blue disc parts, silk "RV". Drawn as varistors to GND;\n  they could be Y-capacitors to chassis.\n'
           '- L1 is a white SMD part (fuse or inductor).\n- D4 is assumed to be the reverse-polarity diode.', m(210), m(15), m(95), m(30))
 
@@ -269,7 +269,7 @@ s.wire([pl3.p('2'), (m(250), ysw)], 'V'); s.mark(pl3, '2', '+3V3', 'V')
 s.power('+3V3', m(250), ysw); s.power('PWR_FLAG', m(250), ysw, lib_name='PWR_FLAG', rot=180)
 pc2 = two(s, 'Device:C', 'PC2', 'MLCC', m(262), m(187), True); s.stub(pc2, '1', 'TBD_PC2_1', 'U'); s.stub(pc2, '2', 'TBD_PC2_2', 'U')
 r11 = two(s, 'Device:R', 'R11', '20k5 "31C"', m(262), m(175), True); s.stub(r11, '1', 'TBD_R11_1', 'U'); s.stub(r11, '2', 'TBD_R11_2', 'U')
-s.textbox('3.3 V buck\n- PU1 marking "2622 SCT 6DC" = SCT2622. Pin functions are from its datasheet;\n  pin numbers are assumed.\n'
+s.textbox('3.3 V buck\n- PU1 marking "2622" with "SCT 6DC" (board A) or "SCT 5DC" (board B) =\n  SCT2622. Pin functions are from its datasheet; pin numbers are assumed.\n'
           '- Values are decoded EIA-96 codes (49C = 31.6k, 86C = 73.2k, 30D = 200k).\n'
           '- Which resistors form the FB divider is not checked: measure TC1 (expect 3.3 V).\n'
           '- PC2 and R11 sit next to PU1; nets not traced.\n\n'
@@ -303,7 +303,7 @@ s.wire([l3.p('1'), (m(85), l3.p('1')[1])], 'V'); s.mark(l3, '1', '+1V15', 'V')
 s.power('+1V15', m(85), l3.p('1')[1], lib_name='+1V1'); s.power('PWR_FLAG', m(85), l3.p('1')[1], lib_name='PWR_FLAG', rot=180)
 s.textbox('RBIAS: 2.49 kOhm 1 % to GND per datasheet. The\nresistor and the reset RC are not located.', m(15), m(100), m(60), m(10))
 # EEPROM
-u10 = s.place('Memory_EEPROM:24LC08', 'U10', 'HK24C08', m(55), m(150), ref_at=(m(55) - 10.16, m(150) - 8.89), val_at=(m(55) + 2.54, m(150) - 8.89), center=set())
+u10 = s.place('Memory_EEPROM:24LC08', 'U10', 'HK 24C08', m(55), m(150), ref_at=(m(55) - 10.16, m(150) - 8.89), val_at=(m(55) + 2.54, m(150) - 8.89), center=set())
 s.route(u10.p('6'), uC.p('91'), 'I', xm=m(76.2)); s.mark(u10, '6', 'I2C_SCL', 'I'); s.mark(uC, '91', 'I2C_SCL', 'I')
 s.route(u10.p('5'), uC.p('92'), 'I', xm=m(78.74)); s.mark(u10, '5', 'I2C_SDA', 'I'); s.mark(uC, '92', 'I2C_SDA', 'I')
 xa = u10.p('1')[0] - m(5.08)
@@ -451,7 +451,7 @@ for k in range(8):
     s.label('POE%d' % (k + 1), (x + G, yb - m(5.08)), (0, -1))
 s.textbox('Notes: PoE assumed on the centre taps of pairs 1-2 and 3-6 (odd and even POE nets) -> header PIN1 (PoE module sheet). '
           'The centre taps of pairs 4-5 and 7-8 (Pn_CT45 and Pn_CT78) are assumed to go to Bob-Smith terminations on the bottom. '
-          'Bottom parts under J1 with no net assigned: 12x SMB "CP06C" (D6, D8-D18), 1206 caps C16, C38, C55, C56, C60-C62, C65, C71, C75, C98, ..., '
+          'Bottom parts under J1 with no net assigned: 14x SMB "CP06C" (D6, D8-D19, D21), 1206 caps C16, C38, C55, C56, C60-C62, C65, C71, C75, C98, ..., '
           '0603 resistors R15, R32, R67, R71-R76, R82-R84. J1 is one 1x4 RJ45 block, drawn as J101-J104. G2401PR pinout assumed. '
           '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(12.7), m(241.3), m(165), size=1.1)
 

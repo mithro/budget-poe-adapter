@@ -114,8 +114,8 @@ and 34. The bottom-side photos (24 to 29) show nothing that ties them to one boa
 | R93 | SPF0 SCK resistor | Top | SMD |  |  |  |  |
 
 Markings that differ between the boards, or are visible on one board only, are in
-[the first table](#the-two-boards): lines 3 to 5 of U4, lines 2 and 3 of PU1, line 2
-of D40, and the marking of C4 and TC1 with the value of C4. The board B reading of PU1
+[the first table](#the-two-boards): lines 3 to 5 of U4, lines 2 and 3 of PU1, lines 1
+and 2 of D40, and the marking of C4 and TC1 with the value of C4. The board B reading of PU1
 comes from [photo 08](#photo-08), and its last line is at the limit of that photo's
 resolution. The SFP cage over U12 is fitted on board B only. RV1-RV3 are varistors or Y-capacitors; their
 marking is not readable in any photo.
@@ -410,7 +410,7 @@ R110-R114 near the crystal are clear.
 
 ![Photo 14](web/14.jpg)
 
-Board A, U4 and the power section at an angle. PU1 (an SCT2622 buck marked `2622`, `SCT 6DC`, `2U650`), PL3 `100`, D40 `SS310` and C4 (`YX 47 63V`) are in frame.
+Board A, U4 and the power section at an angle. PU1 (an SCT2622 buck marked `2622`, `SCT 6DC`, `2U650`), PL3 `100`, D40 `SS310`, C4 (`YX 47 63V`), D4 and D5 are in frame.
 
 ### Photo 15
 

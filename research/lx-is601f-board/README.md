@@ -31,7 +31,8 @@ The pin table for these images, and the confidence of each pin, are in
 [`../motorcomm-debug-pins.md`](../motorcomm-debug-pins.md#lx-is601f-v20-boards). The chip is a YT9215SCH, so the pin
 numbers are those of the SC and SCH pinout. Names marked `*` are JTAG names from the
 YT9215SC draft datasheet. Label colours: orange for UART, cyan for SPI flash, pink for
-JTAG, yellow for straps, green for SCL and SDA, grey for clock and reset.
+JTAG, yellow for straps, green for SCL and SDA, grey for clock and reset. The lilac rings
+are the vias of pins 80 and 85, which are LED pins with no debug function.
 
 ### Pin numbering
 
@@ -62,7 +63,7 @@ JTAG names are from the [YT9215SC Draft_07 datasheet](../../datasheets/motorcomm
 V1.03 does not list them, so JTAG is unconfirmed.
 
 Pin 1 is the lead beside the small dimple on the package. Leads were counted from
-there, 32 to a side, and checked against these landmarks:
+there anticlockwise as seen from the top, 32 to a side, and checked against these landmarks:
 
 | Landmark | Pin |
 | --- | --- |
@@ -72,7 +73,7 @@ there, 32 to a side, and checked against these landmarks:
 | Wide power trace | 59 |
 | Wide power trace | 68 |
 | Wide power trace | 69 |
-| Decoupling capacitor | 82 |
+| Decoupling capacitor C25 | 82 |
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [87](../motorcomm-debug-pins.md#sch-pin-87) |
 | Crystal [Y6](../motorcomm-debug-pins.md#lx-y6) | [88](../motorcomm-debug-pins.md#sch-pin-88) |
 

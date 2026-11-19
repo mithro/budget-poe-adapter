@@ -172,6 +172,8 @@ leds = sheet('leds.kicad_sch', 'Port LEDs', 'A3', '7')
 ALL = [root, power, switch, eth, upl, poe, leds]
 root.loose_titles = ['Title', 'Block diagram', 'Wire styles', 'How to read the schematic', 'Sources']
 eth.loose_titles = ['PoE bus to the PoE module sheet and notes']
+power.loose_titles = ['Notes on the DC input', 'Notes on the 3.3 V buck']
+upl.loose_titles = ['Note on the uplink']
 
 LEGEND = ('Wire style = confidence of each connection\n'
           'green solid      C  confirmed (traced on both sides, or measured)\n'
@@ -348,7 +350,7 @@ for n in ('85', '84', '83', '80', '81', '79', '77', '78', '76', '75', '73', '74'
 for n in ('14', '15', '116'):
     s.nc(uC.p(n)); s.mark(uC, n, '(NC)', 'I')
 s.textbox('Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 goes to the LED\n'
-          'sheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced).', m(195), m(215), m(80), m(16))
+          'sheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced).', m(169.6), m(215), m(80), m(16))
 # U4A MDI
 s.frame(m(290), m(15), m(450), m(270), 'U4A: copper ports (MDI)')
 uA = s.place('lxr:YT9215SCH', 'U4', 'YT9215SCH', m(330), m(130), unit=1, node=u4node)
@@ -417,8 +419,8 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=185, h=10
         q = t.p(pin); s.wire([q, (xt, q[1])], 'U'); s.mark(t, pin, 'P%d_TCT' % p, 'U')
     s.wire([(xt, t.p('1')[1]), (xt, t.p('10')[1] + m(5.08))], 'U')
     s.label('P%d_TCT' % p, (xt, t.p('10')[1] + m(5.08)), (0, 1))
-    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(142.24), y0 + m(45), mirror='y',
-                ref_at=(x0 + m(137.16), y0 + m(25.4)), val_at=(x0 + m(137.16), y0 + m(27.94)), center=set())
+    j = s.place('Connector:RJ45_Shielded', jref, jval, x0 + m(152.4), y0 + m(35.56), mirror='y',
+                ref_at=(x0 + m(147.32), y0 + m(15.24)), val_at=(x0 + m(147.32), y0 + m(17.78)), center=set())
     for tp, jp in [('23', '1'), ('22', '2'), ('20', '3'), ('19', '6'), ('17', '4'), ('16', '5'), ('14', '7'), ('13', '8')]:
         s.stub(t, tp, 'P%d_L%s' % (p, jp), 'V', length=m(10.16))
         s.stub(j, jp, 'P%d_L%s' % (p, jp), 'V', length=m(7.62))
@@ -427,7 +429,7 @@ def port_block(s, p, xfrm, jref, jval, eds, x0, y0, poe_base, title, w=185, h=10
     for pin, net in (('24', 'POE%d' % poe_base), ('21', 'POE%d' % (poe_base + 1)), ('18', 'P%d_CT45' % p), ('15', 'P%d_CT78' % p)):
         s.stub(t, pin, net, 'U', length=m(10.16))
     for k, ed in enumerate(eds):
-        ex, ey = x0 + m(45 + 66.04 * k), y0 + m(82.55)
+        ex, ey = x0 + m(45 + 107.4 * k), y0 + m(82.55)       # ED under the magnetics, ED under the jack
         e = s.place('Power_Protection:SRV05-4', ed, '"05U"', ex, ey, ref_at=(ex + m(5.08), ey - m(15.24)), val_at=(ex + m(5.08), ey - m(12.7)), center=set())
         for pin, mi in zip(('1', '3', '4', '6'), ([0, 1, 2, 3] if k == 0 else [4, 5, 6, 7])):
             s.stub(e, pin, 'P%d_MDI%d' % (p, mi), 'I', length=m(5.08))
@@ -456,7 +458,7 @@ s.textbox('Notes: PoE assumed on the centre taps of pairs 1-2 and 3-6 (odd and e
           'The centre taps of pairs 4-5 and 7-8 (Pn_CT45 and Pn_CT78) are assumed to go to Bob-Smith terminations on the bottom. '
           'Bottom parts under J1 with no net assigned: 14x SMB "CP06C" (D6, D8-D19, D21), 1206 caps C16, C38, C55, C56, C60-C62, C65, C71, C75, C98, ..., '
           '0603 resistors R15, R32, R67, R71-R76, R82-R84. J1 is one 1x4 RJ45 block, drawn as J101-J104. G2401PR pinout assumed. '
-          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(12.7), m(241.3), m(150), size=1.1)
+          '"05U" arrays drawn with the SRV05-4 pinout (assumed).', m(12.7), m(241.3), m(125), size=1.1)
 
 # ---------------------------------------------------------------- UPLINK + SFP
 s = upl
@@ -486,7 +488,7 @@ s.mark(sfp, 'CAGE', 'Earth_Protective', 'U')
 c = sfp.p('CAGE'); ye = c[1] + m(7.62); xe = c[0] - m(7.62)
 s.wire([c, (c[0], ye), (xe, ye)], 'U'); s.power('Earth_Protective', xe, ye, lib_name='Earth_Protective')
 s.textbox('U12 is a 20-pin SFP edge connector; one board has the cage fitted.\nAC-coupling caps, I2C and status pins are not traced.', m(225), m(120), m(100))
-s.textbox('The uplink has no PoE: POE9 and POE10 are placeholders for the centre taps of its pairs 1-2 and 3-6 (not traced).', m(12.7), m(124), m(150))
+s.textbox('The uplink has no PoE: POE9 and POE10 are placeholders for the centre taps of its pairs 1-2 and 3-6 (not traced).', m(12.7), m(124), m(125))
 
 # ---------------------------------------------------------------- POE MODULE
 s = poe
@@ -560,29 +562,29 @@ s.stub(r68, '1', 'TBD_R68_1', 'U', length=m(5.08)); s.stub(r68, '2', 'TBD_R68_2'
 s = root
 s.text('LX-IS601F V2.0 switch board: reverse-engineered schematic', m(15), m(15), size=2.8, bold=True)
 s.text('Two boards photographed 2026-11-17.\nYT9215SCH 5-port GbE switch + SFP, with a 4-port PoE PSE plug-in module.', m(15), m(22), size=1.8)
-pp = s.subsheet(power, m(20), m(115), m(45), m(20), [])
-sw = s.subsheet(switch, m(20), m(45), m(45), m(55),
+pp = s.subsheet(power, m(20), m(115), m(38), m(20), [])
+sw = s.subsheet(switch, m(20), m(45), m(38), m(55),
                 [('P0_MDI[0..7]', 'R', 'bidirectional'), ('P1_MDI[0..7]', 'R', 'bidirectional'), ('P2_MDI[0..7]', 'R', 'bidirectional'),
                  ('P3_MDI[0..7]', 'R', 'bidirectional'), ('P4_MDI[0..7]', 'R', 'bidirectional'), ('SDS0_TXP', 'R', 'output'),
                  ('SDS0_TXN', 'R', 'output'), ('SDS0_RXP', 'R', 'input'), ('SDS0_RXN', 'R', 'input'),
                  ('LED_P0', 'R', 'output'), ('LED_P1', 'R', 'output'), ('LED_P2', 'R', 'output'), ('LED_P3', 'R', 'output'),
                  ('LED_P4', 'R', 'output'), ('LED_P9', 'R', 'output')])
-ep = s.subsheet(eth, m(122), m(45), m(50), m(18),
+ep = s.subsheet(eth, m(104.14), m(45), m(45), m(22),
                 [('P0_MDI[0..7]', 'L', 'bidirectional'), ('P1_MDI[0..7]', 'L', 'bidirectional'), ('P2_MDI[0..7]', 'L', 'bidirectional'),
-                 ('P3_MDI[0..7]', 'L', 'bidirectional'), ('POE[1..8]', 'R', 'bidirectional')])
-up = s.subsheet(upl, m(122), m(75), m(50), m(18),
+                 ('P3_MDI[0..7]', 'L', 'bidirectional'), ('POE[1..8]', 'L', 'bidirectional')])
+up = s.subsheet(upl, m(104.14), m(77), m(45), m(22),
                 [('P4_MDI[0..7]', 'L', 'bidirectional'), ('SDS0_TXP', 'L', 'input'), ('SDS0_TXN', 'L', 'input'),
                  ('SDS0_RXP', 'L', 'output'), ('SDS0_RXN', 'L', 'output')])
-ld = s.subsheet(leds, m(122), m(105), m(50), m(20),
+ld = s.subsheet(leds, m(104.14), m(111), m(45), m(24),
                 [('LED_P0', 'L', 'input'), ('LED_P1', 'L', 'input'), ('LED_P2', 'L', 'input'), ('LED_P3', 'L', 'input'),
                  ('LED_P4', 'L', 'input'), ('LED_P9', 'L', 'input')])
-pm = s.subsheet(poe, m(122), m(137), m(50), m(12), [('POE[1..8]', 'R', 'bidirectional')])
+pm = s.subsheet(poe, m(104.14), m(147), m(45), m(12), [('POE[1..8]', 'L', 'bidirectional')])
 for (x, y, t) in [(m(22), m(120), 'J2 input, protection,\nSCT2622 buck to +3V3'),
                   (m(22), m(88), 'YT9215SCH (4 units),\n25 MHz crystal,\nEEPROM U10,\nempty flash footprint U6'),
-                  (m(137), m(56), 'DXFRM2-5, J1, ED1-ED7, ED10'),
-                  (m(137), m(87), 'DXFRM6, J3, ED8-ED9, SFP U12'),
-                  (m(137), m(118), '12 LEDs, LED6 footprint'),
-                  (m(124), m(144), 'PIN1 header, PSE module')]:
+                  (m(106.68), m(63.5), 'DXFRM2-5, J1, ED1-ED7, ED10'),
+                  (m(106.68), m(95), 'DXFRM6, J3, ED8-ED9, SFP U12'),
+                  (m(106.68), m(131), '12 LEDs, LED6 footprint'),
+                  (m(106.68), m(155), 'PIN1 header, PSE module')]:
     s.text(t, x, y, size=1.27, italic=True, color=(90, 90, 90))
 
 
@@ -594,23 +596,23 @@ def rw(a, b, xm, kind):
 
 
 for k in range(4):
-    rw(sw['P%d_MDI[0..7]' % k], ep['P%d_MDI[0..7]' % k], m(88.9 + 5.08 * k), 'bus')
-rw(sw['P4_MDI[0..7]'], up['P4_MDI[0..7]'], m(119.38), 'bus')
+    rw(sw['P%d_MDI[0..7]' % k], ep['P%d_MDI[0..7]' % k], m(78.74 + 2.54 * k), 'bus')
+rw(sw['P4_MDI[0..7]'], up['P4_MDI[0..7]'], m(99.06), 'bus')
 for k, n in enumerate(('SDS0_TXP', 'SDS0_TXN', 'SDS0_RXP', 'SDS0_RXN')):
-    rw(sw[n], up[n], m(116.84 - 2.54 * k), 'wire')
+    rw(sw[n], up[n], m(96.52 - 2.54 * k), 'wire')
 for k, n in enumerate(['LED_P0', 'LED_P1', 'LED_P2', 'LED_P3', 'LED_P4', 'LED_P9']):
-    rw(sw[n], ld[n], m(71.12 + 2.54 * (5 - k)), 'wire')
+    rw(sw[n], ld[n], m(63.5 + 2.54 * (5 - k)), 'wire')
 a, b = ep['POE[1..8]'], pm['POE[1..8]']
-rw(a, b, m(177.8), 'bus')
-s.textbox(LEGEND, m(15), m(162), m(120), m(35), size=1.5)
+rw(a, b, m(101.6), 'bus')
+s.textbox(LEGEND, m(15), m(172), m(120), m(35), size=1.5)
 s.textbox('How to read this schematic\n'
           '- One sheet per function. Power nets (+48V, +3V3, +1V15, GND) are global power ports.\n'
           '- Net names starting TBD_ are placeholders for pins whose destination is not traced.\n'
           '- Values come from part markings (EIA-96 codes decoded); unmarked parts show the package only.\n'
           '- Pinouts of G2401PR, the "05U" ESD arrays, SCT2622 and the PoE module chip are assumed.\n'
           '- Generated by gen_schematic.py; edit that, not the .kicad_sch files.\n'
-          '- lx-is601f-nets.csv lists every pin with its net and confidence code.', m(15), m(206), m(130), m(35), size=1.5)
-s.text('Sources: photos in the project album; Motorcomm YT9215SCH datasheet V1.03; SCT2622 datasheet; KiCad 7 standard libraries.', m(15), m(248), size=1.4, italic=True)
+          '- lx-is601f-nets.csv lists every pin with its net and confidence code.', m(15), m(216), m(125), m(35), size=1.5)
+s.text('Sources: photos in the project album; Motorcomm YT9215SCH datasheet V1.03; SCT2622 datasheet; KiCad 7 standard libraries.', m(15), m(262), size=1.3, italic=True)
 
 
 # ======================================================================
@@ -705,8 +707,8 @@ def clear_margin(png, paper):
 # in README.md. All pieces share one scale, DETAIL_SCALE, so 1.27 mm schematic text is
 # the same readable size in each of them, and no piece is wider than DETAIL_MAX mm.
 DETAIL_DPI = 300
-DETAIL_SCALE = 5.5        # pixels per mm in the saved piece
-DETAIL_MAX = 165.0        # widest piece, mm (908 px)
+DETAIL_SCALE = 6.6        # pixels per mm in the saved piece
+DETAIL_MAX = 136.0        # widest piece, mm (898 px)
 DETAIL_PAD = 3.0          # clear space kept around the ink of a piece, mm
 
 
@@ -781,7 +783,7 @@ def detail_regions(png, sh):
             runs = reg[:-t].copy()
             for j in range(1, t + 1):
                 runs &= reg[j:reg.shape[0] - t + j]
-            cost = runs.sum(axis=0)
+            cost = runs.sum(axis=0) + (reg.sum(axis=0) > 8 * k)      # also: no column with over 8 mm of ink (a dotted vertical wire)
             band = round(1.5 * k)                           # clear space needed on both sides of a cut
             width = x1 - x0
             while x1 - cuts[-1] > DETAIL_MAX * k:
@@ -790,8 +792,11 @@ def detail_regions(png, sh):
                 ideal = a + left / -(-left // (DETAIL_MAX * k))
                 lo, hi = a + round(0.3 * DETAIL_MAX * k), min(a + round(DETAIL_MAX * k), width - band - 1)
                 good = [c for c in range(lo, hi) if not cost[c - band:c + band + 1].any()]
-                if good:
-                    cuts.append(x0 + min(good, key=lambda c: abs(c - ideal)))
+                if hi <= lo:
+                    clean_cut = False
+                    break
+                if good:                                    # best: a column in a gap with no ink at all
+                    cuts.append(x0 + min(good, key=lambda c: (bool(reg[:, c - band:c + band + 1].any()), abs(c - ideal))))
                 else:
                     clean_cut = False
                     cuts.append(x0 + min(range(lo, hi), key=lambda c: (cost[c], abs(c - ideal))))
@@ -799,6 +804,8 @@ def detail_regions(png, sh):
         parts = len(cuts) - 1
         for i, (a, c) in enumerate(zip(cuts, cuts[1:]), 1):
             rows = mask.crop((a - ox, y0 - oy, c - ox, y1 - oy)).getbbox()       # each part keeps only its own rows
+            if not rows:
+                continue
             ya, yb = max(y0 + rows[1] - pad, y0), min(y0 + rows[3] + pad, y1)
             piece = im.crop((a, ya, c, yb))
             piece = piece.resize((round((c - a) / k * DETAIL_SCALE), round((yb - ya) / k * DETAIL_SCALE)), Image.LANCZOS)

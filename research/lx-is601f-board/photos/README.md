@@ -561,7 +561,7 @@ apart.
 
 ## Regenerating the images
 
-[`make_photos.py`](make_photos.py) builds [`web/`](web/), [`thumbs/`](thumbs/) and
+[`make_photos.py`](make_photos.py) builds [`web/`](web/), [`thumbs/`](thumbs/),
 [`annotated/`](annotated/) and [`detail/`](detail/). The first two come from the album
 originals, the last two from the copies in [`web/`](web/):
 

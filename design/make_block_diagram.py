@@ -3,8 +3,8 @@
 
 Usage: python3 make_block_diagram.py
 Writes block-diagram-with-switch.svg and block-diagram-without-switch.svg next to
-this script. Needs only the Python standard library. The PNG copies are made from
-the SVGs with any SVG renderer at twice the SVG size.
+this script. Needs only the Python standard library. svg_to_png.js makes the PNG
+copies from the SVGs.
 
 The canvas is 940 units wide and the smallest text is 14 units, so the text stays
 readable when the figure is scaled to the width of a documentation page.
@@ -34,9 +34,12 @@ class Svg:
         self.out.append('<text x="%g" y="%g" font-size="%g" fill="%s" text-anchor="%s" font-weight="%d">%s</text>'
                         % (x, y, size, fill, anchor, 700 if bold else 400, escape(s)))
 
-    def label(self, x, y, lines, fill, anchor='middle', bold=False):
-        """Lines of text on a white backing, first baseline at y."""
+    def label(self, x, y, lines, fill, anchor='middle', bold=False, backing=True):
+        """Lines of text, first baseline at y, on a white backing unless the label sits in clear space."""
         for i, s in enumerate(lines):
+            if not backing:
+                self.text(x, y + i * 17, s, fill=fill, anchor=anchor, bold=bold)
+                continue
             w = len(s) * F_TEXT * 0.52 + 8
             x0 = {'middle': x - w / 2, 'start': x - 4, 'end': x - w + 4}[anchor]
             self.out.append('<rect x="%g" y="%g" width="%g" height="18" fill="#ffffff" opacity="0.92"/>'
@@ -164,7 +167,7 @@ def draw(v):
     s.line([(r2, top(3) + 32), (l3, top(3) + 32)], 'ctrl')
     s.label((r2 + l3) / 2, top(3) + 23, ['VBUS_EN (gate)'], CTRL)
     s.line([(l3, top(3) + 78), (r2, top(3) + 78)], 'ctrl')
-    s.label((r2 + l3) / 2, top(3) + 99, ['VBUS V / I sense'], CTRL)
+    s.label((r2 + l3) / 2, top(3) + 99, ['VBUS V / I sense'], CTRL, backing=False)
     yc = bottom(3) + 42
     s.line([(r2 - 30, bottom(3)), (r2 - 30, yc), (l3 + 40, yc), (l3 + 40, top(4))], 'ctrl', both=True)
     s.label((r2 - 30 + l3 + 40) / 2, yc + 22, ['CC1 / CC2 (Rp, PD BMC)'], CTRL)

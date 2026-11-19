@@ -44,6 +44,7 @@ The research notes cover these topics:
 | [`block-diagram-with-switch.png`](design/block-diagram-with-switch.png) | Figure A as PNG |
 | [`block-diagram-without-switch.png`](design/block-diagram-without-switch.png) | Figure B as PNG |
 | [`make_block_diagram.py`](design/make_block_diagram.py) | Script that draws the SVG figures |
+| [`svg_to_png.js`](design/svg_to_png.js) | Script that renders the PNG figures |
 | [`bom-rough.csv`](design/bom-rough.csv) | BOM table |
 
 ### Research: power

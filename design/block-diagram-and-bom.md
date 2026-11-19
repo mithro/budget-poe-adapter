@@ -10,7 +10,7 @@ Rough first-pass design for a 5 V and 12 V output, with prices as of 2026-10-21.
 from [`research/poe.md`](../research/poe.md), [`research/usb-c-pd.md`](../research/usb-c-pd.md) and
 [`research/ethernet-switch.md`](../research/ethernet-switch.md). Line items and per-line prices are in
 [`bom-rough.csv`](bom-rough.csv). The diagrams are [`block-diagram-with-switch.svg`](block-diagram-with-switch.svg) and
-[`block-diagram-without-switch.svg`](block-diagram-without-switch.svg), drawn by [`make_block_diagram.py`](make_block_diagram.py).
+[`block-diagram-without-switch.svg`](block-diagram-without-switch.svg), drawn by [`make_block_diagram.py`](make_block_diagram.py). [`svg_to_png.js`](svg_to_png.js) renders the bitmap copies.
 
 **Pricing basis:** 1k units, LCSC parts with JLCPCB PCB + assembly. Only the
 RTL8363NB price ($1.43 @1k) was checked live (in [`research/ethernet-switch.md`](../research/ethernet-switch.md)). Every

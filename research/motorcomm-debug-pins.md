@@ -331,7 +331,7 @@ Two bought 5-port switch boards with the silkscreen `LX-IS601F V2.0` were photog
 
 ### Annotated photos
 
-The three images are crops of one photo of board A. Names marked `*` are JTAG names from [Draft_07](#yt9215sc-and-yt9215sch). Label colours: orange for UART, cyan for SPI flash, pink for JTAG, yellow for straps, green for SCL and SDA, grey for clock and reset.
+The three images are crops of one photo of board A. Names marked `*` are JTAG names from [Draft_07](#yt9215sc-and-yt9215sch). Label colours: orange for UART, cyan for SPI flash, pink for JTAG, yellow for straps, green for SCL and SDA, grey for clock and reset. The lilac rings are the vias of pins 80 and 85, which are LED pins (P1LED0 and P0LED0) with no debug function.
 
 ![U4 with pin 1, the corner pin numbers and the pin range of each side marked](lx-is601f-board/u4-pin-numbering-annotated.png)
 
@@ -358,7 +358,7 @@ Right edge, pins 46 to 55.
 
 ### How the leads were numbered
 
-Pin 1 of [U4](#lx-u4) is the lead beside the small dimple on the package. Leads were counted from there, 32 to a side. The SPF0 resistor column is [R44](#lx-r44), [R89](#lx-r89), [R92](#lx-r92) and [R93](#lx-r93).
+Pin 1 of [U4](#lx-u4) is the lead beside the small dimple on the package. Leads were counted from there anticlockwise as seen from the top, 32 to a side. The SPF0 resistor column is [R44](#lx-r44), [R89](#lx-r89), [R92](#lx-r92) and [R93](#lx-r93).
 
 | Package side | First pin | Last pin | Faces |
 |---|---|---|---|
@@ -404,6 +404,10 @@ The routes were read from photos of the top side only, and the lead numbers were
 
 - The vias for pins [70](#sch-pin-70) and [76](#sch-pin-76) sit just above the chip in the [annotated photo of the top edge](#annotated-top-edge).
 - Pin [76](#sch-pin-76) is both UART1 TX and the `DIS_MCU` strap.
+- Pins [46](#sch-pin-46), [47](#sch-pin-47), [67](#sch-pin-67), [79](#sch-pin-79) and [90](#sch-pin-90) are "Lead only", so a wire has to be soldered to the lead itself, at 0.4 mm pitch.
+- On the flash buses SI is the chip's output to the flash DI pin, and SO is the flash DO pin into the chip.
+- [YT9215SCH V1.03](../datasheets/motorcomm/YT9215SCH_Datasheet_V1.03_2025-02-10.pdf) names pin [90](#sch-pin-90) GPIO47 and pin [67](#sch-pin-67) GPIO31.
+- The nRESET trace from pin 89 runs towards the crystal past R23 [**I**](#evidence-codes).
 
 ### Unknowns
 

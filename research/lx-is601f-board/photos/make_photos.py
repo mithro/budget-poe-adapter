@@ -223,6 +223,8 @@ def main(src):
 
 
 if __name__ == '__main__':
+    if len(sys.argv) != 2:
+        sys.exit(__doc__)
     if sys.argv[1] == '--derived':
         derived()
     else:

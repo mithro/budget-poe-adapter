@@ -119,7 +119,6 @@
 <rect x="585.04" y="454.5" width="109.92" height="18" fill="#ffffff" opacity="0.92"/>
 <text x="640" y="468" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">VBUS_EN (gate)</text>
 <path d="M698,523 L582,523" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#actl)"/>
-<rect x="577.76" y="530.5" width="124.48" height="18" fill="#ffffff" opacity="0.92"/>
 <text x="640" y="544" font-size="14" fill="#15803d" text-anchor="middle" font-weight="400">VBUS V / I sense</text>
 <path d="M550,557 L550,597 L740,597 L740,633" fill="none" stroke="#15803d" stroke-width="2" stroke-dasharray="6 4" marker-start="url(#actl)" marker-end="url(#actl)"/>
 <rect x="560.92" y="605.5" width="168.16" height="18" fill="#ffffff" opacity="0.92"/>

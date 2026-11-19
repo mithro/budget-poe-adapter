@@ -270,7 +270,7 @@
   (no_connect (at 217.17 165.1) (uuid b57ba4db-7562-57b4-8a08-5b842c2daa7c))
   (no_connect (at 217.17 167.64) (uuid c9962ab7-733b-5391-a50c-7c5e1a45ecc5))
   (no_connect (at 217.17 170.18) (uuid 2809c4f8-fcd5-52e0-ac32-d0beb808cd28))
-  (text_box "Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 goes to the LED\nsheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced)." (at 205.74 226.06 0) (size 78.74 12.7) (stroke (width 0.1524) (type solid) (color 120 120 120 1)) (fill (type color) (color 255 255 225 1)) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 04d99d51-7a5b-5f31-a519-d0cf4a1484f0))
+  (text_box "Straps share LED pins: EN_SPIF 75, DIS_MCU 76, DISAUTOLOAD 77,\nEN_PHY 83, EEPROM_MOD 71, DIS_SPIS 70. LEDx0 goes to the LED\nsheet (inferred). The other LED and strap pins have pull resistors\nR2-R5, R103, R110-R114 nearby (not traced)." (at 180.34 226.06 0) (size 78.74 12.7) (stroke (width 0.1524) (type solid) (color 120 120 120 1)) (fill (type color) (color 255 255 225 1)) (effects (font (size 1.27 1.27)) (justify left top)) (uuid 04d99d51-7a5b-5f31-a519-d0cf4a1484f0))
   (rectangle (start 299.72 25.4) (end 459.74 279.4) (stroke (width 0.254) (type dash) (color 110 110 110 1)) (fill (type none)) (uuid 9d3304a6-f1ba-5cae-adbe-0d04a15681ca))
   (text "U4A: copper ports (MDI)" (at 302.26 27.94 0) (effects (font (size 2 2) bold (color 0 0 132 1)) (justify left top)) (uuid 5a341330-5d6a-53db-90e1-29851d3c1519))
   (label "P0_MDI0" (at 359.41 85.09 0) (fields_autoplaced) (effects (font (size 1.27 1.27)) (justify left bottom)) (uuid 2fcf07eb-7bb3-5e4c-890b-343fb5fa13db))

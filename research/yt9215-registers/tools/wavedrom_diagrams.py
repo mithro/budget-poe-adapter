@@ -10,6 +10,7 @@ every name fits its box.
 import atexit
 import hashlib
 import json
+import math
 import os
 import re
 import subprocess
@@ -24,7 +25,8 @@ FONT_FAMILY = "Helvetica, Arial, sans-serif"   # the fonts of the WaveDrom wavef
 CHAR = FONT * 0.66   # px, upper estimate of the mean advance of one character
 PAD = 8              # px between a name and its box
 ARC_FONT = 13        # px, labels on the arrows of a waveform
-MIN_WIDTH = 560    # px, below which a diagram scrolls instead of shrinking
+WAVE_FONT = 11 * 4 / 3   # px, the 11 pt labels of a waveform
+MIN_FONT = 12.8      # px, smallest text of a diagram on a narrow screen
 ROW = 70             # px, height of one row of a register diagram
 ROW_EXTRA = 1.5 * FONT + 4   # px that WaveDrom keeps of a row for the bit numbers
 
@@ -207,11 +209,17 @@ def render(source, label, links=None):
     if source.get("signal"):
         key = json.dumps(source, sort_keys=True).encode("utf-8")
         svg = unique_ids(scope_style(svg), "w" + hashlib.sha1(key).hexdigest()[:8])
-        # A waveform keeps its text readable on a narrow screen, where the figure scrolls.
-        width = re.search(r'<svg[^>]*\bwidth="([0-9.]+)"', svg)
-        if width:
-            svg = svg.replace("<svg", '<svg style="min-width:%dpx"'
-                              % min(float(width.group(1)), MIN_WIDTH), 1)
     elif links:
         svg = add_links(svg, source["reg"], links)
+    # On a narrow screen the figure scrolls before the smallest text passes below MIN_FONT.
+    width = re.search(r'<svg[^>]*\bwidth="([0-9.]+)"', svg)
+    if width:
+        if source.get("reg"):
+            smallest = config["fontsize"]
+        elif source.get("edge"):
+            smallest = min(WAVE_FONT, config["arcFontSize"])
+        else:
+            smallest = WAVE_FONT
+        style = "min-width:%dpx" % math.ceil(float(width.group(1)) * MIN_FONT / smallest)
+        svg = svg.replace("<svg", '<svg style="%s"' % style, 1)
     return svg.replace("<svg", '<svg role="img" aria-label="%s"' % escape(label, quote=True), 1)

@@ -26,14 +26,14 @@ frame is 64 clock cycles: a preamble of 32 ones, then 32 bits that carry a 5-bit
              The host drives all other bits.
 
    {"signal": [
-     {"name": "Field", "period": 0.5, "wave": "=....=.=.=...=...=.=......",
+     {"name": "Field", "period": 0.5, "wave": "=....=...=...=...=...=...=......",
       "data": ["PRE", "ST", "OP", "PHYAD", "REGAD", "TA", "DATA"]},
-     {"name": "Bits", "period": 0.5, "wave": "=....=.=.=...=...=.=......",
+     {"name": "Bits", "period": 0.5, "wave": "=....=...=...=...=...=...=......",
       "data": ["32", "2", "2", "5", "5", "2", "16"]},
      {},
-     {"name": "Write", "period": 0.5, "wave": "=....=.=.=...=...=.=......",
+     {"name": "Write", "period": 0.5, "wave": "=....=...=...=...=...=...=......",
       "data": ["all 1", "01", "01", "address", "number", "10", "highest first"]},
-     {"name": "Read", "period": 0.5, "wave": "=....=.=.=...=...z07......",
+     {"name": "Read", "period": 0.5, "wave": "=....=...=...=...=...z.0.7......",
       "data": ["all 1", "01", "10", "address", "number", "highest first"]}
    ]}
 

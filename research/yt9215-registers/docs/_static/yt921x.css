@@ -67,7 +67,6 @@ table.docutils td .pre {
 /* WaveDrom diagrams carry their own colours, for a white background. */
 .yt-wavedrom { background: #fff; border-radius: 4px; padding: 6px 0; }
 svg.WaveDrom { display: block; max-width: 100%; height: auto; }
-svg.WaveDrom:not(.yt-wave) { min-width: 560px; }
 svg.WaveDrom a, svg.WaveDrom a:hover { text-decoration: none; }
 svg.WaveDrom a text { fill: #0b57d0; }
 svg.WaveDrom a:hover text { text-decoration: underline; }
